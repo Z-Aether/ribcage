@@ -1,0 +1,1 @@
+Mostly vibecoded hobby project to develop a small scale full web application for scheduling movie marathons.
