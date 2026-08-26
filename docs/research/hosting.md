@@ -1,279 +1,456 @@
-# Hosting: viable paths for a 10-user app, ranked by ops burden
+# Hosting: viable paths for a seasonal 10-user app, ranked by ops burden
 
 Research for issue #7. Downstream consumers: #14 (tech stack), #16 (public access and security posture).
 
-**All figures checked 2026-08-26** against the provider's own pricing/limits pages. Every claim below links to
-the page that owns it. Free tiers move fast — three of the providers surveyed have changed materially in the
-last two years (Fly removed its free allowance, Render's free Postgres now self-destructs, Hetzner raised
-prices in June 2026), so re-verify before committing money.
+**All figures checked 2026-08-26** against the provider's own pricing/limits pages. Every claim links to the
+page that owns it. Free tiers move fast — Fly removed its free allowance, Render's free Postgres became a
+30-day trial, Hetzner raised prices in June 2026 — so re-verify before committing money.
 
-**Workload assumed:** 5–10 users, a few marathons a year, near-zero traffic for months at a time, then a burst.
-Persistent relational data (marathons, suggestions, votes, slates). A solver that may run server-side for tens
-of seconds. Must be HTTPS-reachable on a custom domain. Losing a marathon's votes mid-marathon is the failure
-that matters.
+**Workload (revised).** The app is **seasonal, not year-round**. It is stood up, run continuously for roughly
+**4 weeks** while a marathon is organised (suggest → curate → vote → solve → pick → run day), then **retired
+until the next one**, about **3 times a year**. Between marathons the app is deliberately dead. Per the
+clean-slate rule, the only state that must survive teardown is **the user list** — a new Marathon carries no
+movie library over — and that is backed up locally, to the dev's machine.
+
+Two bars, deliberately separated:
+
+- **In-window bar (unchanged and non-negotiable):** across the ~4 live weeks, losing votes mid-marathon is
+  the failure that matters. Recovery to a point minutes-to-hours before an incident must be possible.
+- **Cross-window bar (newly relaxed):** between marathons, ~10 rows of user records must survive. A file on
+  the dev's laptop clears this bar. Point-in-time recovery does not need to span the gap.
+
+This revision changes the answer materially. §3 states exactly which round-one conclusions survived and which
+reversed.
 
 ---
 
 ## 1. Recommendation
 
-**Ship on Render's paid tier (~$13/month), one always-on web service plus one managed Render Postgres.**
+**Ship on Render's paid tier, defined in a `render.yaml` Blueprint, and delete the stack between marathons.
+~$12 per marathon, ~$36/year at three marathons.**
 
 Reasoning, in the order it matters for *this* dev:
 
-1. **It is the smallest number of new concepts.** One service, one database, one dashboard, git push to deploy.
-   No VM sizing, no `fly.toml`, no serverless/function decomposition, no Durable Objects, no Linux box.
-2. **The durability story is bought, not built.** Paid Render Postgres is continuously backed up with
-   point-in-time recovery over the past 3 days on the Hobby workspace, 7 days on Pro
-   ([Render backups docs](https://render.com/docs/postgresql-backups)). The dev never has to design, run,
-   or test a backup — which is exactly the thing a first-time host gets wrong.
-3. **It constrains the stack least.** Native runtimes *or* an arbitrary Dockerfile
-   ([Render web services docs](https://render.com/docs/web-services)), so Node, Python, or even a C++ binary
-   all work; the solver can be a normal in-process call, a background worker, or a Python MIP stack — no
-   platform veto.
-4. **No sleeping on paid**, so no cold-start weirdness during a live run-day view, and no "is it down?" from
-   friends after four idle months.
-5. **$13/month is the real number**, quoted by Render itself in July 2026 for exactly this shape —
-   "an always-on Starter web service plus a Basic-256mb Postgres instance on a Hobby workspace typically ran
-   about $13/month"
-   ([Render, July 2026](https://render.com/articles/how-much-does-cloud-application-hosting-cost-for-small-businesses)).
-   For a few marathons a year that is ~$156/year, or roughly one cinema ticket a month for the whole group.
+1. **Teardown genuinely stops the money, and it is prorated to the second.** Render's FAQ: *"Prorated by the
+   second. If a service is active for ten seconds in a given month, you are billed only for those ten
+   seconds."* ([Render FAQ](https://render.com/docs/faq)). The round-one figure of ~$156/year becomes
+   **~$36/year** without changing anything about the platform.
+2. **Re-provisioning is one commit, not an afternoon of clicking.** Blueprints are *"Render's
+   infrastructure-as-code (IaC) model for defining, deploying, and managing multiple resources with a single
+   YAML file"*, and *"You can create multiple Blueprints from a single YAML file. Each Blueprint creates and
+   manages a completely independent set of resources"*
+   ([Render Blueprints](https://render.com/docs/infrastructure-as-code)). Web service + Postgres + env groups
+   are declared in the repo. Spin-up for marathon #2 is: push, connect, Deploy Blueprint. This is the single
+   strongest argument for Render under the new model, and it is a stronger argument than the one round one
+   used.
+3. **It still clears the in-window bar without you building anything.** Paid Render Postgres is continuously
+   backed up with PITR over the past 3 days on a Hobby workspace
+   ([backups docs](https://render.com/docs/postgresql-backups)). Three days comfortably covers "someone
+   dropped the votes table on Tuesday".
+4. **It still constrains the stack least** — native runtimes or an arbitrary Dockerfile
+   ([web services docs](https://render.com/docs/web-services)) — so Node, Python + a MIP solver, or a compiled
+   C++ binary all remain on the table. No platform veto on the solver.
+5. **The rebuild is itself the lesson.** The dev's stated goal is web-dev design and architecture
+   fundamentals. Declaring infrastructure in a file, tearing it down, and rebuilding it from that file three
+   times a year is a better version of that lesson than a server that has been quietly running since March.
 
-**Runner-up: Fly.io (~$3–6/month)** if cost matters more than concept count, or if the solver wants a real
-always-warm process and a native binary. Cheapest credible option with proper containers, but you must choose
-SQLite-on-a-volume: Fly's Managed Postgres starts at **$38/month**, which dwarfs everything else here.
+**Margin note, stated honestly: this is now a close call, and it was not close in round one.** On pure money
+and pure recurring toil, **Fly.io wins** — leave it standing with autostop and the whole year costs roughly
+**$5–10** with *zero* teardown/rebuild cycles. Render is recommended over it because Fly makes you design,
+run, and *test* your own SQLite backup, and the in-window bar did not relax. If the dev would rather spend an
+afternoon learning Litestream once than spend $30/year and do a dump/restore dance three times a year, Fly is
+the correct choice and not a mistake.
 
-**Free alternative: Vercel Hobby + Neon Free ($0)** — genuinely viable now that Hobby functions allow
-**300 s** max duration, but it forces a serverless architecture and a Node/Python-shaped app, and Hobby is
-**non-commercial use only**. Fine for a friends' movie app; a dead end the moment money is involved.
+**Recommended variant if the dump/restore step is unappealing:** run the web service on Render (or Fly) but
+put Postgres on **Neon Free** and never tear the database down. Neon Free costs $0, scale-to-zero after
+5 minutes is mandatory and harmless here, and Neon's plan docs state no policy of deleting inactive free
+projects ([Neon plans](https://neon.com/docs/introduction/plans)). The user list simply persists between
+marathons with no export step at all, and the annual bill drops to ~$20. Cost: one more vendor, and Neon
+Free's history window is only 6 hours, so the in-window bar needs a nightly dump during the live weeks.
 
-**Do not** start on: Render's free tier (the database deletes itself), Supabase Free (pauses after a week
-idle), Oracle Always Free (Oracle can reclaim an idle instance), or Cloudflare Workers free (10 ms CPU).
-Details in §5.
-
----
-
-## 2. Ranked shortlist
-
-| Rank | Option | Real cost/mo | Why it ranks here |
-|---|---|---|---|
-| 1 | **Render** (Starter web + Basic-256mb Postgres, Hobby workspace) | **~$13** | Lowest concept count with a bought backup story. No sleep, free TLS, custom domain, any runtime via Docker. |
-| 2 | **Fly.io** (shared-cpu-1x 256 MB + 1 GB volume, SQLite + Litestream) | **~$2.20–5** | Cheapest credible. Containers → zero stack constraint. Costs one more layer of understanding (Machines, volumes, autostop) and you own the SQLite backup design. |
-| 3 | **Vercel Hobby + Neon Free** | **$0** | Zero ops, zero cost, 300 s function limit is enough for the solver. But serverless-only architecture, non-commercial licence, DB is a separate vendor. |
-
-Honourable mention: **Railway Hobby ($5/mo including $5 of usage)** is functionally interchangeable with
-Render for this workload and slightly cheaper; it drops a rank only because backups are opt-in scheduled jobs
-you must remember to configure, and per-second metered billing makes the monthly number less predictable.
+**Do not** use: Oracle Always Free (§6), a VPS (§5), or Cloudflare Workers if the solver runs server-side (§8).
 
 ---
 
-## 3. Comparison table
+## 2. Re-ranked shortlist
 
-| | Cost at this scale | Sleeps / cold start | HTTPS | Custom domain | Database provisioning & backup | Ops burden |
-|---|---|---|---|---|---|---|
-| **Render** | ~$13/mo paid; free tier exists but see §5 | Paid: no. Free: spins down after **15 min** idle, ~**1 min** to wake | Free managed TLS | Yes | Managed Postgres, one click. Paid DBs continuously backed up; PITR **3 days** (Hobby workspace) / **7 days** (Pro). Storage $0.30/GB-mo | **Lowest**: git push + a dashboard |
-| **Railway** | Hobby **$5/mo** incl. $5 usage; RAM ~$10/GB-mo, vCPU ~$20/vCPU-mo metered | Optional "Serverless" scale-to-zero; first request may return **502** | Yes | Yes | Postgres service on a volume (Hobby max **5 GB**). Backups **not automatic by default** — daily (kept 6 days), weekly (1 mo), monthly (3 mo) schedules, billed per incremental GB | **Low**, but you own the backup schedule |
-| **Fly.io** | ~$2.02/mo shared-cpu-1x 256 MB always-on + $0.15/GB-mo volume; **no free tier** | Autostop/autostart or suspend; restart "well under a second"; stopped machines aren't billed for CPU/RAM | Free (first 10 hostname certs free) | Yes | **Managed Postgres from $38/mo** + $0.28/GB storage. Realistic path is SQLite on a volume: automatic **daily** snapshots, default **5-day** retention, configurable 1–60 days, first 10 GB/mo free | **Medium**: Machines, volumes, `fly.toml`, and you design the SQLite durability story |
-| **Vercel** (+ Neon / Supabase / Turso) | Hobby **$0** (non-commercial only) | Functions cold-start; no always-on process | Automatic | Yes, 50 domains/project on Hobby | No storage of its own — bring Neon (free 0.5 GB/project, 100 CU-hr, scale-to-zero after **5 min**, PITR **6 h**), Turso (free 5 GB, PITR **1 day**), or Supabase (free 500 MB but **pauses after 1 week idle**) | **Lowest ops, highest architectural constraint** |
-| **Cloudflare Workers/Pages + D1** | $0 free, or **$5/mo** Workers Paid | Effectively no cold start; D1 scale-to-zero billing | Automatic | Yes | D1: free 5 GB total / **500 MB max per DB**, paid 10 GB max per DB. Time Travel PITR **7 days** free / **30 days** paid — best free backup story surveyed | **Low ops, severe runtime constraint** (see §6) |
-| **VPS — Hetzner** | CX23 **€5.49/mo** (ex VAT, since 15 Jun 2026) + **€0.50/mo** IPv4 + backups at **20%** of server price ⇒ ~**€7/mo ex VAT** | Never sleeps | You install it (certbot/Caddy) | You configure DNS | You install and tune Postgres or SQLite; automatic daily image backups, **7 slots**, oldest rotated out | **Highest: you now own a Linux box** |
-| **VPS — DigitalOcean** | **$4/mo** (1 vCPU / 512 MiB / 10 GiB) + **20%** weekly backups ($0.80); DO Managed Postgres if wanted is **$15.15/mo** | Never sleeps | You install it | You configure DNS | Self-managed, or DO Managed Postgres $15.15/mo (1 GiB / 1 vCPU) | **Highest** |
-| **Free-tier-only** (Oracle Always Free etc.) | $0 | n/a | You install it | Yes | You own everything | **Highest + reclamation risk** (§5) |
+| Rank | Option | Per marathon | Per year (×3) | Teardown required? | Why it ranks here |
+|---|---|---|---|---|---|
+| 1 | **Render paid** — Starter web + Basic-256mb Postgres, `render.yaml` Blueprint | **~$12** | **~$36** | Yes, delete both | Fewest new concepts; managed in-window PITR; one-commit rebuild; per-second proration |
+| 2 | **Fly.io** — 256 MB Machine + 1 GB volume, SQLite + Litestream, autostop, **left standing** | **~$1–3** | **~$5–10** | **No** | Cheapest credible and zero recurring toil, but you own the durability design |
+| 3 | **Supabase Free** (+ any free frontend host) | **$0** | **$0** | **No — pause is automatic** | Round one's biggest reversal: auto-pause after a week idle now matches the usage pattern exactly. Weak spot is no automatic backups on Free |
 
----
-
-## 4. Deploy story per option
-
-- **Render** — connect the GitHub repo, pick a branch; every push builds and deploys. Native runtime or
-  `Dockerfile` ([docs](https://render.com/docs/web-services)). Long jobs can move to a Background Worker,
-  a separate always-on service that receives no HTTP traffic ([docs](https://render.com/docs/background-workers)).
-- **Railway** — connect repo, auto-detect or Dockerfile, push to deploy. Note that a service with a volume
-  **cannot run two deployments at once**, so every redeploy causes brief downtime: *"To prevent data
-  corruption, we prevent multiple deployments from being active and mounted to the same service"*
-  ([docs](https://docs.railway.com/reference/volumes)).
-- **Fly.io** — `fly launch` generates a `fly.toml` and a Dockerfile; `fly deploy` builds the image and rolls
-  Machines. You will learn what a Machine, a volume, and a region are. That is real learning, but it is
-  *infrastructure* learning, not web-architecture learning.
-- **Vercel** — git push. Nothing else. The cost is that your app must be shaped as functions + static assets.
-- **Cloudflare** — `wrangler deploy`. Config in `wrangler.jsonc`, bindings for D1/R2/Containers. A bespoke
-  (if well-documented) mental model.
-- **VPS** — you build the deploy story: ssh + git pull + systemd, or Docker Compose, or a CI runner with a
-  deploy key. Plus TLS renewal, reverse proxy, firewall, unattended upgrades, and monitoring that it's all
-  still working four months later.
+Close behind: **Vercel Hobby + Neon Free ($0/year, nothing to tear down)** — unbeatable on cost and toil, but
+it forces a serverless architecture and Hobby is non-commercial-use-only. **Railway Hobby (~$15/year if you
+cancel the subscription between marathons)** is functionally fine but its IaC is explicitly *"experimental"*
+([Railway IaC](https://docs.railway.com/infrastructure-as-code)), which is the wrong property for a thing you
+only touch three times a year.
 
 ---
 
-## 5. Free tiers: what is actually true today (checked 2026-08-26)
+## 3. What survived from round one, and what reversed
 
-The months-long idle gap makes "what happens to an unused free resource" the decisive question. It kills
-several otherwise-attractive options.
+**Reversed:**
 
-- **Render free Postgres — disqualifying.** *"Free Render Postgres databases expire 30 days after creation"*,
-  followed by a 14-day grace period, after which *"Render deletes the database (along with all of its data)"*.
-  Free databases also get **no recovery capability at all**: *"Render does not provide recovery capabilities
-  for databases on the Free instance type"* ([Render free tier docs](https://render.com/docs/free),
-  [backups docs](https://render.com/docs/postgresql-backups)). Free *web services* are fine-ish — 750 free
-  instance hours/month/workspace, spin down after 15 minutes idle, ~1 minute to wake — but the database makes
-  the free tier unusable for anything you care about.
-- **Supabase Free — disqualifying for this usage pattern.** *"Free projects are paused after 1 week of
-  inactivity. Limit of 2 active projects."* Free plans get **no automatic backups**; daily backups with 7-day
-  retention start on Pro at **$25/mo**, PITR is a **$100/mo** add-on
-  ([Supabase pricing](https://supabase.com/pricing)). Paused projects can be restored manually, but a paused
-  DB the night before a marathon is exactly the failure mode to avoid.
-- **Neon Free — viable.** 0.5 GB storage/project, 100 CU-hours/project, up to 100 projects; compute
-  scale-to-zero after **5 minutes** and it *"cannot [be] disable[d]"* on Free. History/PITR window is
-  **6 hours (1 GB limit)**. Neon's plan docs state **no** policy of deleting inactive free projects — the
-  documented consequence of exceeding limits is compute suspension until the next billing month
-  ([Neon pricing](https://neon.com/pricing), [Neon plans](https://neon.com/docs/introduction/plans)).
-  First paid tier (Launch) is usage-based with no monthly minimum: $0.106/CU-hour, $0.35/GB-month.
-- **Turso Free — viable.** 100 databases, 5 GB storage, 500 M monthly row reads, 10 M writes, PITR **1 day**.
-  Developer plan $4.99/mo ([Turso pricing](https://turso.tech/pricing)). Turso's pricing page states no
-  idle-archival policy, so treat "does an idle DB survive six months" as unverified.
-- **Fly.io — the free tier is gone.** What remains is a trial: *"2 hours of machine runtime or 7 days of
-  access, whichever comes first"*, after which *"your apps will stop running"* until you add a card
-  ([Fly free trial docs](https://fly.io/docs/about/free-trial/)). Billing afterwards is pure usage-based with
-  no plan fee and no minimum ([Fly billing docs](https://fly.io/docs/about/billing/)).
-- **Railway — effectively no free tier.** Trial is a one-time $5 grant; the Free plan gives **$1 of credit per
-  month** with 0.5 GB RAM and 0.5 GB volume — not enough for an app plus a database
-  ([Railway plans](https://docs.railway.com/reference/pricing/plans)). Hobby at **$5/mo** is the real entry point.
-- **Cloudflare Workers Free — usable for the app, not for the solver.** 100,000 requests/day but only
-  **10 ms of CPU time per invocation** ([Workers limits](https://developers.cloudflare.com/workers/platform/limits/)).
-  D1 free gives 5 M row reads/day, 100 K writes/day, 5 GB total, 500 MB max per database, and **7 days** of
-  Time Travel PITR ([D1 pricing](https://developers.cloudflare.com/d1/platform/pricing/),
-  [D1 limits](https://developers.cloudflare.com/d1/platform/limits/)).
-- **Vercel Hobby — free but licence-limited.** *"the Hobby plan restricts users to non-commercial, personal
-  use only"* ([Vercel Hobby plan](https://vercel.com/docs/plans/hobby)). Included: 1 M function invocations,
-  4 CPU-hours active CPU, 360 GB-hours provisioned memory, 100 deployments/day, 50 domains per project.
-- **Oracle Cloud Always Free — do not build the marathon on it.** Generous on paper (1,500 OCPU-hours +
-  9,000 GB-hours/month of Ampere A1 ≈ 2 OCPU / 12 GB, 200 GB block storage, 10 TB egress) but Oracle states:
-  *"Idle Always Free compute instances may be reclaimed by Oracle"* — deemed idle if over a 7-day period the
-  95th-percentile CPU is under 20%, network under 20%, and (on A1) memory under 20%
-  ([Oracle Always Free resources](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm)).
-  An app that is idle for four months at a time is the textbook reclamation candidate.
+| Round one said | Round two says | Why |
+|---|---|---|
+| Supabase Free is **disqualifying** — pauses after 1 week idle | **Actively well-suited**, now a top-3 option | Pausing *is* the seasonal model. Data is retained; *"The project will return to its previous state, including data and configurations"*; resume is self-service — *"Click **Resume project** and confirm"*; the restore window is *"a 1-year window to restore the project on the platform from within Supabase Studio"* ([Supabase project pausing](https://supabase.com/docs/guides/platform/free-project-pausing)) |
+| Sleeping / cold starts are a **disqualifier** | **A non-issue** | An app that is dead for four months by design cannot be embarrassed by a 15-minute idle spin-down or a 5-minute scale-to-zero |
+| Render's free tier is **unusable** | **Conditionally viable, with one sharp edge** | The 30-day database clock is now *nearly* long enough for a 28-day marathon. See §6 — the edge is sharp and worth naming precisely |
+| "No sleeping on paid" was a **top-3 reason to pick Render** | **Deleted as a reason** | Replaced by per-second proration and Blueprints, which are better reasons |
+| "Bought, not built" cross-window durability justifies **$13/mo** | Justifies **~$12 per marathon**; cross-window durability is now a `pg_dump` or a checked-in file | Only the user list must cross the gap |
+| Oracle Always Free rejected because **idle reclamation is fatal** | Still rejected, but for **rebuild burden + undocumented reclamation semantics** | Intending the instance to die defuses the original objection; the replacement objections are stronger (§6) |
+| Annual cost of the recommendation: **~$156** | **~$36** (or ~$20 with Neon Free) | Seasonal billing |
+
+**Survived unchanged:**
+
+- **Render is still the recommendation** — but on different pillars, at a quarter of the cost, and by a much
+  narrower margin over Fly.
+- **The in-window durability bar.** Nothing about the seasonal model makes it acceptable to lose votes on
+  day 12 of a marathon.
+- **Cloudflare Workers is still the sharpest stack constraint** (§8) — 10 ms CPU on free, JS/WASM only, Python
+  in open beta. Unaffected by seasonality.
+- **Vercel Hobby is still non-commercial-use-only** and still forces serverless architecture.
+- **Fly Managed Postgres at $38/mo is still absurd** at this scale — worse now, since it would be $35 per
+  marathon for a database holding ten users and forty films.
+- **A VPS is still the worst ops burden** — and seasonality made it *worse*, not better (§5).
+- **The June 2026 Hetzner price rise and Fly's removed free tier** are facts, not judgements (§10).
 
 ---
 
-## 6. Runtime constraints — what would rule an option out
+## 4. Cost per marathon and per year
 
-These are the flags for **#14 (tech stack)**.
+A marathon window of 4 weeks is 28 days ≈ **0.92 of a month**; 672 hours. Three per year ≈ 2.76 billed months.
 
-**Hard stack constraints:**
+| Option | Cost while idle | Per marathon | Per year (×3) | What you must do to actually hit this number |
+|---|---|---|---|---|
+| **Render paid** (Starter web + Basic-256mb PG, Hobby workspace $0) | $0 | **~$12** | **~$36** | Delete both resources at teardown; rebuild from `render.yaml` |
+| **Render paid web + Neon Free PG** | $0 | **~$6.50** | **~$20** | Delete only the web service; DB just sits there free |
+| **Fly.io** (shared-cpu-1x 256 MB $2.02/mo always-on, 1 GB volume $0.15/mo) | ~$0.30/mo storage | **~$1–3** | **~$5–10** | **Nothing.** Autostop handles it; leave it standing |
+| **Railway Hobby** ($5/mo incl. $5 usage) | $5/mo unless cancelled | **~$5** | **~$15** | Cancel the subscription between marathons |
+| **Render free tier** | $0 | **$0** | **$0** | Accept the 30-day database clock (§6) |
+| **Vercel Hobby + Neon Free** | $0 | **$0** | **$0** | Nothing |
+| **Supabase Free** | $0 (auto-pauses) | **$0** | **$0** | Nothing; click Resume before each marathon |
+| **Cloudflare Workers free + D1** | $0 | **$0** | **$0** | Nothing |
+| **Hetzner CX23** (€5.49/mo ex VAT + €0.50 IPv4 + 20% backups) | €0 only if deleted | **~€6** | **~€18** | Delete the server every time; keep a snapshot (billed per GB-month) and rebuild from it |
+| **Oracle Always Free** | $0 | $0 | $0 | Not recommended — §6 |
 
-- **Cloudflare Workers constrains the stack more than any other option here.** The runtime is JS/WASM: no
-  native binaries, no arbitrary process. Python Workers are **in open beta**, built on Pyodide/PyEmscripten
-  wheels, and *"WebAssembly support for Python packages is still in early stages, and some packages may not
-  yet be available as PyEmscripten wheels on PyPI"*; only async HTTP clients (aiohttp, httpx) work
+Render's per-marathon figure derives from Render's own July 2026 statement that *"an always-on Starter web
+service plus a Basic-256mb Postgres instance on a Hobby workspace typically ran about $13/month"*
+([Render](https://render.com/articles/how-much-does-cloud-application-hosting-cost-for-small-businesses)),
+scaled by 0.92. Render's live pricing page renders client-side and could not be read on 2026-08-26; confirm
+the current Starter price in the dashboard before committing.
+
+---
+
+## 5. Does teardown actually stop the billing?
+
+This is the crux of whether seasonal use saves real money or just adds toil. It is **not** uniform.
+
+- **Render — yes, cleanly.** *"Prorated by the second. If a service is active for ten seconds in a given
+  month, you are billed only for those ten seconds"* ([FAQ](https://render.com/docs/faq)); storage is
+  likewise *"prorated to the second"*
+  ([flexible plans](https://render.com/docs/postgresql-refresh)). **Unverified:** Render's docs do not state
+  in so many words that a *suspended* (as opposed to deleted) database stops billing. Assume you must
+  **delete**, not suspend, the Postgres instance — and therefore that `pg_dump` before teardown is mandatory.
+- **Fly.io — partially, and this is the trap.** Stopped or suspended Machines are not billed for CPU and RAM,
+  but storage keeps ticking: *"Each 1GB of rootfs for a Machine stopped for 30 days is $0.15"*, and volumes
+  are billed on provisioned capacity — *"You'll be charged for volumes that you create, whether they are
+  attached to a Machine or not, including when an attached Machine is stopped"*
+  ([Fly pricing](https://fly.io/docs/about/pricing/)). Also note *"Managed Postgres lives outside your apps.
+  Deleting an app won't delete its database."* The amounts are trivial (~$1.80/year for a 1 GB volume), which
+  is precisely why **the right move on Fly is not to tear down at all** — autostop already reduces the idle
+  bill to loose change, and leaving it standing eliminates the entire re-provisioning cycle.
+- **Hetzner — only if you delete the server.** *"We will bill you for your servers until you delete them,
+  independent of their state"* ([Hetzner billing FAQ](https://docs.hetzner.com/cloud/billing/faq/)). Powering
+  a VPS off saves nothing. Preserving the built machine across the gap means a snapshot, billed per
+  gigabyte-month.
+- **Railway — the $5/mo Hobby fee is a subscription**, not usage; usage stops when services are removed, but
+  the subscription does not stop by itself. Deleted volumes are recoverable only briefly: *"When a volume is
+  deleted, it is queued for deletion and will be permanently deleted within 48 hours"*
+  ([Railway volumes](https://docs.railway.com/reference/volumes)).
+- **Vercel Hobby / Neon Free / Supabase Free / Cloudflare free — nothing to stop.** These cost $0 idle by
+  construction, which under the seasonal model is a structural advantage, not a consolation prize.
+
+---
+
+## 6. Free tiers re-judged under seasonal use
+
+**Render free Postgres — the sharpest question in this round. Verdict: usable for a first marathon, but know
+exactly where the edge is.**
+
+Verbatim from [Render's free tier docs](https://render.com/docs/free):
+
+- *"Free Render Postgres databases expire 30 days after creation."* — **the clock runs from creation, not from
+  last use.** Idling the app does not buy time.
+- At expiry: *"An expired Free database is inaccessible unless you upgrade it to a paid instance type."*
+- Then: 14 days of grace, after which *"Render **deletes** the database (along with all of its data)."*
+- *"Only one Free Render Postgres database can be active for any given workspace."*
+- *"Render notifies you via email when you're approaching a Free database expiration, and then again when
+  you're approaching the end of the grace period."*
+
+**A 28-day marathon against a 30-day clock leaves two days of slack.** Read the failure mode precisely,
+because it is less catastrophic than it first sounds: at day 30 the app **breaks** (the database becomes
+inaccessible) but the data is **not yet gone** — there are 14 further days in which a one-click upgrade to a
+paid instance restores access with data intact. So a marathon that slips a week costs an unplanned ~$6–7 and
+an evening of confusion, not a lost vote set — *provided* the dev reads the warning email and acts inside the
+grace window. If the dev is the sort to ignore a provider email for two weeks, this is a real data-loss path.
+
+Two further cautions: free web services also spin down after 15 minutes idle and take about a minute to wake
+(fine for organising, mildly annoying on run day), and the 750 free instance hours per workspace per month is
+just over the 672 hours in a 28-day window — enough for **one** always-on free service, with no room for a
+second. **Not verified:** whether creating a fresh free database for each marathon, three times a year, is
+within Render's intended use. Their docs do not address it and contain no fair-use language about it. Treat it
+as an open question with support rather than an assumption — the honest framing is that the free tier makes a
+good *first* marathon (a genuine 30-day trial that happens to match the window), after which ~$12 buys the
+question away.
+
+**Supabase Free — reversed to a recommendation.** *"A Free plan project is considered inactive if it does not
+receive sufficient user database activity over the past week"*, after which it pauses; data and configuration
+are retained (*"The project will return to its previous state, including data and configurations"*); resume is
+a single self-service button; and the restore window is a full year
+([project pausing](https://supabase.com/docs/guides/platform/free-project-pausing)). The pricing page's limit
+of **2 active free projects** is not binding here ([pricing](https://supabase.com/pricing)). Its remaining
+weakness is the in-window bar, not the cross-window one: **Free gets no automatic backups** — daily backups
+with 7-day retention start at Pro ($25/mo), PITR is a $100/mo add-on. On Supabase Free you must take your own
+dumps during the live weeks (§7).
+
+**Neon Free — unchanged and quietly ideal for this model.** 0.5 GB storage and 100 CU-hours per project;
+scale-to-zero after 5 minutes, mandatory on Free (*"cannot [be] disable[d]"*); history/PITR window 6 hours,
+1 GB limit; the documented consequence of exceeding limits is compute suspension until the next billing
+month, **not** project deletion ([Neon pricing](https://neon.com/pricing),
+[plans](https://neon.com/docs/introduction/plans)). A Neon project makes an excellent permanent home for a
+user list that outlives every other resource.
+
+**Turso Free** — 5 GB, 500 M monthly row reads, PITR 1 day, Developer plan $4.99/mo
+([Turso pricing](https://turso.tech/pricing)). Turso's pricing page states no idle-archival policy, so
+"does an idle database survive six months" remains **unverified** — the deciding question under this model,
+and it is unanswered.
+
+**Cloudflare D1 free** — 5 GB total, 500 MB max per database, 5 M row reads/day, 100 K writes/day, and
+**7 days of Time Travel point-in-time recovery on the free plan** (30 days paid)
+([D1 pricing](https://developers.cloudflare.com/d1/platform/pricing/),
+[limits](https://developers.cloudflare.com/d1/platform/limits/)). That is the strongest free in-window
+durability story surveyed. It is attached, unfortunately, to the most stack-constraining runtime (§8).
+
+**Oracle Always Free — still rejected, for better reasons.** Intending the instance to die defuses round one's
+objection, but two new ones replace it. First, the semantics are undocumented: Oracle states only that *"Idle
+Always Free compute instances may be reclaimed by Oracle"* (idle = 7 days of sub-20% CPU p95, network, and —
+on A1 — memory), and the page **does not say** whether a reclaimed instance is stopped or terminated, whether
+boot volumes survive, or whether notice is given
+([Oracle Always Free](https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Always_Free_Resources.htm)).
+You cannot plan a teardown/rebuild cycle around a mechanism whose outcome the vendor declines to specify.
+Second, whatever reclamation destroys, you rebuild a Linux box from scratch — the worst re-provisioning burden
+on this list, three times a year, by a dev who has never hosted anything. Free is not cheap enough for that.
+
+**Fly and Railway have no meaningful free tier.** Fly's trial is *"2 hours of machine runtime or 7 days of
+access, whichever comes first"* ([Fly free trial](https://fly.io/docs/about/free-trial/)); Railway's Free plan
+is $1/month of credit with 0.5 GB RAM ([Railway plans](https://docs.railway.com/reference/pricing/plans)).
+Neither is a seasonal option; both are priced low enough that it doesn't matter.
+
+---
+
+## 7. Durability: the two bars, and the concrete backup flow
+
+**In-window (the ~4 live weeks) — the bar did not move.** Ranked by what you get without building anything:
+
+| Option | In-window recovery | Verdict |
+|---|---|---|
+| Render Postgres (paid) | Continuous backup, PITR **past 3 days** (Hobby workspace) / 7 days (Pro) | Clears the bar, zero work |
+| Cloudflare D1 (free) | Time Travel **7 days** free | Clears the bar, zero work |
+| Neon Free | **6 hours** history | Thin — pair with a nightly dump during live weeks |
+| Turso Free | **1 day** PITR | Adequate |
+| Fly + SQLite on a volume | Automatic **daily** snapshots, default **5-day** retention (configurable 1–60) | Adequate *only* with Litestream on top — see below |
+| Supabase Free | **No automatic backups** | Does **not** clear the bar unaided; you must dump nightly yourself |
+| Railway volume | Backups **not automatic by default**; daily (kept 6 days) / weekly / monthly schedules must be configured | Clears the bar only if you remember to switch it on |
+
+On Fly, a volume is a single copy and Fly says so plainly: *"If you only have a single copy of your data on a
+single volume, and the host fails, then any data stored between the time when the snapshot was taken and the
+time when the failure occurred will be lost"* ([volume snapshots](https://fly.io/docs/volumes/snapshots/)).
+The fix is [**Litestream**](https://litestream.io/) — open source, streams SQLite changes continuously to
+object storage with no application code changes — replicating to **Cloudflare R2**, free up to 10 GB-month
+with zero egress charges ([R2 pricing](https://developers.cloudflare.com/r2/pricing/)). Cost: $0. Setup:
+an afternoon, once. **Test the restore before the first marathon** — an untested backup is a rumour.
+
+**Cross-window (the months between) — newly trivial.** Concretely, per option:
+
+- **Render.** The dashboard exposes an external connection URL and a ready-made **PSQL Command**: *"Tools and
+  systems outside of Render can connect to your database via its external URL"*
+  ([connecting docs](https://render.com/docs/postgresql-creating-connecting)). Teardown is
+  `pg_dump "$EXTERNAL_URL" -t users -Fc -f users.dump`; spin-up is `pg_restore -d "$NEW_URL" users.dump`.
+  Render documents psql and its own on-demand logical exports; `pg_dump` against the external URL is standard
+  Postgres and works, but is not itself spelled out in their docs.
+- **Neon.** Documented directly: `pg_dump -Fc -v -d <connection_string> -f mydumpfile.bak` and
+  `pg_restore -v -O -d <connection_string> mydumpfile.bak`, with two caveats worth heeding — *"Avoid using
+  `pg_dump` over a pooled connection string...Use an unpooled connection string instead"*, and pass
+  `-O/--no-owner` because *"the `neon_superuser` is not a PostgreSQL `superuser`. It cannot run `ALTER OWNER`
+  statements"* ([Neon migration docs](https://neon.com/docs/import/migrate-from-postgres)).
+- **Supabase.** `supabase db dump --linked --data-only -f users.sql` — the CLI runs `pg_dump` in a container
+  against the remote project via `--linked` or `--db-url`
+  ([CLI reference](https://supabase.com/docs/reference/cli/supabase-db-dump)). Or simply don't tear down: the
+  automatic pause already retains everything.
+- **Fly + SQLite.** Copy the database file off the volume with flyctl's ssh/sftp before teardown — or, again,
+  don't tear down.
+
+**The honest answer, though: for ten rows, a database is the wrong home between marathons.** If the surviving
+state is a handful of display names and email addresses, keep it as a **seed file in the repo** (or an
+environment variable) and apply it at spin-up. That converts cross-window persistence from an ops problem
+into a code problem: it is versioned, diffable, reviewable, impossible to forget to export, and it makes
+"spin up marathon #4" a single deploy with no restore step. Two caveats: keep it to identities, not secrets
+or password hashes (delegate auth — see §9), and make sure the list stays editable *without* a redeploy once
+the marathon is live, so adding a late-joining friend isn't a git push.
+
+---
+
+## 8. Runtime constraints — what would rule an option out
+
+Flags for **#14 (tech stack)**. Seasonality changes none of these; they are properties of the runtimes.
+
+- **Cloudflare Workers constrains the stack more than anything else here.** JS/WASM only: no native binaries,
+  no arbitrary process. Free plan allows **10 ms of CPU time per invocation**
+  ([Workers limits](https://developers.cloudflare.com/workers/platform/limits/)), which forces the solver into
+  the browser outright. Workers Paid ($5/mo) raises this to 30 s default / **5 min max** per request, but only
+  for WASM-compiled code. Python Workers are **in open beta** on Pyodide/PyEmscripten wheels, where
+  *"WebAssembly support for Python packages is still in early stages, and some packages may not yet be
+  available as PyEmscripten wheels on PyPI"*, and only async HTTP clients (aiohttp, httpx) work
   ([Python Workers](https://developers.cloudflare.com/workers/languages/python/),
   [packages](https://developers.cloudflare.com/workers/languages/python/packages/)). **A pip-installed MIP
-  solver with C extensions will not run on Workers.** On the free plan the 10 ms CPU limit forces the solver
-  into the browser regardless. On Workers Paid ($5/mo) CPU rises to 30 s default / **5 min max** per request,
-  which would be enough — but only for a WASM-compiled solver.
-  *Escape hatch:* **Cloudflare Containers** (Workers Paid) runs *"code written in any programming language,
-  built for any runtime"* from a container image, scales to zero, and includes 25 GiB-hours memory /
-  375 vCPU-minutes / 200 GB-hours disk per month
-  ([Containers pricing](https://developers.cloudflare.com/containers/pricing/)). This rescues the solver but
-  buys a bespoke Worker + Durable Object + Container programming model — exactly the "master a proprietary
-  runtime" cost this project is trying to avoid.
-- **Vercel constrains the architecture, not the language.** No always-on process and no local filesystem, so
-  the database must be external and any long job is a function invocation. But the timeout is no longer the
-  blocker it used to be: with fluid compute, **Hobby max duration is 300 s** (Pro 800 s, 1800 s in beta),
-  memory 2 GB / 1 vCPU on Hobby ([Vercel function limits](https://vercel.com/docs/functions/limitations)).
-  The Python runtime supports 3.12/3.13/3.14 with dependencies from `requirements.txt` / `pyproject.toml`, and
-  bundles up to **250 MB (500 MB for Python)**
-  ([Vercel Python runtime](https://vercel.com/docs/functions/runtimes/python)). A tens-of-seconds MIP solve
-  fits inside 300 s. Request/response bodies are capped at **4.5 MB** — irrelevant at this data size.
-- **Render, Railway, Fly and any VPS impose no language constraint** — all four run arbitrary Docker images,
-  so Node, Python + a MIP solver, or a compiled C++ binary are all on the table. If preserving the option of
-  writing part of the backend in C++ matters, these are the four that keep it open.
+  solver with C extensions will not run on Workers.** The escape hatch is **Cloudflare Containers** on Workers
+  Paid — *"Run code written in any programming language, built for any runtime"*, scale-to-zero, with
+  25 GiB-hours memory / 375 vCPU-minutes / 200 GB-hours disk included per month
+  ([Containers pricing](https://developers.cloudflare.com/containers/pricing/)) — but that buys a bespoke
+  Worker + Durable Object + Container model, exactly the proprietary-runtime cost this project avoids. This is
+  a shame, because D1's free 7-day Time Travel is the best free durability story surveyed.
+- **Vercel constrains architecture, not language.** No always-on process and no local filesystem, so the
+  database is a second vendor and every long job is a function invocation. The timeout is no longer a blocker:
+  with fluid compute, **Hobby max duration is 300 s** (Pro 800 s, 1800 s beta), memory 2 GB / 1 vCPU on Hobby
+  ([function limits](https://vercel.com/docs/functions/limitations)). Python 3.12/3.13/3.14 with
+  `requirements.txt` / `pyproject.toml` dependencies and bundles to 250 MB (500 MB for Python)
+  ([Python runtime](https://vercel.com/docs/functions/runtimes/python)). A tens-of-seconds MIP solve fits
+  inside 300 s. Request/response bodies cap at 4.5 MB — irrelevant here. Hobby remains
+  *"non-commercial, personal use only"* ([Hobby plan](https://vercel.com/docs/plans/hobby)).
+- **Render, Railway, Fly and any VPS impose no language constraint** — all run arbitrary Docker images. These
+  four keep open the option of writing part of the backend in C++.
 - **Unverified:** Render's docs do not document a hard HTTP request timeout for web services (checked
-  2026-08-26). Do not design around a 60-second synchronous solve request on faith — see below.
+  2026-08-26). Don't design around a 60-second synchronous solve on faith.
 
-**Architectural advice that follows, regardless of host:** do not run a tens-of-seconds solve inside a
-synchronous HTTP request. Kick off a job, return an id, poll or stream progress. That pattern works on every
-option in this document, removes the timeout question entirely, and is itself a good web-architecture lesson.
-On Render that means a Background Worker; on Fly a second process or Machine; on Vercel a second function
-invocation; on Cloudflare a Queue consumer (15 min limit) or a Container.
-
----
-
-## 7. Data durability: SQLite on a volume vs managed Postgres
-
-The failure that matters is losing votes mid-marathon. Two credible answers:
-
-**Managed Postgres (recommended).** Someone else runs the backups and you can restore to a point in time.
-Cheapest credible options: Render Postgres inside the ~$13/mo bundle (PITR 3 days on Hobby workspace, 7 on
-Pro), Neon Free ($0, PITR 6 hours), Turso Free ($0, PITR 1 day), Cloudflare D1 free (Time Travel 7 days).
-Avoid: **Fly Managed Postgres at $38/mo Basic** ([Fly MPG](https://fly.io/docs/mpg/overview/)) — more than
-double the entire Render bundle; DigitalOcean Managed Postgres at $15.15/mo.
-
-**SQLite on a volume (viable, cheapest, but you own it).** Works fine at 10 users — but a single volume is a
-single copy. Fly is explicit: *"If you only have a single copy of your data on a single volume, and the host
-fails, then any data stored between the time when the snapshot was taken and the time when the failure
-occurred will be lost"*; automatic daily snapshots default to **5-day** retention, configurable 1–60 days
-([Fly volume snapshots](https://fly.io/docs/volumes/snapshots/)). The cheap fix is
-[**Litestream**](https://litestream.io/) — open source, streams SQLite changes continuously to object storage,
-no application code changes — replicating to **Cloudflare R2**, whose free tier is 10 GB-month with **zero
-egress charges** ([R2 pricing](https://developers.cloudflare.com/r2/pricing/)). Total durability cost: $0.
-Total durability *understanding* cost: you must set it up and actually test a restore, which a first-time
-host usually doesn't.
-
-**Explicitly avoid Fly's unmanaged Postgres.** Fly's own docs warn: *"We are not able to provide support or
-guidance for unmanaged Postgres"* and note it is *"not the same thing as a managed database service"*
-([Fly Postgres docs](https://fly.io/docs/postgres/)). That is a managed-DB-shaped thing with none of the
-guarantees — the worst of both worlds for someone who has never hosted anything.
-
-**Verdict:** for a few marathons a year, a managed Postgres is worth the money. $13/mo buys away the entire
-class of "I thought I had backups" failures. If the budget must be $0–3, take Fly + SQLite + Litestream to R2
-and *test the restore before the first marathon*.
+**Architecture advice that follows regardless of host:** don't run a tens-of-seconds solve inside a
+synchronous HTTP request. Start a job, return an id, poll or stream progress. That pattern works everywhere in
+this document, deletes the timeout question, and is itself good web-architecture practice. On Render that's a
+Background Worker ([docs](https://render.com/docs/background-workers)); on Fly a second process or Machine; on
+Vercel a second invocation; on Cloudflare a Queue consumer (15 min) or a Container.
 
 ---
 
-## 8. Security posture — what the dev must understand (input to #16)
+## 9. Re-provisioning, config rot and URL stability
 
-Roughly in order of how much you must learn:
+Under the seasonal model, **re-provisioning burden replaces steady-state ops burden as the headline axis.**
+Setup is no longer a one-time cost amortised over years; it recurs every marathon, each time after a
+four-month memory gap.
 
-- **Vercel / Render / Railway / Fly / Cloudflare:** TLS certificates are issued and renewed for you, and the
-  platform terminates HTTPS at its edge. There is no OS to patch and no SSH port to leave open. Your
-  remaining responsibilities are application-level: authentication, session handling, secrets in environment
-  variables (never in the repo), and not writing SQL injection. That is the correct set of things for a
-  web-architecture learning project to be worrying about.
-- **VPS:** everything above, plus SSH key-only login, a firewall, unattended security upgrades, a reverse
-  proxy, certbot/Caddy renewal, database network exposure, and noticing when any of it breaks. This is a
-  second discipline (Linux sysadmin) bolted onto the first, and it is the single strongest argument against
-  the VPS path for this dev — the €7/mo price is not the real cost.
-- **Useful shortcut for a fixed group of friends:** **Cloudflare Access** can gate the whole app behind an
+**Spin-up effort, best to worst:**
+
+1. **Nothing to spin up** — Supabase Free (click Resume), Neon Free (wakes on connection), Vercel Hobby
+   (deployment never went away), Fly with autostop (wakes on request; *"Usually this takes well under a
+   second"* — [Machines overview](https://fly.io/docs/machines/overview/)). Under a seasonal model this is a
+   real and underrated category: **the cheapest re-provisioning is not re-provisioning.**
+2. **One commit** — Render Blueprints. `render.yaml` in the repo declares services, databases and environment
+   groups; *"Each push to the linked branch that modifies your Blueprint file triggers a deploy of any added
+   or modified resources"* ([Blueprints](https://render.com/docs/infrastructure-as-code)).
+3. **A few commands** — Fly, if you *do* tear down: `fly launch` / `fly deploy` against the `fly.toml` in the
+   repo, plus recreating the volume and restoring the data. The extra steps are the ones most likely to be
+   misremembered in four months.
+4. **Dashboard clicking, or experimental IaC** — Railway. Its new IaC declares *"services, databases, volumes,
+   buckets, custom domains, environment variables, replicas, and canvas groups"* from `.railway/railway.ts`
+   applied with `railway config apply`, with *"one project definition, one apply, omit means delete"* — but it
+   is explicitly marked **experimental**, and *"Generated `.railway/railway.ts` formatting may change while
+   the DSL is experimental"* ([Railway IaC](https://docs.railway.com/infrastructure-as-code)). The older
+   config-as-code covers only build and deploy settings, is deprecated with legacy support until 1 Dec 2026,
+   and cannot define services, volumes or databases
+   ([config as code](https://docs.railway.com/reference/config-as-code)).
+5. **An afternoon, every time** — VPS and Oracle. Rebuild the box, or restore a snapshot and then patch four
+   months of security updates before you dare expose it.
+
+**Config rot is a genuine recurring cost of this model, and pretending otherwise would be dishonest.** Across a
+four-month gap you should expect: base images and language runtimes deprecated, dependency lockfiles that no
+longer resolve, expired API tokens (the movie-metadata provider is the obvious candidate), platform UI and
+defaults moved, and free-tier terms changed. Two observations:
+
+- **Declared infrastructure rots less than remembered infrastructure.** A `render.yaml` or `fly.toml` in the
+  repo is the difference between "rebuild it the way I did last time" and "rebuild it the way the file says".
+  This is the strongest practical argument for Render or Fly over click-configured Railway.
+- **Rebuilding forces rot to surface at a moment you are paying attention** — at spin-up, three weeks before
+  anyone votes — rather than mid-marathon. Options that never tear down (Fly-left-standing, Supabase) trade
+  this for the risk that the first `fly deploy` in four months is the one that fails, on the day you needed a
+  fix. Neither is strictly safer; the mitigation for both is the same: **spin up a week early and click
+  through the whole flow once before inviting anyone.** Put that in the runbook.
+
+**URL stability — genuinely under-documented, so plan around it rather than trusting it.** Render's docs do
+not state how `onrender.com` subdomains are assigned, whether they must be globally unique, or whether a
+deleted service releases its name; Fly's docs likewise do not state whether app names are globally unique or
+reclaimable (both checked 2026-08-26). Given the seasonal model deletes and recreates resources by design,
+**assume the platform subdomain may change and buy a cheap custom domain.** That decouples the URL the friends
+bookmark from whatever is running underneath, survives a provider switch entirely, and costs ~$10–15/year —
+comparable to the entire hosting bill. Render includes 2 custom domains on the Hobby workspace, *"automatically
+creates and renews TLS certificates for all custom domains"*, and *"All HTTP traffic to a custom domain is
+automatically redirected to HTTPS"* ([custom domains](https://render.com/docs/custom-domains)). **This raises
+the value of a custom domain from a nicety to a structural requirement — feed it into #16.**
+
+---
+
+## 10. Security posture — what the dev must understand (input to #16)
+
+- **Vercel / Render / Railway / Fly / Cloudflare:** TLS certificates are issued and renewed for you and
+  HTTPS is terminated at the platform edge. No OS to patch, no SSH port left open. Your remaining
+  responsibilities are application-level: authentication, session handling, secrets in environment variables
+  (never in the repo — and note this constrains the "checked-in user list" idea in §7 to identities only), and
+  not writing SQL injection.
+- **VPS:** all of the above plus SSH key-only login, a firewall, unattended upgrades, a reverse proxy,
+  certificate renewal, database exposure, and monitoring. Under the seasonal model this gets **worse**: a box
+  rebuilt three times a year, or restored from a four-month-old snapshot full of unpatched packages, is
+  harder to keep safe than one that is continuously maintained. The €18/year is not the cost.
+- **A seasonal-specific risk worth naming:** an app that is publicly reachable but unattended for four months
+  is a liability. If you do leave something standing (the Fly option), either keep it behind access control or
+  take the public route down between marathons. "Dead between marathons" should mean *unreachable*, not merely
+  *unused*.
+- **Useful shortcut for a fixed group of friends:** **Cloudflare Access** gates the whole app behind an
   identity provider or an email one-time PIN before any request reaches the origin, and the Zero Trust free
-  plan *"protects up to 50 users at no cost"*
-  ([Cloudflare blog](https://blog.cloudflare.com/teams-plans/),
-  [Access policies docs](https://developers.cloudflare.com/cloudflare-one/policies/access/)). For a 5–10
-  person marathon this is a legitimate way to be "safely reachable over the internet" without writing an auth
-  system on day one. It works in front of any origin, including Render or Fly — it is not Cloudflare-hosting
-  lock-in. Note the free-seat figure comes from Cloudflare's own blog; the plans page did not render a
-  machine-readable figure on 2026-08-26, so confirm in the dashboard before relying on it.
+  plan *"protects up to 50 users at no cost"* ([Cloudflare blog](https://blog.cloudflare.com/teams-plans/),
+  [Access policies](https://developers.cloudflare.com/cloudflare-one/policies/access/)). It works in front of
+  any origin — Render, Fly, anything — so it is not hosting lock-in. It also fits the seasonal model neatly:
+  the "user list" becomes a list of email addresses in an Access policy, which is both the auth story and the
+  cross-window state, and it is edited in a dashboard rather than a deploy. The free-seat figure comes from
+  Cloudflare's own blog; their plans page did not render a machine-readable figure on 2026-08-26, so confirm
+  in the dashboard before relying on it.
 
 ---
 
-## 9. Price-change watchlist
+## 11. Price-change watchlist
 
-- **Hetzner raised cloud prices on 15 June 2026, 8 AM CEST.** Examples from Hetzner's own notice: CX23
-  €3.99 → **€5.49/mo**, CAX11 €4.49 → **€5.99/mo**, CPX22 €7.99 → **€19.49/mo**, CCX13 €15.99 → **€42.99/mo**
-  (all ex VAT and ex IPv4)
-  ([Hetzner price adjustment](https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/)).
-  Primary IPv4 is **€0.50/mo excl. VAT** ([Hetzner server docs](https://docs.hetzner.com/cloud/servers/overview/));
-  backups cost **20% of the server's monthly price** for seven daily slots
-  ([Hetzner billing FAQ](https://docs.hetzner.com/cloud/billing/faq/),
-  [backups](https://docs.hetzner.com/cloud/servers/getting-started/enabling-backups/)). Older Hetzner
-  marketing pages still quoting CX22 at €3.79/mo ([press release](https://www.hetzner.com/pressroom/new-cx-plans/))
-  are pre-adjustment — the VPS price advantage narrowed substantially.
-- **Fly.io removed its free allowance**; a card is required and billing is per-second usage-based.
-- **Render's free Postgres became a 30-day trial**, not a free tier.
-- **Render's live pricing page renders client-side** and could not be read on 2026-08-26; the $13/mo figure
-  comes from Render's own July 2026 article and the legacy instance table (Postgres Starter $7/mo,
-  [legacy types](https://render.com/docs/postgresql-legacy-instance-types)). Confirm the current Starter web
-  service price in the dashboard before committing.
+- **Hetzner raised cloud prices on 15 June 2026, 8 AM CEST**: CX23 €3.99 → **€5.49/mo**, CAX11 €4.49 →
+  **€5.99/mo**, CPX22 €7.99 → **€19.49/mo**, CCX13 €15.99 → **€42.99/mo**, all ex VAT and ex IPv4
+  ([price adjustment](https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/)).
+  Primary IPv4 is **€0.50/mo excl. VAT** ([servers overview](https://docs.hetzner.com/cloud/servers/overview/));
+  backups are **20% of the server's monthly price** for seven daily slots
+  ([billing FAQ](https://docs.hetzner.com/cloud/billing/faq/),
+  [backups](https://docs.hetzner.com/cloud/servers/getting-started/enabling-backups/)). Marketing pages still
+  quoting CX22 at €3.79/mo ([press release](https://www.hetzner.com/pressroom/new-cx-plans/)) are
+  pre-adjustment.
+- **Fly.io removed its free allowance**; a card is required, billing is per-second usage-based with no plan fee
+  and no minimum ([billing](https://fly.io/docs/about/billing/)).
+- **Render's free Postgres is a 30-day trial**, not a free tier — the single most important expiry date in this
+  document.
+- **Supabase's paused-project restore window has moved before**: a June 2024 changelog set it at 90 days, while
+  the current docs state one year. Re-check it if the plan depends on a long gap.
+- **Railway's IaC is experimental** and its predecessor is deprecated with legacy support only until
+  **1 December 2026**.
+- **Render's live pricing page renders client-side** and could not be read on 2026-08-26; the ~$13/mo bundle
+  figure comes from Render's own July 2026 article plus the legacy instance table (Postgres Starter $7/mo,
+  [legacy types](https://render.com/docs/postgresql-legacy-instance-types)).
 
 ---
 
-## 10. Sources
+## 12. Sources
 
 Fly.io: [pricing](https://fly.io/docs/about/pricing/) · [billing](https://fly.io/docs/about/billing/) ·
 [free trial](https://fly.io/docs/about/free-trial/) · [autostop/autostart](https://fly.io/docs/launch/autostop-autostart/) ·
@@ -282,12 +459,17 @@ Fly.io: [pricing](https://fly.io/docs/about/pricing/) · [billing](https://fly.i
 
 Railway: [pricing](https://railway.com/pricing) · [plans](https://docs.railway.com/reference/pricing/plans) ·
 [volumes](https://docs.railway.com/reference/volumes) · [backups](https://docs.railway.com/reference/backups) ·
-[app sleeping / serverless](https://docs.railway.com/reference/app-sleeping)
+[app sleeping / serverless](https://docs.railway.com/reference/app-sleeping) ·
+[Infrastructure as Code](https://docs.railway.com/infrastructure-as-code) ·
+[config as code (deprecated)](https://docs.railway.com/reference/config-as-code)
 
-Render: [free tier](https://render.com/docs/free) · [web services](https://render.com/docs/web-services) ·
+Render: [free tier](https://render.com/docs/free) · [FAQ (billing proration)](https://render.com/docs/faq) ·
+[Blueprints / IaC](https://render.com/docs/infrastructure-as-code) · [web services](https://render.com/docs/web-services) ·
 [background workers](https://render.com/docs/background-workers) · [Postgres backups](https://render.com/docs/postgresql-backups) ·
-[Postgres flexible plans](https://render.com/docs/postgresql-refresh) · [legacy Postgres types](https://render.com/docs/postgresql-legacy-instance-types) ·
-[instance types](https://render.com/docs/compute-plans) · [cost article, July 2026](https://render.com/articles/how-much-does-cloud-application-hosting-cost-for-small-businesses)
+[Postgres flexible plans](https://render.com/docs/postgresql-refresh) · [creating & connecting to Postgres](https://render.com/docs/postgresql-creating-connecting) ·
+[legacy Postgres types](https://render.com/docs/postgresql-legacy-instance-types) · [instance types](https://render.com/docs/compute-plans) ·
+[custom domains](https://render.com/docs/custom-domains) ·
+[cost article, July 2026](https://render.com/articles/how-much-does-cloud-application-hosting-cost-for-small-businesses)
 
 Vercel: [function limits](https://vercel.com/docs/functions/limitations) · [Hobby plan](https://vercel.com/docs/plans/hobby) ·
 [Python runtime](https://vercel.com/docs/functions/runtimes/python)
@@ -302,9 +484,12 @@ Cloudflare: [Workers limits](https://developers.cloudflare.com/workers/platform/
 [Zero Trust free plan (blog)](https://blog.cloudflare.com/teams-plans/)
 
 Databases: [Neon pricing](https://neon.com/pricing) · [Neon plans](https://neon.com/docs/introduction/plans) ·
-[Supabase pricing](https://supabase.com/pricing) · [Turso pricing](https://turso.tech/pricing) · [Litestream](https://litestream.io/)
+[Neon pg_dump/pg_restore](https://neon.com/docs/import/migrate-from-postgres) ·
+[Supabase pricing](https://supabase.com/pricing) · [Supabase project pausing](https://supabase.com/docs/guides/platform/free-project-pausing) ·
+[supabase db dump](https://supabase.com/docs/reference/cli/supabase-db-dump) ·
+[Turso pricing](https://turso.tech/pricing) · [Litestream](https://litestream.io/)
 
-VPS: [Hetzner price adjustment](https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/) ·
+VPS / free-tier-only: [Hetzner price adjustment](https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/) ·
 [Hetzner billing FAQ](https://docs.hetzner.com/cloud/billing/faq/) · [Hetzner backups](https://docs.hetzner.com/cloud/servers/getting-started/enabling-backups/) ·
 [Hetzner servers overview](https://docs.hetzner.com/cloud/servers/overview/) · [Hetzner CX press release](https://www.hetzner.com/pressroom/new-cx-plans/) ·
 [DigitalOcean droplets](https://www.digitalocean.com/pricing/droplets) · [DigitalOcean managed databases](https://www.digitalocean.com/pricing/managed-databases) ·
