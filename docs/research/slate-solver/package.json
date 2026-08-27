@@ -1,0 +1,6 @@
+{
+  "name": "slate-solver-benchmarks",
+  "private": true,
+  "description": "Throwaway benchmarks backing docs/research/slate-solver.md (issue #6). Not app code.",
+  "dependencies": { "highs": "^1.15.2" }
+}
