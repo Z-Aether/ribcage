@@ -1,3 +1,7 @@
 .agents/*
 .claude/*
 /skills-lock.json
+
+# Live API keys — never commit
+docs/credentials/
+tmp/
