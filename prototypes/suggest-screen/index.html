@@ -10,8 +10,12 @@
   card's contents.
 
     A  Inline       the search box is the pool's header; picking adds instantly
-    B  Two steps    pick, then confirm the copy (runtime) before it enters the pool
+    B  Two steps    pick, then confirm the copy (runtime) before it enters the pool   ← CHOSEN 2026-09-14
     C  The sheet    picking opens the shared film sheet; "add" lives on the sheet
+
+  Round 2 (2026-09-14): B is the default. Official synopsis dropped from the card;
+  TMDB link added beside the trailer; the shared "group content note" became one
+  note per voter; compact-by-default, click the title to expand/collapse.
 
   Data is real (data.js): TMDB search rankings + details and DTDD topics for
   sixteen of the group's own past suggestions. No API calls are made; the
@@ -200,7 +204,7 @@ const ME = 'Peti';
 const IMG = (p, w) => p ? `https://image.tmdb.org/t/p/w${w}${p}` : null;
 const VARIANTS = { A: 'Inline — the search box is the pool', B: 'Two steps — pick, then confirm the copy', C: 'The sheet is the card' };
 const S = {
-  variant: new URLSearchParams(location.search).get('variant') || 'A',
+  variant: new URLSearchParams(location.search).get('variant') || 'B',
   context: new URLSearchParams(location.search).get('context') || 'SUGGEST',   // which surface renders the shared card
   watched: new Set(['a dog dies', 'a cat dies', 'there are spiders']),        // my personal watched list
   watchedOff: false,
@@ -224,14 +228,15 @@ function seed() {
   mk(643586, 'Bori', '');
   mk(273271, 'Csaba', 'Low budget time-travel thing, oddly tense.');
   mk(938614, 'Adam', 'Found footage-ish 70s talk show. Short and nasty.');
-  S.pool[1].groupNote = 'The extended cut adds about 30 min of Lothlórien. Nobody dies who didn\'t already die in the theatrical.';
+  S.pool[4].notes = { 'Bori': 'Heavy strobe in the last twenty minutes — not a DTDD topic, but I know two of us mind it.', 'Dóra': 'In. Obviously.' };
+  S.pool[3].notes = { 'Adam': 'Extended cut adds ~30 min of Lothlórien. Nobody dies who did not already die in the theatrical.' };
 }
 function addFilm(f, by, note, patch = {}) {
   const s = Object.assign({
     sid: nextId++, tmdb: f ? f.id : null, title: f ? f.title : '', year: f ? f.year : '', poster: f ? f.poster_path : null,
     runtime: f ? f.runtime : null, runtimeSrc: f && f.runtime ? 'TMDB' : null,
     director: f ? f.director : [], genres: f ? f.genres : [], cert: f ? f.cert : null, overview: f ? f.overview : '', trailer: f ? f.trailer : null,
-    dtdd: f ? f.dtdd : null, manual: !f, by, note, groupNote: '', added: Date.now(),
+    dtdd: f ? f.dtdd : null, manual: !f, by, note, notes: {}, added: Date.now(),
   }, patch);
   if (patch.runtime && f && patch.runtime !== f.runtime) s.runtimeSrc = 'edited';
   S.pool.unshift(s);
@@ -292,16 +297,19 @@ function triggerBlock(s, where) {
 function card(s, mode = 'full', ctx = S.context) {
   const icon = hasIcon(s) ? `<span class="icon" title="A topic on your watched list is well evidenced on this film">!</span>` : '';
   const poster = s.poster ? `<img class="poster" src="${IMG(s.poster, 185)}" alt="">` : `<div class="poster"></div>`;
-  const meta = [s.director.length ? esc(s.director.join(', ')) : '', s.genres.length ? esc(s.genres.join(' · ')) : '', s.cert ? `<span class="cert">${esc(s.cert)}</span>` : '', s.trailer ? `<a href="https://youtube.com/watch?v=${s.trailer}" target="_blank" rel="noopener">trailer ↗</a>` : '', s.manual ? '<span class="chip">entered by hand</span>' : ''].filter(Boolean).join('<span>·</span>');
+  const meta = [s.director.length ? esc(s.director.join(', ')) : '', s.genres.length ? esc(s.genres.join(' · ')) : '', s.cert ? `<span class="cert">${esc(s.cert)}</span>` : '', s.trailer ? `<a href="https://youtube.com/watch?v=${s.trailer}" target="_blank" rel="noopener">trailer ↗</a>` : '', s.tmdb ? `<a href="https://www.themoviedb.org/movie/${s.tmdb}" target="_blank" rel="noopener" class="muted">TMDB ↗</a>` : '', s.manual ? '<span class="chip">entered by hand</span>' : ''].filter(Boolean).join('<span>·</span>');
   const synOpen = S.openSyn.has(s.sid);
   const rtMode = ctx === 'RUN' ? 'static' : ctx === 'APPROVE' ? 'input' : (mode === 'full' ? 'pencil' : 'pencil');
-  const head = `<div class="head"><div><h3>${icon} ${esc(s.title)} <span class="yr">${esc(s.year)}</span></h3><div class="meta">${meta}</div></div><div>${runtimeCtl(s, { mode: rtMode })}</div></div>`;
-  const syn = s.overview ? `<p class="synopsis${synOpen ? ' open' : ''}" onclick="act('syn',${s.sid})">${esc(s.overview)}</p>` : '';
+  const collapsible = S.variant === 'B' && mode === 'full' && ctx === 'SUGGEST' && s.sid > 0;
+  const head = `<div class="head"><div><h3 ${collapsible ? `style="cursor:pointer" title="collapse" onclick="act('expand',${s.sid})"` : ''}>${icon} ${esc(s.title)} <span class="yr">${esc(s.year)}</span></h3><div class="meta">${meta}</div></div><div>${runtimeCtl(s, { mode: rtMode })}</div></div>`;
+  const syn = ''; // official synopsis dropped 2026-09-14: the suggester's note is the pitch, trailer + TMDB links carry the rest
   const by = `<div class="by">suggested by <b>${esc(s.by)}</b>${s.by === ME && ctx === 'SUGGEST' && s.sid > 0 ? ` · <a href="#" onclick="act('withdraw',${s.sid});return false">withdraw</a>` : ''}</div>`;
   const pnote = s.by === ME && ctx === 'SUGGEST'
     ? `<div class="note-group"><div class="lbl"><span>Your note to the group</span></div><textarea placeholder="Why this one? Scores are hidden during VOTE — this is your only pitch." onchange="act('note',${s.sid},this.value)">${esc(s.note)}</textarea></div>`
     : (s.note ? `<p class="pnote">“${esc(s.note)}”</p>` : '');
-  const gnote = ctx === 'RUN' ? '' : `<div class="note-group"><div class="lbl"><span>Group content note</span><span class="who">anyone can edit</span></div><textarea placeholder="Anything DTDD misses or gets wrong — a strobe sequence, a scene that isn't a topic…" onchange="act('gnote',${s.sid},this.value)">${esc(s.groupNote)}</textarea></div>`;
+  const others = Object.entries(s.notes || {}).filter(([who]) => who !== ME).map(([who, t]) => `<p class="pnote">“${esc(t)}” <span class="who muted small">— ${esc(who)}</span></p>`).join('');
+  const mine = s.by === ME || ctx === 'RUN' || ctx === 'APPROVE' ? '' : `<div class="note-group"><div class="lbl"><span>Your note</span><span class="who">everyone sees it · only you edit it</span></div><textarea placeholder="Anything the group should know — a trigger DTDD misses, a strobe sequence, or just that you're in." onchange="act('gnote',${s.sid},this.value)">${esc((s.notes || {})[ME] || '')}</textarea></div>`;
+  const gnote = `${others ? `<div class="note-group"><div class="lbl"><span>Notes from the group</span></div>${others}</div>` : ''}${mine}`;
   const trig = ctx === 'RUN' || ctx === 'PICK' ? '' : triggerBlock(s, ctx);
   let ctxbar = '';
   if (ctx === 'APPROVE') ctxbar = `<div class="ctx"><span class="muted small">runtime is required to approve</span><button class="primary small" ${s.runtime ? '' : 'disabled'}>Approve</button><button class="small danger">Drop</button></div>`;
@@ -400,7 +408,7 @@ function variantC() {
     <div class="rows">${S.pool.map(poolRow).join('')}</div>
     ${sheet}`;
 }
-function pickC(i) { const r = S.results[i]; const f = detailsFor(r); S.c.adding = Object.assign({ sid: -2, by: ME, note: '', groupNote: '', manual: false }, { tmdb: f.id, title: f.title, year: f.year, poster: f.poster_path, runtime: f.runtime, runtimeSrc: f.runtime ? 'TMDB' : null, director: f.director, genres: f.genres, cert: f.cert, overview: f.overview, trailer: f.trailer, dtdd: f.dtdd }); S.q = ''; S.results = null; render(); }
+function pickC(i) { const r = S.results[i]; const f = detailsFor(r); S.c.adding = Object.assign({ sid: -2, by: ME, note: '', notes: {}, manual: false }, { tmdb: f.id, title: f.title, year: f.year, poster: f.poster_path, runtime: f.runtime, runtimeSrc: f.runtime ? 'TMDB' : null, director: f.director, genres: f.genres, cert: f.cert, overview: f.overview, trailer: f.trailer, dtdd: f.dtdd }); S.q = ''; S.results = null; render(); }
 
 // ------------------------------------------------------------------ actions
 function findS(sid) { return S.pool.find(s => s.sid === sid) || (S.b.draft && S.b.draft.sid === sid ? S.b.draft : null) || (S.c.adding && S.c.adding.sid === sid ? S.c.adding : null); }
@@ -410,7 +418,7 @@ function act(what, a, b) {
     case 'rt': if (s) { const v = parseInt(b, 10); s.runtime = v > 0 ? v : null; s.runtimeSrc = s.tmdb && films[s.tmdb] && films[s.tmdb].runtime === s.runtime ? 'TMDB' : (s.runtime ? 'edited' : null); s._rtEdit = false; } break;
     case 'rtEdit': if (s) s._rtEdit = true; break;
     case 'note': if (s) s.note = b; break;
-    case 'gnote': if (s) s.groupNote = b; break;
+    case 'gnote': if (s) { s.notes = s.notes || {}; b.trim() ? s.notes[ME] = b : delete s.notes[ME]; } break;
     case 'syn': S.openSyn.has(a) ? S.openSyn.delete(a) : S.openSyn.add(a); break;
     case 'allToggle': if (s) s._allOpen = b; return;
     case 'watch': b ? S.watched.add(a) : S.watched.delete(a); break;
@@ -424,7 +432,7 @@ function act(what, a, b) {
     case 'commitB': { const d = S.b.draft; const f = films[d.tmdb]; const n = addFilm(f || { id: d.tmdb, title: d.title, year: d.year, poster_path: d.poster, runtime: null, overview: d.overview, genres: d.genres, director: d.director, cert: d.cert, trailer: null, dtdd: null }, ME, d.note, { runtime: d.runtime }); if (!f) n.manual = d.manual || false; n._open = true; S.b = { step: 1, pick: null, draft: null }; S.q = ''; S.results = null; break; }
     case 'backB': S.b.step = 2; break;
     case 'manual': {
-      const blank = { tmdb: null, title: S.q.trim(), year: '', poster: null, runtime: null, runtimeSrc: null, director: [], genres: [], cert: null, overview: '', trailer: null, dtdd: null, manual: true, note: '', groupNote: '' };
+      const blank = { tmdb: null, title: S.q.trim(), year: '', poster: null, runtime: null, runtimeSrc: null, director: [], genres: [], cert: null, overview: '', trailer: null, dtdd: null, manual: true, note: '', notes: {} };
       if (S.variant === 'A') { const n = addFilm(null, ME, ''); Object.assign(n, blank, { sid: n.sid, by: ME }); n._justAdded = true; S.q = ''; S.results = null; S.toast = { text: 'Added by hand — give it a runtime', undo: n.sid }; }
       else if (S.variant === 'B') { S.b.draft = Object.assign({ sid: -1 }, blank); S.b.step = 3; }
       else { S.c.adding = Object.assign({ sid: -2, by: ME }, blank); S.q = ''; S.results = null; }
