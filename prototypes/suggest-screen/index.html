@@ -22,6 +22,11 @@
   full / truncated / pitch-only / none); confirm step leads with the pitch box and
   demotes the runtime to one line with a pencil.
 
+  Round 4 (2026-09-14): genres dropped; a trailing year in the query narrows the
+  search (no year field); one DTDD credit per expanded card by default, with a
+  bottom-bar toggle to compare against per-block; the bar collapses and can move
+  to the top so the page footer is visible.
+
   Data is real (data.js): TMDB search rankings + details and DTDD topics for
   sixteen of the group's own past suggestions. No API calls are made; the
   search is a lookup against recorded results with a 350 ms debounce.
@@ -125,6 +130,7 @@
   details.all label .n{color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
   details.all label input{margin-right:6px}
   details.all .pfoot{padding:6px 0 8px;border-top:1px solid var(--line)}
+  .credit-line{margin-top:6px;text-align:right}
   .dtdd-match{margin-top:8px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .dtdd-match .lbl{color:var(--muted)}
   .dtdd-match .val{border:1px solid var(--line);border-radius:6px;padding:2px 8px}
@@ -188,6 +194,8 @@
   @media (max-width:700px){header.app .brand span,header.app>.small{display:none}.card{grid-template-columns:80px 1fr;gap:10px}.card .poster{width:80px}.card .head{flex-wrap:wrap}.pool-head{flex-direction:column;align-items:flex-start;gap:2px}main{padding:14px 12px 120px}}
 
   /* ---------- floating prototype switcher (not part of the design) ---------- */
+  #switcher.top{bottom:auto;top:10px}
+  #switcher.min .opt,#switcher.min .lbl,#switcher.min .arrow{display:none}
   #switcher{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:100;background:#fff;color:#111;border-radius:999px;padding:6px 8px;display:flex;gap:6px;align-items:center;box-shadow:0 6px 24px rgba(0,0,0,.6);font-size:13px;white-space:nowrap}
   #switcher button{background:#eee;color:#111;border:0;border-radius:999px;padding:4px 10px}
   #switcher .lbl{font-weight:700;padding:0 6px;min-width:190px;text-align:center}
@@ -216,7 +224,8 @@ const S = {
   context: new URLSearchParams(location.search).get('context') || 'SUGGEST',   // which surface renders the shared card
   watched: new Set(['a dog dies', 'a cat dies', 'there are spiders']),        // my personal watched list
   watchedOff: false,
-  compactNotes: 'trunc',  // what a collapsed card shows of its notes: full | trunc | pitch | none
+  compactNotes: 'trunc',
+  credit: 'once',         // DTDD credit on a card: once (one line under the trigger section) | block (on each block that shows DTDD data)  // what a collapsed card shows of its notes: full | trunc | pitch | none
   pool: [],          // suggestions
   q: '', results: null, searching: false, timer: null,
   // per-variant transient
@@ -260,14 +269,18 @@ function detailsFor(row) { return films[row.id] || stub(row); }
 
 // ------------------------------------------------------------------ search
 function runSearch(q) {
-  const s = q.trim().toLowerCase();
+  // "title 1982" / "title (1982)" → the year becomes TMDB's primary_release_year filter; no year field
+  let s = q.trim().toLowerCase(), year = null;
+  const ym = s.match(/^(.*?)[\s(]+((?:19|20)\d\d)\)?\s*$/);
+  if (ym && ym[1].trim().length >= 2) { s = ym[1].trim(); year = ym[2]; }
+  const byYear = (rows) => year ? rows.filter(r => (r.release_date || '').startsWith(year)) : rows;
   if (s.length < 2) return null;
   // recorded query? (what TMDB actually returned, in its own order)
   const hit = Object.keys(byTitle).find(k => k.startsWith(s) || s.startsWith(k));
-  if (hit) return byTitle[hit].rows.slice(0, 5);
+  if (hit) return byYear(byTitle[hit].rows).slice(0, 5);
   const seen = new Set(), rows = [];
   for (const k of Object.keys(byTitle)) for (const r of byTitle[k].rows) if (!seen.has(r.id) && (r.title.toLowerCase().includes(s) || (r.original_title || '').toLowerCase().includes(s))) { seen.add(r.id); rows.push(r); }
-  return rows.slice(0, 5);
+  return byYear(rows).slice(0, 5);
 }
 function onType(v) {
   S.q = v; S.searching = v.trim().length >= 2; S.results = null;
@@ -301,14 +314,16 @@ function triggerBlock(s, where) {
   const w = watched();
   const empty = s.dtdd.topics.length === 0;
   const match = `<div class="dtdd-match"><span class="lbl">DoesTheDogDie:</span> <span class="val${empty ? ' empty' : ''}">${esc(s.dtdd.name)} (${s.dtdd.year})${empty ? ' — no data' : ''}</span> <a class="small" href="#" onclick="return false">${empty ? 'wrong film? pick another' : 'change'}</a></div>`;
-  const matched = m.length ? `<div class="matched"><div class="ttl"><span>${where === 'VOTE' ? 'On your list' : 'On your watched list'}</span>${POWERED}</div><ul>${m.map(t => `<li><span>${esc(t.topic)}</span><span class="n">${t.yes} yes / ${t.no} no</span></li>`).join('')}</ul></div>` : '';
-  const all = empty ? '' : `<details class="all" ${s._allOpen ? 'open' : ''} ontoggle="act('allToggle',${s.sid},this.open)"><summary>All ${s.dtdd.topics.length} topics · tick any to watch for it</summary><div class="grid">${s.dtdd.topics.map(t => `<label><span><input type="checkbox" ${w.has(t.topic) ? 'checked' : ''} onchange="act('watch','${esc(t.topic).replace(/'/g, '&#39;')}',this.checked)">${esc(t.topic)}</span><span class="n">${t.yes}/${t.no}</span></label>`).join('')}</div><div class="pfoot">${POWERED}</div></details>`;
-  return `<div class="topics">${match}${matched}${all}</div>`;
+  const perBlock = S.credit === 'block';
+  const matched = m.length ? `<div class="matched"><div class="ttl"><span>${where === 'VOTE' ? 'On your list' : 'On your watched list'}</span>${perBlock ? POWERED : ''}</div><ul>${m.map(t => `<li><span>${esc(t.topic)}</span><span class="n">${t.yes} yes / ${t.no} no</span></li>`).join('')}</ul></div>` : '';
+  const all = empty ? '' : `<details class="all" ${s._allOpen ? 'open' : ''} ontoggle="act('allToggle',${s.sid},this.open)"><summary>All ${s.dtdd.topics.length} topics · tick any to watch for it</summary><div class="grid">${s.dtdd.topics.map(t => `<label><span><input type="checkbox" ${w.has(t.topic) ? 'checked' : ''} onchange="act('watch','${esc(t.topic).replace(/'/g, '&#39;')}',this.checked)">${esc(t.topic)}</span><span class="n">${t.yes}/${t.no}</span></label>`).join('')}</div>${perBlock ? `<div class="pfoot">${POWERED}</div>` : ''}</details>`;
+  const once = perBlock ? '' : `<div class="credit-line">${POWERED}</div>`;
+  return `<div class="topics">${match}${matched}${all}${once}</div>`;
 }
 function card(s, mode = 'full', ctx = S.context) {
   const icon = hasIcon(s) ? `<span class="icon" title="A topic on your watched list is well evidenced on this film">!</span>` : '';
   const poster = s.poster ? `<img class="poster" src="${IMG(s.poster, 185)}" alt="">` : `<div class="poster"></div>`;
-  const meta = [s.director.length ? esc(s.director.join(', ')) : '', s.genres.length ? esc(s.genres.join(' · ')) : '', s.cert ? `<span class="cert">${esc(s.cert)}</span>` : '', s.trailer ? `<a href="https://youtube.com/watch?v=${s.trailer}" target="_blank" rel="noopener">trailer ↗</a>` : '', s.tmdb ? `<a href="https://www.themoviedb.org/movie/${s.tmdb}" target="_blank" rel="noopener" class="muted">TMDB ↗</a>` : '', s.manual ? '<span class="chip">entered by hand</span>' : ''].filter(Boolean).join('<span>·</span>');
+  const meta = [s.director.length ? esc(s.director.join(', ')) : '', s.cert ? `<span class="cert">${esc(s.cert)}</span>` : '', s.trailer ? `<a href="https://youtube.com/watch?v=${s.trailer}" target="_blank" rel="noopener">trailer ↗</a>` : '', s.tmdb ? `<a href="https://www.themoviedb.org/movie/${s.tmdb}" target="_blank" rel="noopener" class="muted">TMDB ↗</a>` : '', s.manual ? '<span class="chip">entered by hand</span>' : ''].filter(Boolean).join('<span>·</span>');
   const synOpen = S.openSyn.has(s.sid);
   const rtMode = ctx === 'RUN' ? 'static' : ctx === 'APPROVE' ? 'input' : (mode === 'full' ? 'pencil' : 'pencil');
   const collapsible = S.variant === 'B' && mode === 'full' && ctx === 'SUGGEST' && s.sid > 0;
@@ -369,7 +384,7 @@ function variantB() {
   // Two steps. A dedicated suggest panel: search → tiles → confirm the copy → pool. Pool rows compact.
   const b = S.b;
   const stepNow = b.step === 3 ? 3 : (S.results ? 2 : 1);
-  const steps = `<div class="steps"><span class="${stepNow === 1 ? 'on' : ''}">1 · find</span><span class="${stepNow === 2 ? 'on' : ''}">2 · which one</span><span class="${b.step === 3 ? 'on' : ''}">3 · your copy</span></div>`;
+  const steps = `<div class="steps"><span class="${stepNow === 1 ? 'on' : ''}">1 · find</span><span class="${stepNow === 2 ? 'on' : ''}">2 · which one</span><span class="${b.step === 3 ? 'on' : ''}">3 · your pitch</span></div>`;
   let body = '';
   if (b.step <= 2) {
     body = `<input type="search" placeholder="Title (add the year if you know it)" value="${esc(S.q)}" oninput="onType(this.value); S.b.step = 1" autocomplete="off" style="font-size:17px;padding:12px 14px">`;
@@ -385,7 +400,7 @@ function variantB() {
       ${d.poster ? `<img class="poster" src="${IMG(d.poster, 342)}" alt="">` : '<div class="poster"></div>'}
       <div>
         <h3>${esc(d.title)} <span class="muted" style="font-weight:400">${esc(d.year)}</span></h3>
-        <div class="meta muted small" style="margin-top:4px">${[d.director.join(', '), d.genres.join(' · '), d.cert].filter(Boolean).map(esc).join(' · ')}</div>
+        <div class="meta muted small" style="margin-top:4px">${[d.director.join(', '), d.cert].filter(Boolean).map(esc).join(' · ')}</div>
         <div class="note-group big"><div class="lbl"><span>Your pitch to the group</span></div><textarea autofocus placeholder="Why this one? Scores are hidden during VOTE — this is the only thing the group reads." onchange="S.b.draft.note=this.value">${esc(d.note)}</textarea></div>
         <div class="rtline small">Runtime ${runtimeCtl(d, { mode: 'pencil' })}${d.runtime && !d._rtEdit ? `<span class="muted">· wrong for your copy? click the pencil</span>` : d.runtime ? `<span class="muted">· director's cuts and extended editions differ; SOLVE plans on this number</span>` : `<span style="color:var(--warn)">· required — a film without a runtime cannot be approved</span>`}</div>
         <div class="actions"><button class="primary" ${d.runtime ? '' : 'disabled'} onclick="act('commitB')">Add to the pool</button><button onclick="act('backB')">‹ Back</button></div>
@@ -479,12 +494,15 @@ function render() {
 function renderSwitcher() {
   const keys = Object.keys(VARIANTS);
   const i = keys.indexOf(S.variant);
-  document.getElementById('switcher').innerHTML = `
-    <button onclick="setVariant('${keys[(i + keys.length - 1) % keys.length]}')">←</button>
+  const sw = document.getElementById('switcher'); sw.className = (S.barMin ? 'min ' : '') + (S.barTop ? 'top' : '');
+  sw.innerHTML = `
+    <button title="${S.barMin ? 'expand' : 'collapse'} the prototype bar" onclick="S.barMin=!S.barMin;renderSwitcher()">${S.barMin ? '▸ ' + S.variant : '▾'}</button><button title="move the bar to the ${S.barTop ? 'bottom' : 'top'}" onclick="S.barTop=!S.barTop;renderSwitcher()">${S.barTop ? '⤓' : '⤒'}</button>
+    <button class="arrow" onclick="setVariant('${keys[(i + keys.length - 1) % keys.length]}')">←</button>
     <span class="lbl">${S.variant} — ${VARIANTS[S.variant]}</span>
-    <button onclick="setVariant('${keys[(i + 1) % keys.length]}')">→</button>
+    <button class="arrow" onclick="setVariant('${keys[(i + 1) % keys.length]}')">→</button>
     <label class="opt" title="Render the shared card as the other surfaces would">card as <select onchange="S.context=this.value;render()">${['SUGGEST', 'APPROVE', 'VOTE', 'RUN'].map(c => `<option ${S.context === c ? 'selected' : ''}>${c}</option>`).join('')}</select></label>
     <label class="opt" title="What a collapsed card shows of its notes">notes on compact <select onchange="S.compactNotes=this.value;render()">${[['full','all, full'],['trunc','all, ~120 chars'],['pitch','pitch only'],['none','none']].map(([k,l]) => `<option value="${k}" ${S.compactNotes === k ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+    <label class="opt" title="Where the DoesTheDogDie credit sits on a card">DTDD credit <select onchange="S.credit=this.value;render()"><option value="once" ${S.credit === 'once' ? 'selected' : ''}>once per card</option><option value="block" ${S.credit === 'block' ? 'selected' : ''}>on each block</option></select></label>
     <label class="opt" title="Empty my watched list → no DTDD content inline, no badge"><input type="checkbox" ${S.watchedOff ? 'checked' : ''} onchange="S.watchedOff=this.checked;render()"> empty watched list</label>
     <label class="opt"><a href="#" onclick="location.reload();return false" style="color:#111">reset</a></label>`;
 }
