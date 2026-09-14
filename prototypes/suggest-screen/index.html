@@ -27,6 +27,9 @@
   bottom-bar toggle to compare against per-block; the bar collapses and can move
   to the top so the page footer is visible.
 
+  Round 5 (2026-09-14): runtime is editable by anyone; the APPROVE rendering flags a
+  value that differs from the one TMDB returned. Ticket resolved on this state.
+
   Data is real (data.js): TMDB search rankings + details and DTDD topics for
   sixteen of the group's own past suggestions. No API calls are made; the
   search is a lookup against recorded results with a 350 ms debounce.
@@ -345,7 +348,9 @@ function card(s, mode = 'full', ctx = S.context) {
   const gnote = editBox;
   const trig = ctx === 'RUN' || ctx === 'PICK' ? '' : triggerBlock(s, ctx);
   let ctxbar = '';
-  if (ctx === 'APPROVE') ctxbar = `<div class="ctx"><span class="muted small">runtime is required to approve</span><button class="primary small" ${s.runtime ? '' : 'disabled'}>Approve</button><button class="small danger">Drop</button></div>`;
+  const fetched = s.tmdb && films[s.tmdb] ? films[s.tmdb].runtime : null;
+  const rtFlag = ctx === 'APPROVE' && fetched && s.runtime !== fetched ? `<span class="small" style="color:var(--warn)">⚠ differs from TMDB (${fetched} min) — someone changed it, check the copy</span>` : '';
+  if (ctx === 'APPROVE') ctxbar = `<div class="ctx">${rtFlag || '<span class="muted small">runtime is required to approve</span>'}<button class="primary small" ${s.runtime ? '' : 'disabled'}>Approve</button><button class="small danger">Drop</button></div>`;
   if (ctx === 'VOTE') ctxbar = `<div class="ctx"><span class="score">${[-1, 0, 1, 2, 3].map(v => `<button class="${s._score === v ? 'on' : ''}" onclick="act('score',${s.sid},${v})">${v > 0 ? '+' + v : v}</button>`).join('')}</span><span class="veto">☒ veto</span>${matchedTopics(s).length ? `<span class="small" style="color:var(--warn)">${matchedTopics(s).map(t => esc(t.topic)).join(', ')}</span>` : ''}<label class="small muted"><input type="checkbox"> seen it</label></div>`;
   if (mode === 'compact') return `<div class="card compact" id="s${s.sid}">${poster}<div>${head}${by}${pnote}</div></div>`;
   return `<div class="card" id="s${s.sid}">${poster}<div>${head}${ctx === 'VOTE' ? '' : syn}${by}${pnote}${ctx === 'VOTE' ? ctxbar : ''}${trig}${gnote}${ctx === 'VOTE' ? '' : ctxbar}</div></div>`;
