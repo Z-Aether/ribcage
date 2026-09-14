@@ -17,6 +17,11 @@
   TMDB link added beside the trailer; the shared "group content note" became one
   note per voter; compact-by-default, click the title to expand/collapse.
 
+  Round 3 (2026-09-14): one note per voter per film, the suggester's pitch is their
+  note, highlighted; notes show on collapsed cards (bottom-bar control compares
+  full / truncated / pitch-only / none); confirm step leads with the pitch box and
+  demotes the runtime to one line with a pencil.
+
   Data is real (data.js): TMDB search rankings + details and DTDD topics for
   sixteen of the group's own past suggestions. No API calls are made; the
   search is a lookup against recorded results with a 350 ms debounce.
@@ -163,6 +168,9 @@
   .confirm .q{margin-top:14px;padding:12px 14px;background:var(--panel2);border-radius:8px}
   .confirm .q .lbl{font-weight:600}
   .confirm .q .rt input{width:80px;font-size:18px;padding:4px 8px}
+.note-group.big textarea{min-height:110px;font-size:16px}
+  .card .pnote.pitch{border-left-color:var(--accent)}
+  .rtline{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .confirm .copies{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
   @media (max-width:700px){.confirm{grid-template-columns:100px 1fr}.confirm .poster{width:100px}}
 
@@ -208,6 +216,7 @@ const S = {
   context: new URLSearchParams(location.search).get('context') || 'SUGGEST',   // which surface renders the shared card
   watched: new Set(['a dog dies', 'a cat dies', 'there are spiders']),        // my personal watched list
   watchedOff: false,
+  compactNotes: 'trunc',  // what a collapsed card shows of its notes: full | trunc | pitch | none
   pool: [],          // suggestions
   q: '', results: null, searching: false, timer: null,
   // per-variant transient
@@ -223,20 +232,22 @@ for (const k of Object.keys(PROTO.searches)) byTitle[k.toLowerCase()] = PROTO.se
 
 function seed() {
   const mk = (id, by, note, patch = {}) => addFilm(films[id], by, note, patch);
-  mk(1091, 'Adam', "Carpenter. Practical effects. If you haven't seen it we can't be friends.");
-  mk(120, 'Dóra', 'Extended edition, my Blu-ray. Yes it is long, that is the point.', { runtime: 228 });
-  mk(643586, 'Bori', '');
-  mk(273271, 'Csaba', 'Low budget time-travel thing, oddly tense.');
-  mk(938614, 'Adam', 'Found footage-ish 70s talk show. Short and nasty.');
-  S.pool[4].notes = { 'Bori': 'Heavy strobe in the last twenty minutes — not a DTDD topic, but I know two of us mind it.', 'Dóra': 'In. Obviously.' };
-  S.pool[3].notes = { 'Adam': 'Extended cut adds ~30 min of Lothlórien. Nobody dies who did not already die in the theatrical.' };
+  const thing = mk(1091, 'Adam', "Carpenter. Practical effects. If you haven't seen it we can't be friends.");
+  const lotr = mk(120, 'Dóra', 'Extended edition, my Blu-ray. Yes it is long, that is the point.', { runtime: 228 });
+  const willy = mk(643586, 'Bori', '');
+  const lapse = mk(273271, 'Csaba', 'Low budget time-travel thing, oddly tense.');
+  const devil = mk(938614, 'Adam', 'Found footage-ish 70s talk show. Short and nasty.');
+  Object.assign(thing.notes, { 'Bori': 'Heavy strobe in the last twenty minutes — not a DTDD topic, but I know two of us mind it.', 'Dóra': 'In. Obviously.', 'Csaba': "Watched this on VHS at twelve and it wrecked me. If we do it, let's do it first, while everyone is still sober enough to follow who has been replaced and who hasn't — the paranoia is the film, and it does not survive a 1 a.m. slot." });
+  Object.assign(lotr.notes, { 'Adam': 'Extended cut adds ~30 min of Lothlórien. Nobody dies who did not already die in the theatrical.', [ME]: '228 is a third of the whole budget. Just saying.' });
+  Object.assign(willy.notes, { 'Csaba': "Nic Cage does not say a single word in this. That is the pitch." });
+  Object.assign(devil.notes, { 'Bori': "Fair warning: there is a long stretch of jittery static and strobe when the possession kicks off, maybe 30–40 seconds, plus a lot of vomiting, which DTDD does list. I'm still in, I just don't want it as the last film of the night." });
 }
 function addFilm(f, by, note, patch = {}) {
   const s = Object.assign({
     sid: nextId++, tmdb: f ? f.id : null, title: f ? f.title : '', year: f ? f.year : '', poster: f ? f.poster_path : null,
     runtime: f ? f.runtime : null, runtimeSrc: f && f.runtime ? 'TMDB' : null,
     director: f ? f.director : [], genres: f ? f.genres : [], cert: f ? f.cert : null, overview: f ? f.overview : '', trailer: f ? f.trailer : null,
-    dtdd: f ? f.dtdd : null, manual: !f, by, note, notes: {}, added: Date.now(),
+    dtdd: f ? f.dtdd : null, manual: !f, by, notes: note ? { [by]: note } : {}, added: Date.now(),
   }, patch);
   if (patch.runtime && f && patch.runtime !== f.runtime) s.runtimeSrc = 'edited';
   S.pool.unshift(s);
@@ -304,12 +315,19 @@ function card(s, mode = 'full', ctx = S.context) {
   const head = `<div class="head"><div><h3 ${collapsible ? `style="cursor:pointer" title="collapse" onclick="act('expand',${s.sid})"` : ''}>${icon} ${esc(s.title)} <span class="yr">${esc(s.year)}</span></h3><div class="meta">${meta}</div></div><div>${runtimeCtl(s, { mode: rtMode })}</div></div>`;
   const syn = ''; // official synopsis dropped 2026-09-14: the suggester's note is the pitch, trailer + TMDB links carry the rest
   const by = `<div class="by">suggested by <b>${esc(s.by)}</b>${s.by === ME && ctx === 'SUGGEST' && s.sid > 0 ? ` · <a href="#" onclick="act('withdraw',${s.sid});return false">withdraw</a>` : ''}</div>`;
-  const pnote = s.by === ME && ctx === 'SUGGEST'
-    ? `<div class="note-group"><div class="lbl"><span>Your note to the group</span></div><textarea placeholder="Why this one? Scores are hidden during VOTE — this is your only pitch." onchange="act('note',${s.sid},this.value)">${esc(s.note)}</textarea></div>`
-    : (s.note ? `<p class="pnote">“${esc(s.note)}”</p>` : '');
-  const others = Object.entries(s.notes || {}).filter(([who]) => who !== ME).map(([who, t]) => `<p class="pnote">“${esc(t)}” <span class="who muted small">— ${esc(who)}</span></p>`).join('');
-  const mine = s.by === ME || ctx === 'RUN' || ctx === 'APPROVE' ? '' : `<div class="note-group"><div class="lbl"><span>Your note</span><span class="who">everyone sees it · only you edit it</span></div><textarea placeholder="Anything the group should know — a trigger DTDD misses, a strobe sequence, or just that you're in." onchange="act('gnote',${s.sid},this.value)">${esc((s.notes || {})[ME] || '')}</textarea></div>`;
-  const gnote = `${others ? `<div class="note-group"><div class="lbl"><span>Notes from the group</span></div>${others}</div>` : ''}${mine}`;
+  // one note per voter per film; the suggester's is their pitch, shown first and highlighted
+  const notesHtml = (limit, skipMine) => {
+    const all = Object.entries(s.notes || {}).filter(([w]) => !(skipMine && w === ME));
+    const ordered = [...all.filter(([w]) => w === s.by), ...all.filter(([w]) => w !== s.by)];
+    const shown = limit === 'none' ? [] : limit === 'pitch' ? ordered.filter(([w]) => w === s.by) : ordered;
+    const cut = (t) => limit === 'trunc' && t.length > 120 ? esc(t.slice(0, 118).replace(/\s+\S*$/, '')) + '…' : esc(t);
+    return shown.map(([w, t]) => `<p class="pnote${w === s.by ? ' pitch' : ''}">“${cut(t)}” <span class="who muted small">— ${w === ME ? 'you' : esc(w)}</span></p>`).join('');
+  };
+  const canWrite = ctx === 'SUGGEST' && s.sid > 0;
+  const myNote = (s.notes || {})[ME] || '';
+  const editBox = canWrite ? `<div class="note-group"><div class="lbl"><span>${s.by === ME ? 'Your pitch' : 'Your note'}</span><span class="who">everyone sees it · only you edit it</span></div><textarea placeholder="${s.by === ME ? 'Why this one? Scores are hidden during VOTE — this is your pitch.' : "Anything the group should know — a trigger DTDD misses, a strobe sequence, or just that you're in."}" onchange="act('note',${s.sid},this.value)">${esc(myNote)}</textarea></div>` : '';
+  const pnote = mode === 'compact' ? notesHtml(S.compactNotes, false) : notesHtml('full', canWrite);
+  const gnote = editBox;
   const trig = ctx === 'RUN' || ctx === 'PICK' ? '' : triggerBlock(s, ctx);
   let ctxbar = '';
   if (ctx === 'APPROVE') ctxbar = `<div class="ctx"><span class="muted small">runtime is required to approve</span><button class="primary small" ${s.runtime ? '' : 'disabled'}>Approve</button><button class="small danger">Drop</button></div>`;
@@ -318,7 +336,7 @@ function card(s, mode = 'full', ctx = S.context) {
   return `<div class="card" id="s${s.sid}">${poster}<div>${head}${ctx === 'VOTE' ? '' : syn}${by}${pnote}${ctx === 'VOTE' ? ctxbar : ''}${trig}${gnote}${ctx === 'VOTE' ? '' : ctxbar}</div></div>`;
 }
 function poolRow(s) { // one-line list entry (C)
-  return `<div class="r" onclick="act('open',${s.sid})">${s.poster ? `<img src="${IMG(s.poster, 92)}" alt="">` : '<div class="noimg"></div>'}<div class="t"><b>${hasIcon(s) ? '<span class="icon">!</span> ' : ''}${esc(s.title)} <span class="muted">${esc(s.year)}</span></b><span class="s">${s.note ? '“' + esc(s.note.slice(0, 90)) + (s.note.length > 90 ? '…' : '') + '”' : '<span class="muted">no note</span>'}</span></div><span class="by">${esc(s.by)}</span><span class="rtc${s.runtime ? '' : ' missing'}">${s.runtime ? s.runtime + ' min' : '— min'}</span><span class="muted">›</span></div>`;
+  return `<div class="r" onclick="act('open',${s.sid})">${s.poster ? `<img src="${IMG(s.poster, 92)}" alt="">` : '<div class="noimg"></div>'}<div class="t"><b>${hasIcon(s) ? '<span class="icon">!</span> ' : ''}${esc(s.title)} <span class="muted">${esc(s.year)}</span></b><span class="s">${(s.notes||{})[s.by] ? '“' + esc((s.notes||{})[s.by].slice(0, 90)) + ((s.notes||{})[s.by].length > 90 ? '…' : '') + '”' : '<span class="muted">no pitch</span>'}</span></div><span class="by">${esc(s.by)}</span><span class="rtc${s.runtime ? '' : ' missing'}">${s.runtime ? s.runtime + ' min' : '— min'}</span><span class="muted">›</span></div>`;
 }
 
 // ------------------------------------------------------------------ picker
@@ -368,14 +386,8 @@ function variantB() {
       <div>
         <h3>${esc(d.title)} <span class="muted" style="font-weight:400">${esc(d.year)}</span></h3>
         <div class="meta muted small" style="margin-top:4px">${[d.director.join(', '), d.genres.join(' · '), d.cert].filter(Boolean).map(esc).join(' · ')}</div>
-        <p class="small" style="color:#cfccc4">${esc(d.overview)}</p>
-        <div class="q">
-          <div class="lbl">How long is the copy you'll bring?</div>
-          <div class="small muted" style="margin:2px 0 8px">${f && f.runtime ? `TMDB says ${f.runtime} min. Director's cuts and extended editions differ — SOLVE plans on this number.` : 'TMDB has no runtime for this. Enter it — a film without one cannot be approved.'}</div>
-          ${runtimeCtl(d, { mode: 'input', big: true, autofocus: true })}
-          ${f && f.runtime ? `<div class="copies"><span class="chip on">as TMDB · ${f.runtime}</span><span class="chip">it's a different cut — I'll type it</span></div>` : ''}
-        </div>
-        <div class="note-group"><div class="lbl"><span>Your note to the group</span></div><textarea placeholder="Why this one? Scores are hidden during VOTE — this is your only pitch." onchange="S.b.draft.note=this.value">${esc(d.note)}</textarea></div>
+        <div class="note-group big"><div class="lbl"><span>Your pitch to the group</span></div><textarea autofocus placeholder="Why this one? Scores are hidden during VOTE — this is the only thing the group reads." onchange="S.b.draft.note=this.value">${esc(d.note)}</textarea></div>
+        <div class="rtline small">Runtime ${runtimeCtl(d, { mode: 'pencil' })}${d.runtime && !d._rtEdit ? `<span class="muted">· wrong for your copy? click the pencil</span>` : d.runtime ? `<span class="muted">· director's cuts and extended editions differ; SOLVE plans on this number</span>` : `<span style="color:var(--warn)">· required — a film without a runtime cannot be approved</span>`}</div>
         <div class="actions"><button class="primary" ${d.runtime ? '' : 'disabled'} onclick="act('commitB')">Add to the pool</button><button onclick="act('backB')">‹ Back</button></div>
       </div></div>`;
   }
@@ -417,8 +429,7 @@ function act(what, a, b) {
   switch (what) {
     case 'rt': if (s) { const v = parseInt(b, 10); s.runtime = v > 0 ? v : null; s.runtimeSrc = s.tmdb && films[s.tmdb] && films[s.tmdb].runtime === s.runtime ? 'TMDB' : (s.runtime ? 'edited' : null); s._rtEdit = false; } break;
     case 'rtEdit': if (s) s._rtEdit = true; break;
-    case 'note': if (s) s.note = b; break;
-    case 'gnote': if (s) { s.notes = s.notes || {}; b.trim() ? s.notes[ME] = b : delete s.notes[ME]; } break;
+    case 'note': if (s) { s.notes = s.notes || {}; b.trim() ? s.notes[ME] = b : delete s.notes[ME]; } break;
     case 'syn': S.openSyn.has(a) ? S.openSyn.delete(a) : S.openSyn.add(a); break;
     case 'allToggle': if (s) s._allOpen = b; return;
     case 'watch': b ? S.watched.add(a) : S.watched.delete(a); break;
@@ -473,6 +484,7 @@ function renderSwitcher() {
     <span class="lbl">${S.variant} — ${VARIANTS[S.variant]}</span>
     <button onclick="setVariant('${keys[(i + 1) % keys.length]}')">→</button>
     <label class="opt" title="Render the shared card as the other surfaces would">card as <select onchange="S.context=this.value;render()">${['SUGGEST', 'APPROVE', 'VOTE', 'RUN'].map(c => `<option ${S.context === c ? 'selected' : ''}>${c}</option>`).join('')}</select></label>
+    <label class="opt" title="What a collapsed card shows of its notes">notes on compact <select onchange="S.compactNotes=this.value;render()">${[['full','all, full'],['trunc','all, ~120 chars'],['pitch','pitch only'],['none','none']].map(([k,l]) => `<option value="${k}" ${S.compactNotes === k ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
     <label class="opt" title="Empty my watched list → no DTDD content inline, no badge"><input type="checkbox" ${S.watchedOff ? 'checked' : ''} onchange="S.watchedOff=this.checked;render()"> empty watched list</label>
     <label class="opt"><a href="#" onclick="location.reload();return false" style="color:#111">reset</a></label>`;
 }
