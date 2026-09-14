@@ -1,0 +1,481 @@
+<!doctype html>
+<!--
+  PROTOTYPE — ticket #21, the SUGGEST screen. Throwaway. Not production.
+
+  Three variants of the SUGGEST screen, switchable via ?variant=A|B|C and the
+  floating bar at the bottom. One shared film card renders in all three (the
+  card is one component across SUGGEST / APPROVE / VOTE / RUN per #20 §6), so
+  the variants disagree about the FLOW and the LAYOUT — where the picker sits,
+  when the runtime gets confirmed, what the pool row shows — not about the
+  card's contents.
+
+    A  Inline       the search box is the pool's header; picking adds instantly
+    B  Two steps    pick, then confirm the copy (runtime) before it enters the pool
+    C  The sheet    picking opens the shared film sheet; "add" lives on the sheet
+
+  Data is real (data.js): TMDB search rankings + details and DTDD topics for
+  sixteen of the group's own past suggestions. No API calls are made; the
+  search is a lookup against recorded results with a 350 ms debounce.
+
+  Run:  python -m http.server 8021 -d prototypes/suggest-screen   → http://localhost:8021/?variant=A
+        (or just open this file — everything is inline)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROTOTYPE · SUGGEST screen (#21)</title>
+<style>
+  :root{--bg:#141416;--panel:#1d1d21;--panel2:#26262b;--line:#34343b;--fg:#e8e6e1;--muted:#9a978f;--accent:#e2b24a;--warn:#e07a3a;--ok:#6cbf7a;--danger:#d24a4a;--link:#8ab4f8}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,Segoe UI,Roboto,sans-serif}
+  a{color:var(--link)}
+  button,input,textarea,select{font:inherit;color:inherit}
+  button{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
+  button:hover{border-color:var(--muted)}
+  button.primary{background:var(--accent);color:#141416;border-color:var(--accent);font-weight:600}
+  button.danger{border-color:var(--danger);color:var(--danger)}
+  button.small{padding:2px 8px;font-size:13px}
+  input[type=text],input[type=search],input[type=number],textarea{background:#0f0f11;border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+  input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+  textarea{resize:vertical;min-height:52px}
+  .muted{color:var(--muted)}
+  .small{font-size:13px}
+  header.app{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);background:var(--panel)}
+  header.app .brand{font-weight:700;letter-spacing:.04em}
+  header.app .phase{display:flex;gap:6px;font-size:12px;letter-spacing:.06em}
+  header.app .phase span{padding:2px 8px;border-radius:999px;color:var(--muted)}
+  header.app .phase span.on{background:var(--accent);color:#141416;font-weight:700}
+  main{max-width:1060px;margin:0 auto;padding:20px 20px 120px}
+  footer.attr{max-width:1060px;margin:40px auto 0;padding:14px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+  footer.attr img{height:11px;vertical-align:middle;margin-right:6px}
+  .tmdb{display:inline-block;background:#01b4e4;color:#0d253f;font-weight:800;font-size:10px;padding:1px 5px;border-radius:3px;letter-spacing:.05em}
+
+  /* ---------- search + picker ---------- */
+  .search{position:relative}
+  .search input{font-size:17px;padding:12px 14px}
+  .picker{position:absolute;left:0;right:0;top:100%;z-index:20;background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-top:4px;box-shadow:0 12px 30px rgba(0,0,0,.5);overflow:hidden}
+  .picker .row{display:flex;gap:12px;align-items:center;padding:8px 12px;cursor:pointer;border-top:1px solid var(--line)}
+  .picker .row:first-child{border-top:0}
+  .picker .row:hover,.picker .row.sel{background:var(--panel2)}
+  .picker .row img,.picker .row .noimg{width:36px;height:54px;border-radius:3px;object-fit:cover;background:#333;flex:none}
+  .picker .row .t{flex:1;min-width:0}
+  .picker .row .t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .picker .row .yr{font-variant-numeric:tabular-nums;color:var(--muted);flex:none}
+  .picker .foot{padding:8px 12px;border-top:1px dashed var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .picker .foot a{cursor:pointer}
+  .picker .hint{padding:8px 12px;color:var(--muted);font-size:13px}
+  /* tile picker (B) */
+  .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}
+  .tile{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:pointer;text-align:left;padding:0}
+  .tile:hover{border-color:var(--accent)}
+  .tile img,.tile .noimg{width:100%;aspect-ratio:2/3;object-fit:cover;background:#333;display:block}
+  .tile .t{padding:8px 10px}
+  .tile .t b{display:block;font-size:14px;line-height:1.25}
+  @media (max-width:700px){.tiles{grid-template-columns:repeat(2,1fr)}}
+
+  /* ---------- the shared film card ---------- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:110px 1fr;gap:16px;margin:12px 0}
+  .card.compact{grid-template-columns:56px 1fr;padding:10px 12px}
+  .card.compact .poster{width:56px}
+  .card.compact .synopsis,.card.compact .topics,.card.compact .note-group,.card.compact .dtdd-match{display:none}
+  .card .poster{width:110px;aspect-ratio:2/3;object-fit:cover;border-radius:6px;background:#333}
+  .card .head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+  .card h3{margin:0 0 2px;font-size:19px;line-height:1.2}
+  .card h3 .yr{color:var(--muted);font-weight:400}
+  .card .meta{color:var(--muted);font-size:13px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .card .meta .cert{border:1px solid var(--line);border-radius:3px;padding:0 5px;font-size:11px}
+  .card .synopsis{margin:8px 0 0;font-size:14px;color:#cfccc4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card .synopsis.open{-webkit-line-clamp:unset}
+  .card .by{font-size:13px;color:var(--muted);margin-top:8px}
+  .card .by b{color:var(--fg);font-weight:600}
+  .card .pnote{margin:4px 0 0;font-style:italic;color:#d8d5cd;border-left:3px solid var(--line);padding-left:10px}
+  .card .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+  .icon{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--warn);color:#141416;font-weight:800;font-size:13px;flex:none}
+  /* runtime */
+  .rt{display:inline-flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rt input{width:64px;padding:2px 6px;text-align:right}
+  .rt .src{font-size:12px;color:var(--muted)}
+  .rt .edited{color:var(--accent);font-size:12px}
+  .rt.missing{color:var(--warn)}
+  .rt.missing input{border-color:var(--warn)}
+  .rt button.pencil{padding:0 6px;border:0;background:none;color:var(--muted)}
+  .rt button.pencil:hover{color:var(--fg)}
+  /* triggers */
+  .topics{margin-top:10px}
+  .matched{background:#2a2118;border:1px solid #4d3a1f;border-radius:8px;padding:8px 12px}
+  .matched .ttl{font-size:12px;letter-spacing:.05em;color:var(--warn);font-weight:700;text-transform:uppercase;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .matched ul{margin:6px 0 0;padding:0;list-style:none}
+  .matched li{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:2px 0}
+  .matched li .n{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+  .powered{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:0;text-transform:none}
+  details.all{margin-top:8px;border:1px solid var(--line);border-radius:8px;padding:0 12px}
+  details.all summary{cursor:pointer;padding:8px 0;color:var(--muted);font-size:13px}
+  details.all .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 16px;padding:6px 0 10px;max-height:260px;overflow:auto}
+  details.all label{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:2px 0;cursor:pointer}
+  details.all label .n{color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
+  details.all label input{margin-right:6px}
+  details.all .pfoot{padding:6px 0 8px;border-top:1px solid var(--line)}
+  .dtdd-match{margin-top:8px;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .dtdd-match .lbl{color:var(--muted)}
+  .dtdd-match .val{border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .dtdd-match .val.empty{border-color:#5a4a2c;color:var(--warn)}
+  .note-group{margin-top:10px}
+  .note-group .lbl{font-size:12px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;display:flex;justify-content:space-between}
+  .note-group textarea{margin-top:4px;min-height:40px;font-size:14px}
+  .note-group .who{font-size:12px;color:var(--muted)}
+  .chip{display:inline-block;padding:1px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .chip.on{border-color:var(--accent);color:var(--accent)}
+  /* approve / vote / run chrome on the shared card */
+  .card .ctx{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .score{display:inline-flex;gap:2px}
+  .score button{padding:2px 8px;border-radius:4px}
+  .score button.on{background:var(--accent);color:#141416;border-color:var(--accent)}
+  .veto{display:inline-flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid var(--danger);border-radius:6px;color:var(--danger)}
+
+  /* ---------- pool / lists ---------- */
+  .pool-head{display:flex;justify-content:space-between;align-items:baseline;margin:22px 0 4px}
+  .pool-head h2{margin:0;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .rows{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .rows .r{display:grid;grid-template-columns:40px 1fr auto auto auto;gap:12px;align-items:center;padding:8px 12px;border-top:1px solid var(--line);cursor:pointer}
+  .rows .r:first-child{border-top:0}
+  .rows .r:hover{background:var(--panel)}
+  .rows .r img,.rows .r .noimg{width:40px;height:60px;object-fit:cover;border-radius:3px;background:#333}
+  .rows .r .t b{display:block}
+  .rows .r .t .s{font-size:13px;color:var(--muted)}
+  .rows .r .by{font-size:13px;color:var(--muted);white-space:nowrap}
+  .rows .r .rtc{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rows .r .rtc.missing{color:var(--warn)}
+  @media (max-width:700px){.rows .r{grid-template-columns:40px 1fr auto}.rows .r .by{display:none}}
+  .toast{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;gap:14px;align-items:center;z-index:30}
+
+  /* ---------- B: two-step panel ---------- */
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .steps{display:flex;gap:16px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  .steps span.on{color:var(--accent);font-weight:700}
+  .confirm{display:grid;grid-template-columns:150px 1fr;gap:20px;margin-top:14px}
+  .confirm .poster{width:150px;aspect-ratio:2/3;object-fit:cover;border-radius:8px;background:#333}
+  .confirm h3{margin:0;font-size:22px}
+  .confirm .q{margin-top:14px;padding:12px 14px;background:var(--panel2);border-radius:8px}
+  .confirm .q .lbl{font-weight:600}
+  .confirm .q .rt input{width:80px;font-size:18px;padding:4px 8px}
+  .confirm .copies{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  @media (max-width:700px){.confirm{grid-template-columns:100px 1fr}.confirm .poster{width:100px}}
+
+  /* ---------- C: sheet ---------- */
+  .sheet-wrap{position:fixed;inset:0;z-index:25;display:flex;justify-content:flex-end;background:rgba(0,0,0,.45)}
+  .sheet{width:min(560px,100%);height:100%;overflow:auto;background:var(--panel);border-left:1px solid var(--line);padding:16px 18px 0;box-shadow:-10px 0 40px rgba(0,0,0,.5)}
+  .sheet .card{margin:0;border:0;background:transparent;padding:0;grid-template-columns:120px 1fr;gap:14px}
+  .sheet .card .poster{width:120px}
+  @media (max-width:700px){.sheet .card{grid-template-columns:90px 1fr}.sheet .card .poster{width:90px}}
+  .sheet .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .sheet .stick{position:sticky;bottom:0;background:var(--panel);padding:12px 0 90px;margin-top:14px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+  .c-picker{margin-top:10px}
+  .c-picker .picker{position:static;box-shadow:none}
+
+  @media (max-width:700px){header.app .brand span,header.app>.small{display:none}.card{grid-template-columns:80px 1fr;gap:10px}.card .poster{width:80px}.card .head{flex-wrap:wrap}.pool-head{flex-direction:column;align-items:flex-start;gap:2px}main{padding:14px 12px 120px}}
+
+  /* ---------- floating prototype switcher (not part of the design) ---------- */
+  #switcher{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:100;background:#fff;color:#111;border-radius:999px;padding:6px 8px;display:flex;gap:6px;align-items:center;box-shadow:0 6px 24px rgba(0,0,0,.6);font-size:13px;white-space:nowrap}
+  #switcher button{background:#eee;color:#111;border:0;border-radius:999px;padding:4px 10px}
+  #switcher .lbl{font-weight:700;padding:0 6px;min-width:190px;text-align:center}
+  #switcher label{display:flex;gap:4px;align-items:center;padding:0 6px;border-left:1px solid #ddd;cursor:pointer}
+  #switcher select{background:#eee;border:0;border-radius:6px;padding:3px 6px;color:#111}
+  @media (max-width:760px){#switcher .lbl{min-width:0}#switcher label.opt{display:none}}
+</style>
+</head>
+<body>
+<header class="app">
+  <div class="brand">RIBCAGE <span class="muted small">· prototype</span></div>
+  <div class="phase"><span class="on">SUGGEST</span><span>APPROVE</span><span>VOTE</span><span>PICK</span><span>RUN</span></div>
+  <div class="small muted">signed in as <b>Peti</b></div>
+</header>
+<main id="main"></main>
+<footer class="attr" id="footer"></footer>
+<div id="switcher"></div>
+<script src="data.js"></script>
+<script>
+// ------------------------------------------------------------------ state
+const ME = 'Peti';
+const IMG = (p, w) => p ? `https://image.tmdb.org/t/p/w${w}${p}` : null;
+const VARIANTS = { A: 'Inline — the search box is the pool', B: 'Two steps — pick, then confirm the copy', C: 'The sheet is the card' };
+const S = {
+  variant: new URLSearchParams(location.search).get('variant') || 'A',
+  context: new URLSearchParams(location.search).get('context') || 'SUGGEST',   // which surface renders the shared card
+  watched: new Set(['a dog dies', 'a cat dies', 'there are spiders']),        // my personal watched list
+  watchedOff: false,
+  pool: [],          // suggestions
+  q: '', results: null, searching: false, timer: null,
+  // per-variant transient
+  b: { step: 1, pick: null, draft: null },
+  c: { open: null, adding: null },
+  toast: null,
+  openSyn: new Set(),
+};
+let nextId = 1;
+const films = PROTO.films;
+const byTitle = {};
+for (const k of Object.keys(PROTO.searches)) byTitle[k.toLowerCase()] = PROTO.searches[k];
+
+function seed() {
+  const mk = (id, by, note, patch = {}) => addFilm(films[id], by, note, patch);
+  mk(1091, 'Adam', "Carpenter. Practical effects. If you haven't seen it we can't be friends.");
+  mk(120, 'Dóra', 'Extended edition, my Blu-ray. Yes it is long, that is the point.', { runtime: 228 });
+  mk(643586, 'Bori', '');
+  mk(273271, 'Csaba', 'Low budget time-travel thing, oddly tense.');
+  mk(938614, 'Adam', 'Found footage-ish 70s talk show. Short and nasty.');
+  S.pool[1].groupNote = 'The extended cut adds about 30 min of Lothlórien. Nobody dies who didn\'t already die in the theatrical.';
+}
+function addFilm(f, by, note, patch = {}) {
+  const s = Object.assign({
+    sid: nextId++, tmdb: f ? f.id : null, title: f ? f.title : '', year: f ? f.year : '', poster: f ? f.poster_path : null,
+    runtime: f ? f.runtime : null, runtimeSrc: f && f.runtime ? 'TMDB' : null,
+    director: f ? f.director : [], genres: f ? f.genres : [], cert: f ? f.cert : null, overview: f ? f.overview : '', trailer: f ? f.trailer : null,
+    dtdd: f ? f.dtdd : null, manual: !f, by, note, groupNote: '', added: Date.now(),
+  }, patch);
+  if (patch.runtime && f && patch.runtime !== f.runtime) s.runtimeSrc = 'edited';
+  S.pool.unshift(s);
+  return s;
+}
+function stub(row) { // picked a search row we have no details for → fake a fetched film with no runtime
+  return { id: row.id, title: row.title, original_title: row.original_title, year: (row.release_date || '').slice(0, 4), runtime: null, overview: '(synopsis would be fetched here — this film is not in the prototype data)', poster_path: row.poster_path, genres: [], director: [], trailer: null, cert: null, dtdd: null };
+}
+function detailsFor(row) { return films[row.id] || stub(row); }
+
+// ------------------------------------------------------------------ search
+function runSearch(q) {
+  const s = q.trim().toLowerCase();
+  if (s.length < 2) return null;
+  // recorded query? (what TMDB actually returned, in its own order)
+  const hit = Object.keys(byTitle).find(k => k.startsWith(s) || s.startsWith(k));
+  if (hit) return byTitle[hit].rows.slice(0, 5);
+  const seen = new Set(), rows = [];
+  for (const k of Object.keys(byTitle)) for (const r of byTitle[k].rows) if (!seen.has(r.id) && (r.title.toLowerCase().includes(s) || (r.original_title || '').toLowerCase().includes(s))) { seen.add(r.id); rows.push(r); }
+  return rows.slice(0, 5);
+}
+function onType(v) {
+  S.q = v; S.searching = v.trim().length >= 2; S.results = null;
+  clearTimeout(S.timer);
+  S.timer = setTimeout(() => { S.results = runSearch(v); S.searching = false; render(); }, 350); // debounce (#16)
+  render();
+}
+
+// ------------------------------------------------------------------ triggers
+const watched = () => S.watchedOff ? new Set() : S.watched;
+function matchedTopics(s) { if (!s.dtdd) return []; const w = watched(); return s.dtdd.topics.filter(t => w.has(t.topic)); }
+function hasIcon(s) { return matchedTopics(s).some(t => t.yes >= 5 && t.yes > t.no); } // #20 §4
+const POWERED = `<a class="powered" href="https://www.doesthedogdie.com" target="_blank" rel="noopener">Powered by DoesTheDogDie.com</a>`;
+
+// ------------------------------------------------------------------ the shared card
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function runtimeCtl(s, opts = {}) {
+  const missing = !s.runtime;
+  const big = opts.big ? ' big' : '';
+  const src = s.runtimeSrc === 'edited' ? `<span class="edited">edited</span>` : s.runtimeSrc === 'TMDB' ? `<span class="src">TMDB</span>` : missing ? `<span class="src">required</span>` : '';
+  if (opts.mode === 'pencil' && !s._rtEdit && !missing) {
+    return `<span class="rt"><b>${s.runtime} min</b> ${src} <button class="pencil" title="Wrong length for our copy? Edit" onclick="act('rtEdit',${s.sid})">✎</button></span>`;
+  }
+  if (opts.mode === 'static') return `<span class="rt${missing ? ' missing' : ''}">${missing ? '— min' : `<b>${s.runtime} min</b>`}</span>`;
+  return `<span class="rt${missing ? ' missing' : ''}${big}"><input type="number" min="1" value="${s.runtime ?? ''}" placeholder="min" onchange="act('rt',${s.sid},this.value)" ${opts.autofocus ? 'autofocus' : ''}> <span>min</span> ${src}</span>`;
+}
+function triggerBlock(s, where) {
+  if (!s.dtdd && !s.manual) return `<div class="dtdd-match"><span class="lbl">DoesTheDogDie:</span> <span class="val empty">no match found</span> <a class="small" href="#" onclick="return false">search DTDD and pick manually</a></div>`;
+  if (s.manual) return `<div class="dtdd-match"><span class="lbl">DoesTheDogDie:</span> <span class="val empty">not looked up — entered by hand</span> <a class="small" href="#" onclick="return false">search DTDD and pick manually</a></div>`;
+  const m = matchedTopics(s);
+  const w = watched();
+  const empty = s.dtdd.topics.length === 0;
+  const match = `<div class="dtdd-match"><span class="lbl">DoesTheDogDie:</span> <span class="val${empty ? ' empty' : ''}">${esc(s.dtdd.name)} (${s.dtdd.year})${empty ? ' — no data' : ''}</span> <a class="small" href="#" onclick="return false">${empty ? 'wrong film? pick another' : 'change'}</a></div>`;
+  const matched = m.length ? `<div class="matched"><div class="ttl"><span>${where === 'VOTE' ? 'On your list' : 'On your watched list'}</span>${POWERED}</div><ul>${m.map(t => `<li><span>${esc(t.topic)}</span><span class="n">${t.yes} yes / ${t.no} no</span></li>`).join('')}</ul></div>` : '';
+  const all = empty ? '' : `<details class="all" ${s._allOpen ? 'open' : ''} ontoggle="act('allToggle',${s.sid},this.open)"><summary>All ${s.dtdd.topics.length} topics · tick any to watch for it</summary><div class="grid">${s.dtdd.topics.map(t => `<label><span><input type="checkbox" ${w.has(t.topic) ? 'checked' : ''} onchange="act('watch','${esc(t.topic).replace(/'/g, '&#39;')}',this.checked)">${esc(t.topic)}</span><span class="n">${t.yes}/${t.no}</span></label>`).join('')}</div><div class="pfoot">${POWERED}</div></details>`;
+  return `<div class="topics">${match}${matched}${all}</div>`;
+}
+function card(s, mode = 'full', ctx = S.context) {
+  const icon = hasIcon(s) ? `<span class="icon" title="A topic on your watched list is well evidenced on this film">!</span>` : '';
+  const poster = s.poster ? `<img class="poster" src="${IMG(s.poster, 185)}" alt="">` : `<div class="poster"></div>`;
+  const meta = [s.director.length ? esc(s.director.join(', ')) : '', s.genres.length ? esc(s.genres.join(' · ')) : '', s.cert ? `<span class="cert">${esc(s.cert)}</span>` : '', s.trailer ? `<a href="https://youtube.com/watch?v=${s.trailer}" target="_blank" rel="noopener">trailer ↗</a>` : '', s.manual ? '<span class="chip">entered by hand</span>' : ''].filter(Boolean).join('<span>·</span>');
+  const synOpen = S.openSyn.has(s.sid);
+  const rtMode = ctx === 'RUN' ? 'static' : ctx === 'APPROVE' ? 'input' : (mode === 'full' ? 'pencil' : 'pencil');
+  const head = `<div class="head"><div><h3>${icon} ${esc(s.title)} <span class="yr">${esc(s.year)}</span></h3><div class="meta">${meta}</div></div><div>${runtimeCtl(s, { mode: rtMode })}</div></div>`;
+  const syn = s.overview ? `<p class="synopsis${synOpen ? ' open' : ''}" onclick="act('syn',${s.sid})">${esc(s.overview)}</p>` : '';
+  const by = `<div class="by">suggested by <b>${esc(s.by)}</b>${s.by === ME && ctx === 'SUGGEST' && s.sid > 0 ? ` · <a href="#" onclick="act('withdraw',${s.sid});return false">withdraw</a>` : ''}</div>`;
+  const pnote = s.by === ME && ctx === 'SUGGEST'
+    ? `<div class="note-group"><div class="lbl"><span>Your note to the group</span></div><textarea placeholder="Why this one? Scores are hidden during VOTE — this is your only pitch." onchange="act('note',${s.sid},this.value)">${esc(s.note)}</textarea></div>`
+    : (s.note ? `<p class="pnote">“${esc(s.note)}”</p>` : '');
+  const gnote = ctx === 'RUN' ? '' : `<div class="note-group"><div class="lbl"><span>Group content note</span><span class="who">anyone can edit</span></div><textarea placeholder="Anything DTDD misses or gets wrong — a strobe sequence, a scene that isn't a topic…" onchange="act('gnote',${s.sid},this.value)">${esc(s.groupNote)}</textarea></div>`;
+  const trig = ctx === 'RUN' || ctx === 'PICK' ? '' : triggerBlock(s, ctx);
+  let ctxbar = '';
+  if (ctx === 'APPROVE') ctxbar = `<div class="ctx"><span class="muted small">runtime is required to approve</span><button class="primary small" ${s.runtime ? '' : 'disabled'}>Approve</button><button class="small danger">Drop</button></div>`;
+  if (ctx === 'VOTE') ctxbar = `<div class="ctx"><span class="score">${[-1, 0, 1, 2, 3].map(v => `<button class="${s._score === v ? 'on' : ''}" onclick="act('score',${s.sid},${v})">${v > 0 ? '+' + v : v}</button>`).join('')}</span><span class="veto">☒ veto</span>${matchedTopics(s).length ? `<span class="small" style="color:var(--warn)">${matchedTopics(s).map(t => esc(t.topic)).join(', ')}</span>` : ''}<label class="small muted"><input type="checkbox"> seen it</label></div>`;
+  if (mode === 'compact') return `<div class="card compact" id="s${s.sid}">${poster}<div>${head}${by}${pnote}</div></div>`;
+  return `<div class="card" id="s${s.sid}">${poster}<div>${head}${ctx === 'VOTE' ? '' : syn}${by}${pnote}${ctx === 'VOTE' ? ctxbar : ''}${trig}${gnote}${ctx === 'VOTE' ? '' : ctxbar}</div></div>`;
+}
+function poolRow(s) { // one-line list entry (C)
+  return `<div class="r" onclick="act('open',${s.sid})">${s.poster ? `<img src="${IMG(s.poster, 92)}" alt="">` : '<div class="noimg"></div>'}<div class="t"><b>${hasIcon(s) ? '<span class="icon">!</span> ' : ''}${esc(s.title)} <span class="muted">${esc(s.year)}</span></b><span class="s">${s.note ? '“' + esc(s.note.slice(0, 90)) + (s.note.length > 90 ? '…' : '') + '”' : '<span class="muted">no note</span>'}</span></div><span class="by">${esc(s.by)}</span><span class="rtc${s.runtime ? '' : ' missing'}">${s.runtime ? s.runtime + ' min' : '— min'}</span><span class="muted">›</span></div>`;
+}
+
+// ------------------------------------------------------------------ picker
+function pickerHtml(onPick, extra = '') {
+  if (S.searching) return `<div class="picker"><div class="hint">searching…</div></div>`;
+  if (!S.results) return '';
+  const rows = S.results.map((r, i) => {
+    const y = (r.release_date || '').slice(0, 4);
+    const ot = r.original_title && r.original_title !== r.title ? `<span class="muted small">${esc(r.original_title)}</span>` : '';
+    return `<div class="row" onclick="${onPick}(${i})">${r.poster_path ? `<img src="${IMG(r.poster_path, 92)}" alt="">` : '<div class="noimg"></div>'}<div class="t"><b>${esc(r.title)}</b>${ot}</div><span class="yr">${y || '<span class="muted">year?</span>'}</span></div>`;
+  }).join('');
+  const none = S.results.length === 0 ? `<div class="hint">Nothing on TMDB for “${esc(S.q)}”.</div>` : '';
+  return `<div class="picker">${rows}${none}<div class="foot"><span>${S.results.length ? 'Not it? Try the year or the original title.' : ''}</span><a onclick="act('manual')">Not on TMDB — add by hand ›</a></div>${extra}</div>`;
+}
+
+// ------------------------------------------------------------------ variants
+function variantA() {
+  // Inline. Search box heads the pool; picking adds the film at once, expanded, with an undo toast.
+  return `
+    <div class="search">
+      <input type="search" placeholder="Suggest a film — start typing a title" value="${esc(S.q)}" oninput="onType(this.value)" autocomplete="off">
+      ${pickerHtml('pickA')}
+    </div>
+    <div class="pool-head"><h2>The pool · ${S.pool.length}</h2><span class="small muted">newest first · cards for yours, compact for everyone else's</span></div>
+    ${S.pool.map(s => card(s, S.context !== 'SUGGEST' || s.by === ME || s._justAdded ? 'full' : 'compact')).join('')}`;
+}
+function pickA(i) { const r = S.results[i]; const s = addFilm(detailsFor(r), ME, ''); s._justAdded = true; S.q = ''; S.results = null; S.toast = { text: `Added ${s.title}`, undo: s.sid }; render(); setTimeout(() => { if (S.toast && S.toast.undo === s.sid) { S.toast = null; render(); } }, 6000); }
+
+function variantB() {
+  // Two steps. A dedicated suggest panel: search → tiles → confirm the copy → pool. Pool rows compact.
+  const b = S.b;
+  const stepNow = b.step === 3 ? 3 : (S.results ? 2 : 1);
+  const steps = `<div class="steps"><span class="${stepNow === 1 ? 'on' : ''}">1 · find</span><span class="${stepNow === 2 ? 'on' : ''}">2 · which one</span><span class="${b.step === 3 ? 'on' : ''}">3 · your copy</span></div>`;
+  let body = '';
+  if (b.step <= 2) {
+    body = `<input type="search" placeholder="Title (add the year if you know it)" value="${esc(S.q)}" oninput="onType(this.value); S.b.step = 1" autocomplete="off" style="font-size:17px;padding:12px 14px">`;
+    if (S.searching) body += `<p class="muted small">searching…</p>`;
+    if (S.results) {
+      body += `<div class="tiles">${S.results.map((r, i) => `<button class="tile" onclick="pickB(${i})">${r.poster_path ? `<img src="${IMG(r.poster_path, 185)}" alt="">` : '<div class="noimg"></div>'}<div class="t"><b>${esc(r.title)}</b><span class="muted small">${(r.release_date || '').slice(0, 4) || 'year?'}${r.original_title && r.original_title !== r.title ? ' · ' + esc(r.original_title) : ''}</span></div></button>`).join('')}</div>
+        <p class="small muted" style="margin-top:12px">${S.results.length ? 'None of these?' : `Nothing on TMDB for “${esc(S.q)}”.`} <a href="#" onclick="act('manual');return false">Add it by hand ›</a></p>`;
+    }
+  } else {
+    const d = b.draft;
+    const f = films[d.tmdb];
+    body = `<div class="confirm">
+      ${d.poster ? `<img class="poster" src="${IMG(d.poster, 342)}" alt="">` : '<div class="poster"></div>'}
+      <div>
+        <h3>${esc(d.title)} <span class="muted" style="font-weight:400">${esc(d.year)}</span></h3>
+        <div class="meta muted small" style="margin-top:4px">${[d.director.join(', '), d.genres.join(' · '), d.cert].filter(Boolean).map(esc).join(' · ')}</div>
+        <p class="small" style="color:#cfccc4">${esc(d.overview)}</p>
+        <div class="q">
+          <div class="lbl">How long is the copy you'll bring?</div>
+          <div class="small muted" style="margin:2px 0 8px">${f && f.runtime ? `TMDB says ${f.runtime} min. Director's cuts and extended editions differ — SOLVE plans on this number.` : 'TMDB has no runtime for this. Enter it — a film without one cannot be approved.'}</div>
+          ${runtimeCtl(d, { mode: 'input', big: true, autofocus: true })}
+          ${f && f.runtime ? `<div class="copies"><span class="chip on">as TMDB · ${f.runtime}</span><span class="chip">it's a different cut — I'll type it</span></div>` : ''}
+        </div>
+        <div class="note-group"><div class="lbl"><span>Your note to the group</span></div><textarea placeholder="Why this one? Scores are hidden during VOTE — this is your only pitch." onchange="S.b.draft.note=this.value">${esc(d.note)}</textarea></div>
+        <div class="actions"><button class="primary" ${d.runtime ? '' : 'disabled'} onclick="act('commitB')">Add to the pool</button><button onclick="act('backB')">‹ Back</button></div>
+      </div></div>`;
+  }
+  return `
+    <div class="panel"><h2 style="margin:0 0 10px;font-size:18px">Suggest a film</h2>${steps}${body}</div>
+    <div class="pool-head"><h2>The pool · ${S.pool.length}</h2><span class="small muted">click a card to expand</span></div>
+    ${S.pool.map(s => card(s, S.context !== 'SUGGEST' || s._open ? 'full' : 'compact').replace('<div class="card compact"', `<div class="card compact" style="cursor:pointer" onclick="act('expand',${s.sid})"`)).join('')}`;
+}
+function pickB(i) { const r = S.results[i]; const f = detailsFor(r); S.b.draft = Object.assign({ sid: -1 }, { tmdb: f.id, title: f.title, year: f.year, poster: f.poster_path, runtime: f.runtime, runtimeSrc: f.runtime ? 'TMDB' : null, director: f.director, genres: f.genres, cert: f.cert, overview: f.overview, note: '' }); S.b.step = 3; render(); }
+
+function variantC() {
+  // The sheet. Search sits above a one-line list; picking opens the shared sheet with "Add to pool" on it.
+  const c = S.c;
+  let sheet = '';
+  const openS = c.adding || (c.open != null ? S.pool.find(s => s.sid === c.open) : null);
+  if (openS) {
+    const isNew = !!c.adding;
+    sheet = `<div class="sheet-wrap" onclick="if(event.target===this)act('closeSheet')"><div class="sheet">
+      <div class="top"><span class="muted small">${isNew ? 'New suggestion — not in the pool yet' : 'In the pool'}</span><button class="small" onclick="act('closeSheet')">✕ close</button></div>
+      ${card(openS, 'full')}
+      <div class="stick">${isNew ? `<button onclick="act('closeSheet')">Cancel</button><button class="primary" ${openS.runtime ? '' : 'disabled'} onclick="act('commitC')">Add to the pool</button>` : `<button onclick="act('closeSheet')">Done</button>`}</div>
+    </div></div>`;
+  }
+  return `
+    <div class="search c-picker">
+      <input type="search" placeholder="Suggest a film — start typing a title" value="${esc(S.q)}" oninput="onType(this.value)" autocomplete="off">
+      ${pickerHtml('pickC')}
+    </div>
+    <div class="pool-head"><h2>The pool · ${S.pool.length}</h2><span class="small muted">one line each · open for the full card</span></div>
+    <div class="rows">${S.pool.map(poolRow).join('')}</div>
+    ${sheet}`;
+}
+function pickC(i) { const r = S.results[i]; const f = detailsFor(r); S.c.adding = Object.assign({ sid: -2, by: ME, note: '', groupNote: '', manual: false }, { tmdb: f.id, title: f.title, year: f.year, poster: f.poster_path, runtime: f.runtime, runtimeSrc: f.runtime ? 'TMDB' : null, director: f.director, genres: f.genres, cert: f.cert, overview: f.overview, trailer: f.trailer, dtdd: f.dtdd }); S.q = ''; S.results = null; render(); }
+
+// ------------------------------------------------------------------ actions
+function findS(sid) { return S.pool.find(s => s.sid === sid) || (S.b.draft && S.b.draft.sid === sid ? S.b.draft : null) || (S.c.adding && S.c.adding.sid === sid ? S.c.adding : null); }
+function act(what, a, b) {
+  const s = typeof a === 'number' ? findS(a) : null;
+  switch (what) {
+    case 'rt': if (s) { const v = parseInt(b, 10); s.runtime = v > 0 ? v : null; s.runtimeSrc = s.tmdb && films[s.tmdb] && films[s.tmdb].runtime === s.runtime ? 'TMDB' : (s.runtime ? 'edited' : null); s._rtEdit = false; } break;
+    case 'rtEdit': if (s) s._rtEdit = true; break;
+    case 'note': if (s) s.note = b; break;
+    case 'gnote': if (s) s.groupNote = b; break;
+    case 'syn': S.openSyn.has(a) ? S.openSyn.delete(a) : S.openSyn.add(a); break;
+    case 'allToggle': if (s) s._allOpen = b; return;
+    case 'watch': b ? S.watched.add(a) : S.watched.delete(a); break;
+    case 'withdraw': S.pool = S.pool.filter(x => x.sid !== a); if (S.c.open === a) S.c.open = null; break;
+    case 'undo': S.pool = S.pool.filter(x => x.sid !== a); S.toast = null; break;
+    case 'score': if (s) s._score = s._score === b ? undefined : b; break;
+    case 'open': S.c.open = a; break;
+    case 'expand': if (s) s._open = !s._open; break;
+    case 'closeSheet': S.c.open = null; S.c.adding = null; break;
+    case 'commitC': { const n = S.c.adding; n.sid = nextId++; n.added = Date.now(); S.pool.unshift(n); S.c.adding = null; S.c.open = n.sid; break; }
+    case 'commitB': { const d = S.b.draft; const f = films[d.tmdb]; const n = addFilm(f || { id: d.tmdb, title: d.title, year: d.year, poster_path: d.poster, runtime: null, overview: d.overview, genres: d.genres, director: d.director, cert: d.cert, trailer: null, dtdd: null }, ME, d.note, { runtime: d.runtime }); if (!f) n.manual = d.manual || false; n._open = true; S.b = { step: 1, pick: null, draft: null }; S.q = ''; S.results = null; break; }
+    case 'backB': S.b.step = 2; break;
+    case 'manual': {
+      const blank = { tmdb: null, title: S.q.trim(), year: '', poster: null, runtime: null, runtimeSrc: null, director: [], genres: [], cert: null, overview: '', trailer: null, dtdd: null, manual: true, note: '', groupNote: '' };
+      if (S.variant === 'A') { const n = addFilm(null, ME, ''); Object.assign(n, blank, { sid: n.sid, by: ME }); n._justAdded = true; S.q = ''; S.results = null; S.toast = { text: 'Added by hand — give it a runtime', undo: n.sid }; }
+      else if (S.variant === 'B') { S.b.draft = Object.assign({ sid: -1 }, blank); S.b.step = 3; }
+      else { S.c.adding = Object.assign({ sid: -2, by: ME }, blank); S.q = ''; S.results = null; }
+      break;
+    }
+    case 'title': if (s) s.title = b; break;
+    case 'year': if (s) s.year = b; break;
+  }
+  render();
+}
+
+// ------------------------------------------------------------------ render
+function manualFields(s) { // title/year inputs for a hand-entered film, injected above the card
+  if (!s || !s.manual) return '';
+  return `<div class="card" style="grid-template-columns:1fr;margin-bottom:0;border-bottom:0;border-radius:10px 10px 0 0"><div style="display:grid;grid-template-columns:1fr 100px;gap:10px"><input type="text" placeholder="Title" value="${esc(s.title)}" onchange="act('title',${s.sid},this.value)"><input type="text" placeholder="Year" value="${esc(s.year)}" onchange="act('year',${s.sid},this.value)"></div><div class="small muted" style="margin-top:6px">Not on TMDB — a bootleg, a short, a home video or an episode. Title and runtime are all it needs; nothing else is fetched.</div></div>`;
+}
+function render() {
+  const main = document.getElementById('main');
+  let html = S.variant === 'A' ? variantA() : S.variant === 'B' ? variantB() : variantC();
+  // manual-entry fields for a card of mine that has no TMDB id
+  html = html.replace(/<div class="card" id="s(\d+)">/g, (m, id) => manualFields(findS(+id)) + m);
+  if (S.variant === 'C' && S.c.adding && S.c.adding.manual) html = html.replace('<div class="sheet">', '<div class="sheet">' + manualFields(S.c.adding).replace(/act\('(title|year)',-2/g, "act('$1',-2"));
+  if (S.variant === 'B' && S.b.step === 3 && S.b.draft && S.b.draft.manual) html = html.replace('<div class="confirm">', manualFields(S.b.draft) + '<div class="confirm">');
+  main.innerHTML = html;
+  if (S.toast) main.insertAdjacentHTML('beforeend', `<div class="toast"><span>${esc(S.toast.text)}</span><button class="small" onclick="act('undo',${S.toast.undo})">Undo</button></div>`);
+  // footer attribution: TMDB is page-level (any TMDB data on the page); DTDD rides on the blocks that show its data, plus the abuse mailto (#16)
+  document.getElementById('footer').innerHTML = `<span><span class="tmdb">TMDB</span> This product uses the TMDB API but is not endorsed or certified by TMDB.</span><span>Trigger data: <a href="https://www.doesthedogdie.com" target="_blank" rel="noopener">Powered by DoesTheDogDie.com</a> · <a href="mailto:abuse@example.invalid">report abuse</a></span><span><a href="#">privacy</a></span>`;
+  // keep focus in the search box while typing
+  const inp = main.querySelector('input[type=search]');
+  if (inp && document.activeElement !== inp && S.q && !S.results && S.searching) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+  renderSwitcher();
+}
+function renderSwitcher() {
+  const keys = Object.keys(VARIANTS);
+  const i = keys.indexOf(S.variant);
+  document.getElementById('switcher').innerHTML = `
+    <button onclick="setVariant('${keys[(i + keys.length - 1) % keys.length]}')">←</button>
+    <span class="lbl">${S.variant} — ${VARIANTS[S.variant]}</span>
+    <button onclick="setVariant('${keys[(i + 1) % keys.length]}')">→</button>
+    <label class="opt" title="Render the shared card as the other surfaces would">card as <select onchange="S.context=this.value;render()">${['SUGGEST', 'APPROVE', 'VOTE', 'RUN'].map(c => `<option ${S.context === c ? 'selected' : ''}>${c}</option>`).join('')}</select></label>
+    <label class="opt" title="Empty my watched list → no DTDD content inline, no badge"><input type="checkbox" ${S.watchedOff ? 'checked' : ''} onchange="S.watchedOff=this.checked;render()"> empty watched list</label>
+    <label class="opt"><a href="#" onclick="location.reload();return false" style="color:#111">reset</a></label>`;
+}
+function setVariant(v) { S.variant = v; S.q = ''; S.results = null; S.c = { open: null, adding: null }; S.b = { step: 1, pick: null, draft: null }; S.toast = null; const u = new URL(location); u.searchParams.set('variant', v); history.replaceState(null, '', u); render(); }
+document.addEventListener('keydown', e => {
+  const t = e.target; if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+  const keys = Object.keys(VARIANTS), i = keys.indexOf(S.variant);
+  if (e.key === 'ArrowLeft') setVariant(keys[(i + keys.length - 1) % keys.length]);
+  if (e.key === 'ArrowRight') setVariant(keys[(i + 1) % keys.length]);
+});
+seed(); render();
+</script>
+</body>
+</html>
