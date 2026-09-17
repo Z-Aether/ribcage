@@ -19,8 +19,8 @@ The end of a window: the app is stopped and unreachable, and nothing it held is 
 _Avoid_: archive, cancel, shutdown
 
 **Phase**:
-Which of six stages the marathon is in: SETUP, SUGGEST, APPROVE, VOTE, PICK, RUN. It decides which of the two user-writable surfaces, SUGGEST and VOTE, is live; it never gates the admin and moves freely in both directions. (#15)
-_Avoid_: stage, step, status, state
+Which of five stages the marathon is in: SUGGEST, APPROVE, VOTE, PICK, RUN. It decides which of the two user-writable surfaces, SUGGEST and VOTE, is live; it never gates the admin and moves freely in both directions. A fresh database starts in SUGGEST — there is no phase before it, because standing the app up is the deployment's business, not a state the app is in. (#15)
+_Avoid_: stage, step, status, state; SETUP (dropped as a phase 2026-09-12)
 
 ### People
 
@@ -63,16 +63,20 @@ The suggestions awaiting the admin's decision. Suggestions land here at any time
 _Avoid_: queue, backlog, candidate pool
 
 **Picker**:
-The step in SUGGEST where the suggester says which film they meant. Identity is always chosen by a person, never taken from search ranking. (#5, #19)
+The step in SUGGEST where the suggester says which film they meant: five poster tiles, never auto-advanced, narrowed by a year typed after the title. Identity is always chosen by a person, never taken from search ranking. (#5, #19, #21)
 _Avoid_: autocomplete, search results, disambiguator
 
 **Runtime**:
-The length of the particular copy of a film the group will watch, not a fact about the film. Filled in from metadata and always editable by hand. (#5, #12, #15, #19)
+The length of the particular copy of a film the group will watch, not a fact about the film. Filled in from metadata and editable by anyone; the admin's approve card flags a value that differs from the fetched one. (#5, #12, #15, #19, #21)
 _Avoid_: length, duration, official runtime
 
-**Personal note**:
-The suggester's own words attached to a suggestion. With scores hidden during VOTE, the only channel for persuading the group. (#8)
-_Avoid_: comment, blurb, description
+**Note**:
+A voter's own words on a film: one per voter per film, visible to the whole group, editable only by its author. The suggester's note is their **pitch**, shown first. With scores hidden during VOTE, the only channel for persuading the group; also where anything the crowd evidence misses is written down. (#8, #20, #21)
+_Avoid_: comment, blurb, description, personal note, freeform note, group note
+
+**Film card**:
+The one component that shows a film, shared by SUGGEST, APPROVE and VOTE. Collapsed it shows poster, trigger icon, title, year, director, certificate, trailer and TMDB links, runtime, suggester and every note trimmed; expanded it adds the full notes, the DoesTheDogDie match, matched topics, the topic list and one credit line. Never shows an official synopsis or genres. VOTE and RUN may show it as a sheet instead. (#20, #21)
+_Avoid_: movie card, film sheet (as a distinct thing), tile (that is a picker result)
 
 ### Voting
 
@@ -168,7 +172,19 @@ A proposal's distance from the best slate on screen in the objective's own compo
 _Avoid_: rank, score
 
 **Tier**:
-A group of proposals equal on floor and Σrep. Shown as tied, never ranked within. (#17)
+A group of proposals equal on floor and Σrep. Shown as tied, never ranked within; the primary standing the comparison displays. (#17, #24)
+
+**Swap**:
+The difference between two slates read as one move: the films out, the films in, and what it does to each voter's representative, score and slate sum. Any two slates on screen can be read as a swap. (#24)
+_Avoid_: diff, comparison (as a noun for this), delta
+
+**Film points**:
+Everyone's score for one film in a slate, summed, with a veto counting as its −2. The total's own per-film share; says what a film carries and is never fed back into the objective. (#6, #24)
+_Avoid_: load, weight, popularity
+
+**Slate sum**:
+One voter's scores for every film in a slate, summed. How the whole evening reads for them, beside the single representative that the objective sees. (#24)
+_Avoid_: personal total, satisfaction
 
 ### Arranging
 
@@ -213,7 +229,7 @@ The span of the evening every presence strip covers at once. The stacking cost a
 _Avoid_: overlap, common time
 
 **Set readout**:
-A number about a slate that changes when a film is added or removed and not when one is moved: floor, each voter's representative, Σrep, screen time against the budget, genre mix, the size of the floor set, and which films are vetoed and by whom. Trigger warnings never appear here. (#12, #17, #20)
+A number about a slate that changes when a film is added or removed and not when one is moved: floor, each voter's representative, Σrep, screen time against the budget, the size of the floor set, and which films are vetoed and by whom. Genre mix was one and was dropped; trigger warnings never appear here. (#12, #17, #20, #24)
 
 **Arrangement readout**:
 A number that changes when a box is moved: per-person presence strips and shared time. Derived from vetoes and order alone; nothing exogenous is ever entered. (#11, #12)
@@ -254,6 +270,3 @@ _Avoid_: flag, badge, alert
 Of a candidate: having no crowd evidence bound to it at all, so an absence of warnings on it says nothing about its content. Distinct from a film whose evidence is merely thin. (#19, #20)
 _Avoid_: no data, blank, unmatched (which describes a topic)
 
-**Freeform note**:
-The group's own free-text account of a film's content, editable by anyone in the group, covering whatever the crowd evidence does not. (#20)
-_Avoid_: manual entry, disclaimer, content warning
