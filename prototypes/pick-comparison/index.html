@@ -3,13 +3,17 @@
   PROTOTYPE — ticket #24, the PICK comparison view. Throwaway. Not production.
 
   Three variants of the comparison view, switchable via ?variant=A|B|C and the
-  floating bar at the bottom. The information carried is #17's and is the same in
-  all three; the variants disagree about the SHAPE — what is a row, what is a
-  column, what is a card — and therefore about how crowding shows up.
+  floating bar at the bottom. Rounds 1-2 compared a film-by-slate MATRIX, CARDS
+  and a LEDGER; the dev chose the ledger ("well parseable and surprisingly nice
+  to use"; the matrix too busy, cards uncomfortable) and asked for three
+  materially different ledgers instead. Round 3 (2026-09-17):
 
-    A  Matrix    films as rows, slates as columns; the shared core sorts to the top
-    B  Cards     one card per slate in three rails (timetable / shortlist / batch)
-    C  Ledger    one dense row per slate; film dots, people strip; click to expand
+    A  Ledger · dots       one row per slate, film dots + people strip; tick two rows → swap panel
+    B  Ledger · inspector  a compact numeric table; click a row → detail in a side inspector, click two → the swap
+    C  Ledger · reference  every row is read as a diff against one chosen reference row (the plan by default)
+
+  Also from round 2: totals are a first-class column (ties on floor and Σrep are
+  expected), genre mix is dropped everywhere, row actions are small.
 
   Everything is live: a small exact solver (exhaustive enumeration with budget
   pruning — the MILP's job in the real app, see #6) runs in the browser on every
@@ -26,13 +30,7 @@
   controls, and a stub of #22's timetable editor whose PLACEMENT (side / below /
   tab) is the "one screen or two" decision this ticket makes first.
 
-  Round 2 (2026-09-17): C chosen as the direction ("well parseable and surprisingly
-  nice to use"; A too busy, B uncomfortable). Ticking two rows now opens a compare
-  panel: the swap (films out / in), who it moves (each voter's representative and
-  score on both sides), floor / Σrep / total / screen time deltas, veto changes.
-  C is the default variant.
-
-  Run:  python -m http.server 8024   →  http://localhost:8024/?variant=C
+  Run:  python -m http.server 8024   →  http://localhost:8024/?variant=A
 -->
 <html lang="en">
 <head>
@@ -101,7 +99,7 @@
   .stand .best { color:var(--ok); font-weight:600; }
   .stand .d { color:var(--warn); }
   .stand .z { color:var(--mute); }
-  .tier { font-size:10px; border:1px solid var(--line); border-radius:3px; padding:0 4px; color:var(--mute); }
+  .tier { font-size:10px; border:1px solid var(--line); border-radius:3px; padding:0 4px; color:var(--mute); white-space:nowrap; }
   .tier.tied { border-color:#c9b458; color:#7a6a12; background:#fbf6dd; }
   .sc { display:inline-block; min-width:18px; text-align:center; border-radius:3px; padding:0 3px; font-size:11px; font-weight:600; color:#fff; font-variant-numeric:tabular-nums; }
   .sc.s3 { background:var(--s3);} .sc.s2 { background:var(--s2);} .sc.s1 { background:var(--s1); color:#1c1b19;} .sc.s0 { background:var(--s0); color:#555;} .sc.sm1 { background:var(--sm1);} .sc.sv { background:var(--sv);}
@@ -186,6 +184,29 @@
   .dgrid table { border-collapse:collapse; }
   .dgrid table td { padding:1px 6px 1px 0; border:0; }
 
+  /* ---- ledger shared (round 3) ---- */
+  td.n { font-variant-numeric:tabular-nums; white-space:nowrap; text-align:right; }
+  td.n small { display:inline-block; min-width:26px; text-align:left; margin-left:4px; }
+  .dn { color:var(--warn); } .dz { color:var(--mute); } .dp { color:var(--ok); }
+  .act.mini { flex-wrap:nowrap; }
+  .act.mini button { font-size:11px; padding:0 6px; line-height:18px; border-color:transparent; background:transparent; color:var(--mute); }
+  .act.mini button:hover { border-color:var(--line); color:var(--ink); background:#fff; }
+  .act.mini button.primary { color:var(--acc); }
+  .act.mini button.primary:hover { background:var(--acc2); }
+  table.ledger tr.slate.sel td { background:var(--acc2); }
+  table.ledger tr.slate.ref td { background:#f1efe8; }
+  .hover-act .act { visibility:hidden; } .hover-act tr:hover .act { visibility:visible; }
+  .swap { font-size:12px; }
+  .swap .minus { color:var(--warn); } .swap .plus { color:var(--ok); }
+  .movers { display:flex; gap:4px; flex-wrap:wrap; }
+  .movers span { font-size:11px; border-radius:3px; padding:0 5px; border:1px solid var(--line); white-space:nowrap; }
+  .movers span.up { border-color:#a9d3b0; background:#eef8f0; color:var(--ok); } .movers span.down { border-color:#e8b8b4; background:#fbeeed; color:var(--warn); }
+  #insp { position:sticky; top:96px; align-self:start; background:#fff; border:1px solid var(--line); border-radius:6px; padding:10px 12px; max-height:calc(100vh - 130px); overflow:auto; }
+  #insp h3 { margin:0 0 6px; font-size:14px; }
+  .bwrap { display:grid; grid-template-columns: minmax(0,1fr) 360px; gap:12px; align-items:start; }
+  .cmp.v { grid-template-columns:1fr; position:static; box-shadow:none; gap:8px; padding:0; border:0; }
+  .cmp.v table { font-size:11px; } .cmp.v table td.f { max-width:88px; } .cmp.v .hdr .num { margin-left:0; width:100%; gap:10px; } .cmp.v .hdr .num div b { font-size:13px; }
+
   /* ---- editor stub ---- */
   .tl { position:relative; height:64px; background:#fff; border:1px solid var(--line); border-radius:4px; margin:8px 0; overflow:hidden; }
   .tl .box { position:absolute; top:8px; height:40px; background:var(--acc2); border:1px solid var(--acc); border-radius:3px; font-size:11px; padding:2px 4px; overflow:hidden; white-space:nowrap; }
@@ -254,7 +275,8 @@ const hm = m => (m < 0 ? "−" : "") + Math.floor(Math.abs(m) / 60) + "h" + Stri
 
 const emptyKnobs = () => ({ without: [], disregard: [], fixIn: [], fixOut: [] });
 const S = {
-  variant: new URLSearchParams(location.search).get("variant") || "C",
+  variant: new URLSearchParams(location.search).get("variant") || "A",
+  selected: [], reference: null,
   budget: 480, anchor: "2026-10-31T18:00", k: 4,
   knobs: emptyKnobs(),
   batchN: 5,
@@ -421,94 +443,133 @@ function moreButton(b) {
 }
 function endingBanner(b) { return b.ending ? `<div class="banner warn"><b>${b.ending.kind === "pins" ? "Batch ended" : "Note"}</b> ${esc(b.ending.text)}</div>` : ""; }
 
-// ============================================================ variant A — matrix
+// ============================================================ shared ledger pieces
+function numCells(c, best, ref) {
+  // value plus its distance from the best (or from the reference row in C)
+  const b = ref || best;
+  const cell = (v, bv, goodUp = true) => { const d = v - bv; const cls = d === 0 ? "dz" : ((d > 0) === goodUp ? "dp" : "dn"); return `<td class="n">${v}<small class="${cls}">${c === b ? "" : d === 0 ? "=" : (d > 0 ? "+" : "") + d}</small></td>`; };
+  return cell(c.ev.floor, b.ev.floor) + cell(c.ev.sum, b.ev.sum) + cell(c.ev.total, b.ev.total);
+}
+const numHead = (what) => `<th class="n">floor <small class="mute">${what}</small></th><th class="n">Σrep</th><th class="n">total</th>`;
+function peopleStrip(c) {
+  return `<span class="people2">${VOTERS.map(v => { if (S.knobs.without.includes(v) || !hasVoted(v)) return `<i style="background:transparent;border:1px dashed var(--line);color:var(--mute)" title="${v}: ${hasVoted(v) ? "excluded" : "not voted"}">${v[0]}</i>`; const r = c.ev.rep[v]; const cls = r.s === 0 ? "s0" : "s" + r.s; return `<i class="sc ${cls}" style="width:14px;min-width:0;padding:0" title="${esc(v)}: ${r.id ? esc(title(r.id)) + " " + (r.s > 0 ? "+" : "") + r.s : "0 — best eligible " + (r.alt ? esc(title(r.alt.id)) + " (" + rt(r.alt.id) + " min)" : "none")}${c.ev.pinners.includes(v) ? " — pins the floor" : ""}">${c.ev.pinners.includes(v) ? "★" : v[0]}</i>`; }).join("")}</span>`;
+}
+function miniActions(c) {
+  if (c.kind === "tt") return `<span class="mute" style="font-size:11px">the plan</span>`;
+  const use = `<button class="primary" data-act="use" data-key="${c.key}" title="lay this slate onto the timetable">use</button>`;
+  return `<div class="act mini">${use}${c.kind === "kept" ? `<button data-act="drop" data-key="${c.key}">drop</button>` : `<button data-act="keep" data-key="${c.key}">keep</button>`}</div>`;
+}
+const vetoCount = c => c.ev.vetoFoot.length ? `<small title="${esc(vetoText(c.ev))}">${c.ev.vetoFoot.reduce((a, x) => a + x.by.length, 0)} · ${c.ev.vetoFoot.map(x => esc(title(x.id))).join(", ")}</small>` : `<small class="mute">—</small>`;
+function detailRow(c, span) {
+  return `<tr class="detail"><td colspan="${span}"><div class="dgrid">
+    <div><b>Films</b><ul>${c.ids.map(id => `<li>${esc(title(id))} <span class="rt">${rt(id)}</span>${S.knobs.fixIn.includes(id) ? ' <span class="pin">📌</span>' : ""}</li>`).join("") || "<li class='mute'>empty</li>"}</ul>${budgetBar(c.ev)}</div>
+    <div><b>People</b><table>${VOTERS.map(v => `<tr><td>${esc(v)}</td><td class="rep">${repCell(c, v)}</td></tr>`).join("")}</table></div>
+    <div><b>Vetoed films</b><div>${vetoText(c.ev)}</div>${c.kind === "kept" ? `<br><b>Provenance</b><div class="prov">${esc(knobLabel(c.prov))}</div>` : ""}</div>
+  </div></td></tr>`;
+}
+function sections(cols) { return [["The plan", cols.filter(c => c.kind === "tt"), "The timetable is empty."], ["Shortlist", cols.filter(c => c.kind === "kept"), "Nothing kept yet."], ["This batch", cols.filter(c => c.kind === "batch"), ""]]; }
+const overMark = c => c.ev.screen > S.budget ? ` <span style="color:var(--warn)">over</span>` : "";
+
+// ============================================================ variant A — ledger · dots (round 2's shape, refined)
 function renderA(view) {
-  const { cols, b, union, core } = columns();
-  let h = endingBanner(b);
-  if (!cols.length) { view.innerHTML = h + `<div class="empty">No slates on screen.</div>`; return; }
-  const th = cols.map((c, i) => `<th class="col ${i > 0 && cols[i - 1].kind !== c.kind ? "grp" : ""}"><div class="colhead">
-      <div class="lbl">${c.label} ${tierBadge(c)}</div>
-      <div>${standing(c)} <small>· total ${c.ev.total}</small></div>
-      ${provLine(c)}
-      ${budgetBar(c.ev)}
-      <div class="act">${actions(c)}</div></div></th>`).join("");
-  const rows = union.map(id => {
-    const isCore = core.has(id); const pinIn = S.knobs.fixIn.includes(id);
-    return `<tr class="${isCore ? "core" : ""}"><td class="rowh">${pinIn ? '<span class="pin" title="fixed in">📌</span> ' : ""}${esc(title(id))} <span class="rt">${rt(id)}</span>${isCore ? ' <small>core</small>' : ""}</td>${cols.map((c, i) => `<td class="dot col ${i > 0 && cols[i - 1].kind !== c.kind ? "grp" : ""}">${c.ids.includes(id) ? "●" : '<span style="color:var(--line)">·</span>'}</td>`).join("")}</tr>`;
-  }).join("");
-  const sec = (name) => `<tr class="sec"><th class="rowh">${name}</th>${cols.map(() => `<th></th>`).join("")}</tr>`;
-  const people = VOTERS.map(v => `<tr><td class="rowh">${esc(v)}</td>${cols.map((c, i) => `<td class="rep col ${i > 0 && cols[i - 1].kind !== c.kind ? "grp" : ""}">${repCell(c, v)}</td>`).join("")}</tr>`).join("");
-  const readouts = `<tr><td class="rowh">Genre mix <small>beyond horror</small></td>${cols.map(c => `<td class="col"><small>${genreMix(c.ev)}</small></td>`).join("")}</tr>
-    <tr><td class="rowh">Vetoed films <small>by whom</small></td>${cols.map(c => `<td class="col"><small>${vetoText(c.ev)}</small></td>`).join("")}</tr>
-    <tr><td class="rowh">Films · screen time</td>${cols.map(c => `<td class="col"><small>${c.ids.length} films · ${hm(c.ev.screen)}</small></td>`).join("")}</tr>`;
-  h += `<div class="banner">${batchHeader(b)}<span style="margin-left:auto">${moreButton(b)}</span></div>`;
-  h += `<table class="matrix"><thead><tr><th class="rowh"><small>${cols.length} slates on screen · ${union.length} films appear · ${core.size} in every slate</small></th>${th}</tr></thead><tbody>${rows}${sec("People — representative and score")}${people}${sec("Set readouts")}${readouts}</tbody></table>`;
-  if (S.knobs.fixOut.length) h += `<p class="mute">Fixed out, absent from every slate: ${S.knobs.fixOut.map(title).join(", ")}</p>`;
-  view.innerHTML = h;
-}
-
-// ============================================================ variant B — cards
-function renderB(view) {
-  const { cols, b, core } = columns();
-  const card = c => `<div class="card ${c.kind}">
-    <h3><span>${c.label}</span>${tierBadge(c)}</h3>
-    <div>${standing(c)} <small>· total ${c.ev.total}</small></div>
-    ${provLine(c)}
-    ${budgetBar(c.ev)}
-    <ul>${c.ids.map(id => `<li class="${core.has(id) ? "core" : "diff"}"><span>${S.knobs.fixIn.includes(id) ? "📌 " : ""}${esc(title(id))}</span><span class="rt">${rt(id)}</span></li>`).join("") || `<li class="mute">empty slate</li>`}</ul>
-    <div class="people">${VOTERS.map(v => {
-      if (S.knobs.without.includes(v) || !hasVoted(v)) return `<span title="${v}: ${hasVoted(v) ? "excluded" : "not voted"}"><span class="sc none">–</span><small>${v.slice(0, 3)}</small></span>`;
-      const r = c.ev.rep[v]; const t = r.id ? `${v}: ${title(r.id)} ${r.s > 0 ? "+" : ""}${r.s}` : `${v}: nothing represents them — best eligible ${r.alt ? title(r.alt.id) + " (" + rt(r.alt.id) + " min)" : "none"}`;
-      return `<span title="${esc(t)}${c.ev.pinners.includes(v) ? " — pins the floor" : ""}">${scoreChip(r.s)}<small>${c.ev.pinners.includes(v) ? "★" : ""}${v.slice(0, 3)}</small></span>`; }).join("")}</div>
-    <div class="row"><span>genre mix</span><span>${genreMix(c.ev)}</span></div>
-    <div class="row"><span>vetoed</span><span style="text-align:right">${vetoText(c.ev)}</span></div>
-    <div class="act" style="margin-top:6px">${actions(c)}</div></div>`;
-  const tt = cols.filter(c => c.kind === "tt"), kept = cols.filter(c => c.kind === "kept"), bat = cols.filter(c => c.kind === "batch");
-  let h = endingBanner(b);
-  h += `<div class="banner">${batchHeader(b)}<span class="mute">films in every slate on screen are greyed; differences are bold</span></div>`;
-  h += `<h2>The plan <small>${tt.length ? "the timetable's own film set, scored like any proposal" : "the timetable is empty"}</small></h2><div class="rail">${tt.map(card).join("") || `<div class="empty">Use a slate to start the timetable.</div>`}</div>`;
-  h += `<h2>Shortlist <small>${kept.length} kept</small></h2><div class="rail">${kept.map(card).join("") || `<div class="empty">Nothing kept yet.</div>`}</div>`;
-  h += `<h2>This batch <small>${bat.length} proposals</small> <span style="margin-left:auto">${moreButton(b)}</span></h2><div class="rail">${bat.map(card).join("")}</div>`;
-  view.innerHTML = h;
-}
-
-// ============================================================ variant C — ledger
-function renderC(view) {
-  const { cols, b, union, core } = columns();
+  const { cols, b, union, core, best } = columns();
   const cmp = [...S.compare].map(k => cols.find(c => c.key === k)).filter(Boolean);
   const diff = cmp.length === 2 ? new Set(union.filter(id => cmp[0].ids.includes(id) !== cmp[1].ids.includes(id))) : null;
   const dots = c => `<span class="dots">${union.map(id => { const on = c.ids.includes(id); let cls = on ? (core.has(id) ? "on core" : "on") : ""; if (diff && diff.has(id)) cls += on ? " hl" : " hlo"; if (on && S.knobs.fixIn.includes(id)) cls += " pinin"; return `<i class="${cls}" title="${esc(title(id))} (${rt(id)})${on ? "" : " — not in this slate"}"></i>`; }).join("")}</span>`;
-  const people = c => `<span class="people2">${VOTERS.map(v => { if (S.knobs.without.includes(v) || !hasVoted(v)) return `<i style="background:transparent;border:1px dashed var(--line);color:var(--mute)" title="${v}: ${hasVoted(v) ? "excluded" : "not voted"}">${v[0]}</i>`; const r = c.ev.rep[v]; const cls = r.s === 0 ? "s0" : "s" + r.s; return `<i class="sc ${cls}" style="width:14px;min-width:0;padding:0" title="${esc(v)}: ${r.id ? esc(title(r.id)) + " " + (r.s > 0 ? "+" : "") + r.s : "0 — best eligible " + (r.alt ? esc(title(r.alt.id)) + " (" + rt(r.alt.id) + " min)" : "none")}${c.ev.pinners.includes(v) ? " — pins the floor" : ""}">${c.ev.pinners.includes(v) ? "★" : v[0]}</i>`; }).join("")}</span>`;
+  const SPAN = 11;
   const row = c => `<tr class="slate ${c.kind}" data-key="${c.key}">
-      <td><input type="checkbox" data-cmp="${c.key}" ${S.compare.has(c.key) ? "checked" : ""} title="tick two rows to highlight their difference"></td>
+      <td><input type="checkbox" data-cmp="${c.key}" ${S.compare.has(c.key) ? "checked" : ""} title="tick two rows to see the swap"></td>
       <td><div class="lbl">${c.label}</div>${provLine(c)}</td>
       <td>${tierBadge(c)}</td>
-      <td>${standing(c)}<br><small>total ${c.ev.total}</small></td>
+      ${numCells(c, best)}
       <td>${dots(c)}</td>
-      <td class="nowrap">${c.ids.length} · ${hm(c.ev.screen)}${c.ev.screen > S.budget ? ` <span style="color:var(--warn)">over</span>` : ""}</td>
-      <td>${people(c)}</td>
-      <td class="nowrap"><small>${c.ev.vetoFoot.length ? c.ev.vetoFoot.map(x => x.by.length).reduce((a, b) => a + b, 0) + " veto" + (c.ev.vetoFoot.length > 1 ? "es" : "") : "—"}</small></td>
-      <td><div class="act">${actions(c)}</div></td></tr>` +
-    (S.expanded.has(c.key) ? `<tr class="detail"><td colspan="9"><div class="dgrid">
-      <div><b>Films</b><ul>${c.ids.map(id => `<li class="${core.has(id) ? "mute" : ""}">${esc(title(id))} <span class="rt">${rt(id)}</span>${core.has(id) ? " <small>core</small>" : ""}</li>`).join("") || "<li class='mute'>empty</li>"}</ul><small>genre mix: ${genreMix(c.ev)}</small></div>
-      <div><b>People</b><table>${VOTERS.map(v => `<tr><td>${esc(v)}</td><td class="rep">${repCell(c, v)}</td></tr>`).join("")}</table></div>
-      <div><b>Vetoed films</b><div>${vetoText(c.ev)}</div><br><b>Screen time</b>${budgetBar(c.ev)}</div>
-    </div></td></tr>` : "");
-  const sep = (t, extra = "") => `<tr class="sep"><td colspan="9">${t} ${extra}</td></tr>`;
-  const tt = cols.filter(c => c.kind === "tt"), kept = cols.filter(c => c.kind === "kept"), bat = cols.filter(c => c.kind === "batch");
+      <td class="nowrap">${c.ids.length} · ${hm(c.ev.screen)}${overMark(c)}</td>
+      <td>${peopleStrip(c)}</td>
+      <td>${vetoCount(c)}</td>
+      <td>${miniActions(c)}</td></tr>` + (S.expanded.has(c.key) ? detailRow(c, SPAN) : "");
   let h = endingBanner(b);
-  h += `<div class="banner">${batchHeader(b)}<span class="mute">click a row to expand · tick two to compare</span></div>`;
+  h += `<div class="banner">${batchHeader(b)}<span class="mute">click a row to expand · tick two to see the swap</span></div>`;
   if (cmp.length === 2) h += comparePanel(cmp[0], cmp[1]);
-  h += `<table class="ledger"><thead><tr><th></th><th>Slate</th><th>Tier</th><th>Standing</th><th><div class="filmhead">${union.map(id => `<span title="${esc(title(id))}">${esc(title(id))}</span>`).join("")}</div></th><th>Films · screen</th><th>People</th><th>Vetoes</th><th></th></tr></thead><tbody>`;
-  h += sep("The plan"); h += tt.map(row).join("") || `<tr><td colspan="9" class="empty">The timetable is empty.</td></tr>`;
-  h += sep("Shortlist", `<small>${kept.length} kept</small>`); h += kept.map(row).join("") || `<tr><td colspan="9" class="empty">Nothing kept yet.</td></tr>`;
-  h += sep("This batch", `<small>${bat.length} proposals</small> <span style="float:right">${moreButton(b)}</span>`); h += bat.map(row).join("");
+  h += `<table class="ledger"><thead><tr><th></th><th>Slate</th><th>Tier</th>${numHead("vs best")}<th><div class="filmhead">${union.map(id => `<span title="${esc(title(id))}">${esc(title(id))}</span>`).join("")}</div></th><th>Films · screen</th><th>People</th><th>Vetoes</th><th></th></tr></thead><tbody>`;
+  for (const [name, list, empty] of sections(cols)) { h += `<tr class="sep"><td colspan="${SPAN}">${name} <small>${list.length}</small>${name === "This batch" ? `<span style="float:right">${moreButton(b)}</span>` : ""}</td></tr>`; h += list.map(row).join("") || (empty ? `<tr><td colspan="${SPAN}" class="empty">${empty}</td></tr>` : ""); }
+  h += `</tbody></table>`;
+  view.innerHTML = h;
+}
+
+// ============================================================ variant B — ledger · inspector (compact table, detail and swap in a side pane)
+function renderB(view) {
+  const { cols, b, best } = columns();
+  S.selected = S.selected.filter(k => cols.some(c => c.key === k));
+  const sel = S.selected.map(k => cols.find(c => c.key === k));
+  const SPAN = 8;
+  const row = c => `<tr class="slate ${c.kind} ${S.selected.includes(c.key) ? "sel" : ""}" data-key="${c.key}" data-select="1">
+      <td><div class="lbl">${c.label}</div>${provLine(c)}</td>
+      <td>${tierBadge(c)}</td>
+      ${numCells(c, best)}
+      <td class="nowrap">${c.ids.length} · ${hm(c.ev.screen)}${overMark(c)}</td>
+      <td>${vetoCount(c)}</td>
+      <td class="mute" style="font-size:11px">${S.selected.includes(c.key) ? (S.selected.length === 2 ? (S.selected[0] === c.key ? "left" : "right") : "selected") : ""}</td></tr>`;
+  let h = endingBanner(b);
+  h += `<div class="banner">${batchHeader(b)}<span class="mute">click a row to inspect it · click a second to see the swap</span></div>`;
+  h += `<div class="bwrap"><div><table class="ledger"><thead><tr><th>Slate</th><th>Tier</th>${numHead("vs best")}<th>Films · screen</th><th>Vetoes</th><th></th></tr></thead><tbody>`;
+  for (const [name, list, empty] of sections(cols)) { h += `<tr class="sep"><td colspan="${SPAN}">${name} <small>${list.length}</small>${name === "This batch" ? `<span style="float:right">${moreButton(b)}</span>` : ""}</td></tr>`; h += list.map(row).join("") || (empty ? `<tr><td colspan="${SPAN}" class="empty">${empty}</td></tr>` : ""); }
+  h += `</tbody></table></div>`;
+  const h4 = t => `<h4 style="margin:10px 0 4px;font-size:12px;text-transform:uppercase;color:var(--mute)">${t}</h4>`;
+  let ins = "";
+  if (!sel.length) ins = `<h3 class="mute">Nothing selected</h3><p class="mute" style="font-size:12px">Click a row to see its films, everyone's representative, and the actions. Click a second row to see what swapping to it would do to whom.</p>`;
+  else if (sel.length === 1) {
+    const c = sel[0];
+    ins = `<h3>${c.label} ${tierBadge(c)}</h3><div>${standing(c)} <small>· total ${c.ev.total}</small></div>${provLine(c)}${budgetBar(c.ev)}
+      <div class="act" style="margin:8px 0">${c.kind === "tt" ? `<span class="mute">the plan — edit it in the timetable</span>` : `<button class="primary" data-act="use" data-key="${c.key}">Use this slate</button>${c.kind === "kept" ? `<button data-act="drop" data-key="${c.key}">Drop from shortlist</button>` : `<button data-act="keep" data-key="${c.key}">Keep</button>`}`}</div>
+      ${h4("Films")}<ul style="margin:0;padding-left:16px">${c.ids.map(id => `<li>${esc(title(id))} <span class="rt">${rt(id)}</span></li>`).join("") || "<li class='mute'>empty</li>"}</ul>
+      ${h4("People")}<table>${VOTERS.map(v => `<tr><td style="padding-right:8px">${esc(v)}</td><td class="rep">${repCell(c, v)}</td></tr>`).join("")}</table>
+      ${h4("Vetoed films")}<div>${vetoText(c.ev)}</div>`;
+  } else {
+    const [L, R] = sel;
+    ins = `<div class="act" style="margin:0 0 8px;justify-content:space-between"><span>${L.kind !== "tt" ? `<button data-act="use" data-key="${L.key}">use ${L.label}</button>` : ""}</span><span>${R.kind !== "tt" ? `<button class="primary" data-act="use" data-key="${R.key}">use ${R.label}</button>` : ""}</span></div>` + comparePanel(L, R, true);
+  }
+  h += `<div id="insp">${ins}</div></div>`;
+  view.innerHTML = h;
+}
+
+// ============================================================ variant C — ledger · reference (every row read as a diff against one chosen row)
+function renderC(view) {
+  const { cols, b, best } = columns();
+  if (!cols.some(c => c.key === S.reference)) S.reference = null;
+  const ref = cols.find(c => c.key === S.reference) || cols.find(c => c.kind === "tt") || best;
+  const SPAN = 10;
+  const swapCell = c => {
+    if (c === ref) return `<span class="swap"><b>reference</b> · ${c.ids.map(id => esc(title(id))).join(", ") || "<span class='mute'>empty</span>"}</span>`;
+    const minus = ref.ids.filter(id => !c.ids.includes(id)), plus = c.ids.filter(id => !ref.ids.includes(id));
+    if (!minus.length && !plus.length) return `<span class="mute swap">same films</span>`;
+    return `<span class="swap">${minus.map(id => `<span class="minus">− ${esc(title(id))}</span>`).join(" ")} ${plus.map(id => `<span class="plus">+ ${esc(title(id))}</span>`).join(" ")}</span>`;
+  };
+  const movers = c => {
+    if (c === ref) return `<span class="mute">—</span>`;
+    const m = VOTERS.filter(v => ref.ev.rep[v] && c.ev.rep[v]).map(v => ({ v, d: c.ev.rep[v].s - ref.ev.rep[v].s, from: ref.ev.rep[v], to: c.ev.rep[v] })).filter(x => x.d !== 0);
+    if (!m.length) return `<span class="mute" style="font-size:11px">nobody moves</span>`;
+    return `<span class="movers">${m.map(x => `<span class="${x.d > 0 ? "up" : "down"}" title="${esc(x.v)}: ${x.from.id ? esc(title(x.from.id)) : "nothing"} ${x.from.s > 0 ? "+" : ""}${x.from.s} → ${x.to.id ? esc(title(x.to.id)) : "nothing"} ${x.to.s > 0 ? "+" : ""}${x.to.s}">${esc(x.v)} ${x.d > 0 ? "▲+" + x.d : "▼" + x.d}</span>`).join("")}</span>`;
+  };
+  const screenCell = c => c === ref ? hm(c.ev.screen) : `<small class="${c.ev.screen > ref.ev.screen ? "dn" : c.ev.screen < ref.ev.screen ? "dp" : "dz"}">${c.ev.screen === ref.ev.screen ? "=" : (c.ev.screen > ref.ev.screen ? "+" : "−") + Math.abs(c.ev.screen - ref.ev.screen) + " min"}</small>`;
+  const row = c => `<tr class="slate ${c.kind} ${c === ref ? "ref" : ""}" data-key="${c.key}">
+      <td><input type="radio" name="ref" data-ref="${c.key}" ${c === ref ? "checked" : ""} title="read every other row against this one"></td>
+      <td><div class="lbl">${c.label}</div>${provLine(c)}</td>
+      <td>${tierBadge(c)}</td>
+      ${numCells(c, best, ref)}
+      <td>${swapCell(c)}</td>
+      <td>${movers(c)}</td>
+      <td class="n">${screenCell(c)}${overMark(c)}</td>
+      <td>${miniActions(c)}</td></tr>` + (S.expanded.has(c.key) ? detailRow(c, SPAN) : "");
+  let h = endingBanner(b);
+  h += `<div class="banner">${batchHeader(b)}<span class="mute">every row is read against <b>${ref.label}</b> — pick another reference with the radio · click a row to expand</span></div>`;
+  h += `<table class="ledger hover-act"><thead><tr><th></th><th>Slate</th><th>Tier</th>${numHead("vs reference")}<th>Swap against the reference</th><th>Who it moves</th><th class="n">Screen</th><th></th></tr></thead><tbody>`;
+  for (const [name, list, empty] of sections(cols)) { h += `<tr class="sep"><td colspan="${SPAN}">${name} <small>${list.length}</small>${name === "This batch" ? `<span style="float:right">${moreButton(b)}</span>` : ""}</td></tr>`; h += list.map(row).join("") || (empty ? `<tr><td colspan="${SPAN}" class="empty">${empty}</td></tr>` : ""); }
   h += `</tbody></table>`;
   view.innerHTML = h;
 }
 
 // the swap: what changes between two slates, and who it moves
-function comparePanel(L, R) {
+function comparePanel(L, R, vertical = false) {
   const minus = L.ids.filter(id => !R.ids.includes(id)), plus = R.ids.filter(id => !L.ids.includes(id)), shared = L.ids.filter(id => R.ids.includes(id));
   const dl = (v, sign) => v === 0 ? `<span class="same">=</span>` : `<span class="${(v > 0) === sign ? "up" : "down"}">${v > 0 ? "+" : ""}${v}</span>`;
   const rows = VOTERS.map(v => {
@@ -521,13 +582,13 @@ function comparePanel(L, R) {
   }).join("");
   const moved = VOTERS.filter(v => L.ev.rep[v] && R.ev.rep[v] && L.ev.rep[v].s !== R.ev.rep[v].s);
   const vetoDelta = () => { const l = L.ev.vetoFoot.flatMap(x => x.by.map(b => b + " · " + title(x.id))), r = R.ev.vetoFoot.flatMap(x => x.by.map(b => b + " · " + title(x.id))); const gone = l.filter(x => !r.includes(x)), added = r.filter(x => !l.includes(x)); return (gone.length ? `<div class="up">− ${gone.map(esc).join("; ")}</div>` : "") + (added.length ? `<div class="down">+ ${added.map(esc).join("; ")}</div>` : "") + (!gone.length && !added.length ? `<span class="same">unchanged</span>` : ""); };
-  return `<div class="cmp">
+  return `<div class="cmp ${vertical ? "v" : ""}">
     <div class="hdr"><b>${L.label}</b> <span class="mute">→</span> <b>${R.label}</b> <small>${shared.length} films shared · ${minus.length} out · ${plus.length} in</small>
       <span style="margin-left:auto" class="num"><div><small>floor</small><b>${L.ev.floor} → ${R.ev.floor} ${dl(R.ev.floor - L.ev.floor, true)}</b></div><div><small>Σrep</small><b>${L.ev.sum} → ${R.ev.sum} ${dl(R.ev.sum - L.ev.sum, true)}</b></div><div><small>total</small><b>${L.ev.total} → ${R.ev.total} ${dl(R.ev.total - L.ev.total, true)}</b></div><div><small>screen time</small><b>${hm(L.ev.screen)} → ${hm(R.ev.screen)} ${dl(R.ev.screen - L.ev.screen, false)}</b></div></span>
-      <button class="ghost" data-act="uncompare">✕</button></div>
+      ${vertical ? "" : `<button class="ghost" data-act="uncompare">✕</button>`}</div>
     <div><h4>The swap</h4><ul>${minus.map(id => `<li class="minus"><span>− ${esc(title(id))}</span><span class="rt">${rt(id)}</span></li>`).join("")}${plus.map(id => `<li class="plus"><span>+ ${esc(title(id))}</span><span class="rt">${rt(id)}</span></li>`).join("")}${!minus.length && !plus.length ? `<li class="mute">identical film sets</li>` : ""}</ul><h4 style="margin-top:8px">Vetoes in the room</h4>${vetoDelta()}</div>
     <div><h4>Who it moves <small>· ${moved.length ? moved.join(", ") : "nobody's score changes"}</small></h4><table>${rows}</table></div>
-    <div><h4>Genre mix</h4><div><small>${genreMix(L.ev)}</small><br><span class="mute">→</span> <small>${genreMix(R.ev)}</small></div><h4 style="margin-top:8px">Read it as</h4><p class="mute" style="margin:0;font-size:12px">Left is what you have, right is what the swap gives you. A ▼ is a person the swap costs; ★ marks who pins the floor on each side. Nothing here is a verdict — the model does not score what you are weighing.</p></div>
+    <div><h4>Read it as</h4><p class="mute" style="margin:0;font-size:12px">Left is what you have, right is what the swap gives you. A ▼ is a person the swap costs; ★ marks who pins the floor on each side. Nothing here is a verdict — the model does not score what you are weighing.</p></div>
   </div>`;
 }
 
@@ -562,7 +623,7 @@ function renderEditor() {
 }
 
 // ============================================================ render all
-const VARIANTS = { A: ["Matrix", renderA], B: ["Cards", renderB], C: ["Ledger", renderC] };
+const VARIANTS = { A: ["Ledger · dots", renderA], B: ["Ledger · inspector", renderB], C: ["Ledger · reference", renderC] };
 function render() {
   document.getElementById("budgetH").value = S.budget / 60;
   document.getElementById("anchor").value = S.anchor;
@@ -602,10 +663,14 @@ document.body.addEventListener("click", e => {
   const kn = e.target.closest("[data-knob]"); if (kn) { const set = S.knobs[kn.dataset.knob]; const v = kn.dataset.v; const i = set.indexOf(v); if (i >= 0) set.splice(i, 1); else set.push(v); S.batchN = 5; render(); return; }
   const rm = e.target.closest("[data-knobrm]"); if (rm) { S.knobs[rm.dataset.knobrm] = S.knobs[rm.dataset.knobrm].filter(id => id != rm.dataset.id); S.batchN = 5; render(); return; }
   const cmp = e.target.closest("[data-cmp]"); if (cmp) { const k = cmp.dataset.cmp; if (S.compare.has(k)) S.compare.delete(k); else { if (S.compare.size >= 2) S.compare.delete([...S.compare][0]); S.compare.add(k); } render(); return; }
-  const row = e.target.closest("tr.slate"); if (row && !e.target.closest("button,input,select")) { const k = row.dataset.key; if (S.expanded.has(k)) S.expanded.delete(k); else S.expanded.add(k); render(); return; }
+  const row = e.target.closest("tr.slate"); if (row && !e.target.closest("button,input,select")) {
+    const k = row.dataset.key;
+    if (row.dataset.select) { const i = S.selected.indexOf(k); if (i >= 0) S.selected.splice(i, 1); else { S.selected.push(k); if (S.selected.length > 2) S.selected.shift(); } render(); return; }
+    if (S.expanded.has(k)) S.expanded.delete(k); else S.expanded.add(k); render(); return; }
   const pr = e.target.closest("[data-preset]"); if (pr) { preset(pr.dataset.preset); return; }
 });
 document.body.addEventListener("change", e => {
+  if (e.target.matches("[data-ref]")) { S.reference = e.target.dataset.ref; render(); return; }
   const s = e.target.closest("[data-knobsel]"); if (s && s.value) { S.knobs[s.dataset.knobsel].push(+s.value); S.batchN = 5; render(); return; }
   if (e.target.matches("[data-act=ttadd]") && e.target.value) { S.timetable.push(+e.target.value); render(); return; }
   if (e.target.id === "budgetH") { S.budget = Math.round(+e.target.value * 60); S.batchN = 5; render(); }
@@ -625,7 +690,7 @@ document.addEventListener("keydown", e => { if (e.target.matches("input,select,t
 
 // ============================================================ presets — the stress states the ticket asks for
 function preset(name) {
-  S.knobs = emptyKnobs(); S.batchN = 5; S.shortlist = []; S.timetable = []; S.budget = 480; S.k = 4; S.expanded = new Set(); S.compare = new Set(); S.keptSeq = 0;
+  S.knobs = emptyKnobs(); S.batchN = 5; S.shortlist = []; S.timetable = []; S.budget = 480; S.k = 4; S.expanded = new Set(); S.compare = new Set(); S.selected = []; S.reference = null; S.keptSeq = 0;
   if (name === "working") {
     // one batch looked at, two kept, then a knob and a "more"
     let b = batch(S.knobs, S.budget, 5, S.k); keep(b.proposals[0]); keep(b.proposals[2]);
