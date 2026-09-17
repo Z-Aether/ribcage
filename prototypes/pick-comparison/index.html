@@ -26,7 +26,13 @@
   controls, and a stub of #22's timetable editor whose PLACEMENT (side / below /
   tab) is the "one screen or two" decision this ticket makes first.
 
-  Run:  python -m http.server 8024   →  http://localhost:8024/?variant=A
+  Round 2 (2026-09-17): C chosen as the direction ("well parseable and surprisingly
+  nice to use"; A too busy, B uncomfortable). Ticking two rows now opens a compare
+  panel: the swap (films out / in), who it moves (each voter's representative and
+  score on both sides), floor / Σrep / total / screen time deltas, veto changes.
+  C is the default variant.
+
+  Run:  python -m http.server 8024   →  http://localhost:8024/?variant=C
 -->
 <html lang="en">
 <head>
@@ -161,6 +167,19 @@
   .filmhead span { display:inline-block; width:11px; writing-mode:vertical-rl; transform:rotate(180deg); font-size:9px; color:var(--mute); white-space:nowrap; overflow:hidden; height:96px; line-height:11px; text-transform:none; letter-spacing:0; font-weight:400; }
   .people2 { display:inline-flex; gap:2px; }
   .people2 i { display:inline-block; width:14px; height:14px; border-radius:2px; text-align:center; font-size:9px; line-height:14px; color:#fff; font-style:normal; font-weight:600; }
+  .cmp { background:#fff; border:1px solid var(--ink); border-radius:6px; padding:8px 12px; margin:0 0 10px; display:grid; grid-template-columns: 1fr 1.4fr 1fr; gap:14px; position:sticky; top:40px; z-index:3; box-shadow:0 4px 14px rgba(0,0,0,.08); }
+  .cmp h4 { margin:0 0 4px; font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--mute); font-weight:600; }
+  .cmp .hdr { grid-column:1 / -1; display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; }
+  .cmp .hdr b { font-size:14px; }
+  .cmp ul { list-style:none; margin:0; padding:0; }
+  .cmp li { display:flex; justify-content:space-between; gap:6px; padding:1px 0; }
+  .cmp li.minus { color:var(--warn); } .cmp li.plus { color:var(--ok); }
+  .cmp table { border-collapse:collapse; width:100%; }
+  .cmp table td { padding:1px 6px 1px 0; border:0; white-space:nowrap; }
+  .cmp table td.f { max-width:150px; overflow:hidden; text-overflow:ellipsis; font-size:12px; }
+  .cmp .up { color:var(--ok); font-weight:600; } .cmp .down { color:var(--warn); font-weight:600; } .cmp .same { color:var(--mute); }
+  .cmp .num { display:flex; gap:16px; flex-wrap:wrap; }
+  .cmp .num div b { display:block; font-size:15px; font-variant-numeric:tabular-nums; }
   tr.detail td { background:#fbfaf6; padding:8px 12px 12px; }
   .dgrid { display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap:16px; }
   .dgrid ul { margin:4px 0; padding-left:16px; }
@@ -235,7 +254,7 @@ const hm = m => (m < 0 ? "−" : "") + Math.floor(Math.abs(m) / 60) + "h" + Stri
 
 const emptyKnobs = () => ({ without: [], disregard: [], fixIn: [], fixOut: [] });
 const S = {
-  variant: new URLSearchParams(location.search).get("variant") || "A",
+  variant: new URLSearchParams(location.search).get("variant") || "C",
   budget: 480, anchor: "2026-10-31T18:00", k: 4,
   knobs: emptyKnobs(),
   batchN: 5,
@@ -479,12 +498,37 @@ function renderC(view) {
   const tt = cols.filter(c => c.kind === "tt"), kept = cols.filter(c => c.kind === "kept"), bat = cols.filter(c => c.kind === "batch");
   let h = endingBanner(b);
   h += `<div class="banner">${batchHeader(b)}<span class="mute">click a row to expand · tick two to compare</span></div>`;
+  if (cmp.length === 2) h += comparePanel(cmp[0], cmp[1]);
   h += `<table class="ledger"><thead><tr><th></th><th>Slate</th><th>Tier</th><th>Standing</th><th><div class="filmhead">${union.map(id => `<span title="${esc(title(id))}">${esc(title(id))}</span>`).join("")}</div></th><th>Films · screen</th><th>People</th><th>Vetoes</th><th></th></tr></thead><tbody>`;
   h += sep("The plan"); h += tt.map(row).join("") || `<tr><td colspan="9" class="empty">The timetable is empty.</td></tr>`;
   h += sep("Shortlist", `<small>${kept.length} kept</small>`); h += kept.map(row).join("") || `<tr><td colspan="9" class="empty">Nothing kept yet.</td></tr>`;
   h += sep("This batch", `<small>${bat.length} proposals</small> <span style="float:right">${moreButton(b)}</span>`); h += bat.map(row).join("");
   h += `</tbody></table>`;
   view.innerHTML = h;
+}
+
+// the swap: what changes between two slates, and who it moves
+function comparePanel(L, R) {
+  const minus = L.ids.filter(id => !R.ids.includes(id)), plus = R.ids.filter(id => !L.ids.includes(id)), shared = L.ids.filter(id => R.ids.includes(id));
+  const dl = (v, sign) => v === 0 ? `<span class="same">=</span>` : `<span class="${(v > 0) === sign ? "up" : "down"}">${v > 0 ? "+" : ""}${v}</span>`;
+  const rows = VOTERS.map(v => {
+    if (S.knobs.without.includes(v) || !hasVoted(v)) return `<tr><td class="mute">${esc(v)}</td><td colspan="4" class="mute"><small>${hasVoted(v) ? "excluded" : "not voted"}</small></td></tr>`;
+    const a = L.ev.rep[v], c = R.ev.rep[v]; const d = c.s - a.s;
+    const arrow = d === 0 ? (a.id === c.id ? `<span class="same">same</span>` : `<span class="same">= other film</span>`) : `<span class="${d > 0 ? "up" : "down"}">${d > 0 ? "▲ +" + d : "▼ " + d}</span>`;
+    const film = r => r.id ? esc(title(r.id)) : `<span class="mute">nothing${r.alt ? " · best eligible " + esc(title(r.alt.id)) : ""}</span>`;
+    const pinL = L.ev.pinners.includes(v) ? ' <span class="pin">★</span>' : "", pinR = R.ev.pinners.includes(v) ? ' <span class="pin">★</span>' : "";
+    return `<tr><td>${esc(v)}</td><td>${scoreChip(a.s)}${pinL}</td><td class="f">${film(a)}</td><td style="text-align:center">${arrow}</td><td>${scoreChip(c.s)}${pinR}</td><td class="f">${film(c)}</td></tr>`;
+  }).join("");
+  const moved = VOTERS.filter(v => L.ev.rep[v] && R.ev.rep[v] && L.ev.rep[v].s !== R.ev.rep[v].s);
+  const vetoDelta = () => { const l = L.ev.vetoFoot.flatMap(x => x.by.map(b => b + " · " + title(x.id))), r = R.ev.vetoFoot.flatMap(x => x.by.map(b => b + " · " + title(x.id))); const gone = l.filter(x => !r.includes(x)), added = r.filter(x => !l.includes(x)); return (gone.length ? `<div class="up">− ${gone.map(esc).join("; ")}</div>` : "") + (added.length ? `<div class="down">+ ${added.map(esc).join("; ")}</div>` : "") + (!gone.length && !added.length ? `<span class="same">unchanged</span>` : ""); };
+  return `<div class="cmp">
+    <div class="hdr"><b>${L.label}</b> <span class="mute">→</span> <b>${R.label}</b> <small>${shared.length} films shared · ${minus.length} out · ${plus.length} in</small>
+      <span style="margin-left:auto" class="num"><div><small>floor</small><b>${L.ev.floor} → ${R.ev.floor} ${dl(R.ev.floor - L.ev.floor, true)}</b></div><div><small>Σrep</small><b>${L.ev.sum} → ${R.ev.sum} ${dl(R.ev.sum - L.ev.sum, true)}</b></div><div><small>total</small><b>${L.ev.total} → ${R.ev.total} ${dl(R.ev.total - L.ev.total, true)}</b></div><div><small>screen time</small><b>${hm(L.ev.screen)} → ${hm(R.ev.screen)} ${dl(R.ev.screen - L.ev.screen, false)}</b></div></span>
+      <button class="ghost" data-act="uncompare">✕</button></div>
+    <div><h4>The swap</h4><ul>${minus.map(id => `<li class="minus"><span>− ${esc(title(id))}</span><span class="rt">${rt(id)}</span></li>`).join("")}${plus.map(id => `<li class="plus"><span>+ ${esc(title(id))}</span><span class="rt">${rt(id)}</span></li>`).join("")}${!minus.length && !plus.length ? `<li class="mute">identical film sets</li>` : ""}</ul><h4 style="margin-top:8px">Vetoes in the room</h4>${vetoDelta()}</div>
+    <div><h4>Who it moves <small>· ${moved.length ? moved.join(", ") : "nobody's score changes"}</small></h4><table>${rows}</table></div>
+    <div><h4>Genre mix</h4><div><small>${genreMix(L.ev)}</small><br><span class="mute">→</span> <small>${genreMix(R.ev)}</small></div><h4 style="margin-top:8px">Read it as</h4><p class="mute" style="margin:0;font-size:12px">Left is what you have, right is what the swap gives you. A ▼ is a person the swap costs; ★ marks who pins the floor on each side. Nothing here is a verdict — the model does not score what you are weighing.</p></div>
+  </div>`;
 }
 
 // ============================================================ basis bar (knobs) — shared
@@ -552,6 +596,7 @@ document.body.addEventListener("click", e => {
     if (act === "drop") { S.shortlist = S.shortlist.filter(k => k.key !== key); render(); return; }
     if (act === "more") { S.batchN += 5; render(); return; }
     if (act === "clearknobs") { S.knobs = emptyKnobs(); S.batchN = 5; render(); return; }
+    if (act === "uncompare") { S.compare = new Set(); render(); return; }
     if (act === "ttrm") { S.timetable = S.timetable.filter(id => id != b.dataset.id); render(); return; }
   }
   const kn = e.target.closest("[data-knob]"); if (kn) { const set = S.knobs[kn.dataset.knob]; const v = kn.dataset.v; const i = set.indexOf(v); if (i >= 0) set.splice(i, 1); else set.push(v); S.batchN = 5; render(); return; }
