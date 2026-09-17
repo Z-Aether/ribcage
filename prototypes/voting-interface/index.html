@@ -37,6 +37,18 @@
     B  Deck · grouped  the rail is grouped Unsorted / +3 … −1 / Veto and re-sorts itself as you vote
     C  Deck · flat     round 1's deck, rail in ballot order, kept for contrast
 
+  Round 3 (2026-09-17). The tier list wins, "practically as is"; the grouped deck was
+  better than the flat one but "the fact that we need to discuss how navigation should
+  work means that it is not intuitive enough" — both decks are dropped (branch history,
+  round 2). The worry now is cohesion: a slightly different film card per phase. So:
+
+    A  Tier list · sheet        round 2's winner, film opens in a sheet at the right
+    B  Tier list · inline card  clicking a tile expands it IN THE BAND into #21's shared card —
+                                same structure as the SUGGEST/APPROVE card (poster, head with
+                                runtime at right, suggested-by, quoted notes with the pitch first,
+                                a phase control bar, the DoesTheDogDie block) with the VOTE bar
+                                holding score / veto / seen
+
   Run:  python -m http.server 8009   →  http://localhost:8009/prototypes/voting-interface/?variant=A
 -->
 <html lang="en">
@@ -141,6 +153,38 @@
   .tiers .band.tray.stick { position:sticky; top:41px; z-index:4; max-height:44vh; overflow:auto; box-shadow:0 6px 14px rgba(0,0,0,.08); }
   .rail .ghdr { padding:5px 8px 2px; font-size:11px; font-weight:600; color:var(--mute); border-top:1px solid var(--line2); display:flex; gap:6px; align-items:center; }
   .rail .ghdr .swatch { width:12px; height:12px; }
+  /* the shared card (#21's structure), opened inline inside a band */
+  .tile.open { flex-basis:100%; cursor:default; padding:0; border-color:#b9b5aa; box-shadow:0 4px 14px rgba(0,0,0,.08); }
+  .scard { display:grid; grid-template-columns:110px 1fr; gap:16px; padding:14px 16px; font-size:13px; }
+  .scard .poster { width:110px; aspect-ratio:2/3; object-fit:cover; border-radius:6px; background:#ddd; cursor:grab; }
+  .scard .head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+  .scard h3 { margin:0 0 2px; font-size:19px; line-height:1.2; }
+  .scard h3 .yr { color:var(--mute); font-weight:400; }
+  .scard h3 .icon { width:20px; height:20px; font-size:13px; line-height:20px; }
+  .scard .meta { color:var(--mute); display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .scard .meta .cert { border:1px solid var(--line); border-radius:3px; padding:0 5px; font-size:11px; }
+  .scard .rt { white-space:nowrap; } .scard .rt .src { font-size:12px; color:var(--mute); } .scard .rt .pencil { border:0; background:none; color:var(--mute); padding:0 4px; }
+  .scard .by { color:var(--mute); margin-top:8px; } .scard .by b { color:var(--ink); }
+  .scard .pnote { margin:4px 0 0; font-style:italic; color:#3d3b36; border-left:3px solid var(--line); padding-left:10px; }
+  .scard .pnote.pitch { border-left-color:var(--acc); }
+  .scard .ctx { margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .scard .ctx input[type=text] { flex:1; min-width:200px; }
+  .scard .matched { background:#fff6e5; border:1px solid #f0d9a8; border-radius:8px; padding:8px 12px; margin-top:10px; }
+  .scard .matched .ttl { font-size:12px; letter-spacing:.05em; color:#8a5a00; font-weight:700; text-transform:uppercase; display:flex; justify-content:space-between; }
+  .scard .matched ul { margin:6px 0 0; padding:0; list-style:none; }
+  .scard .matched li { display:flex; justify-content:space-between; gap:12px; padding:2px 0; }
+  .scard .matched li .n { color:var(--mute); }
+  .scard .dtdd-match { margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; color:var(--mute); }
+  .scard .dtdd-match .val { border:1px solid var(--line); border-radius:6px; padding:2px 8px; color:var(--ink); }
+  .scard details.all { margin-top:8px; border:1px solid var(--line); border-radius:8px; padding:0 12px; }
+  .scard details.all summary { cursor:pointer; padding:8px 0; color:var(--mute); }
+  .scard details.all .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:2px 16px; padding:6px 0 10px; max-height:260px; overflow:auto; }
+  .scard details.all label { display:flex; justify-content:space-between; gap:8px; cursor:pointer; }
+  .scard details.all label .n { color:var(--mute); }
+  .scard .credit-line { margin-top:6px; text-align:right; font-size:11px; color:var(--mute); }
+  .scard .note-group { margin-top:10px; } .scard .note-group .lbl { font-size:11px; color:var(--mute); letter-spacing:.05em; text-transform:uppercase; display:flex; justify-content:space-between; }
+  .scard .note-group textarea { width:100%; margin-top:4px; min-height:40px; }
+  .scard .closeb { border:0; background:none; color:var(--mute); font-size:16px; }
   .tile.std, .tile.full { width:88px; padding:3px; font-size:11px; }
   .tile.full { width:150px; font-size:12px; }
   .tile .pst { width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:3px; background:#ddd; display:block; margin-bottom:3px; }
@@ -249,7 +293,7 @@ const S = {
   triggers: q.get("triggers") !== "off",
   b: null,                       // {scores, veto, seen}
   doneMe: false, dontCare: false,
-  sheet: null, expanded: new Set(), sort: "order", hideScored: false,
+  sheet: null, open: null, expanded: new Set(), sort: "order", hideScored: false,
   cur: 0,                        // deck index
   dtddShown: false,
 };
@@ -324,9 +368,42 @@ function sheetHtml(f) {
     </div></div>`;
 }
 
+// ============================================================ the shared card (#21), inline in a band — variant B
+function inlineCardHtml(f) {
+  const st = state(f.id); const ov = othersVeto(f.id); const m = matched(f);
+  const meta = [esc(f.director.join(", ")), f.cert ? `<span class="cert">${esc(f.cert)}</span>` : "", f.trailer ? `<a href="https://youtube.com/watch?v=${f.trailer}" target="_blank">trailer ↗</a>` : "", `<a href="https://www.themoviedb.org/movie/${f.id}" target="_blank" class="mute">TMDB ↗</a>`].filter(Boolean).join("<span>·</span>");
+  const notes = notesOf(f).map(([w, t]) => `<p class="pnote ${w === f.suggester ? "pitch" : ""}">“${esc(t)}” <span class="mute small">— ${w === D.me ? "you" : esc(w)}</span></p>`).join("");
+  const ctx = `<div class="ctx">${segHtml(f)}<button class="veto ${st === "V" ? "on" : ""}" data-act="veto" data-id="${f.id}">${st === "V" ? "☒ vetoed — I won't be in the room" : "☒ veto"}</button>${st === "V" ? `<input type="text" placeholder="reason (optional, everyone sees it)" data-reason="${f.id}" value="${esc(S.b.veto[f.id])}">` : ""}<label class="small mute"><input type="checkbox" data-act="seen" data-id="${f.id}" ${S.b.seen[f.id] ? "checked" : ""}> seen it</label>${ov.length ? `<span class="tag v">vetoed by ${ov.join(", ")}</span>` : ""}</div>`;
+  let trig = "";
+  if (S.triggers) {
+    if (!f.dtdd) trig = `<div class="dtdd-match"><span>DoesTheDogDie:</span> <span class="val" style="color:var(--warn)">no match found</span> <a href="#" onclick="return false" class="small">search DTDD and pick manually</a></div>`;
+    else {
+      S.dtddShown = true;
+      const w = new Set(D.watched);
+      trig = `<div class="dtdd-match"><span>DoesTheDogDie:</span> <span class="val">${esc(f.dtdd.name)} (${f.dtdd.year || "?"})</span> <a href="#" onclick="return false" class="small">change</a></div>`
+        + (m.length ? `<div class="matched"><div class="ttl"><span>On your list</span></div><ul>${m.map(t => `<li><span>${esc(t.topic)}</span><span class="n tn">${t.yes} yes / ${t.no} no</span></li>`).join("")}</ul></div>` : "")
+        + `<details class="all"><summary>All ${f.dtdd.topics.length} topics · tick any to watch for it</summary><div class="grid">${f.dtdd.topics.map(t => `<label><span><input type="checkbox" ${w.has(t.topic) ? "checked" : ""} disabled> ${esc(t.topic)}</span><span class="n tn">${t.yes}/${t.no}</span></label>`).join("")}</div></details>`
+        + `<div class="credit-line">Powered by <a href="https://www.doesthedogdie.com" target="_blank">DoesTheDogDie.com</a></div>`;
+    }
+  }
+  const mine = f.notes[D.me] || "";
+  const noteBox = `<div class="note-group"><div class="lbl"><span>${f.suggester === D.me ? "Your pitch" : "Your note"}</span><span>everyone sees it · only you edit it</span></div><textarea placeholder="Anything the group should know — a trigger DTDD misses, a strobe sequence, or just that you're in.">${esc(mine)}</textarea></div>`;
+  return `<div class="tile poster open" data-id="${f.id}"><div class="scard">
+    <img class="poster" src="${IMG(f.poster, 185)}" draggable="true" data-id="${f.id}" title="drag to score">
+    <div>
+      <div class="head"><div><h3>${iconHtml(f)} ${esc(f.title)} <span class="yr">${f.year || ""}</span></h3><div class="meta">${meta}</div></div><div><span class="rt"><b>${f.runtime} min</b> <span class="src">TMDB</span> <button class="pencil" title="Wrong length for our copy? Edit">✎</button></span> <button class="closeb" data-act="closeinline" title="collapse">✕</button></div></div>
+      <div class="by">suggested by <b>${esc(f.suggester)}</b></div>
+      ${notes}
+      ${ctx}
+      ${trig}
+      ${noteBox}
+    </div></div></div>`;
+}
+
 // ============================================================ variant A — tier list
 function tileHtml(f) {
   const lvl = S.data; const ov = othersVeto(f.id);
+  if (S.variant === "B" && S.open === f.id) return inlineCardHtml(f);
   const seen = `<button class="seenb seen ${S.b.seen[f.id] ? "on" : ""}" data-act="seen" data-id="${f.id}" title="seen it">👁</button>`;
   if (lvl === "min") return `<div class="tile min" draggable="true" data-id="${f.id}"><span class="ttl" data-act="sheet" data-id="${f.id}">${esc(f.title)}</span> <span class="y">${f.year || ""}</span>${iconHtml(f)}${seen}${ov.length ? ` <span class="tag v">${ov.join(", ")}</span>` : ""}</div>`;
   if (lvl === "poster") return `<div class="tile poster" draggable="true" data-id="${f.id}" data-open="${f.id}" title="click to open, drag to score">
@@ -345,6 +422,7 @@ function tileHtml(f) {
   </div>`;
 }
 function vetoTileHtml(f) {
+  if (S.variant === "B" && S.open === f.id) return inlineCardHtml(f);
   return `<div class="tile vt" data-id="${f.id}">
     <div class="drag" draggable="true" data-id="${f.id}" title="drag out to un-veto">${S.data === "min" ? "" : `<img class="pst" src="${IMG(f.poster, 92)}" draggable="false">`}</div>
     <div>
@@ -447,8 +525,8 @@ function renderC(el, grouped = false) {
 }
 
 // ============================================================ render
-const VARIANTS = { A: ["Tier list", renderA], B: ["Deck · grouped rail", el => renderC(el, true)], C: ["Deck · flat rail", el => renderC(el, false)] };
-// renderB (the round-1 ledger) is kept in the branch history only — dropped in round 2 as "a bit too basic".
+const VARIANTS = { A: ["Tier list · sheet", renderA], B: ["Tier list · inline card", renderA] };
+// renderB (the round-1 ledger) and renderC (the round-2 decks) are kept in the branch history only.
 function render() {
   S.dtddShown = false;
   VARIANTS[S.variant][1](document.getElementById("view"));
@@ -469,7 +547,8 @@ function render() {
 // ============================================================ events
 document.body.addEventListener("click", e => {
   const b = e.target.closest("[data-act]");
-  if (!b) { const t = e.target.closest("[data-open]"); if (t) { S.sheet = +t.dataset.open; render(); } return; }
+  if (!b) { const t = e.target.closest("[data-open]"); if (t) { if (S.variant === "B") S.open = +t.dataset.open; else S.sheet = +t.dataset.open; render(); } return; }
+  if (b.dataset.act === "closeinline") { S.open = null; render(); return; }
   const act = b.dataset.act, id = +b.dataset.id;
   if (act === "score") { setScore(id, +b.dataset.v); }
   else if (act === "veto") { setVeto(id, S.b.veto[id] === undefined); }
