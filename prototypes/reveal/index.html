@@ -1,0 +1,450 @@
+<!doctype html>
+<!--
+  PROTOTYPE — ticket #29, the reveal. Throwaway. Not production.
+
+  What a voter sees in PICK: VOTE has closed and everyone's scores are open, per
+  person, by name (#8). Three variants, switchable via ?variant=A|B|C and the
+  floating bar. All three open #21's shared film card INLINE, the way the ballot
+  (#9, variant B) does, with the card's phase bar now READ-ONLY: everyone's score
+  as a named chip, vetoes with their reason, who has seen it, and the film's
+  points (#24's Σ of everyone's score, a veto at −2).
+
+    A  Matrix    one row per film, one column per voter, the score in the cell; a
+                 points column; click a voter's name to read the ballot their way
+                 (the dev's own idea — rows films, columns voters, cells scores)
+    B  Wall      poster tiles in the order of film points, each carrying a nine-cell
+                 strip of everyone's score; pick a name to re-sort the wall by that
+                 person. The ballot's tile, with the spread as a glyph.
+    C  Columns   one column per voter, their films grouped into the ballot's bands
+                 top-to-bottom. Taste, not totals: hover a film to find it in every
+                 column; click to open it above the columns.
+
+  Fixed by earlier tickets, not up for grabs here: the scale (−1…+3, veto = −2,
+  #10); a blank is 0 to the solver but is shown as blank, never as "don't mind";
+  seen-it bars representation only; a voter who scored nothing is visibly absent
+  (the floor set is the admin's readout, not the voter's, #15); the admin's per-
+  person representation and slate sums stay on the Compare tab (#24).
+
+  The bar's "phase" switch shows the reopen case (#15): the admin moves PICK →
+  VOTE, the reveal is gone and the ballot is back. The one rule is that nothing on
+  screen may claim the reopened vote is unanchored. "reopen note" toggles the one
+  line the ballot could say about it, so both readings can be judged.
+
+  Data is real (data.js): the #9 prototype's 32 films, nine voters, notes, DTDD
+  topics and vetoes, plus everyone's ballot, generated correlated. Iván never
+  voted; Hanna left eight films blank. "You" are Dani.
+
+  Run:  python -m http.server 8029   →  http://localhost:8029/prototypes/reveal/?variant=A
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PICK — the reveal (prototype #29)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg:#f6f5f2; --panel:#fff; --ink:#1c1b19; --mute:#6b6963; --line:#dcd9d2; --line2:#ece9e2;
+    --acc:#2f5fd0; --acc2:#e8eefc; --warn:#b3261e; --warn2:#fbeae8; --ok:#2b7a3d;
+    --s3:#1e6b34; --s2:#4b9a5c; --s1:#a5d3a7; --s0:#d9d7d0; --sm1:#e9a35c; --sv:#c8443a; --un:#f0eee8;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.35 system-ui, "Segoe UI", Roboto, sans-serif; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; border-radius:4px; padding:2px 8px; color:var(--ink); }
+  button:hover { border-color:#b9b5aa; }
+  input, select { font:inherit; border:1px solid var(--line); border-radius:4px; padding:3px 6px; background:#fff; color:var(--ink); }
+  a { color:var(--acc); }
+  .mute { color:var(--mute); }
+  .small { font-size:11px; }
+  .tn { font-variant-numeric:tabular-nums; }
+
+  header.app { display:flex; align-items:center; gap:14px; padding:8px 18px; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+  header.app .brand { font-weight:700; letter-spacing:.02em; }
+  header.app .brand span { color:var(--mute); font-weight:400; }
+  header.app .phase { background:var(--acc2); color:var(--acc); border-radius:10px; padding:1px 8px; font-size:11px; font-weight:600; }
+  header.app .grow { flex:1; }
+  main { padding:14px 18px 120px; }
+  footer.app { padding:14px 18px 120px; color:var(--mute); font-size:11px; display:flex; gap:16px; flex-wrap:wrap; }
+  .lede { display:flex; gap:16px; align-items:baseline; flex-wrap:wrap; margin:0 0 10px; }
+  .lede h1 { font-size:16px; margin:0; }
+  .lede .who { color:var(--mute); }
+  .lede .who b { color:var(--ink); }
+  .legend { display:flex; gap:14px; align-items:center; color:var(--mute); font-size:11px; margin:0 0 10px; flex-wrap:wrap; }
+  .legend .k { display:inline-flex; align-items:center; gap:4px; }
+  .legend .sw { width:14px; height:14px; border-radius:3px; display:inline-block; text-align:center; font-size:9px; line-height:14px; }
+  .s3 { background:var(--s3); color:#fff; } .s2 { background:var(--s2); color:#fff; } .s1 { background:var(--s1); } .s0 { background:var(--s0); } .sm1 { background:var(--sm1); } .sv { background:var(--sv); color:#fff; }
+  .un { background:repeating-linear-gradient(45deg, #f3f2ee 0 3px, #e6e4de 3px 6px); color:#a19e96; }
+  .tag { display:inline-block; border-radius:3px; padding:0 5px; font-size:11px; line-height:16px; white-space:nowrap; }
+  .tag.v { background:var(--warn2); color:var(--warn); }
+  .icon { display:inline-block; width:14px; height:14px; border-radius:50%; background:var(--warn); color:#fff; font-size:10px; line-height:14px; text-align:center; font-weight:700; vertical-align:-2px; }
+  .chips { display:flex; gap:4px 6px; flex-wrap:wrap; align-items:center; }
+  .chip { display:inline-flex; align-items:center; gap:4px; border-radius:4px; padding:1px 7px 1px 4px; font-size:12px; line-height:18px; white-space:nowrap; border:1px solid transparent; }
+  .chip b { font-weight:700; font-variant-numeric:tabular-nums; }
+  .chip.un { border-color:var(--line); }
+  .chip .eye { font-size:11px; opacity:.85; }
+  .chip .rsn { font-style:italic; font-weight:400; opacity:.9; }
+  .chip.me { outline:2px solid var(--ink); outline-offset:1px; }
+
+  /* the shared card (#21's structure) — the reveal's phase bar is read-only */
+  .scard { display:grid; grid-template-columns:110px 1fr; gap:16px; padding:14px 16px; font-size:13px; background:#fff; border:1px solid #b9b5aa; border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,.08); text-align:left; }
+  .scard .poster { width:110px; aspect-ratio:2/3; object-fit:cover; border-radius:6px; background:#ddd; }
+  .scard .head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+  .scard h3 { margin:0 0 2px; font-size:19px; line-height:1.2; }
+  .scard h3 .yr { color:var(--mute); font-weight:400; }
+  .scard h3 .icon { width:20px; height:20px; font-size:13px; line-height:20px; }
+  .scard .meta { color:var(--mute); display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .scard .meta .cert { border:1px solid var(--line); border-radius:3px; padding:0 5px; font-size:11px; }
+  .scard .rt { white-space:nowrap; } .scard .rt .src { font-size:12px; color:var(--mute); }
+  .scard .by { color:var(--mute); margin-top:8px; } .scard .by b { color:var(--ink); }
+  .scard .pnote { margin:4px 0 0; font-style:italic; color:#3d3b36; border-left:3px solid var(--line); padding-left:10px; }
+  .scard .pnote.pitch { border-left-color:var(--acc); }
+  .scard .ctx { margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); }
+  .scard .ctx .lbl { font-size:11px; color:var(--mute); letter-spacing:.05em; text-transform:uppercase; display:flex; justify-content:space-between; margin-bottom:6px; }
+  .scard .ctx .sum { margin-top:8px; color:var(--mute); display:flex; gap:14px; flex-wrap:wrap; }
+  .scard .ctx .sum b { color:var(--ink); }
+  .scard .matched { background:#fff6e5; border:1px solid #f0d9a8; border-radius:8px; padding:8px 12px; margin-top:10px; }
+  .scard .matched .ttl { font-size:12px; letter-spacing:.05em; color:#8a5a00; font-weight:700; text-transform:uppercase; }
+  .scard .matched ul { margin:6px 0 0; padding:0; list-style:none; }
+  .scard .matched li { display:flex; justify-content:space-between; gap:12px; padding:2px 0; }
+  .scard .matched li .n { color:var(--mute); }
+  .scard details.all { margin-top:8px; border:1px solid var(--line); border-radius:8px; padding:0 12px; }
+  .scard details.all summary { cursor:pointer; padding:8px 0; color:var(--mute); }
+  .scard details.all .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:2px 16px; padding:6px 0 10px; max-height:260px; overflow:auto; }
+  .scard details.all label { display:flex; justify-content:space-between; gap:8px; }
+  .scard details.all label .n { color:var(--mute); }
+  .scard .credit-line { margin-top:6px; text-align:right; font-size:11px; color:var(--mute); }
+  .scard .closeb { border:0; background:none; color:var(--mute); font-size:16px; }
+
+  /* ================= A · matrix */
+  table.mx { border-collapse:separate; border-spacing:0; background:#fff; border:1px solid var(--line); border-radius:6px; }
+  table.mx th { font-size:11px; color:var(--mute); font-weight:600; padding:6px 4px; border-bottom:1px solid var(--line); position:sticky; top:41px; background:#fff; z-index:3; text-align:center; cursor:pointer; white-space:nowrap; vertical-align:bottom; }
+  table.mx th:hover { color:var(--ink); }
+  table.mx th.on { color:var(--ink); }
+  table.mx th.on::after { content:" ▾"; }
+  table.mx th.film { text-align:left; padding-left:8px; }
+  table.mx th.n { text-align:right; padding-right:10px; }
+  table.mx th.abs { color:#b0ada6; }
+  table.mx th .sub { display:block; font-weight:400; font-size:10px; color:#b0ada6; }
+  table.mx th.me span.you { display:block; font-weight:400; color:var(--ok); font-size:10px; }
+  table.mx td { padding:0; border-bottom:1px solid var(--line2); height:44px; vertical-align:middle; }
+  table.mx tr.f { cursor:pointer; }
+  table.mx tr.f:hover td.film, table.mx tr.f:hover td.n { background:#fbfaf7; }
+  table.mx tr.f.open td.film, table.mx tr.f.open td.n { background:#f1efe8; }
+  table.mx td.film { padding:0 8px; white-space:nowrap; min-width:250px; }
+  table.mx td.film .pst { width:26px; height:39px; object-fit:cover; border-radius:2px; background:#ddd; display:inline-block; vertical-align:middle; margin-right:8px; }
+  table.mx td.film .pst.seen { filter:grayscale(1) brightness(.85); }
+  table.mx td.film b { font-weight:600; }
+  table.mx td.film .y { color:var(--mute); }
+  table.mx td.film .tag { margin-left:6px; vertical-align:1px; }
+  table.mx td.c { width:38px; text-align:center; font-weight:600; font-variant-numeric:tabular-nums; font-size:12px; border-left:1px solid #fff; position:relative; }
+  table.mx td.c.seen::after { content:"👁"; position:absolute; top:1px; right:2px; font-size:9px; opacity:.8; }
+  table.mx td.c.un { font-weight:400; }
+  table.mx td.c.me { box-shadow:inset 2px 0 0 var(--ink), inset -2px 0 0 var(--ink); }
+  table.mx td.n { text-align:right; padding-right:10px; font-weight:700; font-variant-numeric:tabular-nums; width:52px; }
+  table.mx td.n small { color:var(--mute); font-weight:400; }
+  table.mx tr.x td { padding:8px 8px 12px; background:#fbfaf7; }
+  .mxwrap { overflow:auto; }
+
+  /* ================= B · wall */
+  .people { display:flex; gap:4px; align-items:center; flex-wrap:wrap; margin:0 0 10px; }
+  .people .lbl { color:var(--mute); font-size:11px; margin-right:6px; }
+  .people button { padding:1px 8px; font-size:12px; }
+  .people button.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .people button.abs { color:#b0ada6; }
+  .people button i { display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:4px; background:var(--line); }
+  .people button.on i { background:#fff; }
+  .wall { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-start; }
+  .tile { width:118px; background:#fff; border:1px solid var(--line); border-radius:5px; padding:3px; font-size:11px; line-height:1.2; cursor:pointer; position:relative; user-select:none; }
+  .tile:hover { border-color:#b9b5aa; }
+  .tile .pw { position:relative; }
+  .tile .pst { width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:3px; background:#ddd; display:block; margin-bottom:3px; }
+  .tile.seen .pst { filter:grayscale(1) brightness(.85); }
+  .tile.seen .ttl { color:var(--mute); }
+  .tile.trig { box-shadow:0 0 0 2px #e0a000; border-color:#e0a000; }
+  .tile .ribbon { position:absolute; right:-3px; top:6px; background:var(--sv); color:#fff; font-size:10px; font-weight:700; padding:1px 5px; border-radius:3px 0 0 3px; letter-spacing:.05em; box-shadow:0 1px 3px rgba(0,0,0,.3); }
+  .tile .badge { position:absolute; left:4px; top:4px; min-width:26px; height:26px; line-height:24px; text-align:center; border-radius:5px; font-weight:700; font-size:13px; border:1px solid rgba(0,0,0,.15); box-shadow:0 1px 3px rgba(0,0,0,.3); }
+  .tile .ttl { font-weight:600; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:26px; }
+  .tile .y { color:var(--mute); font-size:10px; }
+  .tile .strip { display:grid; grid-template-columns:repeat(9, 1fr); gap:1px; margin:4px 0 3px; height:12px; }
+  .tile .strip i { display:block; border-radius:1px; font-style:normal; font-size:8px; line-height:12px; text-align:center; overflow:hidden; }
+  .tile .strip i.hl { outline:2px solid var(--ink); outline-offset:-1px; z-index:1; }
+  .tile .pts { display:flex; justify-content:space-between; align-items:baseline; }
+  .tile .pts b { font-size:13px; }
+  .tile .pts .r { color:var(--mute); font-size:10px; }
+  .tile.open { flex-basis:100%; width:auto; cursor:default; padding:0; border:0; background:none; }
+
+  /* ================= C · columns */
+  .slot { margin:0 0 12px; position:sticky; top:41px; z-index:4; }
+  .cols { display:grid; grid-template-columns:repeat(9, minmax(0, 1fr)); gap:8px; align-items:start; }
+  .col { background:#fff; border:1px solid var(--line); border-radius:6px; }
+  .col.me { border-color:var(--ink); }
+  .col .hd { padding:6px 8px; border-bottom:1px solid var(--line); position:sticky; top:41px; background:#fff; z-index:2; }
+  .col .hd b { font-size:13px; }
+  .col .hd .you { color:var(--ok); font-size:10px; margin-left:4px; }
+  .col .hd .sub { color:var(--mute); font-size:10px; display:block; }
+  .col.abs .hd b { color:#b0ada6; }
+  .col .band { padding:3px 5px 5px; border-bottom:1px solid var(--line2); }
+  .col .band .bl { font-size:10px; color:var(--mute); display:flex; gap:4px; align-items:center; margin-bottom:3px; }
+  .col .band .bl i { display:inline-block; width:9px; height:9px; border-radius:2px; }
+  .col .band .bl .n { margin-left:auto; }
+  .col .band.veto { background:#fffafa; }
+  .col .band.veto .bl { color:var(--sv); }
+  .col .band .tiles { display:flex; flex-wrap:wrap; gap:3px; }
+  .col .band.empty { padding:2px 5px; } .col .band.empty .bl { margin:0; opacity:.5; }
+  .col .blank { padding:6px 8px; color:#b0ada6; font-size:11px; }
+  .mini { width:34px; height:51px; border-radius:2px; overflow:hidden; cursor:pointer; position:relative; border:2px solid transparent; }
+  .mini img { width:100%; height:100%; object-fit:cover; display:block; background:#ddd; }
+  .mini.seen img { filter:grayscale(1) brightness(.85); }
+  .mini.veto { border-color:var(--sv); }
+  .mini.hl { border-color:var(--ink); }
+  .mini.sel { border-color:var(--acc); box-shadow:0 0 0 2px var(--acc2); }
+  .mini .r { position:absolute; left:0; right:0; bottom:0; background:rgba(200,68,58,.9); color:#fff; font-size:8px; line-height:10px; padding:0 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .colnote { color:var(--mute); font-size:11px; margin:0 0 8px; }
+
+  /* the reopen case: a stub of the ballot's header (#9) */
+  .stub { max-width:820px; }
+  .stub .bh { display:flex; align-items:center; gap:14px; padding:8px 18px; background:#fff; border:1px solid var(--line); border-radius:6px; }
+  .stub .bh .grow { flex:1; }
+  .stub .bh button.done { border-color:var(--ok); color:var(--ok); font-weight:600; }
+  .stub .copy { margin-top:10px; padding:10px 12px; background:#fff; border:1px solid var(--line); border-radius:6px; }
+  .stub .copy p { margin:4px 0; }
+  .stub .note { margin-top:10px; color:var(--mute); }
+  .stub .tray { margin-top:10px; border:1px dashed var(--line); background:var(--un); border-radius:6px; padding:8px 10px; color:var(--mute); }
+
+  /* prototype bar */
+  #pbar { position:fixed; left:50%; bottom:14px; transform:translateX(-50%); background:#1c1b19; color:#fff; border-radius:24px; padding:6px 10px; display:flex; gap:8px; align-items:center; box-shadow:0 6px 24px rgba(0,0,0,.3); z-index:30; font-size:12px; white-space:nowrap; }
+  #pbar button { background:#333; color:#fff; border-color:#555; }
+  #pbar select { background:#333; color:#fff; border-color:#555; }
+  #pbar .lab { font-weight:600; min-width:120px; text-align:center; }
+  #pbar label { color:#bbb; }
+  #pbar.min > :not(#pmin) { display:none; }
+  #pbar.min { padding:6px; }
+</style>
+</head>
+<body>
+<header class="app">
+  <div class="brand">Ribcage <span>· Halloween '26</span></div>
+  <span class="phase" id="phaseChip">PICK</span>
+  <span class="mute small" id="hdrline"></span>
+  <div class="grow"></div>
+  <span class="mute small">Dani</span>
+</header>
+<main id="view"></main>
+<footer class="app" id="foot"></footer>
+<div id="pbar">
+  <button id="pmin" title="minimise">▣</button>
+  <button id="prev">←</button><span class="lab" id="vlabel"></span><button id="next">→</button>
+  <label>phase <select id="phaseSel"><option value="pick">PICK — the reveal</option><option value="reopen">VOTE reopened</option></select></label>
+  <label><input type="checkbox" id="noteSel"> reopen note</label>
+  <label><input type="checkbox" id="trigSel"> my triggers</label>
+</div>
+<script src="data.js"></script>
+<script>
+// ============================================================ state
+const D = window.DATA;
+const FILMS = D.films; const FIDX = new Map(FILMS.map((f, i) => [f.id, i]));
+const film = id => FILMS[FIDX.get(+id)];
+const q = new URLSearchParams(location.search);
+const S = {
+  variant: ["A", "B", "C"].includes(q.get("variant")) ? q.get("variant") : "A",
+  phase: q.get("phase") === "reopen" ? "reopen" : "pick",
+  triggers: q.get("triggers") === "on",
+  reopenNote: q.get("note") === "on",
+  open: null,            // film id whose card is open (one at a time, as on the ballot)
+  sort: "pts",           // A: "pts" | "title" | a voter name; prefix "-" reverses
+  person: null,          // B: the voter the wall is read for
+  dtddShown: false,
+};
+
+// ============================================================ helpers
+const SCALE = [[3, "Top pick"], [2, "Keen"], [1, "Happy to watch"], [0, "Don't mind"], [-1, "Rather not"]];
+const cls = v => v === undefined ? "un" : v === "V" ? "sv" : v < 0 ? "sm1" : "s" + v;
+const fmt = v => v === undefined ? "·" : v === "V" ? "☒" : v > 0 ? "+" + v : String(v);
+const IMG = (p, w) => p ? `https://image.tmdb.org/t/p/w${w}${p}` : "";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const st = (v, id) => D.vetoes[v][id] !== undefined ? "V" : D.scores[v][id];     // "V" | -1..3 | undefined
+const seen = (v, id) => !!D.seen[v][id];
+const reason = (v, id) => D.vetoes[v][id];
+const voted = v => Object.keys(D.scores[v]).length + Object.keys(D.vetoes[v]).length > 0;
+const nScored = v => Object.keys(D.scores[v]).length + Object.keys(D.vetoes[v]).length;
+const VOTED = D.voters.filter(voted), ABSENT = D.voters.filter(v => !voted(v));
+const pts = id => D.voters.reduce((a, v) => { const x = st(v, id); return a + (x === "V" ? -2 : x === undefined ? 0 : x); }, 0);
+const vetoers = id => D.voters.filter(v => st(v, id) === "V");
+const seers = id => D.voters.filter(v => seen(v, id));
+const who = v => v === D.me ? "you" : v;
+const matched = f => (!S.triggers || !f.dtdd) ? [] : f.dtdd.topics.filter(t => D.watched.includes(t.topic));
+const fires = f => matched(f).some(t => t.yes >= 5 && t.yes > t.no);
+const notesOf = f => { const e = Object.entries(f.notes); e.sort((a, b) => (a[0] === f.suggester ? -1 : b[0] === f.suggester ? 1 : 0)); return e; };
+const sortVal = v => id => { const x = st(v, id); return x === "V" ? -2.5 : x === undefined ? -1.5 : x; };   // veto below −1, blank between
+function orderBy(key) {
+  const rev = key.startsWith("-"); const k = rev ? key.slice(1) : key;
+  const ids = FILMS.map(f => f.id);
+  const t = id => film(id).title.toLowerCase();
+  if (k === "title") ids.sort((a, b) => t(a) < t(b) ? -1 : 1);
+  else if (k === "pts") ids.sort((a, b) => pts(b) - pts(a) || (t(a) < t(b) ? -1 : 1));
+  else { const sv = sortVal(k); ids.sort((a, b) => sv(b) - sv(a) || pts(b) - pts(a)); }
+  return rev ? ids.reverse() : ids;
+}
+const vetoTitle = id => { const vs = vetoers(id); return vs.length ? `vetoed by ${vs.map(who).join(", ")} — counts −2 for each of them` : ""; };
+
+// ============================================================ the shared card (#21), read-only reveal bar
+function chip(v, id) {
+  const x = st(v, id); const r = reason(v, id);
+  return `<span class="chip ${cls(x)} ${v === D.me ? "me" : ""}" title="${esc(v)}${x === undefined ? " — no score, counts as 0" : ""}">${seen(v, id) ? `<span class="eye" title="seen it">👁</span>` : ""}${esc(who(v))} <b>${x === undefined ? "—" : fmt(x)}</b>${x === "V" && r ? `<span class="rsn">“${esc(r)}”</span>` : ""}</span>`;
+}
+function cardHtml(f) {
+  const meta = [esc(f.director.join(", ")), f.cert ? `<span class="cert">${esc(f.cert)}</span>` : "", f.trailer ? `<a href="https://youtube.com/watch?v=${f.trailer}" target="_blank">trailer ↗</a>` : "", `<a href="https://www.themoviedb.org/movie/${f.id}" target="_blank" class="mute">TMDB ↗</a>`].filter(Boolean).join("<span>·</span>");
+  const notes = notesOf(f).map(([w, t]) => `<p class="pnote ${w === f.suggester ? "pitch" : ""}">“${esc(t)}” <span class="mute small">— ${esc(who(w))}</span></p>`).join("");
+  const vs = vetoers(f.id), ss = seers(f.id);
+  const ctx = `<div class="ctx"><div class="lbl"><span>Everyone's score</span><span>VOTE is closed</span></div>
+    <div class="chips">${D.voters.map(v => chip(v, f.id)).join("")}</div>
+    <div class="sum"><span><b class="tn">${pts(f.id)}</b> points across the room</span>${vs.length ? `<span>vetoed by <b>${vs.map(who).join(", ")}</b></span>` : ""}${ss.length ? `<span>seen by <b>${ss.map(who).join(", ")}</b></span>` : ""}${ABSENT.length ? `<span class="mute">${ABSENT.join(", ")} didn't vote</span>` : ""}</div></div>`;
+  let trig = "";
+  if (S.triggers && f.dtdd) {
+    S.dtddShown = true; const m = matched(f);
+    trig = (m.length ? `<div class="matched"><div class="ttl">On your list</div><ul>${m.map(t => `<li><span>${esc(t.topic)}</span><span class="n tn">${t.yes} yes / ${t.no} no</span></li>`).join("")}</ul></div>` : "")
+      + `<details class="all"><summary>All ${f.dtdd.topics.length} topics on DoesTheDogDie (${esc(f.dtdd.name)} ${f.dtdd.year || ""})</summary><div class="grid">${f.dtdd.topics.map(t => `<label><span>${esc(t.topic)}</span><span class="n tn">${t.yes}/${t.no}</span></label>`).join("")}</div></details><div class="credit-line">Powered by <a href="https://www.doesthedogdie.com" target="_blank">DoesTheDogDie.com</a></div>`;
+  }
+  return `<div class="scard" data-card="${f.id}">
+    <img class="poster" src="${IMG(f.poster, 185)}">
+    <div>
+      <div class="head"><div><h3>${fires(f) ? `<span class="icon" title="a topic you watch for is reported here">!</span> ` : ""}${esc(f.title)} <span class="yr">${f.year || ""}</span></h3><div class="meta">${meta}</div></div><div><span class="rt"><b>${f.runtime} min</b> <span class="src">TMDB</span></span> <button class="closeb" data-act="close" title="collapse">✕</button></div></div>
+      <div class="by">suggested by <b>${esc(who(f.suggester))}</b></div>
+      ${notes}
+      ${ctx}
+      ${trig}
+    </div></div>`;
+}
+
+// ============================================================ shared top matter
+function legendHtml(extra = "") {
+  return `<div class="legend">${SCALE.map(([v, l]) => `<span class="k"><span class="sw ${cls(v)}"></span>${fmt(v)} ${l}</span>`).join("")}<span class="k"><span class="sw sv">☒</span>veto, counts −2</span><span class="k"><span class="sw un"></span>no score, counts 0</span><span class="k">👁 seen it — can't be what they wanted from the night</span>${extra}</div>`;
+}
+function ledeHtml(sub) {
+  return `<div class="lede"><h1>How everyone scored</h1><span class="who"><b>${VOTED.length} of ${D.voters.length}</b> voted${ABSENT.length ? ` · <b>${ABSENT.join(", ")}</b> didn't` : ""}${VOTED.filter(v => nScored(v) < FILMS.length).map(v => ` · ${who(v)} scored ${nScored(v)} of ${FILMS.length}`).join("")}</span><span class="mute">${sub}</span></div>`;
+}
+
+// ============================================================ variant A — matrix
+function renderA(el) {
+  const k = S.sort.replace(/^-/, "");
+  const th = (key, label, extra = "") => `<th data-sort="${key}" class="${k === key ? "on" : ""} ${extra}" title="sort by ${key === "pts" ? "points" : key === "title" ? "title" : key + "'s score"}">${label}</th>`;
+  let h = ledeHtml("click a film to open it · click a name to read the ballot their way");
+  h += legendHtml();
+  h += `<div class="mxwrap"><table class="mx"><thead><tr>${th("title", "Film", "film")}${D.voters.map(v => th(v, `${esc(v)}${v === D.me ? `<span class="you">you</span>` : ""}${!voted(v) ? `<span class="sub">no scores</span>` : nScored(v) < FILMS.length ? `<span class="sub">${nScored(v)} of ${FILMS.length}</span>` : ""}`, (v === D.me ? "me " : "") + (!voted(v) ? "abs" : ""))).join("")}${th("pts", "Points", "n")}</tr></thead><tbody>`;
+  for (const id of orderBy(S.sort)) {
+    const f = film(id); const vs = vetoers(id);
+    h += `<tr class="f ${S.open === id ? "open" : ""}" data-open="${id}">
+      <td class="film"><img class="pst ${seen(D.me, id) ? "seen" : ""}" src="${IMG(f.poster, 92)}"><b>${esc(f.title)}</b> <span class="y">${f.year || ""}</span>${vs.length ? `<span class="tag v" title="${esc(vetoTitle(id))}">☒ ${vs.map(v => v[0]).join("")}</span>` : ""}</td>
+      ${D.voters.map(v => { const x = st(v, id); return `<td class="c ${cls(x)} ${seen(v, id) ? "seen" : ""} ${v === D.me ? "me" : ""}" title="${esc(v)}: ${x === undefined ? "no score" : x === "V" ? "veto" + (reason(v, id) ? " — “" + reason(v, id) + "”" : "") : fmt(x)}${seen(v, id) ? " · seen it" : ""}">${fmt(x)}</td>`; }).join("")}
+      <td class="n">${pts(id)}</td></tr>`;
+    if (S.open === id) h += `<tr class="x"><td colspan="${D.voters.length + 2}">${cardHtml(f)}</td></tr>`;
+  }
+  el.innerHTML = h + `</tbody></table></div>`;
+}
+
+// ============================================================ variant B — wall
+function tileHtml(f) {
+  const id = f.id; const vs = vetoers(id); const p = S.person; const px = p ? st(p, id) : undefined;
+  return `<div class="tile ${seen(D.me, id) ? "seen" : ""} ${fires(f) ? "trig" : ""}" data-open="${id}" title="click to open${seen(D.me, id) ? " · you've seen it" : ""}">
+    <div class="pw"><img class="pst" src="${IMG(f.poster, 154)}" draggable="false">${vs.length ? `<span class="ribbon" title="${esc(vetoTitle(id))}">☒ ${vs.map(v => v[0]).join("")}</span>` : ""}${p ? `<span class="badge ${cls(px)}" title="${esc(p)}: ${fmt(px)}">${px === undefined ? "—" : fmt(px)}</span>` : ""}</div>
+    <div class="ttl">${esc(f.title)}</div>
+    <div class="y">${f.year || ""}</div>
+    <div class="strip">${D.voters.map(v => { const x = st(v, id); return `<i class="${cls(x)} ${v === p ? "hl" : ""}" title="${esc(v)}: ${x === undefined ? "no score" : fmt(x)}${seen(v, id) ? " · seen it" : ""}">${seen(v, id) ? "👁" : ""}</i>`; }).join("")}</div>
+    <div class="pts"><b class="tn">${pts(id)}</b><span class="r">points</span></div>
+  </div>`;
+}
+function renderB(el) {
+  const p = S.person;
+  let h = ledeHtml(p ? `sorted by ${who(p)}'s score` : "sorted by points across the room · click a tile to open it");
+  h += legendHtml(`<span class="k mute">strip order: ${D.voters.map(who).join(" · ")}</span>`);
+  h += `<div class="people"><span class="lbl">read it as</span><button data-person="" class="${p ? "" : "on"}"><i></i>the room</button>${D.voters.map(v => `<button data-person="${esc(v)}" class="${p === v ? "on" : ""} ${voted(v) ? "" : "abs"}" title="${voted(v) ? "sort the wall by " + who(v) + "'s score" : v + " didn't vote"}"><i></i>${esc(who(v))}</button>`).join("")}</div>`;
+  h += `<div class="wall">`;
+  for (const id of orderBy(p ? p : "pts")) h += S.open === id ? `<div class="tile open">${cardHtml(film(id))}</div>` : tileHtml(film(id));
+  el.innerHTML = h + `</div>`;
+}
+
+// ============================================================ variant C — columns
+function renderC(el) {
+  const order = [D.me, ...D.voters.filter(v => v !== D.me)];
+  let h = ledeHtml("each column is one person's ballot, top pick first · hover a film to find it everywhere · click to open");
+  h += legendHtml();
+  h += `<div class="slot">${S.open != null ? cardHtml(film(S.open)) : ""}</div>`;
+  h += `<div class="cols">`;
+  for (const v of order) {
+    const mine = v === D.me;
+    h += `<div class="col ${mine ? "me" : ""} ${voted(v) ? "" : "abs"}"><div class="hd"><b>${esc(v)}</b>${mine ? `<span class="you">you</span>` : ""}<span class="sub">${voted(v) ? `${nScored(v)} of ${FILMS.length} scored` : "no scores"}</span></div>`;
+    if (!voted(v)) { h += `<div class="blank">${esc(v)} hasn't voted.</div></div>`; continue; }
+    const bands = [...SCALE.map(([x, l]) => ["" + x, l, x]), ["V", "Veto", "V"]];
+    for (const [key, label, x] of bands) {
+      const ids = FILMS.map(f => f.id).filter(id => st(v, id) === x).sort((a, b) => pts(b) - pts(a));
+      h += `<div class="band ${x === "V" ? "veto" : ""} ${ids.length ? "" : "empty"}"><div class="bl"><i class="${cls(x)}"></i>${fmt(x)} ${label}<span class="n tn">${ids.length}</span></div>`;
+      if (ids.length) h += `<div class="tiles">${ids.map(id => { const f = film(id); const r = reason(v, id); return `<div class="mini ${seen(v, id) ? "seen" : ""} ${x === "V" ? "veto" : ""} ${S.open === id ? "sel" : ""}" data-fid="${id}" data-open="${id}" title="${esc(f.title)} (${f.year || ""}) — ${esc(v)}: ${x === "V" ? "veto" + (r ? " — “" + r + "”" : "") : fmt(x)}${seen(v, id) ? " · seen it" : ""}"><img src="${IMG(f.poster, 92)}" draggable="false">${x === "V" && r ? `<span class="r">${esc(r)}</span>` : ""}</div>`; }).join("")}</div>`;
+      h += `</div>`;
+    }
+    const blank = FILMS.length - nScored(v);
+    if (blank) h += `<div class="blank">${blank} not scored — count as 0</div>`;
+    h += `</div>`;
+  }
+  el.innerHTML = h + `</div>`;
+}
+
+// ============================================================ the reopen case (#15): the ballot is back, the reveal is gone
+function renderReopen(el) {
+  el.innerHTML = `<div class="stub">
+    <div class="bh"><span class="phase" style="background:var(--acc2);color:var(--acc);border-radius:10px;padding:1px 8px;font-size:11px;font-weight:600">VOTE</span><span class="mute small">32 of 32 scored</span><div class="grow"></div><span class="mute small">Done: <b>Ana</b>, <b>Feri</b>, <b>Hanna</b> · 3 of 9</span><button class="done">I'm done</button></div>
+    <div class="copy">
+      <p><b>The ballot (#9), exactly as it was.</b> Its only line about visibility is written without a tense, so it stays true after a reopen:</p>
+      <p class="mute">“Your scores aren't shown to the group while VOTE is open. Everyone's scores are shown, by name, once it closes.”</p>
+      ${S.reopenNote ? `<p style="background:#fff8e1;border:1px solid #f0dfa0;border-radius:4px;padding:6px 10px"><b>VOTE was reopened.</b> Scores were open to everyone while it was closed; they're hidden again now.</p>` : ""}
+    </div>
+    <div class="tray">Unsorted · 0 left — the board below is the voter's own ballot, untouched (see the #9 prototype).</div>
+    <p class="note">${S.reopenNote ? "With the reopen note: one line, only while VOTE is open after having been closed, saying what happened and nothing about who looked." : "Without the reopen note: the ballot says nothing about the past. Silence is not a claim, so #15's rule holds; the group already knows the admin reopened it."} Toggle <i>reopen note</i> in the bar to compare.</p>
+  </div>`;
+}
+
+// ============================================================ render
+const VARIANTS = { A: ["Matrix", renderA], B: ["Wall", renderB], C: ["Columns", renderC] };
+function render() {
+  S.dtddShown = false;
+  const el = document.getElementById("view");
+  if (S.phase === "reopen") renderReopen(el); else VARIANTS[S.variant][1](el);
+  document.getElementById("phaseChip").textContent = S.phase === "reopen" ? "VOTE" : "PICK";
+  document.getElementById("hdrline").textContent = S.phase === "reopen" ? "VOTE is open again — your ballot is back" : "VOTE is closed · the admin is choosing the slate · everyone's scores are open, by name";
+  document.getElementById("foot").innerHTML = `<span>Film data from <a href="https://www.themoviedb.org" target="_blank">TMDB</a>. This product uses the TMDB API but is not endorsed or certified by TMDB.</span>${S.dtddShown ? `<span>Powered by <a href="https://www.doesthedogdie.com" target="_blank">DoesTheDogDie.com</a></span>` : ""}<span><a href="mailto:abuse@example.invalid">report abuse</a></span><span><a href="#">privacy</a></span>`;
+  document.getElementById("vlabel").textContent = `${S.variant} — ${VARIANTS[S.variant][0]}`;
+  document.getElementById("phaseSel").value = S.phase; document.getElementById("noteSel").checked = S.reopenNote; document.getElementById("trigSel").checked = S.triggers;
+  history.replaceState(null, "", `?variant=${S.variant}&phase=${S.phase}&note=${S.reopenNote ? "on" : "off"}&triggers=${S.triggers ? "on" : "off"}`);
+}
+
+// ============================================================ events
+document.body.addEventListener("click", e => {
+  if (e.target.closest("a")) return;
+  const act = e.target.closest("[data-act]");
+  if (act && act.dataset.act === "close") { S.open = null; render(); return; }
+  const th = e.target.closest("th[data-sort]");
+  if (th) { const k = th.dataset.sort; S.sort = S.sort === k ? "-" + k : k; render(); return; }
+  const pb = e.target.closest("[data-person]");
+  if (pb) { S.person = pb.dataset.person || null; render(); return; }
+  if (e.target.closest("[data-card]")) return;                       // clicks inside an open card do nothing
+  const t = e.target.closest("[data-open]");
+  if (t) { const id = +t.dataset.open; S.open = S.open === id ? null : id; render(); if (S.variant === "C" && S.open != null) window.scrollTo({ top: 0, behavior: "smooth" }); }
+});
+// C: hovering a film lights it in every column
+document.body.addEventListener("mouseover", e => { const m = e.target.closest(".mini"); if (!m) return; document.querySelectorAll(`.mini[data-fid="${m.dataset.fid}"]`).forEach(x => x.classList.add("hl")); });
+document.body.addEventListener("mouseout", e => { const m = e.target.closest(".mini"); if (!m) return; document.querySelectorAll(`.mini.hl`).forEach(x => x.classList.remove("hl")); });
+document.getElementById("phaseSel").onchange = e => { S.phase = e.target.value; S.open = null; render(); };
+document.getElementById("noteSel").onchange = e => { S.reopenNote = e.target.checked; render(); };
+document.getElementById("trigSel").onchange = e => { S.triggers = e.target.checked; render(); };
+const order = Object.keys(VARIANTS);
+const cycle = d => { S.variant = order[(order.indexOf(S.variant) + d + order.length) % order.length]; S.open = null; render(); };
+document.getElementById("prev").onclick = () => cycle(-1);
+document.getElementById("next").onclick = () => cycle(1);
+document.getElementById("pmin").onclick = () => document.getElementById("pbar").classList.toggle("min");
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input,select,textarea")) return;
+  if (e.key === "ArrowLeft") return cycle(-1); if (e.key === "ArrowRight") return cycle(1);
+  if (e.key === "Escape" && S.open != null) { S.open = null; return render(); }
+});
+render();
+</script>
+</body>
+</html>
