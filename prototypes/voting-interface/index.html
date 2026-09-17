@@ -61,7 +61,14 @@
     frame    the state changes the tile itself: amber ring = a topic you watch for; greyed
              poster = seen it (👁 appears on hover); red corner ribbon with initials = vetoed by
 
-  Run:  python -m http.server 8009   →  http://localhost:8009/prototypes/voting-interface/?variant=A
+  Resolved on this state, 2026-09-17 (round 5): B — the tier list with the shared
+  card opening inline — is the voting interface, with the FRAME tiles ("with trigger
+  watching being opt-in, I don't worry too much about it being too much"). The ribbon
+  and the seen-it toggle must never share a corner: seen-it moved to the bottom-right.
+  A (sheet) and the overlay/strip tiles stay as the losing options; the ledger and the
+  two decks are in the branch history.
+
+  Run:  python -m http.server 8009   →  http://localhost:8009/prototypes/voting-interface/?variant=B
 -->
 <html lang="en">
 <head>
@@ -178,7 +185,7 @@
   .tile.frame.seen .pst { filter:grayscale(1) brightness(.85); }
   .tile.frame.seen .ttl { color:var(--mute); }
   .tile.frame .ribbon { position:absolute; right:-3px; top:6px; background:var(--sv); color:#fff; font-size:10px; font-weight:700; padding:1px 5px; border-radius:3px 0 0 3px; letter-spacing:.05em; box-shadow:0 1px 3px rgba(0,0,0,.3); }
-  .tile.frame .seenb { display:none; }
+  .tile.frame .seenb { display:none; top:auto; bottom:5px; right:3px; }   /* bottom-right: never the ribbon's corner (dev, round 5) */
   .tile.frame:hover .seenb, .tile.frame.seen .seenb { display:block; }
   .legend { display:flex; gap:16px; align-items:center; color:var(--mute); font-size:11px; margin:0 0 8px; }
   .legend .k { display:inline-flex; align-items:center; gap:4px; }
@@ -318,7 +325,7 @@ const FILMS = D.films; const FIDX = new Map(FILMS.map((f, i) => [f.id, i]));
 const film = id => FILMS[FIDX.get(+id)];
 const q = new URLSearchParams(location.search);
 const S = {
-  variant: q.get("variant") || "A",
+  variant: q.get("variant") || "B",
   data: q.get("data") || "poster",
   ballot: q.get("ballot") || "half",
   triggers: q.get("triggers") !== "off",
