@@ -1,0 +1,614 @@
+<!doctype html>
+<!--
+  PROTOTYPE — ticket #24, the PICK comparison view. Throwaway. Not production.
+
+  Three variants of the comparison view, switchable via ?variant=A|B|C and the
+  floating bar at the bottom. The information carried is #17's and is the same in
+  all three; the variants disagree about the SHAPE — what is a row, what is a
+  column, what is a card — and therefore about how crowding shows up.
+
+    A  Matrix    films as rows, slates as columns; the shared core sorts to the top
+    B  Cards     one card per slate in three rails (timetable / shortlist / batch)
+    C  Ledger    one dense row per slate; film dots, people strip; click to expand
+
+  Everything is live: a small exact solver (exhaustive enumeration with budget
+  pruning — the MILP's job in the real app, see #6) runs in the browser on every
+  knob or budget change, so batches, "more", the diversity cut (k = 4, #17), the
+  four knobs, the shortlist and the timetable's standing column all behave for
+  real. Batch endings (#17) are real solver outcomes, not canned messages.
+
+  Data is real (data.js): 32 of the group's own past suggestions (#19) with TMDB
+  runtimes and genres. Votes are generated, deterministic and CORRELATED (three
+  taste factions) — #17 warned that independent draws manufacture a plateau.
+  One voter (Iván) has not voted: the "floor computed over 8 of 9" line.
+
+  Also here, because no other ticket owns them (#28's note): the budget and anchor
+  controls, and a stub of #22's timetable editor whose PLACEMENT (side / below /
+  tab) is the "one screen or two" decision this ticket makes first.
+
+  Run:  python -m http.server 8024   →  http://localhost:8024/?variant=A
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PICK — comparison (prototype #24)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg:#f6f5f2; --panel:#fff; --ink:#1c1b19; --mute:#6b6963; --line:#dcd9d2; --line2:#ece9e2;
+    --acc:#2f5fd0; --acc2:#e8eefc; --warn:#b3261e; --ok:#2b7a3d;
+    --s3:#1e6b34; --s2:#4b9a5c; --s1:#a5d3a7; --s0:#d9d7d0; --sm1:#e9a35c; --sv:#c8443a;
+    --core:#f0eee8;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.35 system-ui, "Segoe UI", Roboto, sans-serif; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; border-radius:4px; padding:2px 8px; color:var(--ink); }
+  button:hover { border-color:#999; }
+  button.primary { background:var(--acc); color:#fff; border-color:var(--acc); }
+  button.ghost { border-color:transparent; background:transparent; color:var(--mute); }
+  button.ghost:hover { color:var(--ink); border-color:var(--line); }
+  button:disabled { opacity:.45; cursor:default; }
+  input, select { font:inherit; border:1px solid var(--line); border-radius:4px; padding:2px 6px; background:#fff; }
+  small, .mute { color:var(--mute); }
+  .nowrap { white-space:nowrap; }
+  code { font-size:12px; }
+
+  /* ---- page chrome ---- */
+  #top { background:#fff; border-bottom:1px solid var(--line); padding:8px 16px; display:flex; flex-wrap:wrap; gap:10px 24px; align-items:center; position:sticky; top:0; z-index:5; }
+  #top h1 { font-size:15px; margin:0; font-weight:600; }
+  #top h1 small { font-weight:400; margin-left:8px; }
+  .phase { display:inline-flex; gap:2px; margin-left:12px; vertical-align:middle; }
+  .phase span { font-size:10px; letter-spacing:.04em; padding:1px 6px; border:1px solid var(--line); border-radius:3px; color:var(--mute); }
+  .phase span.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .ctl { display:flex; gap:6px; align-items:center; }
+  .ctl label { color:var(--mute); }
+  #basis { background:#fff; border-bottom:1px solid var(--line); padding:6px 16px; display:flex; flex-wrap:wrap; gap:6px 18px; align-items:center; }
+  #basis .k { display:flex; gap:4px; align-items:center; flex-wrap:wrap; }
+  #basis .k b { font-weight:500; color:var(--mute); margin-right:2px; }
+  .chip { display:inline-flex; align-items:center; gap:4px; border:1px solid var(--line); border-radius:12px; padding:0 8px; height:20px; background:#fff; cursor:pointer; user-select:none; }
+  .chip.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .chip.in { background:var(--ok); color:#fff; border-color:var(--ok); }
+  .chip.out { background:var(--warn); color:#fff; border-color:var(--warn); }
+  .chip.dim { opacity:.5; }
+  #layout { display:grid; gap:0; min-height:calc(100vh - 100px); }
+  #layout.side { grid-template-columns: minmax(0,1fr) 360px; }
+  #layout.below { grid-template-columns: 1fr; }
+  #layout.tab { grid-template-columns: 1fr; }
+  #view { padding:12px 16px 120px; min-width:0; overflow-x:auto; }
+  #editor { border-left:1px solid var(--line); background:#fbfaf7; padding:12px 16px 120px; }
+  #layout.below #editor { border-left:0; border-top:1px solid var(--line); }
+  #layout.tab #editor.hidden, #layout.tab #view.hidden { display:none; }
+  #tabs { display:flex; gap:0; padding:0 16px; background:#fff; border-bottom:1px solid var(--line); }
+  #tabs button { border:0; border-bottom:2px solid transparent; border-radius:0; padding:8px 14px; background:transparent; }
+  #tabs button.on { border-bottom-color:var(--ink); font-weight:600; }
+  .banner { border:1px solid var(--line); background:#fff; padding:6px 10px; border-radius:4px; margin:0 0 10px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  .banner.warn { border-color:#e5b9b5; background:#fdf3f2; }
+  h2 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--mute); margin:14px 0 6px; font-weight:600; display:flex; gap:10px; align-items:baseline; }
+  h2 small { text-transform:none; letter-spacing:0; font-weight:400; }
+
+  /* ---- shared bits ---- */
+  .bar { height:6px; background:var(--s0); border-radius:3px; position:relative; overflow:visible; }
+  .bar i { display:block; height:100%; background:var(--acc); border-radius:3px; }
+  .bar.over i { background:var(--warn); }
+  .bar b { position:absolute; top:-3px; width:2px; height:12px; background:var(--ink); }
+  .stand { font-variant-numeric:tabular-nums; }
+  .stand .best { color:var(--ok); font-weight:600; }
+  .stand .d { color:var(--warn); }
+  .stand .z { color:var(--mute); }
+  .tier { font-size:10px; border:1px solid var(--line); border-radius:3px; padding:0 4px; color:var(--mute); }
+  .tier.tied { border-color:#c9b458; color:#7a6a12; background:#fbf6dd; }
+  .sc { display:inline-block; min-width:18px; text-align:center; border-radius:3px; padding:0 3px; font-size:11px; font-weight:600; color:#fff; font-variant-numeric:tabular-nums; }
+  .sc.s3 { background:var(--s3);} .sc.s2 { background:var(--s2);} .sc.s1 { background:var(--s1); color:#1c1b19;} .sc.s0 { background:var(--s0); color:#555;} .sc.sm1 { background:var(--sm1);} .sc.sv { background:var(--sv);}
+  .sc.none { background:transparent; color:var(--mute); border:1px dashed var(--line); }
+  .pin { color:#b0730a; }
+  .prov { font-size:11px; color:var(--mute); }
+  .prov.stale { color:#8a6d1a; }
+  .act { display:flex; gap:4px; flex-wrap:wrap; }
+  .lbl { font-weight:600; }
+  .knoblabel { font-size:11px; color:var(--mute); }
+  .empty { color:var(--mute); font-style:italic; padding:10px 0; }
+
+  /* ---- A: matrix ---- */
+  table.matrix { border-collapse:separate; border-spacing:0; }
+  table.matrix th, table.matrix td { border-bottom:1px solid var(--line2); padding:3px 6px; text-align:left; vertical-align:top; }
+  table.matrix th.rowh, table.matrix td.rowh { position:sticky; left:0; background:var(--bg); z-index:2; min-width:230px; max-width:260px; border-right:1px solid var(--line); }
+  table.matrix thead th { position:sticky; top:0; background:var(--bg); z-index:3; vertical-align:bottom; min-width:150px; max-width:170px; }
+  table.matrix thead th.rowh { z-index:4; }
+  table.matrix .col { border-left:1px solid var(--line2); }
+  table.matrix .grp { border-left:2px solid var(--line); }
+  table.matrix tr.core td { background:var(--core); }
+  table.matrix tr.core td.rowh { background:#e9e6de; }
+  table.matrix td.dot { text-align:center; font-size:15px; line-height:1; }
+  table.matrix tr.sec th { background:var(--bg); color:var(--mute); font-size:11px; text-transform:uppercase; letter-spacing:.05em; font-weight:600; padding-top:12px; }
+  table.matrix td.rep { font-size:12px; }
+  table.matrix td.rep .f { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:150px; }
+  .colhead { display:flex; flex-direction:column; gap:3px; }
+  .colhead .lbl { display:flex; gap:6px; align-items:baseline; }
+  .rt { color:var(--mute); font-variant-numeric:tabular-nums; }
+
+  /* ---- B: cards ---- */
+  .rail { display:flex; gap:10px; overflow-x:auto; padding:4px 0 10px; align-items:flex-start; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:6px; width:280px; flex:0 0 280px; padding:8px 10px; }
+  .card.tt { border-color:var(--ink); }
+  .card.kept { border-style:dashed; }
+  .card h3 { margin:0 0 4px; font-size:13px; display:flex; justify-content:space-between; gap:8px; align-items:baseline; }
+  .card ul { list-style:none; margin:6px 0; padding:0; }
+  .card li { display:flex; justify-content:space-between; gap:6px; padding:1px 0; }
+  .card li.core { color:var(--mute); }
+  .card li.diff { font-weight:600; }
+  .card .people { display:flex; gap:3px; flex-wrap:wrap; margin:6px 0; }
+  .card .people span { display:inline-flex; flex-direction:column; align-items:center; width:26px; font-size:10px; }
+  .card .row { display:flex; justify-content:space-between; gap:8px; font-size:12px; margin:3px 0; }
+  .card .row span:first-child { color:var(--mute); }
+
+  /* ---- C: ledger ---- */
+  table.ledger { border-collapse:collapse; width:100%; }
+  table.ledger th, table.ledger td { border-bottom:1px solid var(--line2); padding:3px 6px; text-align:left; vertical-align:middle; }
+  table.ledger td:nth-child(3), table.ledger td:nth-child(4) { white-space:nowrap; }
+  table.ledger thead th { font-size:11px; color:var(--mute); font-weight:600; text-transform:uppercase; letter-spacing:.04em; vertical-align:bottom; position:sticky; top:0; background:var(--bg); z-index:2; }
+  table.ledger tr.slate { cursor:pointer; }
+  table.ledger tr.slate:hover td { background:#fdfcf8; }
+  table.ledger tr.slate.tt td { background:#f1efe8; }
+  table.ledger tr.sep td { padding:10px 6px 2px; color:var(--mute); font-size:11px; text-transform:uppercase; letter-spacing:.05em; font-weight:600; border-bottom:1px solid var(--line); }
+  .dots { display:inline-flex; gap:2px; }
+  .dots i { display:inline-block; width:11px; height:11px; border-radius:2px; background:var(--s0); }
+  .dots i.on { background:var(--ink); }
+  .dots i.core { background:#a39f95; }
+  .dots i.pinin { outline:2px solid #b0730a; outline-offset:-2px; }
+  .dots i.hl { background:var(--acc); }
+  .dots i.hlo { background:#fff; outline:1px solid var(--acc); }
+  .filmhead { display:inline-flex; gap:2px; align-items:flex-end; height:96px; }
+  .filmhead span { display:inline-block; width:11px; writing-mode:vertical-rl; transform:rotate(180deg); font-size:9px; color:var(--mute); white-space:nowrap; overflow:hidden; height:96px; line-height:11px; text-transform:none; letter-spacing:0; font-weight:400; }
+  .people2 { display:inline-flex; gap:2px; }
+  .people2 i { display:inline-block; width:14px; height:14px; border-radius:2px; text-align:center; font-size:9px; line-height:14px; color:#fff; font-style:normal; font-weight:600; }
+  tr.detail td { background:#fbfaf6; padding:8px 12px 12px; }
+  .dgrid { display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap:16px; }
+  .dgrid ul { margin:4px 0; padding-left:16px; }
+  .dgrid table { border-collapse:collapse; }
+  .dgrid table td { padding:1px 6px 1px 0; border:0; }
+
+  /* ---- editor stub ---- */
+  .tl { position:relative; height:64px; background:#fff; border:1px solid var(--line); border-radius:4px; margin:8px 0; overflow:hidden; }
+  .tl .box { position:absolute; top:8px; height:40px; background:var(--acc2); border:1px solid var(--acc); border-radius:3px; font-size:11px; padding:2px 4px; overflow:hidden; white-space:nowrap; }
+  .tl .box.meal { background:#fff4dc; border-color:#d9a441; }
+  .tl .box button { position:absolute; right:0; top:0; border:0; background:transparent; padding:0 3px; line-height:1; }
+  .tl .tick { position:absolute; bottom:0; font-size:9px; color:var(--mute); border-left:1px solid var(--line2); padding-left:2px; height:12px; }
+  .tl .bmark { position:absolute; top:0; bottom:0; width:0; border-left:2px dashed var(--ink); }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .two div { background:#fff; border:1px solid var(--line); border-radius:4px; padding:6px 8px; }
+  .two b { display:block; font-size:16px; font-variant-numeric:tabular-nums; }
+
+  /* ---- floating bar ---- */
+  #pbar { position:fixed; left:50%; bottom:14px; transform:translateX(-50%); background:#1c1b19; color:#fff; border-radius:24px; padding:6px 12px; display:flex; gap:8px; align-items:center; box-shadow:0 6px 24px rgba(0,0,0,.25); z-index:50; font-size:12px; white-space:nowrap; }
+  #pbar button { background:#333; color:#fff; border-color:#444; }
+  #pbar button.on { background:#fff; color:#111; }
+  #pbar select { background:#333; color:#fff; border-color:#444; }
+  #pbar .v { font-weight:600; min-width:150px; text-align:center; }
+  #pbar .sep { width:1px; height:18px; background:#555; }
+  #pbar.min > *:not(.keep) { display:none; }
+</style>
+</head>
+<body>
+<div id="top">
+  <h1>PICK <span class="phase"><span>SUGGEST</span><span>APPROVE</span><span>VOTE</span><span class="on">PICK</span><span>RUN</span></span></h1>
+  <div class="ctl"><label>Budget</label><input id="budgetH" type="number" min="0" step="0.5" style="width:60px"> <span class="mute">h screen time</span></div>
+  <div class="ctl"><label>Anchor</label><input id="anchor" type="datetime-local"></div>
+  <div class="ctl"><label>k</label><select id="kSel"><option>4</option><option>2</option><option>3</option><option>6</option></select> <span class="mute" title="the diversity cut: each proposal differs from every other by at least k films (#17)">diversity cut</span></div>
+  <div class="ctl mute" id="solvetime"></div>
+</div>
+<div id="basis"></div>
+<div id="tabs" style="display:none"><button id="tabC">Compare</button><button id="tabT">Timetable</button></div>
+<div id="layout" class="side">
+  <div id="view"></div>
+  <div id="editor"></div>
+</div>
+
+<div id="pbar">
+  <button class="keep" id="pmin" title="collapse">▾</button>
+  <button id="prev">◀</button><span class="v" id="vlabel"></span><button id="next">▶</button>
+  <span class="sep"></span>
+  <span class="mute">state</span>
+  <button data-preset="fresh">fresh</button><button data-preset="working">working</button><button data-preset="heavy">heavy</button>
+  <span class="sep"></span>
+  <span class="mute">ending</span>
+  <select id="ending"><option value="">—</option><option value="cut">cut infeasible</option><option value="nothing">nothing fits</option><option value="pins">pins exceed budget</option><option value="nofloor">empty floor set</option><option value="all">everything fits</option></select>
+  <span class="sep"></span>
+  <span class="mute">editor</span>
+  <select id="placement"><option value="side">side</option><option value="below">below</option><option value="tab">tab</option></select>
+</div>
+
+<script src="data.js"></script>
+<script>
+// ============================================================ model
+const D = window.DATA;
+const FILMS = D.films; const NF = FILMS.length;
+const FIDX = new Map(FILMS.map((f, i) => [f.id, i]));
+const VOTERS = D.voters; const NV = VOTERS.length;
+const W = 10, K = 4000; // W ≈ |V| (#10); K > 2·max|T| (#6 §7.4)
+const score = (v, id) => D.scores[v][id];              // undefined = not scored
+const vetoed = (v, id) => (D.vetoes[v] || []).includes(id);
+const seenIt = (v, id) => (D.seenIt[v] || []).includes(id);
+const hasVoted = v => Object.keys(D.scores[v]).length > 0;
+const title = id => FILMS[FIDX.get(id)].title;
+const rt = id => FILMS[FIDX.get(id)].runtime;
+const hm = m => (m < 0 ? "−" : "") + Math.floor(Math.abs(m) / 60) + "h" + String(Math.abs(m) % 60).padStart(2, "0");
+
+const emptyKnobs = () => ({ without: [], disregard: [], fixIn: [], fixOut: [] });
+const S = {
+  variant: new URLSearchParams(location.search).get("variant") || "A",
+  budget: 480, anchor: "2026-10-31T18:00", k: 4,
+  knobs: emptyKnobs(),
+  batchN: 5,
+  shortlist: [],        // {key, films:[ids], provenance:knobs, n}
+  timetable: [],        // ordered film ids
+  meals: [{ label: "pizza", at: 200, len: 40 }],
+  placement: "side", tab: "compare",
+  expanded: new Set(), compare: new Set(), keptSeq: 0,
+};
+
+// eligible pair: scored, not seen, not vetoed (a veto removed the hand score in data.js)
+function eligible(v, id) { return score(v, id) !== undefined && !seenIt(v, id) && !vetoed(v, id); }
+// effective score in the total term
+function eff(v, id, knobs) { if (vetoed(v, id)) return knobs.disregard.includes(v) ? 0 : -2; const s = score(v, id); return s === undefined ? 0 : s; }
+function floorSet(knobs) { return VOTERS.filter(v => hasVoted(v) && !knobs.without.includes(v)); }
+function knobLabel(k) {
+  const p = [];
+  if (k.without.length) p.push("without " + k.without.join(", "));
+  if (k.disregard.length) p.push(k.disregard.map(v => v + "'s vetoes disregarded").join(", "));
+  if (k.fixIn.length) p.push(k.fixIn.map(title).join(", ") + " fixed in");
+  if (k.fixOut.length) p.push(k.fixOut.map(title).join(", ") + " fixed out");
+  return p.length ? p.join(" · ") : "no knobs";
+}
+const sameKnobs = (a, b) => knobLabel(a) === knobLabel(b);
+
+// full readouts for one slate under one basis
+function evaluate(ids, knobs) {
+  const F = floorSet(knobs); const active = VOTERS.filter(v => !knobs.without.includes(v));
+  const rep = {}; let sum = 0, floor = F.length ? 3 : 0, total = 0, screen = 0;
+  for (const v of F) {
+    let best = null;
+    for (const id of ids) if (eligible(v, id)) { const s = score(v, id); if (best === null || s > best.s) best = { id, s }; }
+    const r = best ? best.s : 0;
+    rep[v] = best ? best : { id: null, s: 0, alt: bestEligibleOutside(v, ids) };
+    sum += r; if (r < floor) floor = r;
+  }
+  for (const v of active) for (const id of ids) total += eff(v, id, knobs);
+  for (const id of ids) screen += rt(id);
+  const pinners = F.filter(v => rep[v].s === floor);
+  const genres = {}; for (const id of ids) for (const g of FILMS[FIDX.get(id)].genres) if (g !== "Horror") genres[g] = (genres[g] || 0) + 1;
+  const vetoFoot = ids.map(id => ({ id, by: active.filter(v => vetoed(v, id)) })).filter(x => x.by.length);
+  return { ids, floor, sum, total, primary: W * floor + sum, rep, F, pinners, screen, genres, vetoFoot };
+}
+function bestEligibleOutside(v, ids) {
+  let best = null;
+  for (const f of FILMS) if (!ids.includes(f.id) && eligible(v, f.id)) { const s = score(v, f.id); if (best === null || s > best.s) best = { id: f.id, s }; }
+  return best;
+}
+
+// ---- the solver: enumerate every slate under budget, score it, sort. Cached per basis+budget.
+const cache = new Map();
+function solveAll(knobs, budget) {
+  const key = knobLabel(knobs) + "|" + budget;
+  if (cache.has(key)) return cache.get(key);
+  const t0 = performance.now();
+  const F = floorSet(knobs); const fIdx = F.map(v => VOTERS.indexOf(v));
+  const active = VOTERS.filter(v => !knobs.without.includes(v));
+  const pins = knobs.fixIn.map(id => FIDX.get(id));
+  const outs = new Set(knobs.fixOut.map(id => FIDX.get(id)));
+  let forcedMask = 0, forcedRt = 0; for (const i of pins) { forcedMask |= (1 << i); forcedRt += FILMS[i].runtime; }
+  const res = { key, F, leaves: null, count: 0, ms: 0, pinsExceed: false, forcedMask };
+  if (forcedRt > budget) { res.pinsExceed = true; cache.set(key, res); return res; }
+  const free = FILMS.map((f, i) => i).filter(i => !pins.includes(i) && !outs.has(i)).sort((a, b) => FILMS[a].runtime - FILMS[b].runtime);
+  // per film: eligible (voterSlot, score) pairs over the floor set, and the total coefficient
+  const elig = FILMS.map(f => fIdx.map((vi, slot) => eligible(VOTERS[vi], f.id) ? [slot, score(VOTERS[vi], f.id)] : null).filter(Boolean));
+  const coef = FILMS.map(f => active.reduce((a, v) => a + eff(v, f.id, knobs), 0));
+  let cap = 1 << 20; let packed = new Float64Array(cap); let masks = new Uint32Array(cap); let n = 0;
+  const OFF = 1e5, SH = 1 << 21;
+  function leaf(mask, rep, T) {
+    let m = 3, s = 0; if (!fIdx.length) m = 0; for (let i = 0; i < fIdx.length; i++) { s += rep[i]; if (rep[i] < m) m = rep[i]; }
+    const obj = K * (W * m + s) + T;
+    if (n === cap) { cap *= 2; const p2 = new Float64Array(cap); p2.set(packed); packed = p2; const m2 = new Uint32Array(cap); m2.set(masks); masks = m2; }
+    masks[n] = mask; packed[n] = (obj + OFF) * SH + n; n++;
+  }
+  function rec(i, mask, left, rep, T) {
+    if (i === free.length || FILMS[free[i]].runtime > left) { leaf(mask, rep, T); return; }
+    rec(i + 1, mask, left, rep, T);
+    const fi = free[i]; const r2 = rep.slice();
+    for (const [slot, s] of elig[fi]) if (s > r2[slot]) r2[slot] = s;
+    rec(i + 1, mask | (1 << fi), left - FILMS[fi].runtime, r2, T + coef[fi]);
+  }
+  const rep0 = new Array(fIdx.length).fill(0); let T0 = 0;
+  for (const i of pins) { for (const [slot, s] of elig[i]) if (s > rep0[slot]) rep0[slot] = s; T0 += coef[i]; }
+  rec(0, forcedMask, budget - forcedRt, rep0, T0);
+  const view = packed.subarray(0, n); view.sort(); // ascending; read from the end
+  res.leaves = view; res.masks = masks; res.count = n; res.ms = Math.round(performance.now() - t0);
+  cache.set(key, res); return res;
+}
+const popcnt = x => { x = x >>> 0; let c = 0; while (x) { x &= x - 1; c++; } return c; };
+const maskIds = mask => FILMS.filter((f, i) => mask & (1 << i)).map(f => f.id);
+// a batch: the top n leaves under the diversity cut
+function batch(knobs, budget, n, k) {
+  const r = solveAll(knobs, budget);
+  const out = { proposals: [], ending: null, moreReason: null, solve: r };
+  if (r.pinsExceed) { out.ending = { kind: "pins", text: "Infeasible: the fixed-in films alone exceed the budget — " + knobs.fixIn.map(id => title(id) + " (" + rt(id) + ")").join(", ") + ". Nothing dropped; loosen a pin or the budget." }; return out; }
+  const chosen = [];
+  for (let j = r.count - 1; j >= 0 && chosen.length < n; j--) {
+    const idx = r.leaves[j] % (1 << 21); const mask = r.masks[idx];
+    if (chosen.every(c => popcnt(c ^ mask) >= k)) chosen.push(mask);
+  }
+  out.proposals = chosen.map(m => maskIds(m));
+  if (chosen.length < n) out.moreReason = chosen.length === r.count ? "every slate under the budget is on screen" : "no other slate under the budget differs from these by " + k + " or more films";
+  if (out.proposals.length && out.proposals[0].length === 0) out.ending = { kind: "nothing", text: "Nothing fits: no film's runtime is within the budget. The first proposal is the empty slate." };
+  if (!r.F.length) out.ending = { kind: "nofloor", text: "The floor set is empty (everyone excluded or nobody has voted) — optimising the total only." };
+  return out;
+}
+
+// ============================================================ derived state for rendering
+function columns() {
+  const b = batch(S.knobs, S.budget, S.batchN, S.k);
+  const cols = [];
+  if (S.timetable.length) cols.push({ kind: "tt", key: "tt", label: "Timetable", ev: evaluate(S.timetable, S.knobs), ids: S.timetable });
+  S.shortlist.forEach((kp) => cols.push({ kind: "kept", key: kp.key, label: "Kept " + kp.n, ev: evaluate(kp.films, S.knobs), ids: kp.films, prov: kp.provenance, stale: !sameKnobs(kp.provenance, S.knobs), kp }));
+  b.proposals.forEach((ids, i) => cols.push({ kind: "batch", key: "p" + i, label: "Proposal " + (i + 1), ev: evaluate(ids, S.knobs), ids }));
+  // standing: distance from the best column on screen under the current basis
+  let best = null; for (const c of cols) if (!best || c.ev.primary > best.ev.primary || (c.ev.primary === best.ev.primary && c.ev.total > best.ev.total)) best = c;
+  const tiers = new Map(); let tn = 0;
+  for (const c of [...cols].sort((a, b) => b.ev.primary - a.ev.primary)) { const t = c.ev.floor + "/" + c.ev.sum; if (!tiers.has(t)) tiers.set(t, ++tn); c.tier = tiers.get(t); c.tied = false; }
+  for (const c of cols) { c.tiedWith = cols.filter(o => o !== c && o.tier === c.tier).length; c.dFloor = best ? c.ev.floor - best.ev.floor : 0; c.dSum = best ? c.ev.sum - best.ev.sum : 0; c.isBest = c === best; }
+  const union = [...new Set(cols.flatMap(c => c.ids))];
+  const count = id => cols.filter(c => c.ids.includes(id)).length;
+  union.sort((a, b) => count(b) - count(a) || title(a).localeCompare(title(b)));
+  const core = new Set(union.filter(id => cols.length > 1 && count(id) === cols.length));
+  return { cols, b, best, union, core, count };
+}
+
+// ============================================================ rendering helpers
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function standing(c) {
+  if (c.isBest) return `<span class="stand"><span class="best">best on screen</span></span>`;
+  if (c.dFloor === 0 && c.dSum === 0) return `<span class="stand"><span class="best">tied with the best</span></span>`;
+  const f = c.dFloor === 0 ? `<span class="z">floor =</span>` : `<span class="d">floor ${c.dFloor}</span>`;
+  const s = c.dSum === 0 ? `<span class="z">Σrep =</span>` : `<span class="d">Σrep ${c.dSum}</span>`;
+  return `<span class="stand">${f} · ${s}</span>`;
+}
+function tierBadge(c) { return c.tiedWith ? `<span class="tier tied">tier ${c.tier} · tied ×${c.tiedWith + 1}</span>` : `<span class="tier">tier ${c.tier}</span>`; }
+function scoreChip(s, extra = "") { const cls = s === -2 ? "sv" : s < 0 ? "sm1" : "s" + s; return `<span class="sc ${cls} ${extra}">${s > 0 ? "+" + s : s}</span>`; }
+function budgetBar(ev) { const pct = Math.min(100, 100 * ev.screen / S.budget); const over = ev.screen > S.budget; return `<div class="bar ${over ? "over" : ""}" title="screen time ${ev.screen} of ${S.budget} min"><i style="width:${over ? 100 : pct}%"></i>${over ? `<b style="left:${100 * S.budget / ev.screen}%"></b>` : ""}</div><small class="nowrap">${hm(ev.screen)} / ${hm(S.budget)}${over ? ` <span class="d" style="color:var(--warn)">over by ${ev.screen - S.budget} min</span>` : ""}</small>`; }
+function genreMix(ev) { const e = Object.entries(ev.genres).sort((a, b) => b[1] - a[1]); return e.length ? e.map(([g, n]) => `${g}${n > 1 ? " ×" + n : ""}`).join(" · ") : "straight horror"; }
+function vetoText(ev) { return ev.vetoFoot.length ? ev.vetoFoot.map(x => `${esc(title(x.id))} — ${x.by.join(", ")}`).join("; ") : "no vetoed film"; }
+function repCell(c, v) {
+  if (S.knobs.without.includes(v)) return `<span class="mute">excluded</span>`;
+  if (!hasVoted(v)) return `<span class="mute">not voted</span>`;
+  const r = c.ev.rep[v]; const pin = c.ev.pinners.includes(v) ? ` <span class="pin" title="pins the floor">★</span>` : "";
+  if (r.id) return `${scoreChip(r.s)}${pin} <span class="f" title="${esc(title(r.id))}">${esc(title(r.id))}</span>`;
+  const alt = r.alt ? `best eligible: ${esc(title(r.alt.id))} (${rt(r.alt.id)} min, ${r.alt.s > 0 ? "+" : ""}${r.alt.s})` : "nothing eligible in the ballot";
+  return `${scoreChip(0)}${pin} <span class="f mute" title="${alt}">0 · ${alt}</span>`;
+}
+function actions(c) {
+  const use = `<button class="primary" data-act="use" data-key="${c.key}">Use this slate</button>`;
+  if (c.kind === "tt") return `<span class="mute">the plan</span>`;
+  if (c.kind === "kept") return `${use}<button data-act="drop" data-key="${c.key}">Drop</button>`;
+  return `${use}<button data-act="keep" data-key="${c.key}">Keep</button>`;
+}
+function provLine(c) { if (c.kind !== "kept") return ""; return `<div class="prov ${c.stale ? "stale" : ""}">found ${c.stale ? "under: " : "under the current basis: "}${esc(knobLabel(c.prov))}${c.stale ? " — rescored under the current basis" : ""}</div>`; }
+function batchHeader(b) {
+  const F = b.solve.F; const line = `floor computed over <b>${F.length} of ${NV}</b>`;
+  const why = F.length < NV ? ` <small>(${VOTERS.filter(v => !F.includes(v)).map(v => v + (hasVoted(v) ? " excluded" : " has not voted")).join(", ")})</small>` : "";
+  return `<span>${line}${why}</span><span class="knoblabel">basis: ${esc(knobLabel(S.knobs))}</span><span class="mute">${b.solve.count.toLocaleString()} slates under budget${b.solve.ms !== undefined ? ", solved in " + b.solve.ms + " ms" : ""}</span>`;
+}
+function moreButton(b) {
+  if (b.ending && b.ending.kind === "pins") return "";
+  return b.moreReason ? `<button disabled title="${esc(b.moreReason)}">more</button> <small>${esc(b.moreReason)}</small>` : `<button data-act="more">more</button>`;
+}
+function endingBanner(b) { return b.ending ? `<div class="banner warn"><b>${b.ending.kind === "pins" ? "Batch ended" : "Note"}</b> ${esc(b.ending.text)}</div>` : ""; }
+
+// ============================================================ variant A — matrix
+function renderA(view) {
+  const { cols, b, union, core } = columns();
+  let h = endingBanner(b);
+  if (!cols.length) { view.innerHTML = h + `<div class="empty">No slates on screen.</div>`; return; }
+  const th = cols.map((c, i) => `<th class="col ${i > 0 && cols[i - 1].kind !== c.kind ? "grp" : ""}"><div class="colhead">
+      <div class="lbl">${c.label} ${tierBadge(c)}</div>
+      <div>${standing(c)} <small>· total ${c.ev.total}</small></div>
+      ${provLine(c)}
+      ${budgetBar(c.ev)}
+      <div class="act">${actions(c)}</div></div></th>`).join("");
+  const rows = union.map(id => {
+    const isCore = core.has(id); const pinIn = S.knobs.fixIn.includes(id);
+    return `<tr class="${isCore ? "core" : ""}"><td class="rowh">${pinIn ? '<span class="pin" title="fixed in">📌</span> ' : ""}${esc(title(id))} <span class="rt">${rt(id)}</span>${isCore ? ' <small>core</small>' : ""}</td>${cols.map((c, i) => `<td class="dot col ${i > 0 && cols[i - 1].kind !== c.kind ? "grp" : ""}">${c.ids.includes(id) ? "●" : '<span style="color:var(--line)">·</span>'}</td>`).join("")}</tr>`;
+  }).join("");
+  const sec = (name) => `<tr class="sec"><th class="rowh">${name}</th>${cols.map(() => `<th></th>`).join("")}</tr>`;
+  const people = VOTERS.map(v => `<tr><td class="rowh">${esc(v)}</td>${cols.map((c, i) => `<td class="rep col ${i > 0 && cols[i - 1].kind !== c.kind ? "grp" : ""}">${repCell(c, v)}</td>`).join("")}</tr>`).join("");
+  const readouts = `<tr><td class="rowh">Genre mix <small>beyond horror</small></td>${cols.map(c => `<td class="col"><small>${genreMix(c.ev)}</small></td>`).join("")}</tr>
+    <tr><td class="rowh">Vetoed films <small>by whom</small></td>${cols.map(c => `<td class="col"><small>${vetoText(c.ev)}</small></td>`).join("")}</tr>
+    <tr><td class="rowh">Films · screen time</td>${cols.map(c => `<td class="col"><small>${c.ids.length} films · ${hm(c.ev.screen)}</small></td>`).join("")}</tr>`;
+  h += `<div class="banner">${batchHeader(b)}<span style="margin-left:auto">${moreButton(b)}</span></div>`;
+  h += `<table class="matrix"><thead><tr><th class="rowh"><small>${cols.length} slates on screen · ${union.length} films appear · ${core.size} in every slate</small></th>${th}</tr></thead><tbody>${rows}${sec("People — representative and score")}${people}${sec("Set readouts")}${readouts}</tbody></table>`;
+  if (S.knobs.fixOut.length) h += `<p class="mute">Fixed out, absent from every slate: ${S.knobs.fixOut.map(title).join(", ")}</p>`;
+  view.innerHTML = h;
+}
+
+// ============================================================ variant B — cards
+function renderB(view) {
+  const { cols, b, core } = columns();
+  const card = c => `<div class="card ${c.kind}">
+    <h3><span>${c.label}</span>${tierBadge(c)}</h3>
+    <div>${standing(c)} <small>· total ${c.ev.total}</small></div>
+    ${provLine(c)}
+    ${budgetBar(c.ev)}
+    <ul>${c.ids.map(id => `<li class="${core.has(id) ? "core" : "diff"}"><span>${S.knobs.fixIn.includes(id) ? "📌 " : ""}${esc(title(id))}</span><span class="rt">${rt(id)}</span></li>`).join("") || `<li class="mute">empty slate</li>`}</ul>
+    <div class="people">${VOTERS.map(v => {
+      if (S.knobs.without.includes(v) || !hasVoted(v)) return `<span title="${v}: ${hasVoted(v) ? "excluded" : "not voted"}"><span class="sc none">–</span><small>${v.slice(0, 3)}</small></span>`;
+      const r = c.ev.rep[v]; const t = r.id ? `${v}: ${title(r.id)} ${r.s > 0 ? "+" : ""}${r.s}` : `${v}: nothing represents them — best eligible ${r.alt ? title(r.alt.id) + " (" + rt(r.alt.id) + " min)" : "none"}`;
+      return `<span title="${esc(t)}${c.ev.pinners.includes(v) ? " — pins the floor" : ""}">${scoreChip(r.s)}<small>${c.ev.pinners.includes(v) ? "★" : ""}${v.slice(0, 3)}</small></span>`; }).join("")}</div>
+    <div class="row"><span>genre mix</span><span>${genreMix(c.ev)}</span></div>
+    <div class="row"><span>vetoed</span><span style="text-align:right">${vetoText(c.ev)}</span></div>
+    <div class="act" style="margin-top:6px">${actions(c)}</div></div>`;
+  const tt = cols.filter(c => c.kind === "tt"), kept = cols.filter(c => c.kind === "kept"), bat = cols.filter(c => c.kind === "batch");
+  let h = endingBanner(b);
+  h += `<div class="banner">${batchHeader(b)}<span class="mute">films in every slate on screen are greyed; differences are bold</span></div>`;
+  h += `<h2>The plan <small>${tt.length ? "the timetable's own film set, scored like any proposal" : "the timetable is empty"}</small></h2><div class="rail">${tt.map(card).join("") || `<div class="empty">Use a slate to start the timetable.</div>`}</div>`;
+  h += `<h2>Shortlist <small>${kept.length} kept</small></h2><div class="rail">${kept.map(card).join("") || `<div class="empty">Nothing kept yet.</div>`}</div>`;
+  h += `<h2>This batch <small>${bat.length} proposals</small> <span style="margin-left:auto">${moreButton(b)}</span></h2><div class="rail">${bat.map(card).join("")}</div>`;
+  view.innerHTML = h;
+}
+
+// ============================================================ variant C — ledger
+function renderC(view) {
+  const { cols, b, union, core } = columns();
+  const cmp = [...S.compare].map(k => cols.find(c => c.key === k)).filter(Boolean);
+  const diff = cmp.length === 2 ? new Set(union.filter(id => cmp[0].ids.includes(id) !== cmp[1].ids.includes(id))) : null;
+  const dots = c => `<span class="dots">${union.map(id => { const on = c.ids.includes(id); let cls = on ? (core.has(id) ? "on core" : "on") : ""; if (diff && diff.has(id)) cls += on ? " hl" : " hlo"; if (on && S.knobs.fixIn.includes(id)) cls += " pinin"; return `<i class="${cls}" title="${esc(title(id))} (${rt(id)})${on ? "" : " — not in this slate"}"></i>`; }).join("")}</span>`;
+  const people = c => `<span class="people2">${VOTERS.map(v => { if (S.knobs.without.includes(v) || !hasVoted(v)) return `<i style="background:transparent;border:1px dashed var(--line);color:var(--mute)" title="${v}: ${hasVoted(v) ? "excluded" : "not voted"}">${v[0]}</i>`; const r = c.ev.rep[v]; const cls = r.s === 0 ? "s0" : "s" + r.s; return `<i class="sc ${cls}" style="width:14px;min-width:0;padding:0" title="${esc(v)}: ${r.id ? esc(title(r.id)) + " " + (r.s > 0 ? "+" : "") + r.s : "0 — best eligible " + (r.alt ? esc(title(r.alt.id)) + " (" + rt(r.alt.id) + " min)" : "none")}${c.ev.pinners.includes(v) ? " — pins the floor" : ""}">${c.ev.pinners.includes(v) ? "★" : v[0]}</i>`; }).join("")}</span>`;
+  const row = c => `<tr class="slate ${c.kind}" data-key="${c.key}">
+      <td><input type="checkbox" data-cmp="${c.key}" ${S.compare.has(c.key) ? "checked" : ""} title="tick two rows to highlight their difference"></td>
+      <td><div class="lbl">${c.label}</div>${provLine(c)}</td>
+      <td>${tierBadge(c)}</td>
+      <td>${standing(c)}<br><small>total ${c.ev.total}</small></td>
+      <td>${dots(c)}</td>
+      <td class="nowrap">${c.ids.length} · ${hm(c.ev.screen)}${c.ev.screen > S.budget ? ` <span style="color:var(--warn)">over</span>` : ""}</td>
+      <td>${people(c)}</td>
+      <td class="nowrap"><small>${c.ev.vetoFoot.length ? c.ev.vetoFoot.map(x => x.by.length).reduce((a, b) => a + b, 0) + " veto" + (c.ev.vetoFoot.length > 1 ? "es" : "") : "—"}</small></td>
+      <td><div class="act">${actions(c)}</div></td></tr>` +
+    (S.expanded.has(c.key) ? `<tr class="detail"><td colspan="9"><div class="dgrid">
+      <div><b>Films</b><ul>${c.ids.map(id => `<li class="${core.has(id) ? "mute" : ""}">${esc(title(id))} <span class="rt">${rt(id)}</span>${core.has(id) ? " <small>core</small>" : ""}</li>`).join("") || "<li class='mute'>empty</li>"}</ul><small>genre mix: ${genreMix(c.ev)}</small></div>
+      <div><b>People</b><table>${VOTERS.map(v => `<tr><td>${esc(v)}</td><td class="rep">${repCell(c, v)}</td></tr>`).join("")}</table></div>
+      <div><b>Vetoed films</b><div>${vetoText(c.ev)}</div><br><b>Screen time</b>${budgetBar(c.ev)}</div>
+    </div></td></tr>` : "");
+  const sep = (t, extra = "") => `<tr class="sep"><td colspan="9">${t} ${extra}</td></tr>`;
+  const tt = cols.filter(c => c.kind === "tt"), kept = cols.filter(c => c.kind === "kept"), bat = cols.filter(c => c.kind === "batch");
+  let h = endingBanner(b);
+  h += `<div class="banner">${batchHeader(b)}<span class="mute">click a row to expand · tick two to compare</span></div>`;
+  h += `<table class="ledger"><thead><tr><th></th><th>Slate</th><th>Tier</th><th>Standing</th><th><div class="filmhead">${union.map(id => `<span title="${esc(title(id))}">${esc(title(id))}</span>`).join("")}</div></th><th>Films · screen</th><th>People</th><th>Vetoes</th><th></th></tr></thead><tbody>`;
+  h += sep("The plan"); h += tt.map(row).join("") || `<tr><td colspan="9" class="empty">The timetable is empty.</td></tr>`;
+  h += sep("Shortlist", `<small>${kept.length} kept</small>`); h += kept.map(row).join("") || `<tr><td colspan="9" class="empty">Nothing kept yet.</td></tr>`;
+  h += sep("This batch", `<small>${bat.length} proposals</small> <span style="float:right">${moreButton(b)}</span>`); h += bat.map(row).join("");
+  h += `</tbody></table>`;
+  view.innerHTML = h;
+}
+
+// ============================================================ basis bar (knobs) — shared
+function renderBasis() {
+  const k = S.knobs; const el = document.getElementById("basis");
+  const vchips = (set, cls) => VOTERS.map(v => `<span class="chip ${set.includes(v) ? cls : ""} ${hasVoted(v) ? "" : "dim"}" data-knob="${cls === "on" ? "without" : "disregard"}" data-v="${v}" title="${hasVoted(v) ? "" : v + " has not voted"}">${v}</span>`).join("");
+  const fsel = (name, cls) => `<select data-knobsel="${name}"><option value="">+ film…</option>${FILMS.filter(f => !k.fixIn.includes(f.id) && !k.fixOut.includes(f.id)).map(f => `<option value="${f.id}">${esc(f.title)} (${f.runtime})</option>`).join("")}</select>` + k[name].map(id => `<span class="chip ${cls}" data-knobrm="${name}" data-id="${id}">${esc(title(id))} ✕</span>`).join("");
+  el.innerHTML = `<div class="k"><b>Without</b>${vchips(k.without, "on")}</div>
+    <div class="k"><b>Disregard vetoes of</b>${VOTERS.filter(v => (D.vetoes[v] || []).length).map(v => `<span class="chip ${k.disregard.includes(v) ? "on" : ""}" data-knob="disregard" data-v="${v}">${v} <small>(${D.vetoes[v].length})</small></span>`).join("")}</div>
+    <div class="k"><b>Fix in</b>${fsel("fixIn", "in")}</div>
+    <div class="k"><b>Fix out</b>${fsel("fixOut", "out")}</div>
+    <div class="k" style="margin-left:auto"><button class="ghost" data-act="clearknobs" ${knobLabel(k) === "no knobs" ? "disabled" : ""}>clear knobs</button></div>`;
+}
+
+// ============================================================ the timetable editor stub (#22's surface — only its placement is judged here)
+function renderEditor() {
+  const el = document.getElementById("editor");
+  const ids = S.timetable; const ev = ids.length ? evaluate(ids, S.knobs) : null;
+  let t = 0; const boxes = ids.map(id => { const b = { id, at: t, len: rt(id) }; t += rt(id); return b; });
+  const meals = ids.length ? S.meals : [];
+  const end = Math.max(t, ...meals.map(m => m.at + m.len), 60); const scale = 100 / Math.max(end, S.budget * 1.05);
+  const a = new Date(S.anchor); const clock = m => { const d = new Date(a.getTime() + m * 60000); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); };
+  let h = `<h2 style="margin-top:0">Timetable <small>#22's editor — a stub; only its placement is judged here</small></h2>`;
+  if (!ids.length) h += `<div class="empty">Empty. <b>Use this slate</b> on any proposal lays its films back to back from the anchor.</div>`;
+  h += `<div class="tl">${boxes.map(b => `<div class="box" style="left:${b.at * scale}%;width:${b.len * scale}%" title="${esc(title(b.id))} ${clock(b.at)}–${clock(b.at + b.len)}">${esc(title(b.id))}<button data-act="ttrm" data-id="${b.id}" title="remove from the plan">✕</button></div>`).join("")}${meals.map(m => `<div class="box meal" style="left:${m.at * scale}%;width:${m.len * scale}%">${m.label}</div>`).join("")}<div class="bmark" style="left:${S.budget * scale}%" title="budget marker (screen time — position is only indicative here)"></div>${[0, 120, 240, 360, 480, 600, 720].filter(m => m < end * 1.05 || m <= S.budget).map(m => `<div class="tick" style="left:${m * scale}%">${clock(m)}</div>`).join("")}</div>`;
+  if (ev) h += `<div class="two"><div><small>screen time</small><b>${hm(ev.screen)} <small>/ ${hm(S.budget)}</small></b></div><div><small>elapsed · ends</small><b>${hm(end)} <small>· ${clock(end)}</small></b></div></div>
+    <p class="mute" style="font-size:12px">Set readouts for the plan appear as the <b>Timetable</b> column in the comparison — floor ${ev.floor}, Σrep ${ev.sum}, ${ev.F.length ? "pinned by " + ev.pinners.join(", ") : "no floor set"}. Presence strips and shared time are #22's.</p>`;
+  h += `<div class="ctl" style="margin-top:8px"><label>Add a film by hand</label><select data-act="ttadd"><option value="">film…</option>${FILMS.filter(f => !ids.includes(f.id)).map(f => `<option value="${f.id}">${esc(f.title)} (${f.runtime})</option>`).join("")}</select></div>
+    <p class="mute" style="font-size:11px">Ripple mode, drawing meal boxes, dragging and the presence strips are #22's job and are not drawn here.</p>`;
+  el.innerHTML = h;
+}
+
+// ============================================================ render all
+const VARIANTS = { A: ["Matrix", renderA], B: ["Cards", renderB], C: ["Ledger", renderC] };
+function render() {
+  document.getElementById("budgetH").value = S.budget / 60;
+  document.getElementById("anchor").value = S.anchor;
+  document.getElementById("kSel").value = S.k;
+  document.getElementById("placement").value = S.placement;
+  const lay = document.getElementById("layout"); lay.className = S.placement;
+  const tabs = document.getElementById("tabs"); tabs.style.display = S.placement === "tab" ? "flex" : "none";
+  document.getElementById("tabC").className = S.tab === "compare" ? "on" : ""; document.getElementById("tabT").className = S.tab === "timetable" ? "on" : "";
+  document.getElementById("view").classList.toggle("hidden", S.placement === "tab" && S.tab !== "compare");
+  document.getElementById("editor").classList.toggle("hidden", S.placement === "tab" && S.tab !== "timetable");
+  renderBasis();
+  VARIANTS[S.variant][1](document.getElementById("view"));
+  renderEditor();
+  document.getElementById("vlabel").textContent = `${S.variant} — ${VARIANTS[S.variant][0]}`;
+  const b = batch(S.knobs, S.budget, S.batchN, S.k); document.getElementById("solvetime").textContent = b.solve.count ? `${b.solve.count.toLocaleString()} slates · ${b.solve.ms} ms` : "";
+  history.replaceState(null, "", "?variant=" + S.variant);
+}
+
+// ============================================================ actions
+function colByKey(key) { return columns().cols.find(c => c.key === key); }
+function useSlate(ids) {
+  if (S.timetable.length && !confirm("Replace the current timetable? Its arrangement will be lost.")) return;
+  S.timetable = ids.slice(); render();
+}
+function keep(ids) { S.shortlist.push({ key: "k" + (++S.keptSeq), n: S.keptSeq, films: ids.slice(), provenance: JSON.parse(JSON.stringify(S.knobs)) }); render(); }
+document.body.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (b) {
+    const act = b.dataset.act; const key = b.dataset.key;
+    if (act === "use") { useSlate(colByKey(key).ids); return; }
+    if (act === "keep") { keep(colByKey(key).ids); return; }
+    if (act === "drop") { S.shortlist = S.shortlist.filter(k => k.key !== key); render(); return; }
+    if (act === "more") { S.batchN += 5; render(); return; }
+    if (act === "clearknobs") { S.knobs = emptyKnobs(); S.batchN = 5; render(); return; }
+    if (act === "ttrm") { S.timetable = S.timetable.filter(id => id != b.dataset.id); render(); return; }
+  }
+  const kn = e.target.closest("[data-knob]"); if (kn) { const set = S.knobs[kn.dataset.knob]; const v = kn.dataset.v; const i = set.indexOf(v); if (i >= 0) set.splice(i, 1); else set.push(v); S.batchN = 5; render(); return; }
+  const rm = e.target.closest("[data-knobrm]"); if (rm) { S.knobs[rm.dataset.knobrm] = S.knobs[rm.dataset.knobrm].filter(id => id != rm.dataset.id); S.batchN = 5; render(); return; }
+  const cmp = e.target.closest("[data-cmp]"); if (cmp) { const k = cmp.dataset.cmp; if (S.compare.has(k)) S.compare.delete(k); else { if (S.compare.size >= 2) S.compare.delete([...S.compare][0]); S.compare.add(k); } render(); return; }
+  const row = e.target.closest("tr.slate"); if (row && !e.target.closest("button,input,select")) { const k = row.dataset.key; if (S.expanded.has(k)) S.expanded.delete(k); else S.expanded.add(k); render(); return; }
+  const pr = e.target.closest("[data-preset]"); if (pr) { preset(pr.dataset.preset); return; }
+});
+document.body.addEventListener("change", e => {
+  const s = e.target.closest("[data-knobsel]"); if (s && s.value) { S.knobs[s.dataset.knobsel].push(+s.value); S.batchN = 5; render(); return; }
+  if (e.target.matches("[data-act=ttadd]") && e.target.value) { S.timetable.push(+e.target.value); render(); return; }
+  if (e.target.id === "budgetH") { S.budget = Math.round(+e.target.value * 60); S.batchN = 5; render(); }
+  if (e.target.id === "anchor") { S.anchor = e.target.value; render(); }
+  if (e.target.id === "kSel") { S.k = +e.target.value; S.batchN = 5; render(); }
+  if (e.target.id === "placement") { S.placement = e.target.value; render(); }
+  if (e.target.id === "ending") { ending(e.target.value); e.target.value = ""; }
+});
+document.getElementById("tabC").onclick = () => { S.tab = "compare"; render(); };
+document.getElementById("tabT").onclick = () => { S.tab = "timetable"; render(); };
+const order = Object.keys(VARIANTS);
+const cycle = d => { S.variant = order[(order.indexOf(S.variant) + d + order.length) % order.length]; render(); };
+document.getElementById("prev").onclick = () => cycle(-1);
+document.getElementById("next").onclick = () => cycle(1);
+document.getElementById("pmin").onclick = () => document.getElementById("pbar").classList.toggle("min");
+document.addEventListener("keydown", e => { if (e.target.matches("input,select,textarea")) return; if (e.key === "ArrowLeft") cycle(-1); if (e.key === "ArrowRight") cycle(1); });
+
+// ============================================================ presets — the stress states the ticket asks for
+function preset(name) {
+  S.knobs = emptyKnobs(); S.batchN = 5; S.shortlist = []; S.timetable = []; S.budget = 480; S.k = 4; S.expanded = new Set(); S.compare = new Set(); S.keptSeq = 0;
+  if (name === "working") {
+    // one batch looked at, two kept, then a knob and a "more"
+    let b = batch(S.knobs, S.budget, 5, S.k); keep(b.proposals[0]); keep(b.proposals[2]);
+    S.knobs.without = ["Eszter"]; b = batch(S.knobs, S.budget, 5, S.k); keep(b.proposals[1]);
+    S.timetable = b.proposals[0].slice(); S.batchN = 10;
+  }
+  if (name === "heavy") {
+    // the overcrowding test: eight kept across four bases, three batches deep, knobs on, plan hand-edited
+    let b = batch(S.knobs, S.budget, 5, S.k); keep(b.proposals[0]); keep(b.proposals[1]); keep(b.proposals[4]);
+    S.knobs.disregard = ["Eszter"]; b = batch(S.knobs, S.budget, 5, S.k); keep(b.proposals[0]); keep(b.proposals[3]);
+    S.knobs = emptyKnobs(); S.knobs.without = ["Dani"]; b = batch(S.knobs, S.budget, 5, S.k); keep(b.proposals[0]);
+    S.knobs = emptyKnobs(); S.knobs.fixIn = [FILMS.find(f => f.title === "The Thing").id]; S.knobs.fixOut = [FILMS.find(f => f.title === "Terrifier").id]; b = batch(S.knobs, S.budget, 5, S.k); keep(b.proposals[0]); keep(b.proposals[2]);
+    S.knobs = emptyKnobs(); S.knobs.disregard = ["Eszter"]; S.knobs.fixOut = [FILMS.find(f => f.title === "Coco").id];
+    b = batch(S.knobs, S.budget, 5, S.k); S.timetable = b.proposals[0].slice(); S.timetable.pop(); S.timetable.push(FILMS.find(f => f.title === "Midsommar").id);
+    S.batchN = 15;
+  }
+  render();
+}
+function ending(kind) {
+  S.knobs = emptyKnobs(); S.batchN = 5;
+  if (kind === "cut") { S.budget = 130; S.k = 4; }                         // ~one-film slates: the cut runs dry
+  if (kind === "nothing") { S.budget = 50; }                                // shortest film is 55 min
+  if (kind === "pins") { S.knobs.fixIn = ["The Shining", "Midsommar", "Weapons", "The Exorcist"].map(t => FILMS.find(f => f.title === t).id); S.budget = 480; }
+  if (kind === "nofloor") { S.knobs.without = VOTERS.slice(); S.budget = 480; }
+  if (kind === "all") { S.budget = 60 * 60; }                                // everything fits: 32 films ≈ 52 h
+  render();
+}
+render();
+</script>
+</body>
+</html>
