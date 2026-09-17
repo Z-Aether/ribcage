@@ -1,0 +1,476 @@
+<!doctype html>
+<!--
+  PROTOTYPE — ticket #9, the voting interface. Throwaway. Not production.
+
+  Three variants of the ballot, switchable via ?variant=A|B|C and the floating bar.
+  The scoring semantics are #10's and fixed: five hand scores (+3 top pick, +2 keen,
+  +1 happy to watch, 0 don't mind, −1 rather not), a VETO that replaces the score
+  with a reserved −2 (attributed, live-visible, optional reason, #20's matched
+  trigger topics sit at the veto control), and SEEN IT as a separate flag. The
+  question here is the SHAPE of the surface that produces them — round 1 — and
+  then how much other film data to show around the controls — round 2, driven by
+  the "data" selector in the bar (min / std / full).
+
+    A  Tier list   drag tiles into five bands + a veto band that looks like none of them; unsorted tray on top
+    B  Ledger      one dense row per film, a five-button score control + seen + veto per row; expand inline
+    C  Deck        one film at a time, big controls, a progress rail of all 32 on the left; keyboard-first
+
+  Other things in the bar: the ballot state (fresh / half — the "leave and resume"
+  case / full), and "my triggers" on/off — #20 says the screen must look right both
+  for a voter with a watched-list and for one with none (no icons, no inline block,
+  a non-blocking nag instead). The DTDD credit is conditional: it appears wherever
+  DTDD data is actually on screen (#5, #20, #21).
+
+  Data is real (data.js): the same 32 films as the #24 prototype with TMDB posters,
+  directors and trailers, DTDD topic votes, a pitch per suggester and a few extra
+  notes, other voters' live vetoes, and a public done-roster (#15). "You" are Dani.
+
+  Run:  python -m http.server 8009   →  http://localhost:8009/prototypes/voting-interface/?variant=A
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VOTE — ballot (prototype #9)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg:#f6f5f2; --panel:#fff; --ink:#1c1b19; --mute:#6b6963; --line:#dcd9d2; --line2:#ece9e2;
+    --acc:#2f5fd0; --acc2:#e8eefc; --warn:#b3261e; --warn2:#fbeae8; --ok:#2b7a3d;
+    --s3:#1e6b34; --s2:#4b9a5c; --s1:#a5d3a7; --s0:#d9d7d0; --sm1:#e9a35c; --sv:#c8443a; --un:#f0eee8;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.35 system-ui, "Segoe UI", Roboto, sans-serif; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; border-radius:4px; padding:2px 8px; color:var(--ink); }
+  button:hover { border-color:#b9b5aa; }
+  input, select, textarea { font:inherit; border:1px solid var(--line); border-radius:4px; padding:3px 6px; background:#fff; color:var(--ink); }
+  a { color:var(--acc); }
+  .mute { color:var(--mute); }
+  .small { font-size:11px; }
+  .tn { font-variant-numeric:tabular-nums; }
+
+  header.app { display:flex; align-items:center; gap:14px; padding:8px 18px; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+  header.app .brand { font-weight:700; letter-spacing:.02em; }
+  header.app .brand span { color:var(--mute); font-weight:400; }
+  header.app .phase { background:var(--acc2); color:var(--acc); border-radius:10px; padding:1px 8px; font-size:11px; font-weight:600; }
+  header.app .grow { flex:1; }
+  header.app .roster { color:var(--mute); }
+  header.app .roster b { color:var(--ink); }
+  header.app .roster .me { color:var(--ok); }
+  button.done { border-color:var(--ok); color:var(--ok); font-weight:600; }
+  button.done.on { background:var(--ok); color:#fff; }
+  .nag { background:#fff8e1; border-bottom:1px solid #f0dfa0; padding:6px 18px; display:flex; gap:12px; align-items:center; }
+  .nag .grow { flex:1; }
+  main { padding:14px 18px 120px; }
+  footer.app { padding:14px 18px 120px; color:var(--mute); font-size:11px; display:flex; gap:16px; flex-wrap:wrap; }
+
+  /* shared bits */
+  .icon { display:inline-block; width:14px; height:14px; border-radius:50%; background:var(--warn); color:#fff; font-size:10px; line-height:14px; text-align:center; font-weight:700; vertical-align:-2px; }
+  .tag { display:inline-block; border-radius:3px; padding:0 5px; font-size:11px; line-height:16px; white-space:nowrap; }
+  .tag.v { background:var(--warn2); color:var(--warn); }
+  .tag.seen { background:var(--line2); color:var(--mute); }
+  .swatch { display:inline-block; width:10px; height:10px; border-radius:2px; vertical-align:-1px; }
+  .s3 { background:var(--s3); color:#fff; } .s2 { background:var(--s2); color:#fff; } .s1 { background:var(--s1); } .s0 { background:var(--s0); } .sm1 { background:var(--sm1); } .sv { background:var(--sv); color:#fff; } .un { background:var(--un); }
+  .seg { display:inline-flex; border:1px solid var(--line); border-radius:4px; overflow:hidden; }
+  .seg button { border:0; border-right:1px solid var(--line); border-radius:0; padding:2px 7px; background:#fff; min-width:30px; }
+  .seg button:last-child { border-right:0; }
+  .seg button.on.s3 { background:var(--s3); color:#fff; } .seg button.on.s2 { background:var(--s2); color:#fff; } .seg button.on.s1 { background:var(--s1); } .seg button.on.s0 { background:var(--s0); } .seg button.on.sm1 { background:var(--sm1); }
+  .seg button:not(.on), .big button:not(.on) { background:#fff; color:var(--ink); }
+  .seg button:disabled { opacity:.35; cursor:default; }
+  button.veto { border-color:#e6b8b3; color:var(--warn); }
+  button.veto.on { background:var(--sv); color:#fff; border-color:var(--sv); }
+  button.seen { color:var(--mute); }
+  button.seen.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .topics { font-size:12px; }
+  .topics .t { display:inline-block; margin:1px 6px 1px 0; }
+  .topics .t b { font-weight:600; }
+  .topics .t .c { color:var(--mute); }
+  .vblock { background:var(--warn2); border:1px solid #efc8c3; border-radius:4px; padding:6px 8px; margin-top:6px; }
+  .vblock input { width:100%; margin-top:4px; }
+  .credit { font-size:11px; color:var(--mute); }
+  .note { margin:3px 0; padding-left:8px; border-left:3px solid var(--line); }
+  .note.pitch { border-left-color:var(--acc); }
+  .note .who { color:var(--mute); font-size:11px; }
+  .trim { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .links a { margin-right:8px; }
+
+  /* sheet */
+  #sheet { position:fixed; top:0; right:0; bottom:0; width:520px; max-width:100vw; background:#fff; border-left:1px solid var(--line); box-shadow:-8px 0 24px rgba(0,0,0,.08); z-index:20; overflow:auto; padding:16px 18px 40px; display:none; }
+  #sheet.open { display:block; }
+  #sheet .close { position:absolute; top:10px; right:12px; }
+  .card { display:grid; grid-template-columns:120px 1fr; gap:14px; }
+  .card .poster { width:120px; aspect-ratio:2/3; object-fit:cover; border-radius:6px; background:#ddd; }
+  .card h2 { margin:0 0 2px; font-size:18px; }
+  .card .meta { color:var(--mute); }
+  .card .ctl { margin:10px 0; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  details summary { cursor:pointer; color:var(--mute); }
+  .alltopics { columns:2; font-size:11px; }
+
+  /* ================= A · tier list */
+  .tiers .band { display:grid; grid-template-columns:120px 1fr; margin-bottom:6px; border:1px solid var(--line); border-radius:6px; background:#fff; min-height:64px; }
+  .tiers .band .lab { padding:8px 10px; font-weight:600; display:flex; flex-direction:column; justify-content:center; border-radius:5px 0 0 5px; }
+  .tiers .band .lab small { font-weight:400; opacity:.85; }
+  .tiers .band .zone { padding:6px; display:flex; flex-wrap:wrap; gap:6px; align-content:flex-start; min-height:60px; }
+  .tiers .band .zone.over { background:var(--acc2); outline:2px dashed var(--acc); outline-offset:-3px; }
+  .tiers .band.tray { background:var(--un); border-style:dashed; }
+  .tiers .band.tray .lab { color:var(--mute); }
+  .tiers .band.vband { border:2px dashed var(--sv); background:#fffafa; margin-top:16px; }
+  .tiers .band.vband .lab { color:var(--sv); }
+  .tiers .band.vband .zone { min-height:70px; }
+  .tile { background:#fff; border:1px solid var(--line); border-radius:5px; padding:4px 6px; cursor:grab; position:relative; user-select:none; }
+  .tile:active { cursor:grabbing; }
+  .tile.dragging { opacity:.4; }
+  .tile .ttl { font-weight:600; }
+  .tile .ttl:hover { text-decoration:underline; cursor:pointer; }
+  .tile .y { color:var(--mute); }
+  .tile.min { max-width:230px; }
+  .tile.std, .tile.full { width:88px; padding:3px; font-size:11px; }
+  .tile.full { width:150px; font-size:12px; }
+  .tile .pst { width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:3px; background:#ddd; display:block; margin-bottom:3px; }
+  .tile .sub { color:var(--mute); font-size:11px; }
+  .tile .seenb { position:absolute; top:3px; right:3px; font-size:10px; padding:0 4px; line-height:15px; }
+  .tile .iconp { position:absolute; top:3px; left:3px; }
+  .tile.min .seenb, .tile.min .iconp { position:static; margin-left:4px; }
+  .tile.vt { width:100%; cursor:default; display:grid; grid-template-columns:auto 1fr; gap:10px; border-color:#efc8c3; }
+  .tile.vt .pst { width:60px; margin:0; }
+  .tile.vt .drag { cursor:grab; }
+
+  /* ================= B · ledger */
+  table.ledger { border-collapse:collapse; width:100%; background:#fff; border:1px solid var(--line); }
+  table.ledger th { text-align:left; font-weight:600; font-size:11px; color:var(--mute); padding:6px 8px; border-bottom:1px solid var(--line); position:sticky; top:41px; background:#fff; cursor:pointer; white-space:nowrap; }
+  table.ledger td { padding:4px 8px; border-bottom:1px solid var(--line2); vertical-align:middle; }
+  table.ledger tr.f:hover td { background:#fbfaf7; }
+  table.ledger tr.vetoed td { background:#fff6f5; }
+  table.ledger .pst { width:28px; height:42px; object-fit:cover; border-radius:2px; background:#ddd; display:block; }
+  table.ledger .ttl { font-weight:600; cursor:pointer; }
+  table.ledger .ttl:hover { text-decoration:underline; }
+  table.ledger td.n { text-align:right; white-space:nowrap; }
+  table.ledger tr.x td { background:#fbfaf7; padding:8px 12px 12px 48px; }
+  table.ledger .xin { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .ledger-tools { display:flex; gap:10px; align-items:center; margin-bottom:8px; }
+  .ledger-tools .grow { flex:1; }
+  .bar { height:6px; background:var(--line2); border-radius:3px; width:160px; display:inline-block; vertical-align:middle; overflow:hidden; }
+  .bar i { display:block; height:100%; background:var(--ok); }
+
+  /* ================= C · deck */
+  .deck { display:grid; grid-template-columns:230px 1fr; gap:18px; }
+  .rail { border:1px solid var(--line); background:#fff; border-radius:6px; max-height:calc(100vh - 140px); overflow:auto; position:sticky; top:56px; }
+  .rail .r { display:flex; gap:6px; align-items:center; padding:3px 8px; cursor:pointer; border-left:3px solid transparent; }
+  .rail .r:hover { background:#fbfaf7; }
+  .rail .r.cur { border-left-color:var(--acc); background:var(--acc2); }
+  .rail .r .swatch { width:12px; height:12px; flex:none; }
+  .rail .r .t { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+  .rail .r .t.dim { color:var(--mute); }
+  .rail .hdr { padding:6px 8px; font-size:11px; color:var(--mute); border-bottom:1px solid var(--line2); position:sticky; top:0; background:#fff; }
+  .focus { background:#fff; border:1px solid var(--line); border-radius:6px; padding:18px; display:grid; grid-template-columns:200px 1fr; gap:18px; max-width:980px; align-self:start; }
+  .focus.nop { grid-template-columns:1fr; }
+  .focus .poster { width:200px; aspect-ratio:2/3; object-fit:cover; border-radius:6px; background:#ddd; }
+  .focus h2 { margin:0; font-size:22px; }
+  .focus .meta { color:var(--mute); margin-bottom:8px; }
+  .big { display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; margin:12px 0 6px; max-width:560px; }
+  .big button { padding:10px 6px; border-radius:6px; text-align:center; }
+  .big button b { display:block; font-size:16px; }
+  .big button small { color:var(--mute); }
+  .big button.on small { color:inherit; }
+  .big button.on.s3 { background:var(--s3); color:#fff; } .big button.on.s2 { background:var(--s2); color:#fff; } .big button.on.s1 { background:var(--s1); } .big button.on.s0 { background:var(--s0); } .big button.on.sm1 { background:var(--sm1); }
+  .vrow { display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; max-width:560px; margin-top:8px; }
+  .vrow button.veto { padding:10px 14px; border-radius:6px; font-weight:600; }
+  .vrow button.seen { white-space:nowrap; padding:10px 12px; border-radius:6px; }
+  .nav { display:flex; gap:8px; align-items:center; margin-top:16px; }
+  .nav .grow { flex:1; }
+  kbd { font:11px/1 ui-monospace, monospace; border:1px solid var(--line); border-bottom-width:2px; border-radius:3px; padding:1px 4px; background:#fafaf8; color:var(--mute); }
+
+  /* prototype bar */
+  #pbar { position:fixed; left:50%; bottom:14px; transform:translateX(-50%); background:#1c1b19; color:#fff; border-radius:24px; padding:6px 10px; display:flex; gap:8px; align-items:center; box-shadow:0 6px 24px rgba(0,0,0,.3); z-index:30; font-size:12px; white-space:nowrap; }
+  #pbar button { background:#333; color:#fff; border-color:#555; }
+  #pbar select { background:#333; color:#fff; border-color:#555; }
+  #pbar .lab { font-weight:600; min-width:120px; text-align:center; }
+  #pbar label { color:#bbb; }
+  #pbar.min > :not(#pmin) { display:none; }
+  #pbar.min { padding:6px; }
+</style>
+</head>
+<body>
+<header class="app">
+  <div class="brand">Ribcage <span>· Halloween '26</span></div>
+  <span class="phase">VOTE</span>
+  <span class="mute small" id="progress"></span>
+  <div class="grow"></div>
+  <span class="roster small" id="roster"></span>
+  <button class="done" id="doneBtn"></button>
+  <span class="mute small">Dani</span>
+</header>
+<div class="nag" id="nag" style="display:none">
+  <span>Which topics should we flag for you? Tick them on the <a href="#">trigger list</a>, or say <button data-act="dontcare">I don't care</button></span>
+  <div class="grow"></div>
+  <span class="mute small">Voting works without it — nothing is blocked.</span>
+</div>
+<main id="view"></main>
+<footer class="app" id="foot"></footer>
+
+<aside id="sheet"><button class="close" data-act="closesheet">✕</button><div id="sheetin"></div></aside>
+
+<div id="pbar">
+  <button id="pmin" title="minimise">▣</button>
+  <button id="prev">←</button><span class="lab" id="vlabel"></span><button id="next">→</button>
+  <label>data <select id="dataSel"><option value="min">min</option><option value="std">std</option><option value="full">full</option></select></label>
+  <label>ballot <select id="ballotSel"><option value="fresh">fresh</option><option value="half">half done</option><option value="full">all scored</option></select></label>
+  <label><input type="checkbox" id="trigSel"> my triggers</label>
+</div>
+
+<script src="data.js"></script>
+<script>
+// ============================================================ state
+const D = window.DATA;
+const FILMS = D.films; const FIDX = new Map(FILMS.map((f, i) => [f.id, i]));
+const film = id => FILMS[FIDX.get(+id)];
+const q = new URLSearchParams(location.search);
+const S = {
+  variant: q.get("variant") || "A",
+  data: q.get("data") || "std",
+  ballot: q.get("ballot") || "half",
+  triggers: q.get("triggers") !== "off",
+  b: null,                       // {scores, veto, seen}
+  doneMe: false, dontCare: false,
+  sheet: null, expanded: new Set(), sort: "order", hideScored: false,
+  cur: 0,                        // deck index
+  dtddShown: false,
+};
+function loadBallot() { S.b = JSON.parse(JSON.stringify(D.ballots[S.ballot])); S.expanded = new Set(); }
+loadBallot();
+
+const SCALE = [[3, "Top pick"], [2, "Keen"], [1, "Happy to watch"], [0, "Don't mind"], [-1, "Rather not"]];
+const cls = v => v === undefined ? "un" : v === "V" ? "sv" : v < 0 ? "sm1" : "s" + v;
+const IMG = (p, w) => p ? `https://image.tmdb.org/t/p/w${w}${p}` : "";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const state = id => S.b.veto[id] !== undefined ? "V" : S.b.scores[id];   // "V" | -1..3 | undefined
+const scored = id => state(id) !== undefined;
+const othersVeto = id => Object.entries(D.vetoes).filter(([v, m]) => v !== D.me && m[id] !== undefined).map(([v]) => v);
+const matched = f => (!S.triggers || !f.dtdd) ? [] : f.dtdd.topics.filter(t => D.watched.includes(t.topic));
+const fires = f => matched(f).some(t => t.yes >= 5 && t.yes > t.no);
+const notesOf = f => { const e = Object.entries(f.notes); e.sort((a, b) => (a[0] === f.suggester ? -1 : b[0] === f.suggester ? 1 : 0)); return e; };
+const hm = m => Math.floor(m / 60) + "h" + String(m % 60).padStart(2, "0");
+const orderIds = () => FILMS.map(f => f.id);
+
+function setScore(id, v) { delete S.b.veto[id]; S.b.scores[id] = v; render(); }
+function clearScore(id) { delete S.b.veto[id]; delete S.b.scores[id]; render(); }
+function setVeto(id, on) { if (on) { delete S.b.scores[id]; S.b.veto[id] = S.b.veto[id] || ""; } else delete S.b.veto[id]; render(); }
+function toggleSeen(id) { if (S.b.seen[id]) delete S.b.seen[id]; else S.b.seen[id] = true; render(); }
+
+// ============================================================ shared fragments
+function iconHtml(f) { return fires(f) ? `<span class="icon" title="a topic you watch for is reported here">!</span>` : ""; }
+function topicsHtml(f, opts = {}) {
+  const m = matched(f); if (!m.length) return "";
+  S.dtddShown = true;
+  return `<div class="topics">${opts.label !== false ? `<span class="mute">You watch for: </span>` : ""}${m.map(t => `<span class="t"><b>${esc(t.topic)}</b> <span class="c tn">${t.yes} yes / ${t.no} no</span></span>`).join("")}</div>`;
+}
+function vetoBlockHtml(f, noButton = false) {   // the veto control with the matched topics adjacent (#20)
+  const on = S.b.veto[f.id] !== undefined; const ov = othersVeto(f.id);
+  return `<div class="vblock" data-vb="${f.id}">
+    ${noButton ? "" : `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button class="veto ${on ? "on" : ""}" data-act="veto" data-id="${f.id}">${on ? "Vetoed — I won't be in the room" : "Veto — I won't be in the room"}</button>
+      ${ov.length ? `<span class="tag v">also vetoed by ${ov.join(", ")}</span>` : ""}
+    </div>`}
+    ${topicsHtml(f)}
+    ${on ? `<input placeholder="reason (optional, everyone sees it)" data-reason="${f.id}" value="${esc(S.b.veto[f.id])}">` : ""}
+  </div>`;
+}
+function segHtml(f, big = false) {
+  const st = state(f.id); const dis = st === "V";
+  return `<div class="${big ? "big" : "seg"}">${SCALE.map(([v, l]) => `<button class="${cls(v)} ${st === v ? "on" : ""}" data-act="score" data-id="${f.id}" data-v="${v}" ${dis ? "disabled" : ""} title="${l}">${big ? `<b>${v > 0 ? "+" + v : v}</b><small>${l}</small>` : (v > 0 ? "+" + v : v)}</button>`).join("")}</div>`;
+}
+function seenBtn(f, txt = "seen it") { return `<button class="seen ${S.b.seen[f.id] ? "on" : ""}" data-act="seen" data-id="${f.id}" title="I've seen it — it can't count as something I wanted from the night; my score still counts">${txt}</button>`; }
+function notesHtml(f, full = true) {
+  const n = notesOf(f); if (!n.length) return `<div class="mute small">no notes</div>`;
+  return n.map(([who, txt]) => `<div class="note ${who === f.suggester ? "pitch" : ""}"><span class="who">${who === f.suggester ? who + " (suggested it)" : who}</span><div class="${full ? "" : "trim"}">${esc(txt)}</div></div>`).join("");
+}
+function linksHtml(f) { return `<span class="links">${f.trailer ? `<a href="https://www.youtube.com/watch?v=${f.trailer}" target="_blank">trailer</a>` : ""}<a href="https://www.themoviedb.org/movie/${f.id}" target="_blank">TMDB</a>${f.imdb ? `<a href="https://www.imdb.com/title/${f.imdb}/" target="_blank">IMDb</a>` : ""}</span>`; }
+function metaHtml(f) { return `${f.year || "year?"} · ${f.director.join(", ")}${f.cert ? " · " + f.cert : ""} · ${hm(f.runtime)}`; }
+function allTopicsHtml(f) {
+  if (!S.triggers || !f.dtdd) return "";
+  const m = new Set(matched(f).map(t => t.topic)); const rest = f.dtdd.topics.filter(t => !m.has(t.topic));
+  S.dtddShown = true;
+  return `<details><summary>${rest.length} other topics on DoesTheDogDie (matched: ${f.dtdd.name} ${f.dtdd.year || ""})</summary><div class="alltopics">${rest.slice(0, 60).map(t => `<div>${esc(t.topic)} <span class="mute tn">${t.yes}/${t.no}</span></div>`).join("")}</div></details><div class="credit">Powered by <a href="https://www.doesthedogdie.com" target="_blank">DoesTheDogDie.com</a></div>`;
+}
+function sheetHtml(f) {
+  return `<div class="card">
+    <img class="poster" src="${IMG(f.poster, 185)}">
+    <div>
+      <h2>${esc(f.title)} ${iconHtml(f)}</h2>
+      <div class="meta">${metaHtml(f)} · ${linksHtml(f)}</div>
+      <div class="mute small">suggested by ${f.suggester}</div>
+      <div class="ctl">${segHtml(f)} ${seenBtn(f)}</div>
+      ${vetoBlockHtml(f)}
+      <h4 style="margin:12px 0 4px">Notes</h4>
+      ${notesHtml(f)}
+      <div style="margin-top:12px">${allTopicsHtml(f)}</div>
+    </div></div>`;
+}
+
+// ============================================================ variant A — tier list
+function tileHtml(f) {
+  const lvl = S.data; const ov = othersVeto(f.id);
+  const seen = `<button class="seenb seen ${S.b.seen[f.id] ? "on" : ""}" data-act="seen" data-id="${f.id}" title="seen it">👁</button>`;
+  if (lvl === "min") return `<div class="tile min" draggable="true" data-id="${f.id}"><span class="ttl" data-act="sheet" data-id="${f.id}">${esc(f.title)}</span> <span class="y">${f.year || ""}</span>${iconHtml(f)}${seen}${ov.length ? ` <span class="tag v">${ov.join(", ")}</span>` : ""}</div>`;
+  return `<div class="tile ${lvl}" draggable="true" data-id="${f.id}">
+    <img class="pst" src="${IMG(f.poster, 154)}" draggable="false">
+    <span class="iconp">${iconHtml(f)}</span>${seen}
+    <div class="ttl" data-act="sheet" data-id="${f.id}">${esc(f.title)}</div>
+    <div class="sub">${f.year || ""} · ${hm(f.runtime)}${lvl === "full" ? ` · ${f.cert || "—"}<br>${esc(f.director.join(", "))}` : ""}</div>
+    ${lvl === "full" ? `<div class="sub trim" style="margin-top:2px;font-style:italic">${esc(f.notes[f.suggester] || "")}</div>` : ""}
+    <div class="sub">by ${f.suggester}${ov.length ? ` · <span class="tag v">veto: ${ov.join(", ")}</span>` : ""}</div>
+  </div>`;
+}
+function vetoTileHtml(f) {
+  return `<div class="tile vt" data-id="${f.id}">
+    <div class="drag" draggable="true" data-id="${f.id}" title="drag out to un-veto">${S.data === "min" ? "" : `<img class="pst" src="${IMG(f.poster, 92)}" draggable="false">`}</div>
+    <div>
+      <div><span class="ttl" data-act="sheet" data-id="${f.id}">${esc(f.title)}</span> <span class="y">${f.year || ""}</span> ${iconHtml(f)} ${othersVeto(f.id).length ? `<span class="tag v">also ${othersVeto(f.id).join(", ")}</span>` : ""} <span class="mute small">— counts as −2 for you, everyone can see it</span></div>
+      ${topicsHtml(f)}
+      <input placeholder="reason (optional, everyone sees it)" data-reason="${f.id}" value="${esc(S.b.veto[f.id])}" style="width:100%;margin-top:4px">
+    </div></div>`;
+}
+function renderA(el) {
+  const ids = orderIds();
+  const band = (key, lab, sub, items, extra = "") => `<div class="band ${extra}" data-band="${key}"><div class="lab ${key === "tray" || key === "V" ? "" : cls(+key)}">${lab}<small>${sub}</small></div><div class="zone">${items}</div></div>`;
+  const un = ids.filter(id => !scored(id));
+  let h = `<div class="tiers">`;
+  h += band("tray", "Unsorted", `${un.length} left · counts as "don't mind" until you move it`, un.map(id => tileHtml(film(id))).join(""), "tray");
+  for (const [v, l] of SCALE) h += band(String(v), `${v > 0 ? "+" + v : v} ${l}`, v === 3 ? "as many as you like" : "", ids.filter(id => state(id) === v).map(id => tileHtml(film(id))).join(""));
+  h += band("V", "Veto", "I won't be in the room — a different kind of drop", ids.filter(id => state(id) === "V").map(id => vetoTileHtml(film(id))).join(""), "vband");
+  h += `</div>`;
+  el.innerHTML = h;
+  // native drag and drop — a band is a set, order inside it is meaningless
+  let dragId = null;
+  el.querySelectorAll("[draggable=true]").forEach(t => {
+    t.addEventListener("dragstart", e => { dragId = t.dataset.id; e.dataTransfer.effectAllowed = "move"; t.closest(".tile").classList.add("dragging"); });
+    t.addEventListener("dragend", () => t.closest(".tile").classList.remove("dragging"));
+  });
+  el.querySelectorAll(".band").forEach(b => {
+    const z = b.querySelector(".zone");
+    b.addEventListener("dragover", e => { e.preventDefault(); z.classList.add("over"); });
+    b.addEventListener("dragleave", e => { if (!b.contains(e.relatedTarget)) z.classList.remove("over"); });
+    b.addEventListener("drop", e => { e.preventDefault(); z.classList.remove("over"); if (dragId == null) return; const k = b.dataset.band; if (k === "tray") clearScore(dragId); else if (k === "V") setVeto(dragId, true); else setScore(dragId, +k); dragId = null; });
+  });
+}
+
+// ============================================================ variant B — ledger
+function renderB(el) {
+  let ids = orderIds();
+  if (S.hideScored) ids = ids.filter(id => !scored(id));
+  const key = S.sort; const dir = key.startsWith("-") ? -1 : 1; const k = key.replace("-", "");
+  const val = id => { const f = film(id); const st = state(id); return k === "title" ? f.title.toLowerCase() : k === "runtime" ? f.runtime : k === "by" ? f.suggester : k === "mine" ? (st === "V" ? -2 : st === undefined ? -9 : st) : FIDX.get(id); };
+  if (k !== "order") ids.sort((a, b) => (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * dir);
+  const n = orderIds().filter(scored).length;
+  const th = (kk, lab, cl = "") => `<th class="${cl}" data-sort="${kk}">${lab}${k === kk ? (dir > 0 ? " ▲" : " ▼") : ""}</th>`;
+  const lvl = S.data;
+  let h = `<div class="ledger-tools"><span class="bar"><i style="width:${100 * n / FILMS.length}%"></i></span><span class="mute small tn">${n} of ${FILMS.length} scored · unscored counts as "don't mind"</span><div class="grow"></div><label class="small"><input type="checkbox" data-act="hidescored" ${S.hideScored ? "checked" : ""}> only unscored</label></div>`;
+  h += `<table class="ledger"><thead><tr>${lvl !== "min" ? "<th></th>" : ""}${th("title", "Film")}${th("runtime", "Runtime", "n")}${lvl !== "min" ? th("by", "Suggested by") : ""}${lvl === "full" ? "<th>Pitch</th>" : ""}${th("mine", "My score")}<th>Seen</th><th>Veto</th></tr></thead><tbody>`;
+  for (const id of ids) {
+    const f = film(id); const st = state(id); const ov = othersVeto(id); const x = S.expanded.has(id);
+    h += `<tr class="f ${st === "V" ? "vetoed" : ""}" data-id="${id}">
+      ${lvl !== "min" ? `<td style="width:36px"><img class="pst" src="${IMG(f.poster, 92)}"></td>` : ""}
+      <td><span class="ttl" data-act="expand" data-id="${id}">${esc(f.title)}</span> <span class="mute">${f.year || ""}</span> ${iconHtml(f)}${S.b.seen[id] ? ` <span class="tag seen">seen</span>` : ""}${ov.length ? ` <span class="tag v">veto: ${ov.join(", ")}</span>` : ""}${lvl === "full" ? `<div class="mute small">${esc(f.director.join(", "))}${f.cert ? " · " + f.cert : ""}</div>` : ""}</td>
+      <td class="n tn">${hm(f.runtime)}</td>
+      ${lvl !== "min" ? `<td class="mute">${f.suggester}</td>` : ""}
+      ${lvl === "full" ? `<td style="max-width:320px"><div class="trim mute small" style="font-style:italic">${esc(f.notes[f.suggester] || "")}</div></td>` : ""}
+      <td>${segHtml(f)}</td>
+      <td>${seenBtn(f, "👁")}</td>
+      <td><button class="veto ${st === "V" ? "on" : ""}" data-act="veto" data-id="${id}">${st === "V" ? "vetoed" : "veto"}</button></td>
+    </tr>`;
+    if (st === "V" && !x) h += `<tr class="x"><td colspan="9">${vetoBlockHtml(f, true)}</td></tr>`;
+    if (x) h += `<tr class="x"><td colspan="9"><div class="xin"><div><div class="mute small">${metaHtml(f)} · ${linksHtml(f)}</div>${notesHtml(f)}</div><div>${vetoBlockHtml(f)}${allTopicsHtml(f)}</div></div></td></tr>`;
+  }
+  h += `</tbody></table>`;
+  el.innerHTML = h;
+}
+
+// ============================================================ variant C — deck
+function renderC(el) {
+  const ids = orderIds(); S.cur = Math.max(0, Math.min(ids.length - 1, S.cur));
+  const f = film(ids[S.cur]); const st = state(f.id); const ov = othersVeto(f.id); const lvl = S.data;
+  const n = ids.filter(scored).length; const nextUn = ids.findIndex((id, i) => i > S.cur && !scored(id));
+  let rail = `<div class="rail"><div class="hdr tn">${n} of ${ids.length} scored · click to jump</div>`;
+  for (let i = 0; i < ids.length; i++) { const g = film(ids[i]); const s = state(g.id); rail += `<div class="r ${i === S.cur ? "cur" : ""}" data-act="jump" data-i="${i}"><span class="swatch ${cls(s)}"></span><span class="t ${s === undefined ? "dim" : ""}">${esc(g.title)}</span>${fires(g) ? `<span class="icon">!</span>` : ""}${S.b.seen[g.id] ? `<span class="mute small">👁</span>` : ""}</div>`; }
+  rail += `</div>`;
+  const notes = notesOf(f);
+  let card = `<div class="focus ${lvl === "min" ? "nop" : ""}">`;
+  if (lvl !== "min") card += `<img class="poster" src="${IMG(f.poster, 342)}">`;
+  card += `<div>
+    <h2>${esc(f.title)} <span class="mute" style="font-weight:400">${f.year || ""}</span> ${iconHtml(f)}</h2>
+    <div class="meta">${lvl === "min" ? hm(f.runtime) : metaHtml(f)} · suggested by ${f.suggester} ${lvl !== "min" ? "· " + linksHtml(f) : ""}${ov.length ? ` · <span class="tag v">vetoed by ${ov.join(", ")}</span>` : ""}</div>
+    ${lvl === "min" ? `<details><summary>${notes.length} note${notes.length === 1 ? "" : "s"}</summary>${notesHtml(f)}</details>` : lvl === "std" ? (notes.length ? notesHtml(f, false) : "") : notesHtml(f)}
+    ${segHtml(f, true)}
+    <div class="mute small">${st === "V" ? "Vetoed — the score is replaced by −2." : st === undefined ? "Not scored yet — counts as \"don't mind\" until you pick one." : ""}</div>
+    <div class="vrow"><div>${vetoBlockHtml(f)}</div><div style="padding-top:6px">${seenBtn(f, S.b.seen[f.id] ? "👁 seen it" : "👁 seen it?")}</div></div>
+    ${lvl === "full" ? `<div style="margin-top:10px">${allTopicsHtml(f)}</div>` : ""}
+    <div class="nav">
+      <button data-act="jump" data-i="${S.cur - 1}" ${S.cur === 0 ? "disabled" : ""}>← previous</button>
+      <button data-act="jump" data-i="${S.cur + 1}" ${S.cur === ids.length - 1 ? "disabled" : ""}>next →</button>
+      <button data-act="jump" data-i="${nextUn}" ${nextUn < 0 ? "disabled" : ""}>next unscored ↓</button>
+      <div class="grow"></div>
+      <span class="mute small"><kbd>1</kbd>–<kbd>5</kbd> score · <kbd>V</kbd> veto · <kbd>S</kbd> seen · <kbd>J</kbd>/<kbd>K</kbd> next/prev</span>
+    </div>
+  </div></div>`;
+  el.innerHTML = `<div class="deck">${rail}${card}</div>`;
+}
+
+// ============================================================ render
+const VARIANTS = { A: ["Tier list", renderA], B: ["Ledger", renderB], C: ["Deck", renderC] };
+function render() {
+  S.dtddShown = false;
+  VARIANTS[S.variant][1](document.getElementById("view"));
+  const n = orderIds().filter(scored).length;
+  document.getElementById("progress").textContent = `${n} of ${FILMS.length} scored`;
+  const done = D.done.filter(v => v !== D.me).concat(S.doneMe ? [D.me] : []);
+  document.getElementById("roster").innerHTML = `Done: ${done.length ? done.map(v => v === D.me ? `<b class="me">you</b>` : `<b>${v}</b>`).join(", ") : "nobody yet"} <span class="tn">· ${done.length} of ${D.voters.length}</span>`;
+  const db = document.getElementById("doneBtn"); db.textContent = S.doneMe ? "✓ Done (click to undo)" : "I'm done"; db.className = "done " + (S.doneMe ? "on" : "");
+  document.getElementById("nag").style.display = (!S.triggers && !S.dontCare) ? "flex" : "none";
+  const sh = document.getElementById("sheet"); sh.classList.toggle("open", S.sheet != null);
+  if (S.sheet != null) document.getElementById("sheetin").innerHTML = sheetHtml(film(S.sheet));
+  document.getElementById("foot").innerHTML = `<span>Film data from <a href="https://www.themoviedb.org" target="_blank">TMDB</a>. This product uses the TMDB API but is not endorsed or certified by TMDB.</span>${S.dtddShown ? `<span>Powered by <a href="https://www.doesthedogdie.com" target="_blank">DoesTheDogDie.com</a></span>` : ""}<span><a href="mailto:abuse@example.invalid">report abuse</a></span><span><a href="#">privacy</a></span>`;
+  document.getElementById("vlabel").textContent = `${S.variant} — ${VARIANTS[S.variant][0]}`;
+  document.getElementById("dataSel").value = S.data; document.getElementById("ballotSel").value = S.ballot; document.getElementById("trigSel").checked = S.triggers;
+  history.replaceState(null, "", `?variant=${S.variant}&data=${S.data}&ballot=${S.ballot}&triggers=${S.triggers ? "on" : "off"}`);
+}
+
+// ============================================================ events
+document.body.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const act = b.dataset.act, id = +b.dataset.id;
+  if (act === "score") { setScore(id, +b.dataset.v); }
+  else if (act === "veto") { setVeto(id, S.b.veto[id] === undefined); }
+  else if (act === "seen") { toggleSeen(id); }
+  else if (act === "sheet") { S.sheet = id; render(); }
+  else if (act === "closesheet") { S.sheet = null; render(); }
+  else if (act === "expand") { if (S.expanded.has(id)) S.expanded.delete(id); else S.expanded.add(id); render(); }
+  else if (act === "jump") { S.cur = +b.dataset.i; render(); }
+  else if (act === "dontcare") { S.dontCare = true; render(); }
+  else if (act === "hidescored") { S.hideScored = b.checked; render(); }
+});
+document.body.addEventListener("click", e => { const th = e.target.closest("th[data-sort]"); if (!th) return; const k = th.dataset.sort; S.sort = S.sort === k ? "-" + k : k; render(); });
+document.body.addEventListener("input", e => { if (e.target.matches("[data-reason]")) S.b.veto[+e.target.dataset.reason] = e.target.value; });
+document.getElementById("doneBtn").onclick = () => { S.doneMe = !S.doneMe; render(); };
+document.getElementById("dataSel").onchange = e => { S.data = e.target.value; render(); };
+document.getElementById("ballotSel").onchange = e => { S.ballot = e.target.value; loadBallot(); render(); };
+document.getElementById("trigSel").onchange = e => { S.triggers = e.target.checked; render(); };
+const order = Object.keys(VARIANTS);
+const cycle = d => { S.variant = order[(order.indexOf(S.variant) + d + order.length) % order.length]; S.sheet = null; render(); };
+document.getElementById("prev").onclick = () => cycle(-1);
+document.getElementById("next").onclick = () => cycle(1);
+document.getElementById("pmin").onclick = () => document.getElementById("pbar").classList.toggle("min");
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input,select,textarea")) return;
+  if (e.key === "ArrowLeft") return cycle(-1); if (e.key === "ArrowRight") return cycle(1);
+  if (e.key === "Escape" && S.sheet != null) { S.sheet = null; return render(); }
+  if (S.variant !== "C") return;
+  const id = orderIds()[S.cur]; const map = { "1": 3, "2": 2, "3": 1, "4": 0, "5": -1 };
+  if (map[e.key] !== undefined) { setScore(id, map[e.key]); }
+  else if (e.key === "v" || e.key === "V") setVeto(id, S.b.veto[id] === undefined);
+  else if (e.key === "s" || e.key === "S") toggleSeen(id);
+  else if (e.key === "j" || e.key === "J" || e.key === " ") { S.cur++; render(); e.preventDefault(); }
+  else if (e.key === "k" || e.key === "K") { S.cur--; render(); }
+});
+render();
+</script>
+</body>
+</html>
