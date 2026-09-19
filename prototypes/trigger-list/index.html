@@ -1,0 +1,256 @@
+<!doctype html>
+<!--
+  PROTOTYPE — ticket #23, the trigger list page. Throwaway. Not production.
+
+  Settled before the mock, in the ticket's conversation (2026-09-19):
+    - DTDD's own grouping, two tiers: the 10 super-categories as sections, topics
+      flat inside, alphabetical. The middle tier (45 uneven categories) is dropped.
+    - Topic labels are DTDD's `minimalName` ("dogs dying"), not `name`.
+    - Each topic names the films in the pool that carry it, by #20's rule
+      (yesSum >= 5 && yesSum > noSum), strongest claim first.
+    - Welcome page shown once; this page carries its own one-line purpose.
+    - Not linked at RUN.
+
+  The open question this mock exists for: with a real pool the annotation is heavy.
+  On these 32 films, 40 topics carry 11+ films and "blood or gore" carries 23.
+  Three treatments of that annotation, switchable via ?variant=A|B|C and the bar:
+
+    A  All names      every film, inline, wrapping under the label
+    B  First three    three names, then "+ N more" that expands in place
+    C  Count          "12 films" pill; click the row to see them
+
+  Everything else is identical across variants. Nothing persists; reload resets.
+
+  Data: live DTDD vocabulary (204 topics) + the #29 prototype's 32 films; 5 of the
+  32 have no DTDD record and carry nothing.
+
+  Run (repo root):  python -m http.server 8023  →  http://localhost:8023/prototypes/trigger-list/?variant=A
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My warnings (prototype #23)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --bg:#f6f5f2; --panel:#fff; --ink:#1c1b19; --mute:#6b6963; --line:#dcd9d2; --line2:#ece9e2;
+          --acc:#2f5fd0; --acc2:#e8eefc; --warm:#8a5a00; --warm2:#fff6e5; --warm3:#f0d9a8; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 system-ui,"Segoe UI",Roboto,sans-serif; }
+  button { font:inherit; cursor:pointer; }
+  a { color:var(--acc); }
+  .mute { color:var(--mute); }
+
+  header.app { display:flex; align-items:center; gap:18px; padding:10px 28px; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+  header.app .brand { font-weight:700; }
+  header.app .phase { background:var(--acc2); color:var(--acc); border-radius:12px; padding:2px 10px; font-size:12px; font-weight:600; }
+  header.app nav { display:flex; gap:16px; margin-left:12px; }
+  header.app nav a { color:var(--mute); text-decoration:none; }
+  header.app nav a.on { color:var(--ink); font-weight:600; border-bottom:2px solid var(--ink); padding-bottom:2px; }
+  header.app .grow { flex:1; }
+
+  main { max-width:1100px; margin:0 auto; padding:28px 28px 140px; }
+  h1 { font-size:26px; margin:0 0 4px; }
+  .purpose { font-size:16px; color:#3d3b36; margin:0 0 18px; }
+
+  .top { display:grid; grid-template-columns:1fr auto; gap:18px; align-items:start; margin-bottom:18px; }
+  .privacy { background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px 18px; color:#3d3b36; }
+  .privacy b { color:var(--ink); }
+  .dontcare { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .dontcare button { border:2px solid var(--line); background:#fff; border-radius:14px; padding:14px 22px; font-size:16px; font-weight:600; min-width:200px; }
+  .dontcare button.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .dontcare .hint { font-size:12px; color:var(--mute); }
+
+  .tools { display:flex; gap:14px; align-items:center; margin:6px 0 16px; position:sticky; top:49px; z-index:4; background:var(--bg); padding:10px 0; }
+  .tools input { flex:1; font:inherit; font-size:16px; border:1px solid var(--line); border-radius:12px; padding:10px 14px; background:#fff; }
+  .tools .mine { color:var(--mute); white-space:nowrap; }
+  .tools .mine b { color:var(--ink); }
+  .chosen { display:flex; flex-wrap:wrap; gap:6px; margin:-6px 0 16px; min-height:0; }
+  .chosen .c { background:var(--ink); color:#fff; border-radius:12px; padding:3px 6px 3px 12px; font-size:13px; display:inline-flex; gap:6px; align-items:center; }
+  .chosen .c button { border:0; background:rgba(255,255,255,.18); color:#fff; border-radius:50%; width:18px; height:18px; line-height:16px; padding:0; font-size:12px; }
+
+  .list.off { opacity:.4; pointer-events:none; filter:grayscale(1); }
+  section.sup { background:#fff; border:1px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden; }
+  section.sup > .sh { display:flex; align-items:center; gap:12px; padding:14px 18px; cursor:pointer; user-select:none; }
+  section.sup > .sh .chev { width:14px; color:var(--mute); transition:transform .15s; }
+  section.sup.open > .sh .chev { transform:rotate(90deg); }
+  section.sup > .sh .nm { font-size:18px; font-weight:600; }
+  section.sup > .sh .ct { color:var(--mute); }
+  section.sup > .sh .tk { margin-left:auto; background:var(--ink); color:#fff; border-radius:12px; padding:1px 10px; font-size:13px; font-weight:600; }
+  section.sup > .rows { display:none; border-top:1px solid var(--line2); }
+  section.sup.open > .rows { display:block; }
+
+  .row { display:grid; grid-template-columns:28px 230px 1fr; gap:4px 12px; align-items:baseline; padding:9px 18px; border-bottom:1px solid var(--line2); }
+  .row:last-child { border-bottom:0; }
+  .row:hover { background:#faf9f6; }
+  .row input { width:18px; height:18px; margin:0; transform:translateY(3px); accent-color:var(--ink); cursor:pointer; }
+  .row label { font-size:16px; cursor:pointer; }
+  .row.ticked label { font-weight:600; }
+  .row .ann { color:var(--mute); font-size:13.5px; }
+  .row .ann .none { color:#b3b0a8; font-style:italic; }
+  .row .ann .f { white-space:nowrap; }
+  .row .ann .yr { color:#a19e96; }
+  .row .ann .more { border:0; background:none; color:var(--acc); padding:0; font-size:13.5px; }
+  .row .pill { display:inline-block; background:var(--warm2); color:var(--warm); border:1px solid var(--warm3); border-radius:12px; padding:0 10px; font-size:13px; font-weight:600; }
+  .row .pill.zero { background:none; border-color:var(--line2); color:#b3b0a8; font-weight:400; }
+  .row.c-click { cursor:pointer; }
+  .row .names { grid-column:3; color:var(--mute); font-size:13.5px; margin-top:4px; }
+
+  footer.app { max-width:1100px; margin:0 auto; padding:0 28px 120px; color:var(--mute); font-size:12px; display:flex; gap:18px; }
+
+  /* prototype switcher — not part of the design */
+  .pbar { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:#111; color:#fff; border-radius:24px; padding:6px 8px; display:flex; gap:10px; align-items:center; box-shadow:0 6px 24px rgba(0,0,0,.3); z-index:99; font-size:13px; }
+  .pbar button { background:#333; color:#fff; border:0; border-radius:50%; width:30px; height:30px; }
+  .pbar .lbl { min-width:190px; text-align:center; }
+  .pbar .sep { width:1px; height:20px; background:#444; }
+  .pbar .tog { border-radius:14px; width:auto; padding:0 12px; }
+</style>
+</head>
+<body>
+<header class="app">
+  <span class="brand">Ribcage</span><span class="phase">SUGGEST</span>
+  <nav><a href="#">Films</a><a href="#" class="on">My warnings</a></nav>
+  <span class="grow"></span><span class="mute">Dani</span>
+</header>
+
+<main>
+  <h1>My warnings</h1>
+  <p class="purpose">Tick anything you'd rather not be surprised by. Films in the pool that have it get flagged for you, everywhere you see them.</p>
+
+  <div class="top">
+    <div class="privacy"><b>Only you see this list in the app.</b> No one else is shown it, not even as a count. The admin and the person hosting the server can technically read everything stored here, and it is deleted when the marathon's instance is torn down.</div>
+    <div class="dontcare">
+      <button id="dc">I don't care</button>
+      <span class="hint" id="dchint">Nothing bothers me. You can undo this.</span>
+    </div>
+  </div>
+
+  <div class="tools">
+    <input id="q" type="search" placeholder="Search topics: dog, needles, spiders…" autocomplete="off">
+    <span class="mine" id="mine"></span>
+  </div>
+  <div class="chosen" id="chosen"></div>
+
+  <div class="list" id="list"></div>
+</main>
+<footer class="app"><span>Powered by <a href="https://www.doesthedogdie.com" target="_blank" rel="noopener">DoesTheDogDie.com</a></span><a href="#">Report abuse</a><a href="#">Privacy policy</a></footer>
+
+<div class="pbar">
+  <button id="prev">‹</button><span class="lbl" id="vlbl"></span><button id="next">›</button>
+  <span class="sep"></span><button class="tog" id="expall">Open all</button>
+</div>
+
+<script src="data.js"></script>
+<script>
+const D = window.DATA;
+const VARIANTS = { A: "All names", B: "First three, then more", C: "Count, click for names" };
+const keys = Object.keys(VARIANTS);
+const params = new URLSearchParams(location.search);
+let variant = keys.includes(params.get("variant")) ? params.get("variant") : "A";
+const ticked = new Set();
+const openSecs = new Set();
+const expanded = new Set();     // B: "+N more" opened; C: row opened
+let dontCare = false, query = "";
+
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const film = i => `<span class="f">${esc(D.films[i].title)} <span class="yr">${D.films[i].year}</span></span>`;
+const list = ids => ids.map(film).join(", ");
+
+function ann(t) {
+  const n = t.films.length;
+  if (!n) return variant === "C" ? `<span class="pill zero">no films</span>` : `<span class="none">no films in the pool</span>`;
+  if (variant === "A") return list(t.films);
+  if (variant === "B") {
+    if (n <= 3 || expanded.has(t.id)) return list(t.films) + (n > 3 ? ` <button class="more" data-less="${t.id}">less</button>` : "");
+    return list(t.films.slice(0, 3)) + ` <button class="more" data-more="${t.id}">+ ${n - 3} more</button>`;
+  }
+  return `<span class="pill">${n} film${n > 1 ? "s" : ""}</span>`;
+}
+
+function matches(t) {
+  if (!query) return true;
+  const q = query.toLowerCase();
+  return t.name.toLowerCase().includes(q) || t.kw.toLowerCase().includes(q);
+}
+
+function render() {
+  document.getElementById("vlbl").textContent = `${variant} — ${VARIANTS[variant]}`;
+  const L = document.getElementById("list");
+  L.className = "list" + (dontCare ? " off" : "");
+  let html = "";
+  for (const s of D.supers) {
+    const ts = D.topics.filter(t => t.sup === s.id && matches(t));
+    if (!ts.length) continue;
+    const all = D.topics.filter(t => t.sup === s.id);
+    const nt = all.filter(t => ticked.has(t.id)).length;
+    const open = query || openSecs.has(s.id);
+    html += `<section class="sup${open ? " open" : ""}"><div class="sh" data-sec="${s.id}">
+      <span class="chev">▶</span><span class="nm">${esc(s.name)}</span>
+      <span class="ct">${query ? ts.length + " of " : ""}${all.length} topics</span>
+      ${nt ? `<span class="tk">${nt} ticked</span>` : ""}</div><div class="rows">`;
+    for (const t of ts) {
+      const on = ticked.has(t.id), cOpen = variant === "C" && expanded.has(t.id) && t.films.length;
+      html += `<div class="row${on ? " ticked" : ""}${variant === "C" && t.films.length ? " c-click" : ""}" data-row="${t.id}">
+        <input type="checkbox" id="t${t.id}" ${on ? "checked" : ""}>
+        <label for="t${t.id}" title="${esc(t.desc)}">${esc(t.name)}</label>
+        <div class="ann">${ann(t)}</div>
+        ${cOpen ? `<div class="names">${list(t.films)}</div>` : ""}</div>`;
+    }
+    html += `</div></section>`;
+  }
+  L.innerHTML = html || `<p class="mute">No topic matches “${esc(query)}”. DoesTheDogDie's list is fixed, so anything missing can go in a film's note instead.</p>`;
+
+  const chosen = [...ticked].map(id => D.topics.find(t => t.id === id));
+  document.getElementById("mine").innerHTML = dontCare ? "<b>Not watching for anything</b>" :
+    chosen.length ? `Watching for <b>${chosen.length}</b>` : "Nothing ticked yet";
+  document.getElementById("chosen").innerHTML = dontCare ? "" :
+    chosen.map(t => `<span class="c">${esc(t.name)}<button data-untick="${t.id}" title="Remove">×</button></span>`).join("");
+  const dc = document.getElementById("dc");
+  dc.classList.toggle("on", dontCare);
+  dc.textContent = dontCare ? "✓ I don't care" : "I don't care";
+  document.getElementById("dchint").textContent = dontCare ? "Click again to pick topics after all." : "Nothing bothers me. You can undo this.";
+}
+
+document.addEventListener("click", e => {
+  const el = e.target;
+  if (el.dataset.more) { expanded.add(+el.dataset.more); return render(); }
+  if (el.dataset.less) { expanded.delete(+el.dataset.less); return render(); }
+  if (el.dataset.untick) { ticked.delete(+el.dataset.untick); return render(); }
+  const sh = el.closest(".sh");
+  if (sh) { const id = +sh.dataset.sec; openSecs.has(id) ? openSecs.delete(id) : openSecs.add(id); return render(); }
+  const row = el.closest(".row");
+  if (row && variant === "C" && !el.matches("input,label")) {
+    const id = +row.dataset.row; expanded.has(id) ? expanded.delete(id) : expanded.add(id); return render();
+  }
+});
+document.addEventListener("change", e => {
+  if (e.target.type !== "checkbox") return;
+  const id = +e.target.id.slice(1);
+  e.target.checked ? ticked.add(id) : ticked.delete(id);
+  render();
+});
+document.getElementById("dc").onclick = () => { dontCare = !dontCare; render(); };
+document.getElementById("q").oninput = e => { query = e.target.value.trim(); render(); };
+document.getElementById("expall").onclick = e => {
+  const all = openSecs.size === D.supers.length;
+  D.supers.forEach(s => all ? openSecs.delete(s.id) : openSecs.add(s.id));
+  e.target.textContent = all ? "Open all" : "Close all";
+  render();
+};
+
+function go(d) {
+  variant = keys[(keys.indexOf(variant) + d + keys.length) % keys.length];
+  expanded.clear();
+  history.replaceState(null, "", "?variant=" + variant);
+  render();
+}
+document.getElementById("prev").onclick = () => go(-1);
+document.getElementById("next").onclick = () => go(1);
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input,textarea,[contenteditable]")) return;
+  if (e.key === "ArrowLeft") go(-1);
+  if (e.key === "ArrowRight") go(1);
+});
+render();
+</script>
+</body>
+</html>
