@@ -54,6 +54,12 @@
     - PICK is the reveal; RUN is the evening with the reveal as a secondary view,
       one header link away (amends #13's single page).
 
+  Resolved on this state, 2026-09-29: A — one page per phase — is the voter home.
+  A stale suggestion posted during APPROVE still lands; from VOTE on the suggest
+  endpoint rejects it and reloads the tab (a second guard beside #15's vote one).
+  #9's "no note box on the VOTE card" stands; notes are written in SUGGEST and
+  APPROVE only. B (tabs) and C (home hub) stay as the losing options, at round 1.
+
   Run:  python -m http.server 8027   →  http://localhost:8027/prototypes/voter-home/?variant=A
         (or just open this file — everything is inline)
 -->
