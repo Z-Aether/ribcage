@@ -43,7 +43,23 @@
   and vetoes, plus the two long films #27 dropped and Iván's stale-tab suggestion
   that lands during APPROVE. Iván never scores (floor 8 of 9); Hanna is part way.
 
-  Run:  python -m http.server 8028   →  http://localhost:8028/prototypes/admin-console/?variant=A
+  Round 2 (2026-09-29). Dev: A's tabs win, but the phase control leaves the header
+  for a tab of its own that looks like B's console card; click then confirm, to
+  survive misclicks; the dense ledger over the shared cards, provided a row opens
+  the shared card inline. Also answered: three approve states, undecided stays off
+  the ballot; a film dropped mid-VOTE keeps its scores, hidden; one step at a
+  time; the voter-cookie hat line is enough. Changes, shown on A only (B and C are
+  kept as the losing options, at round 1 apart from the shared roster/card rules):
+    - tabs are Phase · Films · Pick · Roster; the header keeps only the hat line.
+      The Phase tab is the console card: track with dates, both moves with their
+      consequences printed, a "Move to X…" button arming the real one, and the
+      three status lines. The tab carries the phase as a badge.
+    - a ledger row's title opens the shared card inline, controls staying on the row.
+    - removing a voter keeps their suggestions (and pitch), marked "removed";
+      their account, scores, vetoes, done marker and other notes go.
+    - reset password forces a change at next login.
+
+  Run:  python -m http.server 8028  →  http://localhost:8028/prototypes/admin-console/?variant=A
         (or just open this file — everything is inline)
 -->
 <html lang="en">
@@ -100,7 +116,7 @@
   .chipf { border-radius:999px; padding:2px 10px; border:1px solid var(--line); background:#fff; cursor:pointer; font-size:12px; }
   .chipf.on { background:var(--ink); color:#fff; border-color:var(--ink); }
   table.led { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); }
-  table.led th { text-align:left; font-size:11px; font-weight:600; color:var(--mute); padding:6px 8px; border-bottom:1px solid var(--line); background:#faf9f6; position:sticky; top:41px; }
+  table.led th { text-align:left; font-size:11px; font-weight:600; color:var(--mute); padding:6px 8px; border-bottom:1px solid var(--line); background:#faf9f6; position:sticky; top:34px; }
   table.led td { padding:4px 8px; border-bottom:1px solid var(--line2); vertical-align:middle; }
   table.led tr.dropped td { color:#9a978f; } table.led tr.dropped img { opacity:.4; }
   table.led tr.x td { background:#fcfbf8; padding:10px 12px 12px 58px; }
@@ -124,7 +140,7 @@
   header.lite { background:#fff; border-bottom:1px solid var(--line); display:flex; gap:12px; align-items:center; padding:8px 18px; position:sticky; top:0; z-index:6; }
   header.lite .brand { font-weight:800; } header.lite .brand small { background:#e9a35c; border-radius:3px; padding:0 5px; font-size:10px; margin-left:6px; letter-spacing:.05em; vertical-align:2px; }
   .pbadge { font-size:10px; font-weight:700; letter-spacing:.05em; background:var(--ink); color:#fff; border-radius:3px; padding:1px 6px; }
-  .pcard { background:#fff; border:1px solid var(--line); border-radius:6px; padding:16px 18px; margin:0 0 14px; }
+  .pcard { max-width:1100px; background:#fff; border:1px solid var(--line); border-radius:6px; padding:16px 18px; margin:0 0 14px; }
   .pcard h2 { margin:0 0 12px; font-size:18px; }
   .track { display:flex; align-items:flex-start; margin:0 0 16px; }
   .track .st { display:flex; flex-direction:column; align-items:center; gap:3px; width:120px; font-size:11px; color:#a19e96; font-weight:600; letter-spacing:.04em; }
@@ -137,7 +153,9 @@
   .move { border:1px solid var(--line); border-radius:6px; padding:10px 12px; display:flex; flex-direction:column; gap:8px; }
   .move.grave { border-color:#efc5c0; background:var(--warn2); }
   .move .h { font-weight:700; } .move .acts { margin-top:auto; }
-  .tools { background:#fff; border:1px solid var(--line); border-radius:6px; }
+  .move.armed { box-shadow:0 0 0 3px #b9ccf5; } .move.grave.armed { box-shadow:0 0 0 3px #efc5c0; }
+  nav.tabs .pbadge { vertical-align:1px; margin-left:4px; }
+  .tools { max-width:1100px; background:#fff; border:1px solid var(--line); border-radius:6px; }
   .tools .row { display:flex; gap:14px; align-items:center; padding:10px 14px; border-bottom:1px solid var(--line2); }
   .tools .row:last-child { border-bottom:none; }
   .tools .row .nm { width:90px; font-weight:700; }
@@ -191,7 +209,7 @@
 <script>
 const D = window.DATA;
 const PHASES = ['SUGGEST', 'APPROVE', 'VOTE', 'PICK', 'RUN'];
-const VARIANTS = { A: 'Tabs + rail', B: 'Console page', C: 'Phase page' };
+const VARIANTS = { A: 'Tabs', B: 'Console page', C: 'Phase page' };
 const LATE = 9877, DROPPED = [120, 438631];
 const qs = new URLSearchParams(location.search);
 const DATES = { SUGGEST: 'Oct 12 · deploy', APPROVE: 'Oct 26', VOTE: 'Oct 28', PICK: 'Nov 6', RUN: 'Nov 8' };
@@ -227,7 +245,9 @@ preset(PHASES.includes(qs.get('start')) ? qs.get('start') : 'VOTE');
 // ---------------------------------------------------------------- the world
 const pi = () => PHASES.indexOf(S.phase);
 const active = () => D.voters.filter(v => !S.removed.has(v));
-const present = () => D.films.filter(f => !S.removed.has(f.suggester) && (f.id !== LATE || PHASES.indexOf(S.start) >= 1));
+const present = () => D.films.filter(f => f.id !== LATE || PHASES.indexOf(S.start) >= 1); // round 2: a removed voter's suggestions stay
+const notesOf = f => Object.entries(f.notes).filter(([w]) => w === f.suggester || !S.removed.has(w)).sort((a, b) => (b[0] === f.suggester) - (a[0] === f.suggester));
+const sugBy = f => S.removed.has(f.suggester) ? `${av(f.suggester)} <s>${esc(f.suggester)}</s> <span class="mute small">removed</span>` : `${av(f.suggester)} ${esc(f.suggester)}`;
 const dec = f => S.dec[f.id] || 'undecided';
 const ballot = () => present().filter(f => dec(f) === 'approved');
 const rtOf = f => (f.id in S.rt ? S.rt[f.id] : f.runtime);
@@ -315,7 +335,7 @@ function dtddCell(f) {
   return `<span class="small mute">✓ ${f.dtdd.topics.length} topics</span>`;
 }
 function detail(f) { // the expanded shared card, minus the note box (#21 comment), nothing personal to anyone (#20)
-  const notes = Object.entries(f.notes).sort((a, b) => (b[0] === f.suggester) - (a[0] === f.suggester));
+  const notes = notesOf(f);
   const bad = !f.dtdd || !f.dtdd.topics.length;
   return `<div class="detail">
     ${notes.map(([w, t]) => `<div class="note ${w === f.suggester ? 'pitch' : ''}">${av(w)} <span>${esc(t)}</span></div>`).join('')}
@@ -345,32 +365,32 @@ function ledger() {
   ${filtered().map(f => { const open = S.open.has(f.id); return `<tr class="${dec(f)}">
     <td><img src="${po(f.poster)}" alt=""></td>
     <td><span class="ti" onclick="tog(${f.id})">${open ? '▾' : '▸'} ${esc(f.title)}</span> <span class="mute">${f.year || ''}</span> <span class="small mute">${esc((f.director || []).join(', '))}</span>${f.id === LATE ? ' <span class="tag">arrived during APPROVE</span>' : ''}</td>
-    <td class="nowrap">${av(f.suggester)} ${esc(f.suggester)}</td>
-    <td class="small mute tn">${Object.keys(f.notes).length}</td>
+    <td class="nowrap">${sugBy(f)}</td>
+    <td class="small mute tn">${notesOf(f).length}</td>
     <td>${dtddCell(f)}</td>
     <td class="nowrap">${rtCtl(f)}</td>
     <td>${stateTag(f)}</td>
     <td class="nowrap">${decCtl(f)}</td></tr>
     ${S.pend && S.pend.id === f.id ? `<tr class="x"><td colspan="8">${inlineConfirm(f)}</td></tr>` : ''}
-    ${open ? `<tr class="x"><td colspan="8">${detail(f)}</td></tr>` : ''}`; }).join('')}
+    ${open ? `<tr class="x"><td colspan="8">${card(f, { inline: true })}</td></tr>` : ''}`; }).join('')}
   </tbody></table>`;
 }
 
 // ---------------------------------------------------------------- B, C: the pool of shared cards with #21's approve bar
-function card(f) {
-  const open = S.open.has(f.id);
-  const notes = Object.entries(f.notes).sort((a, b) => (b[0] === f.suggester) - (a[0] === f.suggester));
+function card(f, o = {}) { // o.inline: opened from a ledger row — always expanded, the row keeps the controls
+  const open = o.inline || S.open.has(f.id);
+  const notes = notesOf(f);
   const tr = t => t.length > 120 ? t.slice(0, 117) + '…' : t;
   return `<article class="card ${dec(f)}">
     <img class="po" src="${po(f.poster)}" alt="">
     <div class="body">
       <div class="t1"><span class="ti" onclick="tog(${f.id})">${esc(f.title)}</span><span class="mute">${f.year || ''}</span>
         <span class="small mute">${esc((f.director || []).join(', '))}${f.cert ? ' · ' + esc(f.cert) : ''}</span>${f.id === LATE ? ' <span class="tag">arrived during APPROVE</span>' : ''}</div>
-      <div class="t2"><span>suggested by ${av(f.suggester)} <b>${esc(f.suggester)}</b></span> ${dtddCell(f)}</div>
+      <div class="t2"><span>suggested by ${sugBy(f)}</span> ${o.inline ? `<span class="tn">⏱ ${rtOf(f) ? rtOf(f) + ' min' : '—'}</span>` : ''} ${dtddCell(f)}</div>
       ${open ? `<div class="more">${detail(f)}</div>` : `<div class="notes">${notes.map(([w, t]) => `<div class="note ${w === f.suggester ? 'pitch' : ''}">${av(w)} <span>${esc(tr(t))}</span></div>`).join('')}</div>`}
-      ${inlineConfirm(f)}
+      ${o.inline ? '' : inlineConfirm(f)}
     </div>
-    <div class="abar"><div class="r">${stateTag(f)}</div><div class="r">⏱ ${rtCtl(f)}</div><div class="r">${decCtl(f)}</div></div>
+    ${o.inline ? '' : `<div class="abar"><div class="r">${stateTag(f)}</div><div class="r">⏱ ${rtCtl(f)}</div><div class="r">${decCtl(f)}</div></div>`}
   </article>`;
 }
 function cardPool(list) { return `<div class="pool">${list.map(card).join('') || '<div class="mute">Nothing here.</div>'}</div>`; }
@@ -381,11 +401,11 @@ function floorLine() {
   const fs = floorSet(), out = active().filter(v => !fs.includes(v));
   return `<div class="floor"><b>Floor computed over ${fs.length} of ${active().length}</b>${out.length ? `<span class="mute">— ${out.map(esc).join(', ')} ${out.length > 1 ? 'have' : 'has'} no scores</span>` : ''}</div>`;
 }
-function removeText(v) {
+function removeText(v) { // round 2: suggestions stay, marked removed
   const sug = present().filter(f => f.suggester === v), onB = sug.filter(f => dec(f) === 'approved');
-  const fs = floorSet(), after = fs.filter(x => x !== v).length;
-  const others = active().length - 1;
-  return `Deletes ${esc(v)}'s account and everything they wrote: <b>${sug.length} suggestion${sug.length === 1 ? '' : 's'}</b>${sug.length ? ` (${sug.map(f => esc(f.title)).join(', ')})` : ''}${onB.length ? ` — <b>${onB.length} on the ballot, so the ballot shrinks to ${ballot().length - onB.length}</b> and everyone's scores on ${onB.length > 1 ? 'them' : 'it'} go too` : ''}; ${notesBy(v)} notes on other films; ${everVoted() ? `${scored(v)} scores, ${vetoes(v)} vetoes` : 'no scores yet'}.
+  const fs = floorSet(), after = fs.filter(x => x !== v).length, others = active().length - 1;
+  return `Deletes ${esc(v)}'s account, ${everVoted() ? `their ${scored(v)} scores, ${vetoes(v)} vetoes${S.done.has(v) ? ', their done marker' : ''} and ` : ''}${notesBy(v)} notes on other films.
+    ${sug.length ? `Their <b>${sug.length} suggestion${sug.length === 1 ? '' : 's'} stay</b> (${sug.map(f => esc(f.title)).join(', ')}${onB.length ? ` — ${onB.length} on the ballot, untouched` : ''}), with the pitch, marked <i>suggested by ${esc(v)} · removed</i>.` : ''}
     ${everVoted() ? `Floor set ${fs.length} of ${active().length} → <b>${after} of ${others}</b>.` : ''} The join code still works for them — rotate it first if that's the problem.`;
 }
 function roster() {
@@ -395,15 +415,15 @@ function roster() {
     const gone = S.removed.has(v), p = S.pend && S.pend.v === v ? S.pend : null;
     const inFloor = everVoted() && floorSet().includes(v);
     return `<tr class="${gone ? 'gone' : ''}"><td class="nowrap">${av(v)} <b>${esc(v)}</b></td>
-      <td class="tn">${present().filter(f => f.suggester === v).length || (gone ? '' : 0)}</td>
+      <td class="tn">${present().filter(f => f.suggester === v).length}${gone ? ' <span class="small">(kept)</span>' : ''}</td>
       <td class="tn">${gone ? '' : notesBy(v)}</td>
       <td class="tn">${gone ? '' : everVoted() ? `${scored(v)} / ${nb}` : '—'}</td>
       <td class="tn">${gone ? '' : everVoted() ? vetoes(v) : '—'}</td>
       <td>${gone ? '' : everVoted() ? (S.done.has(v) ? '✓' : '') : '—'}</td>
       <td>${gone ? '' : everVoted() ? (inFloor ? 'yes' : '<span class="flag">no — no scores</span>') : '—'}</td>
       <td class="nowrap">${gone ? `<a class="small" onclick="S.removed.delete('${v}');render()">restore (prototype only)</a>` : `<button onclick="S.pend={kind:'reset',v:'${v}'};render()">Reset password</button> <button onclick="S.pend={kind:'remove',v:'${v}'};render()">Remove</button>`}</td></tr>
-      ${S.temp[v] && !gone ? `<tr><td colspan="8"><div class="inl">New password for ${esc(v)}: <code class="pw">${S.temp[v]}</code> <span>Send it to them directly — it's shown once. Their other sessions have ended.</span><button onclick="delete S.temp['${v}'];render()">Done</button></div></td></tr>` : ''}
-      ${p && p.kind === 'reset' ? `<tr><td colspan="8"><div class="inl"><span>Generate a new password for ${esc(v)}? Their current one stops working and they are logged out everywhere.</span><button class="primary" onclick="reset('${v}')">Generate</button><button onclick="S.pend=null;render()">Cancel</button></div></td></tr>` : ''}
+      ${S.temp[v] && !gone ? `<tr><td colspan="8"><div class="inl">New password for ${esc(v)}: <code class="pw">${S.temp[v]}</code> <span>Send it to them directly — it's shown once. Their sessions have ended; at their next login they must set their own before anything else.</span><button onclick="delete S.temp['${v}'];render()">Done</button></div></td></tr>` : ''}
+      ${p && p.kind === 'reset' ? `<tr><td colspan="8"><div class="inl"><span>Generate a new password for ${esc(v)}? Their current one stops working, they are logged out everywhere, and at next login they have to change it.</span><button class="primary" onclick="reset('${v}')">Generate</button><button onclick="S.pend=null;render()">Cancel</button></div></td></tr>` : ''}
       ${p && p.kind === 'remove' ? `<tr><td colspan="8"><div class="inl grave"><span>${removeText(v)}</span><button class="grave" onclick="S.removed.add('${v}');S.done.delete('${v}');S.pend=null;render()">Remove ${esc(v)}</button><button onclick="S.pend=null;render()">Cancel</button></div></td></tr>` : ''}`;
   }).join('')}</tbody></table>
   <p class="small mute">Registration is the join code (#8) — there is no invite or approval here.</p>`;
@@ -423,19 +443,33 @@ function runStandin() {
 }
 const voterSide = () => `<a href="#" onclick="return false" title="The voter app, in a new tab — the admin session and the voter session are separate cookies (#8)">Voter side ↗</a> <span class="who">${S.voterCookie ? `signed in there as ${esc(S.voterCookie)}` : 'not signed in there'}</span>`;
 
-// ---------------------------------------------------------------- A: tabs + rail
+// ---------------------------------------------------------------- A: tabs — Phase · Films · Pick · Roster (round 2)
+function phaseTab() { // B's console card, but click then confirm (round 2: misclicks)
+  const b = back(), f = fwd(), und = present().filter(x => dec(x) === 'undecided').length, dr = present().filter(x => dec(x) === 'dropped').length;
+  const at = p => (S.log.slice().reverse().find(e => e.p === p) || {}).at;
+  const box = (m, dir) => {
+    if (!m) return '<div></div>';
+    const armed = S.pend?.kind === 'phase' && S.pend.to === m.to;
+    return `<div class="move ${m.grave ? 'grave' : ''} ${armed ? 'armed' : ''}"><span class="h">${dir === 'b' ? `◀ Back to ${m.to}` : `Forward to ${m.to} ▶`}</span><span>${m.text}</span>
+      <span class="acts">${armed ? `<button class="${m.grave ? 'grave' : 'primary'}" onclick="doMove('${m.to}')">${m.btn}</button> <button onclick="S.pend=null;render()">Cancel</button>`
+        : `<button onclick="askMove('${m.to}')">${dir === 'b' ? `◀ Move back to ${m.to}…` : `Move to ${m.to} ▶…`}</button>`}</span></div>`;
+  };
+  return `<div class="pcard"><h2>The group is in ${S.phase}</h2>
+    <div class="track">${PHASES.map((p, i) => `${i ? '<span class="ln"></span>' : ''}<span class="st ${i === pi() ? 'cur' : i < pi() ? 'past' : ''}"><span class="b"></span>${p}<span class="d">${at(p) || ''}</span></span>`).join('')}</div>
+    <div class="moves">${box(b, 'b')}${box(f, 'f')}</div><div style="margin-top:10px">${histLine()}</div></div>
+    <div class="tools">
+      <div class="row"><span class="nm">Films</span><span class="grow tn">${present().length} suggestions · <b>${ballot().length} on the ballot</b> (${hm(screen())}) · ${dr} dropped · ${und ? `<b class="flag">${und} undecided</b>` : '0 undecided'}</span><a onclick="S.tab='films';render()">Films tab</a></div>
+      <div class="row"><span class="nm">Voters</span><span class="grow tn">${active().length} registered${everVoted() ? ` · ${doneN()} done · floor ${floorSet().length} of ${active().length}` : ''}</span><a onclick="S.tab='roster';render()">Roster tab</a></div>
+      <div class="row"><span class="nm">Pick</span><span class="grow tn">budget 8 h · anchor Sat 14 Nov 18:00 · timetable ${S.plan.length ? S.plan.length + ' films' : 'empty'}</span><a onclick="S.tab='pick';render()">Pick tab</a></div>
+    </div>`;
+}
 function variantA() {
-  const tab = S.tab || (pi() >= 3 ? 'pick' : 'films');
-  const b = back(), f = fwd();
-  const tabs = { films: `Films <span class="mute tn">${present().length}</span>`, pick: 'Pick', roster: `Roster <span class="mute tn">${active().length}</span>` };
+  const tab = S.tab || (pi() >= 3 ? 'pick' : 'films'); // lands on the phase's working tab; stays put when the phase moves
+  const tabs = { phase: `Phase <span class="pbadge">${S.phase}</span>`, films: `Films <span class="mute tn">${present().length}</span>`, pick: 'Pick', roster: `Roster <span class="mute tn">${active().length}</span>` };
   return `<header class="adm"><span class="brand">Ribcage<small>ADMIN</small></span>
-    ${b ? `<button onclick="askMove('${b.to}')" title="${b.btn}">◀ ${b.to}</button>` : '<button disabled>◀</button>'}
-    <span class="rail">${PHASES.map((p, i) => `<span class="${i === pi() ? 'on' : i < pi() ? 'past' : ''}">${p}</span>`).join('')}</span>
-    ${f ? `<button onclick="askMove('${f.to}')" title="${f.btn}">${f.to} ▶</button>` : '<button disabled>▶</button>'}
     <span class="grow"></span>${voterSide()} <a class="small">Log out</a></header>
-  ${confirmStrip()}
-  <nav class="tabs">${Object.entries(tabs).map(([k, l]) => `<a class="${tab === k ? 'on' : ''}" onclick="S.tab='${k}';S.pend=S.pend?.kind==='phase'?S.pend:null;render()">${l}</a>`).join('')}${histLine()}</nav>
-  <main>${tab === 'films' ? ledger() : tab === 'roster' ? roster() : pi() === 4 ? runStandin() : pickStandin()}</main>`;
+  <nav class="tabs">${Object.entries(tabs).map(([k, l]) => `<a class="${tab === k ? 'on' : ''}" onclick="S.tab='${k}';S.pend=null;render()">${l}</a>`).join('')}</nav>
+  <main>${tab === 'phase' ? phaseTab() : tab === 'films' ? ledger() : tab === 'roster' ? roster() : pi() === 4 ? runStandin() : pickStandin()}</main>`;
 }
 
 // ---------------------------------------------------------------- B: console page
