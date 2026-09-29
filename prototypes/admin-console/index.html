@@ -1,0 +1,514 @@
+<!doctype html>
+<!--
+  PROTOTYPE — ticket #28, the admin console. Throwaway. Not production.
+
+  Where the admin lands, how they move the phase, what the approve screen looks
+  like, and the roster's three jobs. Three variants of the ADMIN SHELL, switchable
+  via ?variant=A|B|C and the floating bar; the bar's "start at" buttons load the
+  world as it would be at each phase, and the phase control itself then moves the
+  pointer live, both ways.
+
+    A  Tabs + rail     persistent dark admin header carrying the phase rail with
+                       one-step-back / one-step-forward buttons; a move opens a
+                       confirm strip under the header saying what it does. Tabs
+                       under it — Films · Pick · Roster — land on the current
+                       phase's tool but stay put when the phase moves. The approve
+                       screen is a DENSE LEDGER: one row per suggestion, runtime box
+                       and Approve/Drop inline, the title expanding the row into the
+                       shared card's detail.
+    B  Console page    a home page you land on: the phase is a card of its own with
+                       both possible moves and their consequences always printed,
+                       one click each; below it one line per tool with its numbers.
+                       Each tool is a page one click away. The approve screen is
+                       #27's POOL OF SHARED CARDS with #21's approve bar on each.
+    C  Phase page      the admin's page IS the phase, like the voter's (#27 A): a
+                       thin admin strip with ◀ phase ▶ on top, and underneath, the
+                       admin's work for that phase — the pool with approve bars in
+                       SUGGEST/APPROVE, the ballot and what is not on it in VOTE,
+                       PICK's tool in PICK and RUN. The roster is off-phase, a link.
+
+  Fixed by earlier tickets and not up for grabs here: admin surfaces are never
+  phase-gated (#15); five phases, four manual transitions, both ways, no deadlines
+  (#15 amended); runtime is required to approve and an empty box is the normal
+  path (#15); ballot growth clears every done marker (#15); the approve card is the
+  shared card plus a runtime input, Approve/Drop and the "differs from TMDB" flag,
+  minus the note box (#21 comment); nothing personal-to-anyone on it — no watched
+  list, no "3 people watch for this" (#20); roster = view, remove, reset password
+  (#8); the floor set is always displayed (#15); the reveal is irreversible and the
+  app never claims a reopened vote is unanchored (#8, #15, #29); budget and anchor
+  live in PICK's header, not here (#24); admin screens may be utilitarian (map
+  principle, #29). PICK and RUN's tools are STAND-INS (#24, #22).
+
+  Data is real (data.js): #27's 32 candidates, nine voters, their notes, scores
+  and vetoes, plus the two long films #27 dropped and Iván's stale-tab suggestion
+  that lands during APPROVE. Iván never scores (floor 8 of 9); Hanna is part way.
+
+  Run:  python -m http.server 8028   →  http://localhost:8028/prototypes/admin-console/?variant=A
+        (or just open this file — everything is inline)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin console (prototype #28)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg:#f6f5f2; --panel:#fff; --ink:#1c1b19; --mute:#6b6963; --line:#dcd9d2; --line2:#ece9e2;
+    --acc:#2f5fd0; --acc2:#e8eefc; --warn:#b3261e; --warn2:#fbeae8; --ok:#2b7a3d; --ok2:#e6f2e8;
+    --amb:#8a5a00; --amb2:#fff6dc; --adm:#23262d;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.4 system-ui, "Segoe UI", Roboto, sans-serif; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; border-radius:4px; padding:2px 9px; color:var(--ink); }
+  button:hover { border-color:#999; }
+  button.primary { background:var(--acc); color:#fff; border-color:var(--acc); }
+  button.grave { background:var(--warn); color:#fff; border-color:var(--warn); }
+  button.ghost { border-color:transparent; background:transparent; color:var(--acc); }
+  button:disabled { opacity:.4; cursor:default; }
+  input, select { font:inherit; border:1px solid var(--line); border-radius:4px; padding:2px 6px; background:#fff; }
+  a { color:var(--acc); text-decoration:none; cursor:pointer; } a:hover { text-decoration:underline; }
+  .mute { color:var(--mute); } .small { font-size:12px; } .tn { font-variant-numeric:tabular-nums; } .grow { flex:1; } .nowrap { white-space:nowrap; }
+  main { padding:14px 18px 120px; max-width:1400px; margin:0 auto; }
+  .standin { border:2px dashed var(--line); border-radius:6px; padding:18px; color:#8d8a82; background:#fbfaf7; }
+  .av { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; font-weight:700; font-size:10px; color:#2a2a2a; flex:none; vertical-align:middle; }
+  .flag { color:var(--warn); }
+  .tag { font-size:10px; border:1px solid var(--line); border-radius:3px; padding:0 5px; color:var(--mute); }
+
+  /* phase rail and confirm strip (A, C) */
+  .rail { display:inline-flex; gap:2px; }
+  .rail span { font-size:10px; letter-spacing:.05em; padding:2px 7px; border-radius:3px; color:#9aa0ab; border:1px solid #3a3f49; }
+  .rail span.on { background:#fff; color:var(--adm); border-color:#fff; font-weight:700; }
+  .rail span.past { color:#cfd3da; }
+  .confirm { display:flex; gap:12px; align-items:center; padding:10px 18px; background:var(--acc2); border-bottom:1px solid #c9d6f5; flex-wrap:wrap; }
+  .confirm.grave { background:var(--warn2); border-bottom-color:#efc5c0; }
+  .confirm .txt { flex:1; min-width:320px; max-width:900px; }
+  .hist { font-size:11px; color:var(--mute); }
+  .hist b { color:var(--ink); font-weight:600; }
+
+  /* A */
+  header.adm { background:var(--adm); color:#e9ebef; display:flex; gap:14px; align-items:center; padding:8px 18px; position:sticky; top:0; z-index:6; flex-wrap:wrap; }
+  header.adm .brand { font-weight:800; } header.adm .brand small { background:#e9a35c; color:#111; border-radius:3px; padding:0 5px; font-size:10px; margin-left:6px; letter-spacing:.05em; vertical-align:2px; }
+  header.adm button { background:#353a44; color:#e9ebef; border-color:#4a505c; }
+  header.adm button:hover { border-color:#8a90a0; }
+  header.adm a { color:#9fbaff; }
+  header.adm .who { color:#b6bbc6; font-size:12px; }
+  nav.tabs { display:flex; gap:2px; align-items:flex-end; background:#fff; border-bottom:1px solid var(--line); padding:0 18px; }
+  nav.tabs a { padding:8px 14px; color:var(--mute); border-bottom:2px solid transparent; font-weight:600; text-decoration:none; }
+  nav.tabs a.on { color:var(--ink); border-bottom-color:var(--acc); }
+  nav.tabs .hist { margin-left:auto; padding-bottom:8px; }
+  .sumbar { display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin:0 0 10px; }
+  .chipf { border-radius:999px; padding:2px 10px; border:1px solid var(--line); background:#fff; cursor:pointer; font-size:12px; }
+  .chipf.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  table.led { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); }
+  table.led th { text-align:left; font-size:11px; font-weight:600; color:var(--mute); padding:6px 8px; border-bottom:1px solid var(--line); background:#faf9f6; position:sticky; top:41px; }
+  table.led td { padding:4px 8px; border-bottom:1px solid var(--line2); vertical-align:middle; }
+  table.led tr.dropped td { color:#9a978f; } table.led tr.dropped img { opacity:.4; }
+  table.led tr.x td { background:#fcfbf8; padding:10px 12px 12px 58px; }
+  table.led img { width:28px; height:42px; object-fit:cover; border-radius:2px; display:block; background:var(--line2); }
+  .ti { font-weight:600; cursor:pointer; } .ti:hover { color:var(--acc); }
+  .seg { display:inline-flex; }
+  .seg button { border-radius:0; margin-left:-1px; } .seg button:first-child { border-radius:4px 0 0 4px; margin:0; } .seg button:last-child { border-radius:0 4px 4px 0; }
+  .seg button.onA { background:var(--ok); color:#fff; border-color:var(--ok); } .seg button.onD { background:#8d8a82; color:#fff; border-color:#8d8a82; }
+  .state { font-size:11px; font-weight:600; border-radius:3px; padding:1px 6px; white-space:nowrap; }
+  .state.approved { background:var(--ok2); color:var(--ok); } .state.dropped { background:var(--line2); color:var(--mute); } .state.undecided { background:var(--amb2); color:var(--amb); }
+  .rt { width:52px; text-align:right; }
+  .rt.empty { border-color:var(--warn); background:var(--warn2); }
+  .inl { background:var(--acc2); border:1px solid #c9d6f5; border-radius:4px; padding:6px 10px; margin-top:4px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .inl.grave { background:var(--warn2); border-color:#efc5c0; }
+  .detail { display:flex; flex-direction:column; gap:6px; }
+  .note { display:flex; gap:6px; align-items:baseline; } .note.pitch { font-weight:500; }
+  .topics { columns:3 220px; font-size:12px; margin-top:4px; } .topics div { break-inside:avoid; }
+  details summary { cursor:pointer; color:var(--mute); }
+
+  /* B */
+  header.lite { background:#fff; border-bottom:1px solid var(--line); display:flex; gap:12px; align-items:center; padding:8px 18px; position:sticky; top:0; z-index:6; }
+  header.lite .brand { font-weight:800; } header.lite .brand small { background:#e9a35c; border-radius:3px; padding:0 5px; font-size:10px; margin-left:6px; letter-spacing:.05em; vertical-align:2px; }
+  .pbadge { font-size:10px; font-weight:700; letter-spacing:.05em; background:var(--ink); color:#fff; border-radius:3px; padding:1px 6px; }
+  .pcard { background:#fff; border:1px solid var(--line); border-radius:6px; padding:16px 18px; margin:0 0 14px; }
+  .pcard h2 { margin:0 0 12px; font-size:18px; }
+  .track { display:flex; align-items:flex-start; margin:0 0 16px; }
+  .track .st { display:flex; flex-direction:column; align-items:center; gap:3px; width:120px; font-size:11px; color:#a19e96; font-weight:600; letter-spacing:.04em; }
+  .track .st .b { width:14px; height:14px; border-radius:50%; border:2px solid var(--line); background:#fff; }
+  .track .st.past { color:var(--mute); } .track .st.past .b { background:var(--mute); border-color:var(--mute); }
+  .track .st.cur { color:var(--acc); } .track .st.cur .b { background:var(--acc); border-color:var(--acc); box-shadow:0 0 0 4px var(--acc2); }
+  .track .st .d { font-weight:400; letter-spacing:0; color:var(--mute); font-size:10px; }
+  .track .ln { flex:none; width:40px; height:2px; background:var(--line); margin-top:7px; }
+  .moves { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .move { border:1px solid var(--line); border-radius:6px; padding:10px 12px; display:flex; flex-direction:column; gap:8px; }
+  .move.grave { border-color:#efc5c0; background:var(--warn2); }
+  .move .h { font-weight:700; } .move .acts { margin-top:auto; }
+  .tools { background:#fff; border:1px solid var(--line); border-radius:6px; }
+  .tools .row { display:flex; gap:14px; align-items:center; padding:10px 14px; border-bottom:1px solid var(--line2); }
+  .tools .row:last-child { border-bottom:none; }
+  .tools .row .nm { width:90px; font-weight:700; }
+  .hat { margin:0 0 14px; color:var(--mute); }
+
+  /* shared card with the approve bar (B, C) */
+  .pool { display:flex; flex-direction:column; gap:8px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px 12px; display:flex; gap:12px; align-items:flex-start; }
+  .card.dropped { opacity:.6; }
+  .card img.po { width:52px; height:78px; border-radius:6px; object-fit:cover; background:var(--line2); flex:none; }
+  .card .body { flex:1; min-width:0; }
+  .card .t1 { display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
+  .card .t1 .ti { font-size:14px; }
+  .card .t2 { display:flex; gap:12px; align-items:center; flex-wrap:wrap; color:var(--mute); font-size:12px; margin-top:2px; }
+  .card .notes { margin-top:5px; display:flex; flex-direction:column; gap:2px; }
+  .card .more { margin-top:8px; border-top:1px solid var(--line2); padding-top:8px; }
+  .abar { width:300px; flex:none; display:flex; flex-direction:column; gap:6px; align-items:flex-end; border-left:1px solid var(--line2); padding-left:12px; }
+  .abar .r { display:flex; gap:6px; align-items:center; }
+  .sect { margin:18px 0 8px; font-size:13px; font-weight:700; display:flex; gap:10px; align-items:center; }
+
+  /* C */
+  .strip { background:var(--adm); color:#e9ebef; display:flex; gap:12px; align-items:center; padding:6px 18px; position:sticky; top:0; z-index:6; flex-wrap:wrap; }
+  .strip .brand small { background:#e9a35c; color:#111; border-radius:3px; padding:0 5px; font-size:10px; letter-spacing:.05em; font-weight:800; }
+  .strip button { background:#353a44; color:#e9ebef; border-color:#4a505c; }
+  .strip .ph { font-weight:800; letter-spacing:.05em; min-width:70px; text-align:center; }
+  .strip a { color:#9fbaff; } .strip a.on { color:#fff; font-weight:700; }
+  .strip .who { color:#b6bbc6; font-size:12px; }
+  .vhead { background:#fff; border-bottom:1px solid var(--line); padding:10px 18px; display:flex; gap:12px; align-items:center; }
+  .vhead .big { font-size:15px; font-weight:600; }
+
+  /* roster */
+  table.ros { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); }
+  table.ros th { text-align:left; font-size:11px; font-weight:600; color:var(--mute); padding:6px 10px; border-bottom:1px solid var(--line); background:#faf9f6; }
+  table.ros td { padding:6px 10px; border-bottom:1px solid var(--line2); vertical-align:top; }
+  table.ros tr.gone td { color:#a19e96; text-decoration:line-through; }
+  .floor { background:#fff; border:1px solid var(--line); border-radius:6px; padding:8px 12px; margin:0 0 10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  code.pw { font-size:15px; background:#fff; border:1px solid var(--line); padding:2px 8px; border-radius:4px; user-select:all; }
+
+  /* prototype bar */
+  .pbar { position:fixed; left:50%; bottom:12px; transform:translateX(-50%); background:#111; color:#eee; border-radius:12px; padding:6px 10px; display:flex; gap:10px; align-items:center; z-index:30; box-shadow:0 6px 24px rgba(0,0,0,.35); font-size:12px; flex-wrap:wrap; justify-content:center; max-width:96vw; }
+  .pbar button { background:#2a2a2a; color:#eee; border:1px solid #444; border-radius:6px; padding:2px 8px; font-size:12px; }
+  .pbar button.on { background:#eee; color:#111; }
+  .pbar .lbl { font-weight:700; min-width:150px; text-align:center; }
+  .pbar .grp { display:flex; gap:3px; align-items:center; } .pbar .grp span { color:#999; margin-right:4px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="bar"></div>
+<script src="data.js"></script>
+<script>
+const D = window.DATA;
+const PHASES = ['SUGGEST', 'APPROVE', 'VOTE', 'PICK', 'RUN'];
+const VARIANTS = { A: 'Tabs + rail', B: 'Console page', C: 'Phase page' };
+const LATE = 9877, DROPPED = [120, 438631];
+const qs = new URLSearchParams(location.search);
+const DATES = { SUGGEST: 'Oct 12 · deploy', APPROVE: 'Oct 26', VOTE: 'Oct 28', PICK: 'Nov 6', RUN: 'Nov 8' };
+const HUES = { Ana: '#f4c7c3', Bence: '#c6dafc', Csilla: '#fce8b2', Dani: '#b7e1cd', Eszter: '#e1c9f5', Feri: '#f9d4b0', 'Gergő': '#c8e6f0', Hanna: '#f7c6de', 'Iván': '#d9d2c5' };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const po = p => p ? `https://image.tmdb.org/t/p/w185${p}` : '';
+const av = n => `<span class="av" style="background:${HUES[n] || '#ddd'}" title="${esc(n)}">${esc(n[0])}</span>`;
+const hm = m => `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, '0')}m`;
+const clock = m => { const t = (18 * 60 + m) % 1440; return `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(t % 60).padStart(2, '0')}`; };
+const WORDS = ['tulip', 'orbit', 'mango', 'cedar', 'pixel', 'otter', 'lemon', 'crane', 'amber', 'fjord', 'basil', 'comet'];
+
+let S;
+function preset(p) {
+  const i = PHASES.indexOf(p);
+  const dec = {};
+  if (i === 1) { for (const f of D.films) if (f.order < 20) dec[f.id] = 'approved'; }
+  if (i >= 2) { for (const f of D.films) if (f.id !== LATE) dec[f.id] = 'approved'; }
+  if (i >= 1) for (const id of DROPPED) dec[id] = 'dropped';
+  S = {
+    variant: S?.variant || (VARIANTS[qs.get('variant')] ? qs.get('variant') : 'A'),
+    voterCookie: S?.voterCookie ?? 'Dani',
+    start: p, phase: p,
+    log: PHASES.slice(0, i + 1).map(q => ({ p: q, at: DATES[q] })),
+    dec, rt: {}, dtddFix: {},
+    done: new Set(i >= 2 ? ['Ana', 'Bence', 'Csilla', 'Eszter', 'Feri', 'Gergő'] : []),
+    removed: new Set(), temp: {},
+    plan: i >= 3 ? [1091, 9552, 26466, 170, 1226578, 431] : [],
+    tab: null, route: 'console', cview: 'phase', open: new Set(), filter: 'all', pend: null,
+  };
+}
+preset(PHASES.includes(qs.get('start')) ? qs.get('start') : 'VOTE');
+
+// ---------------------------------------------------------------- the world
+const pi = () => PHASES.indexOf(S.phase);
+const active = () => D.voters.filter(v => !S.removed.has(v));
+const present = () => D.films.filter(f => !S.removed.has(f.suggester) && (f.id !== LATE || PHASES.indexOf(S.start) >= 1));
+const dec = f => S.dec[f.id] || 'undecided';
+const ballot = () => present().filter(f => dec(f) === 'approved');
+const rtOf = f => (f.id in S.rt ? S.rt[f.id] : f.runtime);
+const everVoted = () => S.log.some(e => e.p === 'VOTE');
+const revealedAt = () => (S.log.find(e => e.p === 'PICK') || {}).at;
+const scoreOf = (v, id) => everVoted() ? D.scores[v]?.[id] : undefined;
+const scored = v => ballot().filter(f => scoreOf(v, f.id) !== undefined).length;
+const vetoes = v => everVoted() ? Object.keys(D.vetoes[v] || {}).filter(id => ballot().some(f => f.id == id)).length : 0;
+const floorSet = () => active().filter(v => scored(v) > 0);
+const doneN = () => active().filter(v => S.done.has(v)).length;
+const screen = () => ballot().reduce((a, f) => a + (rtOf(f) || 0), 0);
+const notesBy = v => present().reduce((a, f) => a + (f.notes[v] && f.suggester !== v ? 1 : 0), 0);
+const title = id => (D.films.find(f => f.id === id) || {}).title;
+function planSpan() { let t = 0; for (const id of S.plan) t += (rtOf(D.films.find(f => f.id === id)) || 0) + 15; return t - 15; }
+
+// ---------------------------------------------------------------- phase moves: what each one does, said before it is done
+function move(from, to) {
+  const nv = active().length, und = present().filter(f => dec(f) === 'undecided'), b = ballot();
+  const decided = present().length - und.length, dn = doneN();
+  const k = `${from}>${to}`;
+  const notDone = active().filter(v => !S.done.has(v)).map(v => `${esc(v)} ${scored(v) ? scored(v) + '/' + b.length : 'nothing scored'}`).join(' · ');
+  const M = {
+    'SUGGEST>APPROVE': ['Close suggestions', `Voters' list freezes — no more adding, withdrawing or runtime edits; notes stay open. ${present().length} suggestions, ${decided} decided so far.`],
+    'APPROVE>SUGGEST': ['Reopen suggestions', `Voters can add, withdraw and correct runtimes again. Your ${decided} decisions are kept.`],
+    'APPROVE>VOTE': ['Open the ballot', `<b>${b.length} films</b> (${hm(screen())} screen time) go on ${nv} ballots.${und.length ? ` <b>${und.length} undecided</b> stay off it: ${und.map(f => esc(f.title)).join(', ')}.` : ''}${everVoted() ? ' Scores cast before are kept.' : ''}`],
+    'VOTE>APPROVE': ['Close the ballot', `Voters go back to the frozen list. Scores so far are kept and stay hidden; ${dn} done markers stay.`],
+    'VOTE>PICK': ['Close VOTE and open the scores', `Every score becomes visible to everyone, by name. <b>${dn} of ${nv} done</b>${notDone ? ` — not done: ${notDone}` : ''}. <b>This can't be taken back:</b> going back to VOTE hides the scores again, but everyone will have seen them.${revealedAt() ? ` (They were already opened once, ${revealedAt()}.)` : ''}`, true],
+    'PICK>VOTE': ['Reopen VOTE', `Scores are hidden again. Every ballot comes back with one line: <i>"VOTE was reopened. Scores were open to everyone while it was closed; they're hidden again now."</i> Done markers stay (${dn} of ${nv}).`],
+    'PICK>RUN': ['Publish the plan', S.plan.length ? `Everyone's page becomes the evening: <b>${S.plan.length} films, Sat 18:00 → ${clock(planSpan())}</b>. The reveal stays one link away.` : `<b>The timetable is empty</b> — everyone's page becomes an empty evening.`],
+    'RUN>PICK': ['Unpublish', `Everyone's page goes back to the reveal. The timetable is kept as it is.`],
+  };
+  const [btn, text, grave] = M[k];
+  return { to, btn, text, grave: !!grave };
+}
+const fwd = () => pi() < 4 ? move(S.phase, PHASES[pi() + 1]) : null;
+const back = () => pi() > 0 ? move(S.phase, PHASES[pi() - 1]) : null;
+function doMove(to) {
+  S.log.push({ p: to, at: 'today' }); S.phase = to; S.pend = null;
+  toast(`Phase is now ${to}`); render();
+}
+function askMove(to) { S.pend = { kind: 'phase', to }; render(); }
+function histLine() { return `<span class="hist">history: ${S.log.map((e, i) => `${i === S.log.length - 1 ? '<b>' : ''}${e.p} ${e.at}${i === S.log.length - 1 ? '</b>' : ''}`).join(' → ')}</span>`; }
+function confirmStrip() {
+  if (S.pend?.kind !== 'phase') return '';
+  const m = move(S.phase, S.pend.to);
+  return `<div class="confirm ${m.grave ? 'grave' : ''}"><span class="nowrap"><b>${S.phase} → ${m.to}</b></span><span class="txt">${m.text}</span>
+    <button class="${m.grave ? 'grave' : 'primary'}" onclick="doMove('${m.to}')">${m.btn}</button><button onclick="S.pend=null;render()">Cancel</button></div>`;
+}
+
+// ---------------------------------------------------------------- approve actions
+function markersAt() { return everVoted() ? doneN() : 0; }
+function setDec(id, d) {
+  const f = D.films.find(x => x.id === id);
+  if (d === 'approved' && !rtOf(f)) return;
+  const grows = d === 'approved' && dec(f) !== 'approved';
+  const shrinks = d === 'dropped' && dec(f) === 'approved' && everVoted();
+  if ((grows && markersAt() > 0) || shrinks) { S.pend = { kind: d, id }; render(); return; }
+  S.dec[id] = d; S.pend = null; render();
+}
+function commitDec(id, d) { if (d === 'approved' && dec({ id }) !== 'approved') S.done = new Set(); S.dec[id] = d; S.pend = null; render(); }
+function inlineConfirm(f) {
+  const p = S.pend; if (!p || p.id !== f.id || (p.kind !== 'approved' && p.kind !== 'dropped')) return '';
+  const nv = active().length, dn = markersAt();
+  if (p.kind === 'approved') return `<div class="inl grave"><span>Adds it to ${nv} ballots${S.phase !== 'VOTE' ? ' — VOTE is closed, so nobody can score it unless you reopen VOTE' : ''} and <b>clears every done marker: ${dn} of ${nv} → 0 of ${nv}</b>.</span>
+    <button class="grave" onclick="commitDec(${f.id},'approved')">Approve and clear markers</button><button onclick="S.pend=null;render()">Cancel</button></div>`;
+  const n = active().filter(v => scoreOf(v, f.id) !== undefined).length;
+  return `<div class="inl"><span>Takes it off ${nv} ballots. ${n} scores on it are kept (unshown) in case you bring it back; done markers stay.</span>
+    <button class="primary" onclick="commitDec(${f.id},'dropped')">Drop it</button><button onclick="S.pend=null;render()">Cancel</button></div>`;
+}
+function setRt(id, v) { const n = parseInt(v, 10); S.rt[id] = n > 0 ? n : null; render(); }
+function rtCtl(f) {
+  const r = rtOf(f), diff = r && f.tmdbRuntime && r !== f.tmdbRuntime;
+  return `<span class="nowrap"><input class="rt tn ${r ? '' : 'empty'}" value="${r ?? ''}" placeholder="min" onchange="setRt(${f.id},this.value)"> min</span>
+    ${diff ? `<span class="flag small nowrap" title="Runtime is editable by anyone in SUGGEST; this is the only sign someone touched it">⚠ TMDB says ${f.tmdbRuntime}</span>` : !r ? `<span class="flag small">required to approve</span>` : ''}`;
+}
+function decCtl(f) {
+  const d = dec(f), r = rtOf(f);
+  return `<span class="seg"><button class="${d === 'approved' ? 'onA' : ''}" ${r ? '' : 'disabled title="type a runtime first"'} onclick="setDec(${f.id},'approved')">Approve</button><button class="${d === 'dropped' ? 'onD' : ''}" onclick="setDec(${f.id},'dropped')">Drop</button></span>`;
+}
+const stateTag = f => `<span class="state ${dec(f)}">${{ approved: 'on the ballot', dropped: 'dropped', undecided: 'undecided' }[dec(f)]}</span>`;
+function dtddCell(f) {
+  if (S.dtddFix[f.id]) return `<span class="small">✓ set by you</span>`;
+  if (!f.dtdd) return `<span class="flag small">⚠ no match</span>`;
+  if (!f.dtdd.topics.length) return `<span class="flag small">⚠ empty record</span>`;
+  return `<span class="small mute">✓ ${f.dtdd.topics.length} topics</span>`;
+}
+function detail(f) { // the expanded shared card, minus the note box (#21 comment), nothing personal to anyone (#20)
+  const notes = Object.entries(f.notes).sort((a, b) => (b[0] === f.suggester) - (a[0] === f.suggester));
+  const bad = !f.dtdd || !f.dtdd.topics.length;
+  return `<div class="detail">
+    ${notes.map(([w, t]) => `<div class="note ${w === f.suggester ? 'pitch' : ''}">${av(w)} <span>${esc(t)}</span></div>`).join('')}
+    <div class="small">DoesTheDogDie match: <b>${S.dtddFix[f.id] ? esc(S.dtddFix[f.id]) : f.dtdd ? esc(f.dtdd.name) + ' (' + esc(f.dtdd.year) + ')' + (f.dtdd.topics.length ? '' : ' — <span class="flag">no votes on this record</span>') : '<span class="flag">none</span>'}</b>
+      ${bad ? ` · <input placeholder="paste a doesthedogdie.com link" style="width:260px" onchange="S.dtddFix[${f.id}]=this.value;render()"> <span class="mute">the suggester left it; the fallback is yours (#20)</span>` : ` · <a onclick="S.dtddFix[${f.id}]=prompt('DoesTheDogDie link')||'';render()">wrong film?</a>`}</div>
+    ${f.dtdd && f.dtdd.topics.length ? `<details><summary class="small">All ${f.dtdd.topics.length} topics</summary><div class="topics">${f.dtdd.topics.map(t => `<div>${esc(t.topic)} <span class="mute">${t.yes}/${t.no}</span></div>`).join('')}</div></details>` : ''}
+    <div class="small mute">${f.trailer ? `<a href="https://youtu.be/${f.trailer}" target="_blank">▶ Trailer</a> · ` : ''}<a href="https://www.themoviedb.org/movie/${f.id}" target="_blank">TMDB</a> · Powered by <a href="https://www.doesthedogdie.com" target="_blank">DoesTheDogDie.com</a></div>
+  </div>`;
+}
+function filtered() {
+  const l = present().slice().sort((a, b) => b.order - a.order); // newest on top, as the pool (#21)
+  return S.filter === 'all' ? l : l.filter(f => dec(f) === S.filter);
+}
+function chips() {
+  const c = s => present().filter(f => dec(f) === s).length;
+  return ['all', 'undecided', 'approved', 'dropped'].map(k => `<span class="chipf ${S.filter === k ? 'on' : ''}" onclick="S.filter='${k}';render()">${{ all: 'All', undecided: 'Undecided', approved: 'On the ballot', dropped: 'Dropped' }[k]} ${k === 'all' ? present().length : c(k)}</span>`).join('');
+}
+function sumbar() {
+  return `<div class="sumbar">${chips()}<span class="grow"></span>
+    <span class="tn">Ballot: <b>${ballot().length} films</b> · ${hm(screen())} screen time</span>
+    ${everVoted() ? `<span class="tn">Done: <b>${doneN()} of ${active().length}</b></span>` : ''}</div>`;
+}
+
+// ---------------------------------------------------------------- A: the approve ledger
+function ledger() {
+  return sumbar() + `<table class="led"><thead><tr><th></th><th>Film</th><th>Suggested by</th><th>Notes</th><th>DoesTheDogDie</th><th>Runtime</th><th>State</th><th></th></tr></thead><tbody>
+  ${filtered().map(f => { const open = S.open.has(f.id); return `<tr class="${dec(f)}">
+    <td><img src="${po(f.poster)}" alt=""></td>
+    <td><span class="ti" onclick="tog(${f.id})">${open ? '▾' : '▸'} ${esc(f.title)}</span> <span class="mute">${f.year || ''}</span> <span class="small mute">${esc((f.director || []).join(', '))}</span>${f.id === LATE ? ' <span class="tag">arrived during APPROVE</span>' : ''}</td>
+    <td class="nowrap">${av(f.suggester)} ${esc(f.suggester)}</td>
+    <td class="small mute tn">${Object.keys(f.notes).length}</td>
+    <td>${dtddCell(f)}</td>
+    <td class="nowrap">${rtCtl(f)}</td>
+    <td>${stateTag(f)}</td>
+    <td class="nowrap">${decCtl(f)}</td></tr>
+    ${S.pend && S.pend.id === f.id ? `<tr class="x"><td colspan="8">${inlineConfirm(f)}</td></tr>` : ''}
+    ${open ? `<tr class="x"><td colspan="8">${detail(f)}</td></tr>` : ''}`; }).join('')}
+  </tbody></table>`;
+}
+
+// ---------------------------------------------------------------- B, C: the pool of shared cards with #21's approve bar
+function card(f) {
+  const open = S.open.has(f.id);
+  const notes = Object.entries(f.notes).sort((a, b) => (b[0] === f.suggester) - (a[0] === f.suggester));
+  const tr = t => t.length > 120 ? t.slice(0, 117) + '…' : t;
+  return `<article class="card ${dec(f)}">
+    <img class="po" src="${po(f.poster)}" alt="">
+    <div class="body">
+      <div class="t1"><span class="ti" onclick="tog(${f.id})">${esc(f.title)}</span><span class="mute">${f.year || ''}</span>
+        <span class="small mute">${esc((f.director || []).join(', '))}${f.cert ? ' · ' + esc(f.cert) : ''}</span>${f.id === LATE ? ' <span class="tag">arrived during APPROVE</span>' : ''}</div>
+      <div class="t2"><span>suggested by ${av(f.suggester)} <b>${esc(f.suggester)}</b></span> ${dtddCell(f)}</div>
+      ${open ? `<div class="more">${detail(f)}</div>` : `<div class="notes">${notes.map(([w, t]) => `<div class="note ${w === f.suggester ? 'pitch' : ''}">${av(w)} <span>${esc(tr(t))}</span></div>`).join('')}</div>`}
+      ${inlineConfirm(f)}
+    </div>
+    <div class="abar"><div class="r">${stateTag(f)}</div><div class="r">⏱ ${rtCtl(f)}</div><div class="r">${decCtl(f)}</div></div>
+  </article>`;
+}
+function cardPool(list) { return `<div class="pool">${list.map(card).join('') || '<div class="mute">Nothing here.</div>'}</div>`; }
+
+// ---------------------------------------------------------------- the roster: view, remove, reset password (#8)
+function floorLine() {
+  if (!everVoted()) return `<div class="floor"><b>Floor set:</b> <span class="mute">no scores yet — it forms once VOTE opens</span></div>`;
+  const fs = floorSet(), out = active().filter(v => !fs.includes(v));
+  return `<div class="floor"><b>Floor computed over ${fs.length} of ${active().length}</b>${out.length ? `<span class="mute">— ${out.map(esc).join(', ')} ${out.length > 1 ? 'have' : 'has'} no scores</span>` : ''}</div>`;
+}
+function removeText(v) {
+  const sug = present().filter(f => f.suggester === v), onB = sug.filter(f => dec(f) === 'approved');
+  const fs = floorSet(), after = fs.filter(x => x !== v).length;
+  const others = active().length - 1;
+  return `Deletes ${esc(v)}'s account and everything they wrote: <b>${sug.length} suggestion${sug.length === 1 ? '' : 's'}</b>${sug.length ? ` (${sug.map(f => esc(f.title)).join(', ')})` : ''}${onB.length ? ` — <b>${onB.length} on the ballot, so the ballot shrinks to ${ballot().length - onB.length}</b> and everyone's scores on ${onB.length > 1 ? 'them' : 'it'} go too` : ''}; ${notesBy(v)} notes on other films; ${everVoted() ? `${scored(v)} scores, ${vetoes(v)} vetoes` : 'no scores yet'}.
+    ${everVoted() ? `Floor set ${fs.length} of ${active().length} → <b>${after} of ${others}</b>.` : ''} The join code still works for them — rotate it first if that's the problem.`;
+}
+function roster() {
+  const nb = ballot().length;
+  return floorLine() + `<table class="ros"><thead><tr><th>Voter</th><th>Suggested</th><th>Notes</th><th>Scored</th><th>Vetoes</th><th>Done</th><th>In the floor</th><th></th></tr></thead><tbody>
+  ${D.voters.map(v => {
+    const gone = S.removed.has(v), p = S.pend && S.pend.v === v ? S.pend : null;
+    const inFloor = everVoted() && floorSet().includes(v);
+    return `<tr class="${gone ? 'gone' : ''}"><td class="nowrap">${av(v)} <b>${esc(v)}</b></td>
+      <td class="tn">${present().filter(f => f.suggester === v).length || (gone ? '' : 0)}</td>
+      <td class="tn">${gone ? '' : notesBy(v)}</td>
+      <td class="tn">${gone ? '' : everVoted() ? `${scored(v)} / ${nb}` : '—'}</td>
+      <td class="tn">${gone ? '' : everVoted() ? vetoes(v) : '—'}</td>
+      <td>${gone ? '' : everVoted() ? (S.done.has(v) ? '✓' : '') : '—'}</td>
+      <td>${gone ? '' : everVoted() ? (inFloor ? 'yes' : '<span class="flag">no — no scores</span>') : '—'}</td>
+      <td class="nowrap">${gone ? `<a class="small" onclick="S.removed.delete('${v}');render()">restore (prototype only)</a>` : `<button onclick="S.pend={kind:'reset',v:'${v}'};render()">Reset password</button> <button onclick="S.pend={kind:'remove',v:'${v}'};render()">Remove</button>`}</td></tr>
+      ${S.temp[v] && !gone ? `<tr><td colspan="8"><div class="inl">New password for ${esc(v)}: <code class="pw">${S.temp[v]}</code> <span>Send it to them directly — it's shown once. Their other sessions have ended.</span><button onclick="delete S.temp['${v}'];render()">Done</button></div></td></tr>` : ''}
+      ${p && p.kind === 'reset' ? `<tr><td colspan="8"><div class="inl"><span>Generate a new password for ${esc(v)}? Their current one stops working and they are logged out everywhere.</span><button class="primary" onclick="reset('${v}')">Generate</button><button onclick="S.pend=null;render()">Cancel</button></div></td></tr>` : ''}
+      ${p && p.kind === 'remove' ? `<tr><td colspan="8"><div class="inl grave"><span>${removeText(v)}</span><button class="grave" onclick="S.removed.add('${v}');S.done.delete('${v}');S.pend=null;render()">Remove ${esc(v)}</button><button onclick="S.pend=null;render()">Cancel</button></div></td></tr>` : ''}`;
+  }).join('')}</tbody></table>
+  <p class="small mute">Registration is the join code (#8) — there is no invite or approval here.</p>`;
+}
+function reset(v) { const r = () => WORDS[Math.floor(Math.random() * WORDS.length)]; S.temp[v] = `${r()}-${r()}-${1000 + Math.floor(Math.random() * 9000)}`; S.pend = null; render(); }
+
+// ---------------------------------------------------------------- PICK / RUN stand-ins (#24, #22, #13)
+function pickStandin() {
+  return `<div class="floor"><b>PICK header</b> — Budget <input value="8" style="width:40px"> h · Anchor <input value="Sat 14 Nov 18:00" style="width:130px"> <span class="mute">(#24: above both tabs)</span></div>
+  <div class="standin"><b>Compare | Timetable</b> — #24's ledger and #22's editor live here. Stand-in.<br><br>
+  ${S.plan.length ? `Timetable: ${S.plan.map(id => esc(title(id))).join(' · ')} — ${S.plan.length} films, 18:00 → ${clock(planSpan())}` : 'Timetable: empty'}
+  · <a onclick="S.plan=S.plan.length?[]:[1091,9552,26466,170,1226578,431];render()">${S.plan.length ? 'clear it' : 'use a slate'}</a></div>`;
+}
+function runStandin() {
+  return `<div class="standin"><b>The timetable editor, with #13's ripple modes</b> (None / push keep gaps / push keep end time) — RUN adds no admin surface; this is PICK's Timetable tab. Stand-in.<br><br>
+  ${S.plan.length ? S.plan.map(id => esc(title(id))).join(' · ') : 'Timetable: empty'}</div>`;
+}
+const voterSide = () => `<a href="#" onclick="return false" title="The voter app, in a new tab — the admin session and the voter session are separate cookies (#8)">Voter side ↗</a> <span class="who">${S.voterCookie ? `signed in there as ${esc(S.voterCookie)}` : 'not signed in there'}</span>`;
+
+// ---------------------------------------------------------------- A: tabs + rail
+function variantA() {
+  const tab = S.tab || (pi() >= 3 ? 'pick' : 'films');
+  const b = back(), f = fwd();
+  const tabs = { films: `Films <span class="mute tn">${present().length}</span>`, pick: 'Pick', roster: `Roster <span class="mute tn">${active().length}</span>` };
+  return `<header class="adm"><span class="brand">Ribcage<small>ADMIN</small></span>
+    ${b ? `<button onclick="askMove('${b.to}')" title="${b.btn}">◀ ${b.to}</button>` : '<button disabled>◀</button>'}
+    <span class="rail">${PHASES.map((p, i) => `<span class="${i === pi() ? 'on' : i < pi() ? 'past' : ''}">${p}</span>`).join('')}</span>
+    ${f ? `<button onclick="askMove('${f.to}')" title="${f.btn}">${f.to} ▶</button>` : '<button disabled>▶</button>'}
+    <span class="grow"></span>${voterSide()} <a class="small">Log out</a></header>
+  ${confirmStrip()}
+  <nav class="tabs">${Object.entries(tabs).map(([k, l]) => `<a class="${tab === k ? 'on' : ''}" onclick="S.tab='${k}';S.pend=S.pend?.kind==='phase'?S.pend:null;render()">${l}</a>`).join('')}${histLine()}</nav>
+  <main>${tab === 'films' ? ledger() : tab === 'roster' ? roster() : pi() === 4 ? runStandin() : pickStandin()}</main>`;
+}
+
+// ---------------------------------------------------------------- B: console page
+function variantB() {
+  const r = S.route, crumb = r === 'console' ? '' : `<a onclick="go('console')">← Console</a> <span class="pbadge">${S.phase}</span> <span class="small mute">change the phase on the console</span>`;
+  let body;
+  if (r === 'console') {
+    const b = back(), f = fwd(), und = present().filter(x => dec(x) === 'undecided').length, dr = present().filter(x => dec(x) === 'dropped').length;
+    const at = p => (S.log.slice().reverse().find(e => e.p === p) || {}).at;
+    body = `<div class="pcard"><h2>The group is in ${S.phase}</h2>
+      <div class="track">${PHASES.map((p, i) => `${i ? '<span class="ln"></span>' : ''}<span class="st ${i === pi() ? 'cur' : i < pi() ? 'past' : ''}"><span class="b"></span>${p}<span class="d">${at(p) || ''}</span></span>`).join('')}</div>
+      <div class="moves">
+        ${b ? `<div class="move"><span class="h">◀ Back to ${b.to}</span><span>${b.text}</span><span class="acts"><button onclick="doMove('${b.to}')">${b.btn}</button></span></div>` : '<div></div>'}
+        ${f ? `<div class="move ${f.grave ? 'grave' : ''}"><span class="h">Forward to ${f.to} ▶</span><span>${f.text}</span><span class="acts"><button class="${f.grave ? 'grave' : 'primary'}" onclick="doMove('${f.to}')">${f.btn}</button></span></div>` : '<div></div>'}
+      </div><div style="margin-top:10px">${histLine()}</div></div>
+      <p class="hat">You're signed in as the admin. Your own votes go through an ordinary account on the ${voterSide()}.</p>
+      <div class="tools">
+        <div class="row"><span class="nm">Films</span><span class="grow tn">${present().length} suggestions · <b>${ballot().length} on the ballot</b> (${hm(screen())}) · ${dr} dropped · ${und ? `<b class="flag">${und} undecided</b>` : '0 undecided'}</span><button class="primary" onclick="go('films')">Open</button></div>
+        <div class="row"><span class="nm">Voters</span><span class="grow tn">${active().length} registered${everVoted() ? ` · ${doneN()} done · floor ${floorSet().length} of ${active().length}` : ''}</span><button onclick="go('roster')">Open</button></div>
+        <div class="row"><span class="nm">Pick</span><span class="grow tn">budget 8 h · anchor Sat 14 Nov 18:00 · timetable ${S.plan.length ? S.plan.length + ' films' : 'empty'}</span><button onclick="go('pick')">Open</button></div>
+      </div>`;
+  } else if (r === 'films') body = `<h2 style="margin:4px 0 10px">Films</h2>${sumbar()}${cardPool(filtered())}`;
+  else if (r === 'roster') body = `<h2 style="margin:4px 0 10px">Voters</h2>${roster()}`;
+  else body = `<h2 style="margin:4px 0 10px">Pick</h2>${pickStandin()}`;
+  return `<header class="lite"><span class="brand">Ribcage<small>ADMIN</small></span>${crumb}<span class="grow"></span><a class="small">Log out</a></header><main>${body}</main>`;
+}
+
+// ---------------------------------------------------------------- C: the page is the phase
+function variantC() {
+  const b = back(), f = fwd(), v = S.cview;
+  const STAT = {
+    SUGGEST: 'Suggestions are open. Approve as they come in, or wait for APPROVE.',
+    APPROVE: 'The list is frozen for voters. Decide each film; the ballot is what you approve.',
+    VOTE: `Voting. ${doneN()} of ${active().length} done.`,
+    PICK: 'Scores are open to everyone. Choose the slate and arrange the evening.',
+    RUN: 'The plan is published. Keep it true by editing it.',
+  };
+  let body;
+  if (v === 'roster') body = roster();
+  else if (pi() <= 1) body = sumbar() + cardPool(filtered());
+  else if (pi() === 2) {
+    const off = present().filter(x => dec(x) !== 'approved').sort((a, c) => c.order - a.order);
+    body = `<div class="sumbar"><span class="tn">Ballot: <b>${ballot().length} films</b> · ${hm(screen())}</span><span>Done: ${active().map(x => `${av(x)}${S.done.has(x) ? '✓' : ''}`).join(' ')}</span></div>
+      <div class="sect">Not on the ballot <span class="mute small">${off.length}</span></div>${cardPool(off)}
+      <div class="sect">On the ballot <span class="mute small">${ballot().length}</span></div>${cardPool(ballot().slice().sort((a, c) => c.order - a.order))}`;
+  } else body = pi() === 3 ? pickStandin() : runStandin();
+  return `<div class="strip"><span class="brand"><small>ADMIN</small></span>
+      ${b ? `<button onclick="askMove('${b.to}')">◀</button>` : '<button disabled>◀</button>'}<span class="ph">${S.phase}</span>${f ? `<button onclick="askMove('${f.to}')">▶</button>` : '<button disabled>▶</button>'}
+      <a class="${v === 'phase' ? 'on' : ''}" onclick="S.cview='phase';render()">This phase</a> · <a class="${v === 'roster' ? 'on' : ''}" onclick="S.cview='roster';render()">Roster</a>
+      <span class="grow"></span>${voterSide()} <a class="small">Log out</a></div>
+    ${confirmStrip()}
+    <div class="vhead"><span class="big">${v === 'roster' ? 'Roster' : STAT[S.phase]}</span><span class="grow"></span>${histLine()}</div>
+    <main>${body}</main>`;
+}
+
+// ---------------------------------------------------------------- plumbing
+function tog(id) { S.open.has(id) ? S.open.delete(id) : S.open.add(id); render(); }
+function go(r) { S.route = r; S.pend = null; render(); scrollTo(0, 0); }
+let tt; function toast(t) { const el = document.createElement('div'); el.textContent = t; el.style.cssText = 'position:fixed;left:50%;bottom:64px;transform:translateX(-50%);background:#1c1b19;color:#fff;border-radius:999px;padding:6px 14px;z-index:40'; document.body.appendChild(el); setTimeout(() => el.remove(), 2500); }
+function render() {
+  document.getElementById('app').innerHTML = ({ A: variantA, B: variantB, C: variantC })[S.variant]();
+  renderBar(); syncUrl();
+}
+function renderBar() {
+  document.getElementById('bar').innerHTML = `<div class="pbar"><button onclick="cycle(-1)">◀</button><span class="lbl">${S.variant} — ${VARIANTS[S.variant]}</span><button onclick="cycle(1)">▶</button>
+    <span class="grp"><span>start at</span>${PHASES.map(p => `<button class="${S.start === p ? 'on' : ''}" onclick="restart('${p}')">${p}</button>`).join('')}</span>
+    <span class="grp"><span>voter cookie</span><button class="${S.voterCookie ? 'on' : ''}" onclick="S.voterCookie=S.voterCookie?null:'Dani';render()">${S.voterCookie ? 'Dani' : 'none'}</button></span></div>`;
+}
+function restart(p) { const v = S.variant; preset(p); S.variant = v; render(); }
+function syncUrl() { const u = new URL(location); u.searchParams.set('variant', S.variant); u.searchParams.set('start', S.start); history.replaceState(null, '', u); }
+function cycle(d) { const k = Object.keys(VARIANTS); S.variant = k[(k.indexOf(S.variant) + d + k.length) % k.length]; S.pend = null; render(); }
+document.addEventListener('keydown', e => { if (e.target.closest('input,textarea,[contenteditable]')) return; if (e.key === 'ArrowLeft') cycle(-1); if (e.key === 'ArrowRight') cycle(1); });
+render();
+</script>
+</body>
+</html>
