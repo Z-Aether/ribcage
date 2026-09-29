@@ -1,0 +1,492 @@
+<!doctype html>
+<!--
+  PROTOTYPE — ticket #27, the voter home. Throwaway. Not production.
+
+  Where a voter lands, what they see in each phase, and what the pool of
+  suggestions looks like. Three variants of the VOTER SHELL, switchable via
+  ?variant=A|B|C and the floating bar; the bar's phase switch walks each one
+  through SUGGEST → APPROVE → VOTE → PICK → RUN.
+
+    A  One page      the page IS the phase: a thin header, and the body is whatever
+                     the phase is (pool / ballot / reveal / evening). Status in one
+                     sentence in the header; the nag is a slim bar under it; the
+                     done roster lives in the header in VOTE (as #9 drew it). Late
+                     suggestions in VOTE are one header link away.
+    B  Tabs          one tab per surface that exists so far — Films, Ballot, Scores,
+                     Evening, My warnings — the current phase's tab marked "now" and
+                     opened by default. The Films tab is grouped by who suggested
+                     what, and from APPROVE on it says what happened to each film.
+                     The nag is only a dot on the warnings tab; the done roster is
+                     its own strip on the Ballot tab.
+    C  Home          a hub you land on: what's happening, what comes next, what YOU
+                     still have to do (the nag is one of those to-dos), your own
+                     suggestions and the done roster. Every surface — the pool, the
+                     ballot, the scores, the evening — is its own page one click away.
+
+  Fixed by earlier tickets and not up for grabs here: the collapsed film card IS the
+  pool row and expands in place (#21); the Suggest-a-film panel sits above the pool
+  and a new film lands on top (#21); the ballot is a full-width tier list with a thin
+  header (#9); the voter's PICK body is the reveal matrix (#29); RUN is the
+  timetable, read-only (#13); "My warnings" is reachable in every phase but RUN
+  (#23); scores are hidden entirely during VOTE (#8); only SUGGEST and VOTE are
+  writable, and a voter is shown no door rather than told no (#15); voter-facing
+  surfaces are rounded and roomy (map principle, #29). The ballot, the reveal, the
+  evening and the warnings page are STAND-INS here — enough to judge the shell
+  around them, not redesigns of them.
+
+  Data is real (data.js): the #29 prototype's 32 candidates, nine voters, notes and
+  scores, plus three films from the #21 prototype — two long ones the admin drops in
+  APPROVE and one late suggestion that lands mid-VOTE. The Suggest panel's search is
+  a lookup against #21's recorded TMDB results (try "dune", "evil dead 2013",
+  "urban legend"). "You" are Dani.
+
+  Run:  python -m http.server 8027   →  http://localhost:8027/prototypes/voter-home/?variant=A
+        (or just open this file — everything is inline)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Voter home (prototype #27)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg:#f6f5f2; --panel:#fff; --ink:#1c1b19; --mute:#6b6963; --line:#dcd9d2; --line2:#ece9e2;
+    --acc:#2f5fd0; --acc2:#e8eefc; --warn:#b3261e; --warn2:#fbeae8; --ok:#2b7a3d; --ok2:#e6f2e8;
+    --amb:#8a5a00; --amb2:#fff6dc;
+    --s3:#1e6b34; --s2:#4b9a5c; --s1:#a5d3a7; --s0:#d9d7d0; --sm1:#e9a35c; --sv:#c8443a;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 system-ui, "Segoe UI", Roboto, sans-serif; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; border-radius:999px; padding:5px 14px; color:var(--ink); }
+  button:hover { border-color:#b9b5aa; }
+  button.primary { background:var(--acc); border-color:var(--acc); color:#fff; font-weight:600; }
+  button.ghost { border-color:transparent; background:none; color:var(--acc); padding:5px 8px; }
+  button.small { padding:2px 10px; font-size:12px; }
+  input, textarea { font:inherit; border:1px solid var(--line); border-radius:10px; padding:8px 12px; background:#fff; color:var(--ink); }
+  a { color:var(--acc); text-decoration:none; cursor:pointer; }
+  a:hover { text-decoration:underline; }
+  .mute { color:var(--mute); } .small { font-size:12px; } .tn { font-variant-numeric:tabular-nums; }
+  .grow { flex:1; }
+
+  /* ---------- shell pieces ---------- */
+  header.app { display:flex; align-items:center; gap:14px; padding:10px 22px; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:6; flex-wrap:wrap; }
+  header.app .brand { font-weight:800; letter-spacing:.02em; font-size:15px; }
+  .phase { background:var(--acc2); color:var(--acc); border-radius:999px; padding:2px 10px; font-size:11px; font-weight:700; letter-spacing:.05em; }
+  header.app .status { color:var(--mute); }
+  .me { display:inline-flex; align-items:center; gap:6px; color:var(--mute); }
+  .av { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; font-weight:700; font-size:12px; color:#2a2a2a; flex:none; position:relative; }
+  .av.sm { width:22px; height:22px; font-size:10px; }
+  .av.lg { width:40px; height:40px; font-size:15px; }
+  .av .tick { position:absolute; right:-4px; bottom:-4px; width:15px; height:15px; border-radius:50%; background:var(--ok); color:#fff; font-size:9px; line-height:15px; text-align:center; border:2px solid #fff; }
+  .av.off { opacity:.35; }
+  .roster { display:inline-flex; align-items:center; gap:4px; }
+  button.done { border-color:var(--ok); color:var(--ok); font-weight:600; }
+  button.done.on { background:var(--ok); color:#fff; }
+  .nagbar { background:var(--amb2); border-bottom:1px solid #f0dfa0; padding:8px 22px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; color:var(--amb); }
+  main { padding:18px 22px 140px; max-width:1500px; margin:0 auto; }
+  footer.app { padding:18px 22px 140px; color:var(--mute); font-size:12px; display:flex; gap:18px; flex-wrap:wrap; justify-content:center; }
+  .standin { font-size:11px; color:#a19e96; border:1px dashed var(--line); border-radius:999px; padding:1px 10px; display:inline-block; }
+  .banner { background:#fff; border:1px solid var(--line); border-radius:16px; padding:14px 18px; margin:0 0 16px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  .banner .big { font-size:16px; font-weight:600; }
+  .toast { position:fixed; left:50%; bottom:74px; transform:translateX(-50%); background:var(--ink); color:#fff; border-radius:999px; padding:8px 16px; z-index:20; display:flex; gap:12px; align-items:center; }
+  .toast a { color:#9fbaff; }
+
+  /* B: tabs */
+  nav.tabs { display:flex; gap:4px; padding:0 22px; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:49px; z-index:5; overflow-x:auto; }
+  nav.tabs a { padding:10px 16px; color:var(--mute); border-bottom:3px solid transparent; white-space:nowrap; font-weight:600; text-decoration:none; position:relative; }
+  nav.tabs a.on { color:var(--ink); border-bottom-color:var(--acc); }
+  nav.tabs .now { font-size:10px; background:var(--acc); color:#fff; border-radius:999px; padding:0 6px; margin-left:6px; vertical-align:1px; }
+  nav.tabs .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#e0a100; margin-left:6px; vertical-align:1px; }
+  .rosterstrip { display:flex; align-items:center; gap:14px; background:#fff; border:1px solid var(--line); border-radius:16px; padding:10px 16px; margin:0 0 14px; flex-wrap:wrap; }
+  .rosterstrip .who { display:inline-flex; flex-direction:column; align-items:center; gap:2px; font-size:11px; color:var(--mute); width:48px; }
+  .group h3 { margin:22px 0 8px; font-size:14px; display:flex; gap:8px; align-items:center; }
+  .fate { font-size:11px; border-radius:999px; padding:1px 9px; font-weight:600; white-space:nowrap; }
+  .fate.approved { background:var(--ok2); color:var(--ok); }
+  .fate.dropped { background:var(--line2); color:var(--mute); }
+  .fate.pending { background:var(--amb2); color:var(--amb); }
+
+  /* C: hub */
+  .hero { background:#fff; border:1px solid var(--line); border-radius:22px; padding:26px 30px; margin:0 0 18px; }
+  .hero h1 { margin:0 0 6px; font-size:26px; }
+  .hero p { margin:0 0 16px; color:var(--mute); font-size:15px; max-width:760px; }
+  .steps { display:flex; gap:0; align-items:center; margin:0 0 18px; flex-wrap:wrap; }
+  .steps .st { display:flex; align-items:center; gap:8px; color:#a19e96; font-weight:600; font-size:12px; letter-spacing:.04em; }
+  .steps .st .b { width:14px; height:14px; border-radius:50%; border:2px solid var(--line); background:#fff; }
+  .steps .st.past { color:var(--mute); } .steps .st.past .b { background:var(--mute); border-color:var(--mute); }
+  .steps .st.cur { color:var(--acc); } .steps .st.cur .b { background:var(--acc); border-color:var(--acc); box-shadow:0 0 0 4px var(--acc2); }
+  .steps .ln { width:48px; height:2px; background:var(--line); margin:0 10px; }
+  .todos { display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:14px; margin:0 0 18px; }
+  .todo { background:#fff; border:1px solid var(--line); border-radius:18px; padding:16px 18px; display:flex; flex-direction:column; gap:8px; }
+  .todo h4 { margin:0; font-size:15px; }
+  .todo.amb { background:var(--amb2); border-color:#f0dfa0; }
+  .todo .acts { display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; }
+  .todo ul { margin:0; padding:0; list-style:none; }
+  .todo li { display:flex; gap:8px; align-items:center; padding:3px 0; }
+  .crumb { margin:0 0 14px; }
+
+  /* ---------- the shared film card (#21), collapsed = the pool row ---------- */
+  .pool { display:flex; flex-direction:column; gap:10px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:12px 14px; display:flex; gap:14px; align-items:flex-start; }
+  .card.new { box-shadow:0 0 0 3px #b9ccf5; }
+  .card img.po { width:62px; height:93px; border-radius:8px; object-fit:cover; background:var(--line2); flex:none; }
+  .card .body { flex:1; min-width:0; }
+  .card .t1 { display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
+  .card .t1 .ti { font-weight:700; font-size:15px; cursor:pointer; }
+  .card .t2 { display:flex; gap:12px; align-items:center; flex-wrap:wrap; color:var(--mute); font-size:13px; margin-top:2px; }
+  .icon { display:inline-block; width:16px; height:16px; border-radius:50%; background:var(--warn); color:#fff; font-size:11px; line-height:16px; text-align:center; font-weight:700; }
+  .rtag { font-size:10px; border:1px solid var(--line); border-radius:999px; padding:0 6px; color:var(--mute); }
+  .notes { margin-top:6px; display:flex; flex-direction:column; gap:3px; }
+  .note { font-size:13px; display:flex; gap:6px; align-items:baseline; }
+  .note b { white-space:nowrap; }
+  .note.pitch { color:var(--ink); }
+  .note:not(.pitch) { color:#4a4843; }
+  .card .side { display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+  .card .more { margin-top:10px; border-top:1px solid var(--line2); padding-top:10px; display:flex; flex-direction:column; gap:8px; font-size:13px; }
+  .card .more textarea { width:100%; min-height:54px; }
+  .matched { color:var(--warn); }
+  details summary { cursor:pointer; color:var(--mute); }
+  .topics { columns:3 220px; font-size:12px; margin-top:6px; }
+  .topics div { break-inside:avoid; }
+
+  /* ---------- the Suggest-a-film panel (#21, flow settled; only its place is in question) ---------- */
+  .suggest { background:#fff; border:1px solid var(--line); border-radius:18px; padding:14px 16px; margin:0 0 16px; }
+  .suggest .row1 { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  .suggest .row1 input { flex:1; min-width:220px; }
+  .tiles { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+  .tiles .tl { width:120px; cursor:pointer; text-align:center; font-size:12px; }
+  .tiles .tl img { width:120px; height:180px; object-fit:cover; border-radius:10px; background:var(--line2); display:block; margin-bottom:4px; }
+  .tiles .tl:hover img { outline:3px solid var(--acc); }
+  .pitchstep { display:flex; gap:16px; margin-top:12px; flex-wrap:wrap; }
+  .pitchstep textarea { flex:1; min-width:260px; min-height:90px; }
+  .poolhead { display:flex; gap:10px; align-items:center; margin:0 0 10px; flex-wrap:wrap; }
+  .poolhead h2 { margin:0; font-size:17px; }
+  .chipf { border-radius:999px; padding:3px 12px; border:1px solid var(--line); background:#fff; cursor:pointer; font-size:13px; }
+  .chipf.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+
+  /* ---------- stand-ins ---------- */
+  .tray { position:sticky; background:#fff; border:1px solid var(--line); border-radius:16px; padding:10px 12px; margin:0 0 12px; z-index:4; }
+  .band { display:flex; gap:10px; align-items:stretch; margin:0 0 8px; }
+  .band .lab { width:110px; flex:none; border-radius:12px; padding:8px 10px; font-weight:700; font-size:13px; display:flex; flex-direction:column; justify-content:center; }
+  .band .zone { flex:1; background:#fff; border:1px solid var(--line); border-radius:12px; padding:6px; display:flex; gap:6px; flex-wrap:wrap; min-height:118px; }
+  .band.veto .zone { border:2px dashed var(--sv); }
+  .tile { width:72px; text-align:center; font-size:10px; line-height:1.2; }
+  .tile img { width:72px; height:106px; object-fit:cover; border-radius:6px; display:block; background:var(--line2); }
+  .tile.ring img { outline:3px solid #e0a100; }
+  .s3 { background:var(--s3); color:#fff; } .s2 { background:var(--s2); color:#fff; } .s1 { background:var(--s1); } .s0 { background:var(--s0); } .sm1 { background:var(--sm1); } .sv { background:var(--sv); color:#fff; }
+  table.rev { width:100%; border-collapse:separate; border-spacing:0 6px; }
+  table.rev th { font-size:12px; color:var(--mute); font-weight:600; padding:0 4px; }
+  table.rev td { background:#fff; padding:6px 4px; text-align:center; border-top:1px solid var(--line2); border-bottom:1px solid var(--line2); }
+  table.rev td:first-child { text-align:left; border-left:1px solid var(--line2); border-radius:12px 0 0 12px; padding-left:12px; }
+  table.rev td:last-child { border-right:1px solid var(--line2); border-radius:0 12px 12px 0; }
+  .pill { display:inline-flex; align-items:center; justify-content:center; width:40px; height:30px; border-radius:9px; font-weight:700; font-size:13px; }
+  .pill.blank { border:2px dotted var(--line); }
+  .evening { display:flex; flex-direction:column; gap:10px; max-width:760px; margin:0 auto; }
+  .box { background:#fff; border:1px solid var(--line); border-radius:16px; padding:12px 16px; display:flex; gap:16px; align-items:center; }
+  .box .tm { font-size:18px; font-weight:700; width:120px; font-variant-numeric:tabular-nums; }
+  .box img { width:46px; height:69px; border-radius:6px; object-fit:cover; }
+  .box.now { border:2px solid var(--acc); box-shadow:0 0 0 4px var(--acc2); }
+  .box.past { opacity:.5; }
+  .box.meal { background:var(--line2); }
+  .warnlist { display:flex; flex-wrap:wrap; gap:8px; }
+  .warnlist label { background:#fff; border:1px solid var(--line); border-radius:999px; padding:4px 12px; cursor:pointer; }
+  .warnlist input { margin-right:6px; }
+
+  /* ---------- prototype bar ---------- */
+  .pbar { position:fixed; left:50%; bottom:14px; transform:translateX(-50%); background:#111; color:#eee; border-radius:14px; padding:6px 10px; display:flex; gap:10px; align-items:center; z-index:30; box-shadow:0 6px 24px rgba(0,0,0,.35); font-size:12px; flex-wrap:wrap; justify-content:center; max-width:96vw; }
+  .pbar button { background:#2a2a2a; color:#eee; border:1px solid #444; border-radius:8px; padding:3px 9px; font-size:12px; }
+  .pbar button.on { background:#eee; color:#111; }
+  .pbar .lbl { font-weight:700; min-width:150px; text-align:center; }
+  .pbar .grp { display:flex; gap:3px; align-items:center; }
+  .pbar .grp span { color:#999; margin-right:4px; }
+  .pbar.top { top:10px; bottom:auto; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="bar"></div>
+<script src="data.js"></script>
+<script>
+const D = window.DATA, ME = D.me;
+const PHASES = ['SUGGEST', 'APPROVE', 'VOTE', 'PICK', 'RUN'];
+const VARIANTS = { A: 'One page', B: 'Tabs', C: 'Home' };
+const qs = new URLSearchParams(location.search);
+const S = {
+  variant: VARIANTS[qs.get('variant')] ? qs.get('variant') : 'A',
+  phase: PHASES.includes(qs.get('phase')) ? qs.get('phase') : 'SUGGEST',
+  warn: 'none',            // none | set | dontcare  (#20/#23's nag fires on "none")
+  watched: new Set(D.watched),
+  trim: '120',             // full | 120 | pitch | none — #21's knob for forty cards
+  route: null,             // variant-specific secondary page
+  open: new Set(), filter: 'all',
+  done: new Set(['Ana', 'Csilla', 'Feri', 'Gergő']),
+  added: [], withdrawn: new Set(), myNotes: {}, rt: {},
+  q: '', results: null, draft: null, justAdded: null, toast: null,
+  barMin: false, barTop: false,
+};
+const LATE = 9877;
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const po = p => p ? `https://image.tmdb.org/t/p/w185${p}` : '';
+const pi = () => PHASES.indexOf(S.phase);
+const HUES = { Ana: '#f4c7c3', Bence: '#c6dafc', Csilla: '#fce8b2', Dani: '#b7e1cd', Eszter: '#e1c9f5', Feri: '#f9d4b0', 'Gergő': '#c8e6f0', Hanna: '#f7c6de', 'Iván': '#d9d2c5' };
+const av = (n, cls = '', tick = false) => `<span class="av ${cls}" style="background:${HUES[n] || '#ddd'}" title="${esc(n)}">${esc(n[0])}${tick ? '<span class="tick">✓</span>' : ''}</span>`;
+const byMe = f => f.suggester === ME;
+
+// ---------------------------------------------------------------- the world, by phase
+function exists(f) { return !S.withdrawn.has(f.id) && (f.id !== LATE || pi() >= 2); }
+function fate(f) { // what the admin has done with a suggestion, as of this phase
+  if (f._added) return 'pending';
+  if (f.id === LATE) return 'pending';
+  if (S.phase === 'SUGGEST') return 'pending';
+  if (S.phase === 'APPROVE') return f.fate === 'dropped' ? 'dropped' : f.order < 20 ? 'approved' : 'pending';
+  return f.fate;
+}
+function suggestions() { return [...S.added, ...D.films].filter(exists); }
+function ballot() { return D.films.filter(f => f.fate === 'approved'); }
+const myScore = f => (f.order % 3 === 0 ? undefined : D.scores[ME][f.id]); // a half-sorted ballot: 21 of 32
+function scored() { return ballot().filter(f => myScore(f) !== undefined || D.vetoes[ME][f.id] !== undefined).length; }
+function matched(f) { if (S.warn !== 'set' || !f.dtdd) return []; return f.dtdd.topics.filter(t => S.watched.has(t.topic)); }
+function hasIcon(f) { return matched(f).some(t => t.yes >= 5 && t.yes > t.no); }
+function notesOf(f) { const n = { ...f.notes }; if (S.myNotes[f.id] !== undefined) { if (S.myNotes[f.id]) n[ME] = S.myNotes[f.id]; else delete n[ME]; } return Object.entries(n).sort((a, b) => (b[0] === f.suggester) - (a[0] === f.suggester)); }
+const runtime = f => S.rt[f.id] ?? f.runtime;
+const STATUS = {
+  SUGGEST: 'Suggesting films — add anything you would like to watch. Nothing is decided yet.',
+  APPROVE: 'The admin is choosing which films go to the vote. You can still suggest; new ones wait for the admin.',
+  VOTE: 'Voting — sort every film on your ballot. Nobody sees anyone’s scores until voting closes.',
+  PICK: 'VOTE is closed · the admin is choosing the slate · everyone’s scores are open, by name',
+  RUN: 'The plan is set. This is the evening.',
+};
+
+// ---------------------------------------------------------------- the shared card (#21), collapsed = the pool row
+function trimmed(t) { return S.trim === '120' && t.length > 120 ? t.slice(0, 117) + '…' : t; }
+function card(f, opts = {}) {
+  const open = S.open.has(f.id), notes = notesOf(f), m = matched(f);
+  const shown = S.trim === 'none' ? [] : S.trim === 'pitch' ? notes.slice(0, 1) : notes;
+  const mine = byMe(f), fa = fate(f);
+  const writable = S.phase === 'SUGGEST' || S.phase === 'APPROVE' || (S.phase === 'VOTE' && fa === 'pending');
+  return `<article class="card ${S.justAdded === f.id ? 'new' : ''}">
+    <img class="po" src="${po(f.poster)}" alt="">
+    <div class="body">
+      <div class="t1">${hasIcon(f) ? '<span class="icon" title="a topic you watch for">!</span>' : ''}
+        <span class="ti" onclick="tog(${f.id})">${esc(f.title)}</span><span class="mute">${f.year || ''}</span>
+        <span class="mute small">${esc((f.director || []).join(', '))}${f.cert ? ' · ' + esc(f.cert) : ''}</span>
+        <span class="small">${f.trailer ? `<a href="https://youtu.be/${f.trailer}" target="_blank">▶ Trailer</a> · ` : ''}<a href="https://www.themoviedb.org/movie/${f.id}" target="_blank">TMDB</a></span>
+        ${opts.fate ? `<span class="fate ${fa}">${{ approved: 'On the ballot', dropped: 'Not this time', pending: 'Waiting for the admin' }[fa]}</span>` : ''}
+      </div>
+      <div class="t2"><span class="tn">⏱ ${runtime(f) ? runtime(f) + ' min' : '—'} <span class="rtag">${S.rt[f.id] ? 'edited' : f.runtimeSrc === 'edited' ? 'edited' : 'TMDB'}</span>${writable ? ` <a class="small" onclick="editRt(${f.id})">✎</a>` : ''}</span>
+        ${opts.noBy ? '' : `<span>suggested by ${av(f.suggester, 'sm')} <b>${mine ? 'you' : esc(f.suggester)}</b></span>`}</div>
+      ${shown.length ? `<div class="notes">${(open ? notes : shown).map(([w, t]) => `<div class="note ${w === f.suggester ? 'pitch' : ''}">${av(w, 'sm')}<span>${open ? esc(t) : esc(trimmed(t))}</span></div>`).join('')}</div>` : ''}
+      ${open ? `<div class="more">
+        ${writable ? `<label class="small mute">Your note</label><textarea onchange="note(${f.id},this.value)">${esc(S.myNotes[f.id] ?? f.notes[ME] ?? '')}</textarea>` : ''}
+        <div class="small">DoesTheDogDie match: <b>${f.dtdd ? esc(f.dtdd.name) + ' (' + esc(f.dtdd.year) + ')' : '<span class="mute">none — nothing is known about this film</span>'}</b></div>
+        ${m.length ? `<div class="matched small">Topics you watch for: ${m.map(t => `<b>${esc(t.topic)}</b> ${t.yes} yes / ${t.no} no`).join(' · ')}</div>` : ''}
+        ${f.dtdd && f.dtdd.topics.length ? `<details><summary class="small">All ${f.dtdd.topics.length} topics</summary><div class="topics">${f.dtdd.topics.map(t => `<div>${esc(t.topic)} <span class="mute">${t.yes}/${t.no}</span></div>`).join('')}</div></details>` : ''}
+        <div class="small mute">Powered by <a href="https://www.doesthedogdie.com" target="_blank">DoesTheDogDie.com</a></div>
+      </div>` : ''}
+    </div>
+    <div class="side">${mine && fa === 'pending' && (S.phase !== 'PICK' && S.phase !== 'RUN') ? `<button class="small" onclick="withdraw(${f.id})">Withdraw</button>` : ''}</div>
+  </article>`;
+}
+
+// ---------------------------------------------------------------- the Suggest-a-film panel (#21)
+function suggestPanel() {
+  let inner = '';
+  if (S.draft) {
+    const d = S.draft;
+    inner = `<div class="pitchstep"><img src="${po(d.poster)}" style="width:90px;height:135px;border-radius:10px;object-fit:cover">
+      <div style="flex:1;display:flex;flex-direction:column;gap:8px"><div><b>${esc(d.title)}</b> <span class="mute">${d.year}</span></div>
+      <textarea id="pitch" placeholder="Why this one? Your pitch is the first note everyone reads."></textarea>
+      <div class="small mute">⏱ ${d.runtime ? d.runtime + ' min, from TMDB' : 'no runtime yet'} <a>✎</a></div>
+      <div><button class="primary" onclick="addDraft()">Add to the pool</button> <button class="ghost" onclick="S.draft=null;render()">Back</button></div></div></div>`;
+  } else if (S.results) {
+    inner = S.results.length ? `<div class="tiles">${S.results.map((r, i) => `<div class="tl" onclick="pick(${i})"><img src="${po(r.poster_path)}"><b>${esc(r.title)}</b><br><span class="mute">${(r.release_date || '').slice(0, 4)}</span></div>`).join('')}</div>` : `<div class="small mute" style="margin-top:8px">Nothing recorded for that search in the prototype — try “dune”, “evil dead 2013”, “urban legend”.</div>`;
+  }
+  return `<section class="suggest"><div class="row1"><b>Suggest a film</b>
+    <input id="q" placeholder="Title, and a year if you know it" value="${esc(S.q)}" oninput="search(this.value)" ${S.draft ? 'disabled' : ''}></div>${inner}</section>`;
+}
+let deb;
+function search(v) {
+  S.q = v; clearTimeout(deb);
+  deb = setTimeout(() => {
+    const m = v.trim().match(/^(.*?)(?:\s+(\d{4}))?$/); const t = (m[1] || '').toLowerCase(), y = m[2];
+    if (t.length < 2) { S.results = null; render(); focusQ(); return; }
+    const key = Object.keys(D.searches).find(k => k.toLowerCase().startsWith(t) || t.startsWith(k.toLowerCase()));
+    let rows = key ? D.searches[key].rows : [];
+    if (y) rows = rows.filter(r => (r.release_date || '').startsWith(y));
+    S.results = rows.slice(0, 5); render(); focusQ();
+  }, 300);
+}
+function focusQ() { const q = document.getElementById('q'); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }
+function pick(i) { const r = S.results[i], f = D.searchFilms[r.id] || {}; S.draft = { id: r.id, title: r.title, year: (r.release_date || '').slice(0, 4), poster: r.poster_path, runtime: f.runtime, director: f.director, cert: f.cert, trailer: f.trailer, dtdd: f.dtdd }; render(); }
+function addDraft() {
+  const d = S.draft, p = document.getElementById('pitch').value.trim();
+  const id = d.id + 1e7 + S.added.length; // never collides with a real candidate in the prototype
+  S.added.unshift({ ...d, id, suggester: ME, notes: p ? { [ME]: p } : {}, runtimeSrc: 'TMDB', _added: true, order: 999 });
+  S.draft = null; S.results = null; S.q = ''; S.justAdded = id;
+  if (S.variant === 'C') S.route = 'pool';
+  if (S.variant === 'B') S.route = 'films';
+  if (S.variant === 'A' && S.phase === 'VOTE') S.route = 'pool';
+  toast(`Added ${d.title} to the pool`); render(); window.scrollTo(0, 0);
+}
+
+// ---------------------------------------------------------------- the pool, three arrangements
+function poolFilter(list) { return S.filter === 'mine' ? list.filter(byMe) : list; }
+function poolHead(list, title) {
+  const mine = list.filter(byMe).length, people = new Set(list.map(f => f.suggester)).size;
+  return `<div class="poolhead"><h2>${title}</h2><span class="mute">${list.length} film${list.length === 1 ? '' : 's'} from ${people} ${people === 1 ? 'person' : 'people'}</span><span class="grow"></span>
+    <span class="chipf ${S.filter === 'all' ? 'on' : ''}" onclick="S.filter='all';render()">Everyone’s</span>
+    <span class="chipf ${S.filter === 'mine' ? 'on' : ''}" onclick="S.filter='mine';render()">Mine (${mine})</span></div>`;
+}
+function flatPool(list, opts = {}) { const l = poolFilter(list); return `<div class="pool">${l.map(f => card(f, opts)).join('') || '<div class="mute">Nothing here yet.</div>'}</div>`; }
+function groupedPool(list, opts) { // B: by suggester, you first
+  const who = [...new Set(list.map(f => f.suggester))].sort((a, b) => (b === ME) - (a === ME) || a.localeCompare(b));
+  return who.map(w => { const l = list.filter(f => f.suggester === w); return `<div class="group"><h3>${av(w)} ${w === ME ? 'Your suggestions' : esc(w)} <span class="mute small">${l.length}</span></h3><div class="pool">${l.map(f => card(f, { ...opts, noBy: true })).join('')}</div></div>`; }).join('');
+}
+
+// ---------------------------------------------------------------- stand-ins for settled surfaces
+function ballotBody(topOffset) {
+  const B = ballot(), bands = [[3, '+3', 'top pick', 's3'], [2, '+2', '', 's2'], [1, '+1', '', 's1'], [0, '0', 'don’t mind', 's0'], [-1, '−1', 'rather not', 'sm1']];
+  const tile = f => `<div class="tile ${hasIcon(f) ? 'ring' : ''}"><img src="${po(f.poster)}">${esc(f.title)}</div>`;
+  const uns = B.filter(f => myScore(f) === undefined && D.vetoes[ME][f.id] === undefined);
+  return `<div class="standin" style="margin-bottom:8px">stand-in · the ballot is settled by #9</div>
+    <div class="tray" style="top:${topOffset}px"><b>Unsorted</b> <span class="mute small">${uns.length} left — drag each one into a band</span><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${uns.map(tile).join('')}</div></div>
+    ${bands.map(([v, l, s, c]) => `<div class="band"><div class="lab ${c}">${l}<span style="font-weight:400;font-size:11px">${s}</span></div><div class="zone">${B.filter(f => myScore(f) === v && D.vetoes[ME][f.id] === undefined).map(tile).join('')}</div></div>`).join('')}
+    <div class="band veto"><div class="lab" style="color:var(--sv)">Veto<span style="font-weight:400;font-size:11px">I won’t be in the room</span></div><div class="zone">${B.filter(f => D.vetoes[ME][f.id] !== undefined).map(tile).join('')}</div></div>`;
+}
+function revealBody() {
+  const B = ballot().map(f => ({ f, pts: D.voters.reduce((s, v) => s + (D.vetoes[v][f.id] !== undefined ? -2 : D.scores[v][f.id] ?? 0), 0) })).sort((a, b) => b.pts - a.pts);
+  const cls = { 3: 's3', 2: 's2', 1: 's1', 0: 's0', '-1': 'sm1' };
+  return `<div class="standin" style="margin-bottom:8px">stand-in · the reveal is settled by #29</div>
+    <table class="rev"><tr><th style="text-align:left">Film</th>${D.voters.map(v => `<th>${av(v)}<br>${v === ME ? 'you' : esc(v)}</th>`).join('')}<th>Points</th></tr>
+    ${B.map(({ f, pts }) => `<tr><td><b>${esc(f.title)}</b> <span class="mute">${f.year}</span></td>${D.voters.map(v => { const vt = D.vetoes[v][f.id] !== undefined, s = D.scores[v][f.id]; return `<td>${vt ? '<span class="pill sv">☒</span>' : s === undefined ? (v === 'Iván' ? '' : '<span class="pill blank"></span>') : `<span class="pill ${cls[s]}">${s > 0 ? '+' + s : s === -1 ? '−1' : s}</span>`}</td>`; }).join('')}<td><b class="tn">${pts}</b></td></tr>`).join('')}</table>`;
+}
+function eveningBody() {
+  const films = ballot().filter(f => [1091, 499537, 938614, 1078605, 109428].includes(f.id));
+  let t = 18 * 60; const rows = []; const fmt = m => `${String(Math.floor(m / 60) % 24).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+  films.forEach((f, i) => { rows.push({ f, a: t, b: t + f.runtime }); t += f.runtime + 15; if (i === 1) { rows.push({ meal: 'Dinner', a: t, b: t + 45 }); t += 60; } });
+  const now = rows[2].a + 20;
+  return `<div class="standin" style="margin-bottom:8px">stand-in · the evening is #13's read-only timetable, drawn by #22</div>
+    <div class="evening"><div class="mute" style="text-align:center">Saturday 11 October · starts 18:00</div>
+    ${rows.map(r => `<div class="box ${r.meal ? 'meal' : ''} ${now >= r.a && now < r.b ? 'now' : now >= r.b ? 'past' : ''}"><div class="tm">${fmt(r.a)}–${fmt(r.b)}</div>${r.meal ? `<b>${r.meal}</b>` : `<img src="${po(r.f.poster)}"><div><b>${esc(r.f.title)}</b> <span class="mute">${r.f.year} · ${r.f.runtime} min</span>${now >= r.a && now < r.b ? '<div class="small" style="color:var(--acc);font-weight:700">NOW PLAYING</div>' : ''}</div>`}</div>`).join('')}</div>`;
+}
+function warningsBody() {
+  const all = ['Does the dog die', 'Does a cat die', 'Are there spiders', 'Are there flashing lights or images', 'Does someone vomit', 'Is someone sexually assaulted', 'Are needles/syringes used', 'Is there eye mutilation', 'Is someone buried alive', 'Are there jump scares', 'Is there blood/gore', 'Does someone self harm'];
+  return `<div class="standin" style="margin-bottom:8px">stand-in · the trigger list page is settled by #23</div>
+    <h2 style="margin:6px 0">My warnings</h2><p class="mute">Only you ever see this list — not the group, not the admin’s screens. The admin and the person hosting the app could read it in the database.</p>
+    <p><button class="ghost" onclick="S.warn='dontcare';S.route=null;render()">I don’t care about warnings</button></p>
+    <div class="warnlist">${all.map(t => `<label><input type="checkbox" ${S.warn === 'set' && S.watched.has(t) ? 'checked' : ''} onchange="watch('${t.replace(/'/g, "\\'")}',this.checked)">${esc(t)}</label>`).join('')}</div>`;
+}
+const footer = () => `<footer class="app"><span>Film data from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.</span><a>DoesTheDogDie.com</a><a>Report abuse</a><a>Privacy</a></footer>`;
+const doneBtn = () => `<button class="done ${S.done.has(ME) ? 'on' : ''}" onclick="toggleDone()">${S.done.has(ME) ? '✓ I’m done' : 'I’m done'}</button>`;
+const rosterAvs = () => `<span class="roster">${D.voters.map(v => av(v, 'sm' + (S.done.has(v) ? '' : ' off'), S.done.has(v))).join('')}</span>`;
+const nagText = `You haven’t said what you’d like to be warned about.`;
+
+// ---------------------------------------------------------------- A · One page
+function variantA() {
+  const ph = S.phase, onPool = S.route === 'pool', onWarn = S.route === 'warnings';
+  let hdr = `<header class="app"><span class="brand">Ribcage</span><span class="phase">${ph}</span><span class="status">${ph === 'VOTE' && !onPool && !onWarn ? '' : esc(STATUS[ph])}</span>`;
+  if (ph === 'VOTE' && !onPool && !onWarn) hdr += `<span class="tn"><b>${scored()}</b> of ${ballot().length} scored</span> ${rosterAvs()} <span class="mute small">${S.done.size} of ${D.voters.length} done</span> ${doneBtn()}`;
+  hdr += `<span class="grow"></span>`;
+  if (ph === 'VOTE') hdr += onPool ? `<a onclick="go(null)">← Your ballot</a>` : `<a onclick="go('pool')">＋ Suggest a film</a>`;
+  if (ph !== 'RUN') hdr += `<a onclick="go(${onWarn ? 'null' : "'warnings'"})">${onWarn ? '← Back' : 'My warnings'}</a>`;
+  hdr += `<span class="me">${av(ME)} Dani</span></header>`;
+  const nag = S.warn === 'none' && ph !== 'RUN' && !onWarn ? `<div class="nagbar">⚑ <span>${nagText}</span><a onclick="go('warnings')"><b>Set up warnings</b></a><span class="grow"></span><button class="ghost" onclick="S.warn='dontcare';render()">I don’t care</button></div>` : '';
+  let body;
+  if (onWarn) body = warningsBody();
+  else if (ph === 'SUGGEST' || ph === 'APPROVE') body = suggestPanel() + poolHead(suggestions(), 'Suggestions') + flatPool(suggestions());
+  else if (ph === 'VOTE' && onPool) { const l = suggestions().filter(f => fate(f) === 'pending'); body = suggestPanel() + poolHead(l, 'Late suggestions') + `<p class="mute" style="margin-top:-4px">These wait for the admin. The other ${ballot().length} films are on <a onclick="go(null)">your ballot</a>.</p>` + flatPool(l); }
+  else if (ph === 'VOTE') body = ballotBody(53);
+  else if (ph === 'PICK') body = revealBody();
+  else body = eveningBody();
+  return hdr + nag + `<main>${body}</main>` + footer();
+}
+
+// ---------------------------------------------------------------- B · Tabs
+function variantB() {
+  const ph = S.phase, i = pi();
+  const tabs = [['films', `Films <span class="mute">${suggestions().length}</span>`, 0, 1], ['ballot', 'Ballot', 2, 2], ['scores', 'Scores', 3, 3], ['evening', 'Evening', 4, 4]]
+    .filter(([, , from, to]) => i >= from && !(i > 2 && from === 2)); // the ballot turns into the scores at VOTE close
+  const nowTab = { SUGGEST: 'films', APPROVE: 'films', VOTE: 'ballot', PICK: 'scores', RUN: 'evening' }[ph];
+  const cur = S.route && (tabs.some(t => t[0] === S.route) || S.route === 'warnings') ? S.route : nowTab;
+  let hdr = `<header class="app"><span class="brand">Ribcage</span><span class="phase">${ph}</span><span class="status">${esc(STATUS[ph])}</span><span class="grow"></span><span class="me">${av(ME)} Dani</span></header>`;
+  hdr += `<nav class="tabs">${tabs.map(([k, l]) => `<a class="${cur === k ? 'on' : ''}" onclick="go('${k}')">${l}${k === nowTab ? '<span class="now">now</span>' : ''}</a>`).join('')}
+    ${ph !== 'RUN' ? `<span class="grow"></span><a class="${cur === 'warnings' ? 'on' : ''}" onclick="go('warnings')">My warnings${S.warn === 'none' ? '<span class="dot" title="not set up yet"></span>' : ''}</a>` : ''}</nav>`;
+  let body;
+  if (cur === 'warnings') body = warningsBody();
+  else if (cur === 'films') {
+    const l = suggestions(), writable = ph !== 'PICK' && ph !== 'RUN';
+    body = (writable ? suggestPanel() : '') + `<div class="poolhead"><h2>Films</h2><span class="mute">${l.length} suggested by ${new Set(l.map(f => f.suggester)).size} people${i >= 1 ? ` · ${l.filter(f => fate(f) === 'approved').length} on the ballot` : ''}</span></div>` + groupedPool(l, { fate: i >= 1 });
+  }
+  else if (cur === 'ballot') body = `<div class="rosterstrip"><b>Who’s done</b>${D.voters.map(v => `<span class="who">${av(v, 'lg' + (S.done.has(v) ? '' : ' off'), S.done.has(v))}${v === ME ? 'you' : esc(v)}</span>`).join('')}<span class="grow"></span><span class="tn"><b>${scored()}</b> of ${ballot().length} scored</span>${doneBtn()}</div>` + ballotBody(94);
+  else if (cur === 'scores') body = revealBody();
+  else body = eveningBody();
+  return hdr + `<main>${body}</main>` + footer();
+}
+
+// ---------------------------------------------------------------- C · Home
+function variantC() {
+  const ph = S.phase, i = pi(), r = S.route;
+  const back = r ? `<div class="crumb"><a onclick="go(null)">← Home</a></div>` : '';
+  let hdr = `<header class="app"><span class="brand" style="cursor:pointer" onclick="go(null)">Ribcage</span><span class="phase">${ph}</span>`;
+  if (r === 'ballot') hdr += `<span class="tn"><b>${scored()}</b> of ${ballot().length} scored</span> ${rosterAvs()} ${doneBtn()}`;
+  hdr += `<span class="grow"></span>${ph !== 'RUN' ? `<a onclick="go('warnings')">My warnings</a>` : ''}<span class="me">${av(ME)} Dani</span></header>`;
+  let body;
+  if (r === 'warnings') body = back + warningsBody();
+  else if (r === 'pool') { const l = i >= 2 ? suggestions().filter(f => fate(f) === 'pending') : suggestions(); body = back + (ph !== 'PICK' && ph !== 'RUN' ? suggestPanel() : '') + poolHead(l, i >= 2 ? 'Waiting for the admin' : 'Suggestions') + flatPool(l); }
+  else if (r === 'ballot') body = back + ballotBody(53);
+  else if (r === 'scores') body = back + revealBody();
+  else if (r === 'evening') body = back + eveningBody();
+  else body = homeC();
+  return hdr + `<main>${body}</main>` + footer();
+}
+function homeC() {
+  const ph = S.phase, i = pi(), mine = suggestions().filter(byMe);
+  const H = {
+    SUGGEST: ['Suggest films', `${suggestions().length} films from ${new Set(suggestions().map(f => f.suggester)).size} people so far. Add anything you’d like to watch and say why — your pitch is what everyone reads.`, [['pool', 'See the suggestions and add yours', 1]]],
+    APPROVE: ['The admin is choosing the ballot', `${suggestions().filter(f => fate(f) === 'approved').length} of ${suggestions().length} films are in so far. Voting opens when the admin is done. You can still suggest — new ones wait for the admin.`, [['pool', 'Look through the suggestions', 0]]],
+    VOTE: ['Time to vote', `Sort all ${ballot().length} films into bands. Nobody sees anyone’s scores until voting closes — then everyone sees everything.`, [['ballot', 'Open your ballot', 1], ['pool', 'Suggest a late film', 0]]],
+    PICK: ['Voting is closed', 'The admin is choosing the slate. Everyone’s scores are open now, by name.', [['scores', 'See everyone’s scores', 1]]],
+    RUN: ['The plan is set', 'Saturday 11 October from 18:00. The evening is on the next page — it keeps itself up to date.', [['evening', 'Open the evening', 1]]],
+  }[ph];
+  const steps = PHASES.map((p, k) => `<span class="st ${k < i ? 'past' : k === i ? 'cur' : ''}"><span class="b"></span>${p}</span>`).join('<span class="ln"></span>');
+  const todos = [];
+  if (S.warn === 'none' && ph !== 'RUN') todos.push(`<div class="todo amb"><h4>⚑ Warnings</h4><div>${nagText} Films with something you’d rather know about get a mark.</div><div class="acts"><button class="primary" onclick="go('warnings')">Set up warnings</button><button class="ghost" onclick="S.warn='dontcare';render()">I don’t care</button></div></div>`);
+  if (ph === 'VOTE') todos.push(`<div class="todo"><h4>Your ballot</h4><div class="tn" style="font-size:22px"><b>${scored()}</b> <span class="mute" style="font-size:14px">of ${ballot().length} sorted</span></div><div class="acts"><button onclick="go('ballot')">Keep sorting</button>${doneBtn()}</div></div>`,
+    `<div class="todo"><h4>Who’s done</h4><ul>${D.voters.map(v => `<li>${av(v, 'sm' + (S.done.has(v) ? '' : ' off'), S.done.has(v))} ${v === ME ? 'you' : esc(v)} <span class="mute small">${S.done.has(v) ? 'done' : ''}</span></li>`).join('')}</ul></div>`);
+  if (ph !== 'RUN') todos.push(`<div class="todo"><h4>Your suggestions <span class="mute small">${mine.length}</span></h4><ul>${mine.map(f => `<li><img src="${po(f.poster)}" style="width:26px;height:39px;border-radius:4px;object-fit:cover"> <span class="grow">${esc(f.title)} <span class="mute small">${f.year}</span></span>${i >= 1 ? `<span class="fate ${fate(f)}">${{ approved: 'On the ballot', dropped: 'Not this time', pending: 'Waiting' }[fate(f)]}</span>` : ''}</li>`).join('') || '<li class="mute">None yet.</li>'}</ul>${ph !== 'PICK' ? `<div class="acts"><button class="ghost" onclick="S.filter='mine';go('pool')">Edit notes or withdraw</button></div>` : ''}</div>`);
+  return `<section class="hero"><div class="steps">${steps}</div><h1>${H[0]}</h1><p>${H[1]}</p>${H[2].map(([rt, l, p]) => `<button class="${p ? 'primary' : ''}" style="font-size:15px;padding:8px 18px;margin-right:8px" onclick="go('${rt}')">${l} →</button>`).join('')}</section><div class="todos">${todos.join('')}</div>`;
+}
+
+// ---------------------------------------------------------------- actions
+function go(r) { S.route = r; if (r !== 'pool') S.filter = r === null ? S.filter : S.filter; render(); window.scrollTo(0, 0); }
+function tog(id) { S.open.has(id) ? S.open.delete(id) : S.open.add(id); render(); }
+function note(id, v) { S.myNotes[id] = v.trim(); render(); }
+function editRt(id) { const f = [...S.added, ...D.films].find(x => x.id === id); const v = prompt(`Runtime of the copy we’ll watch (TMDB says ${f.tmdbRuntime || f.runtime} min)`, runtime(f)); if (v && +v > 0) { S.rt[id] = +v; render(); } }
+function withdraw(id) { S.withdrawn.add(id); toast('Withdrawn', () => { S.withdrawn.delete(id); render(); }); render(); }
+function watch(t, on) { if (S.warn !== 'set') { S.warn = 'set'; S.watched = new Set(); } on ? S.watched.add(t) : S.watched.delete(t); if (!S.watched.size) S.warn = 'none'; render(); }
+function toggleDone() { S.done.has(ME) ? S.done.delete(ME) : S.done.add(ME); render(); }
+let tt;
+function toast(text, undo) { S.toast = { text, undo }; clearTimeout(tt); tt = setTimeout(() => { S.toast = null; S.justAdded = null; render(); }, 5000); }
+
+function render() {
+  const html = S.variant === 'A' ? variantA() : S.variant === 'B' ? variantB() : variantC();
+  document.getElementById('app').innerHTML = html + (S.toast ? `<div class="toast">${esc(S.toast.text)}${S.toast.undo ? ` <a onclick="S.toast.undo();S.toast=null;render()">Undo</a>` : ''}</div>` : '');
+  renderBar();
+}
+function renderBar() {
+  const b = document.getElementById('bar');
+  if (S.barMin) { b.innerHTML = `<div class="pbar ${S.barTop ? 'top' : ''}"><button onclick="S.barMin=false;renderBar()">▸ ${S.variant} · ${S.phase}</button></div>`; return; }
+  b.innerHTML = `<div class="pbar ${S.barTop ? 'top' : ''}">
+    <button onclick="cycle(-1)">←</button><span class="lbl">${S.variant} — ${VARIANTS[S.variant]}</span><button onclick="cycle(1)">→</button>
+    <span class="grp"><span>phase</span>${PHASES.map(p => `<button class="${S.phase === p ? 'on' : ''}" onclick="setPhase('${p}')">${p[0]}${p.slice(1).toLowerCase()}</button>`).join('')}</span>
+    <span class="grp"><span>warnings</span>${[['none', 'not set'], ['set', 'set'], ['dontcare', 'don’t care']].map(([k, l]) => `<button class="${S.warn === k ? 'on' : ''}" onclick="S.warn='${k}';if(S.warn==='set'&&!S.watched.size)S.watched=new Set(D.watched);render()">${l}</button>`).join('')}</span>
+    <span class="grp"><span>notes</span>${[['full', 'full'], ['120', '120'], ['pitch', 'pitch'], ['none', 'none']].map(([k, l]) => `<button class="${S.trim === k ? 'on' : ''}" onclick="S.trim='${k}';render()">${l}</button>`).join('')}</span>
+    <button title="move the bar" onclick="S.barTop=!S.barTop;renderBar()">${S.barTop ? '⤓' : '⤒'}</button><button onclick="S.barMin=true;renderBar()">▾</button></div>`;
+}
+function syncUrl() { const u = new URL(location); u.searchParams.set('variant', S.variant); u.searchParams.set('phase', S.phase); history.replaceState(null, '', u); }
+function cycle(d) { const k = Object.keys(VARIANTS); S.variant = k[(k.indexOf(S.variant) + d + k.length) % k.length]; S.route = null; S.draft = null; S.results = null; syncUrl(); render(); }
+function setPhase(p) { S.phase = p; S.route = null; S.draft = null; S.results = null; syncUrl(); render(); }
+document.addEventListener('keydown', e => { if (e.target.closest('input,textarea,[contenteditable]')) return; if (e.key === 'ArrowLeft') cycle(-1); if (e.key === 'ArrowRight') cycle(1); });
+syncUrl(); render();
+</script>
+</body>
+</html>
