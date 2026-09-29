@@ -55,11 +55,11 @@ _Avoid_: publish (that is what advancing to RUN does to the timetable), results
 ### Suggesting
 
 **Suggestion**:
-A film a voter puts forward in SUGGEST, attributed to them, waiting in the pool for the admin to approve or drop. (#8, #15)
+A film a voter puts forward in SUGGEST, attributed to them, waiting in the pool for the admin to approve or drop. Made and withdrawn in SUGGEST only; a withdrawn suggestion is simply gone. (#8, #15, #27)
 _Avoid_: nomination, entry, submission
 
 **Pool**:
-The suggestions awaiting the admin's decision. Suggestions land here at any time, including after VOTE has opened. (#15)
+The suggestions awaiting the admin's decision. Open to additions in SUGGEST, frozen in APPROVE, and not shown to voters from VOTE on, when the ballot takes its place; what the admin dropped is never marked, only absent from the ballot. (#15, #27)
 _Avoid_: queue, backlog, candidate pool
 
 **Picker**:
@@ -67,11 +67,11 @@ The step in SUGGEST where the suggester says which film they meant: five poster 
 _Avoid_: autocomplete, search results, disambiguator
 
 **Runtime**:
-The length of the particular copy of a film the group will watch, not a fact about the film. Filled in from metadata and editable by anyone; the admin's approve card flags a value that differs from the fetched one. (#5, #12, #15, #19, #21)
+The length of the particular copy of a film the group will watch, not a fact about the film. Filled in from metadata and editable by anyone during SUGGEST, by the admin after it; the admin's approve card flags a value that differs from the fetched one. (#5, #12, #15, #19, #21, #27)
 _Avoid_: length, duration, official runtime
 
 **Note**:
-A voter's own words on a film: one per voter per film, visible to the whole group, editable only by its author. The suggester's note is their **pitch**, shown first. With scores hidden during VOTE, the only channel for persuading the group; also where anything the crowd evidence misses is written down. (#8, #20, #21)
+A voter's own words on a film: one per voter per film, visible to the whole group, editable only by its author and only in SUGGEST and APPROVE. The suggester's note is their **pitch**, shown first. With scores hidden during VOTE, the only channel for persuading the group; also where anything the crowd evidence misses is written down. (#8, #9, #20, #21, #27)
 _Avoid_: comment, blurb, description, personal note, freeform note, group note
 
 **Film card**:
@@ -237,7 +237,7 @@ A number that changes when a box is moved: per-person presence strips and shared
 ### Running
 
 **RUN**:
-The final phase, entered when the admin declares the plan settled, possibly days ahead; advancing to it publishes the timetable, which stays editable. Nothing follows it: the marathon ending is a fact about the world, not a state in the app. (#12, #13, #15)
+The final phase, entered when the admin declares the plan settled, possibly days ahead; advancing to it publishes the timetable, which stays editable and is the voter's page, with the reveal behind it as a secondary view. Nothing follows it: the marathon ending is a fact about the world, not a state in the app. (#12, #13, #15, #27)
 _Avoid_: marathon day, done, finished
 
 **Actualising**:
