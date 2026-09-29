@@ -19,8 +19,12 @@ The end of a window: the app is stopped and unreachable, and nothing it held is 
 _Avoid_: archive, cancel, shutdown
 
 **Phase**:
-Which of five stages the marathon is in: SUGGEST, APPROVE, VOTE, PICK, RUN. It decides which of the two user-writable surfaces, SUGGEST and VOTE, is live; it never gates the admin and moves freely in both directions. A fresh database starts in SUGGEST — there is no phase before it, because standing the app up is the deployment's business, not a state the app is in. (#15)
+Which of five stages the marathon is in: SUGGEST, APPROVE, VOTE, PICK, RUN. It decides which of the two user-writable surfaces, SUGGEST and VOTE, is live; it never gates the admin and moves one step at a time in either direction. A fresh database starts in SUGGEST — there is no phase before it, because standing the app up is the deployment's business, not a state the app is in. (#15, #28)
 _Avoid_: stage, step, status, state; SETUP (dropped as a phase 2026-09-12)
+
+**Phase history**:
+The append-only record of every phase move and when it was made. Whether the reveal has ever happened is read from it, never kept as a flag of its own. (#28, #29)
+_Avoid_: audit log, previous phase
 
 ### People
 
@@ -29,7 +33,7 @@ A person registered into the marathon. The roster holds voters and nothing else,
 _Avoid_: user, account, member, participant
 
 **Admin**:
-The person who runs the marathon and moves its phase, signing in with a credential that lives outside the roster. Never a voter and never counted as one. (#8)
+The person who runs the marathon and moves its phase, signing in with a credential that lives outside the roster. Never a voter and never counted as one; the person holding it may also register as a voter, under a separate sign-in. (#8, #28)
 _Avoid_: owner, host, organiser, moderator
 
 **Join code**:
@@ -41,37 +45,49 @@ The unique name a voter chooses at registration and is known by everywhere. The 
 _Avoid_: username, handle, real name
 
 **Roster**:
-The list of everyone registered for the marathon. The control over who is in: looked at and pruned by the admin, never approved into. (#8)
+The list of everyone registered for the marathon. The control over who is in: looked at by the admin and removed from after the fact, never approved into. (#8, #28)
 _Avoid_: user list, membership, directory
+
+**Removal**:
+The admin taking a voter off the roster. Their scores, vetoes, done marker and notes on other films go with them; their suggestions stay, pitch and place on the ballot included, still attributed to them and marked removed. Not a ban: the join code still admits them. (#8, #28)
+_Avoid_: delete, ban, kick, prune
 
 **Attribution**:
 The binding of every suggestion, score and veto to the voter who made it. A property of the model rather than of any screen, so "anonymous" can only ever mean hidden from other voters. (#8, #10)
 _Avoid_: anonymity (as a claim about the app), authorship
 
 **Reveal**:
-The moment VOTE closes and every voter's scores become visible, per person, to the whole group. One-way; reopening VOTE does not undo it. (#8, #15)
+The moment VOTE closes and every voter's scores become visible, per person, to the whole group. One-way: reopening VOTE hides the scores again but cannot unsee them. (#8, #15, #29)
 _Avoid_: publish (that is what advancing to RUN does to the timetable), results
 
 ### Suggesting
 
 **Suggestion**:
-A film a voter puts forward in SUGGEST, attributed to them, waiting in the pool for the admin to approve or drop. Made and withdrawn in SUGGEST only; a withdrawn suggestion is simply gone. (#8, #15, #27)
+A film a voter puts forward in SUGGEST, attributed to them and carrying the admin's approval. Made and withdrawn in SUGGEST only; a withdrawn suggestion is simply gone, while one whose suggester is removed stays. (#8, #15, #27, #28)
 _Avoid_: nomination, entry, submission
 
 **Pool**:
-The suggestions awaiting the admin's decision. Open to additions in SUGGEST, frozen in APPROVE, and not shown to voters from VOTE on, when the ballot takes its place; what the admin dropped is never marked, only absent from the ballot. (#15, #27)
+All the suggestions, whatever their approval. Open to additions in SUGGEST, frozen in APPROVE, and not shown to voters from VOTE on, when the ballot takes its place; voters never see approval, and what the admin dropped is only absent from the ballot. (#15, #27, #28)
 _Avoid_: queue, backlog, candidate pool
+
+**Approval**:
+The admin's standing decision on a suggestion: undecided, approved or dropped. Every suggestion starts undecided, only approved ones are on the ballot, and any of the three can become another at any time. (#15, #28)
+_Avoid_: pending, review, status, accept
+
+**Drop**:
+The admin's decision to keep a suggestion off the ballot. Reversible and destroys nothing: a dropped film keeps its notes, and any scores and vetoes it gathered as a candidate, unshown and counted nowhere until it is approved again. (#27, #28)
+_Avoid_: reject, delete, remove (that is done to a voter), withdraw (that is the suggester's own)
 
 **Picker**:
 The step in SUGGEST where the suggester says which film they meant: five poster tiles, never auto-advanced, narrowed by a year typed after the title. Identity is always chosen by a person, never taken from search ranking. (#5, #19, #21)
 _Avoid_: autocomplete, search results, disambiguator
 
 **Runtime**:
-The length of the particular copy of a film the group will watch, not a fact about the film. Filled in from metadata and editable by anyone during SUGGEST, by the admin after it; the admin's approve card flags a value that differs from the fetched one. (#5, #12, #15, #19, #21, #27)
+The length of the particular copy of a film the group will watch, not a fact about the film. Filled in from metadata and editable by anyone during SUGGEST, by the admin after it; the approve screen flags a value that differs from the fetched one. (#5, #12, #15, #19, #21, #27, #28)
 _Avoid_: length, duration, official runtime
 
 **Note**:
-A voter's own words on a film: one per voter per film, visible to the whole group, editable only by its author and only in SUGGEST and APPROVE. The suggester's note is their **pitch**, shown first. With scores hidden during VOTE, the only channel for persuading the group; also where anything the crowd evidence misses is written down. (#8, #9, #20, #21, #27)
+A voter's own words on a film: one per voter per film, visible to the whole group, editable only by its author and only in SUGGEST and APPROVE. The suggester's note is their **pitch**, shown first, and it outlives their removal; their notes on other films do not. With scores hidden during VOTE, the only channel for persuading the group; also where anything the crowd evidence misses is written down. (#8, #9, #20, #21, #27, #28)
 _Avoid_: comment, blurb, description, personal note, freeform note, group note
 
 **Film card**:
@@ -81,15 +97,15 @@ _Avoid_: movie card, film sheet (as a distinct thing), tile (that is a picker re
 ### Voting
 
 **Candidate**:
-A film the admin has approved out of the pool. The candidates are what VOTE and SOLVE work on; a film without a runtime cannot become one. (#5, #15)
-_Avoid_: movie; not interchangeable with suggestion, the pre-approval state
+A suggestion the admin has approved and not since dropped. The candidates are what VOTE and SOLVE work on; a film without a runtime cannot become one. (#5, #15, #28)
+_Avoid_: movie; not interchangeable with suggestion, which also covers undecided and dropped films
 
 **Ballot**:
-The candidates put before voters in VOTE. Growing it while VOTE is open clears every voter's done marker, whoever added the film. (#15)
+The candidates put before voters in VOTE: exactly the approved suggestions. Growing it once VOTE has opened clears every voter's done marker; shrinking it clears nothing. (#15, #28)
 _Avoid_: candidate set, voting list
 
 **Score**:
-A voter's stated appetite for a candidate on a coarse five-point scale from "rather not" to "top pick", taken at face value and never normalised against anyone else's. Hidden from other voters until the reveal. (#8, #10)
+A voter's stated appetite for a candidate on a coarse five-point scale from "rather not" to "top pick", taken at face value and never normalised against anyone else's. Hidden from other voters until the reveal. A score on a dropped film is kept but counts nowhere while it stays dropped. (#8, #10, #28)
 _Avoid_: rating, preference, vote, points
 
 **Veto**:
@@ -105,7 +121,7 @@ A voter being out of the room for a film. Only the absence a veto declares is mo
 _Avoid_: attendance, availability, presence (as a modelled thing)
 
 **Done**:
-A voter's own signal that they have finished with the current ballot, shown by name to the whole group. Reversible and never a lock on their votes; cleared for everyone when the ballot grows. (#15)
+A voter's own signal that they have finished with the current ballot, shown by name to the whole group. Reversible and never a lock on their votes; cleared for everyone when the ballot grows, never when it shrinks or VOTE reopens. (#15, #28)
 _Avoid_: submit, lock, finalize, finished
 
 ### Selection
@@ -134,7 +150,7 @@ The sum of every voter's score for every film in a slate. The objective's least 
 _Avoid_: ε, tie-break, tiebreaker
 
 **Floor set**:
-The voters the floor is computed over: everyone with at least one score, never everyone registered, minus anyone removed by the without-a-voter knob. (#8, #15, #17)
+The voters the floor is computed over: everyone with at least one score on a candidate, never everyone registered, minus anyone set aside by the without-a-voter knob. (#8, #15, #17, #28)
 
 ### Proposing
 
