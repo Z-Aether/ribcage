@@ -40,6 +40,20 @@
   a lookup against #21's recorded TMDB results (try "dune", "evil dead 2013",
   "urban legend"). "You" are Dani.
 
+  Round 2 (2026-09-29). Dev: A wins — "mostly one screen per phase"; B and C
+  overcomplicate it; the nag bar is not too loud; the header roster is enough.
+  Simplicity is the driving principle. Changes, shown on A only (B and C are kept
+  as the losing options and only run, they were not revised):
+    - suggesting, withdrawing and editing the runtime happen in SUGGEST only; in
+      APPROVE the list is frozen and in VOTE it is not shown — the ballot is the
+      whole page. Late suggestions are not a feature (amends #15).
+    - notes stay editable while the list is reachable (SUGGEST, APPROVE).
+    - APPROVE shows nothing of the admin's decisions; the result is the ballot.
+    - the nag shows until the reveal (SUGGEST, APPROVE, VOTE); My warnings stays
+      reachable through PICK, since the reveal opens the card (#29).
+    - PICK is the reveal; RUN is the evening with the reveal as a secondary view,
+      one header link away (amends #13's single page).
+
   Run:  python -m http.server 8027   →  http://localhost:8027/prototypes/voter-home/?variant=A
         (or just open this file — everything is inline)
 -->
@@ -232,7 +246,7 @@ const av = (n, cls = '', tick = false) => `<span class="av ${cls}" style="backgr
 const byMe = f => f.suggester === ME;
 
 // ---------------------------------------------------------------- the world, by phase
-function exists(f) { return !S.withdrawn.has(f.id) && (f.id !== LATE || pi() >= 2); }
+function exists(f) { return !S.withdrawn.has(f.id) && f.id !== LATE; } // round 2: late suggestions are not a feature
 function fate(f) { // what the admin has done with a suggestion, as of this phase
   if (f._added) return 'pending';
   if (f.id === LATE) return 'pending';
@@ -250,7 +264,7 @@ function notesOf(f) { const n = { ...f.notes }; if (S.myNotes[f.id] !== undefine
 const runtime = f => S.rt[f.id] ?? f.runtime;
 const STATUS = {
   SUGGEST: 'Suggesting films — add anything you would like to watch. Nothing is decided yet.',
-  APPROVE: 'The admin is choosing which films go to the vote. You can still suggest; new ones wait for the admin.',
+  APPROVE: 'The admin is choosing which films go to the vote. The list is closed.',
   VOTE: 'Voting — sort every film on your ballot. Nobody sees anyone’s scores until voting closes.',
   PICK: 'VOTE is closed · the admin is choosing the slate · everyone’s scores are open, by name',
   RUN: 'The plan is set. This is the evening.',
@@ -262,7 +276,8 @@ function card(f, opts = {}) {
   const open = S.open.has(f.id), notes = notesOf(f), m = matched(f);
   const shown = S.trim === 'none' ? [] : S.trim === 'pitch' ? notes.slice(0, 1) : notes;
   const mine = byMe(f), fa = fate(f);
-  const writable = S.phase === 'SUGGEST' || S.phase === 'APPROVE' || (S.phase === 'VOTE' && fa === 'pending');
+  const writable = S.phase === 'SUGGEST';                            // round 2: runtime and withdraw only while suggesting
+  const noteable = S.phase === 'SUGGEST' || S.phase === 'APPROVE';  // round 2: notes stay open while the list is reachable
   return `<article class="card ${S.justAdded === f.id ? 'new' : ''}">
     <img class="po" src="${po(f.poster)}" alt="">
     <div class="body">
@@ -276,14 +291,14 @@ function card(f, opts = {}) {
         ${opts.noBy ? '' : `<span>suggested by ${av(f.suggester, 'sm')} <b>${mine ? 'you' : esc(f.suggester)}</b></span>`}</div>
       ${shown.length ? `<div class="notes">${(open ? notes : shown).map(([w, t]) => `<div class="note ${w === f.suggester ? 'pitch' : ''}">${av(w, 'sm')}<span>${open ? esc(t) : esc(trimmed(t))}</span></div>`).join('')}</div>` : ''}
       ${open ? `<div class="more">
-        ${writable ? `<label class="small mute">Your note</label><textarea onchange="note(${f.id},this.value)">${esc(S.myNotes[f.id] ?? f.notes[ME] ?? '')}</textarea>` : ''}
+        ${noteable ? `<label class="small mute">Your note</label><textarea onchange="note(${f.id},this.value)">${esc(S.myNotes[f.id] ?? f.notes[ME] ?? '')}</textarea>` : ''}
         <div class="small">DoesTheDogDie match: <b>${f.dtdd ? esc(f.dtdd.name) + ' (' + esc(f.dtdd.year) + ')' : '<span class="mute">none — nothing is known about this film</span>'}</b></div>
         ${m.length ? `<div class="matched small">Topics you watch for: ${m.map(t => `<b>${esc(t.topic)}</b> ${t.yes} yes / ${t.no} no`).join(' · ')}</div>` : ''}
         ${f.dtdd && f.dtdd.topics.length ? `<details><summary class="small">All ${f.dtdd.topics.length} topics</summary><div class="topics">${f.dtdd.topics.map(t => `<div>${esc(t.topic)} <span class="mute">${t.yes}/${t.no}</span></div>`).join('')}</div></details>` : ''}
         <div class="small mute">Powered by <a href="https://www.doesthedogdie.com" target="_blank">DoesTheDogDie.com</a></div>
       </div>` : ''}
     </div>
-    <div class="side">${mine && fa === 'pending' && (S.phase !== 'PICK' && S.phase !== 'RUN') ? `<button class="small" onclick="withdraw(${f.id})">Withdraw</button>` : ''}</div>
+    <div class="side">${mine && writable ? `<button class="small" onclick="withdraw(${f.id})">Withdraw</button>` : ''}</div>
   </article>`;
 }
 
@@ -382,20 +397,20 @@ const nagText = `You haven’t said what you’d like to be warned about.`;
 
 // ---------------------------------------------------------------- A · One page
 function variantA() {
-  const ph = S.phase, onPool = S.route === 'pool', onWarn = S.route === 'warnings';
-  let hdr = `<header class="app"><span class="brand">Ribcage</span><span class="phase">${ph}</span><span class="status">${ph === 'VOTE' && !onPool && !onWarn ? '' : esc(STATUS[ph])}</span>`;
-  if (ph === 'VOTE' && !onPool && !onWarn) hdr += `<span class="tn"><b>${scored()}</b> of ${ballot().length} scored</span> ${rosterAvs()} <span class="mute small">${S.done.size} of ${D.voters.length} done</span> ${doneBtn()}`;
+  const ph = S.phase, onWarn = S.route === 'warnings', onScores = S.route === 'scores';
+  let hdr = `<header class="app"><span class="brand">Ribcage</span><span class="phase">${ph}</span><span class="status">${ph === 'VOTE' && !onWarn ? '' : esc(onScores ? 'Everyone’s scores, as they were when voting closed' : STATUS[ph])}</span>`;
+  if (ph === 'VOTE' && !onWarn) hdr += `<span class="tn"><b>${scored()}</b> of ${ballot().length} scored</span> ${rosterAvs()} <span class="mute small">${S.done.size} of ${D.voters.length} done</span> ${doneBtn()}`;
   hdr += `<span class="grow"></span>`;
-  if (ph === 'VOTE') hdr += onPool ? `<a onclick="go(null)">← Your ballot</a>` : `<a onclick="go('pool')">＋ Suggest a film</a>`;
+  if (ph === 'RUN') hdr += onScores ? `<a onclick="go(null)">← The evening</a>` : `<a onclick="go('scores')">Everyone’s scores</a>`; // round 2: RUN's secondary view
   if (ph !== 'RUN') hdr += `<a onclick="go(${onWarn ? 'null' : "'warnings'"})">${onWarn ? '← Back' : 'My warnings'}</a>`;
   hdr += `<span class="me">${av(ME)} Dani</span></header>`;
-  const nag = S.warn === 'none' && ph !== 'RUN' && !onWarn ? `<div class="nagbar">⚑ <span>${nagText}</span><a onclick="go('warnings')"><b>Set up warnings</b></a><span class="grow"></span><button class="ghost" onclick="S.warn='dontcare';render()">I don’t care</button></div>` : '';
+  const nag = S.warn === 'none' && pi() <= 2 && !onWarn ? `<div class="nagbar">⚑ <span>${nagText}</span><a onclick="go('warnings')"><b>Set up warnings</b></a><span class="grow"></span><button class="ghost" onclick="S.warn='dontcare';render()">I don’t care</button></div>` : ''; // round 2: gone from the reveal on
   let body;
   if (onWarn) body = warningsBody();
-  else if (ph === 'SUGGEST' || ph === 'APPROVE') body = suggestPanel() + poolHead(suggestions(), 'Suggestions') + flatPool(suggestions());
-  else if (ph === 'VOTE' && onPool) { const l = suggestions().filter(f => fate(f) === 'pending'); body = suggestPanel() + poolHead(l, 'Late suggestions') + `<p class="mute" style="margin-top:-4px">These wait for the admin. The other ${ballot().length} films are on <a onclick="go(null)">your ballot</a>.</p>` + flatPool(l); }
+  else if (ph === 'SUGGEST') body = suggestPanel() + poolHead(suggestions(), 'Suggestions') + flatPool(suggestions());
+  else if (ph === 'APPROVE') body = poolHead(suggestions(), 'Suggestions') + flatPool(suggestions()); // frozen: no panel, no withdraw, notes still open
   else if (ph === 'VOTE') body = ballotBody(53);
-  else if (ph === 'PICK') body = revealBody();
+  else if (ph === 'PICK' || onScores) body = revealBody();
   else body = eveningBody();
   return hdr + nag + `<main>${body}</main>` + footer();
 }
