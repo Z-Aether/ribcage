@@ -5,3 +5,5 @@
 # Live API keys — never commit
 docs/credentials/
 tmp/
+
+/data
