@@ -41,6 +41,12 @@
     two questions — the whole evening vs only now-and-later (refitting as the evening passes), and the
     now-playing card vs that information inside the box.
 
+  Round 4 (2026-10-04): editor split and four-phone RUN settled (phone 2 — whole evening, now-playing in
+    the box). The dev wants the live ripple preview AND one copy of the engine, on the server. The bar's
+    "engine" control simulates that: the dragged box follows the pointer locally, a preview request goes
+    out only when the snapped value changes (latest wins, stale answers dropped), and every other box and
+    readout is the server's answer, arriving after the chosen latency. Undo removed (dev: no undo).
+
   Run:  python -m http.server 8022   →  http://localhost:8022/prototypes/timetable-editor/?variant=A
 -->
 <html lang="en">
@@ -318,7 +324,7 @@ const SCEN = {
 // ============================================================ state
 const qs = new URLSearchParams(location.search);
 const S = {
-  variant: 'A', fitHs: {}, zoom: true, lockA: null, // round 2: the editor is A; B/C editors stay in the code and the round-1 commit
+  variant: 'A', fitHs: {}, zoom: true, lockA: null, lat: 100, lastReqs: 0, saving: false, // round 2: the editor is A; B/C editors stay in the code and the round-1 commit
   view: 'pick', anchor: '2026-10-31T18:00', budget: 540, mode: 'none',
   boxes: [], rt: {}, sel: null, now: 0, undoOn: false, prev: null, scen: 'arranged', sheet: null, tab: 'timetable',
 };
@@ -685,12 +691,12 @@ function renderBar() {
   const R = readouts(S);
   const [t0, t1] = R.bs.length ? [Math.min(R.first, 0) - 30, R.last + 30] : [0, 600];
   document.getElementById('proto').innerHTML = `
-    <b>Round 3</b><span class="sep"></span>
+    <b>Round 4</b><span class="sep"></span>
     ${[['pick', 'PICK'], ['runadmin', 'RUN · admin'], ['runvoter', 'RUN · voter 📱']].map(([k, l]) => `<button data-view="${k}" class="${S.view === k ? 'on' : ''}">${l}</button>`).join('')}
     ${S.view !== 'pick' ? `<label>clock <input type="range" id="now" min="${t0}" max="${t1}" step="5" value="${S.now}" style="width:140px"> <b class="num">${dclock(S.now)}</b></label>` : ''}
     <span class="sep"></span><select id="scen">${Object.entries(SCEN).map(([k, v]) => `<option value="${k}" ${S.scen === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select>
     ${S.view === 'runvoter' ? `<button data-act="zoom" class="${S.zoom ? 'on' : ''}">phones 80%</button>` : ''}
-    <label title="#13's candidate, not a decision"><input type="checkbox" id="undo" ${S.undoOn ? 'checked' : ''}> undo (Ctrl+Z, one level)</label>`;
+    ${S.view !== 'runvoter' ? `<span class="sep"></span><label>engine <select id="lat">${[[0, 'in the browser'], [30, 'server · 30 ms'], [100, 'server · 100 ms'], [250, 'server · 250 ms'], [600, 'server · 600 ms']].map(([v, l]) => `<option value="${v}" ${S.lat === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>${S.lat && S.lastReqs ? `<span style="color:#aaa">last drag: ${S.lastReqs} preview requests${S.saving ? ' · saving…' : ''}</span>` : ''}` : ''}`;
   const n = SCEN[S.scen].note;
   const notes = document.getElementById('scenNote') || (() => { const d = document.createElement('div'); d.id = 'scenNote'; d.style.cssText = 'position:fixed;left:16px;bottom:64px;max-width:380px;background:#fffbe9;border:1px solid #e6d89a;border-radius:6px;padding:8px 10px;font-size:12px;z-index:99'; document.body.appendChild(d); return d; })();
   notes.innerHTML = `<b>${esc(SCEN[S.scen].name)}</b> <a href="#" data-act="hidenote" style="float:right;color:#888">hide</a><br>${esc(n)}`;
@@ -720,7 +726,7 @@ document.addEventListener('pointerdown', e => {
   const sc = el.closest('[data-ppm]'); if (!sc) return;
   const id = +el.dataset.box, b = S.boxes.find(x => x.id === id);
   if (S.variant === 'A') S.lockA = { t0: +sc.dataset.t0, t1: +sc.dataset.t1, ppm: +sc.dataset.ppm }; // don't rescale under the pointer
-  drag = { id, axis: S.variant === 'A' ? 'x' : 'y', ppm: +sc.dataset.ppm, x0: e.clientX, y0: e.clientY, base: { boxes: S.boxes, rt: S.rt }, start0: b.start, len0: lenOf(S, b), resize: !!e.target.dataset.rz, moved: false };
+  drag = { seq: 0, shown: 0, reqs: 0, lastKey: null, server: null, ch: null, id, axis: S.variant === 'A' ? 'x' : 'y', ppm: +sc.dataset.ppm, x0: e.clientX, y0: e.clientY, base: { boxes: S.boxes, rt: S.rt }, start0: b.start, len0: lenOf(S, b), resize: !!e.target.dataset.rz, moved: false };
   e.preventDefault();
 });
 document.addEventListener('pointermove', e => {
@@ -730,16 +736,38 @@ document.addEventListener('pointermove', e => {
   drag.moved = true;
   const dm = px / drag.ppm;
   let next;
-  if (drag.resize) next = edit(drag.base, drag.id, { len: Math.max(5, e.altKey ? Math.round(drag.len0 + dm) : r5(drag.len0 + dm)) }, S.mode);
-  else next = edit(drag.base, drag.id, { start: snapStart(drag.base, drag.id, drag.start0 + dm, drag.len0, e.altKey) }, S.mode);
-  S.boxes = next.boxes; S.rt = next.rt; S.sel = drag.id;
-  render();
-  const el = document.querySelector(`.bx[data-box="${drag.id}"]`); if (el) el.classList.add('drag');
+  const ch = drag.resize ? { len: Math.max(5, e.altKey ? Math.round(drag.len0 + dm) : r5(drag.len0 + dm)) }
+                         : { start: snapStart(drag.base, drag.id, drag.start0 + dm, drag.len0, e.altKey) };
+  S.sel = drag.id;
+  if (!S.lat) { const next = edit(drag.base, drag.id, ch, S.mode); S.boxes = next.boxes; S.rt = next.rt; paintDrag(); return; }
+  // round 4: the engine lives on the server. The dragged box follows the pointer locally (snapping is UI);
+  // everything else — neighbours, strips, clocks, overlap, budget marker — is the server's answer.
+  // A request goes out only when the snapped value changes. Any answer newer than the one on screen is shown
+  // (strict latest-wins froze the neighbours for as long as the pointer kept moving faster than the latency).
+  drag.ch = ch;
+  const key = JSON.stringify(ch);
+  if (key !== drag.lastKey) {
+    drag.lastKey = key; const seq = ++drag.seq; drag.reqs++;
+    serverEdit(drag.base, drag.id, ch, S.mode).then(r => { if (drag && seq > drag.shown) { drag.shown = seq; drag.server = r; showDrag(); } });
+  }
+  showDrag();
 });
+function serverEdit(base, id, ch, mode) { // stands in for POST /timetable/preview — a pure function call behind HTTP, never writes
+  return new Promise(res => setTimeout(() => res(edit(base, id, ch, mode)), S.lat * (0.8 + Math.random() * 0.4)));
+}
+function showDrag() { // last server answer, with the dragged box overridden by where the pointer is now
+  const st = clone(drag.server || drag.base), b = st.boxes.find(x => x.id === drag.id);
+  Object.assign(b, drag.ch); S.boxes = st.boxes; S.rt = st.rt; paintDrag();
+}
+function paintDrag() { render(); const el = document.querySelector(`.bx[data-box="${drag.id}"]`); if (el) el.classList.add('drag'); }
 document.addEventListener('pointerup', () => {
   if (!drag) return;
-  if (!drag.moved) { S.sel = S.sel === drag.id ? null : drag.id; }
-  else if (S.undoOn) S.prev = drag.base;
+  const d = drag;
+  if (!d.moved) { S.sel = S.sel === d.id ? null : d.id; }
+  else if (S.lat) { // the commit is the same call as the preview, but it saves; the preview already showed its answer
+    S.lastReqs = d.reqs; S.saving = true;
+    serverEdit(d.base, d.id, d.ch, S.mode).then(r => { S.boxes = r.boxes; S.rt = r.rt; S.saving = false; render(); });
+  }
   drag = null; S.lockA = null; render();
 });
 window.addEventListener('resize', () => { if (!drag) render(); });
@@ -805,7 +833,7 @@ document.addEventListener('change', e => {
   if (t.id === 'budget') { S.budget = +t.value || 0; render(); return; }
   if (t.id === 'anchor') { S.anchor = t.value; render(); return; }
   if (t.id === 'scen') { loadScen(t.value); S.phScrolled = false; S.hideNote = false; render(); return; }
-  if (t.id === 'undo') { S.undoOn = t.checked; S.prev = null; return; }
+  if (t.id === 'lat') { S.lat = +t.value; S.lastReqs = 0; renderBar(); return; }
   if (t.dataset.rt) { commit(edit(S, +t.dataset.rt, { runtime: +t.value }, S.mode)); render(); return; }
   if (t.dataset.len) { commit(edit(S, +t.dataset.len, { len: +t.value }, S.mode)); render(); return; }
   if (t.dataset.lab) { S.boxes = S.boxes.map(b => b.id === +t.dataset.lab ? { ...b, label: t.value } : b); render(); return; }
