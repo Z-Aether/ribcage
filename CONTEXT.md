@@ -75,7 +75,7 @@ The admin's standing decision on a suggestion: undecided, approved or dropped. E
 _Avoid_: pending, review, status, accept
 
 **Drop**:
-The admin's decision to keep a suggestion off the ballot. Reversible and destroys nothing: a dropped film keeps its notes, and any scores and vetoes it gathered as a candidate, unshown and counted nowhere until it is approved again. (#27, #28)
+The admin's decision to keep a suggestion off the ballot. Reversible and destroys nothing: a dropped film keeps its notes, and any scores and vetoes it gathered as a candidate. It is out of SOLVE and cannot be newly placed on the timetable, but a slate that already holds it — the timetable or a kept proposal — keeps it and keeps counting its scores, marked dropped for the admin only. (#26, #27, #28)
 _Avoid_: reject, delete, remove (that is done to a voter), withdraw (that is the suggester's own)
 
 **Picker**:
@@ -105,7 +105,7 @@ The candidates put before voters in VOTE: exactly the approved suggestions. Grow
 _Avoid_: candidate set, voting list
 
 **Score**:
-A voter's stated appetite for a candidate on a coarse five-point scale from "rather not" to "top pick", taken at face value and never normalised against anyone else's. Hidden from other voters until the reveal. A score on a dropped film is kept but counts nowhere while it stays dropped. (#8, #10, #28)
+A voter's stated appetite for a candidate on a coarse five-point scale from "rather not" to "top pick", taken at face value and never normalised against anyone else's. Hidden from other voters until the reveal. A score on a dropped film is kept; it counts only in a slate that already holds the film. (#8, #10, #26, #28)
 _Avoid_: rating, preference, vote, points
 
 **Veto**:
