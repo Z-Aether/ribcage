@@ -47,6 +47,17 @@
     out only when the snapped value changes (latest wins, stale answers dropped), and every other box and
     readout is the server's answer, arriving after the chosen latency. Undo removed (dev: no undo).
 
+  Resolved on this state, 2026-10-04:
+    - Editor = A, the horizontal track, desktop only, scale fitted to the full evening and refitting as it
+      changes; under it, selected box + approved list left, shortlist right (#24's ledger rows, compact).
+    - Voter RUN = phone 2: vertical, proportional, whole evening fitted to one screen, now-playing inside
+      the box (kicker, time left, progress, elapsed tint). No card, no tap sheet.
+    - Engine on the server, live preview kept: dragged box local, everything else the server's answer
+      (250 ms judged usable). No undo. Grid-only snapping under push modes.
+    - Spec-only, not prototyped: a per-box "flexible" flag for labelled boxes (squeezed by keep-end-time,
+      floor one grid step); two arrange utilities (fixed break N / spread evenly) applied by arming —
+      the armed result is previewed through the same call, then applied.
+
   Run:  python -m http.server 8022   →  http://localhost:8022/prototypes/timetable-editor/?variant=A
 -->
 <html lang="en">
