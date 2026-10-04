@@ -27,6 +27,14 @@
   Data: 35 of the group's real past suggestions with TMDB runtimes and posters, and the generated
   vetoes from the voter-home prototype (data.js, via gen-data.mjs).
 
+  Round 2 (2026-10-04): the dev split the editor from the voter's RUN page.
+    Editor = A (Track): B is more natural but wrong for a desktop monitor's proportions; C is clean but
+    loses the visual representation of time differences and scale. Desktop only; fill the horizontal
+    space, so the track's scale is now computed to fit the window. B and C editors stay in the code but
+    are no longer switchable.
+    RUN voter = vertical and proportional (B's shape). Open question, shown side by side: FIT the whole
+    evening on one screen, or SCROLL at a fixed scale.
+
   Run:  python -m http.server 8022   →  http://localhost:8022/prototypes/timetable-editor/?variant=A
 -->
 <html lang="en">
@@ -155,6 +163,9 @@
   .B-col .bx img { width:40px; height:60px; object-fit:cover; border-radius:2px; flex:none; }
   .B-col .bx .tt { font-weight:600; }
   .B-col .bx .tm { font-size:11px; color:var(--mute); }
+  .B-col .bx.tiny { padding:0 8px; align-items:center; }
+  .B-col .bx.tiny .tt { font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .B-col .bx.tiny .tm { font-weight:400; }
   .B-col .bx .rz { left:0; right:0; bottom:0; height:7px; cursor:ns-resize; }
   .B-lane { position:relative; width:30px; flex:none; border-left:1px solid var(--line2); }
   .B-lane .pres { top:auto; left:12px; width:6px; height:auto; }
@@ -232,6 +243,8 @@
   .phone .B-scroll { overflow:visible !important; }
   .phone .B-col .hl { border-top-color:#24242b; } .phone .B-col .hl.h { border-top-color:#2e2e36; }
   .phone .B-gut { border-right-color:#2a2a30; }
+  .phone .body { scrollbar-width:none; } .phone .body::-webkit-scrollbar { display:none; }
+  .phlabel { font-size:12px; font-weight:600; margin:0 0 6px 6px; }
   .phnote { max-width:300px; font-size:12px; color:var(--mute); }
   .phnote h4 { margin:0 0 6px; color:var(--ink); }
 
@@ -272,14 +285,14 @@ const SCEN = {
     make: () => [F('Coco', -115), F('Evil Dead', 0), F('The Thing', 105), L('Dinner', 225, 45), F('The Exorcist', 285), F('Triangle', 425), F('Terrifier', 540), F('Late Night with the Devil', 615)], budget: 540 },
   late: { name: 'RUN — dinner ran long', note: 'RUN, 23:15. Dinner overran: The Exorcist was planned for 22:45 and actually started at 23:05. Make the plan true again — drag it 20 minutes later. “Push · keep gaps” moves everything after it; “keep end time” eats the gaps so you still finish at 04:24. Note that Dinner is a box, not a gap: the squeeze never shortens it.',
     make: () => [F('Evil Dead', 0), F('The Thing', 105), L('Dinner', 225, 45), F('The Exorcist', 285), F('Triangle', 425), F('Terrifier', 540)], budget: 540, view: 'runadmin', now: 315 },
-  weekend: { name: 'A weekend: Fri evening + Sat afternoon', note: 'No day entity (#12): a two-day marathon is boxes with an eighteen-hour gap. How does each layout carry the empty night?',
+  weekend: { name: 'A weekend: Sat evening + Sun afternoon', note: 'No day entity (#12): a two-day marathon is boxes with an eighteen-hour gap. How does each layout carry the empty night?',
     make: () => [F('Evil Dead', 0), F('The Thing', 100), F('Triangle', 220), F('28 Days Later', 1200), L('Pizza', 1320, 40), F('Midsommar', 1365), F('Terrifier', 1520)], budget: 720 },
 };
 
 // ============================================================ state
 const qs = new URLSearchParams(location.search);
 const S = {
-  variant: VARIANTS[qs.get('variant')] ? qs.get('variant') : 'A',
+  variant: 'A', fitH: 470, lockA: null, // round 2: the editor is A; B/C editors stay in the code and the round-1 commit
   view: 'pick', anchor: '2026-10-31T18:00', budget: 540, mode: 'none',
   boxes: [], rt: {}, sel: null, now: 0, undoOn: false, prev: null, scen: 'arranged', sheet: null, tab: 'timetable',
 };
@@ -441,7 +454,7 @@ function trayHTML(vertical) {
 }
 
 // ============================================================ A — horizontal track
-const A_PPM = 1.6;
+let A_PPM = 1.6; // round 2: computed per render so the evening fills the window width
 function range(R, pad0 = 15, pad1 = 30) {
   if (!R.bs.length) return [0, 600];
   return [Math.floor((Math.min(R.first, 0) - pad0) / 30) * 30, Math.ceil((R.last + pad1) / 30) * 30];
@@ -455,7 +468,9 @@ function axisTicks(t0, t1, pos, cls) {
   return h;
 }
 function renderA(R, ro) {
-  const [t0, t1] = range(R), W = (t1 - t0) * A_PPM, X = t => (t - t0) * A_PPM;
+  const [t0, t1] = S.lockA ? [S.lockA.t0, S.lockA.t1] : range(R);
+  if (!ro) A_PPM = S.lockA ? S.lockA.ppm : Math.max(0.8, Math.min(4, (document.documentElement.clientWidth - 32 - 112 - 6) / (t1 - t0)));
+  const W = (t1 - t0) * A_PPM, X = t => (t - t0) * A_PPM;
   const st = S;
   const lane = (inner, extra = '') => `<div class="A-lane" style="width:${W}px">${extra}${inner}</div>`;
   const band = R.shared && R.strips.length ? `<div class="sharedband" style="left:${X(R.shared.s)}px;width:${X(R.shared.e) - X(R.shared.s)}px;top:0;bottom:0"></div>` : '';
@@ -472,7 +487,7 @@ function renderA(R, ro) {
     strips = R.strips.map(s => `<div class="A-row A-strip"><div class="A-lbl" title="${s.lead.length ? 'misses the start' : ''}">${esc(s.v)}</div>${lane(`<div class="pres" style="left:${X(s.arrive)}px;width:${Math.max(0, X(s.leave) - X(s.arrive))}px"></div>` + s.holes.map(h => `<div class="hole" title="vetoed ${esc(FILM[h.film].title)} — steps out mid-evening" style="left:${X(h.s)}px;width:${(h.e - h.s) * A_PPM}px"></div>`).join(''), band + nowL)}</div>`).join('');
     strips += `<div class="A-foot">${R.throughout} of ${D.voters.length} present throughout${R.strips.length ? ` · shared time ${dur(R.shared.mins)}` : ''}</div>`;
   }
-  return `<div class="A-scroll" id="keepA" data-ppm="${A_PPM}" data-t0="${t0}">
+  return `<div class="A-scroll" id="keepA" data-ppm="${A_PPM}" data-t0="${t0}" data-t1="${t1}">
     <div class="A-row A-axis"><div class="A-lbl"></div>${lane(axisTicks(t0, t1, t => `left:${X(t)}px`), nowL)}</div>
     <div class="A-row A-track"><div class="A-lbl">${ro ? '' : 'Plan'}</div>${lane(boxes + ovs, band + bud + nowL)}</div>
     ${strips}
@@ -481,8 +496,8 @@ function renderA(R, ro) {
 
 // ============================================================ B — vertical column
 const B_PPM = 1.5;
-function renderB(R, ro, phoneW) {
-  const [t0, t1] = range(R, 30, 45), H = (t1 - t0) * B_PPM, Y = t => (t - t0) * B_PPM;
+function renderB(R, ro, phoneW, ppm = B_PPM, sid = 'keepB', pads = [30, 45]) {
+  const [t0, t1] = range(R, ...pads), H = (t1 - t0) * ppm, Y = t => (t - t0) * ppm;
   const lanes = ro ? [] : R.strips;
   const colW = phoneW ? phoneW - 58 : 400;
   let gut = '', hl = '';
@@ -493,12 +508,13 @@ function renderB(R, ro, phoneW) {
   const boxes = R.bs.map(b => {
     const l = lenOf(S, b), f = b.kind === 'film' ? FILM[b.film] : null;
     const cls = ['bx', b.kind === 'label' ? 'lab' : '', S.sel === b.id ? 'sel' : '', R.ovIds.has(b.id) ? 'ov' : '', S.view !== 'pick' && S.now >= b.start + l ? 'past' : '', S.view !== 'pick' && S.now >= b.start && S.now < b.start + l ? 'now' : ''].join(' ');
-    const small = l * B_PPM < 60;
-    return `<div class="${cls}" data-box="${b.id}" style="top:${Y(b.start)}px;height:${l * B_PPM}px">${f && !small ? `<img src="${po(f.poster)}">` : ''}<div style="min-width:0"><div class="tt">${boxTitle(b)}${ro ? '' : vtags(b)}</div><div class="tm">${clock(b.start)}–${clock(b.start + l)} · ${l}′${runtag(b)}</div></div>${b.kind === 'label' && !ro ? '<div class="rz" data-rz="1"></div>' : ''}</div>`;
+    const small = l * ppm < 60, tiny = l * ppm < 34;
+    if (tiny) return `<div class="${cls} tiny" data-box="${b.id}" style="top:${Y(b.start)}px;height:${l * ppm}px"><div class="tt">${boxTitle(b)} <span class="tm">${clock(b.start)}–${clock(b.start + l)}</span></div></div>`;
+    return `<div class="${cls}" data-box="${b.id}" style="top:${Y(b.start)}px;height:${l * ppm}px">${f && !small ? `<img src="${po(f.poster)}">` : ''}<div style="min-width:0"><div class="tt">${boxTitle(b)}${ro ? '' : vtags(b)}</div><div class="tm">${clock(b.start)}–${clock(b.start + l)} · ${l}′${runtag(b)}</div></div>${b.kind === 'label' && !ro ? '<div class="rz" data-rz="1"></div>' : ''}</div>`;
   }).join('');
-  const ovs = R.overlaps.map(o => `<div class="ovband" style="top:${Y(o.s)}px;height:${(o.e - o.s) * B_PPM}px;left:4px;right:4px"></div>`).join('');
-  const laneH = lanes.map(s => `<div class="B-lane" style="height:${H}px">${band}<div class="pres" style="top:${Y(s.arrive)}px;height:${Math.max(0, Y(s.leave) - Y(s.arrive))}px"></div>${s.holes.map(h => `<div class="hole" title="vetoed ${esc(FILM[h.film].title)}" style="top:${Y(h.s)}px;height:${(h.e - h.s) * B_PPM}px"></div>`).join('')}${nowL}</div>`).join('');
-  const grid = `<div class="B-scroll" id="keepB" data-ppm="${B_PPM}" data-t0="${t0}" style="${phoneW ? 'border:0;border-radius:0;max-height:none;background:transparent' : ''}">
+  const ovs = R.overlaps.map(o => `<div class="ovband" style="top:${Y(o.s)}px;height:${(o.e - o.s) * ppm}px;left:4px;right:4px"></div>`).join('');
+  const laneH = lanes.map(s => `<div class="B-lane" style="height:${H}px">${band}<div class="pres" style="top:${Y(s.arrive)}px;height:${Math.max(0, Y(s.leave) - Y(s.arrive))}px"></div>${s.holes.map(h => `<div class="hole" title="vetoed ${esc(FILM[h.film].title)}" style="top:${Y(h.s)}px;height:${(h.e - h.s) * ppm}px"></div>`).join('')}${nowL}</div>`).join('');
+  const grid = `<div class="B-scroll" id="${sid}" data-ppm="${ppm}" data-t0="${t0}" style="${phoneW ? 'border:0;border-radius:0;max-height:none;background:transparent' : ''}">
     ${lanes.length ? `<div class="B-head"><div style="width:58px"></div><div style="width:${colW}px">Plan</div>${lanes.map(s => `<div style="width:30px" title="${esc(s.v)}">${esc(s.v.slice(0, 2))}</div>`).join('')}</div>` : ''}
     <div class="B-body"><div class="B-gut" style="height:${H}px">${gut}</div><div class="B-col" style="height:${H}px;width:${colW}px">${hl}${band}${bud}${boxes}${ovs}${nowL}</div>${laneH}</div></div>`;
   if (ro) return grid;
@@ -550,35 +566,31 @@ function renderC(R) {
 }
 
 // ============================================================ RUN — voter on a phone
+const SCROLL_PPM = 1.8;
 function phoneHTML(R) {
   const cur = R.bs.find(b => S.now >= b.start && S.now < endOf(S, b) && b.kind === 'film');
   const next = R.bs.find(b => b.start > S.now);
   let np = '';
   if (cur) { const f = FILM[cur.film], l = lenOf(S, cur); np = `<div class="np"><img src="${po(f.poster)}"><div style="flex:1"><div class="k">NOW PLAYING</div><div style="font-weight:600;font-size:15px">${esc(f.title)}</div><div style="color:#a09d96;font-size:12px">${clock(cur.start)}–${clock(cur.start + l)} · ${dur(cur.start + l - S.now)} left</div><div class="bar"><i style="width:${(S.now - cur.start) / l * 100}%"></i></div></div></div>`; }
   else if (next) np = `<div class="np"><div style="flex:1"><div class="k">NEXT</div><div style="font-weight:600;font-size:15px">${boxTitle(next)}</div><div style="color:#a09d96;font-size:12px">${dclock(next.start)} · in ${dur(next.start - S.now)}</div></div></div>`;
-  let body;
-  if (S.variant === 'A') body = `<div style="padding:8px 0">${renderA(R, true)}</div>`;
-  else if (S.variant === 'B') body = renderB(R, true, 370);
-  else {
-    let h = '', pe = null;
-    for (const b of R.bs) { const l = lenOf(S, b), f = b.kind === 'film' ? FILM[b.film] : null; if (pe !== null && b.start - pe >= 10) h += `<div class="gap">${dur(b.start - pe)} break</div>`;
-      const cls = (S.now >= b.start && S.now < b.start + l ? 'now' : S.now >= b.start + l ? 'past' : '') + (f ? '' : ' lab');
-      h += f ? `<div class="it ${cls}" data-sheet="${b.id}"><img src="${po(f.poster)}"><div><div class="t">${esc(f.title)}</div><div class="tm">${dclock(b.start)}–${clock(b.start + l)} · ${dur(l)}</div></div></div>` : `<div class="it ${cls}"><div class="tm" style="width:44px;text-align:center">☕</div><div><div>${esc(b.label)}</div><div class="tm">${clock(b.start)}–${clock(b.start + l)}</div></div></div>`;
-      pe = b.start + l; }
-    body = `<div class="ph-list">${h}</div>`;
-  }
-  const sb = S.sheet && S.boxes.find(b => b.id === S.sheet && b.kind === 'film');
-  const sheet = sb ? (() => { const f = FILM[sb.film], l = lenOf(S, sb); return `<div class="sheet"><img src="${po(f.poster)}"><div style="flex:1"><h3>${esc(f.title)}</h3><div style="color:#a09d96">${f.year || ''} · ${dur(l)}${f.director ? ' · ' + esc(f.director.join(', ')) : ''}</div><div style="margin-top:6px">${dclock(sb.start)}–${clock(sb.start + l)}</div>${f.trailer ? `<div style="margin-top:10px"><a href="https://www.youtube.com/watch?v=${f.trailer}" target="_blank">▶ Trailer</a></div>` : ''}<div style="margin-top:10px"><a href="#" data-act="closesheet">Close</a></div></div></div>`; })() : '';
   const first = R.first;
-  return `<div id="phonewrap"><div class="phone"><header><b>The evening</b><a>Everyone’s scores</a></header>
-    <div class="sub">${first !== null ? `${at(first).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })} · from ${clock(first)}` : ''}</div>
-    ${np}<div class="body" id="keepP">${body}</div>${sheet}</div>
-    <div class="phnote"><h4>RUN · voter · ${VARIANTS[S.variant]}</h4>The same layout as the editor minus every control and every admin readout (strips, budget, overlap marks, veto tags) — #13’s “same view minus the edit affordances”. Simulated clock in the bar. Tap a film for the sheet (#21’s steer: poster, title, year, runtime, trailer, nothing else). Dark because the room is.</div></div>`;
+  const phone = (kind, title) => {
+    let body;
+    if (kind === 'fit') { const [t0, t1] = range(R, 10, 10); body = renderB(R, true, 370, (S.fitH - 6) / (t1 - t0), 'colfit', [10, 10]); }
+    else body = renderB(R, true, 370, SCROLL_PPM, 'colscroll', [20, 30]);
+    const sb = S.sheet && S.sheet.k === kind && S.boxes.find(b => b.id === S.sheet.id && b.kind === 'film');
+    const sheet = sb ? (() => { const f = FILM[sb.film], l = lenOf(S, sb); return `<div class="sheet"><img src="${po(f.poster)}"><div style="flex:1"><h3>${esc(f.title)}</h3><div style="color:#a09d96">${f.year || ''} · ${dur(l)}${f.director ? ' · ' + esc(f.director.join(', ')) : ''}</div><div style="margin-top:6px">${dclock(sb.start)}–${clock(sb.start + l)}</div>${f.trailer ? `<div style="margin-top:10px"><a href="https://www.youtube.com/watch?v=${f.trailer}" target="_blank">▶ Trailer</a></div>` : ''}<div style="margin-top:10px"><a href="#" data-act="closesheet">Close</a></div></div></div>`; })() : '';
+    return `<div><div class="phlabel">${title}</div><div class="phone" data-kind="${kind}"><header><b>The evening</b><a>Everyone’s scores</a></header>
+      <div class="sub">${first !== null ? `${at(first).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })} · from ${clock(first)}` : ''}</div>
+      ${np}<div class="body" id="keepP${kind}" style="${kind === 'fit' ? 'overflow:hidden' : ''}">${body}</div>${sheet}</div></div>`;
+  };
+  return `<div id="phonewrap">${phone('fit', 'Fit — the whole evening on one screen')}${phone('scroll', `Scroll — fixed scale, ${SCROLL_PPM} px a minute`)}
+    <div class="phnote"><h4>RUN · voter — round 2</h4>Vertical and proportional: box height is duration, gaps are empty space. Left: the scale is whatever makes the evening fit the screen, so it changes with the plan. Right: one fixed scale, opened scrolled to now. Everything else is identical — now-playing card, now line, past films dimmed, tap a film for the sheet (poster, title, year, runtime, trailer). Try the <b>weekend</b> scenario for the fit's worst case, and drag the clock.</div></div>`;
 }
 
 // ============================================================ render
 function render() {
-  const keep = {}; for (const id of ['keepA', 'keepB', 'keepP']) { const el = document.getElementById(id); if (el) keep[id] = [el.scrollLeft, el.scrollTop]; }
+  const keep = {}; for (const id of ['keepA', 'keepB', 'keepPscroll']) { const el = document.getElementById(id); if (el) keep[id] = [el.scrollLeft, el.scrollTop]; }
   const winY = window.scrollY;
   const R = readouts(S);
   let h;
@@ -601,11 +613,10 @@ function render() {
   document.getElementById('app').innerHTML = h;
   for (const [id, [x, y]] of Object.entries(keep)) { const el = document.getElementById(id); if (el) { el.scrollLeft = x; el.scrollTop = y; } }
   window.scrollTo(0, winY);
-  if (S.view === 'runvoter' && !keep.keepP) { // first paint of the phone: bring "now" into view
-    const sc = document.querySelector('.phone .A-scroll'); if (sc) sc.scrollLeft = Math.max(0, (S.now - +sc.dataset.t0) * A_PPM - 120);
-    const bd = document.getElementById('keepP'), b = document.querySelector('.phone .B-scroll');
-    if (b) bd.scrollTop = Math.max(0, (S.now - +b.dataset.t0) * B_PPM - 140);
-    const it = document.querySelector('.phone .ph-list .it.now'); if (it) bd.scrollTop = Math.max(0, it.offsetTop - 80); }
+  if (S.view === 'runvoter') {
+    const fb = document.getElementById('keepPfit'); if (fb && Math.abs(fb.clientHeight - S.fitH) > 2) { S.fitH = fb.clientHeight; return render(); }
+    if (!S.phScrolled) { S.phScrolled = true; const bd = document.getElementById('keepPscroll'), c = document.getElementById('colscroll'); if (bd && c) bd.scrollTop = Math.max(0, (S.now - +c.dataset.t0) * SCROLL_PPM - 140); }
+  }
   renderBar();
 }
 function renderBar() {
@@ -613,7 +624,7 @@ function renderBar() {
   const R = readouts(S);
   const [t0, t1] = R.bs.length ? [Math.min(R.first, 0) - 30, R.last + 30] : [0, 600];
   document.getElementById('proto').innerHTML = `
-    <button data-pv="-1">←</button><b>${S.variant} — ${VARIANTS[S.variant]}</b><button data-pv="1">→</button><span class="sep"></span>
+    <b>Round 2 · editor = A Track</b><span class="sep"></span>
     ${[['pick', 'PICK'], ['runadmin', 'RUN · admin'], ['runvoter', 'RUN · voter 📱']].map(([k, l]) => `<button data-view="${k}" class="${S.view === k ? 'on' : ''}">${l}</button>`).join('')}
     ${S.view !== 'pick' ? `<label>clock <input type="range" id="now" min="${t0}" max="${t1}" step="5" value="${S.now}" style="width:140px"> <b class="num">${dclock(S.now)}</b></label>` : ''}
     <span class="sep"></span><select id="scen">${Object.entries(SCEN).map(([k, v]) => `<option value="${k}" ${S.scen === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select>
@@ -646,6 +657,7 @@ document.addEventListener('pointerdown', e => {
   const el = e.target.closest('.bx[data-box]'); if (!el || e.button !== 0) return;
   const sc = el.closest('[data-ppm]'); if (!sc) return;
   const id = +el.dataset.box, b = S.boxes.find(x => x.id === id);
+  if (S.variant === 'A') S.lockA = { t0: +sc.dataset.t0, t1: +sc.dataset.t1, ppm: +sc.dataset.ppm }; // don't rescale under the pointer
   drag = { id, axis: S.variant === 'A' ? 'x' : 'y', ppm: +sc.dataset.ppm, x0: e.clientX, y0: e.clientY, base: { boxes: S.boxes, rt: S.rt }, start0: b.start, len0: lenOf(S, b), resize: !!e.target.dataset.rz, moved: false };
   e.preventDefault();
 });
@@ -666,8 +678,9 @@ document.addEventListener('pointerup', () => {
   if (!drag) return;
   if (!drag.moved) { S.sel = S.sel === drag.id ? null : drag.id; }
   else if (S.undoOn) S.prev = drag.base;
-  drag = null; render();
+  drag = null; S.lockA = null; render();
 });
+window.addEventListener('resize', () => { if (!drag) render(); });
 
 // tray → timeline (HTML5 drag)
 document.addEventListener('dragstart', e => {
@@ -703,12 +716,12 @@ document.addEventListener('drop', e => {
 document.addEventListener('click', e => {
   const t = e.target;
   if (t.dataset.pv) { const ks = Object.keys(VARIANTS); S.variant = ks[(ks.indexOf(S.variant) + +t.dataset.pv + ks.length) % ks.length]; setURL(); render(); return; }
-  if (t.dataset.view) { S.view = t.dataset.view; S.sheet = null; render(); return; }
+  if (t.dataset.view) { S.view = t.dataset.view; S.sheet = null; S.phScrolled = false; render(); return; }
   if (t.dataset.mode) { S.mode = t.dataset.mode; render(); return; }
   if (t.dataset.tab) { S.tab = t.dataset.tab; render(); return; }
   if (t.dataset.nudge) { const b = S.boxes.find(x => x.id === +t.dataset.id); commit(edit(S, b.id, { start: b.start + +t.dataset.nudge }, S.mode)); render(); return; }
   if (t.dataset.sel) { S.sel = S.sel === +t.dataset.sel ? null : +t.dataset.sel; render(); return; }
-  const sh = t.closest('[data-sheet], .phone .bx[data-box]'); if (sh) { S.sheet = +(sh.dataset.sheet || sh.dataset.box); render(); return; }
+  const sh = t.closest('.phone .bx[data-box]'); if (sh) { const id = +sh.dataset.box; if (S.boxes.find(b => b.id === id).kind === 'film') { S.sheet = { k: t.closest('.phone').dataset.kind, id }; render(); } return; }
   const act = t.dataset.act; if (!act) return;
   e.preventDefault();
   if (act === 'hidenote') { S.hideNote = true; renderBar(); return; }
@@ -725,7 +738,7 @@ document.addEventListener('change', e => {
   const t = e.target;
   if (t.id === 'budget') { S.budget = +t.value || 0; render(); return; }
   if (t.id === 'anchor') { S.anchor = t.value; render(); return; }
-  if (t.id === 'scen') { loadScen(t.value); S.hideNote = false; render(); return; }
+  if (t.id === 'scen') { loadScen(t.value); S.phScrolled = false; S.hideNote = false; render(); return; }
   if (t.id === 'undo') { S.undoOn = t.checked; S.prev = null; return; }
   if (t.dataset.rt) { commit(edit(S, +t.dataset.rt, { runtime: +t.value }, S.mode)); render(); return; }
   if (t.dataset.len) { commit(edit(S, +t.dataset.len, { len: +t.value }, S.mode)); render(); return; }
@@ -740,7 +753,7 @@ document.addEventListener('input', e => { if (e.target.id === 'now') { S.now = +
 document.addEventListener('keydown', e => {
   if (e.target.matches('input, textarea, select, [contenteditable]')) return;
   if ((e.ctrlKey || e.metaKey) && e.key === 'z' && S.undoOn && S.prev) { S.boxes = S.prev.boxes; S.rt = S.prev.rt; S.prev = null; render(); e.preventDefault(); return; }
-  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { const ks = Object.keys(VARIANTS); S.variant = ks[(ks.indexOf(S.variant) + (e.key === 'ArrowRight' ? 1 : -1) + ks.length) % ks.length]; setURL(); render(); }
+  if (false && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) { const ks = Object.keys(VARIANTS); S.variant = ks[(ks.indexOf(S.variant) + (e.key === 'ArrowRight' ? 1 : -1) + ks.length) % ks.length]; setURL(); render(); }
   if (e.key === 'Escape') { S.sel = null; S.sheet = null; render(); }
 });
 function setURL() { const u = new URL(location); u.searchParams.set('variant', S.variant); history.replaceState(null, '', u); }
