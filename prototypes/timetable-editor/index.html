@@ -1,0 +1,751 @@
+<!doctype html>
+<!--
+  PROTOTYPE — ticket #22, the timetable editor. Throwaway. Not production.
+
+  Three structurally different editors for PICK's Timetable tab (and RUN's admin
+  view — #13 made them the same tool), switchable via ?variant=A|B|C and the
+  floating bar at the bottom:
+
+    A  Track     a horizontal wall-clock timeline; boxes slide continuously; presence strips are rows under the track
+    B  Column    a vertical calendar day; boxes slide up and down; presence strips are lanes beside the column
+    C  Agenda    a dense ledger, one row per box; reorder by handle + edit start times; presence is a column per voter
+
+  All three share one engine, so behaviour is identical and only the surface differs:
+    - one anchor + per-box offsets; film boxes fixed at runtime; admin-drawn boxes = label + span (#12)
+    - snap to a 5-minute grid and flush to neighbours; overlap allowed and flagged (#12)
+    - the sticky ripple mode — None / Push · keep gaps / Push · keep end time — applied to ANY edit that
+      creates a clash: moves, label resizes, runtime corrections, inserts (#13)
+    - screen time vs budget and elapsed / end time as two separately named numbers; the budget marker
+      sits where cumulative screen time runs out, and there is no warning beyond it (#12)
+    - presence strips only for voters not present throughout; shared time as a number and a band (#12)
+    - no undo by default; a "single-level undo" toggle in the bar lets you feel the candidate #13 named
+
+  The bar also switches the VIEW — PICK editor / RUN as the admin / RUN as a voter on a phone — and,
+  in RUN, a simulated clock. The voter view is each variant's own layout minus the controls (#13),
+  so you can judge whether that holds on a phone (#14 made RUN the only page that must).
+
+  Data: 35 of the group's real past suggestions with TMDB runtimes and posters, and the generated
+  vetoes from the voter-home prototype (data.js, via gen-data.mjs).
+
+  Run:  python -m http.server 8022   →  http://localhost:8022/prototypes/timetable-editor/?variant=A
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PICK — timetable (prototype #22)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg:#f6f5f2; --panel:#fff; --ink:#1c1b19; --mute:#6b6963; --line:#dcd9d2; --line2:#ece9e2;
+    --acc:#2f5fd0; --acc2:#e8eefc; --warn:#b3261e; --ok:#2b7a3d; --amb:#b0730a;
+    --film:#eef2fb; --filmb:#9fb3e0; --lab:#f3efe6; --labb:#c8bfa8; --shared:rgba(43,122,61,.08);
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.35 system-ui, "Segoe UI", Roboto, sans-serif; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; border-radius:4px; padding:2px 8px; color:var(--ink); }
+  button:hover { border-color:#999; }
+  button.primary { background:var(--acc); color:#fff; border-color:var(--acc); }
+  button.ghost { border-color:transparent; background:transparent; color:var(--mute); }
+  button.ghost:hover { color:var(--ink); border-color:var(--line); }
+  input, select { font:inherit; border:1px solid var(--line); border-radius:4px; padding:2px 6px; background:#fff; }
+  .mute { color:var(--mute); } .small { font-size:11px; }
+  .warn { color:var(--warn); } .ok { color:var(--ok); } .amb { color:var(--amb); }
+  .num { font-variant-numeric:tabular-nums; }
+
+  /* ---- admin chrome (#28 console, #24 PICK header) ---- */
+  #console { background:#fff; border-bottom:1px solid var(--line); padding:0 16px; display:flex; align-items:center; gap:16px; }
+  #console b { font-size:14px; }
+  #console nav { display:flex; }
+  #console nav span { padding:9px 12px; color:var(--mute); border-bottom:2px solid transparent; }
+  #console nav span.on { color:var(--ink); border-bottom-color:var(--ink); font-weight:600; }
+  #console .hat { margin-left:auto; color:var(--mute); font-size:12px; }
+  #pickhead { background:#fff; border-bottom:1px solid var(--line); padding:8px 16px 0; }
+  #pickhead .row { display:flex; gap:22px; align-items:center; flex-wrap:wrap; }
+  #pickhead .ctl { display:flex; gap:6px; align-items:center; }
+  #pickhead .ctl label { color:var(--mute); }
+  #pickhead .tabs { display:flex; margin-top:6px; }
+  #pickhead .tabs span { padding:7px 14px; border-bottom:2px solid transparent; color:var(--mute); cursor:pointer; }
+  #pickhead .tabs span.on { border-bottom-color:var(--ink); color:var(--ink); font-weight:600; }
+  .phasepill { font-size:10px; letter-spacing:.05em; border:1px solid var(--ink); background:var(--ink); color:#fff; padding:1px 6px; border-radius:3px; }
+
+  #tools { background:#fbfaf7; border-bottom:1px solid var(--line); padding:6px 16px; display:flex; gap:10px 22px; align-items:center; flex-wrap:wrap; }
+  .seg { display:inline-flex; border:1px solid var(--line); border-radius:5px; overflow:hidden; }
+  .seg button { border:0; border-radius:0; border-right:1px solid var(--line); padding:3px 10px; }
+  .seg button:last-child { border-right:0; }
+  .seg button.on { background:var(--ink); color:#fff; }
+  .clocks { display:flex; gap:18px; align-items:baseline; flex-wrap:wrap; }
+  .clocks .k { color:var(--mute); margin-right:4px; }
+  .clocks b { font-variant-numeric:tabular-nums; }
+  .meter { display:inline-block; width:120px; height:6px; background:var(--line2); border-radius:3px; position:relative; vertical-align:middle; margin:0 6px; }
+  .meter i { position:absolute; left:0; top:0; bottom:0; background:var(--acc); border-radius:3px; }
+  .meter.over i { background:var(--warn); }
+  .meter u { position:absolute; top:-3px; width:2px; height:12px; background:var(--ink); }
+
+  #main { padding:12px 16px 140px; }
+  .empty { border:1px dashed var(--line); border-radius:6px; padding:24px; text-align:center; color:var(--mute); }
+  .hint { font-size:11px; color:var(--mute); margin:6px 0; }
+
+  /* ---- shared box look ---- */
+  .bx { position:absolute; border:1px solid var(--filmb); background:var(--film); border-radius:5px; overflow:hidden; cursor:grab; user-select:none; }
+  .bx.lab { background:var(--lab); border-color:var(--labb); border-style:dashed; }
+  .bx.sel { outline:2px solid var(--acc); outline-offset:1px; z-index:3; }
+  .bx.ov { border-color:var(--warn); box-shadow: inset 0 0 0 1px var(--warn); }
+  .bx.drag { cursor:grabbing; opacity:.92; z-index:4; box-shadow:0 4px 14px rgba(0,0,0,.18); }
+  .bx.past { opacity:.5; }
+  .bx.now { box-shadow:0 0 0 2px var(--warn); }
+  .bx .rz { position:absolute; background:transparent; }
+  .vtag { display:inline-block; font-size:9px; font-weight:700; color:#fff; background:#c8443a; border-radius:2px; padding:0 3px; margin-left:3px; letter-spacing:.02em; }
+  .ovband { position:absolute; background:repeating-linear-gradient(45deg, rgba(179,38,30,.25) 0 4px, transparent 4px 8px); pointer-events:none; z-index:2; }
+  .budget { position:absolute; z-index:5; pointer-events:none; }
+  .nowline { position:absolute; z-index:6; pointer-events:none; background:var(--warn); }
+  .sharedband { position:absolute; background:var(--shared); pointer-events:none; }
+
+  /* ---- popover / inspector ---- */
+  .insp { background:#fff; border:1px solid var(--line); border-radius:6px; padding:10px 12px; display:flex; gap:12px; align-items:flex-start; }
+  .insp img { width:54px; height:81px; object-fit:cover; border-radius:3px; }
+  .insp .f { display:grid; grid-template-columns:auto auto; gap:4px 10px; align-items:center; }
+  .insp .f label { color:var(--mute); }
+  .insp h3 { margin:0 0 6px; font-size:14px; }
+  .insp input[type=number] { width:64px; }
+
+  /* ---- tray ---- */
+  #tray { margin-top:14px; }
+  #tray h2, h2.sec { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--mute); margin:14px 0 6px; font-weight:600; }
+  #tray h2 small, h2.sec small { text-transform:none; letter-spacing:0; font-weight:400; }
+  .cands { display:flex; flex-wrap:wrap; gap:6px; }
+  .cand { display:flex; align-items:center; gap:6px; background:#fff; border:1px solid var(--line); border-radius:5px; padding:3px 6px 3px 3px; cursor:grab; }
+  .cand img { width:22px; height:33px; object-fit:cover; border-radius:2px; }
+  .cand .t { max-width:170px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  /* ---- A: track ---- */
+  .A-scroll { overflow-x:auto; background:#fff; border:1px solid var(--line); border-radius:6px; position:relative; }
+  .A-row { position:relative; display:flex; }
+  .A-lbl { position:sticky; left:0; width:110px; flex:none; background:#fff; z-index:8; border-right:1px solid var(--line2); padding:0 8px; display:flex; align-items:center; font-size:12px; }
+  .A-lane { position:relative; flex:none; }
+  .A-axis .A-lane { height:34px; border-bottom:1px solid var(--line); }
+  .tick { position:absolute; top:0; bottom:0; border-left:1px solid var(--line2); }
+  .tick.h { border-left-color:var(--line); }
+  .tick span { position:absolute; top:3px; left:3px; font-size:11px; color:var(--mute); white-space:nowrap; }
+  .tick.day span { color:var(--ink); font-weight:600; top:17px; }
+  .A-track .A-lane { height:84px; }
+  .A-track .bx { top:8px; height:68px; padding:4px 6px; display:flex; gap:6px; }
+  .A-track .bx img { height:58px; width:39px; object-fit:cover; border-radius:2px; flex:none; }
+  .A-track .bx .tt { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .A-track .bx .tm { font-size:11px; color:var(--mute); white-space:nowrap; }
+  .A-track .bx .rz { right:0; top:0; bottom:0; width:7px; cursor:ew-resize; }
+  .A-strip .A-lane { height:22px; }
+  .A-strip .A-lbl { font-size:11px; }
+  .pres { position:absolute; top:8px; height:6px; background:#7d93c6; border-radius:3px; }
+  .hole { position:absolute; top:6px; height:10px; border:1px dashed var(--amb); border-radius:3px; background:repeating-linear-gradient(90deg, rgba(176,115,10,.18) 0 3px, transparent 3px 6px); }
+  .A-foot { padding:6px 10px; font-size:12px; color:var(--mute); border-top:1px solid var(--line2); position:sticky; left:0; }
+
+  /* ---- B: column ---- */
+  .B-wrap { display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:16px; align-items:start; }
+  .B-scroll { background:#fff; border:1px solid var(--line); border-radius:6px; overflow:auto; max-height:calc(100vh - 230px); }
+  .B-head { display:flex; position:sticky; top:0; z-index:9; background:#fff; border-bottom:1px solid var(--line); }
+  .B-head div { font-size:11px; color:var(--mute); padding:4px 0; text-align:center; flex:none; }
+  .B-body { position:relative; display:flex; }
+  .B-gut { position:relative; width:58px; flex:none; border-right:1px solid var(--line2); }
+  .B-gut span { position:absolute; right:6px; font-size:11px; color:var(--mute); transform:translateY(-7px); white-space:nowrap; }
+  .B-gut span.day { color:var(--ink); font-weight:600; }
+  .B-col { position:relative; width:400px; flex:none; }
+  .B-col .hl { position:absolute; left:0; right:0; border-top:1px solid var(--line2); }
+  .B-col .hl.h { border-top-color:var(--line); }
+  .B-col .bx { left:8px; right:8px; padding:5px 8px; display:flex; gap:8px; }
+  .B-col .bx img { width:40px; height:60px; object-fit:cover; border-radius:2px; flex:none; }
+  .B-col .bx .tt { font-weight:600; }
+  .B-col .bx .tm { font-size:11px; color:var(--mute); }
+  .B-col .bx .rz { left:0; right:0; bottom:0; height:7px; cursor:ns-resize; }
+  .B-lane { position:relative; width:30px; flex:none; border-left:1px solid var(--line2); }
+  .B-lane .pres { top:auto; left:12px; width:6px; height:auto; }
+  .B-lane .hole { top:auto; left:9px; width:12px; height:auto; background:repeating-linear-gradient(0deg, rgba(176,115,10,.18) 0 3px, transparent 3px 6px); }
+  .B-side { position:sticky; top:12px; display:flex; flex-direction:column; gap:12px; }
+  .B-side .card { background:#fff; border:1px solid var(--line); border-radius:6px; padding:10px 12px; }
+  .B-side .card h4 { margin:0 0 6px; font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--mute); }
+  .B-side .cands { max-height:260px; overflow:auto; }
+  .B-side .insp { border:0; padding:0; }
+
+  /* ---- C: agenda ---- */
+  table.C { border-collapse:collapse; background:#fff; border:1px solid var(--line); width:100%; max-width:1100px; }
+  table.C th { text-align:left; font-weight:500; font-size:11px; color:var(--mute); padding:5px 6px; border-bottom:1px solid var(--line); background:#fbfaf7; white-space:nowrap; }
+  table.C td { padding:4px 6px; border-bottom:1px solid var(--line2); vertical-align:middle; }
+  table.C tr.box td { height:44px; }
+  table.C tr.box.lab td { background:#fbf8f1; }
+  table.C tr.box.shared td { background-image:linear-gradient(var(--shared), var(--shared)); }
+  table.C tr.box.sel td { background:var(--acc2); }
+  table.C tr.box.ov td:first-child { box-shadow:inset 3px 0 0 var(--warn); }
+  table.C tr.box.now td { box-shadow:inset 0 2px 0 var(--warn), inset 0 -2px 0 var(--warn); }
+  table.C tr.box.past td { opacity:.5; }
+  table.C tr.gap td { height:auto; padding:0 6px; font-size:11px; color:var(--mute); border-bottom:1px solid var(--line2); background:repeating-linear-gradient(90deg, #fff 0 6px, #fafaf8 6px 12px); }
+  table.C tr.gap.neg td { color:var(--warn); background:#fdf3f2; }
+  table.C tr.budget td { padding:0; height:0; border-bottom:2px solid var(--ink); position:relative; }
+  table.C tr.budget td span { position:absolute; right:6px; top:-9px; background:var(--ink); color:#fff; font-size:10px; padding:0 5px; border-radius:2px; }
+  table.C .handle { cursor:grab; color:#aaa; font-size:15px; user-select:none; }
+  table.C .time { font-variant-numeric:tabular-nums; white-space:nowrap; }
+  table.C .time input { width:74px; }
+  table.C .nud button { padding:0 4px; font-size:11px; }
+  table.C img { width:26px; height:39px; object-fit:cover; border-radius:2px; display:block; }
+  table.C .pc { width:30px; text-align:center; padding:0; }
+  table.C .pc i { display:block; margin:0 auto; width:8px; height:44px; }
+  table.C .pc i.in { background:#7d93c6; }
+  table.C .pc i.hole { border:1px dashed var(--amb); width:10px; height:36px; border-radius:3px; background:repeating-linear-gradient(0deg, rgba(176,115,10,.18) 0 3px, transparent 3px 6px); position:static; }
+  table.C tr.dragover td { border-top:2px solid var(--acc); }
+  table.C tr.insp-row td { background:#fbfaf7; padding:8px 10px; }
+  table.C tr.insp-row .insp { border:0; background:transparent; padding:0; }
+
+  /* ---- RUN voter view on a phone (#13 read-only, #14 phone-first, #27 thin header) ---- */
+  #phonewrap { display:flex; gap:28px; padding:20px; align-items:flex-start; justify-content:center; }
+  .phone { width:390px; height:780px; border-radius:34px; border:10px solid #111; background:#16161a; color:#ece9e2; overflow:hidden; display:flex; flex-direction:column; position:relative; flex:none; }
+  .phone header { display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid #2a2a30; }
+  .phone header b { font-size:15px; }
+  .phone header a { margin-left:auto; color:#9fb3e0; font-size:13px; }
+  .phone .sub { padding:10px 16px 4px; color:#a09d96; font-size:13px; }
+  .phone .body { flex:1; overflow:auto; position:relative; }
+  .phone .bx { background:#23232b; border-color:#3a3a46; color:#ece9e2; cursor:pointer; }
+  .phone .bx.lab { background:#1d1d22; border-color:#3a3a46; }
+  .phone .bx .tm { color:#a09d96 !important; }
+  .phone .bx.now { box-shadow:0 0 0 2px #f2b84b; }
+  .phone .tick { border-left-color:#2a2a30; }
+  .phone .tick span { color:#8a877f; }
+  .phone .tick.day span { color:#ece9e2; }
+  .phone .nowline { background:#f2b84b; }
+  .phone .sheet { position:absolute; left:0; right:0; bottom:0; background:#202027; border-top:1px solid #3a3a46; border-radius:16px 16px 0 0; padding:16px; display:flex; gap:14px; box-shadow:0 -8px 24px rgba(0,0,0,.5); }
+  .phone .sheet img { width:92px; height:138px; object-fit:cover; border-radius:6px; }
+  .phone .sheet h3 { margin:0 0 4px; font-size:17px; }
+  .phone .sheet a { color:#9fb3e0; }
+  .phone .np { margin:10px 16px; padding:12px; border-radius:12px; background:#2a2418; border:1px solid #5a4a22; display:flex; gap:12px; align-items:center; }
+  .phone .np img { width:48px; height:72px; object-fit:cover; border-radius:4px; }
+  .phone .np .k { color:#f2b84b; font-size:11px; font-weight:700; letter-spacing:.06em; }
+  .phone .np .bar { height:4px; background:#3a3324; border-radius:2px; margin-top:6px; }
+  .phone .np .bar i { display:block; height:100%; background:#f2b84b; border-radius:2px; }
+  .ph-list .it { display:flex; gap:12px; padding:10px 16px; align-items:center; border-bottom:1px solid #24242b; cursor:pointer; }
+  .ph-list .it img { width:44px; height:66px; object-fit:cover; border-radius:5px; }
+  .ph-list .it .t { font-weight:600; font-size:15px; }
+  .ph-list .it .tm { color:#a09d96; font-size:13px; font-variant-numeric:tabular-nums; }
+  .ph-list .it.now { background:#2a2418; }
+  .ph-list .it.past { opacity:.45; }
+  .ph-list .it.lab { padding-top:6px; padding-bottom:6px; color:#a09d96; }
+  .ph-list .gap { padding:2px 16px; color:#6f6c66; font-size:11px; }
+  .phone .A-scroll { background:transparent; border:0; border-radius:0; }
+  .phone .A-lbl { display:none; }
+  .phone .A-track .bx .tt { white-space:normal; }
+  .phone .B-scroll { overflow:visible !important; }
+  .phone .B-col .hl { border-top-color:#24242b; } .phone .B-col .hl.h { border-top-color:#2e2e36; }
+  .phone .B-gut { border-right-color:#2a2a30; }
+  .phnote { max-width:300px; font-size:12px; color:var(--mute); }
+  .phnote h4 { margin:0 0 6px; color:var(--ink); }
+
+  /* ---- prototype bar (not part of the design) ---- */
+  #proto { position:fixed; left:50%; bottom:14px; transform:translateX(-50%); background:#111; color:#fff; border-radius:24px; padding:6px 10px; display:flex; gap:10px; align-items:center; box-shadow:0 6px 24px rgba(0,0,0,.35); z-index:100; font-size:12px; white-space:nowrap; }
+  #proto button { background:#2a2a2a; color:#fff; border-color:#444; border-radius:14px; }
+  #proto button.on { background:#fff; color:#111; }
+  #proto select, #proto input { background:#2a2a2a; color:#fff; border-color:#444; }
+  #proto .sep { width:1px; height:18px; background:#444; }
+  #proto label { display:flex; gap:4px; align-items:center; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="proto"></div>
+<script src="data.js"></script>
+<script>
+// ============================================================ data
+const D = window.DATA;
+const FILM = Object.fromEntries(D.films.map(f => [f.id, f]));
+const VETO = {}; // film id -> [voter names]
+for (const [v, m] of Object.entries(D.vetoes)) for (const id of Object.keys(m)) (VETO[id] ||= []).push(v);
+const po = p => p ? `https://image.tmdb.org/t/p/w185${p}` : '';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const VARIANTS = { A: 'Track', B: 'Column', C: 'Agenda' };
+
+// ============================================================ scenarios
+const T = (title) => D.films.find(f => f.title.startsWith(title)).id;
+let BID = 0;
+const F = (title, start) => ({ id: ++BID, kind: 'film', film: T(title), start });
+const L = (label, start, len) => ({ id: ++BID, kind: 'label', label, start, len });
+const SCEN = {
+  fresh: { name: 'Fresh from “Use this slate”', note: 'What #12/#17’s push produces: the slate back to back from the anchor in solver order, no breaks. Make it an evening — add a dinner, open some gaps.',
+    make: () => { let t = 0; return ['Evil Dead', 'The Thing', 'The Exorcist', 'Triangle', 'Terrifier'].map(n => { const b = F(n, t); t += FILM[b.film].runtime; return b; }); }, budget: 540 },
+  arranged: { name: 'An arranged evening', note: 'A finished plan: gaps, a dinner, a mid-evening veto (Csilla, The Exorcist) and a trailing one (Ana and Eszter, Terrifier). Try each ripple mode while moving The Thing or lengthening Dinner.',
+    make: () => [F('Evil Dead', 0), F('The Thing', 105), L('Dinner', 225, 45), F('The Exorcist', 285), F('Triangle', 425), F('Terrifier', 540)], budget: 540 },
+  stress: { name: 'Over budget, with an overlap', note: 'Late Night with the Devil dragged in by hand: screen time crosses the budget, and it overlaps Terrifier. Coco at the front makes Bence and Gergő arrive late. Nothing stops you; what tells you?',
+    make: () => [F('Coco', -115), F('Evil Dead', 0), F('The Thing', 105), L('Dinner', 225, 45), F('The Exorcist', 285), F('Triangle', 425), F('Terrifier', 540), F('Late Night with the Devil', 615)], budget: 540 },
+  late: { name: 'RUN — dinner ran long', note: 'RUN, 23:15. Dinner overran: The Exorcist was planned for 22:45 and actually started at 23:05. Make the plan true again — drag it 20 minutes later. “Push · keep gaps” moves everything after it; “keep end time” eats the gaps so you still finish at 04:24. Note that Dinner is a box, not a gap: the squeeze never shortens it.',
+    make: () => [F('Evil Dead', 0), F('The Thing', 105), L('Dinner', 225, 45), F('The Exorcist', 285), F('Triangle', 425), F('Terrifier', 540)], budget: 540, view: 'runadmin', now: 315 },
+  weekend: { name: 'A weekend: Fri evening + Sat afternoon', note: 'No day entity (#12): a two-day marathon is boxes with an eighteen-hour gap. How does each layout carry the empty night?',
+    make: () => [F('Evil Dead', 0), F('The Thing', 100), F('Triangle', 220), F('28 Days Later', 1200), L('Pizza', 1320, 40), F('Midsommar', 1365), F('Terrifier', 1520)], budget: 720 },
+};
+
+// ============================================================ state
+const qs = new URLSearchParams(location.search);
+const S = {
+  variant: VARIANTS[qs.get('variant')] ? qs.get('variant') : 'A',
+  view: 'pick', anchor: '2026-10-31T18:00', budget: 540, mode: 'none',
+  boxes: [], rt: {}, sel: null, now: 0, undoOn: false, prev: null, scen: 'arranged', sheet: null, tab: 'timetable',
+};
+function loadScen(k) {
+  const sc = SCEN[k]; BID = 0;
+  Object.assign(S, { scen: k, boxes: sc.make(), rt: {}, budget: sc.budget, sel: null, prev: null, sheet: null, view: sc.view || 'pick', now: sc.now ?? 150 });
+}
+
+// ============================================================ engine — pure over {boxes, rt}
+const runtime = (rt, id) => rt[id] ?? FILM[id].runtime;
+const lenOf = (st, b) => b.kind === 'film' ? runtime(st.rt, b.film) : b.len;
+const endOf = (st, b) => b.start + lenOf(st, b);
+const sorted = st => st.boxes.slice().sort((a, b) => a.start - b.start || a.id - b.id);
+const clone = st => ({ boxes: st.boxes.map(b => ({ ...b })), rt: { ...st.rt } });
+const r5 = m => Math.round(m / 5) * 5;
+
+// Apply one edit and then the sticky ripple mode (#13). ch: {start} | {len} | {runtime} | {insert: box}
+function edit(st0, id, ch, mode) {
+  const st = clone(st0);
+  let b, oS, oE;
+  if (ch.insert) { b = { ...ch.insert }; st.boxes.push(b); oS = b.start; oE = b.start; }
+  else { b = st.boxes.find(x => x.id === id); oS = b.start; oE = endOf(st, b); }
+  if ('start' in ch) b.start = ch.start;
+  if ('len' in ch) b.len = Math.max(5, ch.len);
+  if ('runtime' in ch) st.rt[b.film] = Math.max(1, ch.runtime);
+  const nS = b.start, nE = endOf(st, b);
+  if (mode === 'none') return st;
+  const moved = nS !== oS, d = moved ? nS - oS : nE - oE;
+  if (!d) return st;
+  const L = x => lenOf(st, x);
+  const clash = side => side.some(x => x.start < nE && x.start + L(x) > nS);
+  if (d > 0) {
+    const side = st.boxes.filter(x => x !== b && x.start >= oS).sort((p, q) => p.start - q.start);
+    if (!clash(side)) return st;                        // keep gaps *once contact is made* (#13)
+    if (mode === 'gaps') side.forEach(x => x.start += d); // push by the delta, not the overlap
+    else squeeze(side.map(x => ({ x, s: x.start, len: L(x) })), oE, nE, (it, s) => it.x.start = s);
+  } else {
+    const side = st.boxes.filter(x => x !== b && x.start < oS);
+    if (!clash(side)) return st;
+    if (mode === 'gaps') side.forEach(x => x.start += d);
+    else { // mirror time and squeeze the other way, holding the first box's start
+      const its = side.map(x => ({ x, s: -(x.start + L(x)), len: L(x) })).sort((p, q) => p.s - q.s);
+      squeeze(its, -oS, -nS, (it, s) => it.x.start = -(s + it.len));
+    }
+  }
+  return st;
+}
+// "Push, keep end time": squeeze the gaps on the pushed side proportionally to hold its outer edge;
+// when slack runs out, flat push with zero gaps. Starts are rounded to the 5-minute grid one by one,
+// so the residue never accumulates — the outer edge lands within ±2.5 min (#13's one real cost).
+function squeeze(items, prevEndOld, prevEndNew, put) {
+  if (!items.length) return;
+  const E = Math.max(...items.map(i => i.s + i.len));
+  const gaps = items.map((it, i) => Math.max(0, it.s - (i ? items[i - 1].s + items[i - 1].len : prevEndOld)));
+  const G = gaps.reduce((a, b) => a + b, 0), need = items.reduce((a, i) => a + i.len, 0);
+  const avail = E - prevEndNew - need;
+  let cursor = prevEndNew, ideal = prevEndNew;
+  items.forEach((it, i) => {
+    let s;
+    if (avail <= 0 || G <= 0) s = cursor;                         // flat push, gaps at zero — the floor
+    else { ideal += gaps[i] * avail / G; s = Math.max(cursor, r5(ideal)); }
+    put(it, s); cursor = s + it.len; ideal += it.len;
+  });
+}
+
+function readouts(st) {
+  const bs = sorted(st), films = bs.filter(b => b.kind === 'film');
+  const R = { bs, films, screen: 0, first: null, last: null, overlaps: [], budgetAt: null, strips: [], throughout: 0, shared: null };
+  if (!bs.length) return R;
+  R.first = Math.min(...bs.map(b => b.start)); R.last = Math.max(...bs.map(b => endOf(st, b)));
+  let cum = 0;
+  for (const f of films) { const l = lenOf(st, f); if (R.budgetAt === null && cum + l > S.budget) R.budgetAt = f.start + (S.budget - cum); cum += l; }
+  R.screen = cum;
+  for (let i = 0; i < bs.length; i++) for (let j = i + 1; j < bs.length; j++) {
+    const a = bs[i], b = bs[j], e = Math.min(endOf(st, a), endOf(st, b));
+    if (b.start < endOf(st, a)) R.overlaps.push({ a: a.id, b: b.id, s: b.start, e });
+  }
+  // presence strips (#12): a pure function of vetoes + order. Arrive after the leading vetoed run,
+  // leave before the trailing one; a vetoed film in between is a hole, marked.
+  for (const v of D.voters) {
+    const vet = films.map(f => (VETO[f.film] || []).includes(v));
+    if (!vet.some(Boolean)) { R.throughout++; continue; }
+    let i = 0; while (i < films.length && vet[i]) i++;
+    let j = films.length - 1; while (j >= i && vet[j]) j--;
+    const arrive = i > 0 ? endOf(st, films[i - 1]) : R.first;
+    const leave = j < films.length - 1 ? films[j + 1].start : R.last;
+    const holes = []; for (let k = i; k <= j; k++) if (vet[k]) holes.push({ s: films[k].start, e: endOf(st, films[k]), film: films[k].film });
+    R.strips.push({ v, arrive, leave, holes, lead: films.slice(0, i).map(f => f.film), trail: films.slice(j + 1).map(f => f.film) });
+  }
+  if (R.strips.length) {
+    const s = Math.max(...R.strips.map(x => x.arrive)), e = Math.min(...R.strips.map(x => x.leave));
+    let mins = Math.max(0, e - s);
+    // subtract the union of holes inside [s, e]
+    const hs = R.strips.flatMap(x => x.holes).map(h => [Math.max(s, h.s), Math.min(e, h.e)]).filter(h => h[1] > h[0]).sort((a, b) => a[0] - b[0]);
+    let cs = null, ce = null; for (const [a, b] of hs) { if (cs === null || a > ce) { if (cs !== null) mins -= ce - cs; cs = a; ce = b; } else ce = Math.max(ce, b); } if (cs !== null) mins -= ce - cs;
+    R.shared = { s, e: Math.max(s, e), mins: Math.max(0, mins) };
+  } else R.shared = { s: R.first, e: R.last, mins: R.last - R.first };
+  R.ovIds = new Set(R.overlaps.flatMap(o => [o.a, o.b]));
+  return R;
+}
+
+// ============================================================ time formatting
+const pad = n => String(n).padStart(2, '0');
+const at = off => new Date(new Date(S.anchor).getTime() + off * 60000);
+const clock = off => { const d = at(off); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const wday = off => at(off).toLocaleDateString('en-GB', { weekday: 'short' });
+const dclock = off => wday(off) + ' ' + clock(off);
+const dur = m => { m = Math.round(m); const sg = m < 0 ? '−' : ''; m = Math.abs(m); const h = Math.floor(m / 60), mm = m % 60; return sg + (h ? h + 'h' + (mm ? pad(mm) + 'm' : '') : mm + 'm'); };
+const dayStart = off => { const d = at(off); return off - (d.getHours() * 60 + d.getMinutes()); }; // offset of that day's midnight
+const phase = () => S.view === 'pick' ? 'PICK' : 'RUN';
+
+// ============================================================ shared pieces
+function vtags(b) { if (b.kind !== 'film') return ''; const v = VETO[b.film] || []; return v.map(n => `<span class="vtag" title="vetoed by ${esc(n)}">${esc(n.slice(0, 2))}</span>`).join(''); }
+function boxTitle(b) { return b.kind === 'film' ? esc(FILM[b.film].title) : esc(b.label); }
+function runtag(b) { if (b.kind !== 'film') return ''; const o = S.rt[b.film]; return o != null && o !== FILM[b.film].runtime ? ` <span class="amb" title="TMDB says ${FILM[b.film].runtime}">✎</span>` : ''; }
+
+function clocksHTML(R) {
+  if (!R.bs.length) return `<div class="clocks mute">Empty timetable.</div>`;
+  const over = R.screen > S.budget, pct = Math.min(100, R.screen / Math.max(S.budget, R.screen) * 100), mk = S.budget / Math.max(S.budget, R.screen) * 100;
+  return `<div class="clocks">
+    <span><span class="k">Screen time</span><b>${dur(R.screen)}</b> <span class="mute">of ${dur(S.budget)} budget</span><span class="meter ${over ? 'over' : ''}"><i style="width:${pct}%"></i><u style="left:${mk}%"></u></span><span class="${over ? 'warn' : 'mute'}">${over ? dur(R.screen - S.budget) + ' over' : dur(S.budget - R.screen) + ' to spare'}</span></span>
+    <span><span class="k">Evening</span><b>${dclock(R.first)} → ${dclock(R.last)}</b> <span class="mute">${dur(R.last - R.first)} elapsed</span></span>
+    <span><span class="k">Shared</span><b>${dur(R.shared.mins)}</b> <span class="mute">everyone in the room</span></span>
+    ${R.overlaps.length ? `<span class="warn">⚠ ${R.overlaps.length} overlap${R.overlaps.length > 1 ? 's' : ''}</span>` : ''}
+  </div>`;
+}
+function toolsHTML(R) {
+  const m = [['none', 'None'], ['gaps', 'Push · keep gaps'], ['end', 'Push · keep end time']];
+  return `<div id="tools">
+    <span><span class="mute">On a clash:</span> <span class="seg">${m.map(([k, l]) => `<button data-mode="${k}" class="${S.mode === k ? 'on' : ''}">${l}</button>`).join('')}</span></span>
+    <button data-act="addlabel">+ Break</button>
+    ${clocksHTML(R)}
+  </div>`;
+}
+function inspHTML(b) {
+  if (!b) return '';
+  if (b.kind === 'film') {
+    const f = FILM[b.film], r = runtime(S.rt, b.film), v = VETO[b.film] || [];
+    return `<div class="insp"><img src="${po(f.poster)}"><div><h3>${esc(f.title)} <span class="mute" style="font-weight:400">${f.year || ''}</span></h3>
+      <div class="f"><label>Starts</label><span class="num">${dclock(b.start)} <span class="mute">→ ${clock(b.start + r)}</span></span>
+      <label>Runtime</label><span><input type="number" data-rt="${b.id}" value="${r}" min="1"> min <span class="mute small">TMDB ${f.runtime}${r !== f.runtime ? ` · <a href="#" data-act="rtreset" data-id="${b.id}">reset</a>` : ''}</span></span>
+      <label></label><span class="mute small">The film’s runtime everywhere — SOLVE reads it too.</span>
+      ${v.length ? `<label>Vetoed by</label><span>${v.map(esc).join(', ')}</span>` : ''}</div>
+      <div style="margin-top:8px"><button data-act="remove" data-id="${b.id}">Remove from the plan</button></div></div></div>`;
+  }
+  return `<div class="insp"><div><h3>${esc(b.label)}</h3><div class="f"><label>Label</label><input data-lab="${b.id}" value="${esc(b.label)}">
+    <label>Starts</label><span class="num">${dclock(b.start)} → ${clock(b.start + b.len)}</span>
+    <label>Length</label><span><input type="number" data-len="${b.id}" value="${b.len}" step="5" min="5"> min</span></div>
+    <div style="margin-top:8px"><button data-act="remove" data-id="${b.id}">Remove</button></div></div></div>`;
+}
+function candidates() {
+  const inPlan = new Set(S.boxes.filter(b => b.kind === 'film').map(b => b.film));
+  return D.films.filter(f => !inPlan.has(f.id));
+}
+function trayHTML(vertical) {
+  const c = candidates();
+  return `<div id="tray"><h2>Approved, not in the plan <small>${c.length} · drag onto the timetable, or + to put it after the last box</small></h2>
+  <div class="cands">${c.map(f => `<div class="cand" draggable="true" data-film="${f.id}"><img src="${po(f.poster)}"><span class="t">${esc(f.title)}</span><span class="mute num">${runtime(S.rt, f.id)}′</span>${vtags({ kind: 'film', film: f.id })}<button class="ghost" data-act="append" data-film="${f.id}" title="after the last box">+</button></div>`).join('')}</div></div>`;
+}
+
+// ============================================================ A — horizontal track
+const A_PPM = 1.6;
+function range(R, pad0 = 15, pad1 = 30) {
+  if (!R.bs.length) return [0, 600];
+  return [Math.floor((Math.min(R.first, 0) - pad0) / 30) * 30, Math.ceil((R.last + pad1) / 30) * 30];
+}
+function axisTicks(t0, t1, pos, cls) {
+  let h = '';
+  for (let t = t0; t <= t1; t += 30) {
+    const d = at(t), mid = d.getHours() === 0 && d.getMinutes() === 0, hour = d.getMinutes() === 0;
+    h += `<div class="tick ${hour ? 'h' : ''} ${mid ? 'day' : ''}" style="${pos(t)}">${hour ? `<span>${mid ? wday(t) + ' ' : ''}${clock(t)}</span>` : ''}</div>`;
+  }
+  return h;
+}
+function renderA(R, ro) {
+  const [t0, t1] = range(R), W = (t1 - t0) * A_PPM, X = t => (t - t0) * A_PPM;
+  const st = S;
+  const lane = (inner, extra = '') => `<div class="A-lane" style="width:${W}px">${extra}${inner}</div>`;
+  const band = R.shared && R.strips.length ? `<div class="sharedband" style="left:${X(R.shared.s)}px;width:${X(R.shared.e) - X(R.shared.s)}px;top:0;bottom:0"></div>` : '';
+  const nowL = S.view !== 'pick' ? `<div class="nowline" style="left:${X(S.now)}px;top:0;bottom:0;width:2px"></div>` : '';
+  const bud = R.budgetAt !== null && !ro ? `<div class="budget" style="left:${X(R.budgetAt)}px;top:0;bottom:0;border-left:2px solid var(--ink)"><span style="position:absolute;top:0;left:3px;background:var(--ink);color:#fff;font-size:10px;padding:0 4px;border-radius:2px;white-space:nowrap">budget ${dur(S.budget)}</span></div>` : '';
+  const boxes = R.bs.map(b => {
+    const l = lenOf(st, b), cls = ['bx', b.kind === 'label' ? 'lab' : '', S.sel === b.id ? 'sel' : '', R.ovIds.has(b.id) ? 'ov' : '', S.view !== 'pick' && S.now >= b.start + l ? 'past' : '', S.view !== 'pick' && S.now >= b.start && S.now < b.start + l ? 'now' : ''].join(' ');
+    const f = b.kind === 'film' ? FILM[b.film] : null;
+    return `<div class="${cls}" data-box="${b.id}" style="left:${X(b.start)}px;width:${l * A_PPM}px">${f ? `<img src="${po(f.poster)}">` : ''}<div style="min-width:0"><div class="tt">${boxTitle(b)}${ro ? '' : vtags(b)}</div><div class="tm">${clock(b.start)}–${clock(b.start + l)} · ${l}′${runtag(b)}</div></div>${b.kind === 'label' && !ro ? '<div class="rz" data-rz="1"></div>' : ''}</div>`;
+  }).join('');
+  const ovs = R.overlaps.map(o => `<div class="ovband" style="left:${X(o.s)}px;width:${(o.e - o.s) * A_PPM}px;top:4px;bottom:4px"></div>`).join('');
+  let strips = '';
+  if (!ro) {
+    strips = R.strips.map(s => `<div class="A-row A-strip"><div class="A-lbl" title="${s.lead.length ? 'misses the start' : ''}">${esc(s.v)}</div>${lane(`<div class="pres" style="left:${X(s.arrive)}px;width:${Math.max(0, X(s.leave) - X(s.arrive))}px"></div>` + s.holes.map(h => `<div class="hole" title="vetoed ${esc(FILM[h.film].title)} — steps out mid-evening" style="left:${X(h.s)}px;width:${(h.e - h.s) * A_PPM}px"></div>`).join(''), band + nowL)}</div>`).join('');
+    strips += `<div class="A-foot">${R.throughout} of ${D.voters.length} present throughout${R.strips.length ? ` · shared time ${dur(R.shared.mins)}` : ''}</div>`;
+  }
+  return `<div class="A-scroll" id="keepA" data-ppm="${A_PPM}" data-t0="${t0}">
+    <div class="A-row A-axis"><div class="A-lbl"></div>${lane(axisTicks(t0, t1, t => `left:${X(t)}px`), nowL)}</div>
+    <div class="A-row A-track"><div class="A-lbl">${ro ? '' : 'Plan'}</div>${lane(boxes + ovs, band + bud + nowL)}</div>
+    ${strips}
+  </div>`;
+}
+
+// ============================================================ B — vertical column
+const B_PPM = 1.5;
+function renderB(R, ro, phoneW) {
+  const [t0, t1] = range(R, 30, 45), H = (t1 - t0) * B_PPM, Y = t => (t - t0) * B_PPM;
+  const lanes = ro ? [] : R.strips;
+  const colW = phoneW ? phoneW - 58 : 400;
+  let gut = '', hl = '';
+  for (let t = t0; t <= t1; t += 30) { const d = at(t), hour = d.getMinutes() === 0, mid = hour && d.getHours() === 0; if (hour) gut += `<span class="${mid ? 'day' : ''}" style="top:${Y(t)}px">${mid ? wday(t) + ' ' : ''}${clock(t)}</span>`; hl += `<div class="hl ${hour ? 'h' : ''}" style="top:${Y(t)}px"></div>`; }
+  const nowL = S.view !== 'pick' ? `<div class="nowline" style="top:${Y(S.now)}px;left:0;right:0;height:2px"></div>` : '';
+  const band = R.strips.length && !ro ? `<div class="sharedband" style="top:${Y(R.shared.s)}px;height:${Y(R.shared.e) - Y(R.shared.s)}px;left:0;right:0"></div>` : '';
+  const bud = R.budgetAt !== null && !ro ? `<div class="budget" style="top:${Y(R.budgetAt)}px;left:0;right:0;border-top:2px solid var(--ink)"><span style="position:absolute;right:4px;top:-9px;background:var(--ink);color:#fff;font-size:10px;padding:0 4px;border-radius:2px">budget ${dur(S.budget)}</span></div>` : '';
+  const boxes = R.bs.map(b => {
+    const l = lenOf(S, b), f = b.kind === 'film' ? FILM[b.film] : null;
+    const cls = ['bx', b.kind === 'label' ? 'lab' : '', S.sel === b.id ? 'sel' : '', R.ovIds.has(b.id) ? 'ov' : '', S.view !== 'pick' && S.now >= b.start + l ? 'past' : '', S.view !== 'pick' && S.now >= b.start && S.now < b.start + l ? 'now' : ''].join(' ');
+    const small = l * B_PPM < 60;
+    return `<div class="${cls}" data-box="${b.id}" style="top:${Y(b.start)}px;height:${l * B_PPM}px">${f && !small ? `<img src="${po(f.poster)}">` : ''}<div style="min-width:0"><div class="tt">${boxTitle(b)}${ro ? '' : vtags(b)}</div><div class="tm">${clock(b.start)}–${clock(b.start + l)} · ${l}′${runtag(b)}</div></div>${b.kind === 'label' && !ro ? '<div class="rz" data-rz="1"></div>' : ''}</div>`;
+  }).join('');
+  const ovs = R.overlaps.map(o => `<div class="ovband" style="top:${Y(o.s)}px;height:${(o.e - o.s) * B_PPM}px;left:4px;right:4px"></div>`).join('');
+  const laneH = lanes.map(s => `<div class="B-lane" style="height:${H}px">${band}<div class="pres" style="top:${Y(s.arrive)}px;height:${Math.max(0, Y(s.leave) - Y(s.arrive))}px"></div>${s.holes.map(h => `<div class="hole" title="vetoed ${esc(FILM[h.film].title)}" style="top:${Y(h.s)}px;height:${(h.e - h.s) * B_PPM}px"></div>`).join('')}${nowL}</div>`).join('');
+  const grid = `<div class="B-scroll" id="keepB" data-ppm="${B_PPM}" data-t0="${t0}" style="${phoneW ? 'border:0;border-radius:0;max-height:none;background:transparent' : ''}">
+    ${lanes.length ? `<div class="B-head"><div style="width:58px"></div><div style="width:${colW}px">Plan</div>${lanes.map(s => `<div style="width:30px" title="${esc(s.v)}">${esc(s.v.slice(0, 2))}</div>`).join('')}</div>` : ''}
+    <div class="B-body"><div class="B-gut" style="height:${H}px">${gut}</div><div class="B-col" style="height:${H}px;width:${colW}px">${hl}${band}${bud}${boxes}${ovs}${nowL}</div>${laneH}</div></div>`;
+  if (ro) return grid;
+  const sel = S.boxes.find(b => b.id === S.sel);
+  const c = candidates();
+  return `<div class="B-wrap">${grid}<div class="B-side">
+    <div class="card"><h4>Presence</h4>${R.strips.length ? R.strips.map(s => `<div><b>${esc(s.v)}</b> <span class="mute">${clock(s.arrive)}–${clock(s.leave)}${s.holes.length ? ` · steps out for ${s.holes.map(h => esc(FILM[h.film].title)).join(', ')}` : ''}</span></div>`).join('') + `<div class="mute" style="margin-top:4px">${R.throughout} of ${D.voters.length} present throughout · shared ${dur(R.shared.mins)}</div>` : `<div class="mute">All ${D.voters.length} present throughout.</div>`}</div>
+    ${sel ? `<div class="card"><h4>Selected</h4>${inspHTML(sel)}</div>` : ''}
+    <div class="card"><h4>Approved, not in the plan · ${c.length}</h4><div class="cands" style="flex-direction:column;flex-wrap:nowrap">${c.map(f => `<div class="cand" draggable="true" data-film="${f.id}"><img src="${po(f.poster)}"><span class="t">${esc(f.title)}</span><span class="mute num">${runtime(S.rt, f.id)}′</span>${vtags({ kind: 'film', film: f.id })}<span style="flex:1"></span><button class="ghost" data-act="append" data-film="${f.id}">+</button></div>`).join('')}</div></div>
+  </div></div>`;
+}
+
+// ============================================================ C — agenda ledger
+function renderC(R) {
+  const strips = R.strips;
+  const presCell = (s, b) => {
+    const l = lenOf(S, b), mid = b.start + l / 2;
+    if (s.holes.some(h => h.s === b.start && b.kind === 'film')) return `<td class="pc"><i class="hole" title="${esc(s.v)} vetoed this — steps out mid-evening"></i></td>`;
+    return `<td class="pc">${mid >= s.arrive && mid <= s.leave ? '<i class="in"></i>' : ''}</td>`;
+  };
+  let rows = '', prevEnd = null, cum = 0, budgetDone = false;
+  for (const b of R.bs) {
+    const l = lenOf(S, b), f = b.kind === 'film' ? FILM[b.film] : null;
+    if (prevEnd !== null) {
+      const g = b.start - prevEnd;
+      if (g !== 0) rows += `<tr class="gap ${g < 0 ? 'neg' : ''}"><td colspan="${8 + strips.length}" style="height:${Math.min(28, Math.max(6, Math.abs(g) / 3))}px">${g < 0 ? `⚠ overlaps the box above by ${dur(-g)}` : dur(g)}</td></tr>`;
+    }
+    if (b.kind === 'film' && !budgetDone && cum + l > S.budget) { budgetDone = true; if (cum + l > S.budget && S.budget - cum < l) rows += `<tr class="budget"><td colspan="${8 + strips.length}"><span>budget ${dur(S.budget)} runs out ${dur(S.budget - cum)} into the next film</span></td></tr>`; }
+    if (b.kind === 'film') cum += l;
+    const now = S.view !== 'pick' && S.now >= b.start && S.now < b.start + l, past = S.view !== 'pick' && S.now >= b.start + l;
+    const inShared = R.strips.length && b.start >= R.shared.s && b.start + l <= R.shared.e;
+    rows += `<tr class="box ${b.kind === 'label' ? 'lab' : ''} ${S.sel === b.id ? 'sel' : ''} ${R.ovIds.has(b.id) ? 'ov' : ''} ${now ? 'now' : ''} ${past ? 'past' : ''} ${inShared ? 'shared' : ''}" data-row="${b.id}" draggable="true">
+      <td class="handle" title="drag to reorder">⠿</td>
+      <td class="time"><input type="time" data-start="${b.id}" value="${clock(b.start)}"> <span class="mute">${wday(b.start)}</span></td>
+      <td class="nud"><button data-nudge="-15" data-id="${b.id}">−15</button><button data-nudge="-5" data-id="${b.id}">−5</button><button data-nudge="5" data-id="${b.id}">+5</button><button data-nudge="15" data-id="${b.id}">+15</button></td>
+      <td class="time mute">→ ${clock(b.start + l)}</td>
+      <td style="width:30px">${f ? `<img src="${po(f.poster)}">` : ''}</td>
+      <td data-sel="${b.id}" style="cursor:pointer">${f ? `<b>${esc(f.title)}</b> <span class="mute">${f.year || ''}</span>${vtags(b)}` : `<input data-lab="${b.id}" value="${esc(b.label)}" style="width:160px">`}</td>
+      <td class="num" style="white-space:nowrap">${f ? `<input type="number" data-rt="${b.id}" value="${l}" style="width:56px">′${l !== f.runtime ? ` <span class="amb small" title="TMDB says ${f.runtime}">✎ TMDB ${f.runtime}</span>` : ''}` : `<input type="number" data-len="${b.id}" value="${l}" step="5" style="width:56px">′`}</td>
+      ${strips.map(s => presCell(s, b)).join('')}
+      <td><button class="ghost" data-act="remove" data-id="${b.id}" title="remove">✕</button></td>
+    </tr>`;
+    if (S.sel === b.id && f) rows += `<tr class="insp-row"><td></td><td colspan="${7 + strips.length}">${inspHTML(b)}</td></tr>`;
+    prevEnd = b.start + l;
+  }
+  if (R.budgetAt === null && R.bs.length) rows += `<tr class="gap"><td colspan="${8 + strips.length}" class="mute">budget ${dur(S.budget)} not reached · ${dur(S.budget - R.screen)} to spare</td></tr>`;
+  return `<table class="C"><thead><tr><th></th><th>Starts</th><th>Move</th><th>Ends</th><th></th><th>Film / break</th><th>Length</th>${strips.map(s => `<th class="pc" title="${esc(s.v)}">${esc(s.v.slice(0, 2))}</th>`).join('')}<th></th></tr></thead><tbody id="ctbody">${rows || `<tr><td colspan="9" class="mute" style="padding:20px">Empty.</td></tr>`}</tbody></table>
+  <div class="hint">${R.throughout} of ${D.voters.length} present throughout${R.strips.length ? ` · shared time ${dur(R.shared.mins)} (rows tinted)` : ''} · drag ⠿ to reorder: the row lands flush after the one above it, then the clash rule applies.</div>`;
+}
+
+// ============================================================ RUN — voter on a phone
+function phoneHTML(R) {
+  const cur = R.bs.find(b => S.now >= b.start && S.now < endOf(S, b) && b.kind === 'film');
+  const next = R.bs.find(b => b.start > S.now);
+  let np = '';
+  if (cur) { const f = FILM[cur.film], l = lenOf(S, cur); np = `<div class="np"><img src="${po(f.poster)}"><div style="flex:1"><div class="k">NOW PLAYING</div><div style="font-weight:600;font-size:15px">${esc(f.title)}</div><div style="color:#a09d96;font-size:12px">${clock(cur.start)}–${clock(cur.start + l)} · ${dur(cur.start + l - S.now)} left</div><div class="bar"><i style="width:${(S.now - cur.start) / l * 100}%"></i></div></div></div>`; }
+  else if (next) np = `<div class="np"><div style="flex:1"><div class="k">NEXT</div><div style="font-weight:600;font-size:15px">${boxTitle(next)}</div><div style="color:#a09d96;font-size:12px">${dclock(next.start)} · in ${dur(next.start - S.now)}</div></div></div>`;
+  let body;
+  if (S.variant === 'A') body = `<div style="padding:8px 0">${renderA(R, true)}</div>`;
+  else if (S.variant === 'B') body = renderB(R, true, 370);
+  else {
+    let h = '', pe = null;
+    for (const b of R.bs) { const l = lenOf(S, b), f = b.kind === 'film' ? FILM[b.film] : null; if (pe !== null && b.start - pe >= 10) h += `<div class="gap">${dur(b.start - pe)} break</div>`;
+      const cls = (S.now >= b.start && S.now < b.start + l ? 'now' : S.now >= b.start + l ? 'past' : '') + (f ? '' : ' lab');
+      h += f ? `<div class="it ${cls}" data-sheet="${b.id}"><img src="${po(f.poster)}"><div><div class="t">${esc(f.title)}</div><div class="tm">${dclock(b.start)}–${clock(b.start + l)} · ${dur(l)}</div></div></div>` : `<div class="it ${cls}"><div class="tm" style="width:44px;text-align:center">☕</div><div><div>${esc(b.label)}</div><div class="tm">${clock(b.start)}–${clock(b.start + l)}</div></div></div>`;
+      pe = b.start + l; }
+    body = `<div class="ph-list">${h}</div>`;
+  }
+  const sb = S.sheet && S.boxes.find(b => b.id === S.sheet && b.kind === 'film');
+  const sheet = sb ? (() => { const f = FILM[sb.film], l = lenOf(S, sb); return `<div class="sheet"><img src="${po(f.poster)}"><div style="flex:1"><h3>${esc(f.title)}</h3><div style="color:#a09d96">${f.year || ''} · ${dur(l)}${f.director ? ' · ' + esc(f.director.join(', ')) : ''}</div><div style="margin-top:6px">${dclock(sb.start)}–${clock(sb.start + l)}</div>${f.trailer ? `<div style="margin-top:10px"><a href="https://www.youtube.com/watch?v=${f.trailer}" target="_blank">▶ Trailer</a></div>` : ''}<div style="margin-top:10px"><a href="#" data-act="closesheet">Close</a></div></div></div>`; })() : '';
+  const first = R.first;
+  return `<div id="phonewrap"><div class="phone"><header><b>The evening</b><a>Everyone’s scores</a></header>
+    <div class="sub">${first !== null ? `${at(first).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })} · from ${clock(first)}` : ''}</div>
+    ${np}<div class="body" id="keepP">${body}</div>${sheet}</div>
+    <div class="phnote"><h4>RUN · voter · ${VARIANTS[S.variant]}</h4>The same layout as the editor minus every control and every admin readout (strips, budget, overlap marks, veto tags) — #13’s “same view minus the edit affordances”. Simulated clock in the bar. Tap a film for the sheet (#21’s steer: poster, title, year, runtime, trailer, nothing else). Dark because the room is.</div></div>`;
+}
+
+// ============================================================ render
+function render() {
+  const keep = {}; for (const id of ['keepA', 'keepB', 'keepP']) { const el = document.getElementById(id); if (el) keep[id] = [el.scrollLeft, el.scrollTop]; }
+  const winY = window.scrollY;
+  const R = readouts(S);
+  let h;
+  if (S.view === 'runvoter') h = phoneHTML(R);
+  else {
+    h = `<div id="console"><b>Ribcage · admin</b><nav><span>Phase</span><span>Films</span><span class="on">Pick</span><span>Roster</span></nav><span class="hat">Voter side ↗ · signed in there as Dani</span></div>
+    <div id="pickhead"><div class="row"><span class="phasepill">${phase()}</span>
+      <span class="ctl"><label>Budget</label><input type="number" id="budget" value="${S.budget}" step="15" style="width:70px"> <span class="mute">min · ${dur(S.budget)} of screen time</span></span>
+      <span class="ctl"><label>Anchor</label><input type="datetime-local" id="anchor" value="${S.anchor}"></span></div>
+      <div class="tabs"><span data-tab="compare" class="${S.tab === 'compare' ? 'on' : ''}">Compare</span><span data-tab="timetable" class="${S.tab === 'timetable' ? 'on' : ''}">Timetable</span></div></div>`;
+    if (S.tab === 'compare') h += `<div id="main"><div class="empty">Compare — #24’s ledger, decided and not part of this prototype. The plan’s set readouts (floor, Σrep, representatives) live there as its own row.</div></div>`;
+    else {
+      h += toolsHTML(R) + `<div id="main">`;
+      if (S.variant === 'A') { h += renderA(R, false); const sel = S.boxes.find(b => b.id === S.sel); h += sel ? `<div style="margin-top:10px;max-width:640px">${inspHTML(sel)}</div>` : `<div class="hint">Drag a box along the clock; drag a break’s right edge to resize it; click a box for its runtime. Hold Alt while dragging to skip snapping.</div>`; h += trayHTML(); }
+      else if (S.variant === 'B') { h += renderB(R, false) + `<div class="hint">Drag a box up or down the clock; drag a break’s bottom edge to resize it; click a box for its runtime. Hold Alt while dragging to skip snapping.</div>`; }
+      else { h += renderC(R) + trayHTML(); }
+      h += `</div>`;
+    }
+  }
+  document.getElementById('app').innerHTML = h;
+  for (const [id, [x, y]] of Object.entries(keep)) { const el = document.getElementById(id); if (el) { el.scrollLeft = x; el.scrollTop = y; } }
+  window.scrollTo(0, winY);
+  if (S.view === 'runvoter' && !keep.keepP) { // first paint of the phone: bring "now" into view
+    const sc = document.querySelector('.phone .A-scroll'); if (sc) sc.scrollLeft = Math.max(0, (S.now - +sc.dataset.t0) * A_PPM - 120);
+    const bd = document.getElementById('keepP'), b = document.querySelector('.phone .B-scroll');
+    if (b) bd.scrollTop = Math.max(0, (S.now - +b.dataset.t0) * B_PPM - 140);
+    const it = document.querySelector('.phone .ph-list .it.now'); if (it) bd.scrollTop = Math.max(0, it.offsetTop - 80); }
+  renderBar();
+}
+function renderBar() {
+  const ks = Object.keys(VARIANTS);
+  const R = readouts(S);
+  const [t0, t1] = R.bs.length ? [Math.min(R.first, 0) - 30, R.last + 30] : [0, 600];
+  document.getElementById('proto').innerHTML = `
+    <button data-pv="-1">←</button><b>${S.variant} — ${VARIANTS[S.variant]}</b><button data-pv="1">→</button><span class="sep"></span>
+    ${[['pick', 'PICK'], ['runadmin', 'RUN · admin'], ['runvoter', 'RUN · voter 📱']].map(([k, l]) => `<button data-view="${k}" class="${S.view === k ? 'on' : ''}">${l}</button>`).join('')}
+    ${S.view !== 'pick' ? `<label>clock <input type="range" id="now" min="${t0}" max="${t1}" step="5" value="${S.now}" style="width:140px"> <b class="num">${dclock(S.now)}</b></label>` : ''}
+    <span class="sep"></span><select id="scen">${Object.entries(SCEN).map(([k, v]) => `<option value="${k}" ${S.scen === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select>
+    <label title="#13's candidate, not a decision"><input type="checkbox" id="undo" ${S.undoOn ? 'checked' : ''}> undo (Ctrl+Z, one level)</label>`;
+  const n = SCEN[S.scen].note;
+  const notes = document.getElementById('scenNote') || (() => { const d = document.createElement('div'); d.id = 'scenNote'; d.style.cssText = 'position:fixed;left:16px;bottom:64px;max-width:380px;background:#fffbe9;border:1px solid #e6d89a;border-radius:6px;padding:8px 10px;font-size:12px;z-index:99'; document.body.appendChild(d); return d; })();
+  notes.innerHTML = `<b>${esc(SCEN[S.scen].name)}</b> <a href="#" data-act="hidenote" style="float:right;color:#888">hide</a><br>${esc(n)}`;
+  notes.style.display = S.hideNote ? 'none' : '';
+}
+
+// ============================================================ commit an edit (with optional one-level undo)
+function commit(next) { if (S.undoOn) S.prev = { boxes: S.boxes, rt: S.rt }; S.boxes = next.boxes; S.rt = next.rt; }
+function newBoxId() { return Math.max(0, ...S.boxes.map(b => b.id)) + 1; }
+function snapStart(st, id, s, len, alt) {
+  if (alt) return Math.round(s);
+  // Under a push mode the neighbours move out of the way, so flush-snapping to them is noise
+  // (it stole "23:05" → "23:03" in testing): push modes snap to the 5-minute grid only.
+  if (S.mode !== 'none') return r5(s);
+  let best = r5(s), bd = 6;
+  for (const o of st.boxes) { if (o.id === id) continue; const e = endOf(st, o);
+    if (Math.abs(s - e) < bd) { bd = Math.abs(s - e); best = e; }
+    if (Math.abs(s + len - o.start) < bd) { bd = Math.abs(s + len - o.start); best = o.start - len; } }
+  return best;
+}
+
+// ============================================================ dragging (A and B) — continuous, live ripple preview
+let drag = null;
+document.addEventListener('pointerdown', e => {
+  if (S.view === 'runvoter') return;
+  const el = e.target.closest('.bx[data-box]'); if (!el || e.button !== 0) return;
+  const sc = el.closest('[data-ppm]'); if (!sc) return;
+  const id = +el.dataset.box, b = S.boxes.find(x => x.id === id);
+  drag = { id, axis: S.variant === 'A' ? 'x' : 'y', ppm: +sc.dataset.ppm, x0: e.clientX, y0: e.clientY, base: { boxes: S.boxes, rt: S.rt }, start0: b.start, len0: lenOf(S, b), resize: !!e.target.dataset.rz, moved: false };
+  e.preventDefault();
+});
+document.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const px = drag.axis === 'x' ? e.clientX - drag.x0 : e.clientY - drag.y0;
+  if (!drag.moved && Math.abs(px) < 4) return;
+  drag.moved = true;
+  const dm = px / drag.ppm;
+  let next;
+  if (drag.resize) next = edit(drag.base, drag.id, { len: Math.max(5, e.altKey ? Math.round(drag.len0 + dm) : r5(drag.len0 + dm)) }, S.mode);
+  else next = edit(drag.base, drag.id, { start: snapStart(drag.base, drag.id, drag.start0 + dm, drag.len0, e.altKey) }, S.mode);
+  S.boxes = next.boxes; S.rt = next.rt; S.sel = drag.id;
+  render();
+  const el = document.querySelector(`.bx[data-box="${drag.id}"]`); if (el) el.classList.add('drag');
+});
+document.addEventListener('pointerup', () => {
+  if (!drag) return;
+  if (!drag.moved) { S.sel = S.sel === drag.id ? null : drag.id; }
+  else if (S.undoOn) S.prev = drag.base;
+  drag = null; render();
+});
+
+// tray → timeline (HTML5 drag)
+document.addEventListener('dragstart', e => {
+  const c = e.target.closest('.cand'); if (c) { e.dataTransfer.setData('text/film', c.dataset.film); return; }
+  const r = e.target.closest('tr[data-row]'); if (r) { e.dataTransfer.setData('text/row', r.dataset.row); }
+});
+document.addEventListener('dragover', e => {
+  if (e.target.closest('[data-ppm]') || e.target.closest('#ctbody')) { e.preventDefault(); document.querySelectorAll('tr.dragover').forEach(x => x.classList.remove('dragover')); const tr = e.target.closest('tr[data-row]'); if (tr) tr.classList.add('dragover'); }
+});
+document.addEventListener('drop', e => {
+  const film = +e.dataTransfer.getData('text/film'), row = +e.dataTransfer.getData('text/row');
+  const sc = e.target.closest('[data-ppm]');
+  if (sc && film) {
+    e.preventDefault();
+    const lane = sc.querySelector(S.variant === 'A' ? '.A-track .A-lane' : '.B-col').getBoundingClientRect();
+    const t = +sc.dataset.t0 + (S.variant === 'A' ? e.clientX - lane.left : e.clientY - lane.top) / +sc.dataset.ppm;
+    const len = runtime(S.rt, film), s = snapStart(S, -1, t, len, e.altKey);
+    const id = newBoxId(); commit(edit(S, null, { insert: { id, kind: 'film', film, start: s } }, S.mode)); S.sel = id; render(); return;
+  }
+  const tr = e.target.closest('tr[data-row]');
+  if (tr && (film || row)) { // C: land flush after the row ABOVE the drop target, then the clash rule
+    e.preventDefault();
+    const bs = sorted(S), tgt = +tr.dataset.row, idx = bs.findIndex(b => b.id === tgt);
+    const above = bs.slice(0, idx).filter(b => b.id !== row).pop();
+    const s = above ? endOf(S, above) : bs[idx].start;
+    if (film) { const id = newBoxId(); commit(edit(S, null, { insert: { id, kind: 'film', film, start: s } }, S.mode)); S.sel = id; }
+    else if (row !== tgt) commit(edit(S, row, { start: s }, S.mode));
+    render();
+  }
+});
+
+// clicks
+document.addEventListener('click', e => {
+  const t = e.target;
+  if (t.dataset.pv) { const ks = Object.keys(VARIANTS); S.variant = ks[(ks.indexOf(S.variant) + +t.dataset.pv + ks.length) % ks.length]; setURL(); render(); return; }
+  if (t.dataset.view) { S.view = t.dataset.view; S.sheet = null; render(); return; }
+  if (t.dataset.mode) { S.mode = t.dataset.mode; render(); return; }
+  if (t.dataset.tab) { S.tab = t.dataset.tab; render(); return; }
+  if (t.dataset.nudge) { const b = S.boxes.find(x => x.id === +t.dataset.id); commit(edit(S, b.id, { start: b.start + +t.dataset.nudge }, S.mode)); render(); return; }
+  if (t.dataset.sel) { S.sel = S.sel === +t.dataset.sel ? null : +t.dataset.sel; render(); return; }
+  const sh = t.closest('[data-sheet], .phone .bx[data-box]'); if (sh) { S.sheet = +(sh.dataset.sheet || sh.dataset.box); render(); return; }
+  const act = t.dataset.act; if (!act) return;
+  e.preventDefault();
+  if (act === 'hidenote') { S.hideNote = true; renderBar(); return; }
+  if (act === 'closesheet') { S.sheet = null; render(); return; }
+  if (act === 'remove') { const id = +t.dataset.id; commit({ boxes: S.boxes.filter(b => b.id !== id), rt: S.rt }); S.sel = null; render(); return; }
+  if (act === 'rtreset') { const b = S.boxes.find(x => x.id === +t.dataset.id); commit(edit(S, b.id, { runtime: FILM[b.film].runtime }, S.mode)); render(); return; }
+  if (act === 'append' || act === 'addlabel') {
+    const R = readouts(S), s = R.bs.length ? Math.ceil(R.last / 5) * 5 : 0, id = newBoxId();
+    const box = act === 'append' ? { id, kind: 'film', film: +t.dataset.film, start: s } : { id, kind: 'label', label: 'Break', start: s, len: 30 };
+    commit(edit(S, null, { insert: box }, S.mode)); S.sel = id; render(); return;
+  }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'budget') { S.budget = +t.value || 0; render(); return; }
+  if (t.id === 'anchor') { S.anchor = t.value; render(); return; }
+  if (t.id === 'scen') { loadScen(t.value); S.hideNote = false; render(); return; }
+  if (t.id === 'undo') { S.undoOn = t.checked; S.prev = null; return; }
+  if (t.dataset.rt) { commit(edit(S, +t.dataset.rt, { runtime: +t.value }, S.mode)); render(); return; }
+  if (t.dataset.len) { commit(edit(S, +t.dataset.len, { len: +t.value }, S.mode)); render(); return; }
+  if (t.dataset.lab) { S.boxes = S.boxes.map(b => b.id === +t.dataset.lab ? { ...b, label: t.value } : b); render(); return; }
+  if (t.dataset.start) { // C: type a time; keep the day the box is already on, nearest match
+    const b = S.boxes.find(x => x.id === +t.dataset.start), [hh, mm] = t.value.split(':').map(Number);
+    let s = dayStart(b.start) + hh * 60 + mm; if (s - b.start > 720) s -= 1440; if (b.start - s > 720) s += 1440;
+    commit(edit(S, b.id, { start: s }, S.mode)); render(); return;
+  }
+});
+document.addEventListener('input', e => { if (e.target.id === 'now') { S.now = +e.target.value; render(); } });
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, textarea, select, [contenteditable]')) return;
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && S.undoOn && S.prev) { S.boxes = S.prev.boxes; S.rt = S.prev.rt; S.prev = null; render(); e.preventDefault(); return; }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { const ks = Object.keys(VARIANTS); S.variant = ks[(ks.indexOf(S.variant) + (e.key === 'ArrowRight' ? 1 : -1) + ks.length) % ks.length]; setURL(); render(); }
+  if (e.key === 'Escape') { S.sel = null; S.sheet = null; render(); }
+});
+function setURL() { const u = new URL(location); u.searchParams.set('variant', S.variant); history.replaceState(null, '', u); }
+
+loadScen('arranged'); render();
+</script>
+</body>
+</html>
