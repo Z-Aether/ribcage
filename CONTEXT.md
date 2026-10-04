@@ -205,7 +205,7 @@ _Avoid_: personal total, satisfaction
 ### Arranging
 
 **Timetable**:
-The single arrangement of boxes against the anchor. One per marathon; solving never touches it and RUN never freezes it. (#12, #13)
+The single arrangement of boxes against the anchor. One per marathon; solving never touches it, RUN never freezes it, and nothing of it is versioned. The admin edits it on the track; voters read it in RUN as a different layout of the same thing. (#12, #13, #22)
 _Avoid_: plan (as a term of art), schedule
 
 **Anchor**:
@@ -213,8 +213,11 @@ The one wall-clock datetime the whole timetable is positioned against, set by th
 _Avoid_: start time, kickoff, day
 
 **Box**:
-A labelled span on the timetable: a film, fixed at its runtime, or something the admin draws such as a meal. The minutes between boxes are unoccupied, not a thing. (#12)
+A labelled span on the timetable: a film, fixed at its runtime, or a **labelled box** the admin draws, such as a meal or break, which can be resized and marked flexible. The minutes between boxes are unoccupied, not a thing. (#12, #22)
 _Avoid_: block, slot, item, gap (as an entity)
+
+**Flexible**:
+Of a labelled box: allowed to shrink when "keep end time" squeezes, alongside the gaps and in proportion, never below one 5-minute step. Off by default, and a film can never be flexible. Every other movement leaves it at full length. (#22, #26)
 
 **Overlap**:
 Two boxes occupying the same minutes. Allowed and flagged, never prevented; the condition a ripple mode responds to. (#12, #13)
@@ -222,15 +225,27 @@ _Avoid_: clash, conflict, collision
 
 **Use this slate**:
 The one explicit action that lays a proposal's films onto the timetable back to back from the anchor, replacing what was there. The only path from proposals to the timetable. (#12, #17)
-_Avoid_: push (a ripple mode), apply, import, sync
+_Avoid_: push (what a ripple mode does), apply, import, sync
 
 **Ripple mode**:
-The timetable editor's sticky setting for what an edit does to the boxes it comes to overlap: leave them (the default), push them keeping gaps, or push them keeping the end time. Always chosen, never ambient; the same setting in PICK and RUN. (#12, #13)
+The timetable editor's sticky setting for what an edit (a move, resize, runtime correction or insert) does to the boxes it comes to overlap: leave them (the default), push them keeping gaps, or push them keeping the end time by squeezing gaps and flexible boxes. Always chosen, never ambient; the same in PICK and RUN, and ignored by the arrange utilities. (#12, #13, #22)
 _Avoid_: ripple (bare), cascade, reflow, auto-adjust
 
 **Push**:
-The movement a ripple mode applies to every box on one side of an edit, by the edit's own delta from the point of contact. Not undone by dragging back, since the reverse move touches nothing. (#13)
+The movement a ripple mode applies to every box on one side of an edit, by the edit's own delta from the point of contact, and it may carry boxes before the anchor. Dragging back does not reverse it, since the reverse move touches nothing, and there is no undo: the preview is the safeguard. (#13, #22)
 _Avoid_: shift, nudge
+
+**Arrange utility**:
+A whole-timetable rearrangement that ignores the ripple mode and takes every box in its current start order. **Lay out with a break** puts them back to back from the anchor, a set number of minutes apart. **Spread evenly** shares the empty time between the anchor and the current last end equally among them. (#22)
+_Avoid_: auto-layout, reflow
+
+**Preview**:
+The result of a timetable edit shown before it is made, while a box is dragged or an arrange utility is **armed**; nothing changes until the edit is released or the armed action applied. The control that stands in for undo. (#22)
+_Avoid_: draft, dry run, proposal (a slate from SOLVE)
+
+**Track**:
+The admin's rendering of the timetable: one horizontal span of wall-clock time fitted to the whole evening, with boxes, presence strips and readouts on it. Voters never see it. (#22)
+_Avoid_: timeline, Gantt
 
 **Elapsed time**:
 The span from the first box's start to the last box's end, gaps and meals included. Never compared against the budget. (#12)
@@ -248,12 +263,12 @@ _Avoid_: overlap, common time
 A number about a slate that changes when a film is added or removed and not when one is moved: floor, each voter's representative, Σrep, screen time against the budget, the size of the floor set, and which films are vetoed and by whom. Genre mix was one and was dropped; trigger warnings never appear here. (#12, #17, #20, #24)
 
 **Arrangement readout**:
-A number that changes when a box is moved: per-person presence strips and shared time. Derived from vetoes and order alone; nothing exogenous is ever entered. (#11, #12)
+A number that changes when a box is moved: per-person presence strips and shared time. Derived from vetoes and order alone; nothing exogenous is ever entered. Shown to the admin only. (#11, #12, #22)
 
 ### Running
 
 **RUN**:
-The final phase, entered when the admin declares the plan settled, possibly days ahead; advancing to it publishes the timetable, which stays editable and is the voter's page, with the reveal behind it as a secondary view. Nothing follows it: the marathon ending is a fact about the world, not a state in the app. (#12, #13, #15, #27)
+The final phase, entered when the admin declares the plan settled, possibly days ahead; advancing to it publishes the timetable, which stays editable by the admin and is what voters read: the whole evening fitted top to bottom on one phone screen, past dimmed, with no readouts, and the reveal behind it as a secondary view. Nothing follows it: the marathon ending is a fact about the world, not a state in the app. (#12, #13, #15, #22, #27)
 _Avoid_: marathon day, done, finished
 
 **Actualising**:
@@ -261,7 +276,7 @@ Keeping the timetable true to the evening as it really runs, by editing it. The 
 _Avoid_: recording, tracking, actuals, planned-vs-actual
 
 **Now playing**:
-The box the present moment falls inside, derived on each reader's device from the anchor and offsets. Never stored and never marked by hand. (#13)
+The box the present moment falls inside, derived on each reader's device from the anchor and offsets and shown within that box. In a gap, or before the evening begins, the next box reads as next instead, so there is no pre-evening mode. Never stored and never marked by hand. (#13, #22)
 _Avoid_: current film, started/finished marks
 
 ### Trigger warnings
