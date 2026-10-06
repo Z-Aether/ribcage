@@ -11,15 +11,15 @@ The single event one running copy of the app exists to plan and run. Nothing car
 _Avoid_: event, session, edition, instance
 
 **Window**:
-The span of a few weeks in which one marathon is organised and run, from the app being rebuilt and wiped to its being stopped. About three a year, with nothing crossing between them. (#7, #18)
+The span of a few weeks in which one marathon is organised and run, from the app being rebuilt to its teardown. About three a year, with nothing crossing between them. (#7, #18, #30)
 _Avoid_: season, cycle, iteration
 
 **Teardown**:
-The end of a window: the app is stopped and unreachable, and nothing it held is kept. The routine end of every marathon, including one abandoned partway. (#7, #15, #18)
-_Avoid_: archive, cancel, shutdown
+The end of a window: the app's containers and volumes are removed and every copy of its data is deleted, snapshots included, leaving only the stack's definition for the next rebuild. Nothing it held is kept, except a pseudonymised score matrix the developer keeps privately for testing. The routine end of every marathon, including one abandoned partway. (#7, #15, #18, #25, #30)
+_Avoid_: archive, cancel, shutdown, stop (stopping alone keeps the data)
 
 **Phase**:
-Which of five stages the marathon is in: SUGGEST, APPROVE, VOTE, PICK, RUN. It decides which of the two user-writable surfaces, SUGGEST and VOTE, is live; it never gates the admin and moves one step at a time in either direction. A fresh database starts in SUGGEST — there is no phase before it, because standing the app up is the deployment's business, not a state the app is in. (#15, #28)
+Which of five stages the marathon is in: SUGGEST, APPROVE, VOTE, PICK, RUN. It decides which of the two user-writable surfaces, SUGGEST and VOTE, is live; it never gates the admin and moves one step at a time in either direction. Every voter action has a window of phases, and a post from a tab left open outside it is refused and reloaded into the current phase. A page that polls and finds the phase moved reloads the same way, so stepping RUN back to PICK takes the published evening down at once. A fresh database starts in SUGGEST — there is no phase before it, because standing the app up is the deployment's business, not a state the app is in. (#15, #28, #36)
 _Avoid_: stage, step, status, state; SETUP (dropped as a phase 2026-09-12)
 
 **Phase history**:
@@ -41,7 +41,7 @@ The one shared secret that admits a person to registration. Used exactly once pe
 _Avoid_: invite code, invite link, access code
 
 **Display name**:
-The unique name a voter chooses at registration and is known by everywhere. The only personal detail the app holds. (#8)
+The unique name a voter chooses at registration and is known by everywhere. The only personal detail the app holds. Unique regardless of case and shown as typed; fixed for the marathon, with no renaming. (#8, #37)
 _Avoid_: username, handle, real name
 
 **Roster**:
@@ -63,7 +63,7 @@ _Avoid_: publish (that is what advancing to RUN does to the timetable), results
 ### Suggesting
 
 **Suggestion**:
-A film a voter puts forward in SUGGEST, attributed to them and carrying the admin's approval. Made and withdrawn in SUGGEST only; a withdrawn suggestion is simply gone, while one whose suggester is removed stays. (#8, #15, #27, #28)
+A film a voter puts forward in SUGGEST, attributed to them and carrying the admin's approval. Made and withdrawn in SUGGEST only, and withdrawable only while it is not approved and nothing downstream holds it — no scores, no timetable box, no kept proposal — so the phase moving back to SUGGEST reopens nothing. A withdrawn suggestion is simply gone, while one whose suggester is removed stays. (#8, #15, #27, #28, #34)
 _Avoid_: nomination, entry, submission
 
 **Pool**:
@@ -83,7 +83,7 @@ The step in SUGGEST where the suggester says which film they meant: five poster 
 _Avoid_: autocomplete, search results, disambiguator
 
 **Runtime**:
-The length of the particular copy of a film the group will watch, not a fact about the film. Filled in from metadata and editable by anyone during SUGGEST, by the admin after it; the approve screen flags a value that differs from the fetched one. (#5, #12, #15, #19, #21, #27, #28)
+The length of the particular copy of a film the group will watch, not a fact about the film. Filled in from metadata and editable by anyone during SUGGEST on a film the suggester could still withdraw, otherwise by the admin alone; the approve screen flags a value that differs from the fetched one. (#5, #12, #15, #19, #21, #27, #28, #34)
 _Avoid_: length, duration, official runtime
 
 **Note**:
@@ -91,8 +91,12 @@ A voter's own words on a film: one per voter per film, visible to the whole grou
 _Avoid_: comment, blurb, description, personal note, freeform note, group note
 
 **Film card**:
-The one component that shows a film, shared by SUGGEST, APPROVE and VOTE. Collapsed it shows poster, trigger icon, title, year, director, certificate, trailer and TMDB links, runtime, suggester and every note trimmed; expanded it adds the full notes, the DoesTheDogDie match, matched topics, the topic list and one credit line. Never shows an official synopsis or genres. VOTE and RUN may show it as a sheet instead. (#20, #21)
+The one component that shows a film, shared by SUGGEST, APPROVE and VOTE. Collapsed it shows poster, trigger icon, title, year, director, certificate, trailer and TMDB links, runtime, suggester and every note trimmed; expanded it adds the full notes, the DoesTheDogDie match, matched topics, the topic list and one credit line. Never shows an official synopsis or genres. VOTE and RUN may show it as a sheet instead. Its title is TMDB's `en-US` title, the one every surface leads with; the expanded card adds the original title on one line when it differs. (#20, #21, #38)
 _Avoid_: movie card, film sheet (as a distinct thing), tile (that is a picker result)
+
+**Title card**:
+What stands in for a poster when a film has none — hand-entered, or a TMDB film without a poster path. Same shape as a poster: a muted fill picked per film, the title large and the year beneath. Everywhere a poster appears, a title card can. (#26, #38)
+_Avoid_: placeholder, fallback poster, default image
 
 ### Voting
 
@@ -104,16 +108,20 @@ _Avoid_: movie; not interchangeable with suggestion, which also covers undecided
 The candidates put before voters in VOTE: exactly the approved suggestions. Growing it once VOTE has opened clears every voter's done marker; shrinking it clears nothing. (#15, #28)
 _Avoid_: candidate set, voting list
 
+**Unsorted**:
+The tray at the top of a voter's ballot holding every candidate they have not yet placed; anything left there counts as "don't mind". Ordered per voter: candidates matching their watched topics first, then the rest, each group in a fixed shuffle of that voter and film, sorted only when the page loads, so a film put back returns to its own place. (#9, #10, #38)
+_Avoid_: unrated pile, inbox, queue
+
 **Score**:
 A voter's stated appetite for a candidate on a coarse five-point scale from "rather not" to "top pick", taken at face value and never normalised against anyone else's. Hidden from other voters until the reveal. A score on a dropped film is kept; it counts only in a slate that already holds the film. (#8, #10, #26, #28)
 _Avoid_: rating, preference, vote, points
 
 **Veto**:
-A voter's declaration that they would not be in the room for a film. It bars the film from representing them and scores it −2 for them, a reserved step below anything hand-entered that prices the group's loss of them; uncapped, attributed and visible while VOTE is open. (#10, #12)
+A voter's declaration that they would not be in the room for a film. It bars the film from representing them and scores it −2 for them, a reserved step below anything hand-entered that prices the group's loss of them; uncapped, attributed and visible while VOTE is open — initials on the tile, names and any reason in the opened card. (#10, #12, #35)
 _Avoid_: hard veto, ban, block, exclusion
 
 **Seen it**:
-A voter's flag that a candidate could not count as something they wanted from the night. It bars the film from representing them and does nothing else. (#10)
+A voter's flag that a candidate could not count as something they wanted from the night. It bars the film from representing them and does nothing else. A fact about the voter, not an appetite, so others see it while VOTE is open, by name in the opened card. (#10, #35)
 _Avoid_: watched, rewatch penalty
 
 **Absence**:
@@ -121,7 +129,7 @@ A voter being out of the room for a film. Only the absence a veto declares is mo
 _Avoid_: attendance, availability, presence (as a modelled thing)
 
 **Done**:
-A voter's own signal that they have finished with the current ballot, shown by name to the whole group. Reversible and never a lock on their votes; cleared for everyone when the ballot grows, never when it shrinks or VOTE reopens. (#15, #28)
+A voter's own signal that they have finished with the current ballot, shown by name to the whole group. Reversible and never a lock on their votes; cleared for everyone when the ballot grows, never when it shrinks or VOTE reopens. The group sees done and nothing finer — how far another voter has got is never shown while VOTE is open. (#15, #28, #35)
 _Avoid_: submit, lock, finalize, finished
 
 ### Selection
@@ -129,6 +137,10 @@ _Avoid_: submit, lock, finalize, finished
 **Slate**:
 A set of candidates considered together as one evening's films. A set, not an order; SOLVE never proposes one over budget, but the admin may hand-build one that is. (#10, #12)
 _Avoid_: lineup, programme, schedule
+
+**Slate order**:
+The one order a slate's films are listed in wherever they are listed — the comparison, the shortlist, *Use this slate*: fewest vetoes first, then most film points, then title. So the strongest films come first and the vetoed ones last, where whoever vetoed can step out; a default, never a rule. (#36)
+_Avoid_: solver order, ranking
 
 **Screen time**:
 The sum of the runtimes of the films in a slate. The only duration SOLVE knows and the quantity the budget caps. (#6, #10, #12)
@@ -150,7 +162,7 @@ The sum of every voter's score for every film in a slate. The objective's least 
 _Avoid_: ε, tie-break, tiebreaker
 
 **Floor set**:
-The voters the floor is computed over: everyone with at least one score on a candidate, never everyone registered, minus anyone set aside by the without-a-voter knob. (#8, #15, #17, #28)
+The voters the floor is computed over: everyone who could be represented above zero — a positive score on a candidate they have neither seen nor vetoed, that is not fixed out and fits the budget on its own — minus anyone set aside by the without-a-voter knob. Never everyone registered; a voter with no ballot is simply one who fails the test. Recomputed on every solve, and anyone outside it is named on screen with the reason. (#8, #15, #17, #28, #33)
 
 ### Proposing
 
@@ -209,7 +221,7 @@ The single arrangement of boxes against the anchor. One per marathon; solving ne
 _Avoid_: plan (as a term of art), schedule
 
 **Anchor**:
-The one wall-clock datetime the whole timetable is positioned against, set by the admin in PICK; every box is an offset from it, so moving it moves the evening. This is where time enters the model: there is no day, session or multi-day concept. (#11, #12)
+The one wall-clock datetime the whole timetable is positioned against, set by the admin in PICK; every box is an offset from it in elapsed minutes, so moving it moves the evening. Stored as an instant and shown in the one time zone the deployment is configured with, never the device's; a night crossing a clock change shows an hour twice or skips one, and nothing else notices. This is where time enters the model: there is no day, session or multi-day concept. Starts empty, and nothing can be laid on the timetable until it is set. (#11, #12, #26, #36)
 _Avoid_: start time, kickoff, day
 
 **Box**:
@@ -220,11 +232,11 @@ _Avoid_: block, slot, item, gap (as an entity)
 Of a labelled box: allowed to shrink when "keep end time" squeezes, alongside the gaps and in proportion, never below one 5-minute step. Off by default, and a film can never be flexible. Every other movement leaves it at full length. (#22, #26)
 
 **Overlap**:
-Two boxes occupying the same minutes. Allowed and flagged, never prevented; the condition a ripple mode responds to. (#12, #13)
+Two boxes occupying the same minutes. Allowed and flagged, never prevented; the condition a ripple mode responds to. A runtime corrected anywhere but the track changes the box's length and ripples nothing, so any overlap it makes is simply flagged. (#12, #13, #36)
 _Avoid_: clash, conflict, collision
 
 **Use this slate**:
-The one explicit action that lays a proposal's films onto the timetable back to back from the anchor, replacing what was there. The only path from proposals to the timetable. (#12, #17)
+The one explicit action that lays a proposal's films onto the timetable back to back from the anchor in slate order, replacing everything that was there, labelled boxes included. Always armed: fired from the comparison it opens the timetable with the result previewed. Unavailable until the anchor is set. The only path from proposals to the timetable. (#12, #17, #22, #24, #36)
 _Avoid_: push (what a ripple mode does), apply, import, sync
 
 **Ripple mode**:
@@ -240,7 +252,7 @@ A whole-timetable rearrangement that ignores the ripple mode and takes every box
 _Avoid_: auto-layout, reflow
 
 **Preview**:
-The result of a timetable edit shown before it is made, while a box is dragged or an arrange utility is **armed**; nothing changes until the edit is released or the armed action applied. The control that stands in for undo. (#22)
+The result of a timetable edit shown before it is made, while a box is dragged or an arrange utility or *Use this slate* is **armed**; nothing changes until the edit is released or the armed action applied. The control that stands in for undo. (#22)
 _Avoid_: draft, dry run, proposal (a slate from SOLVE)
 
 **Track**:
@@ -276,7 +288,7 @@ Keeping the timetable true to the evening as it really runs, by editing it. The 
 _Avoid_: recording, tracking, actuals, planned-vs-actual
 
 **Now playing**:
-The box the present moment falls inside, derived on each reader's device from the anchor and offsets and shown within that box. In a gap, or before the evening begins, the next box reads as next instead, so there is no pre-evening mode. Never stored and never marked by hand. (#13, #22)
+The box the present moment falls inside, derived on each reader's device from the anchor and offsets as instants, so the device's own time zone never matters, and shown within that box. In a gap, or before the evening begins, the next box reads as next instead, so there is no pre-evening mode. Never stored and never marked by hand. (#13, #22)
 _Avoid_: current film, started/finished marks
 
 ### Trigger warnings
@@ -290,7 +302,7 @@ The topics a voter has declared they want to be told about. Private to that vote
 _Avoid_: trigger profile, watchlist, trigger list (the page carrying the full vocabulary)
 
 **Matched topic**:
-A topic on a film that is also on the viewing voter's watched list, evaluated at the moment of viewing. Shown beside the veto control in VOTE; it never touches the objective and never vetoes on anyone's behalf. (#20)
+A topic on a film that is also on the viewing voter's watched list, evaluated at the moment of viewing. Voter side only — the admin has no list, so admin surfaces show none. Listed in the opened card and beside the veto control in VOTE; on a closed card or tile only the trigger icon speaks for them. It never touches the objective and never vetoes on anyone's behalf. (#20, #35)
 _Avoid_: trigger warning (unqualified), hit, flagged topic
 
 **Trigger icon**:
