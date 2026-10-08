@@ -313,3 +313,7 @@ _Avoid_: flag, badge, alert
 Of a candidate: having no crowd evidence bound to it at all, so an absence of warnings on it says nothing about its content. Distinct from a film whose evidence is merely thin. (#19, #20)
 _Avoid_: no data, blank, unmatched (which describes a topic)
 
+**Not fetched**:
+Of a candidate: DoesTheDogDie has not answered for it, so it has a match to fetch but no snapshot. Says nothing about content, and never shows as an all-clear or as uncovered. Fetched first on the next phase move, or by hand by correcting the match. (#32)
+_Avoid_: uncovered, failed, pending
+
