@@ -1,0 +1,6 @@
+{
+  "name": "slate-solver-benchmarks",
+  "private": true,
+  "description": "Slate-solver benchmark harness and enumeration oracle from issue #6 (research/slate-solver). Not app code.",
+  "dependencies": { "highs": "^1.15.2" }
+}

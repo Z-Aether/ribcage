@@ -7,3 +7,8 @@ docs/credentials/
 tmp/
 
 /data
+
+node_modules/
+
+# DoesTheDogDie topic vocabulary — raw third-party API output, kept local
+fixtures/dtdd/
