@@ -1,9 +1,12 @@
+from django.contrib.auth.decorators import login_not_required
 from django.shortcuts import redirect, render
 
 from ribcage.hello.forms import MessageForm
 from ribcage.hello.models import KEPT_MESSAGES, Message
 
 
+# Public until M3 removes it; the zero-query invariant's test lists it as an exception (#42, #49).
+@login_not_required
 def hello(request):
     if request.method == "POST":
         form = MessageForm(request.POST)

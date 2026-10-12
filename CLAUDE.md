@@ -16,7 +16,7 @@ A web app a group of friends uses to plan and run one film marathon. It is rebui
 
 Top-level directories sort by what a thing is, not by which ticket made it. A new kind of thing gets its directory and its line here.
 
-- `ribcage/` is the Django project: settings and URLs, plus one app per module of `docs/design.md` §9 (`identity` holds `Voter`, the user model). `hello` is M1 scaffolding that M3 removes (#42, #47). Every page extends `templates/base.html`. `static/vendor/` holds the front-end libraries byte for byte with their licences, and its `vendored.toml` records each one's source, version and checksum and says how to upgrade one (#14, #46).
+- `ribcage/` is the Django project: settings and URLs, plus one app per module of `docs/design.md` §9 (`identity` holds `Voter`, the user model). `hello` is M1 scaffolding that M3 removes (#42, #47). Every page extends `templates/base.html`. `privacy.md` is the public privacy policy's one copy, rendered at `/privacy/` (#16, #49). A page outside the login wall carries `login_not_required`, which is how `tests/http/test_public_pages.py` finds it and holds it to zero queries. `static/vendor/` holds the front-end libraries byte for byte with their licences, and its `vendored.toml` records each one's source, version and checksum and says how to upgrade one (#14, #46).
 - `tests/` is pytest. `tests/pure/` holds plain-data tests, where any database access fails the test; `tests/http/` holds tests through Django's test client (#25).
 - `docs/` is prose. `docs/deferred/` holds designs that were worked out and then shelved. `docs/agents/` configures skills and is reached through the pointers below.
 - `fixtures/` is recorded data, grouped by subject, that tests and seeding read offline. It holds data only.
