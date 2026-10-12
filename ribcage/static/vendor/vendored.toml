@@ -1,0 +1,40 @@
+# Each vendored front-end file, byte for byte as its npm package publishes it (#14, #46).
+# To upgrade a library: download its tarball at the new version, check it against the registry's
+# integrity value (https://registry.npmjs.org/<package>/<version>, under dist), copy the files over,
+# then update its entry here. tests/pure/test_vendored_files.py holds the files to these checksums.
+
+[htmx]
+package = "htmx.org"
+version = "2.0.11"
+licence = "0BSD"
+tarball = "https://registry.npmjs.org/htmx.org/-/htmx.org-2.0.11.tgz"
+tarball_integrity = "sha512-Thx/WtpeOQqSrqBCw/A1cwGJGg4UrVa3+sW0GmrM3p4gJgO89ecH4qtbnyzDDWFvBTqjnIMCgELTNt636dtamA=="
+files."htmx.min.js" = { from = "package/dist/htmx.min.js", sha256 = "d6fdc75f204e6bdefa99b69bf1e6d4ac69b8a364f77929f45c13476b4000f717" }
+files."LICENSE" = { from = "package/LICENSE", sha256 = "d3d2456f76414f2456104660ebd65aff1c04cd7966b942bdabd63f3cdb316a38" }
+
+[idiomorph]
+package = "idiomorph"
+version = "0.8.0"
+licence = "0BSD"
+tarball = "https://registry.npmjs.org/idiomorph/-/idiomorph-0.8.0.tgz"
+tarball_integrity = "sha512-R47JBL+6jHDQvcnbppIUtXXcxi5h6+wuCEEZXnRhUltsgzPFKzThL5PuHppP9ypJuy+7WawcY1TsSBD/iQbMhw=="
+files."idiomorph-ext.min.js" = { from = "package/dist/idiomorph-ext.min.js", sha256 = "5811b9a7eda14878b7dab4378bf60432e1bb6f11fcfb970cc26540642650181e" }
+files."LICENSE" = { from = "package/LICENSE", sha256 = "d3d2456f76414f2456104660ebd65aff1c04cd7966b942bdabd63f3cdb316a38" }
+
+[sortablejs]
+package = "sortablejs"
+version = "1.15.7"
+licence = "MIT"
+tarball = "https://registry.npmjs.org/sortablejs/-/sortablejs-1.15.7.tgz"
+tarball_integrity = "sha512-Kk8wLQPlS+yi1ZEf48a4+fzHa4yxjC30M/Sr2AnQu+f/MPwvvX9XjZ6OWejiz8crBsLwSq8GHqaxaET7u6ux0A=="
+files."Sortable.min.js" = { from = "package/Sortable.min.js", sha256 = "bf4241bc73fef7f11c59a283a69fe8051cdd31c6d8ff5a2b9ba219e7831fcf76" }
+files."LICENSE" = { from = "package/LICENSE", sha256 = "e94dfc31e800d169257569db270457c9f028440c9ccae41e7eb78b2db18f1298" }
+
+[pico]
+package = "@picocss/pico"
+version = "2.1.1"
+licence = "MIT"
+tarball = "https://registry.npmjs.org/@picocss/pico/-/pico-2.1.1.tgz"
+tarball_integrity = "sha512-kIDugA7Ps4U+2BHxiNHmvgPIQDWPDU4IeU6TNRdvXQM1uZX+FibqDQT2xUOnnO2yq/LUHcwnGlu1hvf4KfXnMg=="
+files."pico.classless.min.css" = { from = "package/css/pico.classless.min.css", sha256 = "61207a40ffc02a42d1e50143651c121beab70ed413c934c1ff84fa263ba436b0" }
+files."LICENSE" = { from = "package/LICENSE.md", sha256 = "afaff063e044233f917b7807dccab022f09dca474f92b642846bee4850655bbf" }

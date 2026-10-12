@@ -1,0 +1,2 @@
+# Vendored files stay byte for byte as published, so their recorded checksums hold on every checkout (#46).
+ribcage/static/vendor/** -text

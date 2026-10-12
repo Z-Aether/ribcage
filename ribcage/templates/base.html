@@ -1,0 +1,20 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Ribcage{% endblock %}</title>
+  {# An empty icon stops the browser's /favicon.ico request and its 404 until the theme brings one (#46). #}
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{% static 'vendor/pico/pico.classless.min.css' %}">
+  {# Deferred scripts run in order, so the morph extension finds htmx already loaded (#22). #}
+  <script src="{% static 'vendor/htmx/htmx.min.js' %}" defer></script>
+  <script src="{% static 'vendor/idiomorph/idiomorph-ext.min.js' %}" defer></script>
+  <script src="{% static 'vendor/sortablejs/Sortable.min.js' %}" defer></script>
+</head>
+<body>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

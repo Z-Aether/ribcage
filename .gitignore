@@ -12,8 +12,9 @@ node_modules/
 # DoesTheDogDie topic vocabulary — raw third-party API output, kept local
 fixtures/dtdd/
 
-# Local Python environment, database and caches
+# Local Python environment, database, collected static files and caches
 /.venv/
 /db.sqlite3*
+/staticfiles/
 __pycache__/
 .pytest_cache/
