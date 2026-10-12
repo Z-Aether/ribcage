@@ -2,4 +2,14 @@
 
 {% block content %}
   <h1>Hello World</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Post</button>
+  </form>
+  <ul>
+    {% for message in latest_messages %}
+      <li>{{ message.text }}</li>
+    {% endfor %}
+  </ul>
 {% endblock %}
