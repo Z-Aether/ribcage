@@ -2,11 +2,9 @@
 .claude/*
 /skills-lock.json
 
-# Live API keys — never commit
-docs/credentials/
+# Credentials and the group's real data — never commit
+/private/
 tmp/
-
-/data
 
 node_modules/
 

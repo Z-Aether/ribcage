@@ -91,8 +91,8 @@ A voter's own words on a film: one per voter per film, visible to the whole grou
 _Avoid_: comment, blurb, description, personal note, freeform note, group note
 
 **Film card**:
-The one component that shows a film, shared by SUGGEST, APPROVE and VOTE. Collapsed it shows poster, trigger icon, title, year, director, certificate, trailer and TMDB links, runtime, suggester and every note trimmed; expanded it adds the full notes, the DoesTheDogDie match, matched topics, the topic list and one credit line. Never shows an official synopsis or genres. VOTE and RUN may show it as a sheet instead. Its title is TMDB's `en-US` title, the one every surface leads with; the expanded card adds the original title on one line when it differs. (#20, #21, #38)
-_Avoid_: movie card, film sheet (as a distinct thing), tile (that is a picker result)
+The one component that shows a film, shared by SUGGEST, APPROVE, VOTE and the reveal. Collapsed it shows poster, trigger icon, title, year, director, certificate, trailer and TMDB links, runtime, suggester and every note trimmed; expanded it adds the full notes, the DoesTheDogDie match, matched topics, the topic list and one credit line. Never shows an official synopsis or genres. It always opens in place, never as a sheet: in the pool, under an approve-screen row, inside its ballot band, under a reveal row. Only the phase bar changes between them. The voter's RUN evening shows no card; the reveal behind it still opens one, with no trigger content after the RUN purge. Its title is TMDB's `en-US` title, the one every surface leads with; the expanded card adds the original title on one line when it differs. (#9, #20, #21, #22, #28, #29, #38)
+_Avoid_: movie card, film sheet (as a distinct thing), tile (that is a picker result or a poster on the ballot)
 
 **Title card**:
 What stands in for a poster when a film has none — hand-entered, or a TMDB film without a poster path. Same shape as a poster: a muted fill picked per film, the title large and the year beneath. Everywhere a poster appears, a title card can. (#26, #38)
@@ -252,7 +252,7 @@ A whole-timetable rearrangement that ignores the ripple mode and takes every box
 _Avoid_: auto-layout, reflow
 
 **Preview**:
-The result of a timetable edit shown before it is made, while a box is dragged or an arrange utility or *Use this slate* is **armed**; nothing changes until the edit is released or the armed action applied. The control that stands in for undo. (#22)
+The result of a timetable edit shown before it is made, while a box is dragged or an arrange utility or *Use this slate* is **armed**; nothing changes until the edit is released or the armed action applied. The app has no undo anywhere; this is the control that stands in for it. (#22, #39)
 _Avoid_: draft, dry run, proposal (a slate from SOLVE)
 
 **Track**:
