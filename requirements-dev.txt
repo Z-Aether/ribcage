@@ -1,0 +1,9 @@
+# The app plus the test harness, pinned exactly like the app (#14).
+-r requirements.txt
+pytest==9.1.1
+pytest-django==4.14.0
+iniconfig==2.3.1
+packaging==26.3
+pluggy==1.6.0
+Pygments==2.21.0
+colorama==0.4.6; sys_platform == "win32"

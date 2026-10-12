@@ -16,6 +16,8 @@ A web app a group of friends uses to plan and run one film marathon. It is rebui
 
 Top-level directories sort by what a thing is, not by which ticket made it. A new kind of thing gets its directory and its line here.
 
+- `ribcage/` is the Django project: settings and URLs, plus one app per module of `docs/design.md` §9 (`identity` holds `Voter`, the user model). `hello` is M1 scaffolding that M3 removes (#42, #47).
+- `tests/` is pytest. `tests/pure/` holds plain-data tests, where any database access fails the test; `tests/http/` holds tests through Django's test client (#25).
 - `docs/` is prose. `docs/deferred/` holds designs that were worked out and then shelved. `docs/agents/` configures skills and is reached through the pointers below.
 - `fixtures/` is recorded data, grouped by subject, that tests and seeding read offline. It holds data only.
 - `tools/` holds standalone harnesses from research tickets, one directory each. They stay outside the app and never ship.
@@ -23,6 +25,15 @@ Top-level directories sort by what a thing is, not by which ticket made it. A ne
 - `tmp/` is scratch, and nothing durable points into it.
 
 **Ignored files are part of the layout.** `private/`, `tmp/` and some of `fixtures/` are gitignored, so `git ls-files` won't show them. Check `.gitignore` before concluding a file is missing.
+
+## Running it
+
+Python 3.14, with every dependency pinned exactly in `requirements.txt` (the app) and `requirements-dev.txt` (plus the test harness). Changing a dependency means re-pinning it and its transitive dependencies there.
+
+- **Install:** `py -3.14 -m venv .venv`, then `.venv/Scripts/python -m pip install -r requirements-dev.txt` (off Windows, `python3.14` and `.venv/bin/python`). The commands below use the venv's `python`.
+- **Run the server:** `python manage.py migrate`, then `python manage.py runserver`. The local database is `db.sqlite3`, gitignored.
+- **Test:** `python -m pytest` runs both suites; `python -m pytest tests/pure` or `tests/http` runs one.
+- **Slow tests** are marked `@pytest.mark.slow` and stay out of the default run: `python -m pytest -m slow` runs only them, `-m ""` runs everything. Use the mark for on-demand checks such as #6's enumeration oracle.
 
 ## Commits
 

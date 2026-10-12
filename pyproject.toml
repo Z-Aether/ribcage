@@ -1,0 +1,8 @@
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "ribcage.settings"
+testpaths = ["tests"]
+# On-demand tests are marked slow and stay out of the default run (#25).
+addopts = ["-m", "not slow", "--strict-markers", "-p", "pytester"]
+markers = [
+    "slow: on-demand tests excluded from the default run, such as #6's enumeration oracle; run with -m slow",
+]
