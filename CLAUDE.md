@@ -16,9 +16,15 @@ A web app a group of friends uses to plan and run one film marathon. It is rebui
 
 Top-level directories sort by what a thing is, not by which ticket made it. A new kind of thing gets its directory and its line here.
 
-- `ribcage/` is the Django project: settings and URLs, plus one app per module of `docs/design.md` §9 (`identity` holds `Voter`, the user model). `hello` is M1 scaffolding that M3 removes (#42, #47). Every page extends `templates/base.html`. `privacy.md` is the public privacy policy's one copy, rendered at `/privacy/` (#16, #49). A page outside the login wall carries `login_not_required`, which is how `tests/http/test_public_pages.py` finds it and holds it to zero queries. `static/vendor/` holds the front-end libraries byte for byte with their licences, and its `vendored.toml` records each one's source, version and checksum and says how to upgrade one (#14, #46).
-- `tests/` is pytest. `tests/pure/` holds plain-data tests, where any database access fails the test; `tests/http/` holds tests through Django's test client (#25).
-- `docs/` is prose. `docs/deferred/` holds designs that were worked out and then shelved. `docs/agents/` configures skills and is reached through the pointers below.
+- `ribcage/` is the Django project: settings and URLs, plus one app per module of `docs/design.md` §9 and two outside it.
+  - `identity` holds `Voter`, the user model.
+  - `hello` is M1 scaffolding that M3 removes (#42, #47).
+  - `seeding` holds the dev-only seed commands, the only route to development data. Each milestone extends them to seed what it builds, and `--phase` picks which of the phases M3 adds to seed into (#25, #50).
+  - Every page extends `templates/base.html`. A page outside the login wall carries `login_not_required`, which is how `tests/http/test_public_pages.py` finds it and holds it to zero queries.
+  - `privacy.md` is the public privacy policy's one copy, rendered at `/privacy/` (#16, #49).
+  - `static/vendor/` holds the front-end libraries byte for byte with their licences, and its `vendored.toml` records each one's source, version and checksum and says how to upgrade one (#14, #46).
+- `tests/` is pytest. `tests/pure/` holds plain-data tests, where any database access fails the test; `tests/http/` holds tests through Django's test client (#25); `tests/commands/` runs management commands: in process against the test database, or as a child process to test startup.
+- `docs/` is prose. `docs/deferred/` holds designs that were worked out and then shelved. `docs/agents/` holds agent guides and skill configuration, each reached through a pointer in this file.
 - `fixtures/` is recorded data, grouped by subject, that tests and seeding read offline. It holds data only.
 - `tools/` holds standalone harnesses from research tickets, one directory each. They stay outside the app and never ship.
 - `private/` holds credentials and the group's real data. Its contents stay on this machine, out of commits, tickets and logs.
@@ -35,7 +41,9 @@ Python 3.14, with every dependency pinned exactly in `requirements.txt` (the app
 - **Configure:** copy `.env.example` to `.env` (gitignored). Settings come only from the environment; `manage.py` alone reads `.env`, filling in what the environment lacks (#45). `.env.example` lists every variable, so a new one goes there too, and a new judgement constant also joins the block at the foot of `ribcage/settings.py`.
 - **Run the server:** `python manage.py migrate`, then `python manage.py runserver`. The local database is `db.sqlite3`, gitignored. With `DEBUG` off, run `python manage.py collectstatic` first.
 - **Browse it** at `localhost` or `127.0.0.1` in Chromium or Firefox, Playwright's Chromium included: only they keep the always-`Secure` cookies over plain http, so from other browsers or a LAN address every POST gets a 403 (#31).
-- **Test:** `python -m pytest` runs both suites; `python -m pytest tests/pure` or `tests/http` runs one. The suite runs under `tests.settings`, which reads `.env.example`'s placeholders rather than `.env`.
+- **Seeded instance:** `python manage.py seededserver` rebuilds the local database from nothing with known voters and serves it at `http://127.0.0.1:8000/`; `python manage.py seed` only rebuilds. Both refuse unless `DEBUG` is on, which the deployment never sets (#50).
+- **Verify a page in a browser** by following `docs/agents/browser-verification.md`: Playwright over MCP against the seeded instance, at desktop width and at 390 px (#25).
+- **Test:** `python -m pytest` runs every suite; `python -m pytest tests/pure`, `tests/http` or `tests/commands` runs one. The suite runs under `tests.settings`, which reads `.env.example`'s placeholders rather than `.env`.
 - **Slow tests** are marked `@pytest.mark.slow` and stay out of the default run: `python -m pytest -m slow` runs only them, `-m ""` runs everything. Use the mark for on-demand checks such as #6's enumeration oracle.
 
 ## Commits

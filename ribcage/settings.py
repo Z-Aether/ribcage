@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ribcage.identity",
     "ribcage.hello",
+    "ribcage.seeding",
 ]
 
 MIDDLEWARE = [
