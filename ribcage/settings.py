@@ -14,6 +14,25 @@ ADMIN_PASSWORD = environment.required("ADMIN_PASSWORD")
 TMDB_API_KEY = environment.required("TMDB_API_KEY")
 DTDD_API_KEY = environment.required("DTDD_API_KEY")
 
+# The container publishes no port, so only the host's proxy can set this header and it is trusted (#31).
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = False
+USE_X_FORWARDED_PORT = False
+SECURE_HSTS_SECONDS = 365 * 24 * 60 * 60
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = False
+SECURE_SSL_REDIRECT = False
+# The proxy redirects to https, and preload would commit the host's apex domain, so both warnings are decided (#16).
+SILENCED_SYSTEM_CHECKS = ["security.W008", "security.W021"]
+# Secure even without the header; over local http only Chromium and Firefox keep them, at localhost or 127.0.0.1 (#31).
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+# Scripts can't read this cookie, so htmx requests must take the token from the page, e.g. hx-headers (#16).
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
+
 INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
