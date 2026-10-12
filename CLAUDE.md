@@ -31,8 +31,9 @@ Top-level directories sort by what a thing is, not by which ticket made it. A ne
 Python 3.14, with every dependency pinned exactly in `requirements.txt` (the app) and `requirements-dev.txt` (plus the test harness). Changing a dependency means re-pinning it and its transitive dependencies there.
 
 - **Install:** `py -3.14 -m venv .venv`, then `.venv/Scripts/python -m pip install -r requirements-dev.txt` (off Windows, `python3.14` and `.venv/bin/python`). The commands below use the venv's `python`.
+- **Configure:** copy `.env.example` to `.env` (gitignored). Settings come only from the environment; `manage.py` alone reads `.env`, filling in what the environment lacks (#45). `.env.example` lists every variable, so a new one goes there too, and a new judgement constant also joins the block at the foot of `ribcage/settings.py`.
 - **Run the server:** `python manage.py migrate`, then `python manage.py runserver`. The local database is `db.sqlite3`, gitignored.
-- **Test:** `python -m pytest` runs both suites; `python -m pytest tests/pure` or `tests/http` runs one.
+- **Test:** `python -m pytest` runs both suites; `python -m pytest tests/pure` or `tests/http` runs one. The suite runs under `tests.settings`, which reads `.env.example`'s placeholders rather than `.env`.
 - **Slow tests** are marked `@pytest.mark.slow` and stay out of the default run: `python -m pytest -m slow` runs only them, `-m ""` runs everything. Use the mark for on-demand checks such as #6's enumeration oracle.
 
 ## Commits

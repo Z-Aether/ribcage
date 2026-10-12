@@ -4,6 +4,7 @@
 
 # Credentials and the group's real data — never commit
 /private/
+/.env
 tmp/
 
 node_modules/

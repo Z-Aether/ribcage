@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "ribcage.settings"
+DJANGO_SETTINGS_MODULE = "tests.settings"
 testpaths = ["tests"]
 # On-demand tests are marked slow and stay out of the default run (#25).
 addopts = ["-m", "not slow", "--strict-markers", "-p", "pytester"]
