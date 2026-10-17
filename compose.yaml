@@ -1,0 +1,52 @@
+# The stack Komodo runs (#40). Locally it runs with compose.local.yaml on top, as CLAUDE.md says.
+name: ribcage
+
+services:
+  ribcage:
+    # A pinned tag, never latest: rolling back is editing this line. Komodo's auto-update stays off (#40).
+    image: ribcage:20261017-1007-2edddd4
+    restart: unless-stopped
+    # Real values go in the Komodo stack's environment; an empty required one stops startup, naming it (#18, #45).
+    environment:
+      SECRET_KEY: ${SECRET_KEY:-}
+      DEBUG: "false"
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-}
+      DATABASE_PATH: /data/db.sqlite3
+      TIME_ZONE: ${TIME_ZONE:-}
+      JOIN_CODE: ${JOIN_CODE:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      TMDB_API_KEY: ${TMDB_API_KEY:-}
+      DTDD_API_KEY: ${DTDD_API_KEY:-}
+      # Judgement constants: left empty, each keeps its default (#25).
+      DIVERSITY_CUT: ${DIVERSITY_CUT:-}
+      FLOOR_WEIGHT_MULTIPLIER: ${FLOOR_WEIGHT_MULTIPLIER:-}
+      BATCH_SIZE: ${BATCH_SIZE:-}
+      POLL_INTERVAL_SECONDS: ${POLL_INTERVAL_SECONDS:-}
+      TRIGGER_ICON_THRESHOLD: ${TRIGGER_ICON_THRESHOLD:-}
+      LOGIN_BACKOFF_FAILURES: ${LOGIN_BACKOFF_FAILURES:-}
+      LOGIN_BACKOFF_WINDOW_MINUTES: ${LOGIN_BACKOFF_WINDOW_MINUTES:-}
+      LOGIN_BACKOFF_WAIT_MINUTES: ${LOGIN_BACKOFF_WAIT_MINUTES:-}
+    volumes:
+      - data:/data
+    # No ports: the proxy's network is the only way in, which is what makes X-Forwarded-Proto trustworthy (#31).
+    networks:
+      proxy:
+        # The proxy forwards here at port 8000; other stacks share the network, so no generic names like app (#43).
+        aliases:
+          - ribcage
+    # Logs sit on the host's disk until the container is removed, so they are capped (#16).
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+volumes:
+  # The SQLite database, in WAL mode (#14, #18).
+  data:
+
+networks:
+  proxy:
+    name: ${PROXY_NETWORK:?Set PROXY_NETWORK to the name of the proxy's Docker network.}
+    external: true

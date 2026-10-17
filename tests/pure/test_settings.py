@@ -125,7 +125,7 @@ def test_a_judgement_constant_set_to_zero_stops_startup_naming_it(monkeypatch, n
 def test_the_example_env_file_names_every_variable_and_nothing_else():
     named = re.findall(r"^#? ?([A-Z_]+)=", EXAMPLE_ENV_FILE.read_text(), re.MULTILINE)
 
-    assert sorted(named) == sorted([*REQUIRED, "DEBUG", *JUDGEMENT_DEFAULTS])
+    assert sorted(named) == sorted([*REQUIRED, "DEBUG", *JUDGEMENT_DEFAULTS, "PROXY_NETWORK"])
 
 
 @pytest.mark.parametrize("debug", ["true", "false"])

@@ -8,12 +8,12 @@ REPO_ROOT = Path(ribcage.__file__).parents[1]
 CONTEXT_COPY = "FROM scratch\nCOPY . /\n"
 
 
-def run_docker(*arguments, input=None, timeout=600):
-    return subprocess.run(["docker", *arguments], input=input, capture_output=True, text=True, timeout=timeout)
+def run_docker(*arguments, input=None, timeout=600, env=None):
+    return subprocess.run(["docker", *arguments], input=input, capture_output=True, text=True, timeout=timeout, env=env)
 
 
-def docker(*arguments, input=None, timeout=600):
-    result = run_docker(*arguments, input=input, timeout=timeout)
+def docker(*arguments, input=None, timeout=600, env=None):
+    result = run_docker(*arguments, input=input, timeout=timeout, env=env)
     assert result.returncode == 0, f"docker {' '.join(arguments)} failed:\n{result.stderr}"
     return result.stdout
 

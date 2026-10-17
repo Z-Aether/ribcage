@@ -1,0 +1,14 @@
+# The stack on the dev's machine, layered over compose.yaml as CLAUDE.md says (#52).
+services:
+  ribcage:
+    # Built from the working tree under its own tag, so no pinned tag is overwritten.
+    image: ribcage:local
+    build: .
+    # Loopback only, at the port .env.example's trusted origins name.
+    ports:
+      - 127.0.0.1:8000:8000
+
+networks:
+  proxy:
+    # There is no proxy here, so compose creates the network on up and removes it on down.
+    external: false
