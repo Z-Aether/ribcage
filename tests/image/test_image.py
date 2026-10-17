@@ -75,9 +75,10 @@ def a_page_with_its_csrf_token(port):
     return cookie.split(";")[0], token
 
 
-def post_form(port, fields, cookie=None):
+def post_form(port, fields, cookie=None, extra_headers=None):
     body = "&".join(f"{name}={value}" for name, value in fields.items())
     headers = {"Content-Type": "application/x-www-form-urlencoded", "Origin": f"http://127.0.0.1:{port}"}
+    headers.update(extra_headers or {})
     if cookie:
         headers["Cookie"] = cookie
     return fetch(port, "POST", "/", headers, body)
@@ -178,3 +179,22 @@ def logs_once_they_show(name, text):
             return logs
         time.sleep(0.25)
     pytest.fail(f"{text} never reached the container's stdout.")
+
+
+def test_a_server_error_leaves_its_traceback_on_stderr_without_any_client_address(container):
+    name, port = container
+    cookie, token = a_page_with_its_csrf_token(port)
+    docker("exec", name, "chmod", "-R", "a-w", "/data")
+    try:
+        status, _, _ = post_form(port, {"csrfmiddlewaretoken": token, "text": "Unwritable"}, cookie, FORGED_ADDRESSES)
+    finally:
+        docker("exec", name, "chmod", "-R", "u+w", "/data")
+
+    assert status == 500
+    for _ in range(20):
+        logs = run_docker("logs", name, timeout=60)
+        if "Traceback" in logs.stderr:
+            break
+        time.sleep(0.25)
+    assert "Traceback" in logs.stderr and "readonly database" in logs.stderr
+    assert not any(value.removeprefix("for=") in logs.stdout + logs.stderr for value in FORGED_ADDRESSES.values())

@@ -107,6 +107,16 @@ STORAGES = {
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 }
 
+# With DEBUG off Django only mails request errors to the empty ADMINS; log them to stderr instead (#51).
+# The message is "Internal Server Error: <path>" and the traceback: no headers, no client address (#31).
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"plain": {"format": "%(message)s"}},
+    "handlers": {"stderr": {"class": "logging.StreamHandler", "formatter": "plain"}},
+    "loggers": {"django.request": {"handlers": ["stderr"], "level": "ERROR", "propagate": False}},
+}
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Judgement values: tunable from the environment without a rebuild; correctness values stay hard-coded (#25).
