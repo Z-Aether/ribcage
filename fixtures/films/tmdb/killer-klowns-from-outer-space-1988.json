@@ -1,0 +1,1207 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/ibFzbRVlVUTWBf4IZ8Osm9xSgWm.jpg",
+  "belongs_to_collection": null,
+  "budget": 1800000,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 1,
+     "character": "Mike Tobacco",
+     "credit_id": "52fe46c19251416c7508274b",
+     "gender": 2,
+     "id": 80245,
+     "known_for_department": "Acting",
+     "name": "Grant Cramer",
+     "order": 0,
+     "original_name": "Grant Cramer",
+     "popularity": 0.9571,
+     "profile_path": "/e0LPHBvTiwSH1RCr9ZU8gdA9vGU.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 2,
+     "character": "Debbie Stone",
+     "credit_id": "52fe46c19251416c7508274f",
+     "gender": 1,
+     "id": 20363,
+     "known_for_department": "Acting",
+     "name": "Suzanne Snyder",
+     "order": 1,
+     "original_name": "Suzanne Snyder",
+     "popularity": 1.0355,
+     "profile_path": "/7WO00lJH52Bm4Zo2R8eUVRekwqH.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 3,
+     "character": "Dave Hanson",
+     "credit_id": "52fe46c19251416c75082753",
+     "gender": 2,
+     "id": 80246,
+     "known_for_department": "Acting",
+     "name": "John Allen Nelson",
+     "order": 2,
+     "original_name": "John Allen Nelson",
+     "popularity": 1.1866,
+     "profile_path": "/ku0miuv59CJSB9iAhQJAMOcudau.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Curtis Mooney",
+     "credit_id": "52fe46c19251416c75082757",
+     "gender": 2,
+     "id": 17580,
+     "known_for_department": "Acting",
+     "name": "John Vernon",
+     "order": 3,
+     "original_name": "John Vernon",
+     "popularity": 2.0818,
+     "profile_path": "/xlHU7X2FhjnZVxu7fjoguCWlXeC.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 10,
+     "character": "Farmer Gene Green",
+     "credit_id": "547b670e9251412d730004c2",
+     "gender": 2,
+     "id": 19968,
+     "known_for_department": "Acting",
+     "name": "Royal Dano",
+     "order": 4,
+     "original_name": "Royal Dano",
+     "popularity": 1.7931,
+     "profile_path": "/nDZwO90amUQmSD5IP8l340bi0gW.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 11,
+     "character": "Bob McReed",
+     "credit_id": "547b672f9251412d7c0004e4",
+     "gender": 2,
+     "id": 80103,
+     "known_for_department": "Acting",
+     "name": "Christopher Titus",
+     "order": 5,
+     "original_name": "Christopher Titus",
+     "popularity": 0.9451,
+     "profile_path": "/htR0qNrSjnu0lTKZS1KHqqMfixf.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 32,
+     "character": "Rich Terenzi",
+     "credit_id": "582408c1c3a3684bfb004828",
+     "gender": 2,
+     "id": 1706337,
+     "known_for_department": "Acting",
+     "name": "Michael S. Siegel",
+     "order": 6,
+     "original_name": "Michael S. Siegel",
+     "popularity": 0.656,
+     "profile_path": "/6nIKEcxdbPXHmG8wo1Lj5mo3XWw.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 33,
+     "character": "Paul Terenzi",
+     "credit_id": "582408cac3a3684bf7004674",
+     "gender": 0,
+     "id": 1706339,
+     "known_for_department": "Acting",
+     "name": "Peter Licassi",
+     "order": 7,
+     "original_name": "Peter Licassi",
+     "popularity": 0.4526,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 34,
+     "character": "Stacy",
+     "credit_id": "582408d5c3a3684bf7004683",
+     "gender": 0,
+     "id": 1706340,
+     "known_for_department": "Acting",
+     "name": "Irene Michaels",
+     "order": 8,
+     "original_name": "Irene Michaels",
+     "popularity": 0.455,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 35,
+     "character": "Tracy",
+     "credit_id": "582408ddc3a3684bf700468c",
+     "gender": 1,
+     "id": 1706342,
+     "known_for_department": "Acting",
+     "name": "Karla Sue Krull",
+     "order": 9,
+     "original_name": "Karla Sue Krull",
+     "popularity": 0.3106,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 36,
+     "character": "Punk #1",
+     "credit_id": "582408e69251411a360048d6",
+     "gender": 2,
+     "id": 1706343,
+     "known_for_department": "Acting",
+     "name": "Aeron MacIntyre",
+     "order": 10,
+     "original_name": "Aeron MacIntyre",
+     "popularity": 0.4741,
+     "profile_path": "/6oj6aktP23XHTGTMYCuhSM5FHiB.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 37,
+     "character": "Punk #2",
+     "credit_id": "582408f19251411a3800474d",
+     "gender": 0,
+     "id": 1074167,
+     "known_for_department": "Acting",
+     "name": "Danny Kovacs",
+     "order": 11,
+     "original_name": "Danny Kovacs",
+     "popularity": 0.5792,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 38,
+     "character": "Mrs. Franco",
+     "credit_id": "582408fbc3a3684c08004542",
+     "gender": 1,
+     "id": 1706344,
+     "known_for_department": "Acting",
+     "name": "Adele Proom",
+     "order": 12,
+     "original_name": "Adele Proom",
+     "popularity": 0.4869,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 39,
+     "character": "Mr. Myers",
+     "credit_id": "5bca8fb80e0a265edf00368d",
+     "gender": 0,
+     "id": 1192199,
+     "known_for_department": "Acting",
+     "name": "Howard Malpas",
+     "order": 13,
+     "original_name": "Howard Malpas",
+     "popularity": 0.3154,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 40,
+     "character": "Mom #1",
+     "credit_id": "5bca8fcc0e0a265edf0036b4",
+     "gender": 0,
+     "id": 2154959,
+     "known_for_department": "Acting",
+     "name": "Karen Raff",
+     "order": 14,
+     "original_name": "Karen Raff",
+     "popularity": 0.4155,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 41,
+     "character": "Mom #2",
+     "credit_id": "5bca8fd6c3a3684090003fc3",
+     "gender": 1,
+     "id": 1331148,
+     "known_for_department": "Acting",
+     "name": "Kathleen Stefano",
+     "order": 15,
+     "original_name": "Kathleen Stefano",
+     "popularity": 0.4587,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 42,
+     "character": "Little Girl",
+     "credit_id": "5bca8fe1c3a3684071004026",
+     "gender": 0,
+     "id": 2154960,
+     "known_for_department": "Acting",
+     "name": "Claire Bartle",
+     "order": 16,
+     "original_name": "Claire Bartle",
+     "popularity": 0.3243,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 43,
+     "character": "Waitress",
+     "credit_id": "5bca8fee9251416c21003e40",
+     "gender": 0,
+     "id": 2154961,
+     "known_for_department": "Acting",
+     "name": "Sharon O'Mahoney",
+     "order": 17,
+     "original_name": "Sharon O'Mahoney",
+     "popularity": 0.3712,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 44,
+     "character": "Slug",
+     "credit_id": "5bca8ff80e0a265ed5003e02",
+     "gender": 2,
+     "id": 1089421,
+     "known_for_department": "Acting",
+     "name": "Michael Halton",
+     "order": 18,
+     "original_name": "Michael Halton",
+     "popularity": 0.5076,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 45,
+     "character": "Sheila",
+     "credit_id": "5bca90060e0a265ed9003bf4",
+     "gender": 0,
+     "id": 2154962,
+     "known_for_department": "Acting",
+     "name": "Lucinda Burgess",
+     "order": 19,
+     "original_name": "Lucinda Burgess",
+     "popularity": 0.2959,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 46,
+     "character": "Black Biker",
+     "credit_id": "5bca90130e0a265ecf004633",
+     "gender": 2,
+     "id": 2154963,
+     "known_for_department": "Acting",
+     "name": "Melvin Thompson",
+     "order": 20,
+     "original_name": "Melvin Thompson",
+     "popularity": 0.3071,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 47,
+     "character": "Security Guard",
+     "credit_id": "5bca9035c3a36840830044b4",
+     "gender": 0,
+     "id": 2154964,
+     "known_for_department": "Acting",
+     "name": "David Piel",
+     "order": 21,
+     "original_name": "David Piel",
+     "popularity": 0.3789,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 48,
+     "character": "State Trooper",
+     "credit_id": "5bca9060c3a3684078003c5d",
+     "gender": 0,
+     "id": 2154965,
+     "known_for_department": "Acting",
+     "name": "Armon Stover",
+     "order": 22,
+     "original_name": "Armon Stover",
+     "popularity": 0.2871,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 49,
+     "character": "State Trooper",
+     "credit_id": "5bca906bc3a3684090004083",
+     "gender": 0,
+     "id": 138629,
+     "known_for_department": "Acting",
+     "name": "Jeff Yesko",
+     "order": 23,
+     "original_name": "Jeff Yesko",
+     "popularity": 0.5943,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 50,
+     "character": "Klown Performer",
+     "credit_id": "5bca90789251416c130038e7",
+     "gender": 0,
+     "id": 2154966,
+     "known_for_department": "Acting",
+     "name": "Steve Rockhold",
+     "order": 24,
+     "original_name": "Steve Rockhold",
+     "popularity": 0.3351,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 51,
+     "character": "Klown Performer",
+     "credit_id": "5bca909c0e0a265ecf0046ed",
+     "gender": 0,
+     "id": 2154967,
+     "known_for_department": "Acting",
+     "name": "Michael Harington Burris",
+     "order": 25,
+     "original_name": "Michael Harington Burris",
+     "popularity": 0.2914,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 52,
+     "character": "Klown Performer",
+     "credit_id": "5bca90a29251416c09003afc",
+     "gender": 0,
+     "id": 2154968,
+     "known_for_department": "Acting",
+     "name": "Geno Ponza",
+     "order": 26,
+     "original_name": "Geno Ponza",
+     "popularity": 0.2722,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 53,
+     "character": "Klown Performer",
+     "credit_id": "5bca90a9c3a36840830045ad",
+     "gender": 0,
+     "id": 1857933,
+     "known_for_department": "Acting",
+     "name": "Scott Beatty",
+     "order": 27,
+     "original_name": "Scott Beatty",
+     "popularity": 0.3189,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 54,
+     "character": "Klown Performer",
+     "credit_id": "5bca90b1c3a3684075003d38",
+     "gender": 0,
+     "id": 1484416,
+     "known_for_department": "Acting",
+     "name": "Paul Haley",
+     "order": 28,
+     "original_name": "Paul Haley",
+     "popularity": 0.5625,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 55,
+     "character": "Klown Performer",
+     "credit_id": "5bca90b99251416c240038ee",
+     "gender": 0,
+     "id": 2154969,
+     "known_for_department": "Acting",
+     "name": "Dennis C. Walsh",
+     "order": 29,
+     "original_name": "Dennis C. Walsh",
+     "popularity": 0.3029,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 56,
+     "character": "Klown Performer",
+     "credit_id": "5bca90c19251416c16003560",
+     "gender": 0,
+     "id": 2154970,
+     "known_for_department": "Acting",
+     "name": "Genie Houdini",
+     "order": 30,
+     "original_name": "Genie Houdini",
+     "popularity": 0.3232,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 57,
+     "character": "Klown Performer",
+     "credit_id": "5bca914d9251416c13003a01",
+     "gender": 2,
+     "id": 320973,
+     "known_for_department": "Directing",
+     "name": "Harrod Blank",
+     "order": 31,
+     "original_name": "Harrod Blank",
+     "popularity": 0.4048,
+     "profile_path": "/ff3Eq3CU5HZaKFAxJ3133jimhu7.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 58,
+     "character": "Klown Performer",
+     "credit_id": "5bca9158c3a368407100423a",
+     "gender": 0,
+     "id": 2154971,
+     "known_for_department": "Acting",
+     "name": "Karl Shaeffer",
+     "order": 32,
+     "original_name": "Karl Shaeffer",
+     "popularity": 0.2629,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 59,
+     "character": "Klown Performer",
+     "credit_id": "5bca918cc3a3684090004242",
+     "gender": 0,
+     "id": 2154972,
+     "known_for_department": "Acting",
+     "name": "Paul Parsons",
+     "order": 33,
+     "original_name": "Paul Parsons",
+     "popularity": 0.2541,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 60,
+     "character": "Klown Performer",
+     "credit_id": "5bca91959251416c0b003442",
+     "gender": 0,
+     "id": 2154973,
+     "known_for_department": "Acting",
+     "name": "Jimmy Locust",
+     "order": 34,
+     "original_name": "Jimmy Locust",
+     "popularity": 0.4264,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 61,
+     "character": "Klown Performer",
+     "credit_id": "5bca91bcc3a36840710042f8",
+     "gender": 0,
+     "id": 2154974,
+     "known_for_department": "Acting",
+     "name": "Mitch Bryan",
+     "order": 35,
+     "original_name": "Mitch Bryan",
+     "popularity": 0.2828,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 62,
+     "character": "Klown Performer",
+     "credit_id": "5bca91c3c3a36840830046da",
+     "gender": 0,
+     "id": 2154975,
+     "known_for_department": "Acting",
+     "name": "Greg Sykes",
+     "order": 36,
+     "original_name": "Greg Sykes",
+     "popularity": 0.3284,
+     "profile_path": null
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "607cd8a77776f000298b3102",
+     "department": "Crew",
+     "gender": 2,
+     "id": 563350,
+     "job": "Special Effects Assistant",
+     "known_for_department": "Writing",
+     "name": "Steve Shibuya",
+     "original_name": "Steve Shibuya",
+     "popularity": 0.5138,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe46c19251416c7508275d",
+     "department": "Directing",
+     "gender": 2,
+     "id": 80247,
+     "job": "Director",
+     "known_for_department": "Visual Effects",
+     "name": "Stephen Chiodo",
+     "original_name": "Stephen Chiodo",
+     "popularity": 0.7351,
+     "profile_path": "/o0SvYV65c27h7KvalhPNdOyxTA5.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5536c06cc3a3681785003316",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 1353148,
+     "job": "Animation",
+     "known_for_department": "Visual Effects",
+     "name": "Justin Kohn",
+     "original_name": "Justin Kohn",
+     "popularity": 0.6101,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "582404a79251411a3b004773",
+     "department": "Production",
+     "gender": 2,
+     "id": 49681,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Paul Mason",
+     "original_name": "Paul Mason",
+     "popularity": 0.5454,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "582405559251411a3e00460e",
+     "department": "Production",
+     "gender": 2,
+     "id": 65163,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Ed Mitchell",
+     "original_name": "Ed Mitchell",
+     "popularity": 0.4571,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5824055c9251411a38004592",
+     "department": "Art",
+     "gender": 2,
+     "id": 80249,
+     "job": "Production Design",
+     "known_for_department": "Visual Effects",
+     "name": "Charles Chiodo",
+     "original_name": "Charles Chiodo",
+     "popularity": 0.5987,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "582405219251411a38004574",
+     "department": "Production",
+     "gender": 0,
+     "id": 1706329,
+     "job": "Associate Producer",
+     "known_for_department": "Production",
+     "name": "J.J. Lichauco Pelman",
+     "original_name": "J.J. Lichauco Pelman",
+     "popularity": 0.4217,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5824046e9251411a3b004745",
+     "department": "Sound",
+     "gender": 2,
+     "id": 63656,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "John Massari",
+     "original_name": "John Massari",
+     "popularity": 0.4192,
+     "profile_path": "/ZMCj84cTKZugYLc8c2RPPwKGjJ.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "58240485c3a3684bfb00459b",
+     "department": "Production",
+     "gender": 2,
+     "id": 80247,
+     "job": "Producer",
+     "known_for_department": "Visual Effects",
+     "name": "Stephen Chiodo",
+     "original_name": "Stephen Chiodo",
+     "popularity": 0.7351,
+     "profile_path": "/o0SvYV65c27h7KvalhPNdOyxTA5.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5824045a9251411a480041a1",
+     "department": "Writing",
+     "gender": 2,
+     "id": 80247,
+     "job": "Writer",
+     "known_for_department": "Visual Effects",
+     "name": "Stephen Chiodo",
+     "original_name": "Stephen Chiodo",
+     "popularity": 0.7351,
+     "profile_path": "/o0SvYV65c27h7KvalhPNdOyxTA5.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5824047e9251411a36004626",
+     "department": "Production",
+     "gender": 2,
+     "id": 80251,
+     "job": "Producer",
+     "known_for_department": "Visual Effects",
+     "name": "Edward Chiodo",
+     "original_name": "Edward Chiodo",
+     "popularity": 0.4911,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "582404759251411a480041b3",
+     "department": "Production",
+     "gender": 2,
+     "id": 80249,
+     "job": "Producer",
+     "known_for_department": "Visual Effects",
+     "name": "Charles Chiodo",
+     "original_name": "Charles Chiodo",
+     "popularity": 0.5987,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "582405319251411a3800457f",
+     "department": "Production",
+     "gender": 2,
+     "id": 56989,
+     "job": "Associate Producer",
+     "known_for_department": "Editing",
+     "name": "Christopher Roth",
+     "original_name": "Christopher Roth",
+     "popularity": 0.5282,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "58240548c3a3684c08004302",
+     "department": "Editing",
+     "gender": 2,
+     "id": 56989,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Christopher Roth",
+     "original_name": "Christopher Roth",
+     "popularity": 0.5282,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "58240463c3a3684bfb00457c",
+     "department": "Writing",
+     "gender": 2,
+     "id": 80251,
+     "job": "Writer",
+     "known_for_department": "Visual Effects",
+     "name": "Edward Chiodo",
+     "original_name": "Edward Chiodo",
+     "popularity": 0.4911,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "582405419251411a3b0047d8",
+     "department": "Camera",
+     "gender": 2,
+     "id": 101005,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Alfred Taylor",
+     "original_name": "Alfred Taylor",
+     "popularity": 0.4742,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "582405399251411a360046b0",
+     "department": "Production",
+     "gender": 1,
+     "id": 1706330,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Helen Szabo",
+     "original_name": "Helen Szabo",
+     "popularity": 0.4303,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "582405639251411a3b0047e9",
+     "department": "Art",
+     "gender": 0,
+     "id": 35089,
+     "job": "Art Direction",
+     "known_for_department": "Art",
+     "name": "Philip Dean Foreman",
+     "original_name": "Philip Dean Foreman",
+     "popularity": 0.5466,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5824056b9251411a34004491",
+     "department": "Art",
+     "gender": 0,
+     "id": 1706331,
+     "job": "Set Decoration",
+     "known_for_department": "Art",
+     "name": "Luana Speelman",
+     "original_name": "Luana Speelman",
+     "popularity": 0.439,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "582404519251411a4800419d",
+     "department": "Writing",
+     "gender": 2,
+     "id": 80249,
+     "job": "Writer",
+     "known_for_department": "Visual Effects",
+     "name": "Charles Chiodo",
+     "original_name": "Charles Chiodo",
+     "popularity": 0.5987,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5824054e9251411a43004226",
+     "department": "Production",
+     "gender": 0,
+     "id": 993337,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Alana H. Lambros",
+     "original_name": "Alana H. Lambros",
+     "popularity": 0.444,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "58240625c3a3684bfb00469e",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 2874082,
+     "job": "Costume Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Darcee F. Olson",
+     "original_name": "Darcee F. Olson",
+     "popularity": 0.492,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "669675ca002e7ec20f73b35f",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2983040,
+     "job": "Sound Effects Editor",
+     "known_for_department": "Acting",
+     "name": "Dan Harville",
+     "original_name": "Dan Harville",
+     "popularity": 0.6587,
+     "profile_path": null
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 35,
+    "name": "Comedy"
+   },
+   {
+    "id": 27,
+    "name": "Horror"
+   },
+   {
+    "id": 878,
+    "name": "Science Fiction"
+   }
+  ],
+  "homepage": "",
+  "id": 16296,
+  "imdb_id": "tt0095444",
+  "origin_country": [
+   "US"
+  ],
+  "original_language": "en",
+  "original_title": "Killer Klowns from Outer Space",
+  "overview": "Aliens disguised as clowns crash land on Earth in a rural town to capture unsuspecting victims in cotton candy cocoons for later consumption.",
+  "popularity": 7.3642,
+  "poster_path": "/lHdAk5T42ofyi3NTjmrdyR7xPmY.jpg",
+  "production_companies": [
+   {
+    "id": 8610,
+    "logo_path": null,
+    "name": "Sarlui / Diamant Production",
+    "origin_country": ""
+   },
+   {
+    "id": 3173,
+    "logo_path": "/jukiDO8dDAQJAE2MIrcDmnjWjFq.png",
+    "name": "Chiodo Bros. Productions",
+    "origin_country": "US"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   }
+  ],
+  "release_date": "1988-05-27",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "M",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "This may not be the official release date for the film but it was the date it was classified with a rating",
+       "release_date": "1988-08-18T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1988-05-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "18A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1988-05-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "de",
+       "note": "Koch Media Blu-Ray Mediabook",
+       "release_date": "2018-02-22T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "de",
+       "note": "Empire VHS",
+       "release_date": "1988-11-30T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "'84 Entertainment DVD",
+       "release_date": "2014-02-12T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "KSM DVD",
+       "release_date": "2012-05-14T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Koch Media Blu-Ray Mediabook (2. Edition)",
+       "release_date": "2019-11-28T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DF1 - SF",
+       "release_date": "1997-06-21T00:00:00.000Z",
+       "type": 6
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1988-12-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FI",
+     "release_dates": [
+      {
+       "certification": "K-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1988-05-27T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2009-03-11T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1988-08-18T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "JP",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1989-07-20T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "C",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1988-05-27T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NL",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1988-05-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SE",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "DVD release",
+       "release_date": "2010-08-20T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "PG-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1988-05-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 43625095,
+  "runtime": 86,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   }
+  ],
+  "status": "Released",
+  "tagline": "It’s craazzy!",
+  "title": "Killer Klowns from Outer Space",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "61eeabbda402c100997f5e89",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "BzcscF3p7JU",
+     "name": "What Are You Going to Do With Those Pies, Boys?",
+     "official": true,
+     "published_at": "2021-10-30T16:00:04.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "61eeabc802842000445ae2d8",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "Jf7XAyYBlxA",
+     "name": "Puppet Show",
+     "official": true,
+     "published_at": "2021-10-27T23:30:01.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "61eeab859e458601073088cd",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "ETiSMS4i1as",
+     "name": "Official Trailer",
+     "official": true,
+     "published_at": "2021-10-26T23:30:03.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "533ec67ac3a3685448002b43",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "RoLldkHEuqU",
+     "name": "Mick Garris on Killer Klowns From Outer Space",
+     "official": false,
+     "published_at": "2013-04-22T07:00:15.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    }
+   ]
+  },
+  "vote_average": 6.7,
+  "vote_count": 1235
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/ibFzbRVlVUTWBf4IZ8Osm9xSgWm.jpg",
+    "genre_ids": [
+     35,
+     27,
+     878
+    ],
+    "id": 16296,
+    "original_language": "en",
+    "original_title": "Killer Klowns from Outer Space",
+    "overview": "Aliens disguised as clowns crash land on Earth in a rural town to capture unsuspecting victims in cotton candy cocoons for later consumption.",
+    "popularity": 7.3642,
+    "poster_path": "/lHdAk5T42ofyi3NTjmrdyR7xPmY.jpg",
+    "release_date": "1988-05-27",
+    "softcore": false,
+    "title": "Killer Klowns from Outer Space",
+    "video": false,
+    "vote_average": 6.7,
+    "vote_count": 1235
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     35,
+     27,
+     878
+    ],
+    "id": 1464927,
+    "original_language": "en",
+    "original_title": "Killer Klowns from Outer Space",
+    "overview": "Remake of the 1988 film.",
+    "popularity": 0.9149,
+    "poster_path": null,
+    "release_date": "",
+    "softcore": false,
+    "title": "Killer Klowns from Outer Space",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   }
+  ],
+  "total_pages": 1,
+  "total_results": 2
+ }
+}

@@ -1,0 +1,3354 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/AdKA2F1SzYPhSZdEbjH1Zh75UVQ.jpg",
+  "belongs_to_collection": {
+   "backdrop_path": "/8L2bt7OWxrVhZPrFPkyZW4rEXzq.jpg",
+   "id": 530064,
+   "name": "The Shining Collection",
+   "poster_path": "/iic9YD6zyz2mWIoHVaFy34N0MxX.jpg"
+  },
+  "budget": 19000000,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 18,
+     "character": "Jack Torrance",
+     "credit_id": "52fe426bc3a36847f801d3ff",
+     "gender": 2,
+     "id": 514,
+     "known_for_department": "Acting",
+     "name": "Jack Nicholson",
+     "order": 0,
+     "original_name": "Jack Nicholson",
+     "popularity": 4.0302,
+     "profile_path": "/6h12pZsgj3WWjMtykUgfLkLEBWz.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 19,
+     "character": "Wendy Torrance",
+     "credit_id": "52fe426bc3a36847f801d403",
+     "gender": 1,
+     "id": 10409,
+     "known_for_department": "Acting",
+     "name": "Shelley Duvall",
+     "order": 1,
+     "original_name": "Shelley Duvall",
+     "popularity": 2.3379,
+     "profile_path": "/zwscEWl7QLiOsfsvzGXFjAQCVp3.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 20,
+     "character": "Danny",
+     "credit_id": "52fe426bc3a36847f801d407",
+     "gender": 2,
+     "id": 10410,
+     "known_for_department": "Acting",
+     "name": "Danny Lloyd",
+     "order": 2,
+     "original_name": "Danny Lloyd",
+     "popularity": 1.879,
+     "profile_path": "/5pEmugZ6m25RB0cXbL4t5D4kZAO.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 21,
+     "character": "Hallorann",
+     "credit_id": "52fe426bc3a36847f801d40b",
+     "gender": 2,
+     "id": 7077,
+     "known_for_department": "Acting",
+     "name": "Scatman Crothers",
+     "order": 3,
+     "original_name": "Scatman Crothers",
+     "popularity": 1.321,
+     "profile_path": "/ughfThqQuuoPLSsC9HfkxwX370w.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 22,
+     "character": "Ullman",
+     "credit_id": "52fe426bc3a36847f801d40f",
+     "gender": 2,
+     "id": 10411,
+     "known_for_department": "Acting",
+     "name": "Barry Nelson",
+     "order": 4,
+     "original_name": "Barry Nelson",
+     "popularity": 1.0442,
+     "profile_path": "/fSrHmvOxZJbeKpNM0uWGvha1aK9.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 23,
+     "character": "Grady",
+     "credit_id": "52fe426bc3a36847f801d413",
+     "gender": 2,
+     "id": 694,
+     "known_for_department": "Acting",
+     "name": "Philip Stone",
+     "order": 5,
+     "original_name": "Philip Stone",
+     "popularity": 1.6901,
+     "profile_path": "/l9riEGDgSK1NkVDUN6fn1TaXdpy.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 24,
+     "character": "Lloyd",
+     "credit_id": "52fe426bc3a36847f801d417",
+     "gender": 2,
+     "id": 592,
+     "known_for_department": "Acting",
+     "name": "Joe Turkel",
+     "order": 6,
+     "original_name": "Joe Turkel",
+     "popularity": 1.1513,
+     "profile_path": "/rqpNzjLFCoMrvGSf6SIL5JnWwMT.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 25,
+     "character": "Doctor",
+     "credit_id": "52fe426bc3a36847f801d41b",
+     "gender": 1,
+     "id": 10412,
+     "known_for_department": "Acting",
+     "name": "Anne Jackson",
+     "order": 7,
+     "original_name": "Anne Jackson",
+     "popularity": 1.5748,
+     "profile_path": "/tRXdd8JVhClmM0LsuyD7lWbbw4a.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 26,
+     "character": "Durkin",
+     "credit_id": "52fe426bc3a36847f801d41f",
+     "gender": 2,
+     "id": 16504,
+     "known_for_department": "Acting",
+     "name": "Tony Burton",
+     "order": 8,
+     "original_name": "Tony Burton",
+     "popularity": 1.2388,
+     "profile_path": "/iG51d1Ck1doZNGseRMqGTnNC8t8.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 28,
+     "character": "Young Woman in Bath",
+     "credit_id": "54b7e3299251411d6a0025ec",
+     "gender": 1,
+     "id": 1413939,
+     "known_for_department": "Acting",
+     "name": "Lia Beldam",
+     "order": 9,
+     "original_name": "Lia Beldam",
+     "popularity": 0.7689,
+     "profile_path": "/cMqC8geIBmTnKRN2AhBtYbA5fT4.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 29,
+     "character": "Old Woman in Bath",
+     "credit_id": "54b7e3489251411d6600239f",
+     "gender": 1,
+     "id": 1413940,
+     "known_for_department": "Acting",
+     "name": "Billie Gibson",
+     "order": 10,
+     "original_name": "Billie Gibson",
+     "popularity": 0.4365,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 27,
+     "character": "Watson",
+     "credit_id": "52fe426bc3a36847f801d423",
+     "gender": 2,
+     "id": 72742,
+     "known_for_department": "Acting",
+     "name": "Barry Dennen",
+     "order": 11,
+     "original_name": "Barry Dennen",
+     "popularity": 0.803,
+     "profile_path": "/6m6LMpQZlHLYDuMxbPU4R5gr75l.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 33,
+     "character": "Forest Ranger 1",
+     "credit_id": "5ad3f9820e0a2628c500a869",
+     "gender": 2,
+     "id": 38651,
+     "known_for_department": "Acting",
+     "name": "David Baxt",
+     "order": 12,
+     "original_name": "David Baxt",
+     "popularity": 0.97,
+     "profile_path": "/amzGafV7re5W1Xxnsj0L52eZiIy.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 34,
+     "character": "Forest Ranger 2",
+     "credit_id": "5ad3f990925141297b009872",
+     "gender": 2,
+     "id": 99366,
+     "known_for_department": "Acting",
+     "name": "Manning Redwood",
+     "order": 13,
+     "original_name": "Manning Redwood",
+     "popularity": 0.8505,
+     "profile_path": "/aOkx2u8X4Ti3URsGD8RCszA5GbH.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 135,
+     "character": "Grady Daughter",
+     "credit_id": "63476cbedcf8750090a5a3f9",
+     "gender": 1,
+     "id": 3738136,
+     "known_for_department": "Acting",
+     "name": "Lisa Burns",
+     "order": 14,
+     "original_name": "Lisa Burns",
+     "popularity": 0.484,
+     "profile_path": "/nPXGqrRD0BeMU8dEgQ9x7SIL7tt.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 136,
+     "character": "Grady Daughter",
+     "credit_id": "63476ccf006b01007a064608",
+     "gender": 1,
+     "id": 3738137,
+     "known_for_department": "Acting",
+     "name": "Louise Burns",
+     "order": 15,
+     "original_name": "Louise Burns",
+     "popularity": 0.3372,
+     "profile_path": "/l4pgEmzCgDML83OT0wYqEddDj19.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 37,
+     "character": "Nurse",
+     "credit_id": "5ad3f9e0925141298100a09e",
+     "gender": 1,
+     "id": 1697241,
+     "known_for_department": "Acting",
+     "name": "Robin Pappas",
+     "order": 16,
+     "original_name": "Robin Pappas",
+     "popularity": 0.3718,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 38,
+     "character": "Secretary",
+     "credit_id": "5ad3f9f9c3a3685c6a00abbb",
+     "gender": 1,
+     "id": 2023549,
+     "known_for_department": "Acting",
+     "name": "Alison Coleridge",
+     "order": 17,
+     "original_name": "Alison Coleridge",
+     "popularity": 0.3669,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 39,
+     "character": "Policeman",
+     "credit_id": "5ad3fa16925141298100a0d3",
+     "gender": 2,
+     "id": 184980,
+     "known_for_department": "Acting",
+     "name": "Burnell Tucker",
+     "order": 18,
+     "original_name": "Burnell Tucker",
+     "popularity": 0.655,
+     "profile_path": "/2HXfmGuUHCl6rKeL0n6DXJlFtLs.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 40,
+     "character": "Stewardess",
+     "credit_id": "5ad3fa41c3a3685c6a00ac03",
+     "gender": 1,
+     "id": 201441,
+     "known_for_department": "Acting",
+     "name": "Jana Shelden",
+     "order": 19,
+     "original_name": "Jana Shelden",
+     "popularity": 0.7247,
+     "profile_path": "/FQMFRWTkLA6sI15mSPugI5Qg9X.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 158,
+     "character": "Receptionist",
+     "credit_id": "659daca2eb64f1020350d706",
+     "gender": 1,
+     "id": 4472825,
+     "known_for_department": "Acting",
+     "name": "Kate Phelps",
+     "order": 20,
+     "original_name": "Kate Phelps",
+     "popularity": 0.3116,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 159,
+     "character": "Injured Guest",
+     "credit_id": "659dae9bd6590b00ed2c92b8",
+     "gender": 2,
+     "id": 4061836,
+     "known_for_department": "Acting",
+     "name": "Norman Gay",
+     "order": 21,
+     "original_name": "Norman Gay",
+     "popularity": 0.4855,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 43,
+     "character": "Hotel Porter (uncredited)",
+     "credit_id": "5ad3fae80e0a2628c500aa0b",
+     "gender": 0,
+     "id": 1526724,
+     "known_for_department": "Acting",
+     "name": "Paul Desbois",
+     "order": 22,
+     "original_name": "Paul Desbois",
+     "popularity": 0.4402,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 44,
+     "character": "Smoking Guest on Ballroom Couch (uncredited)",
+     "credit_id": "5ad3fb0cc3a3685c37009cca",
+     "gender": 1,
+     "id": 8645,
+     "known_for_department": "Acting",
+     "name": "Vivian Kubrick",
+     "order": 23,
+     "original_name": "Vivian Kubrick",
+     "popularity": 0.7598,
+     "profile_path": "/abkr2zJWKURpfzsBJDGeYZZaAXt.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 45,
+     "character": "Hotel Bellhop (uncredited)",
+     "credit_id": "5ad3fb25925141297b009a19",
+     "gender": 2,
+     "id": 1271092,
+     "known_for_department": "Acting",
+     "name": "Derek Lyons",
+     "order": 24,
+     "original_name": "Derek Lyons",
+     "popularity": 0.7558,
+     "profile_path": "/3rz4mRzDsS3PgdnOaeDH3VmmFVL.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 123,
+     "character": "Ballroom Dancer (uncredited)",
+     "credit_id": "5e74e355b7d3520013768978",
+     "gender": 2,
+     "id": 964699,
+     "known_for_department": "Acting",
+     "name": "Alan Harris",
+     "order": 25,
+     "original_name": "Alan Harris",
+     "popularity": 0.6327,
+     "profile_path": "/nc83B1SJ7xVJjx8Op7HolOM70uc.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 127,
+     "character": "Dinner Guest (uncredited)",
+     "credit_id": "5e74e3c92f3b1700144df07e",
+     "gender": 2,
+     "id": 1452763,
+     "known_for_department": "Acting",
+     "name": "Peter McNamara",
+     "order": 26,
+     "original_name": "Peter McNamara",
+     "popularity": 0.6175,
+     "profile_path": "/iztEduFFszlfqGgKpm70WZeAqrB.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 131,
+     "character": "Ballroom Guest (uncredited)",
+     "credit_id": "5e74e45b2f3b1700114f161c",
+     "gender": 2,
+     "id": 1708535,
+     "known_for_department": "Acting",
+     "name": "Guy Standeven",
+     "order": 27,
+     "original_name": "Guy Standeven",
+     "popularity": 0.8284,
+     "profile_path": "/kSJL3FMnLA1YxqqCLIQs1BjJ66e.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 132,
+     "character": "Ballroom Guest (uncredited)",
+     "credit_id": "5e74e4accabfe400181e8059",
+     "gender": 2,
+     "id": 2021756,
+     "known_for_department": "Acting",
+     "name": "Reg Thomason",
+     "order": 28,
+     "original_name": "Reg Thomason",
+     "popularity": 0.6226,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 168,
+     "character": "Skeleton in Lobby (uncredited)",
+     "credit_id": "69ed647c1189724a7a029105",
+     "gender": 0,
+     "id": 5511856,
+     "known_for_department": "Acting",
+     "name": "Skeleton",
+     "order": 29,
+     "original_name": "Skeleton (from 'House on Haunted Hill' - 1959)",
+     "popularity": 0.5097,
+     "profile_path": null
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3a1",
+     "department": "Writing",
+     "gender": 2,
+     "id": 240,
+     "job": "Screenplay",
+     "known_for_department": "Directing",
+     "name": "Stanley Kubrick",
+     "original_name": "Stanley Kubrick",
+     "popularity": 3.6288,
+     "profile_path": "/yFT0VyIelI9aegZrsAwOG5iVP4v.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3a7",
+     "department": "Writing",
+     "gender": 2,
+     "id": 3027,
+     "job": "Novel",
+     "known_for_department": "Writing",
+     "name": "Stephen King",
+     "original_name": "Stephen King",
+     "popularity": 3.7088,
+     "profile_path": "/7r5nEzNanuEhmxtpsKE1uCBU5Jd.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3ad",
+     "department": "Writing",
+     "gender": 1,
+     "id": 10404,
+     "job": "Screenplay",
+     "known_for_department": "Writing",
+     "name": "Diane Johnson",
+     "original_name": "Diane Johnson",
+     "popularity": 0.7937,
+     "profile_path": "/8k3ZWYwBYeCAZQdkn9i0ObgeURX.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3b3",
+     "department": "Production",
+     "gender": 2,
+     "id": 240,
+     "job": "Producer",
+     "known_for_department": "Directing",
+     "name": "Stanley Kubrick",
+     "original_name": "Stanley Kubrick",
+     "popularity": 3.6288,
+     "profile_path": "/yFT0VyIelI9aegZrsAwOG5iVP4v.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3b9",
+     "department": "Production",
+     "gender": 2,
+     "id": 5016,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Jan Harlan",
+     "original_name": "Jan Harlan",
+     "popularity": 0.4818,
+     "profile_path": "/71s8NkRpUyzwyBTRsipLr8RBqlA.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3bf",
+     "department": "Sound",
+     "gender": 1,
+     "id": 2284,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Wendy Carlos",
+     "original_name": "Wendy Carlos",
+     "popularity": 0.7131,
+     "profile_path": "/dgLL2IzOp8Qb6V5ZtMeaQ3NAkzb.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3c5",
+     "department": "Sound",
+     "gender": 1,
+     "id": 2285,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Rachel Elkind",
+     "original_name": "Rachel Elkind",
+     "popularity": 0.3491,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3cb",
+     "department": "Camera",
+     "gender": 2,
+     "id": 2286,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "John Alcott",
+     "original_name": "John Alcott",
+     "popularity": 0.8979,
+     "profile_path": "/vpWpMQirRnTpNwhVwgcXYWmFE54.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3d1",
+     "department": "Editing",
+     "gender": 2,
+     "id": 244,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Ray Lovejoy",
+     "original_name": "Ray Lovejoy",
+     "popularity": 0.7053,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3d7",
+     "department": "Production",
+     "gender": 2,
+     "id": 2288,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "James Liggat",
+     "original_name": "James Liggat",
+     "popularity": 0.5649,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3dd",
+     "department": "Art",
+     "gender": 2,
+     "id": 5022,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Roy Walker",
+     "original_name": "Roy Walker",
+     "popularity": 0.4995,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3e3",
+     "department": "Art",
+     "gender": 2,
+     "id": 5021,
+     "job": "Art Direction",
+     "known_for_department": "Art",
+     "name": "Leslie Tomkins",
+     "original_name": "Leslie Tomkins",
+     "popularity": 0.6005,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3e9",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 5671,
+     "job": "Costume Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Milena Canonero",
+     "original_name": "Milena Canonero",
+     "popularity": 1.2485,
+     "profile_path": "/4CJUhZSbsj6W8Aoid7N1NBrBGji.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3ef",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 10405,
+     "job": "Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Barbara Daly",
+     "original_name": "Barbara Daly",
+     "popularity": 0.548,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3f5",
+     "department": "Costume & Make-Up",
+     "gender": 2,
+     "id": 10407,
+     "job": "Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Tom Smith",
+     "original_name": "Tom Smith",
+     "popularity": 0.5385,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe426bc3a36847f801d3fb",
+     "department": "Production",
+     "gender": 2,
+     "id": 10408,
+     "job": "Production Manager",
+     "known_for_department": "Production",
+     "name": "Douglas Twiddy",
+     "original_name": "Douglas Twiddy",
+     "popularity": 0.5783,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6586e33a4772155add4332eb",
+     "department": "Costume & Make-Up",
+     "gender": 2,
+     "id": 3066778,
+     "job": "Hairstylist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Leonard",
+     "original_name": "Leonard",
+     "popularity": 0.3474,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "659f0297b39e3502007bc9f1",
+     "department": "Sound",
+     "gender": 2,
+     "id": 589952,
+     "job": "Sound Re-Recording Mixer",
+     "known_for_department": "Sound",
+     "name": "Ray Merrin",
+     "original_name": "Ray Merrin",
+     "popularity": 0.4532,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "659f03f7b39e3502007bca0e",
+     "department": "Sound",
+     "gender": 2,
+     "id": 11384,
+     "job": "Sound Re-Recording Mixer",
+     "known_for_department": "Sound",
+     "name": "Bill Rowe",
+     "original_name": "Bill Rowe",
+     "popularity": 0.4234,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65b290bbb1f68d0184d58e1e",
+     "department": "Camera",
+     "gender": 2,
+     "id": 8306,
+     "job": "Second Unit Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Douglas Milsome",
+     "original_name": "Douglas Milsome",
+     "popularity": 0.4172,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5a7a365cc3a368224e02af3b",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1914930,
+     "job": "Sound Editor",
+     "known_for_department": "Sound",
+     "name": "Dino Di Campo",
+     "original_name": "Dino Di Campo",
+     "popularity": 0.5634,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5a7a3667925141775902b6de",
+     "department": "Sound",
+     "gender": 2,
+     "id": 589951,
+     "job": "Sound Editor",
+     "known_for_department": "Sound",
+     "name": "Jack T. Knight",
+     "original_name": "Jack T. Knight",
+     "popularity": 0.4542,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5a7a3672925141775c02a836",
+     "department": "Sound",
+     "gender": 2,
+     "id": 255,
+     "job": "Sound Editor",
+     "known_for_department": "Sound",
+     "name": "Winston Ryder",
+     "original_name": "Winston Ryder",
+     "popularity": 0.4997,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e6586c6d35dea00110142e6",
+     "department": "Directing",
+     "gender": 2,
+     "id": 240,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "Stanley Kubrick",
+     "original_name": "Stanley Kubrick",
+     "popularity": 3.6288,
+     "profile_path": "/yFT0VyIelI9aegZrsAwOG5iVP4v.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5e741ff1357c0000194b54f4",
+     "department": "Production",
+     "gender": 2,
+     "id": 567770,
+     "job": "Associate Producer",
+     "known_for_department": "Production",
+     "name": "Robert Fryer",
+     "original_name": "Robert Fryer",
+     "popularity": 0.4601,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742013b1f68d0014e07ca8",
+     "department": "Production",
+     "gender": 1,
+     "id": 2572007,
+     "job": "Associate Producer",
+     "known_for_department": "Production",
+     "name": "Mary Lea Johnson",
+     "original_name": "Mary Lea Johnson",
+     "popularity": 0.3986,
+     "profile_path": null
+    },
+    {
+     "adult": true,
+     "credit_id": "5e74206a2f3b1700114d7546",
+     "department": "Production",
+     "gender": 2,
+     "id": 17634,
+     "job": "Associate Producer",
+     "known_for_department": "Production",
+     "name": "Martin Richards",
+     "original_name": "Martin Richards",
+     "popularity": 0.0,
+     "profile_path": "/4CFeYvy7KTcOruzezpPIzBHlaX.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742123a055ef0018299d49",
+     "department": "Directing",
+     "gender": 2,
+     "id": 5015,
+     "job": "Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Brian W. Cook",
+     "original_name": "Brian W. Cook",
+     "popularity": 0.6811,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7421542f3b1700144cf3f2",
+     "department": "Directing",
+     "gender": 2,
+     "id": 12785,
+     "job": "Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Terry Needham",
+     "original_name": "Terry Needham",
+     "popularity": 0.9425,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74216db1f68d0012e02562",
+     "department": "Directing",
+     "gender": 2,
+     "id": 1836887,
+     "job": "Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Michael Stevenson",
+     "original_name": "Michael Stevenson",
+     "popularity": 0.836,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7421a9357c0000114cbc1e",
+     "department": "Art",
+     "gender": 0,
+     "id": 2176758,
+     "job": "Props",
+     "known_for_department": "Art",
+     "name": "Barry Arnold",
+     "original_name": "Barry Arnold",
+     "popularity": 0.3382,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7421c2b1f68d0017e07334",
+     "department": "Art",
+     "gender": 2,
+     "id": 1593072,
+     "job": "Draughtsman",
+     "known_for_department": "Art",
+     "name": "Michael Boone",
+     "original_name": "Michael Boone",
+     "popularity": 0.4741,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7421d9a055ef0014297f69",
+     "department": "Art",
+     "gender": 0,
+     "id": 75800,
+     "job": "Property Buyer",
+     "known_for_department": "Art",
+     "name": "Karen Brookes",
+     "original_name": "Karen Brookes",
+     "popularity": 0.4701,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742209f9aa470019d45d37",
+     "department": "Art",
+     "gender": 1,
+     "id": 11959,
+     "job": "Set Dresser",
+     "known_for_department": "Art",
+     "name": "Tessa Davies",
+     "original_name": "Tessa Davies",
+     "popularity": 0.4141,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742230cabfe400131e3a26",
+     "department": "Art",
+     "gender": 2,
+     "id": 10497,
+     "job": "Draughtsman",
+     "known_for_department": "Art",
+     "name": "John Fenner",
+     "original_name": "John Fenner",
+     "popularity": 0.5286,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74229df9aa470013d3dee3",
+     "department": "Art",
+     "gender": 0,
+     "id": 2572013,
+     "job": "Construction Manager",
+     "known_for_department": "Art",
+     "name": "Len Furey",
+     "original_name": "Len Furey",
+     "popularity": 0.4009,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7422a9b1f68d0014e081e9",
+     "department": "Art",
+     "gender": 0,
+     "id": 2572014,
+     "job": "Head Carpenter",
+     "known_for_department": "Art",
+     "name": "Fred Gunning",
+     "original_name": "Fred Gunning",
+     "popularity": 0.3982,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7422bacabfe400131e3bf1",
+     "department": "Art",
+     "gender": 2,
+     "id": 1342589,
+     "job": "Property Master",
+     "known_for_department": "Art",
+     "name": "Peter Hancock",
+     "original_name": "Peter Hancock",
+     "popularity": 0.4397,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74230d2f3b1700194e1b4c",
+     "department": "Art",
+     "gender": 2,
+     "id": 8380,
+     "job": "Draughtsman",
+     "known_for_department": "Art",
+     "name": "Michael Lamont",
+     "original_name": "Michael Lamont",
+     "popularity": 0.6193,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742338a055ef0012297009",
+     "department": "Art",
+     "gender": 2,
+     "id": 1370841,
+     "job": "Props",
+     "known_for_department": "Art",
+     "name": "Philip McDonald",
+     "original_name": "Philip McDonald",
+     "popularity": 0.3779,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742354cabfe400181d1d96",
+     "department": "Art",
+     "gender": 2,
+     "id": 2572016,
+     "job": "Property Buyer",
+     "known_for_department": "Art",
+     "name": "Edward Rodrigo",
+     "original_name": "Edward Rodrigo",
+     "popularity": 0.3819,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74236fb1f68d0017e074c1",
+     "department": "Art",
+     "gender": 0,
+     "id": 2572017,
+     "job": "Painter",
+     "known_for_department": "Art",
+     "name": "Del Smith",
+     "original_name": "Del Smith",
+     "popularity": 0.6915,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74239bf9aa470013d3e197",
+     "department": "Art",
+     "gender": 0,
+     "id": 2572018,
+     "job": "Props",
+     "known_for_department": "Art",
+     "name": "Peter Spencer",
+     "original_name": "Peter Spencer",
+     "popularity": 0.3752,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7423f0b1f68d0017e0752c",
+     "department": "Art",
+     "gender": 0,
+     "id": 1456370,
+     "job": "Decorator",
+     "known_for_department": "Crew",
+     "name": "Bob Walker",
+     "original_name": "Bob Walker",
+     "popularity": 0.3473,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7424a8357c0000164be71f",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2572024,
+     "job": "Boom Operator",
+     "known_for_department": "Sound",
+     "name": "Michael Charman",
+     "original_name": "Michael Charman",
+     "popularity": 0.438,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7424c12f3b1700144cf72c",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2572025,
+     "job": "Sound Recordist",
+     "known_for_department": "Sound",
+     "name": "Richard Daniel",
+     "original_name": "Richard Daniel",
+     "popularity": 0.5419,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7424fdf9aa470013d3e30b",
+     "department": "Sound",
+     "gender": 2,
+     "id": 11385,
+     "job": "Sound Recordist",
+     "known_for_department": "Sound",
+     "name": "Ivan Sharrock",
+     "original_name": "Ivan Sharrock",
+     "popularity": 0.6841,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742513f9aa470019d46392",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1977653,
+     "job": "Boom Operator",
+     "known_for_department": "Sound",
+     "name": "Ken Weston",
+     "original_name": "Ken Weston",
+     "popularity": 0.3997,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74261cf9aa470019d46a3d",
+     "department": "Camera",
+     "gender": 0,
+     "id": 2572027,
+     "job": "Focus Puller",
+     "known_for_department": "Camera",
+     "name": "Maurice Arnold",
+     "original_name": "Maurice Arnold",
+     "popularity": 0.4999,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74263bf9aa470019d46ac7",
+     "department": "Lighting",
+     "gender": 0,
+     "id": 1528910,
+     "job": "Gaffer",
+     "known_for_department": "Lighting",
+     "name": "Lou Bogue",
+     "original_name": "Lou Bogue",
+     "popularity": 0.4281,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74267ea055ef001829b023",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1399143,
+     "job": "Steadicam Operator",
+     "known_for_department": "Camera",
+     "name": "Garrett Brown",
+     "original_name": "Garrett Brown",
+     "popularity": 0.6881,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7426b02f3b1700114d7e02",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1025920,
+     "job": "Camera Operator",
+     "known_for_department": "Camera",
+     "name": "James Devis",
+     "original_name": "James Devis",
+     "popularity": 0.6672,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7426feb1f68d0017e0815c",
+     "department": "Lighting",
+     "gender": 0,
+     "id": 2572028,
+     "job": "Key Rigging Grip",
+     "known_for_department": "Lighting",
+     "name": "Jim Kelly",
+     "original_name": "Jim Kelly",
+     "popularity": 0.3553,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74271af9aa470013d3e65a",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1394783,
+     "job": "Assistant Camera",
+     "known_for_department": "Camera",
+     "name": "Martin Kenzie",
+     "original_name": "Martin Kenzie",
+     "popularity": 0.5753,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742754f9aa470015d450e6",
+     "department": "Camera",
+     "gender": 0,
+     "id": 2572029,
+     "job": "Grip",
+     "known_for_department": "Camera",
+     "name": "Dennis Lewis",
+     "original_name": "Dennis Lewis",
+     "popularity": 0.3764,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74276d2f3b1700114d7f1e",
+     "department": "Camera",
+     "gender": 2,
+     "id": 8306,
+     "job": "Focus Puller",
+     "known_for_department": "Camera",
+     "name": "Douglas Milsome",
+     "original_name": "Douglas Milsome",
+     "popularity": 0.4172,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74278b357c0000164bfc37",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1556557,
+     "job": "Camera Operator",
+     "known_for_department": "Camera",
+     "name": "Kelvin Pike",
+     "original_name": "Kelvin Pike",
+     "popularity": 0.5465,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7427e7b1f68d0019e10e50",
+     "department": "Camera",
+     "gender": 1,
+     "id": 1398130,
+     "job": "Assistant Camera",
+     "known_for_department": "Camera",
+     "name": "Kate Robinson",
+     "original_name": "Kate Robinson",
+     "popularity": 0.4633,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74281bf9aa470019d47d53",
+     "department": "Camera",
+     "gender": 2,
+     "id": 2572031,
+     "job": "Assistant Camera",
+     "known_for_department": "Camera",
+     "name": "Danny Shelmerdine",
+     "original_name": "Danny Shelmerdine",
+     "popularity": 0.3648,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74282ef9aa470013d3e92c",
+     "department": "Lighting",
+     "gender": 2,
+     "id": 5018,
+     "job": "Gaffer",
+     "known_for_department": "Camera",
+     "name": "Larry Smith",
+     "original_name": "Larry Smith",
+     "popularity": 0.6761,
+     "profile_path": "/8eiyCRAjHHOHGu253ufhqROZaP7.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74294eb1f68d0017e0858f",
+     "department": "Camera",
+     "gender": 2,
+     "id": 90223,
+     "job": "Helicopter Camera",
+     "known_for_department": "Directing",
+     "name": "Greg MacGillivray",
+     "original_name": "Greg MacGillivray",
+     "popularity": 0.8222,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e74298db1f68d0017e085ed",
+     "department": "Costume & Make-Up",
+     "gender": 2,
+     "id": 2021308,
+     "job": "Wardrobe Supervisor",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Ron Beck",
+     "original_name": "Ron Beck",
+     "popularity": 0.4817,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e7429a92f3b1700144cf96e",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2572033,
+     "job": "Wardrobe Supervisor",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Ken Lawton",
+     "original_name": "Ken Lawton",
+     "popularity": 0.4016,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742a70f9aa470019d481d3",
+     "department": "Editing",
+     "gender": 0,
+     "id": 2572040,
+     "job": "Color Grading",
+     "known_for_department": "Editing",
+     "name": "Eddie Gordon",
+     "original_name": "Eddie Gordon",
+     "popularity": 0.3689,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742affb1f68d0014e0922f",
+     "department": "Editing",
+     "gender": 2,
+     "id": 2572042,
+     "job": "Assistant Editor",
+     "known_for_department": "Editing",
+     "name": "Steve Pickard",
+     "original_name": "Steve Pickard",
+     "popularity": 0.4043,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742b17a055ef00122980a3",
+     "department": "Editing",
+     "gender": 0,
+     "id": 2572043,
+     "job": "Assistant Editor",
+     "known_for_department": "Editing",
+     "name": "Gill Smith",
+     "original_name": "Gill Smith",
+     "popularity": 0.3739,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742b3d2f3b1700144cffd7",
+     "department": "Editing",
+     "gender": 2,
+     "id": 2015769,
+     "job": "Assistant Editor",
+     "known_for_department": "Editing",
+     "name": "Gordon Stainforth",
+     "original_name": "Gordon Stainforth",
+     "popularity": 0.4326,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742b6ccabfe400131e47f9",
+     "department": "Editing",
+     "gender": 2,
+     "id": 2572044,
+     "job": "Assistant Editor",
+     "known_for_department": "Editing",
+     "name": "Adam Unger",
+     "original_name": "Adam Unger",
+     "popularity": 0.4327,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742c2af9aa470013d3ef97",
+     "department": "Directing",
+     "gender": 1,
+     "id": 1398136,
+     "job": "Continuity",
+     "known_for_department": "Directing",
+     "name": "June Randall",
+     "original_name": "June Randall",
+     "popularity": 0.4513,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742c4fa055ef001829ba6c",
+     "department": "Production",
+     "gender": 1,
+     "id": 1825085,
+     "job": "Production Secretary",
+     "known_for_department": "Production",
+     "name": "Marlene Butland",
+     "original_name": "Marlene Butland",
+     "popularity": 0.4588,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742c702f3b1700144d01dd",
+     "department": "Production",
+     "gender": 2,
+     "id": 1628803,
+     "job": "Production Assistant",
+     "known_for_department": "Acting",
+     "name": "Emilio D'Alessandro",
+     "original_name": "Emilio D'Alessandro",
+     "popularity": 0.3762,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742c932f3b1700144d01f8",
+     "department": "Production",
+     "gender": 0,
+     "id": 2256330,
+     "job": "Production Accountant",
+     "known_for_department": "Production",
+     "name": "Jo Gregory",
+     "original_name": "Jo Gregory",
+     "popularity": 0.3958,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e742cae357c0000164c0975",
+     "department": "Production",
+     "gender": 0,
+     "id": 2572049,
+     "job": "Production Secretary",
+     "known_for_department": "Production",
+     "name": "Pat Pennelegion",
+     "original_name": "Pat Pennelegion",
+     "popularity": 0.4118,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "66f0703592d39685383b888c",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1596223,
+     "job": "Music",
+     "known_for_department": "Sound",
+     "name": "Béla Bartók",
+     "original_name": "Bartók Béla",
+     "popularity": 1.0781,
+     "profile_path": "/emu8wYA7qyWLNM54YZES37vovd3.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "66f0708d92d39685383b8899",
+     "department": "Sound",
+     "gender": 2,
+     "id": 55975,
+     "job": "Music",
+     "known_for_department": "Sound",
+     "name": "Krzysztof Penderecki",
+     "original_name": "Krzysztof Penderecki",
+     "popularity": 0.5782,
+     "profile_path": "/7cAbfLFn5pYQFLAdHzcb64dPqQa.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "66f0714dd4a8ac49678d97ab",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1655425,
+     "job": "Music",
+     "known_for_department": "Sound",
+     "name": "György Ligeti",
+     "original_name": "György Ligeti",
+     "popularity": 0.6354,
+     "profile_path": "/bpOc7JQ6kj9J919dlln5coEk8uL.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "68fb9e8fb6825c8c5e42c17b",
+     "department": "Art",
+     "gender": 2,
+     "id": 19460,
+     "job": "Art Designer",
+     "known_for_department": "Art",
+     "name": "Saul Bass",
+     "original_name": "Saul Bass",
+     "popularity": 0.7234,
+     "profile_path": null
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   },
+   {
+    "id": 53,
+    "name": "Thriller"
+   }
+  ],
+  "homepage": "https://www.warnerbros.com/movies/shining",
+  "id": 694,
+  "imdb_id": "tt0081505",
+  "origin_country": [
+   "US"
+  ],
+  "original_language": "en",
+  "original_title": "The Shining",
+  "overview": "Jack Torrance accepts a caretaker job at the Overlook Hotel, where he, along with his wife Wendy and their son Danny, must live isolated from the rest of the world for the winter. But they aren't prepared for the madness that lurks within.",
+  "popularity": 30.6227,
+  "poster_path": "/uAR0AWqhQL1hQa69UDEbb2rE5Wx.jpg",
+  "production_companies": [
+   {
+    "id": 174,
+    "logo_path": "/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png",
+    "name": "Warner Bros. Pictures",
+    "origin_country": "US"
+   },
+   {
+    "id": 11272,
+    "logo_path": null,
+    "name": "Peregrine",
+    "origin_country": "GB"
+   },
+   {
+    "id": 88,
+    "logo_path": null,
+    "name": "Hawk Films",
+    "origin_country": "GB"
+   },
+   {
+    "id": 734,
+    "logo_path": "/nJ9FtMXQZ0zoP8VEzxGJNvWPRZb.png",
+    "name": "The Producer Circle Co.",
+    "origin_country": "US"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "GB",
+    "name": "United Kingdom"
+   },
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   }
+  ],
+  "release_date": "1980-05-23",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray",
+       "release_date": "2017-05-17T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Mar del Plata Film Festival",
+       "release_date": "2012-11-19T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "+13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2019-10-17T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "+18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-12-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "MA 15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2016-10-28T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "M",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-11-13T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "MA 15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1999-11-05T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BE",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2017-11-20T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Gent",
+       "release_date": "1980-11-06T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BG",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Sofia",
+       "release_date": "2017-11-16T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Santa Cruz",
+       "release_date": "2017-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-12-25T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release (4K Restoration)",
+       "release_date": "2025-12-11T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Digital Film Festival",
+       "release_date": "2010-02-07T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-06-13T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CH",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Locarno Film Festival",
+       "release_date": "2025-08-10T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2015-01-31T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2015-12-05T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "分线有限上映 Limited Release / IMAX、Cinity有限上映 Limited Release for IMAX and Cinity Screens / 4K修复版 4K Restoration",
+       "release_date": "2026-01-30T00:00:00.000Z",
+       "type": 2
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-12-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Larnaca",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CZ",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "2001-10-08T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Hamburg Film Festival",
+       "release_date": "2012-10-05T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "West Germany ",
+       "release_date": "1980-10-16T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DK",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-09-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "EG",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "2021-04-22T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "San Sebastian Film Festival",
+       "release_date": "1980-09-25T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Madrid / Barcelona",
+       "release_date": "1980-12-19T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1988-10-28T00:00:00.000Z",
+       "type": 6
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FI",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Night Visions Film Festival",
+       "release_date": "2012-11-02T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "K-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2017-11-01T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "K-18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-09-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-10-16T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "restored version, Cannes Film Festival",
+       "release_date": "2019-05-17T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2007-08-15T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-10-02T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2012-11-02T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "4k Restoration Re-release",
+       "release_date": "2019-10-23T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "45th Anniversary Re-release",
+       "release_date": "2025-12-12T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "4k Ultra HD Blu-ray",
+       "release_date": "2019-09-30T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "VHS",
+       "release_date": "1988-09-05T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "2001-09-10T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray",
+       "release_date": "2008-03-03T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-12-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HK",
+     "release_dates": [
+      {
+       "certification": "III",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1983-06-02T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Rijeka",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HU",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "2001-12-18T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ID",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2012-12-04T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IE",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-12-12T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2012-11-02T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1981-03-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2017-10-04T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IS",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Reykjavik Film Festival",
+       "release_date": "1999-08-27T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Reykjavik",
+       "release_date": "2017-10-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IT",
+     "release_dates": [
+      {
+       "certification": "VM14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-12-22T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2017-11-02T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Extended cut, 4K restoration",
+       "release_date": "2019-10-21T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "JP",
+     "release_dates": [
+      {
+       "certification": "R15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-12-13T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "19",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2025-12-10T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "19",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-06-28T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Camana Bay",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LT",
+     "release_dates": [
+      {
+       "certification": "N-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 2
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LV",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Riga",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Muestra Internacional de Cine",
+       "release_date": "1980-11-20T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "B-15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2018-11-02T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "B",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2019-10-27T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "C",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-12-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Leiden International Film Festival",
+       "release_date": "2017-10-28T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-10-30T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NO",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-09-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2015-12-03T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2013-02-14T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1981-01-15T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PH",
+     "release_dates": [
+      {
+       "certification": "R-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "IMAX",
+       "release_date": "2025-12-10T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "R-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2014-03-12T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PL",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1990-12-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PR",
+     "release_dates": [
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "IMAX",
+       "release_date": "2025-12-11T00:00:00.000Z",
+       "type": 2
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PT",
+     "release_dates": [
+      {
+       "certification": "M/16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-11-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Asunción",
+       "release_date": "2017-10-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RU",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2020-10-29T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "2001-12-25T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SE",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-09-26T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SG",
+     "release_dates": [
+      {
+       "certification": "M18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2019-10-31T00:00:00.000Z",
+       "type": 2
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SI",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Ljubljana",
+       "release_date": "2017-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TR",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-05-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Taipei Golden Horse Film Festival",
+       "release_date": "2012-11-09T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2018-09-28T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Moonlit Matines Film Festival",
+       "release_date": "2012-06-14T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Palm Springs International Film Festival",
+       "release_date": "2013-01-05T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-05-23T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2021-11-03T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "IMAX",
+       "release_date": "2025-12-12T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1980-06-13T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "1999-06-26T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1981-07-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 50312025,
+  "runtime": 144,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   }
+  ],
+  "status": "Released",
+  "tagline": "A masterpiece of modern horror.",
+  "title": "The Shining",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "6ac421324a95d563de2a6f46",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "Ftrd7OsN0uo",
+     "name": "Are You Scared Of This Place?",
+     "official": true,
+     "published_at": "2026-10-02T14:00:06.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a85fe6258495f0d249e5a66",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "O2JSN1R4XqA",
+     "name": "Lee Unkrich on the Two Versions of THE SHINING",
+     "official": true,
+     "published_at": "2026-08-19T18:25:04.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "6a14a1723a3f4e913f10c331",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "KUF43-Ce3aE",
+     "name": "He Saw it on the Television",
+     "official": true,
+     "published_at": "2026-05-09T16:00:26.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a14a2db99ec4323501d50de",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "BhCK4Lax-84",
+     "name": "Jack's Interview at The Overlook Hotel",
+     "official": true,
+     "published_at": "2026-02-02T17:00:14.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a14a3d9638b8f95d01d50e8",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "H_5wlpBKKsM",
+     "name": "Grady - You've Always Been the Caretaker",
+     "official": true,
+     "published_at": "2025-11-16T16:00:32.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a14a45b0b8d4fdb134be016",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "d1Zij68dJ_0",
+     "name": "Here's Johnny!",
+     "official": true,
+     "published_at": "2025-10-26T17:00:55.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "68ef52c35459903f8a095fe2",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "PC-OdRbIKDU",
+     "name": "Stanley Kubrick's Iconic Legacy",
+     "official": true,
+     "published_at": "2025-10-14T12:00:45.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "6a14a59a230e1d369e476291",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "6MicXVe8DC4",
+     "name": "Lloyd",
+     "official": true,
+     "published_at": "2025-07-15T16:00:12.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a14a5b0329c7de16cee10d5",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "Q3muC6VqQgE",
+     "name": "Snow Chase",
+     "official": true,
+     "published_at": "2025-07-07T16:00:41.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "69fe654b86f9e0543e50e7fb",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "Usa2Fn7FxuY",
+     "name": "Scariest Moments",
+     "official": true,
+     "published_at": "2025-06-13T14:00:54.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "6a14a601e7f067de144be019",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "PFPSiUnqcTs",
+     "name": "The Making of the Pantry Scene",
+     "official": true,
+     "published_at": "2025-06-01T16:00:29.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Behind the Scenes"
+    },
+    {
+     "id": "6a14a6371b56bc3ef9ee0fff",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "HqtlLGgsyk0",
+     "name": "Dick Hallorann Explains Shining to Danny",
+     "official": true,
+     "published_at": "2025-05-23T16:00:35.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a15994df2349e9ac95467d2",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "pWkR-1ZRrA0",
+     "name": "Jack's Best (Worst!) Moments",
+     "official": true,
+     "published_at": "2025-04-22T16:01:17.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "6a29b4ee7784ceac9379b6fa",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "s1TLa2dFEEQ",
+     "name": "When It's Only Tuesday...",
+     "official": true,
+     "published_at": "2025-04-15T16:01:18.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a159b2c5764294aaf54696e",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "jAE7dNurHR4",
+     "name": "Original Trailer",
+     "official": true,
+     "published_at": "2025-01-01T17:00:41.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "67514afa1234b99a9473d5d9",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "726_DZ7FcJc",
+     "name": "What is The Shining to You?",
+     "official": true,
+     "published_at": "2024-11-27T17:02:54.000Z",
+     "site": "YouTube",
+     "size": 2160,
+     "type": "Featurette"
+    },
+    {
+     "id": "6721e7421601419f7361cf28",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "WhhFwx12HTw",
+     "name": "Jack Doesn’t Want Wendy to Interrupt Him",
+     "official": true,
+     "published_at": "2024-10-30T00:00:26.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "67514b22f043bd8a6027141a",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "ODhlpTyshwQ",
+     "name": "Jack Chases Wendy",
+     "official": true,
+     "published_at": "2024-10-24T16:00:32.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "66ddee2a2dd3347119ee4a01",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "AjUzPpuqzaE",
+     "name": "Come play with us, Danny!",
+     "official": true,
+     "published_at": "2024-09-04T19:15:00.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "66ddee3d2c7aed2ab4ee48ce",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "2wkvlV2cndA",
+     "name": "REDRUM",
+     "official": true,
+     "published_at": "2024-08-23T19:00:04.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "66c389d2b17b9b53116e3c59",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "kBVXROnbIwM",
+     "name": "Most Iconic Moments",
+     "official": true,
+     "published_at": "2024-08-10T20:30:03.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "67514be01234b99a9473d614",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "O5-KZGGOrVE",
+     "name": "Wendy and Danny Have Lunch",
+     "official": true,
+     "published_at": "2024-07-07T16:00:30.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "67514bcc72d1a8a59c2975ba",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "V0IRyQSu8ao",
+     "name": "Dick Hallorann's Vision",
+     "official": true,
+     "published_at": "2024-05-23T16:07:49.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a25ea11c08d387e405adf87",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "bSKsoTdV5Kk",
+     "name": "What Does Redrum Mean??",
+     "official": true,
+     "published_at": "2024-03-20T14:00:34.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6ac02638557392ee24f35c0a",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "zlqTL-IApkI",
+     "name": "On Stanley Kubrick : A Force Of Nature (2001) 4/5 The Shining",
+     "official": false,
+     "published_at": "2023-03-22T13:42:18.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "64074aed9f51af007b08db36",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "FBmlG2L1uGM",
+     "name": "Ex-Pixar director Lee Unkrich on his book about Stanley Kubrick's The Shining | BFI Q&A",
+     "official": true,
+     "published_at": "2023-03-07T11:00:16.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "618b12ac595a56004395c4bc",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "FZQvIJxG9Xs",
+     "name": "4K Trailer",
+     "official": true,
+     "published_at": "2021-10-22T17:59:50.000Z",
+     "site": "YouTube",
+     "size": 2160,
+     "type": "Trailer"
+    },
+    {
+     "id": "67536e15802bad16091ac7c5",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "Z2QJi70OhpU",
+     "name": "Shelley Duvall and AFI Life Achievement Award Recipient Jack Nicholson on THE SHINING",
+     "official": true,
+     "published_at": "2020-11-04T03:54:34.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "67536e0c3494cc9bfbc64962",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "jXBiUP6btXI",
+     "name": "Freida Pinto announces THE SHINING",
+     "official": true,
+     "published_at": "2020-10-30T16:46:38.000Z",
+     "site": "YouTube",
+     "size": 720,
+     "type": "Featurette"
+    },
+    {
+     "id": "615f982b635013002a42c006",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "RuZ5ev3dZrA",
+     "name": "10 Minute Preview",
+     "official": true,
+     "published_at": "2020-10-15T13:22:18.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "5d16b611cf48a1001842feb4",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "ANKdpe4J2h0",
+     "name": "Trailer",
+     "official": true,
+     "published_at": "2012-10-01T14:16:31.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "533ec655c3a3685448000554",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "S014oGZiSdI",
+     "name": "Official Trailer",
+     "official": true,
+     "published_at": "2012-04-07T01:26:23.000Z",
+     "site": "YouTube",
+     "size": 720,
+     "type": "Trailer"
+    }
+   ]
+  },
+  "vote_average": 8.2,
+  "vote_count": 19532
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/AdKA2F1SzYPhSZdEbjH1Zh75UVQ.jpg",
+    "genre_ids": [
+     27,
+     53
+    ],
+    "id": 694,
+    "original_language": "en",
+    "original_title": "The Shining",
+    "overview": "Jack Torrance accepts a caretaker job at the Overlook Hotel, where he, along with his wife Wendy and their son Danny, must live isolated from the rest of the world for the winter. But they aren't prepared for the madness that lurks within.",
+    "popularity": 30.6227,
+    "poster_path": "/uAR0AWqhQL1hQa69UDEbb2rE5Wx.jpg",
+    "release_date": "1980-05-23",
+    "softcore": false,
+    "title": "The Shining",
+    "video": false,
+    "vote_average": 8.2,
+    "vote_count": 19532
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/gf9f39QH1EaVTeGSuHPTMyXojNY.jpg",
+    "genre_ids": [
+     99
+    ],
+    "id": 18875,
+    "original_language": "en",
+    "original_title": "Making 'The Shining'",
+    "overview": "Directed and edited by Stanley Kubrick's daughter Vivian Kubrick, this film offers a look behind the scenes during the making of The Shining.",
+    "popularity": 2.056,
+    "poster_path": "/upBsuweJjBftrkJGqVf8PHCdH0l.jpg",
+    "release_date": "1980-10-04",
+    "softcore": false,
+    "title": "Making 'The Shining'",
+    "video": false,
+    "vote_average": 7.1,
+    "vote_count": 120
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/5t0xfA9zxLdzymp342IOPEnDdyZ.jpg",
+    "genre_ids": [
+     18,
+     10749
+    ],
+    "id": 111463,
+    "original_language": "en",
+    "original_title": "The Shining Hour",
+    "overview": "A nightclub dancer shakes the foundations of a wealthy farming family after she marries into it.",
+    "popularity": 2.0743,
+    "poster_path": "/icPlJYyRg3zhvONL1wwbqbbXXpH.jpg",
+    "release_date": "1938-11-18",
+    "softcore": false,
+    "title": "The Shining Hour",
+    "video": false,
+    "vote_average": 6.7,
+    "vote_count": 22
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1203182,
+    "original_language": "ko",
+    "original_title": "SHINee - The Shining",
+    "overview": "In September 1st and 2nd 2018, SHINee held a fan meeting in Seoul's KSPO Dome. It was a special event where they performed with a live band, with a focus on their vocals, in front of thousands. It's not your normal concert movie, it's SHINee's special fan party.",
+    "popularity": 1.4513,
+    "poster_path": "/phkAS1MQYqxBmNkf09lwUA3VFLS.jpg",
+    "release_date": "2019-12-09",
+    "softcore": false,
+    "title": "SHINee - The Shining",
+    "video": true,
+    "vote_average": 2.5,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     27,
+     18,
+     10770
+    ],
+    "id": 1013699,
+    "original_language": "en",
+    "original_title": "The Shining Pyramid",
+    "overview": "When stones begin miraculously arranging themselves on the edge of one young man's private land, he and his friend begin trying to decipher them in any way possible. When they realize that it might be a dark portent, they become desperate to achieve their goal before it is too late.",
+    "popularity": 1.0821,
+    "poster_path": "/g8IlNYICgmLNZvb2Bl6FnZT3lpa.jpg",
+    "release_date": "1979-08-22",
+    "softcore": false,
+    "title": "The Shining Pyramid",
+    "video": false,
+    "vote_average": 9.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     10402,
+     99
+    ],
+    "id": 257402,
+    "original_language": "en",
+    "original_title": "The Shining Future",
+    "overview": "Documentary short film intended to drum up support for the Fifth War Loan Campaign. It shows a happy family in the future of 1960 enjoying the prosperity and advantages made possible by the successful prosecution of the war, and how the sacrifices of 1944 have made the world a better place.",
+    "popularity": 1.1664,
+    "poster_path": "/4NA3Gz1ALgHwHGlCTtUkneTzNbh.jpg",
+    "release_date": "1944-04-11",
+    "softcore": false,
+    "title": "The Shining Future",
+    "video": false,
+    "vote_average": 4.0,
+    "vote_count": 2
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1455781,
+    "original_language": "en",
+    "original_title": "The Shining Tapestry",
+    "overview": "A family of wild owls experiences the springtime: hunting, feeding, raising their young. A camera in their nest captures their every move. While a community of online viewers monitor the owls 24/7 via livestream, a strange story begins to unfold, calling into question the paradigm of control that underpins our human interventions into the non-human realm.",
+    "popularity": 0.417,
+    "poster_path": "/vKVuP8BdWBgoEWYsfbBIyP1XADb.jpg",
+    "release_date": "2025-04-08",
+    "softcore": false,
+    "title": "The Shining Tapestry",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     18
+    ],
+    "id": 475008,
+    "original_language": "en",
+    "original_title": "Shining the Ball",
+    "overview": "An attractive young man joins a cricket club and finds that the vice captain may have an unexpected vice...",
+    "popularity": 0.4742,
+    "poster_path": null,
+    "release_date": "2005-06-10",
+    "softcore": false,
+    "title": "Shining the Ball",
+    "video": false,
+    "vote_average": 4.8,
+    "vote_count": 4
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 977541,
+    "original_language": "en",
+    "original_title": "The Shining Hour",
+    "overview": "A child playing in the playground, a silent street. Innocent scenes which take on another aspect when viewed as the last few minutes before the bomb fell.",
+    "popularity": 0.4,
+    "poster_path": "/jl32NTtOxY84cbt9XXckYDdziPm.jpg",
+    "release_date": "1982-06-01",
+    "softcore": false,
+    "title": "The Shining Hour",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1336780,
+    "original_language": "en",
+    "original_title": "The Last Shining Legacy",
+    "overview": "This documentary delves into the importance people found in stained glass throughout their lives, and the impact it has on the people around them, while also delving into the time it takes to go into this craft and trade.",
+    "popularity": 0.7545,
+    "poster_path": "/lYAbcoPFmqns0J0y68RYLqB5gfH.jpg",
+    "release_date": "2024-08-21",
+    "softcore": false,
+    "title": "The Last Shining Legacy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1318854,
+    "original_language": "en",
+    "original_title": "Shine On: The Forgotten Shining Location",
+    "overview": "Almost 50 years after the film’s release, all the Overlook Hotel’s sets are thought to have been destroyed, but one last filming site remains.",
+    "popularity": 1.5818,
+    "poster_path": "/eQbxH4FHSW5TlSk6VgBwkOsP2wj.jpg",
+    "release_date": "2024-07-26",
+    "softcore": false,
+    "title": "Shine On: The Forgotten Shining Location",
+    "video": false,
+    "vote_average": 8.0,
+    "vote_count": 2
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/cUqaH8ZNJpgAekOjzFy7Z8fzHaL.jpg",
+    "genre_ids": [
+     18
+    ],
+    "id": 258473,
+    "original_language": "zh",
+    "original_title": "弧光",
+    "overview": "On a cold night, psychology student Liu Kai took Jing Huan, a paranoid schizophrenia patient, to a mysterious frozen lake she had often dreamed of. The lake reflected an “8” shape, causing Jing Huan’s expression to change, unsettling Liu Kai. During an internship at a psychiatric hospital, Liu Kai’s classmate Xie Ni, who was in a relationship with him, became interested in Jing Huan, a former factory cashier who developed mental illness after embezzling funds. Xie Ni wanted to study Jing Huan’s condition for a thesis and asked Liu Kai to help her, even arranging for Jing Huan to stay at her home.",
+    "popularity": 0.8638,
+    "poster_path": "/jbOTy6wLqe7f5rKa4vMXdYBtuSl.jpg",
+    "release_date": "1989-07-01",
+    "softcore": false,
+    "title": "The Shining Arc",
+    "video": false,
+    "vote_average": 7.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     35
+    ],
+    "id": 1744968,
+    "original_language": "en",
+    "original_title": "The Shining (in 60 seconds)",
+    "overview": "A losing entry in the 2011 Empire Done in 60 seconds competition.  Watch: https://www.youtube.com/watch?v=QEkV4keIA00",
+    "popularity": 1.259,
+    "poster_path": "/6lPNMd3LSj30lddaTjUXB9keII2.jpg",
+    "release_date": "2011-01-28",
+    "softcore": false,
+    "title": "The Shining (in 60 seconds)",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     16
+    ],
+    "id": 775443,
+    "original_language": "fr",
+    "original_title": "Short Cuts : The Shining",
+    "overview": "Stanley Kubrick's The Shining summarized in 1 minute.",
+    "popularity": 0.6836,
+    "poster_path": "/a3sdvU0VuZJ3S4N7RdBU3Qx3OCr.jpg",
+    "release_date": "2017-06-15",
+    "softcore": false,
+    "title": "Short Cuts : The Shining",
+    "video": false,
+    "vote_average": 5.0,
+    "vote_count": 2
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/vPL7G9amrW935rWEreOL6mX56ty.jpg",
+    "genre_ids": [
+     16,
+     10751
+    ],
+    "id": 269571,
+    "original_language": "en",
+    "original_title": "Angelina Ballerina: The Shining Star Trophy",
+    "overview": "Angelina shines brighter than ever in this all-new movie! Ms. Mimi announces that there’s going to be a big talent show at Camembert Academy – and the winner will walk away with the Shining Star Trophy. With celebrity guest judge Perry Parmesan deciding the winner, every minute of practice counts. But when Angelina goes out of her way to help her friends find their special talents, she has little time to work on her own routine. Who will take center stage and win the Shining Star Trophy? Watch as Angelina follows her heart to become a true shining star!",
+    "popularity": 1.027,
+    "poster_path": "/6cujRwFBv38K9ODmkJ8NHUUFSqE.jpg",
+    "release_date": "2011-09-03",
+    "softcore": false,
+    "title": "Angelina Ballerina: The Shining Star Trophy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1174044,
+    "original_language": "fa",
+    "original_title": "درخشش",
+    "overview": "The film tries to examine the ups and downs of this profession by talking to the stars of yesterday and today in cinema and reviewing some relevant images. In this documentary, people like Farideh Naseri, Reza Arham Sadr, Bahman Mofid, Behrouz Vosoughi, Reza Beyk Imanverdi and many others are seen.",
+    "popularity": 0.4786,
+    "poster_path": "/gW2aLGtzDYBAc7btXYcgzKRUkhb.jpg",
+    "release_date": "",
+    "softcore": false,
+    "title": "The Shining",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 401662,
+    "original_language": "en",
+    "original_title": "Bigger Than The Shining",
+    "overview": "Mark Cousins (The Story of Film: An Odyssey) reflects on questions concerning copyright and the extent to which a film can conform to the associations of the person watching it. Can two people ever really see the same film?",
+    "popularity": 0.698,
+    "poster_path": null,
+    "release_date": "2016-02-03",
+    "softcore": false,
+    "title": "Bigger Than The Shining",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1120445,
+    "original_language": "en",
+    "original_title": "Shining Secrets of the Stanley Hotel",
+    "overview": "A documentary capturing the Stanley Hotel's unique locations and rooms seldom seen by the public. Included are the personal accounts of tour guides and patrons, as well as a team of paranormal filmmakers. Witness personal accounts, stories of paranormal activity and compelling video evidence captured by the Adventure Myths team of investigators.",
+    "popularity": 0.6921,
+    "poster_path": "/16EQl7uQebwtXg4Vr4PEq4TOH9I.jpg",
+    "release_date": "2012-09-28",
+    "softcore": false,
+    "title": "Shining Secrets of the Stanley Hotel",
+    "video": false,
+    "vote_average": 1.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/gS3rqjTHZRrkkwJXL1QkXtoIXOe.jpg",
+    "genre_ids": [
+     99
+    ],
+    "id": 228633,
+    "original_language": "en",
+    "original_title": "View from the Overlook: Crafting 'The Shining'",
+    "overview": "An overview of the making of, and a look at the continuing popularity of, Stanley Kubrick's The Shining.",
+    "popularity": 1.3332,
+    "poster_path": "/v7bYiTTmUhabNFB8Jc6y2sTchWd.jpg",
+    "release_date": "2007-10-23",
+    "softcore": false,
+    "title": "View from the Overlook: Crafting 'The Shining'",
+    "video": false,
+    "vote_average": 7.4,
+    "vote_count": 7
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 173458,
+    "original_language": "en",
+    "original_title": "Stephen King: Shining in the Dark",
+    "overview": "A documentary looking at the life and work of Stephen King.",
+    "popularity": 1.5596,
+    "poster_path": "/1F0bQ77FBIEk0PbS3vV8mbLgZSj.jpg",
+    "release_date": "1999-09-09",
+    "softcore": false,
+    "title": "Stephen King: Shining in the Dark",
+    "video": false,
+    "vote_average": 6.8,
+    "vote_count": 11
+   }
+  ],
+  "total_pages": 4,
+  "total_results": 74
+ }
+}

@@ -1,0 +1,3176 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/qY7zVZ7liULhfRoXg4c9Xl83LcR.jpg",
+  "belongs_to_collection": null,
+  "budget": 5000000,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 2,
+     "character": "Ohm Bauman",
+     "credit_id": "67a4df2e8858c8705a66f53c",
+     "gender": 2,
+     "id": 36801,
+     "known_for_department": "Acting",
+     "name": "Adam Scott",
+     "order": 0,
+     "original_name": "Adam Scott",
+     "popularity": 3.8129,
+     "profile_path": "/b82C29R6fGiPoqIglQ4lzS6q2YX.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 5,
+     "character": "Mal",
+     "credit_id": "67a4df92aca91da4ba85c3f2",
+     "gender": 2,
+     "id": 523748,
+     "known_for_department": "Acting",
+     "name": "Peter Coonan",
+     "order": 1,
+     "original_name": "Peter Coonan",
+     "popularity": 0.6956,
+     "profile_path": "/4CIPj53v871Gwwyean91BhXesfW.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Jerry",
+     "credit_id": "67a4df885088b945972fd608",
+     "gender": 2,
+     "id": 73287,
+     "known_for_department": "Acting",
+     "name": "David Wilmot",
+     "order": 2,
+     "original_name": "David Wilmot",
+     "popularity": 2.0813,
+     "profile_path": "/epb46N0iJyAmSOguMdFn6qQGSsy.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 23,
+     "character": "Fiona",
+     "credit_id": "67c4d23f881c013ede7a5b06",
+     "gender": 1,
+     "id": 3249431,
+     "known_for_department": "Acting",
+     "name": "Florence Ordesh",
+     "order": 3,
+     "original_name": "Florence Ordesh",
+     "popularity": 0.669,
+     "profile_path": "/vOSd53O4QOjZUl9U8LIP84lrvGk.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 22,
+     "character": "Fergal",
+     "credit_id": "67c4d22fccfc749af291daa0",
+     "gender": 2,
+     "id": 1368268,
+     "known_for_department": "Acting",
+     "name": "Michael Patric",
+     "order": 4,
+     "original_name": "Michael Patric",
+     "popularity": 0.9263,
+     "profile_path": "/mHbEIuUbc9wuqDRhVgLn4hnxVvn.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 24,
+     "character": "Alby / Jack (The Jackass)",
+     "credit_id": "67c4d24efded3b516f91d985",
+     "gender": 2,
+     "id": 1865592,
+     "known_for_department": "Acting",
+     "name": "Will O'Connell",
+     "order": 5,
+     "original_name": "Will O'Connell",
+     "popularity": 0.8567,
+     "profile_path": "/9aQlrstSFoKQdsCigFWQibyfZhW.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 26,
+     "character": "Cob",
+     "credit_id": "68b0ab5e8b4947f9cd390d8b",
+     "gender": 2,
+     "id": 26865,
+     "known_for_department": "Acting",
+     "name": "Brendan Conroy",
+     "order": 6,
+     "original_name": "Brendan Conroy",
+     "popularity": 0.9376,
+     "profile_path": "/pUyjqFWqBERIW0wIJkxwgvfq1VY.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 28,
+     "character": "Boy",
+     "credit_id": "68b0ab793bd92b0005b37858",
+     "gender": 2,
+     "id": 4947443,
+     "known_for_department": "Acting",
+     "name": "Ezra Carlisle",
+     "order": 7,
+     "original_name": "Ezra Carlisle",
+     "popularity": 0.5206,
+     "profile_path": "/9R5EmE7JOU703wl43si2wMwp0MP.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 27,
+     "character": "Conquistador",
+     "credit_id": "68b0ab6c4a97710143a8ab70",
+     "gender": 2,
+     "id": 1552436,
+     "known_for_department": "Acting",
+     "name": "Austin Amelio",
+     "order": 8,
+     "original_name": "Austin Amelio",
+     "popularity": 1.7412,
+     "profile_path": "/y4QTXuSSmD99n8dinMiTRBkUnAp.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 29,
+     "character": "Ohm's Mother",
+     "credit_id": "68b0abae4d7780fe63625278",
+     "gender": 0,
+     "id": 2369470,
+     "known_for_department": "Acting",
+     "name": "Mallory Adams",
+     "order": 9,
+     "original_name": "Mallory Adams",
+     "popularity": 0.5482,
+     "profile_path": "/c5CdKuNTubd0kZUA7oNizY7my8Z.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 60,
+     "character": "Witch",
+     "credit_id": "69e7d2dee4185262a2939b08",
+     "gender": 1,
+     "id": 6158553,
+     "known_for_department": "Acting",
+     "name": "Sioux Carroll",
+     "order": 10,
+     "original_name": "Sioux Carroll",
+     "popularity": 0.6681,
+     "profile_path": "/5k8boLGuGzclsLu6mp0tQAZbbTG.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 106,
+     "character": "Background Actor",
+     "credit_id": "6a7a80eb41411859b08bf12a",
+     "gender": 2,
+     "id": 4787501,
+     "known_for_department": "Acting",
+     "name": "Brian Bowler",
+     "order": 11,
+     "original_name": "Brian Bowler",
+     "popularity": 0.3916,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 107,
+     "character": "Background Actor",
+     "credit_id": "6a7a815f1c3ffc4c908bf17a",
+     "gender": 1,
+     "id": 6403640,
+     "known_for_department": "Acting",
+     "name": "Rose Creagh",
+     "order": 12,
+     "original_name": "Rose Creagh",
+     "popularity": 0.2951,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 108,
+     "character": "Background Actor",
+     "credit_id": "6a7a818885d4897ccadcb488",
+     "gender": 0,
+     "id": 6403643,
+     "known_for_department": "Acting",
+     "name": "Ali Draper",
+     "order": 13,
+     "original_name": "Ali Draper",
+     "popularity": 0.2719,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 109,
+     "character": "Background Actor",
+     "credit_id": "6a7a819893ea47e6b290df63",
+     "gender": 0,
+     "id": 6403646,
+     "known_for_department": "Acting",
+     "name": "Emer Dunne",
+     "order": 14,
+     "original_name": "Emer Dunne",
+     "popularity": 0.2947,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 110,
+     "character": "Background Actor",
+     "credit_id": "6a7a81b1a05b3e31474b7c77",
+     "gender": 2,
+     "id": 2543708,
+     "known_for_department": "Acting",
+     "name": "Conor Dwane",
+     "order": 15,
+     "original_name": "Conor Dwane",
+     "popularity": 0.5758,
+     "profile_path": "/3oqH2aK5EaSEXfgAZX7N2KvzVfB.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 111,
+     "character": "Background Actor",
+     "credit_id": "6a7a81ead624a212d390ddda",
+     "gender": 0,
+     "id": 6403652,
+     "known_for_department": "Acting",
+     "name": "Hadrian Famisitt",
+     "order": 16,
+     "original_name": "Hadrian Famisitt",
+     "popularity": 0.25,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 112,
+     "character": "Background Actor",
+     "credit_id": "6a7a820268d9faf17f86f0a5",
+     "gender": 1,
+     "id": 6403654,
+     "known_for_department": "Acting",
+     "name": "Ciara Ferguson",
+     "order": 17,
+     "original_name": "Ciara Ferguson",
+     "popularity": 0.2541,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 113,
+     "character": "Background Actor",
+     "credit_id": "6a7a821f154e00338b90e055",
+     "gender": 0,
+     "id": 6403655,
+     "known_for_department": "Acting",
+     "name": "Euan Ferguson",
+     "order": 18,
+     "original_name": "Euan Ferguson",
+     "popularity": 0.2688,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 114,
+     "character": "Background Actor",
+     "credit_id": "6a7a822e54e594d80d92b3c4",
+     "gender": 2,
+     "id": 6403656,
+     "known_for_department": "Acting",
+     "name": "Karl Fortune",
+     "order": 19,
+     "original_name": "Karl Fortune",
+     "popularity": 0.2848,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 115,
+     "character": "Background Actor",
+     "credit_id": "6a7a8242c0ce3e4e458bf053",
+     "gender": 0,
+     "id": 6403658,
+     "known_for_department": "Acting",
+     "name": "Ana Galiano",
+     "order": 20,
+     "original_name": "Ana Galiano",
+     "popularity": 0.2563,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 116,
+     "character": "Background Actor",
+     "credit_id": "6a7a825cb3e49a41e52a3aec",
+     "gender": 0,
+     "id": 6403661,
+     "known_for_department": "Acting",
+     "name": "Finn Hook",
+     "order": 21,
+     "original_name": "Finn Hook",
+     "popularity": 0.2591,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 117,
+     "character": "Background Actor",
+     "credit_id": "6a7a82662532884768b99602",
+     "gender": 0,
+     "id": 6403663,
+     "known_for_department": "Acting",
+     "name": "Rory Hook",
+     "order": 22,
+     "original_name": "Rory Hook",
+     "popularity": 0.2978,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 118,
+     "character": "Background Actor",
+     "credit_id": "6a7a827768d9faf17f86f0bb",
+     "gender": 2,
+     "id": 6403665,
+     "known_for_department": "Acting",
+     "name": "Mikhail Ivannikov",
+     "order": 23,
+     "original_name": "Mikhail Ivannikov",
+     "popularity": 0.2895,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 119,
+     "character": "Background Actor",
+     "credit_id": "6a7a828d92cb2dcb124b7c78",
+     "gender": 0,
+     "id": 6403667,
+     "known_for_department": "Acting",
+     "name": "Gerald Kavanagh",
+     "order": 24,
+     "original_name": "Gerald Kavanagh",
+     "popularity": 0.2719,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 120,
+     "character": "Background Actor",
+     "credit_id": "6a7a82a12ad415b29a948ddb",
+     "gender": 2,
+     "id": 4841065,
+     "known_for_department": "Acting",
+     "name": "Austin Lawlor",
+     "order": 25,
+     "original_name": "Austin Lawlor",
+     "popularity": 0.2837,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 121,
+     "character": "Background Actor",
+     "credit_id": "6a7a82ea373d5f9c3df6a7eb",
+     "gender": 1,
+     "id": 3724732,
+     "known_for_department": "Acting",
+     "name": "Leticia Lopez Ramos",
+     "order": 26,
+     "original_name": "Leticia Lopez Ramos",
+     "popularity": 0.404,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 122,
+     "character": "Background Actor",
+     "credit_id": "6a7a83783bd3c610cedcb4c8",
+     "gender": 1,
+     "id": 4841066,
+     "known_for_department": "Acting",
+     "name": "Eileen McCarthy",
+     "order": 27,
+     "original_name": "Eileen McCarthy",
+     "popularity": 0.2761,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 123,
+     "character": "Background Actor",
+     "credit_id": "6a7a83af726a634290948d81",
+     "gender": 1,
+     "id": 5448044,
+     "known_for_department": "Acting",
+     "name": "Henriette McCarthy",
+     "order": 28,
+     "original_name": "Henriette McCarthy",
+     "popularity": 0.4979,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 124,
+     "character": "Background Actor",
+     "credit_id": "6a7a840881cad7099fb996c9",
+     "gender": 2,
+     "id": 3724651,
+     "known_for_department": "Acting",
+     "name": "Joseph McCarthy",
+     "order": 29,
+     "original_name": "Joseph McCarthy",
+     "popularity": 0.5852,
+     "profile_path": "/Af01kWwDy6YlKjZx7scqxpHXnp1.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 125,
+     "character": "Background Actor",
+     "credit_id": "6a7a844e85b719d69d5f95b7",
+     "gender": 1,
+     "id": 6403693,
+     "known_for_department": "Acting",
+     "name": "Linda McCarthy",
+     "order": 30,
+     "original_name": "Linda McCarthy",
+     "popularity": 0.2332,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 126,
+     "character": "Background Actor",
+     "credit_id": "6a7a84863bd3c610cedcb4cd",
+     "gender": 2,
+     "id": 4841067,
+     "known_for_department": "Acting",
+     "name": "Peter McCarthy",
+     "order": 31,
+     "original_name": "Peter McCarthy",
+     "popularity": 0.3129,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 127,
+     "character": "Background Actor",
+     "credit_id": "6a7a849c43adea5d0df6a7f5",
+     "gender": 1,
+     "id": 6403700,
+     "known_for_department": "Acting",
+     "name": "Evie Navia",
+     "order": 32,
+     "original_name": "Evie Navia",
+     "popularity": 0.2735,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 128,
+     "character": "Background Actor",
+     "credit_id": "6a7a84c6cf89de09338bf25d",
+     "gender": 1,
+     "id": 6403704,
+     "known_for_department": "Acting",
+     "name": "Muireann O'Donnell",
+     "order": 33,
+     "original_name": "Muireann O'Donnell",
+     "popularity": 0.3062,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 129,
+     "character": "Background Actor",
+     "credit_id": "6a7a84ee94662840eb94839a",
+     "gender": 1,
+     "id": 6403706,
+     "known_for_department": "Acting",
+     "name": "Eleanor O'Donovan",
+     "order": 34,
+     "original_name": "Eleanor O'Donovan",
+     "popularity": 0.2641,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 130,
+     "character": "Background Actor",
+     "credit_id": "6a7a85066355c3509d8498a3",
+     "gender": 0,
+     "id": 6403708,
+     "known_for_department": "Acting",
+     "name": "Georgine O'Donovan",
+     "order": 35,
+     "original_name": "Georgine O'Donovan",
+     "popularity": 0.2694,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 131,
+     "character": "Background Actor",
+     "credit_id": "6a7a85212541b7ba5f49db43",
+     "gender": 0,
+     "id": 6403709,
+     "known_for_department": "Acting",
+     "name": "Teige O'Donovan",
+     "order": 36,
+     "original_name": "Teige O'Donovan",
+     "popularity": 0.2552,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 132,
+     "character": "Background Actor",
+     "credit_id": "6a7a8574b3e49a41e52a3b0b",
+     "gender": 1,
+     "id": 6403712,
+     "known_for_department": "Acting",
+     "name": "Lydia O'Farrell Little",
+     "order": 37,
+     "original_name": "Lydia O'Farrell Little",
+     "popularity": 0.2566,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 133,
+     "character": "Background Actor",
+     "credit_id": "6a7a85904f8fcfd98cf6a75e",
+     "gender": 1,
+     "id": 2854105,
+     "known_for_department": "Acting",
+     "name": "Inma Pavon",
+     "order": 38,
+     "original_name": "Inma Pavon",
+     "popularity": 0.4655,
+     "profile_path": "/Me8Nw8UZfcpSbqyvfdDyIfnFKE.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 134,
+     "character": "Background Actor",
+     "credit_id": "6a7a85af0b9cfacefacb20f8",
+     "gender": 1,
+     "id": 6403713,
+     "known_for_department": "Acting",
+     "name": "Emily Quinlan",
+     "order": 39,
+     "original_name": "Emily Quinlan",
+     "popularity": 0.2541,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 135,
+     "character": "Background Actor",
+     "credit_id": "6a7a862c82a6084fd7849991",
+     "gender": 1,
+     "id": 6403716,
+     "known_for_department": "Acting",
+     "name": "Maeve Quinlan",
+     "order": 40,
+     "original_name": "Maeve Quinlan",
+     "popularity": 0.3031,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 136,
+     "character": "Background Actor",
+     "credit_id": "6a7a864fc63fb513308498ed",
+     "gender": 1,
+     "id": 6403721,
+     "known_for_department": "Acting",
+     "name": "Orla Quinlan",
+     "order": 41,
+     "original_name": "Orla Quinlan",
+     "popularity": 0.3074,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 137,
+     "character": "Background Actor",
+     "credit_id": "6a7a87142532884768b99645",
+     "gender": 2,
+     "id": 2895307,
+     "known_for_department": "Acting",
+     "name": "Paul Reid",
+     "order": 42,
+     "original_name": "Paul Reid",
+     "popularity": 0.2795,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 138,
+     "character": "Background Actor",
+     "credit_id": "6a7a875f94662840eb9483ae",
+     "gender": 2,
+     "id": 4910717,
+     "known_for_department": "Acting",
+     "name": "Daniel Richardson",
+     "order": 43,
+     "original_name": "Daniel Richardson",
+     "popularity": 0.2629,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 139,
+     "character": "Background Actor",
+     "credit_id": "6a7a87934c027af35bdcb5f2",
+     "gender": 1,
+     "id": 6403733,
+     "known_for_department": "Acting",
+     "name": "Shirley Ryan",
+     "order": 44,
+     "original_name": "Shirley Ryan",
+     "popularity": 0.3159,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 140,
+     "character": "Background Actor",
+     "credit_id": "6a7a87b768e207f8d72a3ba8",
+     "gender": 1,
+     "id": 6403735,
+     "known_for_department": "Acting",
+     "name": "Sally Smart",
+     "order": 45,
+     "original_name": "Sally Smart",
+     "popularity": 0.2143,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 141,
+     "character": "Background Actor",
+     "credit_id": "6a7a87c37db1f28fe190dfc1",
+     "gender": 1,
+     "id": 6403736,
+     "known_for_department": "Acting",
+     "name": "Ruby Spilbury",
+     "order": 46,
+     "original_name": "Ruby Spilbury",
+     "popularity": 0.2624,
+     "profile_path": null
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "67a4df262f44f82ad32ff993",
+     "department": "Directing",
+     "gender": 2,
+     "id": 1102882,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "Damian McCarthy",
+     "original_name": "Damian McCarthy",
+     "popularity": 1.3156,
+     "profile_path": "/mCY9Q0rJcmbj165O3qOutFMOEoH.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4df685088b945972fd5e1",
+     "department": "Writing",
+     "gender": 2,
+     "id": 1102882,
+     "job": "Writer",
+     "known_for_department": "Directing",
+     "name": "Damian McCarthy",
+     "original_name": "Damian McCarthy",
+     "popularity": 1.3156,
+     "profile_path": "/mCY9Q0rJcmbj165O3qOutFMOEoH.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4dfb6aca91da4ba85c426",
+     "department": "Production",
+     "gender": 2,
+     "id": 21036,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Roy Lee",
+     "original_name": "Roy Lee",
+     "popularity": 1.6569,
+     "profile_path": "/7HGbsI8y3TGK8VQhN5rkaXtQnro.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4dfbfaca91da4ba85c42c",
+     "department": "Production",
+     "gender": 2,
+     "id": 995456,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Steven Schneider",
+     "original_name": "Steven Schneider",
+     "popularity": 1.0963,
+     "profile_path": "/lKvFSqxjqB5l2Al6Z2mshDMILvO.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4dfe25088b945972fd646",
+     "department": "Production",
+     "gender": 2,
+     "id": 11812,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Derek Dauchy",
+     "original_name": "Derek Dauchy",
+     "popularity": 0.7867,
+     "profile_path": "/70aMUgMSzEyPBencRPybBl1aoiz.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4dff0f1d04fe5ea2fec40",
+     "department": "Production",
+     "gender": 0,
+     "id": 1320133,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Ruth Treacy",
+     "original_name": "Ruth Treacy",
+     "popularity": 0.5557,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4dffbdf336f38ab85c3e1",
+     "department": "Production",
+     "gender": 0,
+     "id": 1171617,
+     "job": "Producer",
+     "known_for_department": "Directing",
+     "name": "Mairtín de Barra",
+     "original_name": "Mairtín de Barra",
+     "popularity": 0.4677,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4e0118858c8705a66f565",
+     "department": "Production",
+     "gender": 2,
+     "id": 3465438,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Ben Ross",
+     "original_name": "Ben Ross",
+     "popularity": 0.5779,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4e02077b8ced45666ee77",
+     "department": "Production",
+     "gender": 2,
+     "id": 3261926,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Dan Kagan",
+     "original_name": "Dan Kagan",
+     "popularity": 0.5786,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4e02e8858c8705a66f576",
+     "department": "Production",
+     "gender": 2,
+     "id": 1482587,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Rami Yasin",
+     "original_name": "Rami Yasin",
+     "popularity": 0.5493,
+     "profile_path": "/hVaNY3tHSxGTWcxdaYuTW9tMEl7.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67a4e038f1d04fe5ea2fec4f",
+     "department": "Production",
+     "gender": 2,
+     "id": 3034045,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Andrew Childs",
+     "original_name": "Andrew Childs",
+     "popularity": 0.5318,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c4d1396ca9035a6a7a5b8b",
+     "department": "Production",
+     "gender": 0,
+     "id": 1320132,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Julianne Forde",
+     "original_name": "Julianne Forde",
+     "popularity": 0.6433,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c4d180fded3b516f91d943",
+     "department": "Production",
+     "gender": 2,
+     "id": 2825152,
+     "job": "Line Producer",
+     "known_for_department": "Directing",
+     "name": "Ivan McMahon",
+     "original_name": "Ivan McMahon",
+     "popularity": 0.5041,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c4d19e881c013ede7a5aaf",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4841080,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Colm Hogan",
+     "original_name": "Colm Hogan",
+     "popularity": 0.5555,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c4d1b4881c013ede7a5ac3",
+     "department": "Editing",
+     "gender": 2,
+     "id": 1203978,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Brian Philip Davis",
+     "original_name": "Brian Philip Davis",
+     "popularity": 0.5048,
+     "profile_path": "/g68vSoPLqbDY3mX7c5UaNOAUd2t.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67c4d1daa3277ab4a1e750c3",
+     "department": "Art",
+     "gender": 0,
+     "id": 1458979,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Til Frohlich",
+     "original_name": "Til Frohlich",
+     "popularity": 0.4086,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c4d1ee6ca9035a6a7a5bea",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 1168764,
+     "job": "Costume Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Lara Campbell",
+     "original_name": "Lara Campbell",
+     "popularity": 0.388,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68b0ac15b763b169df390ddc",
+     "department": "Sound",
+     "gender": 2,
+     "id": 73417,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Joseph Bishara",
+     "original_name": "Joseph Bishara",
+     "popularity": 1.9354,
+     "profile_path": "/jkFmkZcd16cEX2yGFNNAsNJyN5U.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "68b0adcddf425abfc10f947d",
+     "department": "Art",
+     "gender": 0,
+     "id": 3899682,
+     "job": "Set Decoration",
+     "known_for_department": "Art",
+     "name": "Ciara McKenna",
+     "original_name": "Ciara McKenna",
+     "popularity": 0.3082,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68b0adf4e8b9112a8f390d96",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 43159,
+     "job": "Makeup Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Niamh O'Loan",
+     "original_name": "Niamh O'Loan",
+     "popularity": 0.5138,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68cfdec6133d09d9d7fe9437",
+     "department": "Crew",
+     "gender": 1,
+     "id": 5595971,
+     "job": "Intern",
+     "known_for_department": "Directing",
+     "name": "Tereza Feixová",
+     "original_name": "Tereza Feixová",
+     "popularity": 0.264,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68cfded2f04d6e5013fe93f6",
+     "department": "Crew",
+     "gender": 2,
+     "id": 5109699,
+     "job": "Intern",
+     "known_for_department": "Directing",
+     "name": "Sebastian Beausang",
+     "original_name": "Sebastian Beausang",
+     "popularity": 0.5814,
+     "profile_path": "/dVu0l5HZD4O0mFvtb4t6bp02Wuz.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "692f657c7c59bbbc2311487b",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 2854104,
+     "job": "Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Miriam McCarthy",
+     "original_name": "Miriam McCarthy",
+     "popularity": 0.319,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f65cb04c9c38184512af7",
+     "department": "Directing",
+     "gender": 0,
+     "id": 4661371,
+     "job": "Assistant Director Trainee",
+     "known_for_department": "Directing",
+     "name": "Adam Byrne",
+     "original_name": "Adam Byrne",
+     "popularity": 0.5868,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f66887d315c43731147e2",
+     "department": "Art",
+     "gender": 1,
+     "id": 4828875,
+     "job": "Graphic Designer",
+     "known_for_department": "Art",
+     "name": "Deirdre Bolger",
+     "original_name": "Deirdre Bolger",
+     "popularity": 0.2541,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f684104bf856d62399576",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1926904,
+     "job": "Sound Mixer",
+     "known_for_department": "Sound",
+     "name": "Hugo Parvery",
+     "original_name": "Hugo Parvery",
+     "popularity": 0.4274,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f6853c63812c0433993d6",
+     "department": "Crew",
+     "gender": 1,
+     "id": 2612117,
+     "job": "Stunt Driver",
+     "known_for_department": "Crew",
+     "name": "Orlaith Doherty",
+     "original_name": "Orlaith Doherty",
+     "popularity": 0.6296,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f68a071e03698af3994f5",
+     "department": "Crew",
+     "gender": 0,
+     "id": 2270880,
+     "job": "Stunt Coordinator",
+     "known_for_department": "Crew",
+     "name": "Eimear O'Grady",
+     "original_name": "Eimear O'Grady",
+     "popularity": 0.5073,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f68cad913fee498287013",
+     "department": "Camera",
+     "gender": 0,
+     "id": 5852917,
+     "job": "Key Grip",
+     "known_for_department": "Camera",
+     "name": "John Connon",
+     "original_name": "John Connon",
+     "popularity": 0.2769,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f68f8dad0914600399391",
+     "department": "Camera",
+     "gender": 0,
+     "id": 1963379,
+     "job": "Camera Trainee",
+     "known_for_department": "Camera",
+     "name": "Jack Long",
+     "original_name": "Jack Long",
+     "popularity": 0.375,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f690bd172f9b4f03eac3d",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4561870,
+     "job": "Camera Trainee",
+     "known_for_department": "Lighting",
+     "name": "Orna Indie Murphy",
+     "original_name": "Orna Indie Murphy",
+     "popularity": 0.3113,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f6927fb2fe0186a114b70",
+     "department": "Crew",
+     "gender": 0,
+     "id": 2538771,
+     "job": "Chaperone",
+     "known_for_department": "Production",
+     "name": "Azalea Aznidi",
+     "original_name": "Azalea Aznidi",
+     "popularity": 0.331,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f6951c25ba18e9126f639",
+     "department": "Editing",
+     "gender": 2,
+     "id": 2998717,
+     "job": "Assistant Editor",
+     "known_for_department": "Editing",
+     "name": "Adrian Conway",
+     "original_name": "Adrian Conway",
+     "popularity": 0.4083,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f6972472a6daa7826f4e6",
+     "department": "Production",
+     "gender": 0,
+     "id": 2952654,
+     "job": "Location Manager",
+     "known_for_department": "Production",
+     "name": "Emma Payne",
+     "original_name": "Emma Payne",
+     "popularity": 0.3063,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f69b1850c525bd8286e2a",
+     "department": "Crew",
+     "gender": 0,
+     "id": 3264419,
+     "job": "Additional Script Supervisor",
+     "known_for_department": "Directing",
+     "name": "Fiona Lanham",
+     "original_name": "Fiona Lanham",
+     "popularity": 0.3017,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f69e2615e82c85d6e30af",
+     "department": "Crew",
+     "gender": 0,
+     "id": 1938982,
+     "job": "Legal Services",
+     "known_for_department": "Crew",
+     "name": "Oisín O'Neill",
+     "original_name": "Oisín O'Neill",
+     "popularity": 0.4241,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f69feed7253624f26f5e5",
+     "department": "Production",
+     "gender": 0,
+     "id": 5395967,
+     "job": "Production Coordinator",
+     "known_for_department": "Production",
+     "name": "Cristina Badea",
+     "original_name": "Cristina Badea",
+     "popularity": 0.5003,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f6a68fb266fec83286d6e",
+     "department": "Production",
+     "gender": 0,
+     "id": 4902949,
+     "job": "Assistant Production Coordinator",
+     "known_for_department": "Production",
+     "name": "Gayle Smith",
+     "original_name": "Gayle Smith",
+     "popularity": 0.2682,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "692f6a9979f5659a82286ded",
+     "department": "Art",
+     "gender": 0,
+     "id": 4614939,
+     "job": "Props",
+     "known_for_department": "Art",
+     "name": "Fabien Oman",
+     "original_name": "Fabien Oman",
+     "popularity": 0.4489,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bad5053aef2b66e109024b",
+     "department": "Production",
+     "gender": 2,
+     "id": 1436490,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Tom Quinn",
+     "original_name": "Tom Quinn",
+     "popularity": 0.4944,
+     "profile_path": "/r5PH8k7AZdxvopZ7hOJz3iSzMuj.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b201b075ab957e0f4ca5",
+     "department": "Production",
+     "gender": 2,
+     "id": 1775004,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Josh Rosenbaum",
+     "original_name": "Josh Rosenbaum",
+     "popularity": 0.6087,
+     "profile_path": "/vgAPUVkgJEOqyXSXKGhVhrpYTWS.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b20bb363c463f56b1eb4",
+     "department": "Production",
+     "gender": 2,
+     "id": 5962644,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Jakob Pollack",
+     "original_name": "Jakob Pollack",
+     "popularity": 0.4664,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b219a78d00134bbb1a79",
+     "department": "Production",
+     "gender": 0,
+     "id": 1337639,
+     "job": "Associate Producer",
+     "known_for_department": "Crew",
+     "name": "Kyle Holden",
+     "original_name": "Kyle Holden",
+     "popularity": 0.5658,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b22cef7f7e4beec61b58",
+     "department": "Production",
+     "gender": 2,
+     "id": 1108140,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Keith Potter",
+     "original_name": "Keith Potter",
+     "popularity": 0.7644,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b25dda2524c0c7bcb535",
+     "department": "Production",
+     "gender": 0,
+     "id": 6162255,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Bryan Meng",
+     "original_name": "Bryan Meng",
+     "popularity": 0.6571,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b27807f28e657ccd3107",
+     "department": "Production",
+     "gender": 0,
+     "id": 6162256,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Terence Chan",
+     "original_name": "Terence Chan",
+     "popularity": 0.4529,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b289d621a830450f4d86",
+     "department": "Production",
+     "gender": 0,
+     "id": 3865626,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Ryan Friscia",
+     "original_name": "Ryan Friscia",
+     "popularity": 0.6581,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b29be5672d2b1bbcb309",
+     "department": "Production",
+     "gender": 2,
+     "id": 1211765,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Jeff Deutchman",
+     "original_name": "Jeff Deutchman",
+     "popularity": 0.4425,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b2d50f84b0c86ecd326e",
+     "department": "Production",
+     "gender": 0,
+     "id": 6162259,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Evan O'Brien",
+     "original_name": "Evan O'Brien",
+     "popularity": 0.2923,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b3112fad177eef3341d8",
+     "department": "Production",
+     "gender": 2,
+     "id": 1024274,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Ken Kao",
+     "original_name": "Ken Kao",
+     "popularity": 0.82,
+     "profile_path": "/2u0LA8H2AIEwtDvyg5hGq4JjMk3.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b32c7f25f1c0ed6b1f58",
+     "department": "Directing",
+     "gender": 0,
+     "id": 2952652,
+     "job": "First Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Jim Corr",
+     "original_name": "Jim Corr",
+     "popularity": 0.3094,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9b3590f84b0c86ecd3272",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1354922,
+     "job": "Sound Designer",
+     "known_for_department": "Sound",
+     "name": "Steve Fanagan",
+     "original_name": "Steve Fanagan",
+     "popularity": 0.6372,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9de0e547ddc4dad0abca0",
+     "department": "Production",
+     "gender": 1,
+     "id": 1622448,
+     "job": "Casting Director",
+     "known_for_department": "Production",
+     "name": "Emma Gunnery",
+     "original_name": "Emma Gunnery",
+     "popularity": 0.5357,
+     "profile_path": "/doaX4CbI9cOEf7WbRk2I5X7I7a2.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9de2f46372ed5420abcda",
+     "department": "Directing",
+     "gender": 0,
+     "id": 4202998,
+     "job": "Second Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Carmen Kovacs",
+     "original_name": "Carmen Kovacs",
+     "popularity": 0.2902,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9de4542e42317b6bb1bc0",
+     "department": "Crew",
+     "gender": 2,
+     "id": 1569658,
+     "job": "Stunt Coordinator",
+     "known_for_department": "Crew",
+     "name": "Giedrius Nagys",
+     "original_name": "Giedrius Nagys",
+     "popularity": 0.5785,
+     "profile_path": "/isyhBlyhT7vpUUywAxRx7AU48nE.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9de63e820ce4258334224",
+     "department": "Camera",
+     "gender": 0,
+     "id": 2557572,
+     "job": "First Assistant Camera",
+     "known_for_department": "Camera",
+     "name": "Roman Bugovskiy",
+     "original_name": "Roman Bugovskiy",
+     "popularity": 0.4842,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9de86b505b1de306b20f2",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4594649,
+     "job": "Second Assistant Camera",
+     "known_for_department": "Camera",
+     "name": "Ruairi O Hoisin",
+     "original_name": "Ruairi O Hoisin",
+     "popularity": 0.2993,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9de92d9f82cc69da5a531",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4304256,
+     "job": "Second Assistant Camera",
+     "known_for_department": "Camera",
+     "name": "Shane Joyce",
+     "original_name": "Shane Joyce",
+     "popularity": 0.6064,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9de9dd9f82cc69da5a538",
+     "department": "Camera",
+     "gender": 0,
+     "id": 3603923,
+     "job": "Digital Imaging Technician",
+     "known_for_department": "Camera",
+     "name": "Ger Murphy",
+     "original_name": "Ger Murphy",
+     "popularity": 0.2826,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9deaded5c18f45dbcb4f7",
+     "department": "Directing",
+     "gender": 0,
+     "id": 3264419,
+     "job": "Script Supervisor",
+     "known_for_department": "Directing",
+     "name": "Fiona Lanham",
+     "original_name": "Fiona Lanham",
+     "popularity": 0.3017,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9dec507f28e657ccd32d9",
+     "department": "Directing",
+     "gender": 1,
+     "id": 1721020,
+     "job": "Script Supervisor",
+     "known_for_department": "Directing",
+     "name": "Áine Máire Ní Tháibhís",
+     "original_name": "Áine Máire Ní Tháibhís",
+     "popularity": 0.4771,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9dede6ff0da091d0f4f23",
+     "department": "Sound",
+     "gender": 0,
+     "id": 5587319,
+     "job": "First Assistant Sound Editor",
+     "known_for_department": "Sound",
+     "name": "Chris Collie",
+     "original_name": "Chris Collie",
+     "popularity": 0.4362,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9dee94401c99783bb1d01",
+     "department": "Art",
+     "gender": 0,
+     "id": 1334164,
+     "job": "Art Direction",
+     "known_for_department": "Art",
+     "name": "Martin Goulding",
+     "original_name": "Martin Goulding",
+     "popularity": 0.4004,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9defb4401c99783bb1d04",
+     "department": "Art",
+     "gender": 0,
+     "id": 4990198,
+     "job": "Assistant Art Director",
+     "known_for_department": "Art",
+     "name": "Éna Lochrin",
+     "original_name": "Éna Lochrin",
+     "popularity": 0.3308,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9df0b07f28e657ccd32df",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 3856708,
+     "job": "Costume Supervisor",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Paul Keady",
+     "original_name": "Paul Keady",
+     "popularity": 0.3249,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9df1d5692a9d8d03343ec",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2673799,
+     "job": "Hair Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Jennie Readman",
+     "original_name": "Jennie Readman",
+     "popularity": 0.3478,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9df2642fbdc62bc0f4e08",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 3082980,
+     "job": "Hairstylist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Aoife Maher",
+     "original_name": "Aoife Maher",
+     "popularity": 0.4446,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9df408136fa0183a5a5a5",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 6162591,
+     "job": "Hairstylist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Lynsey O'Leary",
+     "original_name": "Lynsey O'Leary",
+     "popularity": 0.3374,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9df4f6ff0da091d0f4f2d",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 4005565,
+     "job": "Special Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Aidan Byrne",
+     "original_name": "Aidan Byrne",
+     "popularity": 0.4149,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9df5d0df8c5661a0abc4d",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 1405021,
+     "job": "Special Effects Supervisor",
+     "known_for_department": "Crew",
+     "name": "Brendan Byrne",
+     "original_name": "Brendan Byrne",
+     "popularity": 0.5415,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9df9ad9f82cc69da5a550",
+     "department": "Lighting",
+     "gender": 0,
+     "id": 4841097,
+     "job": "Gaffer",
+     "known_for_department": "Lighting",
+     "name": "Padraic O'Fatharta",
+     "original_name": "Padraic O'Fatharta",
+     "popularity": 0.3347,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9dfaa97f42ede430f4df9",
+     "department": "Directing",
+     "gender": 0,
+     "id": 5408462,
+     "job": "Third Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Noel McInerney",
+     "original_name": "Noel McInerney",
+     "popularity": 0.39,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9dfd1b0c9d3c7d2cd3187",
+     "department": "Camera",
+     "gender": 0,
+     "id": 1330113,
+     "job": "Additional Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Stephen Murphy",
+     "original_name": "Stephen Murphy",
+     "popularity": 0.6325,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9dfeced5c18f45dbcb500",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1354922,
+     "job": "Supervising Sound Editor",
+     "known_for_department": "Sound",
+     "name": "Steve Fanagan",
+     "original_name": "Steve Fanagan",
+     "popularity": 0.6372,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9dff27ab8e6cf8f0abb96",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1354922,
+     "job": "Sound Re-Recording Mixer",
+     "known_for_department": "Sound",
+     "name": "Steve Fanagan",
+     "original_name": "Steve Fanagan",
+     "popularity": 0.6372,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e00414bfdec20dc61aa1",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1425588,
+     "job": "Foley Artist",
+     "known_for_department": "Sound",
+     "name": "Caoimhe Doyle",
+     "original_name": "Caoimhe Doyle",
+     "popularity": 0.7682,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e00c49f34ee11abcb520",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1398918,
+     "job": "Foley Artist",
+     "known_for_department": "Sound",
+     "name": "Andrea King",
+     "original_name": "Andrea King",
+     "popularity": 0.4813,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e0172fad177eef334398",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1547155,
+     "job": "Foley Editor",
+     "known_for_department": "Sound",
+     "name": "Niall Brady",
+     "original_name": "Niall Brady",
+     "popularity": 0.5199,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e0400bac48b79433428a",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 1320132,
+     "job": "Visual Effects Producer",
+     "known_for_department": "Production",
+     "name": "Julianne Forde",
+     "original_name": "Julianne Forde",
+     "popularity": 0.6433,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e04df64616dcffbb1cf2",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 5044526,
+     "job": "Visual Effects Producer",
+     "known_for_department": "Visual Effects",
+     "name": "Jonny Figgis",
+     "original_name": "Jonny Figgis",
+     "popularity": 0.3429,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e05947847a19c6bb1d4d",
+     "department": "Art",
+     "gender": 0,
+     "id": 1920966,
+     "job": "Title Designer",
+     "known_for_department": "Art",
+     "name": "Annie Atkins",
+     "original_name": "Annie Atkins",
+     "popularity": 0.4778,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e07984afcea8d4c61a7d",
+     "department": "Visual Effects",
+     "gender": 2,
+     "id": 2470186,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Daniel Cullen",
+     "original_name": "Daniel Cullen",
+     "popularity": 0.3484,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e08d6ff0da091d0f4f38",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1422818,
+     "job": "Music Editor",
+     "known_for_department": "Sound",
+     "name": "Andrew Glen",
+     "original_name": "Andrew Glen",
+     "popularity": 0.6246,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e097ed5c18f45dbcb50f",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1986823,
+     "job": "Music Supervisor",
+     "known_for_department": "Sound",
+     "name": "Dina Coughlan",
+     "original_name": "Dina Coughlan",
+     "popularity": 0.4268,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69e9e0a4f64616dcffbb1d0d",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1986825,
+     "job": "Music Supervisor",
+     "known_for_department": "Sound",
+     "name": "Rory McPartland",
+     "original_name": "Rory McPartland",
+     "popularity": 0.5157,
+     "profile_path": null
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   },
+   {
+    "id": 53,
+    "name": "Thriller"
+   }
+  ],
+  "homepage": "https://www.neonrated.com/film/hokum",
+  "id": 1430077,
+  "imdb_id": "tt35672862",
+  "origin_country": [
+   "US"
+  ],
+  "original_language": "en",
+  "original_title": "Hokum",
+  "overview": "When novelist Ohm Bauman retreats to a remote inn to scatter his parents' ashes, he is consumed by tales of a witch haunting the honeymoon suite. Disturbing visions and a shocking disappearance forces him to confront dark corners of his past.",
+  "popularity": 26.4686,
+  "poster_path": "/x6rHcQFiYcczLQPrmxXPAicm54E.jpg",
+  "production_companies": [
+   {
+    "id": 169906,
+    "logo_path": "/zcjActhEXaYww1JSvx2OtCd8jTG.png",
+    "name": "Spooky Pictures",
+    "origin_country": "US"
+   },
+   {
+    "id": 6736,
+    "logo_path": "/cdCAYeb3K3Ajhn1tfXHPSfT1KzB.png",
+    "name": "Image Nation Studios",
+    "origin_country": "AE"
+   },
+   {
+    "id": 272588,
+    "logo_path": null,
+    "name": "Cweature Features",
+    "origin_country": "US"
+   },
+   {
+    "id": 272589,
+    "logo_path": null,
+    "name": "Team Thrives",
+    "origin_country": "HK"
+   },
+   {
+    "id": 23459,
+    "logo_path": "/41KbJFe2xc1jQHyZCDFTyFbKInM.png",
+    "name": "Tailored Films",
+    "origin_country": "IE"
+   },
+   {
+    "id": 1898,
+    "logo_path": "/8ix6SGlJiyuUDxLBtY8E0PY2G7w.png",
+    "name": "Fís Éireann/Screen Ireland",
+    "origin_country": "IE"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   },
+   {
+    "iso_3166_1": "IE",
+    "name": "Ireland"
+   },
+   {
+    "iso_3166_1": "AE",
+    "name": "United Arab Emirates"
+   },
+   {
+    "iso_3166_1": "HK",
+    "name": "Hong Kong"
+   }
+  ],
+  "release_date": "2026-04-29",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AR",
+     "release_dates": [
+      {
+       "certification": "+16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "M",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Fantastic Film Festival",
+       "release_date": "2026-04-23T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "M",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-07-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BG",
+     "release_dates": [
+      {
+       "certification": "C",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BH",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-14T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-21T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Calgary Underground Film Festival",
+       "release_date": "2026-04-16T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "14A",
+       "descriptors": [
+        "Frightening Scenes",
+        "Coarse Language"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 2
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CL",
+     "release_dates": [
+      {
+       "certification": "14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-06-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CZ",
+     "release_dates": [
+      {
+       "certification": "15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Fantasy Filmfest",
+       "release_date": "2026-09-05T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-12-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "EE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "EG",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-15T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FI",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-29T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GR",
+     "release_dates": [
+      {
+       "certification": "K18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GT",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HU",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ID",
+     "release_dates": [
+      {
+       "certification": "13+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-19T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "15A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-21T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IN",
+     "release_dates": [
+      {
+       "certification": "A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-15T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IT",
+     "release_dates": [
+      {
+       "certification": "10+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-08-05T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Bucheon International Fantastic Film Festival",
+       "release_date": "2026-07-03T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-07-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KW",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KZ",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LB",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LT",
+     "release_dates": [
+      {
+       "certification": "N-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "N-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "ŽMONĖS Cinema",
+       "release_date": "2026-07-23T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LV",
+     "release_dates": [
+      {
+       "certification": "16+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "B",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NL",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [
+        "Fear"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-07-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NO",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NZ",
+     "release_dates": [
+      {
+       "certification": "R13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "OM",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-14T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PH",
+     "release_dates": [
+      {
+       "certification": "R-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-06T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PR",
+     "release_dates": [
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PT",
+     "release_dates": [
+      {
+       "certification": "M/14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "QA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RU",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-06-11T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-08-03T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SG",
+     "release_dates": [
+      {
+       "certification": "NC16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-21T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SK",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TH",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-28T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TR",
+     "release_dates": [
+      {
+       "certification": "16+",
+       "descriptors": [
+        "Violence / Horror",
+        "Negative examples"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-06-17T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "South by Southwest Film & TV Festival",
+       "release_date": "2026-03-14T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Overlook Film Festival",
+       "release_date": "2026-04-11T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "PFS SpringFest",
+       "release_date": "2026-04-17T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Independent Film Festival Boston",
+       "release_date": "2026-04-24T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-01T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-06-02T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Hulu",
+       "release_date": "2026-10-10T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-08-11T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-06-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "VE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "VN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-29T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 25023390,
+  "runtime": 108,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   },
+   {
+    "english_name": "Spanish",
+    "iso_639_1": "es",
+    "name": "Español"
+   }
+  ],
+  "status": "Released",
+  "tagline": "We've been expecting you.",
+  "title": "Hokum",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "6a8c19e48a744957d8a851df",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "rKfquft7gn0",
+     "name": "Alby Witch",
+     "official": true,
+     "published_at": "2026-06-16T21:33:12.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a007373288ec13c2fa8d314",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "uiMPkzJ-iJU",
+     "name": "Dictaphone",
+     "official": true,
+     "published_at": "2026-05-08T14:00:58.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "6a0073f70ea5737e6eec1fbb",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "xtZZcolHyy8",
+     "name": "CAILLEACH",
+     "official": true,
+     "published_at": "2026-05-08T14:00:40.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "6a00749447a05f5cc2799f3f",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "mns3X9EUEsY",
+     "name": "Adam Scott stars in a new twisted nightmare from horror mastermind Damian McCarthy.",
+     "official": true,
+     "published_at": "2026-05-06T11:00:25.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "69f4ed5878a93d03f023f4be",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "UmIs2xkgX2g",
+     "name": "IN CINEMAS NOW.",
+     "official": true,
+     "published_at": "2026-05-01T06:51:40.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "69f4f01f7064801b9bc4ab5e",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "ClOWuSGBZ_c",
+     "name": "First reactions from HOKUM London special screening at Prince Charles Cinema",
+     "official": true,
+     "published_at": "2026-04-29T12:43:47.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "69ef89c37c5cca7bf217df33",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "dUZmnpdsTXo",
+     "name": "“Pure nightmare fuel” (Bloody Disgusting).",
+     "official": true,
+     "published_at": "2026-04-24T12:08:04.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "69ef9d39595e85b4262e632c",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "PaJVjCJamVo",
+     "name": "They've been waiting.",
+     "official": true,
+     "published_at": "2026-04-22T14:27:04.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "69ef9d4ef624770bd2a164fb",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "gQ_yXwax50Q",
+     "name": "Open your eyes.",
+     "official": true,
+     "published_at": "2026-04-21T13:31:23.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "69e69244c26e305627521224",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "qU_i5e48KzQ",
+     "name": "Final Trailer",
+     "official": true,
+     "published_at": "2026-04-20T16:01:22.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "69ef9dc0b9d3270bb5d466c2",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "k9nlCox-lsY",
+     "name": "Clip",
+     "official": true,
+     "published_at": "2026-04-20T14:05:13.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "69ef88fd8b2fab3447dc8ba5",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "k0_n2UPFpSQ",
+     "name": "Tale",
+     "official": true,
+     "published_at": "2026-04-20T13:49:30.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "69ef89393094b4133db4f854",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "3QDg8gLXow8",
+     "name": "Hotel",
+     "official": true,
+     "published_at": "2026-04-20T13:49:24.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "69ef8978918b03bfdc17e311",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "_fbbMMj-95M",
+     "name": "Fado",
+     "official": true,
+     "published_at": "2026-04-20T12:35:34.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "69df55adc5851579a22d954c",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "x94TNKhMN94",
+     "name": "UK Trailer",
+     "official": true,
+     "published_at": "2026-04-09T10:13:28.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "6a62f9e904be528a7af3a5db",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "1181172224",
+     "name": "Hokum - Witch",
+     "official": true,
+     "published_at": "2026-04-08T12:14:14.000Z",
+     "site": "Vimeo",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "69b1a921946c2b314aeba5e1",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "jP2nDyQWBOU",
+     "name": "Official Trailer",
+     "official": true,
+     "published_at": "2026-03-11T16:01:12.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "69405bb98d703d6b028c7990",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "OFmbY2o4tt0",
+     "name": "Official Teaser Trailer",
+     "official": true,
+     "published_at": "2025-12-15T17:00:50.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    }
+   ]
+  },
+  "vote_average": 6.838,
+  "vote_count": 961
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/qY7zVZ7liULhfRoXg4c9Xl83LcR.jpg",
+    "genre_ids": [
+     27,
+     53
+    ],
+    "id": 1430077,
+    "original_language": "en",
+    "original_title": "Hokum",
+    "overview": "When novelist Ohm Bauman retreats to a remote inn to scatter his parents' ashes, he is consumed by tales of a witch haunting the honeymoon suite. Disturbing visions and a shocking disappearance forces him to confront dark corners of his past.",
+    "popularity": 26.4686,
+    "poster_path": "/x6rHcQFiYcczLQPrmxXPAicm54E.jpg",
+    "release_date": "2026-04-29",
+    "softcore": false,
+    "title": "Hokum",
+    "video": false,
+    "vote_average": 6.839,
+    "vote_count": 960
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     16,
+     35
+    ],
+    "id": 316577,
+    "original_language": "en",
+    "original_title": "Tally Hokum",
+    "overview": "Hangdog and Foxie Moxie try to outdo each other.",
+    "popularity": 0.6635,
+    "poster_path": null,
+    "release_date": "1965-10-08",
+    "softcore": false,
+    "title": "Tally Hokum",
+    "video": false,
+    "vote_average": 8.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     16
+    ],
+    "id": 1149434,
+    "original_language": "en",
+    "original_title": "Hokum Hotel",
+    "overview": "The piano player at a swank hotel thinks she is good until a \"wolf in sheep's clothing\" comes along and shows her how to really beat out a tune. She swoons.",
+    "popularity": 0.4309,
+    "poster_path": null,
+    "release_date": "1932-11-18",
+    "softcore": false,
+    "title": "Hokum Hotel",
+    "video": false,
+    "vote_average": 10.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     16
+    ],
+    "id": 165423,
+    "original_language": "en",
+    "original_title": "Old Hokum Bucket",
+    "overview": "A slow farm life is turned upside-down thanks to some magic pills....",
+    "popularity": 0.6999,
+    "poster_path": "/etDqLY6Aje2dhwZ2cqyf88SYU5.jpg",
+    "release_date": "1931-03-28",
+    "softcore": false,
+    "title": "Old Hokum Bucket",
+    "video": false,
+    "vote_average": 5.5,
+    "vote_count": 2
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     16,
+     35
+    ],
+    "id": 161859,
+    "original_language": "en",
+    "original_title": "Hook and Ladder Hokum",
+    "overview": "Tom and Jerry are firemen working to rescue the top floor residents of a burning apartment house.",
+    "popularity": 0.8796,
+    "poster_path": "/1tvxCWVB26zMZ730BgiBHE4uTpT.jpg",
+    "release_date": "1933-04-27",
+    "softcore": false,
+    "title": "Hook and Ladder Hokum",
+    "video": false,
+    "vote_average": 6.8,
+    "vote_count": 4
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     18
+    ],
+    "id": 525665,
+    "original_language": "en",
+    "original_title": "The Madness Of Tellaralette Seville",
+    "overview": "Under the command of the mysterious Colonel Bracco, PTSD suffering military drone operators Marcy Braccante and Daniel Denham succumb to the pressures of life 'in the box'.",
+    "popularity": 0.8264,
+    "poster_path": "/m1ofEwcfbD5oXkS5V876Iig3KKS.jpg",
+    "release_date": "2018-05-04",
+    "softcore": false,
+    "title": "The Madness Of Tellaralette Seville",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   }
+  ],
+  "total_pages": 1,
+  "total_results": 6
+ }
+}

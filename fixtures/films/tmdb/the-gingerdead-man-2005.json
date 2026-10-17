@@ -1,0 +1,815 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/wJO9uBYIPQ8lIeb0qeRu3LgSEVb.jpg",
+  "belongs_to_collection": {
+   "backdrop_path": "/bD5F0rSZCosi6zHufGP97ckomJ4.jpg",
+   "id": 138968,
+   "name": "The Gingerdead Man Collection",
+   "poster_path": "/3sjVX06RspD6iRErbpI8g0y1HR1.jpg"
+  },
+  "budget": 0,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 1,
+     "character": "Millard Findlemeyer",
+     "credit_id": "52fe453dc3a368484e04f639",
+     "gender": 2,
+     "id": 2048,
+     "known_for_department": "Acting",
+     "name": "Gary Busey",
+     "order": 0,
+     "original_name": "Gary Busey",
+     "popularity": 3.422,
+     "profile_path": "/8H7Hlv6b7ZoK4jZKeLnc2i4pfPL.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 2,
+     "character": "Sarah Leigh",
+     "credit_id": "52fe453dc3a368484e04f63d",
+     "gender": 1,
+     "id": 63206,
+     "known_for_department": "Acting",
+     "name": "Robin Sydney",
+     "order": 1,
+     "original_name": "Robin Sydney",
+     "popularity": 1.0399,
+     "profile_path": "/5lXOwSftoAa5ojZMDerjONYbv1p.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 3,
+     "character": "Amos Cadbury",
+     "credit_id": "52fe453dc3a368484e04f641",
+     "gender": 2,
+     "id": 97545,
+     "known_for_department": "Acting",
+     "name": "Ryan Locke",
+     "order": 2,
+     "original_name": "Ryan Locke",
+     "popularity": 0.8077,
+     "profile_path": "/6ENJQcTVKSKIsa9YkO5yW9VbKLh.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Jimmy Dean",
+     "credit_id": "52fe453dc3a368484e04f645",
+     "gender": 2,
+     "id": 94304,
+     "known_for_department": "Acting",
+     "name": "Larry Cedar",
+     "order": 3,
+     "original_name": "Larry Cedar",
+     "popularity": 1.2625,
+     "profile_path": "/mvfn1YoL9ACp4n51HZOD0TMs2Ah.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 15,
+     "character": "Brick Fields",
+     "credit_id": "52fe453dc3a368484e04f677",
+     "gender": 2,
+     "id": 77262,
+     "known_for_department": "Acting",
+     "name": "Jonathan Chase",
+     "order": 4,
+     "original_name": "Jonathan Chase",
+     "popularity": 0.9098,
+     "profile_path": "/rSuhULp97mEZPD7nnqQPoioBCpl.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 8,
+     "character": "Lorna Dean",
+     "credit_id": "52fe453dc3a368484e04f65b",
+     "gender": 0,
+     "id": 1082947,
+     "known_for_department": "Acting",
+     "name": "Alexia Aleman",
+     "order": 5,
+     "original_name": "Alexia Aleman",
+     "popularity": 0.4143,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 14,
+     "character": "Betty Leigh",
+     "credit_id": "52fe453dc3a368484e04f673",
+     "gender": 1,
+     "id": 65552,
+     "known_for_department": "Acting",
+     "name": "Margaret Blye",
+     "order": 6,
+     "original_name": "Margaret Blye",
+     "popularity": 1.3035,
+     "profile_path": "/hvgzZtn3AliCNqXgwUJT1aYrTRM.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 9,
+     "character": "James Leigh",
+     "credit_id": "52fe453dc3a368484e04f65f",
+     "gender": 2,
+     "id": 84080,
+     "known_for_department": "Acting",
+     "name": "Newell Alexander",
+     "order": 7,
+     "original_name": "Newell Alexander",
+     "popularity": 0.7422,
+     "profile_path": "/jXz5ahA0uyxPeMcPIlZeS9Rtldb.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 21,
+     "character": "Jeremy Leigh",
+     "credit_id": "582caed7c3a3683e3500101e",
+     "gender": 0,
+     "id": 1276474,
+     "known_for_department": "Production",
+     "name": "James Snyder",
+     "order": 8,
+     "original_name": "James Snyder",
+     "popularity": 0.3338,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 13,
+     "character": "Millard's Mom",
+     "credit_id": "52fe453dc3a368484e04f66f",
+     "gender": 1,
+     "id": 36054,
+     "known_for_department": "Costume & Make-Up",
+     "name": "E. Dee Biddlecome",
+     "order": 9,
+     "original_name": "E. Dee Biddlecome",
+     "popularity": 0.5271,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 19,
+     "character": "Nurse #1",
+     "credit_id": "582caea1c3a3683e3f0012d7",
+     "gender": 1,
+     "id": 98817,
+     "known_for_department": "Acting",
+     "name": "Debra Mayer",
+     "order": 10,
+     "original_name": "Debra Mayer",
+     "popularity": 0.7866,
+     "profile_path": "/jQyvX4UDuP1PBPulxEuMZQssJCm.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 20,
+     "character": "Nurse #2",
+     "credit_id": "582caebbc3a3683e43001195",
+     "gender": 0,
+     "id": 99819,
+     "known_for_department": "Acting",
+     "name": "Kaycee Shank",
+     "order": 11,
+     "original_name": "Kaycee Shank",
+     "popularity": 0.451,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 10,
+     "character": "Bake Sale Customer",
+     "credit_id": "52fe453dc3a368484e04f663",
+     "gender": 2,
+     "id": 1082948,
+     "known_for_department": "Acting",
+     "name": "Harlan Band",
+     "order": 12,
+     "original_name": "Harlan Band",
+     "popularity": 0.3372,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 11,
+     "character": "Bake Sale Customer",
+     "credit_id": "52fe453dc3a368484e04f667",
+     "gender": 1,
+     "id": 1082949,
+     "known_for_department": "Acting",
+     "name": "Jacquelyn Band",
+     "order": 13,
+     "original_name": "Jacquelyn Band",
+     "popularity": 0.3507,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 12,
+     "character": "Bake Sale Customer",
+     "credit_id": "52fe453dc3a368484e04f66b",
+     "gender": 2,
+     "id": 1082950,
+     "known_for_department": "Production",
+     "name": "Zalman Band",
+     "order": 14,
+     "original_name": "Zalman Band",
+     "popularity": 0.5392,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 16,
+     "character": "Diner Patrons",
+     "credit_id": "52fe453dc3a368484e04f67b",
+     "gender": 1,
+     "id": 191566,
+     "known_for_department": "Acting",
+     "name": "Lisa Cohen",
+     "order": 15,
+     "original_name": "Lisa Cohen",
+     "popularity": 0.3765,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 17,
+     "character": "Bake Sale Customer",
+     "credit_id": "52fe453dc3a368484e04f67f",
+     "gender": 1,
+     "id": 978494,
+     "known_for_department": "Directing",
+     "name": "Diane Collins",
+     "order": 16,
+     "original_name": "Diane Collins",
+     "popularity": 0.405,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 18,
+     "character": "Bake Sale Customer",
+     "credit_id": "52fe453dc3a368484e04f683",
+     "gender": 2,
+     "id": 63185,
+     "known_for_department": "Production",
+     "name": "Joe Dain",
+     "order": 17,
+     "original_name": "Joe Dain",
+     "popularity": 0.7983,
+     "profile_path": "/ovEKF14PbX2t0aFlFbLXfWSCU03.jpg"
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "52fe453dc3a368484e04f651",
+     "department": "Writing",
+     "gender": 2,
+     "id": 81460,
+     "job": "Story",
+     "known_for_department": "Acting",
+     "name": "William Butler",
+     "original_name": "William Butler",
+     "popularity": 0.8993,
+     "profile_path": "/cySMimnW5CaC1IQDBdVXqtNMOEU.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe453dc3a368484e04f64b",
+     "department": "Directing",
+     "gender": 2,
+     "id": 19707,
+     "job": "Director",
+     "known_for_department": "Production",
+     "name": "Charles Band",
+     "original_name": "Charles Band",
+     "popularity": 1.1187,
+     "profile_path": "/1pqtGXcgBZEc4rxK6FcjLZsEBzp.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "650cf67044ea54011d022647",
+     "department": "Directing",
+     "gender": 0,
+     "id": 1414142,
+     "job": "Second Unit Director",
+     "known_for_department": "Production",
+     "name": "Jethro Rothe-Kushel",
+     "original_name": "Jethro Rothe-Kushel",
+     "popularity": 0.5269,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "650cf66b3d745401387a5d4b",
+     "department": "Directing",
+     "gender": 0,
+     "id": 2473783,
+     "job": "First Assistant Director",
+     "known_for_department": "Production",
+     "name": "Aaron Steele-Nicholson",
+     "original_name": "Aaron Steele-Nicholson",
+     "popularity": 0.5386,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "650cf699f9253200c94a0907",
+     "department": "Lighting",
+     "gender": 2,
+     "id": 1289958,
+     "job": "Gaffer",
+     "known_for_department": "Lighting",
+     "name": "Dimitris Bogiantzis",
+     "original_name": "Dimitris Bogiantzis",
+     "popularity": 0.4367,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "650cf65793db92011bb7feb1",
+     "department": "Camera",
+     "gender": 0,
+     "id": 548498,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Keith J. Duggan",
+     "original_name": "Keith J. Duggan",
+     "popularity": 0.4334,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "650cf6af4da3d4010bb16404",
+     "department": "Directing",
+     "gender": 1,
+     "id": 978494,
+     "job": "Script Supervisor",
+     "known_for_department": "Directing",
+     "name": "Diane Collins",
+     "original_name": "Diane Collins",
+     "popularity": 0.405,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "650cf695f92532012cc959ca",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1059036,
+     "job": "Second Unit Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Brett Juskalian",
+     "original_name": "Brett Juskalian",
+     "popularity": 0.5396,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "650cf6352c6b7b00c4fe384a",
+     "department": "Production",
+     "gender": 2,
+     "id": 63198,
+     "job": "Consulting Producer",
+     "known_for_department": "Editing",
+     "name": "Danny Draven",
+     "original_name": "Danny Draven",
+     "popularity": 0.6976,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "650d071cf92532012cc9654d",
+     "department": "Writing",
+     "gender": 0,
+     "id": 100483,
+     "job": "Writer",
+     "known_for_department": "Writing",
+     "name": "Domonic Muir",
+     "original_name": "Domonic Muir",
+     "popularity": 0.9675,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61a5a46f85c0a20044ea5a93",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2660685,
+     "job": "Key Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Cyndi Welch",
+     "original_name": "Cyndi Welch",
+     "popularity": 0.5723,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61a5a457028420006646f179",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2683832,
+     "job": "Key Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Crystal Blair",
+     "original_name": "Crystal Blair",
+     "popularity": 0.4188,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd0710c3a3681b5800e064",
+     "department": "Production",
+     "gender": 0,
+     "id": 1414142,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Jethro Rothe-Kushel",
+     "original_name": "Jethro Rothe-Kushel",
+     "popularity": 0.5269,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd0765925141350b00f59f",
+     "department": "Editing",
+     "gender": 2,
+     "id": 63198,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Danny Draven",
+     "original_name": "Danny Draven",
+     "popularity": 0.6976,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd0784925141350600f125",
+     "department": "Production",
+     "gender": 2,
+     "id": 33144,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Robert MacDonald",
+     "original_name": "Robert MacDonald",
+     "popularity": 0.5417,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd06a5925141355100eb4d",
+     "department": "Production",
+     "gender": 2,
+     "id": 19707,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Charles Band",
+     "original_name": "Charles Band",
+     "popularity": 1.1187,
+     "profile_path": "/1pqtGXcgBZEc4rxK6FcjLZsEBzp.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd075dc3a3681b5800e0bc",
+     "department": "Editing",
+     "gender": 0,
+     "id": 1409705,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Elijah Dylan Costa",
+     "original_name": "Elijah Dylan Costa",
+     "popularity": 0.6436,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd0805925141352500e802",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 36054,
+     "job": "Costume Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "E. Dee Biddlecome",
+     "original_name": "E. Dee Biddlecome",
+     "popularity": 0.5271,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd0702c3a3681bae00df84",
+     "department": "Production",
+     "gender": 1,
+     "id": 63187,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Dana K. Harrloe",
+     "original_name": "Dana K. Harrloe",
+     "popularity": 0.4557,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd0722925141356100f614",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1888919,
+     "job": "Music",
+     "known_for_department": "Sound",
+     "name": "Roger Ballenger",
+     "original_name": "Roger Ballenger",
+     "popularity": 0.3908,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd06b6c3a3681bae00df17",
+     "department": "Production",
+     "gender": 2,
+     "id": 63185,
+     "job": "Line Producer",
+     "known_for_department": "Production",
+     "name": "Joe Dain",
+     "original_name": "Joe Dain",
+     "popularity": 0.7983,
+     "profile_path": "/ovEKF14PbX2t0aFlFbLXfWSCU03.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd0796925141355100ec92",
+     "department": "Art",
+     "gender": 0,
+     "id": 1262168,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Elvis Strange",
+     "original_name": "Elvis Strange",
+     "popularity": 0.3637,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd06e3c3a3681bc000ecd1",
+     "department": "Production",
+     "gender": 2,
+     "id": 970836,
+     "job": "Associate Producer",
+     "known_for_department": "Production",
+     "name": "Jeremy Gordon",
+     "original_name": "Jeremy Gordon",
+     "popularity": 0.7139,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd0777c3a3681b6e00e2c2",
+     "department": "Production",
+     "gender": 2,
+     "id": 31631,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Perry Bullington",
+     "original_name": "Perry Bullington",
+     "popularity": 0.81,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd0820c3a3681b5800e1c6",
+     "department": "Crew",
+     "gender": 2,
+     "id": 64722,
+     "job": "Special Effects",
+     "known_for_department": "Crew",
+     "name": "John Carl Buechler",
+     "original_name": "John Carl Buechler",
+     "popularity": 0.7248,
+     "profile_path": "/q0elk8xsBQ77AZIMtb7ARf9ehcj.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "59bd07eec3a3681bc000ee27",
+     "department": "Art",
+     "gender": 0,
+     "id": 1888920,
+     "job": "Art Direction",
+     "known_for_department": "Art",
+     "name": "Brian Ferguson",
+     "original_name": "Brian Ferguson",
+     "popularity": 0.4605,
+     "profile_path": null
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   },
+   {
+    "id": 35,
+    "name": "Comedy"
+   }
+  ],
+  "homepage": "",
+  "id": 27296,
+  "imdb_id": "tt0364376",
+  "origin_country": [
+   "US"
+  ],
+  "original_language": "en",
+  "original_title": "The Gingerdead Man",
+  "overview": "An evil yet adorable Gingerbread man comes to life with the soul of a convicted killer, and this real life cookie monster wreaks havoc on the girl who sent the killer to the electric chair.",
+  "popularity": 1.653,
+  "poster_path": "/tZgIllFk4ncvhuzNipLkStjPjqk.jpg",
+  "production_companies": [
+   {
+    "id": 95020,
+    "logo_path": null,
+    "name": "Talos Entertainment",
+    "origin_country": ""
+   },
+   {
+    "id": 4656,
+    "logo_path": null,
+    "name": "Shoot Productions",
+    "origin_country": ""
+   },
+   {
+    "id": 15352,
+    "logo_path": "/sk4KMGNHLCPe03XiQaDmBPnczjy.png",
+    "name": "Full Moon Features",
+    "origin_country": "US"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   }
+  ],
+  "release_date": "2005-11-08",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2005-11-08T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CZ",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-12-14T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "NR",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "2005-11-08T00:00:00.000Z",
+       "type": 2
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 0,
+  "runtime": 70,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   }
+  ],
+  "status": "Released",
+  "tagline": "Evil never tasted so good...",
+  "title": "The Gingerdead Man",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "63d406c8594c94007ca6f2b5",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "mLFVY41RmtA",
+     "name": "The Gingerdead Man Trailer",
+     "official": false,
+     "published_at": "2013-04-22T23:25:17.000Z",
+     "site": "YouTube",
+     "size": 360,
+     "type": "Trailer"
+    }
+   ]
+  },
+  "vote_average": 3.8,
+  "vote_count": 114
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/wJO9uBYIPQ8lIeb0qeRu3LgSEVb.jpg",
+    "genre_ids": [
+     27,
+     35
+    ],
+    "id": 27296,
+    "original_language": "en",
+    "original_title": "The Gingerdead Man",
+    "overview": "An evil yet adorable Gingerbread man comes to life with the soul of a convicted killer, and this real life cookie monster wreaks havoc on the girl who sent the killer to the electric chair.",
+    "popularity": 1.653,
+    "poster_path": "/tZgIllFk4ncvhuzNipLkStjPjqk.jpg",
+    "release_date": "2005-11-08",
+    "softcore": false,
+    "title": "The Gingerdead Man",
+    "video": false,
+    "vote_average": 3.8,
+    "vote_count": 114
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1621431,
+    "original_language": "en",
+    "original_title": "Making of: The Gingerdead Man",
+    "overview": "Interviews with the cast and crew of Gingerdead Man, featuring unseen footage",
+    "popularity": 1.1687,
+    "poster_path": "/wl0zHATi5mBNwAUBOpqjbydYDkG.jpg",
+    "release_date": "2005-11-08",
+    "softcore": false,
+    "title": "Making of: The Gingerdead Man",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/RWN6gQKphxDgzQKSqw4qda7tb9.jpg",
+    "genre_ids": [
+     27,
+     35
+    ],
+    "id": 16846,
+    "original_language": "en",
+    "original_title": "Gingerdead Man 2: The Passion of the Crust",
+    "overview": "The horrifying yet delicious and chewy Gingerdead Man causes murder and mayhem on the set of a horrible low budget movie set. It will take the determination of the studio's young new owner to save both his company and well as the lives of his young new friends. Including a terminally ill young boy whose final wish it was to meet the studios stars - The Tiny Terrors.",
+    "popularity": 2.4502,
+    "poster_path": "/1hd6zLMDvs5hLTTcaTIYanNmauy.jpg",
+    "release_date": "2008-07-04",
+    "softcore": false,
+    "title": "Gingerdead Man 2: The Passion of the Crust",
+    "video": false,
+    "vote_average": 4.5,
+    "vote_count": 59
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1677923,
+    "original_language": "en",
+    "original_title": "Videozone: Behind the Scenes of Gingerdead Man vs Evil Bong",
+    "overview": "Interviews with the cast and crew of the film",
+    "popularity": 0.7915,
+    "poster_path": "/mBOX5DKKbVvVljIxcFGEVQxYaG7.jpg",
+    "release_date": "2013-11-12",
+    "softcore": false,
+    "title": "Videozone: Behind the Scenes of Gingerdead Man vs Evil Bong",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   }
+  ],
+  "total_pages": 1,
+  "total_results": 4
+ }
+}

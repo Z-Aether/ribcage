@@ -1,0 +1,1717 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/3cVrg7tzSf5AgEecYWDOSAzXAeX.jpg",
+  "belongs_to_collection": null,
+  "budget": 1400000,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Lost Man",
+     "credit_id": "67e6a47c33a74341e310f508",
+     "gender": 2,
+     "id": 33515,
+     "known_for_department": "Acting",
+     "name": "Kazunari Ninomiya",
+     "order": 0,
+     "original_name": "二宮和也",
+     "popularity": 2.5008,
+     "profile_path": "/4mxogZeEPZiVrnJ4L8ICvOJONfs.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 2,
+     "character": "Walking Man",
+     "credit_id": "6772a5ca4111599e3812828c",
+     "gender": 2,
+     "id": 3576845,
+     "known_for_department": "Acting",
+     "name": "Yamato Kochi",
+     "order": 1,
+     "original_name": "河内大和",
+     "popularity": 1.7836,
+     "profile_path": "/8CUS41LVMlBH5Am2uZC3F44yyDw.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 47,
+     "character": "The Boy",
+     "credit_id": "681e7bfef7481a5a778c7192",
+     "gender": 2,
+     "id": 5428351,
+     "known_for_department": "Acting",
+     "name": "Naru Asanuma",
+     "order": 2,
+     "original_name": "浅沼成",
+     "popularity": 1.114,
+     "profile_path": "/orV4an2sD7PgLpHCulgCBDgs1bl.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 46,
+     "character": "High School Student",
+     "credit_id": "681b8cfc3375076dfe9f0638",
+     "gender": 1,
+     "id": 3661042,
+     "known_for_department": "Acting",
+     "name": "Kotone Hanase",
+     "order": 3,
+     "original_name": "花瀬琴音",
+     "popularity": 1.5543,
+     "profile_path": "/xSimDM5cdwBtVAa7FJ36gFyMC0p.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 45,
+     "character": "Lost Man's Partner",
+     "credit_id": "6814216f1106622582907987",
+     "gender": 1,
+     "id": 1287268,
+     "known_for_department": "Acting",
+     "name": "Nana Komatsu",
+     "order": 4,
+     "original_name": "小松菜奈",
+     "popularity": 3.0429,
+     "profile_path": "/74WvpjdZkE5kYSEHwG9E4f0gVKk.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 48,
+     "character": "Screaming Man on Train",
+     "credit_id": "6988be907dbf83f1178e6e14",
+     "gender": 2,
+     "id": 1393397,
+     "known_for_department": "Acting",
+     "name": "Hirota Otsuka",
+     "order": 5,
+     "original_name": "大塚ヒロタ",
+     "popularity": 1.0346,
+     "profile_path": "/fWxZgSLwAl3JAbLHoTyZDcGTI1m.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 49,
+     "character": "Mother on Train",
+     "credit_id": "6988bf9124f6b0b7e78fcee1",
+     "gender": 1,
+     "id": 5995070,
+     "known_for_department": "Acting",
+     "name": "Tara Nakashima",
+     "order": 6,
+     "original_name": "中島多羅",
+     "popularity": 0.853,
+     "profile_path": "/6GWRQWO1NcHFoRVlp5L3ZmL69Ed.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 50,
+     "character": "Child",
+     "credit_id": "6988c0df92420a7b73f80fdc",
+     "gender": 0,
+     "id": 5995080,
+     "known_for_department": "Acting",
+     "name": "Reo Soda",
+     "order": 7,
+     "original_name": "曽田怜央",
+     "popularity": 0.8189,
+     "profile_path": "/v63pfKMiVrMidWfqhEU213pZQSS.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 51,
+     "character": "Man on Train",
+     "credit_id": "6988c17bc96edd317d8e6f4b",
+     "gender": 2,
+     "id": 5995086,
+     "known_for_department": "Acting",
+     "name": "Mikio Ueda",
+     "order": 8,
+     "original_name": "上田実規朗",
+     "popularity": 0.9665,
+     "profile_path": "/wsAhgcda1yuPfAAlgGNt5L4FlYd.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 60,
+     "character": "Passerby",
+     "credit_id": "6a63a6afbc8badf72ec99f59",
+     "gender": 2,
+     "id": 1732608,
+     "known_for_department": "Acting",
+     "name": "HIKAKIN",
+     "order": 9,
+     "original_name": "ヒカキン",
+     "popularity": 0.596,
+     "profile_path": "/wuBzUSQJn8YApxQ35MEswALqWyi.jpg"
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "676e6a390c4402b6319295e7",
+     "department": "Writing",
+     "gender": 2,
+     "id": 5143193,
+     "job": "Original Concept",
+     "known_for_department": "Writing",
+     "name": "Kotake Create",
+     "original_name": "Kotake Create",
+     "popularity": 0.2231,
+     "profile_path": "/aQgny8oOvLFdW0rDNeUQX8fyNw5.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67b74c24e484fc21541a26b8",
+     "department": "Directing",
+     "gender": 2,
+     "id": 237364,
+     "job": "Director",
+     "known_for_department": "Writing",
+     "name": "Genki Kawamura",
+     "original_name": "川村元気",
+     "popularity": 1.6149,
+     "profile_path": "/lYiWJdjiib6b6uhiPfX9eU0bOGX.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f0f1a04f530b5c993e7b",
+     "department": "Lighting",
+     "gender": 2,
+     "id": 2161788,
+     "job": "Lighting Technician",
+     "known_for_department": "Lighting",
+     "name": "Tatsuya Hirayama",
+     "original_name": "平山達弥",
+     "popularity": 0.5092,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f1067f70ac1a21d9a592",
+     "department": "Production",
+     "gender": 1,
+     "id": 1342698,
+     "job": "Casting Director",
+     "known_for_department": "Production",
+     "name": "Toshie Tabata",
+     "original_name": "田端利江",
+     "popularity": 0.4638,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f129d3ab7d7a8badca36",
+     "department": "Production",
+     "gender": 1,
+     "id": 2211182,
+     "job": "Casting Director",
+     "known_for_department": "Production",
+     "name": "Yoko Yamashita",
+     "original_name": "山下葉子",
+     "popularity": 0.5796,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f14ed3ab7d7a8badca3a",
+     "department": "Camera",
+     "gender": 2,
+     "id": 2094078,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Keisuke Imamura",
+     "original_name": "今村圭佑",
+     "popularity": 0.7458,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f1ad7b43bdce20aeba00",
+     "department": "Editing",
+     "gender": 2,
+     "id": 3114080,
+     "job": "Colorist",
+     "known_for_department": "Editing",
+     "name": "Masahiro Ishiyama",
+     "original_name": "石山将弘",
+     "popularity": 0.5212,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f1bcde5e4dec62ad9e11",
+     "department": "Editing",
+     "gender": 0,
+     "id": 5210986,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Sakura Seya",
+     "original_name": "瀬谷さくら",
+     "popularity": 0.5388,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f1d07f70ac1a21d9a632",
+     "department": "Costume & Make-Up",
+     "gender": 2,
+     "id": 1681821,
+     "job": "Makeup & Hair",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Katsuhiko Yuhmi",
+     "original_name": "勇見勝彦",
+     "popularity": 0.4191,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f1e77f70ac1a21d9a653",
+     "department": "Production",
+     "gender": 2,
+     "id": 1029281,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Minami Ichikawa",
+     "original_name": "市川南",
+     "popularity": 1.1178,
+     "profile_path": "/hbLwY27J83U0FFTPqYvfFXpBRco.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f1f6de5e4dec62ad9e18",
+     "department": "Production",
+     "gender": 2,
+     "id": 1537404,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Taichi Ueda",
+     "original_name": "上田太地",
+     "popularity": 0.5025,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f203a04f530b5c993ee7",
+     "department": "Production",
+     "gender": 2,
+     "id": 1749022,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Yoshihiro Furusawa",
+     "original_name": "古澤佳寛",
+     "popularity": 0.7796,
+     "profile_path": "/8cVWxK1hw3YEqzjpE8cxI1gR8W4.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f241a04f530b5c993f3d",
+     "department": "Production",
+     "gender": 0,
+     "id": 5366583,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Yuki Abe",
+     "original_name": "阿部祐樹",
+     "popularity": 0.3398,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f2511bc639566ada7e78",
+     "department": "Production",
+     "gender": 0,
+     "id": 5366584,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Yusaku Tanaka",
+     "original_name": "田中優策",
+     "popularity": 0.3904,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f2617b43bdce20aeba11",
+     "department": "Production",
+     "gender": 2,
+     "id": 1780564,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Akihito Watanabe",
+     "original_name": "渡辺章仁",
+     "popularity": 0.4743,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f2787f70ac1a21d9a6ea",
+     "department": "Production",
+     "gender": 2,
+     "id": 5366586,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Ichiro Shinohara",
+     "original_name": "篠原一朗",
+     "popularity": 0.2786,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f2b3d3ab7d7a8badcb57",
+     "department": "Production",
+     "gender": 0,
+     "id": 5366589,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Saito Takashi",
+     "original_name": "齊藤貴",
+     "popularity": 0.3556,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f2c77b43bdce20aeba18",
+     "department": "Production",
+     "gender": 2,
+     "id": 1057924,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Hisashi Usui",
+     "original_name": "臼井央",
+     "popularity": 0.539,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f2d8d4c444a1cc99fce4",
+     "department": "Production",
+     "gender": 1,
+     "id": 2419817,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Wakana Okamura",
+     "original_name": "岡村和佳菜",
+     "popularity": 0.5732,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f2fbd3ab7d7a8badcb91",
+     "department": "Production",
+     "gender": 0,
+     "id": 5366592,
+     "job": "Other",
+     "known_for_department": "Production",
+     "name": "Yuto Sakata",
+     "original_name": "坂田悠人",
+     "popularity": 0.2591,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f31e1bc639566ada7eaf",
+     "department": "Production",
+     "gender": 2,
+     "id": 2131363,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Kenji Yamada",
+     "original_name": "山田兼司",
+     "popularity": 0.5674,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f3317f70ac1a21d9a734",
+     "department": "Production",
+     "gender": 0,
+     "id": 5366593,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Tetsuto Yamamoto",
+     "original_name": "山元哲人",
+     "popularity": 0.2563,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f34fa04f530b5c993f74",
+     "department": "Production",
+     "gender": 2,
+     "id": 1152307,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Taichi Ito",
+     "original_name": "伊藤太一",
+     "popularity": 0.5101,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f369de5e4dec62ad9e5d",
+     "department": "Production",
+     "gender": 0,
+     "id": 4839732,
+     "job": "Line Producer",
+     "known_for_department": "Production",
+     "name": "Yoshihito Yokoi",
+     "original_name": "横井義人",
+     "popularity": 0.4417,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f3c6d3ab7d7a8badcbbd",
+     "department": "Production",
+     "gender": 0,
+     "id": 5366594,
+     "job": "Production Manager",
+     "known_for_department": "Production",
+     "name": "Kenta Tsutsumi",
+     "original_name": "堤健太",
+     "popularity": 0.3289,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f40cd4c444a1cc99fd08",
+     "department": "Sound",
+     "gender": 2,
+     "id": 2026796,
+     "job": "Sound Effects",
+     "known_for_department": "Sound",
+     "name": "Masaya Kitada",
+     "original_name": "北田雅也",
+     "popularity": 0.5185,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f420d4c444a1cc99fd19",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 5366595,
+     "job": "Visual Effects",
+     "known_for_department": "Visual Effects",
+     "name": "Seiji Masamoto",
+     "original_name": "政本星爾",
+     "popularity": 0.2971,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f4907f70ac1a21d9a784",
+     "department": "Directing",
+     "gender": 2,
+     "id": 2021333,
+     "job": "Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Kentaro Hirase",
+     "original_name": "平瀬謙太朗",
+     "popularity": 1.02,
+     "profile_path": "/4S5l9f0rkDN6Ycj5ZpY7S1HOhS.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f4bc7b43bdce20aeba84",
+     "department": "Directing",
+     "gender": 0,
+     "id": 4718751,
+     "job": "Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Jun Sekine",
+     "original_name": "関根淳",
+     "popularity": 0.3069,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67f9f6537f70ac1a21d9a83a",
+     "department": "Production",
+     "gender": 2,
+     "id": 237364,
+     "job": "Producer",
+     "known_for_department": "Writing",
+     "name": "Genki Kawamura",
+     "original_name": "川村元気",
+     "popularity": 1.6149,
+     "profile_path": "/lYiWJdjiib6b6uhiPfX9eU0bOGX.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "68114fca9a9f8be2730f7a15",
+     "department": "Crew",
+     "gender": 2,
+     "id": 5143193,
+     "job": "Video Game",
+     "known_for_department": "Writing",
+     "name": "Kotake Create",
+     "original_name": "Kotake Create",
+     "popularity": 0.2231,
+     "profile_path": "/aQgny8oOvLFdW0rDNeUQX8fyNw5.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "68114fd82ce920d0bd80dba2",
+     "department": "Writing",
+     "gender": 2,
+     "id": 237364,
+     "job": "Screenplay",
+     "known_for_department": "Writing",
+     "name": "Genki Kawamura",
+     "original_name": "川村元気",
+     "popularity": 1.6149,
+     "profile_path": "/lYiWJdjiib6b6uhiPfX9eU0bOGX.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "68114fe32ce920d0bd80dba5",
+     "department": "Writing",
+     "gender": 2,
+     "id": 2021333,
+     "job": "Screenplay",
+     "known_for_department": "Directing",
+     "name": "Kentaro Hirase",
+     "original_name": "平瀬謙太朗",
+     "popularity": 1.02,
+     "profile_path": "/4S5l9f0rkDN6Ycj5ZpY7S1HOhS.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6988c393ea012e3fc52ceb06",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2040261,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Shouhei Amimori",
+     "original_name": "網守将平",
+     "popularity": 0.4245,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6988c3a0ed05d1113b3a9fd8",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1653834,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Yasutaka Nakata",
+     "original_name": "中田ヤスタカ",
+     "popularity": 0.3801,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6993aeb3889bd86477850bfc",
+     "department": "Costume & Make-Up",
+     "gender": 2,
+     "id": 111232,
+     "job": "Costume Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Daisuke Iga",
+     "original_name": "伊賀大介",
+     "popularity": 0.5917,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69a443d3aac6e74d7de2b814",
+     "department": "Art",
+     "gender": 2,
+     "id": 111231,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Ryo Sugimoto",
+     "original_name": "杉本亮",
+     "popularity": 0.5984,
+     "profile_path": "/tsxwLAvWGQSPUrhyYkkfBwHJux5.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "69a443da8202541057de8f60",
+     "department": "Art",
+     "gender": 2,
+     "id": 1776966,
+     "job": "Set Decoration",
+     "known_for_department": "Art",
+     "name": "Yutaka Mogi",
+     "original_name": "茂木豊",
+     "popularity": 0.5034,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69b6efb442d2dfa5b45c9e59",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1776946,
+     "job": "Sound Recordist",
+     "known_for_department": "Sound",
+     "name": "Masato Yano",
+     "original_name": "矢野正人",
+     "popularity": 0.8071,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69f789f250a2aefc9b60afe6",
+     "department": "Writing",
+     "gender": 2,
+     "id": 5143193,
+     "job": "Original Story",
+     "known_for_department": "Writing",
+     "name": "Kotake Create",
+     "original_name": "Kotake Create",
+     "popularity": 0.2231,
+     "profile_path": "/aQgny8oOvLFdW0rDNeUQX8fyNw5.jpg"
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 9648,
+    "name": "Mystery"
+   },
+   {
+    "id": 53,
+    "name": "Thriller"
+   },
+   {
+    "id": 27,
+    "name": "Horror"
+   }
+  ],
+  "homepage": "https://www.neonrated.com/film/exit-8",
+  "id": 1408208,
+  "imdb_id": "tt35222590",
+  "origin_country": [
+   "JP"
+  ],
+  "original_language": "ja",
+  "original_title": "８番出口",
+  "overview": "A man trapped in an endless sterile subway passageway sets out to find Exit 8. The rules of his quest are simple: do not overlook anything out of the ordinary. If you discover an anomaly, turn back immediately. If you don’t, carry on. Then leave from Exit 8. But even a single oversight will send him back to the beginning. Will he ever reach his goal and escape this infinite corridor?",
+  "popularity": 28.6796,
+  "poster_path": "/nQXYTvm6AY4WmtcPskroqC7Skh.jpg",
+  "production_companies": [
+   {
+    "id": 882,
+    "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+    "name": "TOHO",
+    "origin_country": "JP"
+   },
+   {
+    "id": 39804,
+    "logo_path": "/bT7wDgMpeT7EAewYfWIHs3gWNYE.png",
+    "name": "AOI Pro.",
+    "origin_country": "JP"
+   },
+   {
+    "id": 128616,
+    "logo_path": "/cjmwexOzetWZa8QKy447NMrM6MG.png",
+    "name": "Story",
+    "origin_country": "JP"
+   },
+   {
+    "id": 11849,
+    "logo_path": "/ssKAToULWqC6LJXOJWtd0O3VdV0.png",
+    "name": "Lawson",
+    "origin_country": "JP"
+   },
+   {
+    "id": 270390,
+    "logo_path": null,
+    "name": "Suirinsha",
+    "origin_country": "JP"
+   },
+   {
+    "id": 145105,
+    "logo_path": "/oFUDvCLCRmAXlGqjmwO8CN33ygl.png",
+    "name": "Tohan",
+    "origin_country": "JP"
+   },
+   {
+    "id": 270391,
+    "logo_path": null,
+    "name": "Office Nino",
+    "origin_country": "JP"
+   },
+   {
+    "id": 270392,
+    "logo_path": null,
+    "name": "Metro Ad Agency",
+    "origin_country": "JP"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "JP",
+    "name": "Japan"
+   }
+  ],
+  "release_date": "2025-08-03",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AR",
+     "release_dates": [
+      {
+       "certification": "+13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-14T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AT",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-08-13T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Melbourne International Film Festival",
+       "release_date": "2025-08-16T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "SXSW Sydney",
+       "release_date": "2025-10-18T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Brisbane International Film Festival ",
+       "release_date": "2025-11-28T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Melbourne Writers Festival",
+       "release_date": "2026-05-08T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "M",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-06-18T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Toronto International Film Festival",
+       "release_date": "2025-09-04T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CH",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Brugggore Filmfestival",
+       "release_date": "2026-04-21T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CL",
+     "release_dates": [
+      {
+       "certification": "TE+7",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "China Golden Rooster&Hundred Flowers Film Festival",
+       "release_date": "2025-11-11T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CZ",
+     "release_dates": [
+      {
+       "certification": "15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [
+        "Violence",
+        "Threat"
+       ],
+       "iso_639_1": "",
+       "note": "Fantasy Filmfest",
+       "release_date": "2025-09-07T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-08-13T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "EE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-08-29T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-17T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Cannes Film Festival",
+       "release_date": "2025-05-19T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "TP",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-09-03T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "fr",
+       "note": "Canal+",
+       "release_date": "2026-10-10T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "fr",
+       "note": "Canal+ Cinéma(s)",
+       "release_date": "2026-10-10T00:00:00.000Z",
+       "type": 6
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Manchester Film Festival",
+       "release_date": "2026-03-24T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "BFI London Film Festival",
+       "release_date": "2025-10-08T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-24T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-24T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray",
+       "release_date": "2026-06-29T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GR",
+     "release_dates": [
+      {
+       "certification": "K12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-11-13T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GT",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-08-13T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HK",
+     "release_dates": [
+      {
+       "certification": "IIA",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-08-03T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "IIA",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-09-04T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HU",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-03-05T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ID",
+     "release_dates": [
+      {
+       "certification": "13+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-09-10T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IE",
+     "release_dates": [
+      {
+       "certification": "12A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IT",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-23T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "10+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-11-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "JP",
+     "release_dates": [
+      {
+       "certification": "G",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-08-29T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "G",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray / DVD",
+       "release_date": "2026-02-04T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-08-28T00:00:00.000Z",
+       "type": 6
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "ALL",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Busan International Film Festival",
+       "release_date": "2025-09-18T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LT",
+     "release_dates": [
+      {
+       "certification": "N-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-31T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "ŽMONĖS Cinema",
+       "release_date": "2026-02-05T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MO",
+     "release_dates": [
+      {
+       "certification": "B",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-09-04T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "B",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MY",
+     "release_dates": [
+      {
+       "certification": "P13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-03-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "International Film Festival Rotterdam",
+       "release_date": "2026-01-30T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "12",
+       "descriptors": [
+        "Fear",
+        "Coarse Language"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NO",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-24T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NZ",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "New Zealand International Film Festival",
+       "release_date": "2025-08-13T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "M",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray",
+       "release_date": "2026-06-16T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-05-28T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PH",
+     "release_dates": [
+      {
+       "certification": "R-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-09-17T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-09-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PT",
+     "release_dates": [
+      {
+       "certification": "M/12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-10T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "QA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RO",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-02-06T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RU",
+     "release_dates": [
+      {
+       "certification": "16+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-08-28T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SE",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-01-02T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SK",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-16T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TH",
+     "release_dates": [
+      {
+       "certification": "13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-12-04T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TR",
+     "release_dates": [
+      {
+       "certification": "13+",
+       "descriptors": [
+        "Violence / Horror",
+        "Negative examples"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-08-29T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "6+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-09-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Beyond Fest",
+       "release_date": "2025-09-27T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "PG-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-04-10T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "PG",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "AMC+ / Shudder",
+       "release_date": "2026-07-17T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "PG-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Letterboxd Video Store",
+       "release_date": "2026-10-15T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "PG-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray",
+       "release_date": "2026-08-04T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "VN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-09-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 43892680,
+  "runtime": 95,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "Japanese",
+    "iso_639_1": "ja",
+    "name": "日本語"
+   },
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   }
+  ],
+  "status": "Released",
+  "tagline": "Turn back.",
+  "title": "Exit 8",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "6a26f9b0fae83b1c6119333a",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "IJ6vRz4RzCE",
+     "name": "Director Genki Kawamura Breaks Down THAT Scene & More",
+     "official": true,
+     "published_at": "2026-06-08T17:00:14.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "69d69e9235fb4673a931460c",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "zzEDWwhtAHc",
+     "name": "Final Trailer [Subtitled]",
+     "official": true,
+     "published_at": "2026-04-08T16:01:31.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "69c5e48d2c9f7cb7ba89bd2b",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "iq3h6PJ7tB8",
+     "name": "Turn Around [Subtitled]",
+     "official": true,
+     "published_at": "2026-03-27T00:19:28.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6984c25eb692c187d76e77fb",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "DlRQ1oatOt8",
+     "name": "Official US Trailer [Subtitled]",
+     "official": true,
+     "published_at": "2026-02-05T15:58:36.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "68758a2d96d3dab73b7cef8a",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "emZZexEJO8c",
+     "name": "Official Trailer [Subtitled]",
+     "official": true,
+     "published_at": "2025-07-10T02:56:39.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    }
+   ]
+  },
+  "vote_average": 7.003,
+  "vote_count": 864
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/3cVrg7tzSf5AgEecYWDOSAzXAeX.jpg",
+    "genre_ids": [
+     9648,
+     53,
+     27
+    ],
+    "id": 1408208,
+    "original_language": "ja",
+    "original_title": "８番出口",
+    "overview": "A man trapped in an endless sterile subway passageway sets out to find Exit 8. The rules of his quest are simple: do not overlook anything out of the ordinary. If you discover an anomaly, turn back immediately. If you don’t, carry on. Then leave from Exit 8. But even a single oversight will send him back to the beginning. Will he ever reach his goal and escape this infinite corridor?",
+    "popularity": 28.6796,
+    "poster_path": "/nQXYTvm6AY4WmtcPskroqC7Skh.jpg",
+    "release_date": "2025-08-03",
+    "softcore": false,
+    "title": "Exit 8",
+    "video": false,
+    "vote_average": 7.003,
+    "vote_count": 864
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1435761,
+    "original_language": "en",
+    "original_title": "Exit 8A",
+    "overview": "Nick tracks down his father, looking for answers to questions about his life.",
+    "popularity": 0.9493,
+    "poster_path": "/8VXcFgJQRjkhOi6bV3FOdxeMFJ9.jpg",
+    "release_date": "2004-01-15",
+    "softcore": false,
+    "title": "Exit 8A",
+    "video": false,
+    "vote_average": 8.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/4rt35cuyJ3CwpZgeIdXm5fmCinx.jpg",
+    "genre_ids": [
+     18,
+     80
+    ],
+    "id": 8052,
+    "original_language": "en",
+    "original_title": "Hard Eight",
+    "overview": "A stranger mentors a young Reno gambler who weds a hooker and befriends a vulgar casino regular.",
+    "popularity": 5.5807,
+    "poster_path": "/1l5UaoP25Ak8PWCKIULQz70yF03.jpg",
+    "release_date": "1997-02-28",
+    "softcore": false,
+    "title": "Hard Eight",
+    "video": false,
+    "vote_average": 6.8,
+    "vote_count": 1031
+   }
+  ],
+  "total_pages": 1,
+  "total_results": 3
+ }
+}

@@ -1,0 +1,1703 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/mPtPJzBkwksUoMEKpkZqxBrlKpZ.jpg",
+  "belongs_to_collection": null,
+  "budget": 70000,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 48,
+     "character": "Indy",
+     "credit_id": "6ab99cc6bd441d2a96ddb7e1",
+     "gender": 2,
+     "id": 6509814,
+     "known_for_department": "Acting",
+     "name": "Indy",
+     "order": 0,
+     "original_name": "Indy",
+     "popularity": 0.4182,
+     "profile_path": "/cDI4l14uMpgtoZpHcb8wXN53Xp7.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 3,
+     "character": "Todd",
+     "credit_id": "679647fa3f7fcf67d08f2261",
+     "gender": 2,
+     "id": 3739081,
+     "known_for_department": "Acting",
+     "name": "Shane Jensen",
+     "order": 1,
+     "original_name": "Shane Jensen",
+     "popularity": 0.6401,
+     "profile_path": "/8BNJL3MwvYEUTg187SmhQACVq3Z.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 5,
+     "character": "Vera",
+     "credit_id": "6796483a3f7fcf67d08f226b",
+     "gender": 1,
+     "id": 4747687,
+     "known_for_department": "Production",
+     "name": "Arielle Friedman",
+     "order": 2,
+     "original_name": "Arielle Friedman",
+     "popularity": 0.4735,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Grandpa",
+     "credit_id": "6796480d64431257a38f2106",
+     "gender": 2,
+     "id": 31268,
+     "known_for_department": "Acting",
+     "name": "Larry Fessenden",
+     "order": 3,
+     "original_name": "Larry Fessenden",
+     "popularity": 1.2487,
+     "profile_path": "/imQGskBT7IjqHLVJDQFLR1h1UPH.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 2,
+     "character": "Richard",
+     "credit_id": "679647d50e1e0486d62b03a0",
+     "gender": 2,
+     "id": 94435,
+     "known_for_department": "Acting",
+     "name": "Stuart Rudin",
+     "order": 4,
+     "original_name": "Stuart Rudin",
+     "popularity": 1.0872,
+     "profile_path": "/2jhEJ2zLnRL0iuG5i3fYw4FObgl.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 6,
+     "character": "Doctor",
+     "credit_id": "6796486cd4ba1725f12afd3c",
+     "gender": 1,
+     "id": 3238178,
+     "known_for_department": "Acting",
+     "name": "Anya Krawcheck",
+     "order": 5,
+     "original_name": "Anya Krawcheck",
+     "popularity": 0.3929,
+     "profile_path": "/ffP9mfsovkmgqnsUYKwbVejtG5q.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 27,
+     "character": "Weatherman / Narrator",
+     "credit_id": "68df29e68d44d92251129a08",
+     "gender": 0,
+     "id": 5725666,
+     "known_for_department": "Acting",
+     "name": "Hunter Goetz",
+     "order": 6,
+     "original_name": "Hunter Goetz",
+     "popularity": 0.5182,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 35,
+     "character": "Bandit",
+     "credit_id": "69bcc7bc351f20783c8c1d42",
+     "gender": 2,
+     "id": 6083950,
+     "known_for_department": "Acting",
+     "name": "Max",
+     "order": 7,
+     "original_name": "Max",
+     "popularity": 0.6562,
+     "profile_path": null
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "67919776a5176ed97e46f180",
+     "department": "Directing",
+     "gender": 2,
+     "id": 2831618,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "Ben Leonberg",
+     "original_name": "Ben Leonberg",
+     "popularity": 0.5285,
+     "profile_path": "/3HhM2nZCajd4Je6GPvnObkYYdlK.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67d1e268434c98c8ec818857",
+     "department": "Production",
+     "gender": 1,
+     "id": 5300372,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Kari Fischer",
+     "original_name": "Kari Fischer",
+     "popularity": 0.2552,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67d1e2de27c3960c2d1e33a7",
+     "department": "Production",
+     "gender": 2,
+     "id": 2831618,
+     "job": "Producer",
+     "known_for_department": "Directing",
+     "name": "Ben Leonberg",
+     "original_name": "Ben Leonberg",
+     "popularity": 0.5285,
+     "profile_path": "/3HhM2nZCajd4Je6GPvnObkYYdlK.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67d1e32c434c98c8ec8188c3",
+     "department": "Sound",
+     "gender": 0,
+     "id": 5300376,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Sam Boase-Miller",
+     "original_name": "Sam Boase-Miller",
+     "popularity": 0.2566,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67d1e391d4f741373260aaa4",
+     "department": "Writing",
+     "gender": 2,
+     "id": 1968703,
+     "job": "Writer",
+     "known_for_department": "Writing",
+     "name": "Alex Cannon",
+     "original_name": "Alex Cannon",
+     "popularity": 0.482,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67d1e3a7325e62b3d16071df",
+     "department": "Writing",
+     "gender": 2,
+     "id": 2831618,
+     "job": "Writer",
+     "known_for_department": "Directing",
+     "name": "Ben Leonberg",
+     "original_name": "Ben Leonberg",
+     "popularity": 0.5285,
+     "profile_path": "/3HhM2nZCajd4Je6GPvnObkYYdlK.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67e26a66d4052f4793dc67a3",
+     "department": "Camera",
+     "gender": 0,
+     "id": 5300378,
+     "job": "Director of Photography",
+     "known_for_department": "Crew",
+     "name": "Wade Grebnoel",
+     "original_name": "Wade Grebnoel",
+     "popularity": 0.2805,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67e26bb9440f311ace75df19",
+     "department": "Production",
+     "gender": 2,
+     "id": 1483095,
+     "job": "Co-Producer",
+     "known_for_department": "Sound",
+     "name": "Brian Goodheart",
+     "original_name": "Brian Goodheart",
+     "popularity": 0.4914,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67e26bdd4c52746665dc810c",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1483095,
+     "job": "Sound Re-Recording Mixer",
+     "known_for_department": "Sound",
+     "name": "Brian Goodheart",
+     "original_name": "Brian Goodheart",
+     "popularity": 0.4914,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67e26bee7b7313b5aef05325",
+     "department": "Sound",
+     "gender": 0,
+     "id": 4718766,
+     "job": "Sound Designer",
+     "known_for_department": "Sound",
+     "name": "Kelly Oostman",
+     "original_name": "Kelly Oostman",
+     "popularity": 0.2593,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67e26c317b7313b5aef0533e",
+     "department": "Crew",
+     "gender": 0,
+     "id": 4100126,
+     "job": "Post Production Supervisor",
+     "known_for_department": "Crew",
+     "name": "Michael J. Cacioppo",
+     "original_name": "Michael J. Cacioppo",
+     "popularity": 0.2741,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67e26c477b7313b5aef0534d",
+     "department": "Sound",
+     "gender": 0,
+     "id": 5326806,
+     "job": "Music Producer",
+     "known_for_department": "Sound",
+     "name": "Erik Saras",
+     "original_name": "Erik Saras",
+     "popularity": 0.2681,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67e26c7ad70c61590375d84e",
+     "department": "Editing",
+     "gender": 2,
+     "id": 5326808,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Curtis Roberts",
+     "original_name": "Curtis Roberts",
+     "popularity": 0.5737,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67e26c91e28af41cfc75efae",
+     "department": "Art",
+     "gender": 1,
+     "id": 3123508,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Alison Diviney",
+     "original_name": "Alison Diviney",
+     "popularity": 0.2922,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68a63852c9cb5d9094834d6e",
+     "department": "Sound",
+     "gender": 0,
+     "id": 5638602,
+     "job": "Orchestrator",
+     "known_for_department": "Sound",
+     "name": "Ege Gunes",
+     "original_name": "Ege Gunes",
+     "popularity": 0.3389,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68df2a72f99c229cfaee4d2d",
+     "department": "Directing",
+     "gender": 2,
+     "id": 2831619,
+     "job": "Second Unit Director",
+     "known_for_department": "Production",
+     "name": "Scott Riehs",
+     "original_name": "Scott Riehs",
+     "popularity": 0.3365,
+     "profile_path": "/2YLZHeBwAUTxINZE5bN4zDrvOaQ.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "68df2ac2088d477d942a4480",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2331964,
+     "job": "Sound Recordist",
+     "known_for_department": "Sound",
+     "name": "Brian Neris",
+     "original_name": "Brian Neris",
+     "popularity": 0.3797,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68df2b03ac05c0d4d1ee4ce6",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 4409142,
+     "job": "Visual Effects",
+     "known_for_department": "Camera",
+     "name": "Jan Klier",
+     "original_name": "Jan Klier",
+     "popularity": 0.3162,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68df2b20088d477d942a4484",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4764896,
+     "job": "Additional Photography",
+     "known_for_department": "Camera",
+     "name": "BJ Downs",
+     "original_name": "BJ Downs",
+     "popularity": 0.3792,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68df2b48412a3adf639727ce",
+     "department": "Editing",
+     "gender": 0,
+     "id": 2518032,
+     "job": "Colorist",
+     "known_for_department": "Editing",
+     "name": "Jeff Sousa",
+     "original_name": "Jeff Sousa",
+     "popularity": 0.3707,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bcc876a0684880da9dec87",
+     "department": "Production",
+     "gender": 0,
+     "id": 6083954,
+     "job": "Production Assistant",
+     "known_for_department": "Production",
+     "name": "Brittany Aguilar",
+     "original_name": "Brittany Aguilar",
+     "popularity": 0.2719,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bcc898910546070e7c1e71",
+     "department": "Production",
+     "gender": 0,
+     "id": 6083955,
+     "job": "Production Assistant",
+     "known_for_department": "Production",
+     "name": "Kerry Liu",
+     "original_name": "Kerry Liu",
+     "popularity": 0.2805,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bcc8b5363b9fc7b6ee3021",
+     "department": "Production",
+     "gender": 0,
+     "id": 4829973,
+     "job": "Production Assistant",
+     "known_for_department": "Camera",
+     "name": "José G. Rivera",
+     "original_name": "José G. Rivera",
+     "popularity": 0.4952,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bcc98443d3077ac46e559e",
+     "department": "Crew",
+     "gender": 0,
+     "id": 6083959,
+     "job": "Post Production Supervisor",
+     "known_for_department": "Crew",
+     "name": "Peter Vaughan",
+     "original_name": "Peter Vaughan",
+     "popularity": 0.2798,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bcca1b2a2ec7cb4b5fb39f",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 6083960,
+     "job": "VFX Artist",
+     "known_for_department": "Visual Effects",
+     "name": "Luis Villanueva",
+     "original_name": "Luis Villanueva",
+     "popularity": 0.2577,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bcca2e61fa5be4545fb3ca",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 6083961,
+     "job": "VFX Artist",
+     "known_for_department": "Visual Effects",
+     "name": "Andy Sanda",
+     "original_name": "Andy Sanda",
+     "popularity": 0.2865,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bcca44551befd83c06e60e",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 4100126,
+     "job": "VFX Editor",
+     "known_for_department": "Crew",
+     "name": "Michael J. Cacioppo",
+     "original_name": "Michael J. Cacioppo",
+     "popularity": 0.2741,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bcca5d65b6efcb999debf6",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 6083959,
+     "job": "VFX Editor",
+     "known_for_department": "Crew",
+     "name": "Peter Vaughan",
+     "original_name": "Peter Vaughan",
+     "popularity": 0.2798,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bcca8da4afc84052ea3708",
+     "department": "Art",
+     "gender": 0,
+     "id": 2935402,
+     "job": "Title Designer",
+     "known_for_department": "Visual Effects",
+     "name": "Matt Esolda",
+     "original_name": "Matt Esolda",
+     "popularity": 0.3044,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bccb04551befd83c06e618",
+     "department": "Sound",
+     "gender": 0,
+     "id": 6083964,
+     "job": "Music",
+     "known_for_department": "Sound",
+     "name": "Jeanmarie Riccobono",
+     "original_name": "Jeanmarie Riccobono",
+     "popularity": 0.2687,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bccb39c7cc9b4e7b06e4b6",
+     "department": "Crew",
+     "gender": 0,
+     "id": 4869437,
+     "job": "Legal Services",
+     "known_for_department": "Crew",
+     "name": "Rosalind Lichter",
+     "original_name": "Rosalind Lichter",
+     "popularity": 0.3276,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69bccb4ea0684880da9dec9b",
+     "department": "Production",
+     "gender": 0,
+     "id": 6083965,
+     "job": "Production Accountant",
+     "known_for_department": "Production",
+     "name": "Paul Koufos",
+     "original_name": "Paul Koufos",
+     "popularity": 0.2939,
+     "profile_path": null
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   }
+  ],
+  "homepage": "https://www.goodboyfilm.com",
+  "id": 1422096,
+  "imdb_id": "tt35521922",
+  "origin_country": [
+   "US"
+  ],
+  "original_language": "en",
+  "original_title": "Good Boy",
+  "overview": "A loyal dog moves to a rural family home with his owner Todd, only to discover supernatural forces lurking in the shadows. As dark entities threaten his human companion, the brave pup must fight to protect the one he loves most.",
+  "popularity": 18.8105,
+  "poster_path": "/daInKxjoRNLFWIus64fHAy91V0k.jpg",
+  "production_companies": [
+   {
+    "id": 256132,
+    "logo_path": null,
+    "name": "What’s Wrong with Your Dog?",
+    "origin_country": "US"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   }
+  ],
+  "release_date": "2025-10-01",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AR",
+     "release_dates": [
+      {
+       "certification": "+13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AT",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Melbourne International Film Festival",
+       "release_date": "2025-08-08T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "M",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-02T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "M",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-03-18T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BG",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "14A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Calgary Underground Film Festival",
+       "release_date": "2025-04-19T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CL",
+     "release_dates": [
+      {
+       "certification": "14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Fantasy Filmfest",
+       "release_date": "2025-09-03T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "16",
+       "descriptors": [
+        "Threat",
+        "Injury"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Sombra - Festival de Cine Fantástico Europeo",
+       "release_date": "2026-02-01T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "es",
+       "note": "",
+       "release_date": "2025-10-17T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "TP",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "2025-10-10T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Shadowz",
+       "release_date": "2025-10-31T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-10T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-24T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray / DVD",
+       "release_date": "2026-02-16T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HK",
+     "release_dates": [
+      {
+       "certification": "IIA",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-12-04T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HU",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-01-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ID",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Jakarta World Cinema",
+       "release_date": "2025-10-03T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "13+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Special Screening",
+       "release_date": "2025-10-07T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "13+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-08T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IE",
+     "release_dates": [
+      {
+       "certification": "15A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-10T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IL",
+     "release_dates": [
+      {
+       "certification": "14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "JP",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-07-10T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Bucheon International Fantastic Film Festival",
+       "release_date": "2025-07-13T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LT",
+     "release_dates": [
+      {
+       "certification": "N-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Mondo Bizarro Film Festival",
+       "release_date": "2025-09-14T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "N-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-03T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "ŽMONĖS Cinema",
+       "release_date": "2026-01-15T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LV",
+     "release_dates": [
+      {
+       "certification": "12+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-03T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "B",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NL",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [
+        "Fear",
+        "Coarse Language"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NO",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-11-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PH",
+     "release_dates": [
+      {
+       "certification": "PG",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Octopus Film Festival",
+       "release_date": "2025-08-06T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Splat!FilmFest International Fantastic Film Festival",
+       "release_date": "2025-10-25T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PR",
+     "release_dates": [
+      {
+       "certification": "PG-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-11-06T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "QA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RU",
+     "release_dates": [
+      {
+       "certification": "16+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-16T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-11-03T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SG",
+     "release_dates": [
+      {
+       "certification": "PG13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TH",
+     "release_dates": [
+      {
+       "certification": "13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TR",
+     "release_dates": [
+      {
+       "certification": "13+",
+       "descriptors": [
+        "Violence / Horror",
+        "Negative examples"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-12-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "12+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-17T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UA",
+     "release_dates": [
+      {
+       "certification": "16+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "South by Southwest Film & TV Festival",
+       "release_date": "2025-03-08T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Beyond Fest",
+       "release_date": "2025-09-24T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "PG-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-03T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "PG-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-24T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "PG-13",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Hulu",
+       "release_date": "2026-04-25T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "VN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-24T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 8844724,
+  "runtime": 73,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   }
+  ],
+  "status": "Released",
+  "tagline": "Trust his instincts.",
+  "title": "Good Boy",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "68decd2cc70fcfcf02bdff2b",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "I18Rrd2EdKI",
+     "name": "Tickets On Sale",
+     "official": true,
+     "published_at": "2025-09-17T16:01:24.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "68b3150669e3354a203ccb4d",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "boIcuPjdP_M",
+     "name": "Ben Leonberg, Alex Cannon, and Kari Fischer on Good Boy",
+     "official": true,
+     "published_at": "2025-08-28T20:24:10.000Z",
+     "site": "YouTube",
+     "size": 2160,
+     "type": "Featurette"
+    },
+    {
+     "id": "68a37390018eaadcce430dc5",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "q4-CRkd_74g",
+     "name": "Official Trailer",
+     "official": true,
+     "published_at": "2025-08-18T16:30:28.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    }
+   ]
+  },
+  "vote_average": 6.6,
+  "vote_count": 767
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/6AYl4PU29o2WXUPZzAo56GVQs5r.jpg",
+    "genre_ids": [
+     53,
+     18,
+     9648,
+     27
+    ],
+    "id": 1381027,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "Tommy, a volatile 19-year-old, revels in drugs, parties and violence. After getting separated from his friends on a drunken bender, he is abducted by a shadowy figure. He wakes to find himself imprisoned in the basement of a remote Yorkshire house, inhabited by a very strange family. But what unfolds is not what he could possibly expect.",
+    "popularity": 19.886,
+    "poster_path": "/eWb841fMkSNly5gfL9J1N0xzVYI.jpg",
+    "release_date": "2026-03-05",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 7.3,
+    "vote_count": 349
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/mPtPJzBkwksUoMEKpkZqxBrlKpZ.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 1422096,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "A loyal dog moves to a rural family home with his owner Todd, only to discover supernatural forces lurking in the shadows. As dark entities threaten his human companion, the brave pup must fight to protect the one he loves most.",
+    "popularity": 18.8105,
+    "poster_path": "/daInKxjoRNLFWIus64fHAy91V0k.jpg",
+    "release_date": "2025-10-01",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 6.6,
+    "vote_count": 767
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/lYlCKvcw7DeP8DwKY1VO0kJVT0Z.jpg",
+    "genre_ids": [
+     27,
+     53
+    ],
+    "id": 983507,
+    "original_language": "no",
+    "original_title": "Good Boy",
+    "overview": "Christian, a millionaire heir, meets Sigrid, a young student, on a dating app. They hit it off quickly, but there's only one problem: Christian lives with Frank, a man who dresses up and constantly acts like a dog.",
+    "popularity": 4.1308,
+    "poster_path": "/pzluRg3Jnm2YPs7CQyCrFJ8JADl.jpg",
+    "release_date": "2022-06-03",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 6.218,
+    "vote_count": 397
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/5unbVMlqYsgNPEzct6UBo2mVD6A.jpg",
+    "genre_ids": [
+     35,
+     10751,
+     878
+    ],
+    "id": 21765,
+    "original_language": "en",
+    "original_title": "Good Boy!",
+    "overview": "An intergalactic dog pilot from Sirius (the dog star), visits Earth to verify the rumors that dogs have failed to take over the planet.",
+    "popularity": 3.5922,
+    "poster_path": "/kZDXSPfeKNtai6l8yE4J5LwVQMY.jpg",
+    "release_date": "2003-10-10",
+    "softcore": false,
+    "title": "Good Boy!",
+    "video": false,
+    "vote_average": 5.622,
+    "vote_count": 152
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     18
+    ],
+    "id": 1571169,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "A man is about to commit the irreparable after being humiliated by his wife.",
+    "popularity": 0.823,
+    "poster_path": "/95a58bU14IdlUEMpfAhX16cPVQH.jpg",
+    "release_date": "2014-01-01",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/4UyaxAnGFSzD14O5y8rLhZdR6EV.jpg",
+    "genre_ids": [
+     27,
+     53
+    ],
+    "id": 1487650,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "After hearing of his estranged father's mysterious passing, an anxious young man attends the funeral seeking answers. As he searches for the truth, he must face a troubling secret from his past.",
+    "popularity": 2.1626,
+    "poster_path": "/7NwpCil5uxxxVUb8gGJqozTMNpN.jpg",
+    "release_date": "2026-03-21",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 1.0,
+    "vote_count": 3
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/dsKDGGEmaD1OlTcHzqSRXlhESVH.jpg",
+    "genre_ids": [
+     35,
+     27,
+     53,
+     10770
+    ],
+    "id": 710717,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "When Maggie gets an emotional support dog to help quell some of her anxiety, she finds him to be even more effective than she imagined... because unbeknownst to her, he kills anyone who adds stress to her life.",
+    "popularity": 1.7764,
+    "poster_path": "/iMFAKPH7AaUJ76oLqWz9OxU7s6S.jpg",
+    "release_date": "2020-06-12",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 6.5,
+    "vote_count": 72
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1780131,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "Terrorized by the ICE raids tearing through Los Angeles, an undocumented dog walker says goodbye to the unlikely love of his life: a mini doodle named Sir Lewis.",
+    "popularity": 1.2184,
+    "poster_path": "/6EBlPDowNjZVXaKow14jL5On80q.jpg",
+    "release_date": "2026-03-25",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/386CcmCyhGVHULXJ9S19NpImrQB.jpg",
+    "genre_ids": [
+     35,
+     27
+    ],
+    "id": 1618042,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "A golden retriever laments the loss of attention from his owner after the birth of her son. Then he sees his moment to shine.",
+    "popularity": 1.5176,
+    "poster_path": "/pN5AUldfNcECHin2c4R4AEgBjyc.jpg",
+    "release_date": "2011-09-19",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 3.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/yse6g77u44sYQTOAdLyQWiEL4uL.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 1029352,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "Not everyone can be a dog sitter. A young woman learns this the hard way when the tiny Pomeranian she’s hired to watch reveals itself to be a deranged murder junkie.",
+    "popularity": 1.3257,
+    "poster_path": "/gvAqmHk9dfuk9aqcKxZfvo9o0Ed.jpg",
+    "release_date": "2022-07-27",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 4.875,
+    "vote_count": 8
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     18
+    ],
+    "id": 859365,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "Business analyst Andriy, loaded with his work affairs and responsibilities, takes care of his father's post surgery rehabilitation. Trying to be in several places at the same time and worrying about the needs of others, Andrew forgets about his own.",
+    "popularity": 1.1344,
+    "poster_path": "/kICkW4kX14EWb25Oay58aKhuQ8z.jpg",
+    "release_date": "2021-08-05",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1542137,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "A journey of how two wandering souls find exactly what they are looking for.",
+    "popularity": 1.1856,
+    "poster_path": "/rDbo0uqmpb1lzkZ5WXyoIjn05zh.jpg",
+    "release_date": "",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     53
+    ],
+    "id": 513087,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "Good Boy is about a young man in a dead end job, who steals from his employer and hits the road for a new life. His journey to freedom is derailed by a mysterious, sadistic killer and his human pets.",
+    "popularity": 1.3039,
+    "poster_path": "/srOCu6eiPrhsDPqsMNwUzoCRtwc.jpg",
+    "release_date": "2010-12-28",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 3.5,
+    "vote_count": 2
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 719396,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "a short film by Mark La Rosa",
+    "popularity": 1.1327,
+    "poster_path": "/A6CsZ7YZuOYxhGz55WCcOnego5l.jpg",
+    "release_date": "2009-01-01",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/sb8QCOaYMAVlSTKUdMZ4IKHArWg.jpg",
+    "genre_ids": [
+     35,
+     18
+    ],
+    "id": 1128846,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "Out of money and out of luck, Danny is determined to turn his life around, but the interventions of his anarchic mum and the reappearance of figures from his past threaten to derail him at every turn.",
+    "popularity": 1.7033,
+    "poster_path": "/9aAnH7tisclCtTZz3BZGVosa7g1.jpg",
+    "release_date": "2023-06-22",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 6.8,
+    "vote_count": 8
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/hm1uz6mgRIYsLqfLGlrn0ManQaO.jpg",
+    "genre_ids": [
+     878,
+     27
+    ],
+    "id": 1547088,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "When an obedient recluse is ordered to capture a young woman for his motherly A.I, the captured girl has to quickly devise a plan of escape before she's forced to submit to being a good girl for her new mommy.",
+    "popularity": 1.0043,
+    "poster_path": "/Fzzkncr8KqKnMasRQToYKX1tcp.jpg",
+    "release_date": "2025-09-12",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/79FIVjpK10eLQSFvYsHmA7xspnp.jpg",
+    "genre_ids": [
+     35
+    ],
+    "id": 667823,
+    "original_language": "en",
+    "original_title": "Good boy",
+    "overview": "Everyday nature of a park is affected by the arrival of a chef, who, when settles a food stand, offers one single dish, Unicorn to the fine herbs.",
+    "popularity": 0.8655,
+    "poster_path": "/aktBneYp15aYJJ3a3j5tdFz9Lf0.jpg",
+    "release_date": "2018-10-21",
+    "softcore": false,
+    "title": "Good boy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     35,
+     27,
+     53
+    ],
+    "id": 1384206,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "On their last day of training together, two \"Delivery Dudes\" -- hardened, bitter package expert Elvis and eager, innocent trainee Taylor -- run into some bloody trouble.",
+    "popularity": 1.0375,
+    "poster_path": "/vWon5eFZu1YCXuWzGOIZstHz8Ic.jpg",
+    "release_date": "2024-10-27",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 6.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1206269,
+    "original_language": "en",
+    "original_title": "good boy",
+    "overview": "The author's erotic imagination is mixed between desire and magazine clippings, and the trade of collage becomes a ship that travels from outer space to the city itself.",
+    "popularity": 1.7821,
+    "poster_path": "/iH3HTm81NjQPj2ftOiaHTcwssbx.jpg",
+    "release_date": "2023-12-07",
+    "softcore": false,
+    "title": "good boy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/3bJhuqiNBzrJsKHiakL6PqOTdIc.jpg",
+    "genre_ids": [
+     53,
+     18,
+     80,
+     9648
+    ],
+    "id": 593764,
+    "original_language": "en",
+    "original_title": "Good Boy",
+    "overview": "Two high school friends, Caleb and Macon, are reunited after many years. During the tense reunion, Macon fights his tortured mind, wrestling with a dark secret that is the source of Caleb's greatest pain.",
+    "popularity": 0.7087,
+    "poster_path": "/hSOEXiBZlOSITNSARTriDFETI8c.jpg",
+    "release_date": "2016-05-01",
+    "softcore": false,
+    "title": "Good Boy",
+    "video": false,
+    "vote_average": 3.8,
+    "vote_count": 5
+   }
+  ],
+  "total_pages": 5,
+  "total_results": 100
+ }
+}

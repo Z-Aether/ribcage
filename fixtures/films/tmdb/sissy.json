@@ -1,0 +1,1296 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/n43WipFChYnRC07ExfBZovzO4bg.jpg",
+  "belongs_to_collection": null,
+  "budget": 0,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 3,
+     "character": "Cecilia",
+     "credit_id": "61fb6e1db6abc4001ccdb024",
+     "gender": 1,
+     "id": 103390,
+     "known_for_department": "Acting",
+     "name": "Aisha Dee",
+     "order": 0,
+     "original_name": "Aisha Dee",
+     "popularity": 1.5962,
+     "profile_path": "/dmA3u8KDYcvv673893FNny0nn7G.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 5,
+     "character": "Alex",
+     "credit_id": "61fd267ecb8028009221d90d",
+     "gender": 1,
+     "id": 3407602,
+     "known_for_department": "Acting",
+     "name": "Emily De Margheriti",
+     "order": 1,
+     "original_name": "Emily De Margheriti",
+     "popularity": 0.5837,
+     "profile_path": "/uRc3NMZdd9YImzodvzcBnnFRxLC.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Emma",
+     "credit_id": "61fd2675fe6c1800f43c3721",
+     "gender": 1,
+     "id": 2101968,
+     "known_for_department": "Acting",
+     "name": "Hannah Barlow",
+     "order": 2,
+     "original_name": "Hannah Barlow",
+     "popularity": 0.519,
+     "profile_path": "/pR5qbEmdRZL5moQxiHv9VH023qS.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 6,
+     "character": "Jamie",
+     "credit_id": "61fd2689fe6c1800c20c5be5",
+     "gender": 2,
+     "id": 1759490,
+     "known_for_department": "Acting",
+     "name": "Daniel Monks",
+     "order": 3,
+     "original_name": "Daniel Monks",
+     "popularity": 0.7394,
+     "profile_path": "/qZbCHOZYSztPUXDWmO9DRjgKq8z.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 7,
+     "character": "Tracey",
+     "credit_id": "61fd26925c3247001d98582d",
+     "gender": 1,
+     "id": 2611199,
+     "known_for_department": "Acting",
+     "name": "Yerin Ha",
+     "order": 4,
+     "original_name": "Yerin Ha",
+     "popularity": 1.4543,
+     "profile_path": "/AkEtAVGm0aNSoEYGYFH8KjFZaI7.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 8,
+     "character": "Fran",
+     "credit_id": "61fd269fdfaae900c6bc3294",
+     "gender": 1,
+     "id": 1682317,
+     "known_for_department": "Acting",
+     "name": "Lucy Barrett",
+     "order": 5,
+     "original_name": "Lucy Barrett",
+     "popularity": 0.6274,
+     "profile_path": "/mxBspNMdtRQaWZiy2gAYPqxHZr3.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 9,
+     "character": "Constable Martindale",
+     "credit_id": "61fd26a7072166011ba0c576",
+     "gender": 2,
+     "id": 1980509,
+     "known_for_department": "Acting",
+     "name": "Shaun Martindale",
+     "order": 6,
+     "original_name": "Shaun Martindale",
+     "popularity": 0.6457,
+     "profile_path": "/hOWOpEHqGoYLf3gKIRhZpnxClVt.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 10,
+     "character": "Young Cecilia",
+     "credit_id": "61fd26affe6c1800c20c5c25",
+     "gender": 0,
+     "id": 3412347,
+     "known_for_department": "Acting",
+     "name": "Amelia Lule",
+     "order": 7,
+     "original_name": "Amelia Lule",
+     "popularity": 0.4535,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 11,
+     "character": "Young Alex",
+     "credit_id": "61fd26b7bf0f63006c70e173",
+     "gender": 0,
+     "id": 3412348,
+     "known_for_department": "Acting",
+     "name": "April Blasdall",
+     "order": 8,
+     "original_name": "April Blasdall",
+     "popularity": 0.5119,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 12,
+     "character": "Young Emma",
+     "credit_id": "61fd26be64de350044220218",
+     "gender": 0,
+     "id": 3412349,
+     "known_for_department": "Acting",
+     "name": "Camille Cumpston",
+     "order": 9,
+     "original_name": "Camille Cumpston",
+     "popularity": 0.2949,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 34,
+     "character": "Chemist",
+     "credit_id": "6365f3ebe004a600815c9905",
+     "gender": 0,
+     "id": 3771174,
+     "known_for_department": "Acting",
+     "name": "Louise Barlow",
+     "order": 10,
+     "original_name": "Louise Barlow",
+     "popularity": 0.2801,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 35,
+     "character": "Pregnant Lady",
+     "credit_id": "6365f3fbd7107e007b304466",
+     "gender": 0,
+     "id": 3771175,
+     "known_for_department": "Acting",
+     "name": "Melissa Brownlow",
+     "order": 11,
+     "original_name": "Melissa Brownlow",
+     "popularity": 0.9473,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 36,
+     "character": "Officer Hopkins",
+     "credit_id": "6365f41c0d2f53009199763d",
+     "gender": 1,
+     "id": 142393,
+     "known_for_department": "Acting",
+     "name": "Victoria Hopkins",
+     "order": 12,
+     "original_name": "Victoria Hopkins",
+     "popularity": 0.6721,
+     "profile_path": "/vVEe18tm65xy1oWiQRh4NMOiUeH.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 37,
+     "character": "Jamie's Party Date",
+     "credit_id": "643dea402efe4e04df7a1384",
+     "gender": 0,
+     "id": 3704030,
+     "known_for_department": "Acting",
+     "name": "Neil Parikh",
+     "order": 13,
+     "original_name": "Neil Parikh",
+     "popularity": 0.316,
+     "profile_path": null
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "62e58777f1b57100595608ad",
+     "department": "Camera",
+     "gender": 2,
+     "id": 576008,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Steve Arnold",
+     "original_name": "Steve Arnold",
+     "popularity": 0.5293,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "62e5877efc5f060061060faa",
+     "department": "Editing",
+     "gender": 0,
+     "id": 2800030,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Margi Hoy",
+     "original_name": "Margi Hoy",
+     "popularity": 0.3139,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "633b62a86d000c0091db013d",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 1962307,
+     "job": "Costume Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Renate Henschke",
+     "original_name": "Renate Henschke",
+     "popularity": 0.5675,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "633b6330b0ba7e0079141ca2",
+     "department": "Art",
+     "gender": 0,
+     "id": 3725957,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Michael Price",
+     "original_name": "Michael Price",
+     "popularity": 0.2791,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2a3bdfaae9006ab31926",
+     "department": "Writing",
+     "gender": 1,
+     "id": 2101968,
+     "job": "Screenplay",
+     "known_for_department": "Acting",
+     "name": "Hannah Barlow",
+     "original_name": "Hannah Barlow",
+     "popularity": 0.519,
+     "profile_path": "/pR5qbEmdRZL5moQxiHv9VH023qS.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2a8668929c00f62e6f59",
+     "department": "Writing",
+     "gender": 2,
+     "id": 1455815,
+     "job": "Screenplay",
+     "known_for_department": "Directing",
+     "name": "Kane Senes",
+     "original_name": "Kane Senes",
+     "popularity": 0.5291,
+     "profile_path": "/wpw4JMqdeiXj2ZesytLNUfaFO0Z.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2a8dce997a004460ee59",
+     "department": "Directing",
+     "gender": 2,
+     "id": 1455815,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "Kane Senes",
+     "original_name": "Kane Senes",
+     "popularity": 0.5291,
+     "profile_path": "/wpw4JMqdeiXj2ZesytLNUfaFO0Z.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c28ce997a001cd2b7a1",
+     "department": "Production",
+     "gender": 1,
+     "id": 1830756,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Lisa Shaunessy",
+     "original_name": "Lisa Shaunessy",
+     "popularity": 0.4356,
+     "profile_path": "/nD7QaD70wnwojKMW4y9wuQHtbwO.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c3264de3500e10c76ca",
+     "department": "Production",
+     "gender": 0,
+     "id": 2404758,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "John De Margheriti",
+     "original_name": "John De Margheriti",
+     "popularity": 0.316,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c3fd100b60043c650bd",
+     "department": "Production",
+     "gender": 2,
+     "id": 1486179,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Jason Taylor",
+     "original_name": "Jason Taylor",
+     "popularity": 0.5941,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c4cbf0f6300dd00870b",
+     "department": "Production",
+     "gender": 0,
+     "id": 2885443,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Bec Janek",
+     "original_name": "Bec Janek",
+     "popularity": 0.3826,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c561e259a00450daad8",
+     "department": "Production",
+     "gender": 0,
+     "id": 1582551,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "William Day Frank",
+     "original_name": "William Day Frank",
+     "popularity": 0.5462,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c65559d2200c7d2cdee",
+     "department": "Production",
+     "gender": 0,
+     "id": 2733665,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Alexandra Burke",
+     "original_name": "Alexandra Burke",
+     "popularity": 0.3483,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c711e259a00450dab19",
+     "department": "Production",
+     "gender": 0,
+     "id": 2404759,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Vicki De Margheriti",
+     "original_name": "Vicki De Margheriti",
+     "popularity": 0.2787,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c7bae6f0900d56a2e2a",
+     "department": "Production",
+     "gender": 0,
+     "id": 3412374,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Anna Dadic",
+     "original_name": "Anna Dadic",
+     "popularity": 0.2657,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c92eee186490a1c006a",
+     "department": "Production",
+     "gender": 0,
+     "id": 3412375,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Jacqueline Kerwick",
+     "original_name": "Jacqueline Kerwick",
+     "popularity": 0.4802,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2c9dbf0f630043d17e30",
+     "department": "Production",
+     "gender": 0,
+     "id": 1505073,
+     "job": "Executive Producer",
+     "known_for_department": "Directing",
+     "name": "Seth Larney",
+     "original_name": "Seth Larney",
+     "popularity": 0.5572,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2ca9dfaae9006ab31b39",
+     "department": "Production",
+     "gender": 0,
+     "id": 3306984,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Mathieu van de Velde",
+     "original_name": "Mathieu van de Velde",
+     "popularity": 0.3305,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fd2cb3d100b60115548a82",
+     "department": "Production",
+     "gender": 0,
+     "id": 2030692,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Clement Dunn",
+     "original_name": "Clement Dunn",
+     "popularity": 0.4665,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61fb6dffb6abc4001ccdb002",
+     "department": "Directing",
+     "gender": 1,
+     "id": 2101968,
+     "job": "Director",
+     "known_for_department": "Acting",
+     "name": "Hannah Barlow",
+     "original_name": "Hannah Barlow",
+     "popularity": 0.519,
+     "profile_path": "/pR5qbEmdRZL5moQxiHv9VH023qS.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "643dea65f706de04db299c70",
+     "department": "Sound",
+     "gender": 2,
+     "id": 227874,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Kenneth Lampl",
+     "original_name": "Kenneth Lampl",
+     "popularity": 0.6032,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "643dea8efba62505626ab93e",
+     "department": "Production",
+     "gender": 1,
+     "id": 75140,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Marianne Jade",
+     "original_name": "Marianne Jade",
+     "popularity": 0.5609,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "643deaa60284200576f5eebb",
+     "department": "Art",
+     "gender": 0,
+     "id": 3195259,
+     "job": "Art Direction",
+     "known_for_department": "Art",
+     "name": "Courtney Westbrook",
+     "original_name": "Courtney Westbrook",
+     "popularity": 0.5701,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "643deabfc3aa3f0537e6d7d6",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2345539,
+     "job": "Prosthetic Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Julian Dimase",
+     "original_name": "Julian Dimase",
+     "popularity": 0.3083,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "643dead5f706de0306299d3b",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 3962000,
+     "job": "Prosthetic Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Tristan Lucas",
+     "original_name": "Tristan Lucas",
+     "popularity": 0.393,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "643deaf9435abd04cd724d2d",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 1311620,
+     "job": "Prosthetic Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Larry Van Duynhoven",
+     "original_name": "Larry Van Duynhoven",
+     "popularity": 0.3539,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "643deb0cd940350506fcccd3",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 3481925,
+     "job": "Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Angela Brookes",
+     "original_name": "Angela Brookes",
+     "popularity": 0.3877,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "643deb14d94035055afccc5f",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 3481925,
+     "job": "Hairstylist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Angela Brookes",
+     "original_name": "Angela Brookes",
+     "popularity": 0.3877,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "643deb27028420054cf5eefc",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 2160086,
+     "job": "Hair Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Helen Tuck",
+     "original_name": "Helen Tuck",
+     "popularity": 0.749,
+     "profile_path": "/6UANT0PswOp4GpsF1BZkAOQPTVn.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "643deb2efba62505906abace",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 2160086,
+     "job": "Makeup Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Helen Tuck",
+     "original_name": "Helen Tuck",
+     "popularity": 0.749,
+     "profile_path": "/6UANT0PswOp4GpsF1BZkAOQPTVn.jpg"
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   },
+   {
+    "id": 35,
+    "name": "Comedy"
+   },
+   {
+    "id": 53,
+    "name": "Thriller"
+   },
+   {
+    "id": 18,
+    "name": "Drama"
+   }
+  ],
+  "homepage": "",
+  "id": 934207,
+  "imdb_id": "tt9602472",
+  "origin_country": [
+   "AU"
+  ],
+  "original_language": "en",
+  "original_title": "Sissy",
+  "overview": "Cecilia is a successful social media influencer living the dream, until she runs into her ex-childhood best friend and is invited away on her bachelorette weekend. Suddenly, Sissy finds herself stuck in a remote cabin with her school bully... and a taste for revenge.",
+  "popularity": 8.6066,
+  "poster_path": "/vQ0Dd4epB7meJtRxdLfqbRklQjd.jpg",
+  "production_companies": [
+   {
+    "id": 184156,
+    "logo_path": null,
+    "name": "DEMS Entertainment",
+    "origin_country": ""
+   },
+   {
+    "id": 184157,
+    "logo_path": null,
+    "name": "Dog Park Pictures",
+    "origin_country": ""
+   },
+   {
+    "id": 184158,
+    "logo_path": null,
+    "name": "Arcadia",
+    "origin_country": ""
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "AU",
+    "name": "Australia"
+   }
+  ],
+  "release_date": "2022-11-03",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Melbourne International Film Festival",
+       "release_date": "2022-08-06T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Darwin International Film Festival",
+       "release_date": "2023-09-16T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "MA15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2022-11-03T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-01-16T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Prime Video",
+       "release_date": "2025-08-24T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CH",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2022-07-01T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-02-23T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DK",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "2022-11-09T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "2022-11-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-02-23T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "VOD",
+       "release_date": "2022-11-14T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "2023-03-08T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Shudder",
+       "release_date": "2022-09-29T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "19",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Bucheon International Fantastic Film Festival",
+       "release_date": "2022-07-08T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2022-12-16T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-08-17T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "South by Southwest Film Festival",
+       "release_date": "2022-03-11T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "NR",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Shudder",
+       "release_date": "2022-09-29T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 0,
+  "runtime": 102,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   },
+   {
+    "english_name": "Spanish",
+    "iso_639_1": "es",
+    "name": "Español"
+   }
+  ],
+  "status": "Released",
+  "tagline": "#triggered",
+  "title": "Sissy",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "6547b5c0d55c3d00c5bee4b9",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "gsIrY8GTAjk",
+     "name": "Official Trailer",
+     "official": true,
+     "published_at": "2022-08-12T16:57:33.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "621b81377fcab3001b64ba08",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "BQHU-cj4VMY",
+     "name": "Official Trailer",
+     "official": true,
+     "published_at": "2022-02-22T19:30:02.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    }
+   ]
+  },
+  "vote_average": 6.069,
+  "vote_count": 196
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/n43WipFChYnRC07ExfBZovzO4bg.jpg",
+    "genre_ids": [
+     27,
+     35,
+     53,
+     18
+    ],
+    "id": 934207,
+    "original_language": "en",
+    "original_title": "Sissy",
+    "overview": "Cecilia is a successful social media influencer living the dream, until she runs into her ex-childhood best friend and is invited away on her bachelorette weekend. Suddenly, Sissy finds herself stuck in a remote cabin with her school bully... and a taste for revenge.",
+    "popularity": 8.6066,
+    "poster_path": "/vQ0Dd4epB7meJtRxdLfqbRklQjd.jpg",
+    "release_date": "2022-11-03",
+    "softcore": false,
+    "title": "Sissy",
+    "video": false,
+    "vote_average": 6.069,
+    "vote_count": 196
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/qV4TmxwyhDFjsWvU1AKi2dduax.jpg",
+    "genre_ids": [
+     18,
+     10751
+    ],
+    "id": 795789,
+    "original_language": "en",
+    "original_title": "Sissy",
+    "overview": "‘Sissy’ is a short drama set in a secondary school, where two sisters with a fraught relationship, feisty Millie who is 16 and goody goody Chloe who is 12, wait to be seen by the headteacher for very different reasons.",
+    "popularity": 1.5508,
+    "poster_path": "/nvO2Samo8oCPudirvoxNzhVcwRS.jpg",
+    "release_date": "2021-01-28",
+    "softcore": false,
+    "title": "Sissy",
+    "video": false,
+    "vote_average": 7.0,
+    "vote_count": 2
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/rtuBboKGcOmIWKhIt7rfXr7X5pk.jpg",
+    "genre_ids": [
+     18
+    ],
+    "id": 1609584,
+    "original_language": "en",
+    "original_title": "Sissy",
+    "overview": "",
+    "popularity": 1.4688,
+    "poster_path": "/v5kaByBoBmODuJ2RBhR8luhcwi4.jpg",
+    "release_date": "2025-11-28",
+    "softcore": false,
+    "title": "Sissy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1082315,
+    "original_language": "en",
+    "original_title": "Sissy",
+    "overview": "An intimate exploration of a child and father navigating grief through gender expression.",
+    "popularity": 1.1343,
+    "poster_path": "/zRUgHGdhbBA8SPMdE52WXEcsK4Z.jpg",
+    "release_date": "2023-03-30",
+    "softcore": false,
+    "title": "Sissy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     35
+    ],
+    "id": 457156,
+    "original_language": "de",
+    "original_title": "Prinzessin Sissy",
+    "overview": "Sissy (a character Romy Schneider would later popularize in the 50s) is Duke Maximilian of Bavaria's favorite daughter.The gift of a necklace,meant for her, falls into the hands of a crooked circus director.",
+    "popularity": 1.1373,
+    "poster_path": "/uXiitGhIbKW8HIKptarXU7HVK7x.jpg",
+    "release_date": "1939-04-19",
+    "softcore": false,
+    "title": "Princess Sissy",
+    "video": false,
+    "vote_average": 7.0,
+    "vote_count": 2
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 345831,
+    "original_language": "no",
+    "original_title": "Pyse",
+    "overview": "When Idunn stays home alone for the first time, her brother Even has big plans for her. Even thinks that his sister is the biggest sissy on the planet. This ordinary winter day turns out to be the scariest day in Idunns life, but are things as scary as they seem? And who is really the biggest sissy?",
+    "popularity": 0.9734,
+    "poster_path": null,
+    "release_date": "2013-04-22",
+    "softcore": false,
+    "title": "Sissy",
+    "video": false,
+    "vote_average": 6.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 827574,
+    "original_language": "en",
+    "original_title": "Sissy",
+    "overview": "What exactly is a sissy? Sissy explores masculinity, gender identity, misogyny and self-acceptance. A playful exploration of what it means to be a sissy.",
+    "popularity": 1.1335,
+    "poster_path": "/nXb7ddUDWWvucxGGvTCPM7MrICc.jpg",
+    "release_date": "2014-08-16",
+    "softcore": false,
+    "title": "Sissy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/qphXUsMVt6CB7AdcYUXZA0FaifR.jpg",
+    "genre_ids": [
+     99
+    ],
+    "id": 1206012,
+    "original_language": "en",
+    "original_title": "Sissy",
+    "overview": "SISSY takes you behind the scenes to give a rare insight into a subculture that has created its own space within the gay culture, and it explores the bond that sets the black 'sisterhood' apart from white gays. SISSY is an expression of gay black identity: 'We are glamorous, we are here and we are queer.'",
+    "popularity": 1.1205,
+    "poster_path": "/SDOMv3CSaZo8gJekzA8HZxWuZR.jpg",
+    "release_date": "2000-01-01",
+    "softcore": false,
+    "title": "Sissy",
+    "video": false,
+    "vote_average": 9.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 896012,
+    "original_language": "en",
+    "original_title": "Sissy Fatigue",
+    "overview": "'Sissy Fatigue' follows the insidious transformation of a seductive blonde woman into a rage-fuelled, lip-syncing, six-pack tricking, pearl dripping, bald creature.",
+    "popularity": 1.6508,
+    "poster_path": "/1S1zqrmqWXRJNtmaVSzZI45HXgB.jpg",
+    "release_date": "2019-02-19",
+    "softcore": false,
+    "title": "Sissy Fatigue",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/9MDJycedt82QG4ZiOKeHKFaTGX7.jpg",
+    "genre_ids": [
+     35
+    ],
+    "id": 259210,
+    "original_language": "en",
+    "original_title": "Sissy Frenchfry",
+    "overview": "The annual Student Body President election at wildly eclectic and diverse West Beach High pits the quirky, much-beloved incumbent Sissy Frenchfry against handsome, charismatic -- and socially intolerant -- transfer student Bodey McDodey, who enacts a devious plan to restore the \"status quo.\"",
+    "popularity": 1.2815,
+    "poster_path": "/dm0HkkHT4bNR3tKQlQLNZBHhrtW.jpg",
+    "release_date": "2006-07-15",
+    "softcore": false,
+    "title": "Sissy Frenchfry",
+    "video": false,
+    "vote_average": 5.3,
+    "vote_count": 7
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1012866,
+    "original_language": "it",
+    "original_title": "Sissy",
+    "overview": "After his mother's death, Luca finds he has hit rock bottom. Living on the streets among the homeless, to somehow feel closer to her, he finally decides to go back home for his father's birthday where something magical just might happen.",
+    "popularity": 0.7742,
+    "poster_path": null,
+    "release_date": "2022-04-06",
+    "softcore": false,
+    "title": "Sissy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/i9N6bA2COwwVXdeZc4S2TBO9SnV.jpg",
+    "genre_ids": [
+     16,
+     10751,
+     10770
+    ],
+    "id": 442905,
+    "original_language": "en",
+    "original_title": "The Sissy Duckling",
+    "overview": "Elmer, a sensitive duckling whose schoolmates tease him. However, after his unusual talents help him save a life, the other members of the flock learn to respect him as he is.",
+    "popularity": 1.8055,
+    "poster_path": "/rwg1rBKcn3WUDOJ8DTZwUatuUb5.jpg",
+    "release_date": "1999-09-14",
+    "softcore": false,
+    "title": "The Sissy Duckling",
+    "video": false,
+    "vote_average": 5.091,
+    "vote_count": 11
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/41jVfWKOeiPePCLKZfr5DVaPzwH.jpg",
+    "genre_ids": [
+     16,
+     37,
+     35
+    ],
+    "id": 224042,
+    "original_language": "en",
+    "original_title": "Sissy Sheriff",
+    "overview": "After losing 12 sheriffs in twelve days, the town of Lizzard Gizzard Gulch makes Woody sheriff number 13, with the task of arresting notorious bank robber Dirty McNasty.",
+    "popularity": 0.7895,
+    "poster_path": "/5gUoPjcw9a0SbUdJwDLw68rNkOY.jpg",
+    "release_date": "1967-01-01",
+    "softcore": false,
+    "title": "Sissy Sheriff",
+    "video": false,
+    "vote_average": 7.2,
+    "vote_count": 4
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     14
+    ],
+    "id": 828428,
+    "original_language": "en",
+    "original_title": "The Sissy",
+    "overview": "The Sissy is a short film exploring forced feminization and its power to liberate men of society’s heteronormative expectations.",
+    "popularity": 0.9484,
+    "poster_path": "/9Aru5ryfA5Z8F5ZJrHGSiDZFQAX.jpg",
+    "release_date": "2021-05-06",
+    "softcore": false,
+    "title": "The Sissy",
+    "video": false,
+    "vote_average": 10.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 743857,
+    "original_language": "en",
+    "original_title": "Sissy!",
+    "overview": "Sissy! was written to bring light to the realization that all of us have masculine and feminine qualities. Watch with the volume off, the protagonist may appear as the stereotypical masculine man, while watching with the volume on portrays the dark side of trying to fit into society's view of perfection.",
+    "popularity": 0.4,
+    "poster_path": "/zpgOhjlBEAIemV3VxkhD9CjrOje.jpg",
+    "release_date": "2018-03-24",
+    "softcore": false,
+    "title": "Sissy!",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1470602,
+    "original_language": "en",
+    "original_title": "Sissy Puss",
+    "overview": "A dialogue-less, apartment folk horror following eccentric loner Kat, who is stunned out of her bizarre routine by ethereal Cat.",
+    "popularity": 0.6293,
+    "poster_path": "/svlf0x8AmmOz74ZnzkwnsOQHDdp.jpg",
+    "release_date": "2025-12-01",
+    "softcore": false,
+    "title": "Sissy Puss",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 744635,
+    "original_language": "en",
+    "original_title": "The Sissy",
+    "overview": "Duke thought Jesus was nothing more than a coward, until he ran into someone who told him the truth.",
+    "popularity": 0.5576,
+    "poster_path": null,
+    "release_date": "2009-09-22",
+    "softcore": false,
+    "title": "The Sissy",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/bmkRxHSmSlDgh8onLyQiqDLG1Uv.jpg",
+    "genre_ids": [
+     99,
+     27
+    ],
+    "id": 854114,
+    "original_language": "en",
+    "original_title": "Sissy Sorcery",
+    "overview": "The ritualized performance of trans-feminine chaos magic by moonlight for the purpose of self-actualization and gender affirmation.",
+    "popularity": 0.5326,
+    "poster_path": "/y4GID6MbhohQpQFLNUADV9hup1R.jpg",
+    "release_date": "2021-04-26",
+    "softcore": false,
+    "title": "Sissy Sorcery",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/kIvFFWx0iDY9EA39xJFmXcVmK6H.jpg",
+    "genre_ids": [
+     35,
+     18
+    ],
+    "id": 88031,
+    "original_language": "en",
+    "original_title": "The Devil Is a Sissy",
+    "overview": "A well-bred young English lad living in lower Manhattan tries to gain acceptance from his not-so-well-bred peers at school.",
+    "popularity": 3.1082,
+    "poster_path": "/d9DOU8L48d5nVVdF57WwcD35DCn.jpg",
+    "release_date": "1936-09-18",
+    "softcore": false,
+    "title": "The Devil Is a Sissy",
+    "video": false,
+    "vote_average": 7.0,
+    "vote_count": 12
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/qbMisaI0dc85vR4a00RDLhqEGd9.jpg",
+    "genre_ids": [
+     35
+    ],
+    "id": 143281,
+    "original_language": "en",
+    "original_title": "Sissy-Boy Slap-Party",
+    "overview": "Sailors in repose on an island paradise seemingly have no worries of war or danger — until a playful gesture is interpreted as an act of wilful aggression. Soon, the innocent act of slight slapping becomes a relentless and unforgiving orgy of open-palmed face-smacking.",
+    "popularity": 1.4968,
+    "poster_path": "/cx3AfBJHWM7cJ47TcsWMd4tnIpf.jpg",
+    "release_date": "2004-08-11",
+    "softcore": false,
+    "title": "Sissy-Boy Slap-Party",
+    "video": false,
+    "vote_average": 5.3,
+    "vote_count": 37
+   }
+  ],
+  "total_pages": 2,
+  "total_results": 27
+ }
+}

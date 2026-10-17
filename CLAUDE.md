@@ -18,8 +18,9 @@ Top-level directories sort by what a thing is, not by which ticket made it. A ne
 
 - `ribcage/` is the Django project: settings and URLs, plus an app per module of `docs/design.md` §9, except Operations, whose `operations` is a plain package, and two apps outside it.
   - `identity` holds `Voter`, the user model.
+  - `films` holds `Film`, the plain data the shared components and the models meet at, and `corpus`, the pure reader of the recorded seed corpus (#57).
   - `hello` is M1 scaffolding that M3 removes (#42, #47).
-  - `seeding` holds the dev-only seed commands, the only route to development data. Each milestone extends them to seed what it builds, and `--phase` picks which of the phases M3 adds to seed into (#25, #50).
+  - `seeding` holds the dev-only seed commands, the only route to development data. Each milestone extends them to seed what it builds, and `--phase` picks which of the phases M3 adds to seed into (#25, #50). Its `fetchcorpus` is the one command that goes online: it refetches the seed corpus into `fixtures/films/`, replacing the last fetch, and needs real `TMDB_API_KEY` and `DTDD_API_KEY` values (#57).
   - `operations` is the plain package for §9's Operations module and holds only the backup sidecar, run as `python -m ribcage.operations.backup` (`--help` lists its commands). It never loads the settings, so the sidecar is handed no secrets (#53).
   - Every page extends `templates/base.html`. A page outside the login wall carries `login_not_required`, which is how `tests/http/test_public_pages.py` finds it and holds it to zero queries.
   - `privacy.md` is the public privacy policy's one copy, rendered at `/privacy/` (#16, #49).
@@ -28,7 +29,7 @@ Top-level directories sort by what a thing is, not by which ticket made it. A ne
 - `docs/` is prose. `docs/deferred/` holds designs that were worked out and then shelved. `docs/agents/` holds agent guides and skill configuration, each reached through a pointer in this file. `docs/runbook.md` holds the steps for running a window: taking, pulling and restoring a backup (#53, #55).
 - `Dockerfile` builds the one image the host runs. Its `.dockerignore` is an allowlist, so a file the app needs at runtime outside `ribcage/` joins it there, and `tests/image/test_build_context.py` too (#40, #51).
 - `compose.yaml` is the stack Komodo runs: the image at a pinned tag, the database on the `data` volume, published on the host's port 8080, where the host's proxy forwards (#54), and the `backup` sidecar on the same pin, writing a nightly backup to the `backups` volume (#53). `compose.local.yaml` layers a local build over it and moves the port to 8000 (#40, #52).
-- `fixtures/` is recorded data, grouped by subject, that tests and seeding read offline. It holds data only.
+- `fixtures/` is recorded data, grouped by subject, that tests and seeding read offline. It holds data only. `films/` is the seed corpus: `corpus.json` lists the fifty films, with the TMDB id a person picked for each one not hand-entered, and `tmdb/` and `dtdd/` hold their payloads; `results.json` and `past_movies.txt` are #19's coverage measurement, kept as measured. DoesTheDogDie's raw output, `dtdd/` and `films/dtdd/`, is gitignored under DTDD's terms, so a fresh clone lacks it and pure tests never read it (#40, #57).
 - `tools/` holds standalone harnesses from research tickets, one directory each. They stay outside the app and never ship.
 - `private/` holds credentials and the group's real data, backups pulled from a stack among them, in `private/backups/` (#30). Its contents stay on this machine, out of commits, tickets and logs.
 - `tmp/` is scratch, and nothing durable points into it.

@@ -1,0 +1,2957 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/xcjJ5khg2yzOa282mza39Lbrm7j.jpg",
+  "belongs_to_collection": {
+   "backdrop_path": "/pgxFa9jkfOaopuw5kGZ7KgVkhwW.jpg",
+   "id": 12263,
+   "name": "The Exorcist Collection",
+   "poster_path": "/1gw7RCYyRqginNo5D9PMPQQw7QB.jpg"
+  },
+  "budget": 11000000,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 1,
+     "character": "Chris MacNeil",
+     "credit_id": "52fe4508c3a36847f80b864b",
+     "gender": 1,
+     "id": 9560,
+     "known_for_department": "Acting",
+     "name": "Ellen Burstyn",
+     "order": 0,
+     "original_name": "Ellen Burstyn",
+     "popularity": 2.8664,
+     "profile_path": "/zGihSIVRzwmCqilnA4PmNM4C2RT.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 14,
+     "character": "Regan MacNeil",
+     "credit_id": "52fe4508c3a36847f80b8691",
+     "gender": 1,
+     "id": 37366,
+     "known_for_department": "Acting",
+     "name": "Linda Blair",
+     "order": 1,
+     "original_name": "Linda Blair",
+     "popularity": 3.0376,
+     "profile_path": "/diMBw4RF5HIFnBak6C2Obq3n2Dt.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 17,
+     "character": "Father Damien Karras",
+     "credit_id": "52fe4508c3a36847f80b869d",
+     "gender": 2,
+     "id": 21736,
+     "known_for_department": "Acting",
+     "name": "Jason Miller",
+     "order": 2,
+     "original_name": "Jason Miller",
+     "popularity": 1.3269,
+     "profile_path": "/hYC0SWjPQy4BGJo7fPleifPpcuC.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 2,
+     "character": "Father Lankester Merrin",
+     "credit_id": "52fe4508c3a36847f80b864f",
+     "gender": 2,
+     "id": 2201,
+     "known_for_department": "Acting",
+     "name": "Max von Sydow",
+     "order": 3,
+     "original_name": "Max von Sydow",
+     "popularity": 2.7306,
+     "profile_path": "/u16BsGyT6v9yuO7wWAF62NayDth.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 3,
+     "character": "Lt. Bill Kinderman",
+     "credit_id": "52fe4508c3a36847f80b8653",
+     "gender": 2,
+     "id": 5248,
+     "known_for_department": "Acting",
+     "name": "Lee J. Cobb",
+     "order": 4,
+     "original_name": "Lee J. Cobb",
+     "popularity": 2.992,
+     "profile_path": "/yxMxBvM0PZwu7YXQamG0kFwt9DZ.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 15,
+     "character": "Father Joseph Kevin Dyer",
+     "credit_id": "52fe4508c3a36847f80b8695",
+     "gender": 2,
+     "id": 65433,
+     "known_for_department": "Acting",
+     "name": "William O'Malley",
+     "order": 5,
+     "original_name": "William O'Malley",
+     "popularity": 0.646,
+     "profile_path": "/ukGO7hUgIzCZn29ORLKoicyfuM7.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Sharon Spencer",
+     "credit_id": "52fe4508c3a36847f80b8657",
+     "gender": 1,
+     "id": 57921,
+     "known_for_department": "Acting",
+     "name": "Kitty Winn",
+     "order": 6,
+     "original_name": "Kitty Winn",
+     "popularity": 0.9733,
+     "profile_path": "/9qO3EfnwYkiuol2z8jzetCIR92f.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 18,
+     "character": "Dr. Klein",
+     "credit_id": "52fe4508c3a36847f80b86a1",
+     "gender": 2,
+     "id": 79732,
+     "known_for_department": "Acting",
+     "name": "Barton Heyman",
+     "order": 7,
+     "original_name": "Barton Heyman",
+     "popularity": 0.9486,
+     "profile_path": "/6oyn9WMxi8GjzHAFm3weJBUejkI.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 19,
+     "character": "Dr. Barringer",
+     "credit_id": "52fe4508c3a36847f80b86a5",
+     "gender": 2,
+     "id": 71732,
+     "known_for_department": "Directing",
+     "name": "Peter Masterson",
+     "order": 8,
+     "original_name": "Peter Masterson",
+     "popularity": 1.1755,
+     "profile_path": "/xNIV2DrSMBsxs1XRt0YBBKVnBul.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 16,
+     "character": "Burke Dennings",
+     "credit_id": "52fe4508c3a36847f80b8699",
+     "gender": 2,
+     "id": 14016,
+     "known_for_department": "Acting",
+     "name": "Jack MacGowran",
+     "order": 9,
+     "original_name": "Jack MacGowran",
+     "popularity": 0.8306,
+     "profile_path": "/rpQ8woHjo3ZzsJNT3RJSfJGDNIQ.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 20,
+     "character": "Karl",
+     "credit_id": "52fe4508c3a36847f80b86a9",
+     "gender": 2,
+     "id": 26600,
+     "known_for_department": "Acting",
+     "name": "Rudolf Schündler",
+     "order": 10,
+     "original_name": "Rudolf Schündler",
+     "popularity": 0.5665,
+     "profile_path": "/pCMgzBPLU4CpAVckCiTkAjEM8ca.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 53,
+     "character": "Willi",
+     "credit_id": "5c287d3392514138d7c00c6b",
+     "gender": 1,
+     "id": 982340,
+     "known_for_department": "Acting",
+     "name": "Gina Petrushka",
+     "order": 11,
+     "original_name": "Gina Petrushka",
+     "popularity": 0.3903,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 22,
+     "character": "Dr. Taney",
+     "credit_id": "52fe4508c3a36847f80b86ad",
+     "gender": 2,
+     "id": 119716,
+     "known_for_department": "Acting",
+     "name": "Robert Symonds",
+     "order": 12,
+     "original_name": "Robert Symonds",
+     "popularity": 1.0502,
+     "profile_path": "/vjDNieqXTEiol1SmaY7ijtWle2Q.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 54,
+     "character": "Psychiatrist",
+     "credit_id": "5c287d71c3a3683a76d3c910",
+     "gender": 2,
+     "id": 589090,
+     "known_for_department": "Acting",
+     "name": "Arthur Storch",
+     "order": 13,
+     "original_name": "Arthur Storch",
+     "popularity": 0.5382,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 55,
+     "character": "Tom",
+     "credit_id": "5c287ea792514138e1c022d0",
+     "gender": 2,
+     "id": 1052762,
+     "known_for_department": "Acting",
+     "name": "Thomas Bermingham",
+     "order": 14,
+     "original_name": "Thomas Bermingham",
+     "popularity": 0.4334,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 52,
+     "character": "Mary Karras",
+     "credit_id": "5c287cba92514138c8c02b7f",
+     "gender": 1,
+     "id": 2204437,
+     "known_for_department": "Acting",
+     "name": "Vasiliki Maliaros",
+     "order": 15,
+     "original_name": "Vasiliki Maliaros",
+     "popularity": 0.5328,
+     "profile_path": "/gkh1E74sEPlWhAW2MXqUqFR4p3q.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 26,
+     "character": "Uncle John",
+     "credit_id": "52fe4508c3a36847f80b86b1",
+     "gender": 2,
+     "id": 140177,
+     "known_for_department": "Acting",
+     "name": "Titos Vandis",
+     "order": 16,
+     "original_name": "Τίτος Βανδής",
+     "popularity": 14.0969,
+     "profile_path": "/p3rT1vXOMWNYfV7HJOp0tMhzu6E.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 56,
+     "character": "Language Lab Director",
+     "credit_id": "5c287eef0e0a264f4233800c",
+     "gender": 2,
+     "id": 43978,
+     "known_for_department": "Acting",
+     "name": "John Mahon",
+     "order": 17,
+     "original_name": "John Mahon",
+     "popularity": 0.5645,
+     "profile_path": "/HQ5v471RZCcWhl9qY4cImUf5tP.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 57,
+     "character": "Bishop Michael",
+     "credit_id": "5c287f26c3a3683a59d3ada9",
+     "gender": 2,
+     "id": 1388307,
+     "known_for_department": "Acting",
+     "name": "Wallace Rooney",
+     "order": 18,
+     "original_name": "Wallace Rooney",
+     "popularity": 0.5338,
+     "profile_path": "/xcFGbEz1HTRXTU6cz6ftpxF7mPZ.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 58,
+     "character": "Chuck / Demon (voice)",
+     "credit_id": "5c287f880e0a26790f36787b",
+     "gender": 2,
+     "id": 169281,
+     "known_for_department": "Acting",
+     "name": "Ron Faber",
+     "order": 19,
+     "original_name": "Ron Faber",
+     "popularity": 0.6811,
+     "profile_path": "/5GbSymI7If231v7E86AX48d9Ryp.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 29,
+     "character": "Mary Jo Perrin",
+     "credit_id": "52fe4508c3a36847f80b86b5",
+     "gender": 1,
+     "id": 56694,
+     "known_for_department": "Acting",
+     "name": "Donna Mitchell",
+     "order": 20,
+     "original_name": "Donna Mitchell",
+     "popularity": 1.3983,
+     "profile_path": "/xl8nnJBzNj0cqTAB3nk7GkKqmRV.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 59,
+     "character": "Jesuit Dean",
+     "credit_id": "5c287fc70e0a26792a367765",
+     "gender": 2,
+     "id": 1158858,
+     "known_for_department": "Acting",
+     "name": "Roy Cooper",
+     "order": 21,
+     "original_name": "Roy Cooper",
+     "popularity": 0.5414,
+     "profile_path": "/vucD9F4juSxiHnAGOD8eTUnEK9I.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 31,
+     "character": "Senator at Party",
+     "credit_id": "52fe4508c3a36847f80b86b9",
+     "gender": 2,
+     "id": 129664,
+     "known_for_department": "Acting",
+     "name": "Robert Gerringer",
+     "order": 22,
+     "original_name": "Robert Gerringer",
+     "popularity": 0.5286,
+     "profile_path": "/oWbkr7pCtIsdT3xCllbiXaeTtpx.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 32,
+     "character": "Demon (voice)",
+     "credit_id": "52fe4508c3a36847f80b86bd",
+     "gender": 1,
+     "id": 18737,
+     "known_for_department": "Acting",
+     "name": "Mercedes McCambridge",
+     "order": 23,
+     "original_name": "Mercedes McCambridge",
+     "popularity": 1.3957,
+     "profile_path": "/tAc5xZvGieKhKuc2AEMoXNAtGFc.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 62,
+     "character": "Radiologist's Assistant (uncredited)",
+     "credit_id": "5d3e8e9221621b4d6bf1a492",
+     "gender": 2,
+     "id": 2373611,
+     "known_for_department": "Acting",
+     "name": "Paul Bateson",
+     "order": 24,
+     "original_name": "Paul Bateson",
+     "popularity": 0.5426,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 63,
+     "character": "Nurse (uncredited)",
+     "credit_id": "5d3e8f8a34e1520011e842ce",
+     "gender": 1,
+     "id": 2373616,
+     "known_for_department": "Acting",
+     "name": "Elinore Blair",
+     "order": 25,
+     "original_name": "Elinore Blair",
+     "popularity": 0.3806,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 64,
+     "character": "The Producer (uncredited)",
+     "credit_id": "5d3e9085b87aec1f25399bab",
+     "gender": 2,
+     "id": 57922,
+     "known_for_department": "Writing",
+     "name": "William Peter Blatty",
+     "order": 26,
+     "original_name": "William Peter Blatty",
+     "popularity": 1.2195,
+     "profile_path": "/s39l8UCOT0EJYRXhblWTdzjQaoC.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 65,
+     "character": "First Mental Patient (uncredited)",
+     "credit_id": "5d3e90e234e1520011e844b0",
+     "gender": 1,
+     "id": 142244,
+     "known_for_department": "Acting",
+     "name": "Mary Boylan",
+     "order": 27,
+     "original_name": "Mary Boylan",
+     "popularity": 0.5279,
+     "profile_path": "/yxPBoTfF0AircwcF3K1dlVTYKYK.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 60,
+     "character": "Astronaut (uncredited)",
+     "credit_id": "5c288055c3a3683a76d3cb8e",
+     "gender": 2,
+     "id": 1846049,
+     "known_for_department": "Acting",
+     "name": "Dick Callinan",
+     "order": 28,
+     "original_name": "Dick Callinan",
+     "popularity": 0.6002,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 66,
+     "character": "Doctor (voice) (uncredited)",
+     "credit_id": "5d3e9148b87aec00113a9b13",
+     "gender": 2,
+     "id": 1225439,
+     "known_for_department": "Acting",
+     "name": "Mason Curry",
+     "order": 29,
+     "original_name": "Mason Curry",
+     "popularity": 0.4837,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 67,
+     "character": "Violent psychotic patient (uncredited)",
+     "credit_id": "5d3e91f934e1525defe7acfe",
+     "gender": 1,
+     "id": 2077725,
+     "known_for_department": "Acting",
+     "name": "Toni Darnay",
+     "order": 30,
+     "original_name": "Toni Darnay",
+     "popularity": 0.5008,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 37,
+     "character": "Demon / Regan Double (uncredited)",
+     "credit_id": "53fe8aed0e0a262de2002f64",
+     "gender": 1,
+     "id": 108700,
+     "known_for_department": "Acting",
+     "name": "Eileen Dietz",
+     "order": 31,
+     "original_name": "Eileen Dietz",
+     "popularity": 0.7947,
+     "profile_path": "/o2G8NDUVVMkE6azdOoKtCrFHmO8.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 68,
+     "character": "Senator's Wife (uncredited)",
+     "credit_id": "5d3e92c2b87aec2c3d3a6e21",
+     "gender": 1,
+     "id": 2373641,
+     "known_for_department": "Acting",
+     "name": "Joanne Dusseau",
+     "order": 32,
+     "original_name": "Joanne Dusseau",
+     "popularity": 0.5588,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 69,
+     "character": "Minor Role (uncredited)",
+     "credit_id": "5d3e93c421621b4d6bf1b03b",
+     "gender": 2,
+     "id": 2216890,
+     "known_for_department": "Writing",
+     "name": "Bernard Eismann",
+     "order": 33,
+     "original_name": "Bernard Eismann",
+     "popularity": 0.5907,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 70,
+     "character": "Minor Role (uncredited)",
+     "credit_id": "5d3e988434e15236d6e7aaff",
+     "gender": 1,
+     "id": 2373651,
+     "known_for_department": "Acting",
+     "name": "Beatrice Hunter",
+     "order": 34,
+     "original_name": "Beatrice Hunter",
+     "popularity": 0.3256,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 71,
+     "character": "Bellevue Nurse (uncredited)",
+     "credit_id": "5d3e98e734e1525dace7c952",
+     "gender": 1,
+     "id": 2049236,
+     "known_for_department": "Acting",
+     "name": "Yvonne Jones",
+     "order": 35,
+     "original_name": "Yvonne Jones",
+     "popularity": 0.3492,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 72,
+     "character": "Minor Role (uncredited)",
+     "credit_id": "5d3ea530b87aec2c3d3a97eb",
+     "gender": 2,
+     "id": 2373672,
+     "known_for_department": "Acting",
+     "name": "Don LaBonte",
+     "order": 36,
+     "original_name": "Don LaBonte",
+     "popularity": 0.4222,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 73,
+     "character": "Angiography Doctor (uncredited)",
+     "credit_id": "5d3ea58db87aec1f2539d11c",
+     "gender": 2,
+     "id": 2373676,
+     "known_for_department": "Acting",
+     "name": "Barton Lane",
+     "order": 37,
+     "original_name": "Barton Lane",
+     "popularity": 0.4846,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 74,
+     "character": "Spiderwalk (uncredited)",
+     "credit_id": "5d3ea61134e1520011e87bed",
+     "gender": 1,
+     "id": 2373677,
+     "known_for_department": "Acting",
+     "name": "Ann Miles",
+     "order": 38,
+     "original_name": "Ann Miles",
+     "popularity": 0.5512,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 76,
+     "character": "Priest (uncredited)",
+     "credit_id": "5d3ea8d2b87aec1f2539dd81",
+     "gender": 2,
+     "id": 2373683,
+     "known_for_department": "Acting",
+     "name": "John Nicola",
+     "order": 39,
+     "original_name": "John Nicola",
+     "popularity": 0.2916,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 78,
+     "character": "Subway Vagrant (uncredited)",
+     "credit_id": "5d3ea9bc34e1525dace7fa95",
+     "gender": 2,
+     "id": 2373687,
+     "known_for_department": "Acting",
+     "name": "Vincent Russell",
+     "order": 40,
+     "original_name": "Vincent Russell",
+     "popularity": 0.3087,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 79,
+     "character": "Priest Singing Around Piano at Party (uncredited)",
+     "credit_id": "5d3eaa8221621b178bee2e3b",
+     "gender": 2,
+     "id": 2373695,
+     "known_for_department": "Acting",
+     "name": "Gerard F. Yates",
+     "order": 41,
+     "original_name": "Gerard F. Yates",
+     "popularity": 0.4202,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 91,
+     "character": "(her voice on the radio)",
+     "credit_id": "64e93732c613ce00ac41aa1e",
+     "gender": 1,
+     "id": 1312761,
+     "known_for_department": "Acting",
+     "name": "Rita Sakellariou",
+     "order": 42,
+     "original_name": "Ρίτα Σακελλαρίου",
+     "popularity": 0.3777,
+     "profile_path": "/j3RVU6I5OJ6ZpBiOOiykoqoRZFy.jpg"
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "52fe4508c3a36847f80b865d",
+     "department": "Directing",
+     "gender": 2,
+     "id": 15175,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "William Friedkin",
+     "original_name": "William Friedkin",
+     "popularity": 1.5811,
+     "profile_path": "/r9JJ3VDB7VeDol7cEGsS4NyM6d5.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4508c3a36847f80b866f",
+     "department": "Production",
+     "gender": 2,
+     "id": 57922,
+     "job": "Producer",
+     "known_for_department": "Writing",
+     "name": "William Peter Blatty",
+     "original_name": "William Peter Blatty",
+     "popularity": 1.2195,
+     "profile_path": "/s39l8UCOT0EJYRXhblWTdzjQaoC.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4508c3a36847f80b8663",
+     "department": "Writing",
+     "gender": 2,
+     "id": 57922,
+     "job": "Novel",
+     "known_for_department": "Writing",
+     "name": "William Peter Blatty",
+     "original_name": "William Peter Blatty",
+     "popularity": 1.2195,
+     "profile_path": "/s39l8UCOT0EJYRXhblWTdzjQaoC.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4508c3a36847f80b8669",
+     "department": "Writing",
+     "gender": 2,
+     "id": 57922,
+     "job": "Screenplay",
+     "known_for_department": "Writing",
+     "name": "William Peter Blatty",
+     "original_name": "William Peter Blatty",
+     "popularity": 1.2195,
+     "profile_path": "/s39l8UCOT0EJYRXhblWTdzjQaoC.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4508c3a36847f80b8681",
+     "department": "Camera",
+     "gender": 2,
+     "id": 16331,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Owen Roizman",
+     "original_name": "Owen Roizman",
+     "popularity": 0.6702,
+     "profile_path": "/lOEUYckmdKSB5WS487E2hgYkTdS.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4508c3a36847f80b8687",
+     "department": "Editing",
+     "gender": 2,
+     "id": 57924,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Norman Gay",
+     "original_name": "Norman Gay",
+     "popularity": 0.5126,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4508c3a36847f80b868d",
+     "department": "Editing",
+     "gender": 2,
+     "id": 57925,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Evan A. Lottman",
+     "original_name": "Evan A. Lottman",
+     "popularity": 0.3754,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4508c3a36847f80b8675",
+     "department": "Production",
+     "gender": 2,
+     "id": 29342,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Noel Marshall",
+     "original_name": "Noel Marshall",
+     "popularity": 0.6969,
+     "profile_path": "/gDpxhtlng2TraGeANHkfDWkewVC.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "64da6cd637109700e226e064",
+     "department": "Production",
+     "gender": 2,
+     "id": 1551963,
+     "job": "Associate Producer",
+     "known_for_department": "Production",
+     "name": "David Salven",
+     "original_name": "David Salven",
+     "popularity": 0.6705,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64da6d95d100b600c5d2abeb",
+     "department": "Sound",
+     "gender": 0,
+     "id": 3008406,
+     "job": "Sound Editor",
+     "known_for_department": "Sound",
+     "name": "Randy Nite",
+     "original_name": "Randy Nite",
+     "popularity": 0.3443,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64da6d71001bbd00c6c8804f",
+     "department": "Sound",
+     "gender": 2,
+     "id": 3104,
+     "job": "Sound",
+     "known_for_department": "Sound",
+     "name": "Chris Newman",
+     "original_name": "Chris Newman",
+     "popularity": 0.8302,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64da6dc07719d700afbf323e",
+     "department": "Lighting",
+     "gender": 2,
+     "id": 1046435,
+     "job": "Gaffer",
+     "known_for_department": "Lighting",
+     "name": "Richard Quinlan",
+     "original_name": "Richard Quinlan",
+     "popularity": 0.5246,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64da6d417719d700afbf3210",
+     "department": "Directing",
+     "gender": 2,
+     "id": 71724,
+     "job": "First Assistant Director",
+     "known_for_department": "Production",
+     "name": "Terence A. Donnelly",
+     "original_name": "Terence A. Donnelly",
+     "popularity": 0.6025,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64da6da437109700c51c25c5",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2111120,
+     "job": "Sound Effects Editor",
+     "known_for_department": "Sound",
+     "name": "Ross Taylor",
+     "original_name": "Ross Taylor",
+     "popularity": 0.538,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64da6dd0bf31f201ce6a2260",
+     "department": "Directing",
+     "gender": 2,
+     "id": 191935,
+     "job": "Script Supervisor",
+     "known_for_department": "Directing",
+     "name": "Nicholas Sgarro",
+     "original_name": "Nicholas Sgarro",
+     "popularity": 0.555,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "60f7979e209f180044bc0fe2",
+     "department": "Sound",
+     "gender": 2,
+     "id": 7066,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Jack Nitzsche",
+     "original_name": "Jack Nitzsche",
+     "popularity": 0.7701,
+     "profile_path": "/7j4DfC2JLPdInoNUbVHthNYoSpm.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5322dad09251411f89004784",
+     "department": "Production",
+     "gender": 1,
+     "id": 1046,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Juliet Taylor",
+     "original_name": "Juliet Taylor",
+     "popularity": 0.852,
+     "profile_path": "/yZpHkHDJ38MC9ochQcitEA52oFB.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5322db5b9251411f7e0047f3",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 1300903,
+     "job": "Costume Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Joe Fretwell",
+     "original_name": "Joe Fretwell",
+     "popularity": 0.3617,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5322da319251411f77004840",
+     "department": "Production",
+     "gender": 2,
+     "id": 949,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Louis DiGiaimo",
+     "original_name": "Louis DiGiaimo",
+     "popularity": 0.6751,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "544db883c3a36872bc0038e4",
+     "department": "Costume & Make-Up",
+     "gender": 2,
+     "id": 29654,
+     "job": "Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Dick Smith",
+     "original_name": "Dick Smith",
+     "popularity": 0.7936,
+     "profile_path": "/kKCenlQ8iQCTLGfX8ZPpJFpxvwS.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "54fdb0cc92514123af004da2",
+     "department": "Crew",
+     "gender": 0,
+     "id": 15182,
+     "job": "Scenic Artist",
+     "known_for_department": "Crew",
+     "name": "Edward Garzero",
+     "original_name": "Edward Garzero",
+     "popularity": 0.5133,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "54fdb1dcc3a368479c0046b3",
+     "department": "Camera",
+     "gender": 0,
+     "id": 1437276,
+     "job": "Still Photographer",
+     "known_for_department": "Camera",
+     "name": "Josh Weiner",
+     "original_name": "Josh Weiner",
+     "popularity": 0.4693,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "54fdb16ec3a3684711004e24",
+     "department": "Sound",
+     "gender": 2,
+     "id": 16552,
+     "job": "Sound Effects Editor",
+     "known_for_department": "Sound",
+     "name": "Fred J. Brown",
+     "original_name": "Fred J. Brown",
+     "popularity": 0.5589,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "54fdaf59c3a3681638004478",
+     "department": "Costume & Make-Up",
+     "gender": 2,
+     "id": 1437273,
+     "job": "Hairstylist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "William A. Farley",
+     "original_name": "William A. Farley",
+     "popularity": 0.6447,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "54fdb05fc3a368480800547c",
+     "department": "Art",
+     "gender": 2,
+     "id": 14539,
+     "job": "Assistant Art Director",
+     "known_for_department": "Art",
+     "name": "Charles Bailey",
+     "original_name": "Charles Bailey",
+     "popularity": 0.4882,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "54fdb20992514122be004b49",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1437277,
+     "job": "Music Editor",
+     "known_for_department": "Sound",
+     "name": "Eugene Marks",
+     "original_name": "Eugene Marks",
+     "popularity": 0.4221,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "54fdaf3f925141237d004e01",
+     "department": "Art",
+     "gender": 2,
+     "id": 12848,
+     "job": "Set Decoration",
+     "known_for_department": "Art",
+     "name": "Jerry Wunderlich",
+     "original_name": "Jerry Wunderlich",
+     "popularity": 0.538,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "54fdaf2ac3a368270c0020eb",
+     "department": "Art",
+     "gender": 0,
+     "id": 1052763,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Bill Malley",
+     "original_name": "Bill Malley",
+     "popularity": 0.5558,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "54fdb1a1c3a36869fb0073a4",
+     "department": "Crew",
+     "gender": 0,
+     "id": 1052765,
+     "job": "Special Effects",
+     "known_for_department": "Crew",
+     "name": "Marcel Vercoutere",
+     "original_name": "Marcel Vercoutere",
+     "popularity": 0.3809,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61ffa928d371970043e492d8",
+     "department": "Art",
+     "gender": 2,
+     "id": 70778,
+     "job": "Property Master",
+     "known_for_department": "Production",
+     "name": "Joseph M. Caracciolo",
+     "original_name": "Joseph M. Caracciolo",
+     "popularity": 0.7708,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5723e9bdc3a368222d0004df",
+     "department": "Production",
+     "gender": 1,
+     "id": 53003,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Nessa Hyams",
+     "original_name": "Nessa Hyams",
+     "popularity": 0.7278,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "66411f7292d71d2745c12b83",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2530592,
+     "job": "Sound",
+     "known_for_department": "Sound",
+     "name": "C. Robert Fine",
+     "original_name": "C. Robert Fine",
+     "popularity": 0.4908,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "66412058a6042c1b15ff66a3",
+     "department": "Sound",
+     "gender": 0,
+     "id": 4709919,
+     "job": "Sound",
+     "known_for_department": "Sound",
+     "name": "Hal Landaker",
+     "original_name": "Hal Landaker",
+     "popularity": 0.3545,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "667f8a1cb5b822098b8aa33f",
+     "department": "Editing",
+     "gender": 2,
+     "id": 23914,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Bud S. Smith",
+     "original_name": "Bud S. Smith",
+     "popularity": 0.614,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5c1502010e0a26037c3c768b",
+     "department": "Art",
+     "gender": 2,
+     "id": 1648134,
+     "job": "Title Designer",
+     "known_for_department": "Art",
+     "name": "Dan Perri",
+     "original_name": "Dan Perri",
+     "popularity": 1.0568,
+     "profile_path": "/vrXtMyII0EoV55avH2a3SLhBZKq.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5c5d96ff0e0a2627a76708a9",
+     "department": "Camera",
+     "gender": 2,
+     "id": 2227681,
+     "job": "Focus Puller",
+     "known_for_department": "Camera",
+     "name": "David Wynn-Jones",
+     "original_name": "David Wynn-Jones",
+     "popularity": 0.5323,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d3ea89434e1525defe7ed34",
+     "department": "Crew",
+     "gender": 1,
+     "id": 2373677,
+     "job": "Stunts",
+     "known_for_department": "Acting",
+     "name": "Ann Miles",
+     "original_name": "Ann Miles",
+     "popularity": 0.5512,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d3ea94921621b4d6bf1e372",
+     "department": "Crew",
+     "gender": 2,
+     "id": 2373683,
+     "job": "Technical Advisor",
+     "known_for_department": "Acting",
+     "name": "John Nicola",
+     "original_name": "John Nicola",
+     "popularity": 0.2916,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e42f6a23dd126001857b57f",
+     "department": "Crew",
+     "gender": 2,
+     "id": 16178,
+     "job": "Special Effects Assistant",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Rick Baker",
+     "original_name": "Rick Baker",
+     "popularity": 1.435,
+     "profile_path": "/8thqXBS5CQF0U2zsHAVM9GH7i4I.jpg"
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   }
+  ],
+  "homepage": "http://theexorcist.warnerbros.com/",
+  "id": 9552,
+  "imdb_id": "tt0070047",
+  "origin_country": [
+   "US"
+  ],
+  "original_language": "en",
+  "original_title": "The Exorcist",
+  "overview": "When a mysterious entity possesses a young girl, her mother seeks the help of two Catholic priests to save her life.",
+  "popularity": 38.2005,
+  "poster_path": "/5x0CeVHJI8tcDx8tUUwYHQSNILq.jpg",
+  "production_companies": [
+   {
+    "id": 48184,
+    "logo_path": null,
+    "name": "Hoya Productions",
+    "origin_country": "US"
+   },
+   {
+    "id": 174,
+    "logo_path": "/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png",
+    "name": "Warner Bros. Pictures",
+    "origin_country": "US"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   }
+  ],
+  "release_date": "1973-12-26",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray",
+       "release_date": "2010-10-18T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AR",
+     "release_dates": [
+      {
+       "certification": "+18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-08-14T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "1979-09-20T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "+16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-02-18T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "R 18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-03-22T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "MA 15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-04-03T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BE",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored Version",
+       "release_date": "2001-03-02T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-09-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-11-11T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-03-02T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "18A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1973-12-26T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "18A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "2000-12-26T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CH",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "fr",
+       "note": "Restored version",
+       "release_date": "2001-03-14T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "de",
+       "note": "Restored version",
+       "release_date": "2001-03-15T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2015-05-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Shanghai International Film Festival",
+       "release_date": "2017-06-25T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": " Beijing International Film Festival （4K）Director Edited The Version You've Never Seen Before",
+       "release_date": "2024-04-19T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CZ",
+     "release_dates": [
+      {
+       "certification": "15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-07-12T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "West Germany",
+       "release_date": "1974-09-19T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-03-15T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Neuprüfung",
+       "release_date": "2013-08-13T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DK",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-08-05T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1975-09-01T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Reestreno",
+       "release_date": "2018-07-17T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2000-10-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FI",
+     "release_dates": [
+      {
+       "certification": "K-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2001-02-09T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "K-18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-10-04T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-09-11T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-03-14T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2016-11-08T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "London",
+       "release_date": "1974-03-14T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "X (original rating)",
+       "release_date": "1974-09-22T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "1980-07-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-10-05T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-05-04T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HK",
+     "release_dates": [
+      {
+       "certification": "IIB",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2000-11-02T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HU",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1989-01-05T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-07-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ID",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2016-01-07T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IE",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-05-31T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "1998-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IL",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-08-16T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1977-08-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IS",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2000-11-03T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IT",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-09-20T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2000-12-01T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2013-06-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "JP",
+     "release_dates": [
+      {
+       "certification": "R15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-07-13T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "PG12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2000-10-07T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1975-05-24T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-05-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LU",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Luxembourg City Film Festival",
+       "release_date": "2021-03-11T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "B-15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2021-10-26T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "C",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-12-19T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "B",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-03-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NL",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-09-04T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-04-05T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu ray",
+       "release_date": "2010-09-20T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "2014-04-15T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Net 5",
+       "release_date": "2004-03-16T00:00:00.000Z",
+       "type": 6
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NO",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1977-12-29T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Nytgivelse og ny aldersgrense. Filmen skildrer en djevelutdrivelse og får 15-årsgrense pga. scener der den besatte jenta utagerer verbalt og fysisk. Virkemidlene, som var svært omdiskutert på 70-tallet, er ikke så uvanlig i film i dag.",
+       "release_date": "2000-12-05T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NZ",
+     "release_dates": [
+      {
+       "certification": "R16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-03-15T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2013-02-21T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1975-01-01T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-03-15T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PH",
+     "release_dates": [
+      {
+       "certification": "R-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2000-10-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PL",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2014-10-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PT",
+     "release_dates": [
+      {
+       "certification": "M/18",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "1974-11-01T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "M/18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-04-06T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RU",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-04-01T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SE",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "1974-07-29T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "Stockholm International Film Festival",
+       "release_date": "2015-11-13T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "Restored Version",
+       "release_date": "2001-04-11T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray release",
+       "release_date": "2010-10-27T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD release",
+       "release_date": "2001-08-08T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SG",
+     "release_dates": [
+      {
+       "certification": "R21",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray (uncut)",
+       "release_date": "2013-10-08T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "R21",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD (uncut)",
+       "release_date": "2006-10-10T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SK",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "cs",
+       "note": "Markíza ",
+       "release_date": "1998-01-30T00:00:00.000Z",
+       "type": 6
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "sk",
+       "note": "Markíza ",
+       "release_date": "2015-01-04T00:00:00.000Z",
+       "type": 6
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TR",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored version",
+       "release_date": "2001-05-04T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1981-03-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "輔12級",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored Version",
+       "release_date": "2020-10-30T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Screamfest Horror Film Festival (Extended Version)",
+       "release_date": "2002-10-17T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2000-03-17T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2010-09-30T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1973-12-26T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Restored Version",
+       "release_date": "2000-09-22T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "1979-04-11T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2000-12-06T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1974-08-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "XC",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "1991-10-01T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 430872776,
+  "runtime": 122,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "German",
+    "iso_639_1": "de",
+    "name": "Deutsch"
+   },
+   {
+    "english_name": "French",
+    "iso_639_1": "fr",
+    "name": "Français"
+   },
+   {
+    "english_name": "Latin",
+    "iso_639_1": "la",
+    "name": "Latin"
+   },
+   {
+    "english_name": "Arabic",
+    "iso_639_1": "ar",
+    "name": "العربية"
+   },
+   {
+    "english_name": "Greek",
+    "iso_639_1": "el",
+    "name": "ελληνικά"
+   },
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   }
+  ],
+  "status": "Released",
+  "tagline": "Something almost beyond comprehension is happening to a girl on this street, in this house…And a man has been sent for as a last resort. This man is The Exorcist.",
+  "title": "The Exorcist",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "6ad19df451f6e42ce5a74dd0",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "4eIpUyE1aNo",
+     "name": "Directors on The Exorcist",
+     "official": false,
+     "published_at": "2026-10-14T12:38:21.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "69dd695784a2925e17c738b4",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "4KFB-e0cRAk",
+     "name": "The Movie Mary Bronstein Watched Way Too Young | ADVENTURES IN MOVIEGOING",
+     "official": true,
+     "published_at": "2026-04-12T18:32:58.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "69fe6173bf4f834d76878740",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "p-t9uemRLMM",
+     "name": "Regan Possesses the Priest",
+     "official": true,
+     "published_at": "2025-10-03T14:01:23.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a21ca92bab1fffc1b8255e8",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "oe9Zow-B27A",
+     "name": "The Battle For Regan's Soul",
+     "official": true,
+     "published_at": "2024-08-09T14:00:44.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a21cdd354ae7457ce8001af",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "dBeXTVI3cvU",
+     "name": "Ejecting Evil..",
+     "official": true,
+     "published_at": "2024-05-23T14:00:24.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6517134ba199a600e1fb8cb8",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "xl-YvLWeC4Y",
+     "name": "Possession",
+     "official": true,
+     "published_at": "2023-09-29T14:00:51.000Z",
+     "site": "YouTube",
+     "size": 2160,
+     "type": "Clip"
+    },
+    {
+     "id": "65136053cadb6b00ad91e838",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "EJTE94Hd5ZI",
+     "name": "The Demon Inside Regan",
+     "official": true,
+     "published_at": "2023-09-26T14:00:15.000Z",
+     "site": "YouTube",
+     "size": 2160,
+     "type": "Clip"
+    },
+    {
+     "id": "650b5d930d5d8500fdb7c7d4",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "TtV7EagJkvY",
+     "name": "4K Ultra HD Extended Preview",
+     "official": true,
+     "published_at": "2023-09-19T15:00:22.000Z",
+     "site": "YouTube",
+     "size": 2160,
+     "type": "Clip"
+    },
+    {
+     "id": "64c99717001bbd00ad5414bb",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "BU2eYAO31Cc",
+     "name": "4K Ultra HD Official Trailer",
+     "official": true,
+     "published_at": "2023-08-01T19:00:08.000Z",
+     "site": "YouTube",
+     "size": 2160,
+     "type": "Trailer"
+    },
+    {
+     "id": "653fdaa2109cd0010b04e010",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "poI8YPi4pKM",
+     "name": "‘The Exorcist’ Director William Friedkin Has Never Made a Film for Himself | TCMFF 2023",
+     "official": true,
+     "published_at": "2023-04-17T14:00:35.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "5fefafd74a4bf6003ed64b57",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "vLLUqGltr1A",
+     "name": "Modern Trailer",
+     "official": true,
+     "published_at": "2021-01-01T21:02:30.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "5f9083b755c1f40037223b82",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "UX0sG4jkb40",
+     "name": "Behind The Scenes: Different Versions of The Exorcist",
+     "official": true,
+     "published_at": "2020-10-21T17:59:49.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Behind the Scenes"
+    },
+    {
+     "id": "643da7afc144dd0503fbd10f",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "aeWJE4t7UJg",
+     "name": "\"The Exorcist\" at 45: The Challenges",
+     "official": true,
+     "published_at": "2018-10-23T16:18:25.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "643da78677394104c1f22b10",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "bbzs8cOcnRw",
+     "name": "\"The Exorcist\" at 45: Casting Linda Blair",
+     "official": true,
+     "published_at": "2018-10-23T16:18:24.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "643da7925f4b7304e2fe7a7e",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "r4d42ukCEKs",
+     "name": "\"The Exorcist\" at 45: Fire on Set",
+     "official": true,
+     "published_at": "2018-10-23T16:18:24.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "643da7a25bce9e02fc76e9cf",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "Wxfzq1r273s",
+     "name": "\"The Exorcist\" at 45: Ellen Burstyn's Perspective",
+     "official": true,
+     "published_at": "2018-10-23T16:18:24.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "643da7695bce9e02fc76e9b7",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "8vxMb5ZALt8",
+     "name": "\"The Exorcist\" at 45: The Version You've Never Seen",
+     "official": true,
+     "published_at": "2018-10-23T15:51:32.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "643da77699d5c30447afc3b9",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "HzYm3CwUoBk",
+     "name": "\"The Exorcist\" at 45: The Origin",
+     "official": true,
+     "published_at": "2018-10-23T15:50:44.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "643ac567e3294302ebf9d224",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "jyW5YXDcIGs",
+     "name": "Original Theatrical Trailer",
+     "official": true,
+     "published_at": "2014-07-08T23:45:48.000Z",
+     "site": "YouTube",
+     "size": 360,
+     "type": "Trailer"
+    },
+    {
+     "id": "643daa5977394104c1f22b8e",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "Un0lXLWUiHw",
+     "name": "2011 Governors Awards: Linda Blair on Dick Smith",
+     "official": true,
+     "published_at": "2014-03-21T19:58:49.000Z",
+     "site": "YouTube",
+     "size": 360,
+     "type": "Featurette"
+    },
+    {
+     "id": "643dab1b7739410473f22cf7",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "fwMv9n7We7I",
+     "name": "Rick Baker on Dick Smith",
+     "official": true,
+     "published_at": "2014-03-20T17:15:29.000Z",
+     "site": "YouTube",
+     "size": 360,
+     "type": "Featurette"
+    },
+    {
+     "id": "643daaf377394104f1f22c69",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "3QlRaBMpLRc",
+     "name": "Alec Gillis on Dick Smith",
+     "official": true,
+     "published_at": "2014-03-20T17:15:06.000Z",
+     "site": "YouTube",
+     "size": 360,
+     "type": "Featurette"
+    },
+    {
+     "id": "643da73f99d5c30447afc3ad",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "inw4XhSL8cY",
+     "name": "The Exorcist Wins Adapted Screenplay: 1974 Oscars",
+     "official": true,
+     "published_at": "2013-10-31T18:10:23.000Z",
+     "site": "YouTube",
+     "size": 480,
+     "type": "Featurette"
+    },
+    {
+     "id": "643ac2bf42f19f04f11e952e",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "GT7iY8UDt2I",
+     "name": "Intro",
+     "official": true,
+     "published_at": "2013-10-07T23:39:27.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "643ac45031234504c4d86210",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "P0HNfNkxtTQ",
+     "name": "What's Wrong with Her",
+     "official": true,
+     "published_at": "2013-10-07T23:35:55.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "643ac2e242f19f054a1e9573",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "K9T9Uf2EpN0",
+     "name": "Georgetown",
+     "official": true,
+     "published_at": "2013-10-07T23:34:07.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "643ac4cf31234504c4d8625a",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "cRdHsAJT3Oo",
+     "name": "What's Best for Your Daughter",
+     "official": true,
+     "published_at": "2013-10-07T23:21:37.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "643ac30242f19f02ec1e952f",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "VeATpnVJZNg",
+     "name": "Ouija Board",
+     "official": true,
+     "published_at": "2013-10-07T23:19:49.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "643ac3e6e329430580f9d2ba",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "Uq5RqOfV1GU",
+     "name": "No Spasm",
+     "official": true,
+     "published_at": "2013-10-07T23:19:40.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "643ac42b091e6205055e3997",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "dwKv9vv9bH4",
+     "name": "Shaking Bed",
+     "official": true,
+     "published_at": "2013-10-07T23:18:08.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "643da7c9c144dd045bfbd104",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "X-6kuKzoIHI",
+     "name": "The Exorcist Wins Sound: 1974 Oscars",
+     "official": true,
+     "published_at": "2012-10-26T18:44:40.000Z",
+     "site": "YouTube",
+     "size": 480,
+     "type": "Featurette"
+    },
+    {
+     "id": "643ac33ae8d0b41075cda6ae",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "nV97nwuR6RQ",
+     "name": "Raising Hell",
+     "official": true,
+     "published_at": "2010-10-14T16:43:42.000Z",
+     "site": "YouTube",
+     "size": 360,
+     "type": "Behind the Scenes"
+    }
+   ]
+  },
+  "vote_average": 7.749,
+  "vote_count": 8942
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/xcjJ5khg2yzOa282mza39Lbrm7j.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 9552,
+    "original_language": "en",
+    "original_title": "The Exorcist",
+    "overview": "When a mysterious entity possesses a young girl, her mother seeks the help of two Catholic priests to save her life.",
+    "popularity": 38.2005,
+    "poster_path": "/5x0CeVHJI8tcDx8tUUwYHQSNILq.jpg",
+    "release_date": "1973-12-26",
+    "softcore": false,
+    "title": "The Exorcist",
+    "video": false,
+    "vote_average": 7.749,
+    "vote_count": 8942
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/ePIY6b8TlIjqFzK1JKANPhxUIPn.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 1297467,
+    "original_language": "en",
+    "original_title": "The Exorcist: Martyrs",
+    "overview": "Thirteen years ago, New York City detective Julie Miller ended the terror reign of satanic serial killer Father Sunday. The case made her a hero, and she has thrown herself into her work ever since. Now a new killer scrawls her name in an altar boy's blood on the walls of a church crypt, dragging her back into the darkness she believed she had buried with him.",
+    "popularity": 15.3789,
+    "poster_path": "/i3kvS445sWWIhuxgXywPuUcsoP0.jpg",
+    "release_date": "2027-03-10",
+    "softcore": false,
+    "title": "The Exorcist: Martyrs",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/2JnyyxTibd5ZdMKMePY7zSyedmi.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 11587,
+    "original_language": "en",
+    "original_title": "The Exorcist III",
+    "overview": "On the fifteenth anniversary of the exorcism that claimed Father Damien Karras' life, Police Lieutenant Kinderman's world is once again shattered when a boy is found decapitated and savagely crucified.",
+    "popularity": 16.7207,
+    "poster_path": "/275gw2JA5YCk10o6n84rZdZBycM.jpg",
+    "release_date": "1990-08-17",
+    "softcore": false,
+    "title": "The Exorcist III",
+    "video": false,
+    "vote_average": 6.3,
+    "vote_count": 905
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/wyRJPq5lUy7V5ETiiwihff9wl3G.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 11586,
+    "original_language": "en",
+    "original_title": "Exorcist II: The Heretic",
+    "overview": "Bizarre nightmares plague Regan MacNeil four years after her possession and exorcism. Has the demon returned? And if so, can the combined faith and knowledge of a Vatican investigator and a research specialist free her from its grasp?",
+    "popularity": 22.4129,
+    "poster_path": "/g9i3LTMYLRHvCYSKimZEfd1Vqy7.jpg",
+    "release_date": "1977-06-17",
+    "softcore": false,
+    "title": "Exorcist II: The Heretic",
+    "video": false,
+    "vote_average": 4.5,
+    "vote_count": 827
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/d7zDEW6AkRCvEOT2Cela4h0F3Nb.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 807172,
+    "original_language": "en",
+    "original_title": "The Exorcist: Believer",
+    "overview": "Since his wife's death, Victor has raised his daughter Angela alone. After she and her friend return from a three-day disappearance with missing memories, they begin displaying frightening behavior reminiscent of the MacNeil possession fifty years prior.",
+    "popularity": 18.904,
+    "poster_path": "/fFXkAlMH2iQrNknv4eq7LGTkcti.jpg",
+    "release_date": "2023-10-04",
+    "softcore": false,
+    "title": "The Exorcist: Believer",
+    "video": false,
+    "vote_average": 5.8,
+    "vote_count": 1345
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/A2kXYkGGdeLU20YHPM9qs6GX9nN.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 11026,
+    "original_language": "en",
+    "original_title": "Exorcist: The Beginning",
+    "overview": "Years before Father Merrin helped save Regan MacNeil’s soul, he first encounters the demon Pazuzu in East Africa.",
+    "popularity": 6.7955,
+    "poster_path": "/dwqVrJfAVHqhJSa1sKBsbttFUcU.jpg",
+    "release_date": "2004-08-20",
+    "softcore": false,
+    "title": "Exorcist: The Beginning",
+    "video": false,
+    "vote_average": 5.4,
+    "vote_count": 932
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/3oqmk6mNWPatBKcjOOJLp5WW9zN.jpg",
+    "genre_ids": [
+     27,
+     53
+    ],
+    "id": 758323,
+    "original_language": "en",
+    "original_title": "The Pope's Exorcist",
+    "overview": "Father Gabriele Amorth, Chief Exorcist of the Vatican, investigates a young boy's terrifying possession and ends up uncovering a centuries-old conspiracy the Vatican has desperately tried to keep hidden.",
+    "popularity": 15.0648,
+    "poster_path": "/jFC4LS5qTAT3PinzdEzINfu1CV9.jpg",
+    "release_date": "2023-04-05",
+    "softcore": false,
+    "title": "The Pope's Exorcist",
+    "video": false,
+    "vote_average": 6.902,
+    "vote_count": 3313
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/be5T7oHxmDG4ytEimwPdmDHZD9N.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 1352874,
+    "original_language": "en",
+    "original_title": "The Crucifix: Blood of the Exorcist",
+    "overview": "A gruesome discovery in the grounds of their new home plunges a young couple into a maelstrom of spiritual possession, pagan rituals, Viking battles, and violent revenge.",
+    "popularity": 7.003,
+    "poster_path": "/u3qOxvlykoTpurg1G8VOcawoePI.jpg",
+    "release_date": "2025-01-09",
+    "softcore": false,
+    "title": "The Crucifix: Blood of the Exorcist",
+    "video": false,
+    "vote_average": 5.5,
+    "vote_count": 68
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1741011,
+    "original_language": "en",
+    "original_title": "THE EXORCIST",
+    "overview": "Who taught us that black magic is bad magic? In an experimental vertical format video, Krade explores the taboos surrounding witchcraft, the etymology of the word \"necromancy\", and the link between colonialism and folk magic. This short film, published in three parts,  belongs to a larger and ongoing work, including a self-published essay.",
+    "popularity": 1.6265,
+    "poster_path": null,
+    "release_date": "",
+    "softcore": false,
+    "title": "THE EXORCIST",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/u5nY7pY2Y58o7dSM9cy6NclOV8V.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 1023313,
+    "original_language": "es",
+    "original_title": "La Exorcista",
+    "overview": "Ophelia, a young nun recently arriving in the town of San Ramon, is forced to perform an exorcism on a pregnant woman in danger of dying. Just when she thinks her possession has ended, she discovers that the evil presence hasn't disappeared yet. The director of the award-winning Here Comes the Devil and Late Phases adds a new twist to possession movies in one of this year's Latin American horror surprises.",
+    "popularity": 4.3381,
+    "poster_path": "/d07xtqwq1uriQ1hda6qeu8Skt5m.jpg",
+    "release_date": "2022-11-02",
+    "softcore": false,
+    "title": "The Exorcist",
+    "video": false,
+    "vote_average": 6.256,
+    "vote_count": 123
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/vc31DWCeiEJn2eOe40CEVQiGXFY.jpg",
+    "genre_ids": [
+     27,
+     18
+    ],
+    "id": 12700,
+    "original_language": "en",
+    "original_title": "Dominion: Prequel to The Exorcist",
+    "overview": "Father Merrin takes a sabbatical from the Church to devote himself to history and archaeology as he struggles with his shattered faith.",
+    "popularity": 9.7667,
+    "poster_path": "/3jIQOCB8ghrxvfWzSjzNv41LR9P.jpg",
+    "release_date": "2005-05-20",
+    "softcore": false,
+    "title": "Dominion: Prequel to The Exorcist",
+    "video": false,
+    "vote_average": 5.303,
+    "vote_count": 442
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/zU64iEhggZX62q1088fs18kjzJu.jpg",
+    "genre_ids": [
+     53,
+     27
+    ],
+    "id": 746135,
+    "original_language": "en",
+    "original_title": "The Last Exorcist",
+    "overview": "When Joan discovers her sister has been possessed by a demonic entity, she has to enlist the help of the only remaining priest trained in exorcisms to help her overcome evil. They find themselves in a race against time to rid her sister of the demon before it can enter the world and wreak havoc.",
+    "popularity": 2.3948,
+    "poster_path": "/ivWleLvEQkSJiJ2xw1IQjJWkldp.jpg",
+    "release_date": "2020-12-17",
+    "softcore": false,
+    "title": "The Last Exorcist",
+    "video": false,
+    "vote_average": 4.5,
+    "vote_count": 17
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/aims44BRhPypiex9XfhYqzXOo1v.jpg",
+    "genre_ids": [
+     14,
+     27
+    ],
+    "id": 991533,
+    "original_language": "zh",
+    "original_title": "驱魔天师",
+    "overview": "The exorcist master Lin Yuanying and his apprentice Liu Yu traveled south and north to exorcise the demons and catch the demons.",
+    "popularity": 1.4464,
+    "poster_path": "/wtLx7HS5VcaSSYf4SJ4QvjEZPzN.jpg",
+    "release_date": "2022-06-24",
+    "softcore": false,
+    "title": "The Exorcist",
+    "video": false,
+    "vote_average": 6.0,
+    "vote_count": 3
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/oy1WZ3adgfjq0OblBuKY9aJI7iT.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 417871,
+    "original_language": "en",
+    "original_title": "Exorcist: The Fallen",
+    "overview": "A young girl and her family go through a horrifying reality while she becomes possessed by demonic forces. Throughout the film we experience the ways a family deals with situations beyond their control and how they fight to overcome them. Only when the possession takes place does the family bond get stronger and the relationships between them get tested to their limits.",
+    "popularity": 1.1814,
+    "poster_path": "/m3RBz94ODgACw9xTD1I3cZ0n2ov.jpg",
+    "release_date": "2014-09-24",
+    "softcore": false,
+    "title": "Exorcist: The Fallen",
+    "video": true,
+    "vote_average": 4.0,
+    "vote_count": 6
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/3LaAk2KiYWQ8slA39lvNXc27RWT.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 112170,
+    "original_language": "tr",
+    "original_title": "Şeytan",
+    "overview": "12 year-old Gul becomes possessed by Satan after experimenting with a Ouija board. A troubled psychiatrist and an experienced exorcist become the girl’s only hope for salvation.",
+    "popularity": 1.9949,
+    "poster_path": "/paZggGOsYzPt8CzdqXUKmZqAC5G.jpg",
+    "release_date": "1974-01-01",
+    "softcore": false,
+    "title": "The Exorcist",
+    "video": false,
+    "vote_average": 5.0,
+    "vote_count": 30
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/2ylmdw7yxTdML5SpMbBLP1zBGhm.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 87246,
+    "original_language": "fr",
+    "original_title": "Les Possédées du diable",
+    "overview": "Twenty years after seducing a businessman, a demonic temptress lays claim to the man's daughter.",
+    "popularity": 2.5086,
+    "poster_path": "/yAlLmBvWdEobyBv9klN8dMSXele.jpg",
+    "release_date": "1974-12-18",
+    "softcore": false,
+    "title": "Lorna, the Exorcist",
+    "video": false,
+    "vote_average": 4.9,
+    "vote_count": 28
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/f38uZUc1MKUqL1POCHq0MSoyXSh.jpg",
+    "genre_ids": [
+     27,
+     35
+    ],
+    "id": 118622,
+    "original_language": "en",
+    "original_title": "The Disco Exorcist",
+    "overview": "Suave swinger and womanizer Rex Romanski loves and leaves evil black magic priestess Rita Marie. Naturally, Rex incurs Rita's lethal wrath by spurning her. Can Rex figure out a way to stop Rita's subsequent rampage of revenge, murder, and destruction as well as reclaim the soul of his new porn starlet gal-friend, Amoreena Jones, before it's too late?",
+    "popularity": 1.1383,
+    "poster_path": "/vAkMGPsRtpTg7sgayGWvfRRYHm5.jpg",
+    "release_date": "2011-10-14",
+    "softcore": false,
+    "title": "The Disco Exorcist",
+    "video": false,
+    "vote_average": 4.0,
+    "vote_count": 10
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/mQRcRIVjMbvLtKzeZ93QtVeZvYh.jpg",
+    "genre_ids": [],
+    "id": 1559551,
+    "original_language": "en",
+    "original_title": "The Exorcist: Making the Demons",
+    "overview": "Follow the lives of two very different priests tackling one family’s case of terrifying demonic possession. Make-up designer, Tami Lane, talks about the process of making actors into demons.",
+    "popularity": 1.4025,
+    "poster_path": "/i8ckLO6vpyaqGHHsKv2ANAvd9wN.jpg",
+    "release_date": "2016-10-26",
+    "softcore": false,
+    "title": "The Exorcist: Making the Demons",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     27
+    ],
+    "id": 73986,
+    "original_language": "en",
+    "original_title": "Anneliese: The Exorcist Tapes",
+    "overview": "Documentary covering the famous 'demonic possession' case of Anneliese Michel. The film features authentic footage of 'exorcisms' and other shocking events, considered to be the inspiration of the film The Exorcism of Emily Rose.",
+    "popularity": 1.2845,
+    "poster_path": "/dllMdyPUvJ7vwbd9BTpNnHiUhZy.jpg",
+    "release_date": "2011-10-17",
+    "softcore": false,
+    "title": "Anneliese: The Exorcist Tapes",
+    "video": false,
+    "vote_average": 3.3,
+    "vote_count": 32
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     27,
+     53
+    ],
+    "id": 1339537,
+    "original_language": "en",
+    "original_title": "The First Exorcist",
+    "overview": "The story of Alexios, “a pillar of his farming community, a beloved husband and father, whose mind and body are overtaken by a legion of demons. As his possession becomes more violent and fear grips the village, a young unknown preacher named Jesus comes to town with a few followers. He and only he can confront this ancient evil, which is unlike anything he has faced before — the demonic force behind the Gerasene Demoniac. What follows is the world’s original exorcism: the Miracle of the Swine, a violent and transcendent supernatural showdown whose reverberations would change the course of human history.”",
+    "popularity": 1.1661,
+    "poster_path": "/66642tZqLk8t4yRJH9eXPOhe4dj.jpg",
+    "release_date": "",
+    "softcore": false,
+    "title": "The First Exorcist",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   }
+  ],
+  "total_pages": 5,
+  "total_results": 87
+ }
+}

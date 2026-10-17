@@ -1,0 +1,687 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/zsVAEu7oOwgAJavdCC7LT7dbkLc.jpg",
+  "belongs_to_collection": {
+   "backdrop_path": "/2JiD4QZXUPhrjxoCUyAYgohslK6.jpg",
+   "id": 507458,
+   "name": "The ThanksKilling Collection",
+   "poster_path": "/9ufNB88rSVe7NZghfVG6OdV8YOR.jpg"
+  },
+  "budget": 3500,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 8,
+     "character": "Johnny",
+     "credit_id": "52fe4621c3a368484e080675",
+     "gender": 0,
+     "id": 1127160,
+     "known_for_department": "Acting",
+     "name": "Lance Predmore",
+     "order": 0,
+     "original_name": "Lance Predmore",
+     "popularity": 0.4782,
+     "profile_path": "/uafMkSqiPb44OdMu18lTTmQXLBO.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 9,
+     "character": "Darren",
+     "credit_id": "52fe4621c3a368484e080679",
+     "gender": 0,
+     "id": 1127161,
+     "known_for_department": "Acting",
+     "name": "Ryan E. Francis",
+     "order": 1,
+     "original_name": "Ryan E. Francis",
+     "popularity": 0.4449,
+     "profile_path": "/urZ0kpe902x6gfCICztuLlbu5f7.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 1,
+     "character": "Kristen",
+     "credit_id": "52fe4621c3a368484e08064d",
+     "gender": 0,
+     "id": 135893,
+     "known_for_department": "Acting",
+     "name": "Lindsey Andersen",
+     "order": 2,
+     "original_name": "Lindsey Andersen",
+     "popularity": 0.4315,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 10,
+     "character": "Billy",
+     "credit_id": "52fe4621c3a368484e08067d",
+     "gender": 0,
+     "id": 1127162,
+     "known_for_department": "Acting",
+     "name": "Aaron Ringhiser-Carlson",
+     "order": 3,
+     "original_name": "Aaron Ringhiser-Carlson",
+     "popularity": 0.3419,
+     "profile_path": "/susTgZNxRDRR0ygEBxnGAfBBMKC.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 11,
+     "character": "Ali",
+     "credit_id": "52fe4621c3a368484e080681",
+     "gender": 1,
+     "id": 1127163,
+     "known_for_department": "Acting",
+     "name": "Natasha Cordova",
+     "order": 4,
+     "original_name": "Natasha Cordova",
+     "popularity": 0.6852,
+     "profile_path": "/GC7A33nH0TCxvd2aTbwabLcabG.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 19,
+     "character": "Turkie (voice)",
+     "credit_id": "52fe4621c3a368484e0806a1",
+     "gender": 2,
+     "id": 1113259,
+     "known_for_department": "Directing",
+     "name": "Jordan Downey",
+     "order": 5,
+     "original_name": "Jordan Downey",
+     "popularity": 0.6918,
+     "profile_path": "/nyOsMrXXdoHTD9RgIjKPqUWQiI.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 12,
+     "character": "Sheriff Roud",
+     "credit_id": "52fe4621c3a368484e080685",
+     "gender": 0,
+     "id": 1127164,
+     "known_for_department": "Acting",
+     "name": "Chuck Lamb",
+     "order": 6,
+     "original_name": "Chuck Lamb",
+     "popularity": 0.5987,
+     "profile_path": "/R9FNM0uy22brYRtrkcyih0B8uS.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 13,
+     "character": "Oscar the Hermit",
+     "credit_id": "52fe4621c3a368484e080689",
+     "gender": 0,
+     "id": 1127165,
+     "known_for_department": "Acting",
+     "name": "General Bastard",
+     "order": 7,
+     "original_name": "General Bastard",
+     "popularity": 0.2607,
+     "profile_path": null
+    },
+    {
+     "adult": true,
+     "cast_id": 14,
+     "character": "Naked Pilgrim",
+     "credit_id": "52fe4621c3a368484e08068d",
+     "gender": 1,
+     "id": 1113277,
+     "known_for_department": "Acting",
+     "name": "Wanda Lust",
+     "order": 8,
+     "original_name": "Wanda Lust",
+     "popularity": 0.0,
+     "profile_path": "/qWxeETPt0BMp2RC3z5FKE9p81ZP.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 15,
+     "character": "Man in Car",
+     "credit_id": "52fe4621c3a368484e080691",
+     "gender": 0,
+     "id": 1127166,
+     "known_for_department": "Acting",
+     "name": "Steve Steinmetz",
+     "order": 9,
+     "original_name": "Steve Steinmetz",
+     "popularity": 0.2785,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 16,
+     "character": "Sheryl the Stepmom",
+     "credit_id": "52fe4621c3a368484e080695",
+     "gender": 0,
+     "id": 1127167,
+     "known_for_department": "Acting",
+     "name": "Pat Love",
+     "order": 10,
+     "original_name": "Pat Love",
+     "popularity": 0.2805,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 17,
+     "character": "Johnny's Dad",
+     "credit_id": "52fe4621c3a368484e080699",
+     "gender": 0,
+     "id": 1127168,
+     "known_for_department": "Acting",
+     "name": "Terry Reagan",
+     "order": 11,
+     "original_name": "Terry Reagan",
+     "popularity": 0.311,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 18,
+     "character": "Johnny's Mom",
+     "credit_id": "52fe4621c3a368484e08069d",
+     "gender": 0,
+     "id": 1127169,
+     "known_for_department": "Acting",
+     "name": "Jessica Rees",
+     "order": 12,
+     "original_name": "Jessica Rees",
+     "popularity": 0.2994,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 30,
+     "character": "Greg",
+     "credit_id": "66dbf5e723c3761aeef5da43",
+     "gender": 2,
+     "id": 1113261,
+     "known_for_department": "Camera",
+     "name": "Kevin Stewart",
+     "order": 13,
+     "original_name": "Kevin Stewart",
+     "popularity": 0.5437,
+     "profile_path": "/tuGRAqgn7KT4niAjmlPU3DV4qvk.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 20,
+     "character": "Man Saying Prayer",
+     "credit_id": "52fe4621c3a368484e0806a5",
+     "gender": 0,
+     "id": 1127170,
+     "known_for_department": "Acting",
+     "name": "Jeff Heim",
+     "order": 14,
+     "original_name": "Jeff Heim",
+     "popularity": 0.2709,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 21,
+     "character": "Child",
+     "credit_id": "52fe4621c3a368484e0806a9",
+     "gender": 0,
+     "id": 1127171,
+     "known_for_department": "Acting",
+     "name": "Kaylah",
+     "order": 15,
+     "original_name": "Kaylah",
+     "popularity": 0.276,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 22,
+     "character": "Kid with Turkey Hat",
+     "credit_id": "52fe4621c3a368484e0806ad",
+     "gender": 0,
+     "id": 1127172,
+     "known_for_department": "Acting",
+     "name": "Caleb Downey",
+     "order": 16,
+     "original_name": "Caleb Downey",
+     "popularity": 0.3082,
+     "profile_path": null
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "52fe4621c3a368484e08066b",
+     "department": "Crew",
+     "gender": 2,
+     "id": 178264,
+     "job": "Additional Dialogue",
+     "known_for_department": "Acting",
+     "name": "Anthony Wilson",
+     "original_name": "Anthony Wilson",
+     "popularity": 0.4109,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4621c3a368484e08065f",
+     "department": "Crew",
+     "gender": 0,
+     "id": 1127158,
+     "job": "Additional Dialogue",
+     "known_for_department": "Editing",
+     "name": "Bradly Schulz",
+     "original_name": "Bradly Schulz",
+     "popularity": 0.3144,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4621c3a368484e080671",
+     "department": "Crew",
+     "gender": 0,
+     "id": 1127159,
+     "job": "Additional Dialogue",
+     "known_for_department": "Crew",
+     "name": "Grant Yaffee",
+     "original_name": "Grant Yaffee",
+     "popularity": 0.3082,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4621c3a368484e080659",
+     "department": "Writing",
+     "gender": 2,
+     "id": 1113259,
+     "job": "Writer",
+     "known_for_department": "Directing",
+     "name": "Jordan Downey",
+     "original_name": "Jordan Downey",
+     "popularity": 0.6918,
+     "profile_path": "/nyOsMrXXdoHTD9RgIjKPqUWQiI.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4621c3a368484e080665",
+     "department": "Writing",
+     "gender": 2,
+     "id": 1113261,
+     "job": "Writer",
+     "known_for_department": "Camera",
+     "name": "Kevin Stewart",
+     "original_name": "Kevin Stewart",
+     "popularity": 0.5437,
+     "profile_path": "/tuGRAqgn7KT4niAjmlPU3DV4qvk.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "52fe4621c3a368484e080653",
+     "department": "Directing",
+     "gender": 2,
+     "id": 1113259,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "Jordan Downey",
+     "original_name": "Jordan Downey",
+     "popularity": 0.6918,
+     "profile_path": "/nyOsMrXXdoHTD9RgIjKPqUWQiI.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "61a16c693dc313002d211c6c",
+     "department": "Editing",
+     "gender": 2,
+     "id": 1113261,
+     "job": "Editor",
+     "known_for_department": "Camera",
+     "name": "Kevin Stewart",
+     "original_name": "Kevin Stewart",
+     "popularity": 0.5437,
+     "profile_path": "/tuGRAqgn7KT4niAjmlPU3DV4qvk.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "61a16c39d37197002a16b5a7",
+     "department": "Production",
+     "gender": 2,
+     "id": 1113259,
+     "job": "Producer",
+     "known_for_department": "Directing",
+     "name": "Jordan Downey",
+     "original_name": "Jordan Downey",
+     "popularity": 0.6918,
+     "profile_path": "/nyOsMrXXdoHTD9RgIjKPqUWQiI.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "61a16cccdcb6a3002d24ffe1",
+     "department": "Sound",
+     "gender": 0,
+     "id": 3326089,
+     "job": "Sound Designer",
+     "known_for_department": "Sound",
+     "name": "Matt Linesch",
+     "original_name": "Matt Linesch",
+     "popularity": 0.25,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61a16c470cb33500440c74b7",
+     "department": "Production",
+     "gender": 2,
+     "id": 1113261,
+     "job": "Producer",
+     "known_for_department": "Camera",
+     "name": "Kevin Stewart",
+     "original_name": "Kevin Stewart",
+     "popularity": 0.5437,
+     "profile_path": "/tuGRAqgn7KT4niAjmlPU3DV4qvk.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "61a16c80be4b3600986e93bc",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 2222862,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Crew",
+     "name": "George Antonopoulos",
+     "original_name": "George Antonopoulos",
+     "popularity": 0.3519,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "61a16c5e7f1d83008ee77687",
+     "department": "Sound",
+     "gender": 0,
+     "id": 3326088,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Kajmir Royale",
+     "original_name": "Kajmir Royale",
+     "popularity": 0.2566,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b03569e0e0a2623e601f0f9",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1113261,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Kevin Stewart",
+     "original_name": "Kevin Stewart",
+     "popularity": 0.5437,
+     "profile_path": "/tuGRAqgn7KT4niAjmlPU3DV4qvk.jpg"
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 35,
+    "name": "Comedy"
+   },
+   {
+    "id": 27,
+    "name": "Horror"
+   }
+  ],
+  "homepage": "",
+  "id": 60366,
+  "imdb_id": "tt1129441",
+  "origin_country": [
+   "US"
+  ],
+  "original_language": "en",
+  "original_title": "ThanksKilling",
+  "overview": "An evil, fowl-mouthed turkey carves up college students on Thanksgiving break.",
+  "popularity": 1.6989,
+  "poster_path": "/o3KVG2jQtLLFIJByVVbk3nQbkfz.jpg",
+  "production_companies": [
+   {
+    "id": 165260,
+    "logo_path": null,
+    "name": "In Broad Daylight Films",
+    "origin_country": ""
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   }
+  ],
+  "release_date": "2008-12-08",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "Sacramento Horror Film Festival",
+       "release_date": "2008-12-08T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "NR",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD",
+       "release_date": "2009-11-17T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "MVD REWIND COLLECTION",
+       "release_date": "2026-11-03T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 0,
+  "runtime": 67,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   }
+  ],
+  "status": "Released",
+  "tagline": "Gobble, Gobble, Motherfu%#@r!",
+  "title": "ThanksKilling",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "6a90f054a23a0dc4c5c27ee9",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "5dwDF-J3b44",
+     "name": "ThanksKilling (2008) - Official Trailer (HD)",
+     "official": false,
+     "published_at": "2026-08-25T19:46:30.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "6a90f1a9cbe0df02a2c27f1a",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "UFRRediVgig",
+     "name": "Best Friend Billy Song and Video",
+     "official": false,
+     "published_at": "2016-09-26T22:23:34.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a90f192e3c8a591fa9feed0",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "vsoN84PnQKU",
+     "name": "ThanksKilling - Turkie and Sheriff Coffee Scene",
+     "official": false,
+     "published_at": "2016-09-26T22:14:40.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a90f17e6dfb5268858c6147",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "37hBgNQvEE8",
+     "name": "ThanksKilling Scene - Turkie Wears The Sheriff's Face",
+     "official": false,
+     "published_at": "2016-09-26T19:30:21.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a90f16935d02697fc4a1cc1",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "cFgZ0ewcQUo",
+     "name": "Ass, Gas, or Grass? Hitchhiker Scene",
+     "official": false,
+     "published_at": "2016-09-26T19:15:10.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a90f174f8debc72822159ab",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "VUJNI3Vy8qg",
+     "name": "Billy's Death Scene",
+     "official": false,
+     "published_at": "2016-09-26T19:05:02.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "6a90f089cb086d6a612159ec",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "YbgPiUDqoZQ",
+     "name": "ThanksKilling on Fox News",
+     "official": false,
+     "published_at": "2010-01-07T20:40:39.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    }
+   ]
+  },
+  "vote_average": 3.9,
+  "vote_count": 118
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/zsVAEu7oOwgAJavdCC7LT7dbkLc.jpg",
+    "genre_ids": [
+     35,
+     27
+    ],
+    "id": 60366,
+    "original_language": "en",
+    "original_title": "ThanksKilling",
+    "overview": "An evil, fowl-mouthed turkey carves up college students on Thanksgiving break.",
+    "popularity": 1.6989,
+    "poster_path": "/o3KVG2jQtLLFIJByVVbk3nQbkfz.jpg",
+    "release_date": "2008-12-08",
+    "softcore": false,
+    "title": "ThanksKilling",
+    "video": false,
+    "vote_average": 3.9,
+    "vote_count": 118
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/96AkV5hfDvp7ZHU7z9HPgWqVMGd.jpg",
+    "genre_ids": [
+     27
+    ],
+    "id": 1754526,
+    "original_language": "cs",
+    "original_title": "Thankskilling Day",
+    "overview": "",
+    "popularity": 2.3445,
+    "poster_path": "/gWViH5N3ABA4xD578rGQGP89WF8.jpg",
+    "release_date": "2026-11-26",
+    "softcore": false,
+    "title": "Thankskilling Day",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/7rGDMrEIAemAkNLKR17K5jf2CJQ.jpg",
+    "genre_ids": [
+     10402,
+     27,
+     35
+    ],
+    "id": 712567,
+    "original_language": "en",
+    "original_title": "ThanksKilling The Musical",
+    "overview": "Based on the film of the same name, ThanksKilling the Musical is about five college students heading home for Thanksgiving break as they cross paths with a killer turkey possessed by an ancient Indian curse. Horror, hilarity, and sodomy ensue as the teens try to stop the homicidal bird from killing them all.",
+    "popularity": 0.8091,
+    "poster_path": "/fhFAn6wpI8gexk7W1afXvt0n335.jpg",
+    "release_date": "2013-11-29",
+    "softcore": false,
+    "title": "ThanksKilling The Musical",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/3Ju6mwGJwt4jxFpXXmmo3ecPPYo.jpg",
+    "genre_ids": [
+     35,
+     27,
+     878
+    ],
+    "id": 140750,
+    "original_language": "en",
+    "original_title": "ThanksKilling 3",
+    "overview": "A fowl-mouthed turkey and a cast of outrageous puppets embark on a surreal quest to find the lost sequel, ThanksKilling 2.",
+    "popularity": 1.3226,
+    "poster_path": "/idcDC9M0DOOYEzxRFFv4wUMNUHs.jpg",
+    "release_date": "2012-11-01",
+    "softcore": false,
+    "title": "ThanksKilling 3",
+    "video": false,
+    "vote_average": 3.3,
+    "vote_count": 42
+   }
+  ],
+  "total_pages": 1,
+  "total_results": 4
+ }
+}

@@ -1,0 +1,3343 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/aAM3cQmYGjjLQ24m0F0RWfjKQ57.jpg",
+  "belongs_to_collection": null,
+  "budget": 9000000,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 3,
+     "character": "Dani",
+     "credit_id": "5b5f6d979251414fcb004fa9",
+     "gender": 1,
+     "id": 1373737,
+     "known_for_department": "Acting",
+     "name": "Florence Pugh",
+     "order": 0,
+     "original_name": "Florence Pugh",
+     "popularity": 13.7829,
+     "profile_path": "/1QfiLnofJFlOJOLCWaxyDpIN03v.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 5,
+     "character": "Christian",
+     "credit_id": "5b5f99140e0a263fb70004c9",
+     "gender": 2,
+     "id": 1007683,
+     "known_for_department": "Acting",
+     "name": "Jack Reynor",
+     "order": 1,
+     "original_name": "Jack Reynor",
+     "popularity": 2.7,
+     "profile_path": "/vbPewOkSGGQl93wgshDlczMqiOk.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 6,
+     "character": "Josh",
+     "credit_id": "5b5f991c0e0a263fc2000489",
+     "gender": 2,
+     "id": 1410478,
+     "known_for_department": "Acting",
+     "name": "William Jackson Harper",
+     "order": 2,
+     "original_name": "William Jackson Harper",
+     "popularity": 1.7287,
+     "profile_path": "/5Oy037YttIweiqNGaErkalNmH0G.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Mark",
+     "credit_id": "5b5f990bc3a368583c000596",
+     "gender": 2,
+     "id": 93491,
+     "known_for_department": "Acting",
+     "name": "Will Poulter",
+     "order": 3,
+     "original_name": "Will Poulter",
+     "popularity": 5.5624,
+     "profile_path": "/9blYMaj79VGC6BHTLmJp3V5S8r3.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 9,
+     "character": "Pelle",
+     "credit_id": "5b5f994b0e0a263fb30004e6",
+     "gender": 2,
+     "id": 2096149,
+     "known_for_department": "Acting",
+     "name": "Vilhelm Blomgren",
+     "order": 4,
+     "original_name": "Vilhelm Blomgren",
+     "popularity": 0.7267,
+     "profile_path": "/uxfGg0gwEJS6CvY0PMNk90yoO71.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 44,
+     "character": "Maja",
+     "credit_id": "5c3154efc3a36819bba5b024",
+     "gender": 1,
+     "id": 2209530,
+     "known_for_department": "Acting",
+     "name": "Isabelle Grill",
+     "order": 5,
+     "original_name": "Isabelle Grill",
+     "popularity": 1.328,
+     "profile_path": "/5g2ytU0fLCRHM20PHwjAAW3IYz2.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 50,
+     "character": "Siv",
+     "credit_id": "5c462c850e0a26494fc7ecc4",
+     "gender": 1,
+     "id": 239349,
+     "known_for_department": "Acting",
+     "name": "Gunnel Fred",
+     "order": 6,
+     "original_name": "Gunnel Fred",
+     "popularity": 0.9339,
+     "profile_path": "/qpszltzBSTK0smwpfpGFJvN24um.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 7,
+     "character": "Connie",
+     "credit_id": "5b5f99270e0a263fbc0004b9",
+     "gender": 1,
+     "id": 1457454,
+     "known_for_department": "Acting",
+     "name": "Ellora Torchia",
+     "order": 7,
+     "original_name": "Ellora Torchia",
+     "popularity": 2.0365,
+     "profile_path": "/xGeOoLNne2U3rViaL8adlT7Hhpl.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 64,
+     "character": "Simon",
+     "credit_id": "5d66e323ecbde9000f95a0f8",
+     "gender": 2,
+     "id": 2249745,
+     "known_for_department": "Acting",
+     "name": "Archie Madekwe",
+     "order": 8,
+     "original_name": "Archie Madekwe",
+     "popularity": 1.7952,
+     "profile_path": "/rb2pHzu35fEdb25WwmC9k4a4Deg.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 63,
+     "character": "Ulf",
+     "credit_id": "5d2e122a839d93000fefddb0",
+     "gender": 2,
+     "id": 64975,
+     "known_for_department": "Acting",
+     "name": "Henrik Norlén",
+     "order": 9,
+     "original_name": "Henrik Norlén",
+     "popularity": 0.8142,
+     "profile_path": "/eiOu61USG30JqBKq6Axc05IU6yc.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 74,
+     "character": "Dagny",
+     "credit_id": "5d94586921c4ca001d7fa6c9",
+     "gender": 1,
+     "id": 2423315,
+     "known_for_department": "Acting",
+     "name": "Agnes Westerlund Rase",
+     "order": 10,
+     "original_name": "Agnes Westerlund Rase",
+     "popularity": 0.7552,
+     "profile_path": "/sXNtvq9ds0MYil8KXkGuDKFM2HO.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 11,
+     "character": "Inga",
+     "credit_id": "5b634e87925141405602fd7b",
+     "gender": 1,
+     "id": 1153231,
+     "known_for_department": "Acting",
+     "name": "Julia Ragnarsson",
+     "order": 11,
+     "original_name": "Julia Ragnarsson",
+     "popularity": 1.2587,
+     "profile_path": "/4T4jdhGmapP5tx3v7u1odez3KyG.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 60,
+     "character": "Odd",
+     "credit_id": "5d2124d755b0c01c876a5e9e",
+     "gender": 2,
+     "id": 221034,
+     "known_for_department": "Acting",
+     "name": "Mats Blomgren",
+     "order": 12,
+     "original_name": "Mats Blomgren",
+     "popularity": 0.7511,
+     "profile_path": "/cAi41iolaDnWq69EZXU2j4V7nJv.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 37,
+     "character": "Stev",
+     "credit_id": "5bec6e80c3a36812e4000ae6",
+     "gender": 2,
+     "id": 132502,
+     "known_for_department": "Acting",
+     "name": "Lars Väringer",
+     "order": 13,
+     "original_name": "Lars Väringer",
+     "popularity": 0.7385,
+     "profile_path": "/6o6i4dU4QagWfYJYQxVRjoKGtTu.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 43,
+     "character": "Karin",
+     "credit_id": "5c3154c4925141635e70d3fa",
+     "gender": 1,
+     "id": 1078910,
+     "known_for_department": "Acting",
+     "name": "Anna Åström",
+     "order": 14,
+     "original_name": "Anna Åström",
+     "popularity": 0.7366,
+     "profile_path": "/hJ3ZBJeuDqASyyIG6IEHMAOUB9q.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 12,
+     "character": "Ingemar",
+     "credit_id": "5b71ce3bc3a368188f19856c",
+     "gender": 0,
+     "id": 1711720,
+     "known_for_department": "Acting",
+     "name": "Hampus Hallberg",
+     "order": 15,
+     "original_name": "Hampus Hallberg",
+     "popularity": 0.6414,
+     "profile_path": "/bYnBaZFYIombQzvYhiGMW8pn1pG.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 47,
+     "character": "Ulla",
+     "credit_id": "5c462c100e0a264962c80a65",
+     "gender": 1,
+     "id": 47072,
+     "known_for_department": "Acting",
+     "name": "Liv Mjönes",
+     "order": 16,
+     "original_name": "Liv Mjönes",
+     "popularity": 1.4623,
+     "profile_path": "/gbU6SnajV9Z1qVazgCJSAl5SP5w.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 49,
+     "character": "Hanna",
+     "credit_id": "5c462c720e0a26496bc7f6ba",
+     "gender": 1,
+     "id": 1167002,
+     "known_for_department": "Acting",
+     "name": "Louise Peterhoff",
+     "order": 17,
+     "original_name": "Louise Peterhoff",
+     "popularity": 0.8866,
+     "profile_path": "/hpLjNXQNdEkCnkvqC26TwCT722l.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 40,
+     "character": "Ylva",
+     "credit_id": "5bec6ed29251413cf0000927",
+     "gender": 1,
+     "id": 1618603,
+     "known_for_department": "Acting",
+     "name": "Katarina Weidhagen",
+     "order": 18,
+     "original_name": "Katarina Weidhagen",
+     "popularity": 0.3957,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 46,
+     "character": "Dan",
+     "credit_id": "5c462c049251410e0a4f13b3",
+     "gender": 2,
+     "id": 50935,
+     "known_for_department": "Acting",
+     "name": "Björn Andrésen",
+     "order": 19,
+     "original_name": "Björn Andrésen",
+     "popularity": 1.2104,
+     "profile_path": "/x3uO4FVbpLLjyyEf7xErhYo5FU.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 45,
+     "character": "Jarl",
+     "credit_id": "5c3155049251415f3c70f474",
+     "gender": 0,
+     "id": 2209531,
+     "known_for_department": "Acting",
+     "name": "Tomas Engström",
+     "order": 20,
+     "original_name": "Tomas Engström",
+     "popularity": 0.4584,
+     "profile_path": "/houznCrciMAbTdOudwkUaFI46Zp.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 59,
+     "character": "Sven",
+     "credit_id": "5d2124a894d8a8049a4217b0",
+     "gender": 0,
+     "id": 2333284,
+     "known_for_department": "Acting",
+     "name": "Dag Andersson",
+     "order": 21,
+     "original_name": "Dag Andersson",
+     "popularity": 0.8009,
+     "profile_path": "/4CgCmYdqwIfKFRoyvB1IU1PVvb2.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 53,
+     "character": "Mats",
+     "credit_id": "5cdc6532925141767ecf0217",
+     "gender": 2,
+     "id": 568303,
+     "known_for_department": "Acting",
+     "name": "Lennart R. Svensson",
+     "order": 22,
+     "original_name": "Lennart R. Svensson",
+     "popularity": 0.4966,
+     "profile_path": "/ab2z91oyHQXA5WCFPSuC0IzdmqP.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 54,
+     "character": "Arne",
+     "credit_id": "5cdc65c70e0a264c87cc90d1",
+     "gender": 0,
+     "id": 1081275,
+     "known_for_department": "Acting",
+     "name": "Anders Beckman",
+     "order": 23,
+     "original_name": "Anders Beckman",
+     "popularity": 0.6298,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 41,
+     "character": "Ulrika",
+     "credit_id": "5bf5ff6c0e0a26265e0ca4a5",
+     "gender": 1,
+     "id": 2180302,
+     "known_for_department": "Acting",
+     "name": "Rebecka Johnston",
+     "order": 24,
+     "original_name": "Rebecka Johnston",
+     "popularity": 0.8408,
+     "profile_path": "/gV37gbJwiXXL78JZr0aEKSdZMos.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 56,
+     "character": "Majvor",
+     "credit_id": "5cdc66820e0a26045cd11eae",
+     "gender": 0,
+     "id": 1837048,
+     "known_for_department": "Acting",
+     "name": "Tove Skeidsvoll",
+     "order": 25,
+     "original_name": "Tove Skeidsvoll",
+     "popularity": 0.9717,
+     "profile_path": "/lkAlfknPVEhcFUXDZnhEeR4y7Fa.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 39,
+     "character": "Valentin",
+     "credit_id": "5bec6ebc0e0a263286000910",
+     "gender": 2,
+     "id": 1946235,
+     "known_for_department": "Acting",
+     "name": "Anders Back",
+     "order": 26,
+     "original_name": "Anders Back",
+     "popularity": 0.8669,
+     "profile_path": "/jTNf7zq2bqfxmLe4tMEFE9ybWqz.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 38,
+     "character": "Irma",
+     "credit_id": "5bec6e9ac3a36812f6000999",
+     "gender": 1,
+     "id": 990347,
+     "known_for_department": "Acting",
+     "name": "Anki Larsson",
+     "order": 27,
+     "original_name": "Anki Larsson",
+     "popularity": 0.5703,
+     "profile_path": "/3ITrigmi5RxDgbUzJI4uSzxtaGK.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 75,
+     "character": "Ruben",
+     "credit_id": "5d94595da06efe001e5ac4cc",
+     "gender": 0,
+     "id": 2423316,
+     "known_for_department": "Acting",
+     "name": "Levente Puczkó-Smith",
+     "order": 28,
+     "original_name": "Levente Puczkó-Smith",
+     "popularity": 0.3103,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 76,
+     "character": "Bror",
+     "credit_id": "5d945978a06efe001e5ac512",
+     "gender": 2,
+     "id": 1779707,
+     "known_for_department": "Acting",
+     "name": "Frans Cavallin Rosengarten",
+     "order": 29,
+     "original_name": "Frans Cavallin Rosengarten",
+     "popularity": 0.3487,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 77,
+     "character": "Elder",
+     "credit_id": "5d94598a87ae7b0014a44f70",
+     "gender": 0,
+     "id": 64418,
+     "known_for_department": "Acting",
+     "name": "Vilmos Kolba",
+     "order": 30,
+     "original_name": "Vilmos Kolba",
+     "popularity": 0.3271,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 78,
+     "character": "Torbjörn",
+     "credit_id": "5d9459b821c4ca00117fbb1e",
+     "gender": 0,
+     "id": 2423318,
+     "known_for_department": "Acting",
+     "name": "Mihály Kaszás",
+     "order": 31,
+     "original_name": "Mihály Kaszás",
+     "popularity": 0.608,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 139,
+     "character": "Dani's Mother",
+     "credit_id": "667498b54227e6e38ac4f793",
+     "gender": 1,
+     "id": 1713255,
+     "known_for_department": "Acting",
+     "name": "Gabi Fón",
+     "order": 32,
+     "original_name": "Gabriella Fon",
+     "popularity": 0.5501,
+     "profile_path": "/Lho1m9hUsi7knGBVu2VHUpsaVc.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 80,
+     "character": "Dani's Father",
+     "credit_id": "5d9459e2a06efe00265aa368",
+     "gender": 0,
+     "id": 2423320,
+     "known_for_department": "Acting",
+     "name": "Zsolt Bojári",
+     "order": 33,
+     "original_name": "Zsolt Bojári",
+     "popularity": 0.3164,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 36,
+     "character": "Terri",
+     "credit_id": "5bbd3396c3a368590101fa6e",
+     "gender": 0,
+     "id": 2146492,
+     "known_for_department": "Acting",
+     "name": "Klaudia Csányi",
+     "order": 34,
+     "original_name": "Klaudia Csányi",
+     "popularity": 0.3505,
+     "profile_path": "/eYeB2UDIKvffpUi5XgNphftqin8.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 81,
+     "character": "Pizza Waitress",
+     "credit_id": "5d945a2721c4ca00307f8b57",
+     "gender": 0,
+     "id": 1823469,
+     "known_for_department": "Acting",
+     "name": "Anna Berentzen",
+     "order": 35,
+     "original_name": "Anna Berentzen",
+     "popularity": 0.4155,
+     "profile_path": "/zfqujO56ZP2ePgMG3FSvBq4CvZC.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 62,
+     "character": "Hipster Guy",
+     "credit_id": "5d21257c15c6361729f69ba5",
+     "gender": 2,
+     "id": 1281174,
+     "known_for_department": "Acting",
+     "name": "Austin R. Grant",
+     "order": 36,
+     "original_name": "Austin R. Grant",
+     "popularity": 0.8267,
+     "profile_path": "/6R10zNAf7VHxVXO8B4XO4nL4s33.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 140,
+     "character": "Podcast on Mark's Phone (voice) (uncredited)",
+     "credit_id": "6677777efb8cb1c6c05632cc",
+     "gender": 2,
+     "id": 1145520,
+     "known_for_department": "Directing",
+     "name": "Ari Aster",
+     "order": 37,
+     "original_name": "Ari Aster",
+     "popularity": 2.1491,
+     "profile_path": "/3j6cVjnqTjx8TJbbTdBlLXYy5yU.jpg"
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "6295a52a5cea180052ff0580",
+     "department": "Writing",
+     "gender": 2,
+     "id": 1145520,
+     "job": "Writer",
+     "known_for_department": "Directing",
+     "name": "Ari Aster",
+     "original_name": "Ari Aster",
+     "popularity": 2.1491,
+     "profile_path": "/3j6cVjnqTjx8TJbbTdBlLXYy5yU.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6102c8a04284ea005d17b2ef",
+     "department": "Production",
+     "gender": 2,
+     "id": 1733485,
+     "job": "Line Producer",
+     "known_for_department": "Production",
+     "name": "Ben Rimmer",
+     "original_name": "Ben Rimmer",
+     "popularity": 0.857,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6102cae822931a007224902f",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 1726048,
+     "job": "Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Anna Törjék",
+     "original_name": "Anna Törjék",
+     "popularity": 0.4373,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6102ccba6517d6005e37f709",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 1374793,
+     "job": "Costume Supervisor",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Izabell Janositz",
+     "original_name": "Izabell Janositz",
+     "popularity": 0.4426,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6102cbeb4f33ad005db2a72a",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2721958,
+     "job": "Prosthetic Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Athina Sapanidis",
+     "original_name": "Athina Sapanidis",
+     "popularity": 0.7421,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6102c9644f33ad005db29fad",
+     "department": "Camera",
+     "gender": 2,
+     "id": 2062134,
+     "job": "Digital Imaging Technician",
+     "known_for_department": "Camera",
+     "name": "Péter 'Tiger' Rácz",
+     "original_name": "Péter 'Tiger' Rácz",
+     "popularity": 0.402,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6102cba74e52ed0075867c20",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2277933,
+     "job": "Prosthetic Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Matyas Borda",
+     "original_name": "Matyas Borda",
+     "popularity": 0.4157,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6102cd4d8d1b8e005d40fb14",
+     "department": "Crew",
+     "gender": 2,
+     "id": 1784619,
+     "job": "Animal Wrangler",
+     "known_for_department": "Crew",
+     "name": "Árpád Halász",
+     "original_name": "Halász Árpád",
+     "popularity": 1.1787,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6102cc194f33ad005db2a774",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 2721959,
+     "job": "Prosthetic Makeup Artist",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Andrea Kozma",
+     "original_name": "Andrea Kozma",
+     "popularity": 0.3543,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "653822939c24fc00e33a4f71",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 4337771,
+     "job": "Visual Effects Coordinator",
+     "known_for_department": "Visual Effects",
+     "name": "Thurman Martin III",
+     "original_name": "Thurman Martin III",
+     "popularity": 0.5306,
+     "profile_path": "/eyeqgSRnOBJQ77cqMdTX8W4t39X.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6182249ea097dc002ab71d61",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 3295078,
+     "job": "Set Costumer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Mátyás Tóth",
+     "original_name": "Mátyás Tóth",
+     "popularity": 0.3253,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65c00265031deb0183f18fb9",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 2377445,
+     "job": "VFX Artist",
+     "known_for_department": "Visual Effects",
+     "name": "Joseph Grundfast",
+     "original_name": "Joseph Grundfast",
+     "popularity": 0.3265,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "646e91d3ea394901342175ef",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1580455,
+     "job": "Conductor",
+     "known_for_department": "Sound",
+     "name": "Ben Foster",
+     "original_name": "Ben Foster",
+     "popularity": 0.7373,
+     "profile_path": "/i1B8PZLuEBLFQKMMu8sb9G9W4w1.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "66855a99a1784ec9b13326c3",
+     "department": "Crew",
+     "gender": 2,
+     "id": 4737084,
+     "job": "Thanks",
+     "known_for_department": "Directing",
+     "name": "Noah Aster",
+     "original_name": "Noah Aster",
+     "popularity": 0.809,
+     "profile_path": "/85zyxtqWqGrGvvdvb2IyBfhplRn.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5b2498910e0a2667140028f6",
+     "department": "Directing",
+     "gender": 2,
+     "id": 1145520,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "Ari Aster",
+     "original_name": "Ari Aster",
+     "popularity": 2.1491,
+     "profile_path": "/3j6cVjnqTjx8TJbbTdBlLXYy5yU.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6696bac921c92492c1f3b691",
+     "department": "Crew",
+     "gender": 2,
+     "id": 23457,
+     "job": "Thanks",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Barrie Gower",
+     "original_name": "Barrie Gower",
+     "popularity": 1.2737,
+     "profile_path": "/w4aurjKq2sIGPHZSpjLDp6BIHV2.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5b551d9b0e0a2673cf009dff",
+     "department": "Production",
+     "gender": 2,
+     "id": 131399,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Lars Knudsen",
+     "original_name": "Lars Knudsen",
+     "popularity": 0.9574,
+     "profile_path": "/cQzlwxBM0UEKcWfoL0cR8PLBLCW.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5b634e6d0e0a267ef603647e",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1650351,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Pawel Pogorzelski",
+     "original_name": "Pawel Pogorzelski",
+     "popularity": 0.8427,
+     "profile_path": "/mCUSXTkDMmJaX4FoQ7adjIcJaOu.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5b71ce6ac3a368189917a935",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 16235,
+     "job": "Costume Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Andrea Flesch",
+     "original_name": "Andrea Flesch",
+     "popularity": 0.5001,
+     "profile_path": "/qI28UvgaSCbCEeXylueMeCam5on.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5b71ce7bc3a36853750ffb6a",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1863964,
+     "job": "Boom Operator",
+     "known_for_department": "Sound",
+     "name": "Gábor Erdei",
+     "original_name": "Gábor Erdei",
+     "popularity": 0.3919,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b71ce8b925141405417d515",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1587110,
+     "job": "Sound Mixer",
+     "known_for_department": "Sound",
+     "name": "Zsolt Magyar",
+     "original_name": "Zsolt Magyar",
+     "popularity": 0.5301,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b7728fa92514156f200193a",
+     "department": "Camera",
+     "gender": 0,
+     "id": 2109684,
+     "job": "Data Wrangler",
+     "known_for_department": "Camera",
+     "name": "Miklos Mnagy",
+     "original_name": "Miklos Mnagy",
+     "popularity": 0.3478,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b7728e60e0a26045a001ab4",
+     "department": "Directing",
+     "gender": 0,
+     "id": 1846451,
+     "job": "First Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Beau Ferris",
+     "original_name": "Beau Ferris",
+     "popularity": 0.5623,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b7780a50e0a264734005216",
+     "department": "Production",
+     "gender": 0,
+     "id": 1846451,
+     "job": "Producer",
+     "known_for_department": "Directing",
+     "name": "Beau Ferris",
+     "original_name": "Beau Ferris",
+     "popularity": 0.5623,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b81aa24c3a36865550183ab",
+     "department": "Camera",
+     "gender": 0,
+     "id": 1379436,
+     "job": "\"A\" Camera Operator",
+     "known_for_department": "Camera",
+     "name": "Fabrizio Sciarra",
+     "original_name": "Fabrizio Sciarra",
+     "popularity": 0.3785,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b81aa330e0a264599016c59",
+     "department": "Camera",
+     "gender": 0,
+     "id": 1379436,
+     "job": "Steadicam Operator",
+     "known_for_department": "Camera",
+     "name": "Fabrizio Sciarra",
+     "original_name": "Fabrizio Sciarra",
+     "popularity": 0.3785,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b79cdff0e0a264731031ecd",
+     "department": "Directing",
+     "gender": 1,
+     "id": 1568900,
+     "job": "Script Supervisor",
+     "known_for_department": "Directing",
+     "name": "Melissa Lawrence",
+     "original_name": "Melissa Lawrence",
+     "popularity": 0.4638,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b7b57169251410200000d21",
+     "department": "Production",
+     "gender": 2,
+     "id": 1979668,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Philip Westgren",
+     "original_name": "Philip Westgren",
+     "popularity": 0.4244,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b7b56f4c3a3681982000f3e",
+     "department": "Production",
+     "gender": 2,
+     "id": 1173858,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Patrik Andersson",
+     "original_name": "Patrik Andersson",
+     "popularity": 0.9972,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b7b570c0e0a267c71000d81",
+     "department": "Production",
+     "gender": 2,
+     "id": 2111888,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Pelle Nilsson",
+     "original_name": "Pelle Nilsson",
+     "popularity": 0.797,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b7b56e792514101f7000c1d",
+     "department": "Production",
+     "gender": 2,
+     "id": 1163117,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Fredrik Heinig",
+     "original_name": "Fredrik Heinig",
+     "popularity": 0.4634,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64b6db7213654500e462e943",
+     "department": "Editing",
+     "gender": 1,
+     "id": 1113553,
+     "job": "Additional Editor",
+     "known_for_department": "Editing",
+     "name": "Jennifer Lame",
+     "original_name": "Jennifer Lame",
+     "popularity": 1.0076,
+     "profile_path": "/1Jl596RMknK3XgGidLbeFOleLns.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5b9def6d0e0a267563011a40",
+     "department": "Directing",
+     "gender": 0,
+     "id": 2128889,
+     "job": "Third Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Reszeli-Soós András",
+     "original_name": "Reszeli-Soós András",
+     "popularity": 0.4268,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b9defa90e0a2675590128dc",
+     "department": "Crew",
+     "gender": 2,
+     "id": 1831266,
+     "job": "Stunt Double",
+     "known_for_department": "Crew",
+     "name": "Géza Kovács",
+     "original_name": "Géza Kovács",
+     "popularity": 0.5677,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b9def7d0e0a26756501224f",
+     "department": "Directing",
+     "gender": 0,
+     "id": 2128890,
+     "job": "Second Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Ákos Strommer",
+     "original_name": "Ákos Strommer",
+     "popularity": 0.6778,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5b9def4ac3a368440301315b",
+     "department": "Editing",
+     "gender": 2,
+     "id": 1790655,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Lucian Johnston",
+     "original_name": "Lucian Johnston",
+     "popularity": 0.5781,
+     "profile_path": "/npyIzNrDntlToDvKkKV5UtajB2e.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5ba539b9c3a368083d01ce2b",
+     "department": "Camera",
+     "gender": 0,
+     "id": 2132215,
+     "job": "Grip",
+     "known_for_department": "Camera",
+     "name": "Bence Czeh",
+     "original_name": "Bence Czeh",
+     "popularity": 0.3498,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64cd802b85090f01445aa4b8",
+     "department": "Sound",
+     "gender": 1,
+     "id": 3340764,
+     "job": "ADR Recordist",
+     "known_for_department": "Acting",
+     "name": "Sophie Sörensen",
+     "original_name": "Sophie Sörensen",
+     "popularity": 0.51,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5bf5ffa80e0a2626740c3498",
+     "department": "Art",
+     "gender": 0,
+     "id": 1583093,
+     "job": "Art Direction",
+     "known_for_department": "Art",
+     "name": "Eszter Takács",
+     "original_name": "Eszter Takács",
+     "popularity": 0.739,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5c6ba9f10e0a266daca8a281",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 2245561,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Gergely Takács",
+     "original_name": "Gergely Takács",
+     "popularity": 0.3764,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5cf599d5c3a36818da232fe7",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1580941,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Bobby Krlic",
+     "original_name": "Bobby Krlic",
+     "popularity": 0.6185,
+     "profile_path": "/edyQ97jkTRbWBARUaB31ghl4mMT.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5cf5a8329251415f8eb91044",
+     "department": "Art",
+     "gender": 2,
+     "id": 1335178,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Henrik Svensson",
+     "original_name": "Henrik Svensson",
+     "popularity": 0.7474,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94573ca06efe00125b1ade",
+     "department": "Production",
+     "gender": 2,
+     "id": 1824499,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Jeffrey Penman",
+     "original_name": "Jeffrey Penman",
+     "popularity": 0.5886,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d945634a097dc001223e68b",
+     "department": "Production",
+     "gender": 2,
+     "id": 236318,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Thomas Benski",
+     "original_name": "Thomas Benski",
+     "popularity": 0.6446,
+     "profile_path": "/hojuXBcXgETtdVjOZycoPZLTa53.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5d945db9a06efe001e5aca12",
+     "department": "Art",
+     "gender": 2,
+     "id": 1173858,
+     "job": "Conceptual Design",
+     "known_for_department": "Production",
+     "name": "Patrik Andersson",
+     "original_name": "Patrik Andersson",
+     "popularity": 0.9972,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d945d11a097dc0022241906",
+     "department": "Crew",
+     "gender": 2,
+     "id": 1858279,
+     "job": "Stunt Coordinator",
+     "known_for_department": "Crew",
+     "name": "Gáspár Szabó",
+     "original_name": "Gáspár Szabó",
+     "popularity": 0.6507,
+     "profile_path": "/uLw52oLWaVLhpTHkpsKatARRGiJ.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5d945719a06efe00265aa079",
+     "department": "Production",
+     "gender": 2,
+     "id": 2339011,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Tyler Campellone",
+     "original_name": "Tyler Campellone",
+     "popularity": 0.6613,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9457fd21c4ca00307f85e4",
+     "department": "Production",
+     "gender": 1,
+     "id": 1077406,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Jeanette Klintberg",
+     "original_name": "Jeanette Klintberg",
+     "popularity": 0.434,
+     "profile_path": "/bNHOSJ4Iw2BuUFI0gd0l2qUvi8A.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94566521c4ca00117fb68b",
+     "department": "Production",
+     "gender": 2,
+     "id": 1733485,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Ben Rimmer",
+     "original_name": "Ben Rimmer",
+     "popularity": 0.857,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9456ef21c4ca00117fb754",
+     "department": "Sound",
+     "gender": 0,
+     "id": 148740,
+     "job": "Supervising Sound Editor",
+     "known_for_department": "Sound",
+     "name": "Gene Park",
+     "original_name": "Gene Park",
+     "popularity": 0.5662,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d945729a06efe00125b1ac9",
+     "department": "Production",
+     "gender": 0,
+     "id": 1846451,
+     "job": "Co-Producer",
+     "known_for_department": "Directing",
+     "name": "Beau Ferris",
+     "original_name": "Beau Ferris",
+     "popularity": 0.5623,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9457e9a06efe00125b1c46",
+     "department": "Production",
+     "gender": 1,
+     "id": 1046729,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Jessica Kelly",
+     "original_name": "Jessica Kelly",
+     "popularity": 0.9151,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d945da5a06efe001e5ac9c4",
+     "department": "Art",
+     "gender": 0,
+     "id": 2423321,
+     "job": "Conceptual Design",
+     "known_for_department": "Art",
+     "name": "Martin Karlqvist",
+     "original_name": "Martin Karlqvist",
+     "popularity": 0.2931,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94576821c4ca00307f8405",
+     "department": "Production",
+     "gender": 0,
+     "id": 2423313,
+     "job": "Associate Producer",
+     "known_for_department": "Production",
+     "name": "Tintin Scheynius",
+     "original_name": "Tintin Scheynius",
+     "popularity": 0.6912,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d945f93a06efe00125b2744",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 1601773,
+     "job": "Special Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Csaba Juhász",
+     "original_name": "Csaba Juhász",
+     "popularity": 0.2875,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94603c87ae7b002ca4a9af",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 107596,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Luc Julien",
+     "original_name": "Luc Julien",
+     "popularity": 0.8414,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94616b87ae7b0014a45eef",
+     "department": "Production",
+     "gender": 2,
+     "id": 1793973,
+     "job": "Unit Production Manager",
+     "known_for_department": "Production",
+     "name": "Gábor Csöge",
+     "original_name": "Gábor Csöge",
+     "popularity": 0.4041,
+     "profile_path": "/hmEx43vl3gw9kbF4jnK3ygNUvMU.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94637121c4ca00307f9849",
+     "department": "Camera",
+     "gender": 0,
+     "id": 2423341,
+     "job": "Grip",
+     "known_for_department": "Camera",
+     "name": "Tyler Furner",
+     "original_name": "Tyler Furner",
+     "popularity": 0.7646,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94622d21c4ca00307f966e",
+     "department": "Production",
+     "gender": 1,
+     "id": 2423338,
+     "job": "Unit Production Manager",
+     "known_for_department": "Production",
+     "name": "Jennifer Ricci",
+     "original_name": "Jennifer Ricci",
+     "popularity": 0.6809,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d946051a06efe00125b2906",
+     "department": "Visual Effects",
+     "gender": 2,
+     "id": 2423329,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Samuel Karlsson",
+     "original_name": "Samuel Karlsson",
+     "popularity": 1.1151,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d946353a06efe00125b31f7",
+     "department": "Camera",
+     "gender": 0,
+     "id": 1629836,
+     "job": "Grip",
+     "known_for_department": "Camera",
+     "name": "Marcos Attila Bohórquez",
+     "original_name": "Marcos Attila Bohórquez",
+     "popularity": 0.2935,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d946822a097dc002a23fab9",
+     "department": "Sound",
+     "gender": 2,
+     "id": 92388,
+     "job": "Foley Artist",
+     "known_for_department": "Sound",
+     "name": "Jay Peck",
+     "original_name": "Jay Peck",
+     "popularity": 0.4742,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9463aba097dc001a23e18d",
+     "department": "Lighting",
+     "gender": 0,
+     "id": 1712034,
+     "job": "Gaffer",
+     "known_for_department": "Lighting",
+     "name": "J. Owen Rogers",
+     "original_name": "J. Owen Rogers",
+     "popularity": 0.4717,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9460b687ae7b001ca470dd",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 2143088,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Robin Aristorenas",
+     "original_name": "Robin Aristorenas",
+     "popularity": 0.408,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94636321c4ca00277f7792",
+     "department": "Camera",
+     "gender": 0,
+     "id": 2423340,
+     "job": "Grip",
+     "known_for_department": "Camera",
+     "name": "Dániel Dobszay",
+     "original_name": "Dániel Dobszay",
+     "popularity": 0.6762,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d945f5687ae7b0014a45b4d",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 2193994,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Robin Scott Graham",
+     "original_name": "Robin Scott Graham",
+     "popularity": 0.488,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d946015a06efe00265aafbd",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 2423325,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "István Vajda",
+     "original_name": "István Vajda",
+     "popularity": 0.7637,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94677f21c4ca00117fcd77",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 23619,
+     "job": "Makeup Supervisor",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Katalin Jakots",
+     "original_name": "Katalin Jakots",
+     "popularity": 0.9523,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94620ea097dc00222424c4",
+     "department": "Production",
+     "gender": 0,
+     "id": 2423337,
+     "job": "Production Manager",
+     "known_for_department": "Production",
+     "name": "Amna Maksumic",
+     "original_name": "Amna Maksumic",
+     "popularity": 0.3385,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94644f21c4ca00307f9962",
+     "department": "Art",
+     "gender": 0,
+     "id": 2423344,
+     "job": "Art Direction",
+     "known_for_department": "Art",
+     "name": "Rico Olsen",
+     "original_name": "Rico Olsen",
+     "popularity": 0.2878,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94655da097dc002a23f4f7",
+     "department": "Sound",
+     "gender": 0,
+     "id": 148740,
+     "job": "Sound Re-Recording Mixer",
+     "known_for_department": "Sound",
+     "name": "Gene Park",
+     "original_name": "Gene Park",
+     "popularity": 0.5662,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94611021c4ca00307f9462",
+     "department": "Camera",
+     "gender": 0,
+     "id": 2423335,
+     "job": "Still Photographer",
+     "known_for_department": "Camera",
+     "name": "Csaba Aknay",
+     "original_name": "Csaba Aknay",
+     "popularity": 0.4083,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9462bb87ae7b001ca4772b",
+     "department": "Art",
+     "gender": 0,
+     "id": 1427826,
+     "job": "Supervising Art Director",
+     "known_for_department": "Art",
+     "name": "Csaba Lódi",
+     "original_name": "Csaba Lódi",
+     "popularity": 0.5328,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94609da097dc001a23db07",
+     "department": "Visual Effects",
+     "gender": 2,
+     "id": 2023244,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Asaf Yeger",
+     "original_name": "Asaf Yeger",
+     "popularity": 0.4262,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94639b87ae7b001ca478f1",
+     "department": "Lighting",
+     "gender": 0,
+     "id": 2114907,
+     "job": "Gaffer",
+     "known_for_department": "Camera",
+     "name": "Zoltán Kristoffy",
+     "original_name": "Zoltán Kristoffy",
+     "popularity": 0.3442,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94650ca06efe00125b3583",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1277640,
+     "job": "Sound Designer",
+     "known_for_department": "Sound",
+     "name": "Ruy García",
+     "original_name": "Ruy García",
+     "popularity": 0.6594,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9467a221c4ca00307f9a49",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2254901,
+     "job": "Hair Supervisor",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Mónika Tóth",
+     "original_name": "Mónika Tóth",
+     "popularity": 0.7458,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94606f87ae7b0024a4af16",
+     "department": "Visual Effects",
+     "gender": 2,
+     "id": 1555322,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "Vico Sharabani",
+     "original_name": "Vico Sharabani",
+     "popularity": 0.6743,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d946123a06efe00265ab1ef",
+     "department": "Camera",
+     "gender": 0,
+     "id": 2061530,
+     "job": "Still Photographer",
+     "known_for_department": "Camera",
+     "name": "Gábor Kotschy",
+     "original_name": "Gábor Kotschy",
+     "popularity": 0.4083,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94657d21c4ca00117fcabd",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1539990,
+     "job": "Sound Re-Recording Mixer",
+     "known_for_department": "Sound",
+     "name": "Ric Schnupp",
+     "original_name": "Ric Schnupp",
+     "popularity": 0.5888,
+     "profile_path": "/AjJjCuP1sHIkYch92muQ7le4fzy.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94628887ae7b0014a46137",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2423339,
+     "job": "Boom Operator",
+     "known_for_department": "Sound",
+     "name": "József Szabados",
+     "original_name": "József Szabados",
+     "popularity": 0.3291,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94641b21c4ca001d7fc530",
+     "department": "Directing",
+     "gender": 0,
+     "id": 1510879,
+     "job": "Script Supervisor",
+     "known_for_department": "Directing",
+     "name": "Lex Hogan",
+     "original_name": "Lex Hogan",
+     "popularity": 0.4783,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d945e6e87ae7b002ca4a790",
+     "department": "Art",
+     "gender": 0,
+     "id": 2423322,
+     "job": "Art Direction",
+     "known_for_department": "Art",
+     "name": "Nille Svensson",
+     "original_name": "Nille Svensson",
+     "popularity": 0.337,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9461e121c4ca001d7fbc64",
+     "department": "Crew",
+     "gender": 1,
+     "id": 1594303,
+     "job": "Choreographer",
+     "known_for_department": "Directing",
+     "name": "Anna Vnuk",
+     "original_name": "Anna Vnuk",
+     "popularity": 0.8491,
+     "profile_path": "/zs5jJJSEvtTEmCjJlLOE6rFfDP9.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9461f8a06efe00265ab3ae",
+     "department": "Production",
+     "gender": 0,
+     "id": 1793974,
+     "job": "Unit Manager",
+     "known_for_department": "Production",
+     "name": "Adam Heisler",
+     "original_name": "Adam Heisler",
+     "popularity": 0.403,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d94627187ae7b002ca4abef",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1657567,
+     "job": "Boom Operator",
+     "known_for_department": "Sound",
+     "name": "Kreigh Carter",
+     "original_name": "Kreigh Carter",
+     "popularity": 0.3709,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5d9463bb21c4ca00277f782f",
+     "department": "Lighting",
+     "gender": 2,
+     "id": 2423342,
+     "job": "Gaffer",
+     "known_for_department": "Camera",
+     "name": "Phil Sokoloff",
+     "original_name": "Phil Sokoloff",
+     "popularity": 0.4983,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "66e7406add224d1a399188e1",
+     "department": "Art",
+     "gender": 2,
+     "id": 1760490,
+     "job": "Title Designer",
+     "known_for_department": "Art",
+     "name": "Teddy Blanks",
+     "original_name": "Teddy Blanks",
+     "popularity": 0.8176,
+     "profile_path": "/cgGmqpbiEWxx2eWejXfgZTF0Xrz.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67036a063afc91a5f1138329",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4985181,
+     "job": "Grip",
+     "known_for_department": "Camera",
+     "name": "Peter Horvath",
+     "original_name": "Peter Horvath",
+     "popularity": 0.4679,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "680b706dd148a82b0d9cfecd",
+     "department": "Production",
+     "gender": 2,
+     "id": 1123882,
+     "job": "Location Manager",
+     "known_for_department": "Production",
+     "name": "Jarrod Phillips",
+     "original_name": "Jarrod Phillips",
+     "popularity": 0.6891,
+     "profile_path": "/7swZH5G5tqJnG9jXfa9IAPp5GBU.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "698267cbfc7d6621fefa61a1",
+     "department": "Editing",
+     "gender": 0,
+     "id": 1790654,
+     "job": "First Assistant Editor",
+     "known_for_department": "Editing",
+     "name": "Max Berger",
+     "original_name": "Max Berger",
+     "popularity": 0.8341,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "699129dfedf123d8c7fa2e19",
+     "department": "Production",
+     "gender": 2,
+     "id": 2446603,
+     "job": "Executive In Charge Of Production",
+     "known_for_department": "Production",
+     "name": "Nathan Reinhart",
+     "original_name": "Nathan Reinhart",
+     "popularity": 0.4826,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "69a5902aab1e95102ce2bf01",
+     "department": "Crew",
+     "gender": 2,
+     "id": 63484,
+     "job": "Thanks",
+     "known_for_department": "Acting",
+     "name": "Fenton Quinn",
+     "original_name": "Fenton Quinn",
+     "popularity": 0.6971,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6a24d197188a593294630d77",
+     "department": "Art",
+     "gender": 0,
+     "id": 5130190,
+     "job": "Set Dresser",
+     "known_for_department": "Art",
+     "name": "Ashley Russell",
+     "original_name": "Ashley Russell",
+     "popularity": 0.3214,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6a24d336f9efedb1005a7995",
+     "department": "Art",
+     "gender": 0,
+     "id": 3345294,
+     "job": "Set Designer",
+     "known_for_department": "Art",
+     "name": "Franciska Nagy",
+     "original_name": "Franciska Nagy",
+     "popularity": 0.3823,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6a24d33f580fbb5838ec5e4a",
+     "department": "Art",
+     "gender": 0,
+     "id": 3351916,
+     "job": "Set Designer",
+     "known_for_department": "Art",
+     "name": "Sándor Jani",
+     "original_name": "Sándor Jani",
+     "popularity": 0.4085,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6a24d3492586b48878c0f720",
+     "department": "Art",
+     "gender": 0,
+     "id": 1930807,
+     "job": "Set Designer",
+     "known_for_department": "Art",
+     "name": "Zsuzsa Sverteczki",
+     "original_name": "Zsuzsa Sverteczki",
+     "popularity": 0.7246,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6a24d35a6535944ba85d1346",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2077358,
+     "job": "Foley Mixer",
+     "known_for_department": "Sound",
+     "name": "Micah Blaichman",
+     "original_name": "Micah Blaichman",
+     "popularity": 0.5056,
+     "profile_path": null
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   },
+   {
+    "id": 18,
+    "name": "Drama"
+   },
+   {
+    "id": 9648,
+    "name": "Mystery"
+   }
+  ],
+  "homepage": "https://a24films.com/films/midsommar",
+  "id": 530385,
+  "imdb_id": "tt8772262",
+  "origin_country": [
+   "US"
+  ],
+  "original_language": "en",
+  "original_title": "Midsommar",
+  "overview": "Several friends travel to Sweden to study as anthropologists a summer festival that is held every ninety years in the remote hometown of one of them. What begins as a dream vacation in a place where the sun never sets, gradually turns into a dark nightmare as the mysterious inhabitants invite them to participate in their disturbing festive activities.",
+  "popularity": 23.7862,
+  "poster_path": "/7LEI8ulZzO5gy9Ww2NVCrKmHeDZ.jpg",
+  "production_companies": [
+   {
+    "id": 39407,
+    "logo_path": "/1ht2ayBUdGgKuLRCkTjyGVEY5VL.png",
+    "name": "B-Reel Films",
+    "origin_country": "SE"
+   },
+   {
+    "id": 123620,
+    "logo_path": "/ePRhZ3yb09Ya6WMzCCBYopwIYbE.png",
+    "name": "Square Peg",
+    "origin_country": "US"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "SE",
+    "name": "Sweden"
+   },
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   }
+  ],
+  "release_date": "2019-07-03",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AR",
+     "release_dates": [
+      {
+       "certification": "+16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AT",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "R 18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-08-08T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "R 18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-01T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "14A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-03T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CL",
+     "release_dates": [
+      {
+       "certification": "14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-10-24T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Aranya Waves Film Festival",
+       "release_date": "2025-09-05T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CO",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-10-10T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CZ",
+     "release_dates": [
+      {
+       "certification": "15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-08-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-26T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2020-02-07T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DK",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-11T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "EE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-05T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FI",
+     "release_dates": [
+      {
+       "certification": "K-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-10T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-31T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Canal+ (ex myCanal)",
+       "release_date": "2022-08-25T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "4K UHD",
+       "release_date": "2023-09-01T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "12",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "DVD & Blu-Ray",
+       "release_date": "2019-12-02T00:00:00.000Z",
+       "type": 5
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "fr",
+       "note": "Canal+ Cinéma(s)",
+       "release_date": "2021-08-25T00:00:00.000Z",
+       "type": 6
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "fr",
+       "note": "Ciné+ Frisson",
+       "release_date": "2026-10-19T00:00:00.000Z",
+       "type": 6
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-05T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-10-28T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GR",
+     "release_dates": [
+      {
+       "certification": "K18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-08-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HK",
+     "release_dates": [
+      {
+       "certification": "III",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HU",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ID",
+     "release_dates": [
+      {
+       "certification": "21+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-08-21T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IE",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-03T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IL",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-08-08T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IN",
+     "release_dates": [
+      {
+       "certification": "A",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Mumbai Film Festival",
+       "release_date": "2019-10-19T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IS",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IT",
+     "release_dates": [
+      {
+       "certification": "14+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "JP",
+     "release_dates": [
+      {
+       "certification": "R15+ ",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2020-02-21T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "19",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-11T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "19",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Director's Cut",
+       "release_date": "2019-10-03T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KZ",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LB",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LT",
+     "release_dates": [
+      {
+       "certification": "N-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-05T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LV",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MO",
+     "release_dates": [
+      {
+       "certification": "D",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "C",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NL",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-25T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-11-29T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NO",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NZ",
+     "release_dates": [
+      {
+       "certification": "R18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "New Zealand International Film Festival",
+       "release_date": "2019-08-04T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-11-14T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PH",
+     "release_dates": [
+      {
+       "certification": "R-18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-24T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PL",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-05T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PT",
+     "release_dates": [
+      {
+       "certification": "M/18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RU",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-18T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Re-release",
+       "release_date": "2023-03-08T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-10-01T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SE",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-10T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SG",
+     "release_dates": [
+      {
+       "certification": "R21",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SK",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-08-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TH",
+     "release_dates": [
+      {
+       "certification": "20",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-08-15T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TR",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-12T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UA",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-11T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "New York City, New York",
+       "release_date": "2019-06-18T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Hollywood, California",
+       "release_date": "2019-06-24T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "NR",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Director's Cut",
+       "release_date": "2019-08-30T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-03T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-24T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-10-08T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-09-19T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "VE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2022-03-19T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ZA",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2019-07-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 48498408,
+  "runtime": 147,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   },
+   {
+    "english_name": "Swedish",
+    "iso_639_1": "sv",
+    "name": "svenska"
+   }
+  ],
+  "status": "Released",
+  "tagline": "Let the festivities begin.",
+  "title": "Midsommar",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "685c5d254c8885538819f9db",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "jpq3_zPyZQs",
+     "name": "Scream",
+     "official": true,
+     "published_at": "2025-06-24T17:09:00.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "67a3178baeee5c0e259fd389",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "H3vN5-ME15o",
+     "name": "No New People",
+     "official": true,
+     "published_at": "2025-02-04T15:52:49.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "66858d2a323ecdc64b026813",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "S3EZ-iTDqX0",
+     "name": "In IMAX for the first time from Friday",
+     "official": true,
+     "published_at": "2024-06-19T13:47:54.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "65c3063c8e2e000183a5c156",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "IdokZ60h3xs",
+     "name": "Dani Takes A Trip",
+     "official": true,
+     "published_at": "2024-02-07T02:01:37.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "62645a62713ed400aa1bc2d6",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "4t5ZmFJGuwA",
+     "name": "Director",
+     "official": true,
+     "published_at": "2022-04-15T21:22:02.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "66858da94edaa2272217c7dc",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "0Lv6Y8QA9Iw",
+     "name": "Florence Pugh on working with Ari Aster on Midsommar",
+     "official": true,
+     "published_at": "2021-07-29T16:56:46.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "66858f8561f7504ab18189b1",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "UNSUcUNi1ZM",
+     "name": "The Most Iconic Florence Pugh Moments",
+     "official": true,
+     "published_at": "2020-01-22T00:39:38.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "5d8cb06479b3d4000f8807fe",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "qQ3qxTIsOhQ",
+     "name": "“Win Couples Therapy”",
+     "official": true,
+     "published_at": "2019-09-25T12:59:57.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "5d8cb07079b3d40027884c34",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "CCrkiJFJGMA",
+     "name": "The Director's Cut Promo",
+     "official": true,
+     "published_at": "2019-08-27T16:00:22.000Z",
+     "site": "YouTube",
+     "size": 720,
+     "type": "Teaser"
+    },
+    {
+     "id": "66858dfd5c62514df63b2a57",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "8uXyRg9iAEs",
+     "name": "Ari Aster Discusses the Director's Cut of Midsommar",
+     "official": true,
+     "published_at": "2019-08-21T18:24:40.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "65c00de99f37b001635c01f4",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "aPGaPTdno10",
+     "name": "Ari Aster on Midsommar, Cathartic Endings, the Director's Cut, and His Favorite Films",
+     "official": true,
+     "published_at": "2019-07-12T16:47:45.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "65c00d7a5cd16e01499c80d1",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "MNz9nkQYag4",
+     "name": "\"Bear in a Cage™\"",
+     "official": true,
+     "published_at": "2019-07-09T13:00:02.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "66e87097050f14e4fcd01f1d",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "5UNklgDjEBg",
+     "name": "UK TV Spot 5",
+     "official": true,
+     "published_at": "2019-06-26T15:46:16.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "66e870a93768a73f8d91fce3",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "JnjboOPCzPo",
+     "name": "UK TV Spot 4",
+     "official": true,
+     "published_at": "2019-06-26T15:44:19.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "5d8cb07ad9f4a6000e5329a2",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "elNrBRG0wPA",
+     "name": "“Happy Midsummer!”",
+     "official": true,
+     "published_at": "2019-06-21T15:50:29.000Z",
+     "site": "YouTube",
+     "size": 720,
+     "type": "Teaser"
+    },
+    {
+     "id": "66e870bb3768a73f8d91fcec",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "-vnYXTDI6EU",
+     "name": "UK TV Spot 3",
+     "official": true,
+     "published_at": "2019-06-19T15:28:52.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "66e870c69dfbbdf0e6d02349",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "33njpqw0P3g",
+     "name": "UK TV Spot 2",
+     "official": true,
+     "published_at": "2019-06-19T15:03:36.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "66e870d0d7bcca524db1335f",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "7r3wQCpXbcM",
+     "name": "UK TV Spot 1",
+     "official": true,
+     "published_at": "2019-06-10T09:39:16.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "5cdacbbe9251410c9dd0edb6",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "1Vnghdsjmd0",
+     "name": "Official Trailer",
+     "official": true,
+     "published_at": "2019-05-14T13:00:03.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "5c7ee75cc3a3684e8fd2870e",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "I0UWIya-O0s",
+     "name": "Teaser Trailer",
+     "official": true,
+     "published_at": "2019-03-05T15:00:02.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    }
+   ]
+  },
+  "vote_average": 7.143,
+  "vote_count": 8522
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/aAM3cQmYGjjLQ24m0F0RWfjKQ57.jpg",
+    "genre_ids": [
+     27,
+     18,
+     9648
+    ],
+    "id": 530385,
+    "original_language": "en",
+    "original_title": "Midsommar",
+    "overview": "Several friends travel to Sweden to study as anthropologists a summer festival that is held every ninety years in the remote hometown of one of them. What begins as a dream vacation in a place where the sun never sets, gradually turns into a dark nightmare as the mysterious inhabitants invite them to participate in their disturbing festive activities.",
+    "popularity": 23.7862,
+    "poster_path": "/7LEI8ulZzO5gy9Ww2NVCrKmHeDZ.jpg",
+    "release_date": "2019-07-03",
+    "softcore": false,
+    "title": "Midsommar",
+    "video": false,
+    "vote_average": 7.1,
+    "vote_count": 8524
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/iRsNcq3hcfTS93f6UFPE1FXRb7n.jpg",
+    "genre_ids": [
+     18,
+     10749,
+     35
+    ],
+    "id": 36565,
+    "original_language": "sv",
+    "original_title": "Äntligen midsommar!",
+    "overview": "A beautiful waterfront house, a Swedish flag fluttering in the wind. A sailboat tied to the wooden deck below. This is the setting of the friends' annual Midsummer celebrations. The friends are gathered at Emil's family house and the herring lunch, sauna, games and compulsory skinny dipping are as always prepared. Expectations are set - Micke worries about his highly pregnant wife and the fastest way to the nearest hospital. Eva is looking for some distraction from her recent split with Patrick and Sam. Emil's college buddy from the States arrives with his own expectations of Swedish sin. Wannabe singer-songwriter Anders hasn't told his wannabe pregnant girlfriend Maria about his low sperm count and hopes to solve the problem over the weekend. To top it off Emil's surprise seems to lift the party to unprecedented heights. If everything had gone according to plan that is.",
+    "popularity": 2.2475,
+    "poster_path": "/8u1U773yEqabCMvGknumME3kkbD.jpg",
+    "release_date": "2009-10-02",
+    "softcore": false,
+    "title": "A Swedish Midsummer Sex Comedy",
+    "video": false,
+    "vote_average": 3.9,
+    "vote_count": 8
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/lTh88KHRLxkJOEvTXoLYFXyCjpg.jpg",
+    "genre_ids": [
+     18
+    ],
+    "id": 1257822,
+    "original_language": "de",
+    "original_title": "Midsommar-Stories",
+    "overview": "Tells the stories of a few people who are driven by different dreams, needs, and fears. At some point or another in their lives, IKEA plays a fateful role - in a comical or tragic way.",
+    "popularity": 1.7405,
+    "poster_path": "/5bs09pLZIyyKPi2wtcErexzvgnR.jpg",
+    "release_date": "1999-01-01",
+    "softcore": false,
+    "title": "Midsommar Stories",
+    "video": false,
+    "vote_average": 4.3,
+    "vote_count": 3
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/pYFaQyE33kC5RbgVH54ZgE4vdKn.jpg",
+    "genre_ids": [
+     10751,
+     35
+    ],
+    "id": 726424,
+    "original_language": "sv",
+    "original_title": "Sune - Uppdrag midsommar",
+    "overview": "The Andersson family and the Blixt family is going to Karin's aunt Hulda to celebrate Midsummer. But just before they leave, Sophie breaks up with Sune! The disaster is gigantic.  Sune decides to win Sophie back by celebrating a truly romantic midsummer with her - just like mom and dad did 20 years ago.  But the question is whether Sune thinks too much about everything being good in his way, and forgets that not everyone thinks like him ...",
+    "popularity": 0.8834,
+    "poster_path": "/zQC0L0WxDLSNTTqD26WsyWt1Nds.jpg",
+    "release_date": "2021-06-11",
+    "softcore": false,
+    "title": "Sune - Mission: Midsummer",
+    "video": false,
+    "vote_average": 4.3,
+    "vote_count": 13
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1664323,
+    "original_language": "fr",
+    "original_title": "Echoes of Midsommar",
+    "overview": "",
+    "popularity": 1.0021,
+    "poster_path": "/q9aFNKCJL5Uqq5zih7itWj6D3qC.jpg",
+    "release_date": "2026-03-31",
+    "softcore": false,
+    "title": "Echoes of Midsommar",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1717438,
+    "original_language": "sv",
+    "original_title": "Midsommar med Ernst",
+    "overview": "Ernst celebrates Midsummer and prepares delicious small dishes, a lovely strawberry dessert and a summery potato salad. There will also be summery crafts on the table.",
+    "popularity": 0.6492,
+    "poster_path": "/eZ1VC2Pmb0iNcWCHBXtTwez4OTv.jpg",
+    "release_date": "2025-06-19",
+    "softcore": false,
+    "title": "Midsommar med Ernst",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1311911,
+    "original_language": "sv",
+    "original_title": "Midsommar med Snoddas",
+    "overview": "Snoddas performs at a midsummer gathering.",
+    "popularity": 0.4558,
+    "poster_path": null,
+    "release_date": "1952-01-01",
+    "softcore": false,
+    "title": "Midsommar med Snoddas",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/xZQ4cxPj38jEuuO1zmUWneXJ9eC.jpg",
+    "genre_ids": [
+     18,
+     35
+    ],
+    "id": 1505217,
+    "original_language": "sv",
+    "original_title": "Myggor & salta pinnar",
+    "overview": "Change is coming to the midsummer party at Barnens ö. There's a rumour that Joey Tempest has moved in next door. Meanwhile the family's youngest member, Alba, has just learned to walk and takes every opportunity to escape from the ever drunker adults.",
+    "popularity": 1.047,
+    "poster_path": "/lENjoIcJvWpFezHRZHDYptjVpdK.jpg",
+    "release_date": "2025-06-06",
+    "softcore": false,
+    "title": "A Real Swedish Midsommar",
+    "video": false,
+    "vote_average": 9.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 873358,
+    "original_language": "en",
+    "original_title": "Wavture Pleasure Midsommar",
+    "overview": "An experimental short commentary about the film Midsommar (2019) made by Ari Aster, uses of bright colours and effects to add onto the idea the director had for the story.",
+    "popularity": 0.4093,
+    "poster_path": "/1iwHSEctisZOiL1owfzVl3AFxsf.jpg",
+    "release_date": "",
+    "softcore": false,
+    "title": "Wavture Pleasure Midsommar",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1396544,
+    "original_language": "en",
+    "original_title": "Ingen midsommar utan",
+    "overview": "A group of friends gather to celebrate Midsummer. The potatoes flow!",
+    "popularity": 0.4066,
+    "poster_path": "/4kxuLxffbIWUQqMD8UOfEd3w9yA.jpg",
+    "release_date": "2024-09-07",
+    "softcore": false,
+    "title": "Ingen midsommar utan",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/tLF57KOkfkpuQvXDwjxUXD18kDl.jpg",
+    "genre_ids": [
+     99
+    ],
+    "id": 1284571,
+    "original_language": "en",
+    "original_title": "Let the Festivities Begin: Manifesting Midsommar",
+    "overview": "A featurette where Ari Aster and the cast break down the story and give us a behind the scenes look at the making of the film. It gives a fascinating look inside Ari Aster’s mind, and the detail put into production.",
+    "popularity": 1.0765,
+    "poster_path": "/pKT8XwEWVa4j5xTJKRQu5LvOmlE.jpg",
+    "release_date": "2019-10-08",
+    "softcore": false,
+    "title": "Let the Festivities Begin: Manifesting Midsommar",
+    "video": false,
+    "vote_average": 5.2,
+    "vote_count": 4
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/lJsm9K3U8swgvsv1CjWq71fgGlS.jpg",
+    "genre_ids": [
+     99
+    ],
+    "id": 1305683,
+    "original_language": "fi",
+    "original_title": "Juhannusyö Aavasaksalla",
+    "overview": "A short documentary documenting Midsummer in Ylitornio.",
+    "popularity": 0.4063,
+    "poster_path": null,
+    "release_date": "1946-01-01",
+    "softcore": false,
+    "title": "Midsommar Night at Aavasaksa",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 441496,
+    "original_language": "sv",
+    "original_title": "Vi bryr oss egentligen inte om midsommar",
+    "overview": "A close look at the people in the populist rightwing party Sverigedemokraterna (Sweden Democrats).",
+    "popularity": 0.615,
+    "poster_path": "/lMBOecTqNbxGFS2xRNP5bE7R2gl.jpg",
+    "release_date": "2010-11-26",
+    "softcore": false,
+    "title": "Vi bryr oss egentligen inte om midsommar",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/4xNB3pjPbXqj7CW1NP5g5CEzx74.jpg",
+    "genre_ids": [
+     35
+    ],
+    "id": 1712068,
+    "original_language": "sv",
+    "original_title": "Trevlig midsommarhelg!",
+    "overview": "The highlight of the summer in Västerköping! Gunnar and Marianne celebrate traditionally with the children, herring, schnapps and Gunnar's own kubb rules. At Tom and Yvonne's the celebration risks being canceled while Präst-Björn is intoxicated by the summer and Vino Tinto. For Terese, \"7 kinds of flowers under the pillow\" brings unexpected consequences and opportunities.",
+    "popularity": 1.6365,
+    "poster_path": "/5LDVvPZqp7JAIepLYenHEkFPkcz.jpg",
+    "release_date": "2026-06-12",
+    "softcore": false,
+    "title": "Trevlig midsommarhelg!",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     18,
+     10770,
+     80
+    ],
+    "id": 329257,
+    "original_language": "sv",
+    "original_title": "Arne Dahl: En midsommarnattsdröm",
+    "overview": "A series of brutal murders of Polish women who secretly hiding in Sweden becomes the new A - team first case. The victims prove to be key witnesses in a major lawsuit against the Polish mafia . Three of them have been found murdered in the space of a few days , two missing and the hope is that they are still alive. Detective Kerstin Holm get command when the hunt for a ruthless killer and his shady victim begins.",
+    "popularity": 1.1808,
+    "poster_path": "/ghnqZyIYabn7nMNY40YWozEfaO6.jpg",
+    "release_date": "2015-02-15",
+    "softcore": false,
+    "title": "Arne Dahl - A Midsummer Night's Dream",
+    "video": false,
+    "vote_average": 4.4,
+    "vote_count": 5
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/9ELWPutC8bK9puoVbXpsC8srFqV.jpg",
+    "genre_ids": [
+     99,
+     18
+    ],
+    "id": 391483,
+    "original_language": "sv",
+    "original_title": "Fyra dagar som skakade Sverige - Midsommarkrisen 1941",
+    "overview": "At dawn on June 22, 1941, Germany invaded the Soviet Union. On the same morning, Germany demanded permission from the Swedish government to transport 18,000 German soldiers from Norway to Finland across Sweden by railway. This was a difficult problem for the Swedish government. On one hand remaining friendly with Germany at the height of its power, on the other maintaining a strict neutrality.  The Swedish cabinet meet in Stockholm to decide upon the best reply to the German demands.",
+    "popularity": 1.234,
+    "poster_path": "/pGdmK2waLo4E1MAw7Said4Eekhh.jpg",
+    "release_date": "1988-01-03",
+    "softcore": false,
+    "title": "Fyra dagar som skakade Sverige - Midsommarkrisen 1941",
+    "video": false,
+    "vote_average": 8.2,
+    "vote_count": 4
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     18,
+     10770
+    ],
+    "id": 984720,
+    "original_language": "sv",
+    "original_title": "En midsommarnattsdröm",
+    "overview": "Stage production of A Midsummer Night's Dream shot for television",
+    "popularity": 0.9493,
+    "poster_path": "/8XV2KeaazanCEscd9zOHSULcSVy.jpg",
+    "release_date": "1990-01-03",
+    "softcore": false,
+    "title": "En midsommarnattsdröm",
+    "video": false,
+    "vote_average": 9.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     10402
+    ],
+    "id": 633623,
+    "original_language": "xx",
+    "original_title": "Midsommarvaka",
+    "overview": "Midsummer celebration with dance and courtship in the idyllic Swedish landscape.",
+    "popularity": 1.3229,
+    "poster_path": "/f7qUCXTHgZs6ATshHlg2rR6AgyK.jpg",
+    "release_date": "1947-12-26",
+    "softcore": false,
+    "title": "Midsommarvaka",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 459405,
+    "original_language": "sv",
+    "original_title": "Midsommarminnen",
+    "overview": "A 1942 short film.",
+    "popularity": 1.2981,
+    "poster_path": null,
+    "release_date": "1942-01-01",
+    "softcore": false,
+    "title": "Midsummer Memories",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     18,
+     10770
+    ],
+    "id": 539540,
+    "original_language": "sv",
+    "original_title": "Midsommardröm i fattighuset",
+    "overview": "A Swedish TV play about a workhouse in Småland, Sweden. Midsummer's Dream in the Workhouse is written by Pär Lagerkvist.",
+    "popularity": 0.8852,
+    "poster_path": "/tgpoV0ykofXKulb3lpaR0eFR80w.jpg",
+    "release_date": "1959-01-06",
+    "softcore": false,
+    "title": "Midsommardröm i fattighuset",
+    "video": false,
+    "vote_average": 10.0,
+    "vote_count": 1
+   }
+  ],
+  "total_pages": 2,
+  "total_results": 30
+ }
+}

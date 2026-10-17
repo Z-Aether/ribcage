@@ -1,0 +1,2249 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/cavK9ox37pxDg11RvJINMH63onU.jpg",
+  "belongs_to_collection": {
+   "backdrop_path": "/268FCe9quBSUuea7TCnwGfDPHb8.jpg",
+   "id": 1503061,
+   "name": "When Evil Lurks Collection",
+   "poster_path": "/z7mfs29VVjuAUNrSezitKnui9Ar.jpg"
+  },
+  "budget": 0,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 3,
+     "character": "Pedro",
+     "credit_id": "64cfe75385090f00e7974ffe",
+     "gender": 2,
+     "id": 1731993,
+     "known_for_department": "Acting",
+     "name": "Ezequiel Rodríguez",
+     "order": 0,
+     "original_name": "Ezequiel Rodríguez",
+     "popularity": 0.8561,
+     "profile_path": "/pTse3nUKhLOwPvfot1XpQSQt9WI.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Jimi",
+     "credit_id": "64cfe766303c85011dd4362d",
+     "gender": 2,
+     "id": 2114682,
+     "known_for_department": "Acting",
+     "name": "Demián Salomón",
+     "order": 1,
+     "original_name": "Demián Salomón",
+     "popularity": 0.8449,
+     "profile_path": "/g46etxsCXXYOUM1cLbonkg3R65R.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 5,
+     "character": "Mirtha",
+     "credit_id": "64cfe76d303c85013a156c24",
+     "gender": 1,
+     "id": 1908266,
+     "known_for_department": "Acting",
+     "name": "Silvina Sabater",
+     "order": 2,
+     "original_name": "Silvina Sabater",
+     "popularity": 0.5393,
+     "profile_path": "/zR2uy9fOUakHBVh9A5XqMYqTSR9.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 8,
+     "character": "Ruíz",
+     "credit_id": "64cfe7886d4c97012e8b6341",
+     "gender": 2,
+     "id": 1028444,
+     "known_for_department": "Acting",
+     "name": "Luis Ziembrowski",
+     "order": 3,
+     "original_name": "Luis Ziembrowski",
+     "popularity": 0.6319,
+     "profile_path": "/8ePSSKG8Kjf6ZEnANnWhCXwu6Jv.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 11,
+     "character": "Santino",
+     "credit_id": "64cfe7b085090f010691cbf0",
+     "gender": 2,
+     "id": 2480553,
+     "known_for_department": "Acting",
+     "name": "Marcelo Michinaux",
+     "order": 4,
+     "original_name": "Marcelo Michinaux",
+     "popularity": 0.5079,
+     "profile_path": "/rvbPCyfbnTc9mWhGYYiGSmQ3O0K.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 7,
+     "character": "Jair",
+     "credit_id": "64cfe782d9f4a603b6c90c67",
+     "gender": 0,
+     "id": 2025882,
+     "known_for_department": "Acting",
+     "name": "Emilio Vodanovich",
+     "order": 5,
+     "original_name": "Emilio Vodanovich",
+     "popularity": 0.9176,
+     "profile_path": "/qOcPVNL06vqCaIbzaEo2dzhpTC2.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 6,
+     "character": "Sabrina",
+     "credit_id": "64cfe77c67e0f701013f6b0b",
+     "gender": 0,
+     "id": 3021721,
+     "known_for_department": "Acting",
+     "name": "Virginia Garófalo",
+     "order": 6,
+     "original_name": "Virginia Garófalo",
+     "popularity": 0.4919,
+     "profile_path": "/6nMiFdETne2r01SePJecF0mTQlS.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 9,
+     "character": "Sara",
+     "credit_id": "64cfe797549dda00c53f757b",
+     "gender": 1,
+     "id": 4201031,
+     "known_for_department": "Acting",
+     "name": "Paula Rubinsztein",
+     "order": 7,
+     "original_name": "Paula Rubinsztein",
+     "popularity": 0.6951,
+     "profile_path": "/dkEjTFVgDR0rsrHvafu8pu4xdde.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 48,
+     "character": "Vicky",
+     "credit_id": "6544e0f541a561336d83a08a",
+     "gender": 1,
+     "id": 4355105,
+     "known_for_department": "Acting",
+     "name": "Lucrecia Niron Talazac",
+     "order": 8,
+     "original_name": "Lucrecia Niron Talazac",
+     "popularity": 0.3628,
+     "profile_path": "/o7ysidrYcb0a0ztp04AG53OUqfB.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 41,
+     "character": "Maria Elena Gómez",
+     "credit_id": "6540c0a863e6fb00e424923c",
+     "gender": 1,
+     "id": 1689137,
+     "known_for_department": "Acting",
+     "name": "Isabel Quinteros",
+     "order": 9,
+     "original_name": "Isabel Quinteros",
+     "popularity": 0.6947,
+     "profile_path": "/61QxNzO9l0wkDi9Z8FYrUnhNLeV.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 40,
+     "character": "Jimena",
+     "credit_id": "653ff5c2bc2cb3012c32ab59",
+     "gender": 1,
+     "id": 2815351,
+     "known_for_department": "Acting",
+     "name": "Desirée Salgueiro",
+     "order": 10,
+     "original_name": "Desirée Salgueiro",
+     "popularity": 0.8585,
+     "profile_path": "/xxv6NfCaXDvgwpvksETSAC6QLKH.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 10,
+     "character": "Leo",
+     "credit_id": "64cfe7aa6d4c97012e8b634d",
+     "gender": 2,
+     "id": 2683842,
+     "known_for_department": "Acting",
+     "name": "Federico Liss",
+     "order": 11,
+     "original_name": "Federico Liss",
+     "popularity": 0.5536,
+     "profile_path": "/yu4cMp0Chfvl0yn530mNoynAQNo.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 47,
+     "character": "Eduardo",
+     "credit_id": "6544e00c7719d7011c932e7c",
+     "gender": 2,
+     "id": 4355098,
+     "known_for_department": "Acting",
+     "name": "Ricardo Velázquez",
+     "order": 12,
+     "original_name": "Ricardo Velázquez",
+     "popularity": 0.2931,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 42,
+     "character": "​Lieutenant Iraola",
+     "credit_id": "6540c1d66ca9a000ca15952d",
+     "gender": 2,
+     "id": 1814150,
+     "known_for_department": "Acting",
+     "name": "Jorge Prado",
+     "order": 13,
+     "original_name": "Jorge Prado",
+     "popularity": 0.5185,
+     "profile_path": "/ixbqYtlsc7mAAntvgMUo3Jrfc9X.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 43,
+     "character": "Police Gutiérrez",
+     "credit_id": "6540c22133a533012c7bc495",
+     "gender": 2,
+     "id": 2363625,
+     "known_for_department": "Acting",
+     "name": "Diego Sampayo",
+     "order": 14,
+     "original_name": "Diego Sampayo",
+     "popularity": 0.5179,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 49,
+     "character": "Kid García",
+     "credit_id": "6544e2b9fd4f8000e47ea021",
+     "gender": 2,
+     "id": 4355121,
+     "known_for_department": "Acting",
+     "name": "Pedro Larrabide",
+     "order": 15,
+     "original_name": "Pedro Larrabide",
+     "popularity": 0.2737,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 51,
+     "character": "Bad Breath Girl",
+     "credit_id": "6544e4be1ac29200ffeb1255",
+     "gender": 1,
+     "id": 4355135,
+     "known_for_department": "Acting",
+     "name": "Cleo Díaz",
+     "order": 16,
+     "original_name": "Cleo Díaz",
+     "popularity": 0.3063,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 50,
+     "character": "Crying Girl",
+     "credit_id": "6544e3651ac292013b61db39",
+     "gender": 1,
+     "id": 4355127,
+     "known_for_department": "Acting",
+     "name": "Agostina Aguilera",
+     "order": 17,
+     "original_name": "Agostina Aguilera",
+     "popularity": 0.3003,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 52,
+     "character": "Neighbor 1",
+     "credit_id": "6544e5ae2866fa00c4232b55",
+     "gender": 2,
+     "id": 4355144,
+     "known_for_department": "Acting",
+     "name": "Julián César López",
+     "order": 18,
+     "original_name": "Julián César López",
+     "popularity": 0.3116,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 53,
+     "character": "Policewoman",
+     "credit_id": "6544e67d9cc67b011cee66dc",
+     "gender": 1,
+     "id": 4355156,
+     "known_for_department": "Acting",
+     "name": "Maria Celina Carbajal",
+     "order": 19,
+     "original_name": "Maria Celina Carbajal",
+     "popularity": 0.3724,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 44,
+     "character": "Uriel 1",
+     "credit_id": "6540c2a633a533012c7bc4f7",
+     "gender": 2,
+     "id": 2439938,
+     "known_for_department": "Camera",
+     "name": "Pablo Galarza",
+     "order": 20,
+     "original_name": "Pablo Galarza",
+     "popularity": 0.4799,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 45,
+     "character": "Uriel 2",
+     "credit_id": "6540c2ba4557a00100acb879",
+     "gender": 2,
+     "id": 4349368,
+     "known_for_department": "Acting",
+     "name": "Gonzalo Galarza",
+     "order": 21,
+     "original_name": "Gonzalo Galarza",
+     "popularity": 0.242,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 46,
+     "character": "Uriel (voice)",
+     "credit_id": "6540c2d735818f00adc69bb0",
+     "gender": 2,
+     "id": 929043,
+     "known_for_department": "Acting",
+     "name": "Berta Muñiz",
+     "order": 22,
+     "original_name": "Berta Muñiz",
+     "popularity": 0.713,
+     "profile_path": "/3xJHNt8uAcjcba5JbTNlq7uAOwW.jpg"
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "64e79ce5c3c89101007c5c84",
+     "department": "Production",
+     "gender": 0,
+     "id": 2462292,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Roxana Ramos",
+     "original_name": "Roxana Ramos",
+     "popularity": 0.4833,
+     "profile_path": "/4iXNr7qjyIVy3Chvyu9TcmLZ3QQ.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79d71c3c891013ab1711b",
+     "department": "Sound",
+     "gender": 0,
+     "id": 4232342,
+     "job": "Foley Artist",
+     "known_for_department": "Sound",
+     "name": "Ricardo Lutsich",
+     "original_name": "Ricardo Lutsich",
+     "popularity": 0.2863,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79cf9c3c891011d9e18e7",
+     "department": "Production",
+     "gender": 0,
+     "id": 2114689,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Fernando Díaz",
+     "original_name": "Fernando Díaz",
+     "popularity": 0.5241,
+     "profile_path": "/j9imWzWFSXhnHbOS8rJrde5BIA4.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79d8ac613ce012cc4a87e",
+     "department": "Sound",
+     "gender": 0,
+     "id": 4232343,
+     "job": "Sound Editor",
+     "known_for_department": "Sound",
+     "name": "Teodoro Gryner",
+     "original_name": "Teodoro Gryner",
+     "popularity": 0.2815,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79da1c3c89100aed8b355",
+     "department": "Lighting",
+     "gender": 2,
+     "id": 2381922,
+     "job": "Gaffer",
+     "known_for_department": "Lighting",
+     "name": "Carlos Diaz",
+     "original_name": "Carlos Diaz",
+     "popularity": 0.4832,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79d325258ae00c94bb333",
+     "department": "Art",
+     "gender": 0,
+     "id": 1374393,
+     "job": "Production Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Laura Aguerrebehere",
+     "original_name": "Laura Aguerrebehere",
+     "popularity": 0.431,
+     "profile_path": "/r7qQy2ysJ0P97ME7nElW0pDY9H2.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79d5606f984010c6f0d72",
+     "department": "Sound",
+     "gender": 2,
+     "id": 574183,
+     "job": "Sound Designer",
+     "known_for_department": "Sound",
+     "name": "Pablo Isola",
+     "original_name": "Pablo Isola",
+     "popularity": 0.4547,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79d491feac100fe5c1be3",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2236688,
+     "job": "Makeup Department Head",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Elizabet Gora",
+     "original_name": "Elizabet Gora",
+     "popularity": 0.5444,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79d76c613ce010b8c400f",
+     "department": "Sound",
+     "gender": 0,
+     "id": 4232342,
+     "job": "Sound Editor",
+     "known_for_department": "Sound",
+     "name": "Ricardo Lutsich",
+     "original_name": "Ricardo Lutsich",
+     "popularity": 0.2863,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79cd4594c9400e25f3cd8",
+     "department": "Production",
+     "gender": 0,
+     "id": 2462292,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Roxana Ramos",
+     "original_name": "Roxana Ramos",
+     "popularity": 0.4833,
+     "profile_path": "/4iXNr7qjyIVy3Chvyu9TcmLZ3QQ.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79d85f2cf2500c6fac7c9",
+     "department": "Sound",
+     "gender": 0,
+     "id": 4232343,
+     "job": "Foley Artist",
+     "known_for_department": "Sound",
+     "name": "Teodoro Gryner",
+     "original_name": "Teodoro Gryner",
+     "popularity": 0.2815,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79c8cc3c89101007c5c52",
+     "department": "Production",
+     "gender": 0,
+     "id": 2915080,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Emily Gotto",
+     "original_name": "Emily Gotto",
+     "popularity": 0.8904,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79d80c613ce014dfb8e71",
+     "department": "Sound",
+     "gender": 0,
+     "id": 4232343,
+     "job": "Dialogue Editor",
+     "known_for_department": "Sound",
+     "name": "Teodoro Gryner",
+     "original_name": "Teodoro Gryner",
+     "popularity": 0.2815,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79c7f1feac100e1698142",
+     "department": "Production",
+     "gender": 0,
+     "id": 2114689,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Fernando Díaz",
+     "original_name": "Fernando Díaz",
+     "popularity": 0.5241,
+     "profile_path": "/j9imWzWFSXhnHbOS8rJrde5BIA4.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79cf0c613ce012cc4a83e",
+     "department": "Production",
+     "gender": 2,
+     "id": 2915081,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Samuel Zimmerman",
+     "original_name": "Samuel Zimmerman",
+     "popularity": 0.4383,
+     "profile_path": "/tllQ8yv8sWoPXDBl3U4EpzyVStL.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "64e79d07594c9400ffe598c9",
+     "department": "Editing",
+     "gender": 0,
+     "id": 2114688,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Lionel Cornistein",
+     "original_name": "Lionel Cornistein",
+     "popularity": 0.4135,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6522f94dfd630000ad9e9736",
+     "department": "Directing",
+     "gender": 2,
+     "id": 1191028,
+     "job": "Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Fabián Forte",
+     "original_name": "Fabián Forte",
+     "popularity": 0.619,
+     "profile_path": "/d0PkQkS9tXKdpPQGtT4onqY3Xou.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6522f9380cb33516fd45b875",
+     "department": "Crew",
+     "gender": 0,
+     "id": 3221863,
+     "job": "Special Effects",
+     "known_for_department": "Crew",
+     "name": "Marcos Berta",
+     "original_name": "Marcos Berta",
+     "popularity": 0.5191,
+     "profile_path": "/ieuMrHidpSVEtoq02LQlso4I0OS.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "653dce0a50733c00c5351ae4",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 2249943,
+     "job": "Costume Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Pheonia Veloz",
+     "original_name": "Pheonia Veloz",
+     "popularity": 0.4881,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "653dce3d109cd0014df4bbc4",
+     "department": "Production",
+     "gender": 2,
+     "id": 3007122,
+     "job": "Production Director",
+     "known_for_department": "Production",
+     "name": "Tomás Eloy Muñoz",
+     "original_name": "Tomás Eloy Muñoz",
+     "popularity": 0.4346,
+     "profile_path": "/1H65xBddxoeXJ43w9ydCoD73gKq.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "653dce80cc968300ade6fdae",
+     "department": "Crew",
+     "gender": 2,
+     "id": 1129914,
+     "job": "Visual Effects Art Director",
+     "known_for_department": "Directing",
+     "name": "Andrés Borghi",
+     "original_name": "Andrés Borghi",
+     "popularity": 0.5135,
+     "profile_path": "/c59VQb9L6VMlt1N8aet2N5IPGjW.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "653dcecfc8a5ac0100fa43ad",
+     "department": "Directing",
+     "gender": 2,
+     "id": 2377747,
+     "job": "Script Supervisor",
+     "known_for_department": "Directing",
+     "name": "Bernardo Bronstein",
+     "original_name": "Bernardo Bronstein",
+     "popularity": 0.5675,
+     "profile_path": "/kMeGAKoPAtE62sGyBsRf3Ldqzgu.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "653dcea8109cd000c9483fe3",
+     "department": "Crew",
+     "gender": 0,
+     "id": 2807355,
+     "job": "Visual Effects Art Director",
+     "known_for_department": "Directing",
+     "name": "Erick Culasso",
+     "original_name": "Erick Culasso",
+     "popularity": 0.6198,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "653dce2ce894a600c5168283",
+     "department": "Production",
+     "gender": 0,
+     "id": 3007121,
+     "job": "Production Director",
+     "known_for_department": "Production",
+     "name": "Valeria Bistagnino",
+     "original_name": "Valeria Bistagnino",
+     "popularity": 0.3755,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "653dce95cc9683014eb96426",
+     "department": "Crew",
+     "gender": 0,
+     "id": 1604061,
+     "job": "Visual Effects Art Director",
+     "known_for_department": "Production",
+     "name": "Matias Costilla",
+     "original_name": "Matias Costilla",
+     "popularity": 0.3532,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b0b553866e00abad4e2c",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4211786,
+     "job": "Key Grip",
+     "known_for_department": "Camera",
+     "name": "Aníbal Cattaneo",
+     "original_name": "Aníbal Cattaneo",
+     "popularity": 0.4962,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b10bea84c710910dcb86",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4385207,
+     "job": "Grip",
+     "known_for_department": "Camera",
+     "name": "Valentín Girbino",
+     "original_name": "Valentín Girbino",
+     "popularity": 0.2563,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b1360816c700fd324108",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4385208,
+     "job": "Grip",
+     "known_for_department": "Camera",
+     "name": "Lucas Recalde",
+     "original_name": "Lucas Recalde",
+     "popularity": 0.2892,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b397b5400214d0701ba2",
+     "department": "Production",
+     "gender": 0,
+     "id": 4332734,
+     "job": "Location Manager",
+     "known_for_department": "Production",
+     "name": "Paula Eliana Morel",
+     "original_name": "Paula Eliana Morel",
+     "popularity": 0.2996,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b00db5400214d3cb38cf",
+     "department": "Crew",
+     "gender": 0,
+     "id": 4385204,
+     "job": "Video Assist Operator",
+     "known_for_department": "Crew",
+     "name": "Francisco Sarduy",
+     "original_name": "Francisco Sarduy",
+     "popularity": 0.29,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b3f3ea84c71096df33b3",
+     "department": "Editing",
+     "gender": 0,
+     "id": 3240153,
+     "job": "Assistant Editor",
+     "known_for_department": "Editing",
+     "name": "Alba Ávila Jacome",
+     "original_name": "Alba Ávila Jacome",
+     "popularity": 0.4618,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b53022931a00ffbd0d0a",
+     "department": "Editing",
+     "gender": 0,
+     "id": 2114688,
+     "job": "Color Grading",
+     "known_for_department": "Editing",
+     "name": "Lionel Cornistein",
+     "original_name": "Lionel Cornistein",
+     "popularity": 0.4135,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559aef3b5400214d3cb3836",
+     "department": "Directing",
+     "gender": 0,
+     "id": 2772959,
+     "job": "First Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Lucía Paz",
+     "original_name": "Lucía Paz",
+     "popularity": 0.6284,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559af57d4fe04013983c94e",
+     "department": "Production",
+     "gender": 0,
+     "id": 4385199,
+     "job": "Production Assistant",
+     "known_for_department": "Production",
+     "name": "Giselle Fiorini",
+     "original_name": "Giselle Fiorini",
+     "popularity": 0.294,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b253b5400214cf3a4ba6",
+     "department": "Art",
+     "gender": 0,
+     "id": 4385216,
+     "job": "Props",
+     "known_for_department": "Art",
+     "name": "Juan Francisco Ramos",
+     "original_name": "Juan Francisco Ramos",
+     "popularity": 0.3362,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b44ed4fe0400fe07f2b5",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 4385230,
+     "job": "VFX Artist",
+     "known_for_department": "Visual Effects",
+     "name": "Ludmila Rodríguez Moreno",
+     "original_name": "Ludmila Rodríguez Moreno",
+     "popularity": 0.2956,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b4090816c700abbeb0b4",
+     "department": "Visual Effects",
+     "gender": 2,
+     "id": 1129914,
+     "job": "VFX Supervisor",
+     "known_for_department": "Directing",
+     "name": "Andrés Borghi",
+     "original_name": "Andrés Borghi",
+     "popularity": 0.5135,
+     "profile_path": "/c59VQb9L6VMlt1N8aet2N5IPGjW.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b48222931a01398eabb4",
+     "department": "Visual Effects",
+     "gender": 2,
+     "id": 1854793,
+     "job": "VFX Artist",
+     "known_for_department": "Visual Effects",
+     "name": "Marcelo Yañez",
+     "original_name": "Marcelo Yañez",
+     "popularity": 0.411,
+     "profile_path": "/zH4vsCWToSb3yMVAksRBXMZ4Ibr.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6559af2eb5400214d82d6d33",
+     "department": "Directing",
+     "gender": 0,
+     "id": 4385198,
+     "job": "Second Assistant Director",
+     "known_for_department": "Directing",
+     "name": "Melina Vasiliadis Bozzo",
+     "original_name": "Melina Vasiliadis Bozzo",
+     "popularity": 0.2588,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559af89ea84c710910dcabc",
+     "department": "Sound",
+     "gender": 0,
+     "id": 3887063,
+     "job": "Boom Operator",
+     "known_for_department": "Sound",
+     "name": "Eugenia Maneyro",
+     "original_name": "Eugenia Maneyro",
+     "popularity": 0.282,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b30c7f054018d78fee17",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 2869589,
+     "job": "Costume Assistant",
+     "known_for_department": "Art",
+     "name": "Sofía Pisoni",
+     "original_name": "Sofía Pisoni",
+     "popularity": 0.5032,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b33e53866e00c5b3d456",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 4385226,
+     "job": "Costume Assistant",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Mauro Ferreira",
+     "original_name": "Mauro Ferreira",
+     "popularity": 0.29,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b3d422931a00c58d3ecf",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 4167808,
+     "job": "Visual Effects Coordinator",
+     "known_for_department": "Visual Effects",
+     "name": "Paula Ceballos",
+     "original_name": "Paula Ceballos",
+     "popularity": 0.3977,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b459ea84c71094024ad6",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 2114688,
+     "job": "VFX Artist",
+     "known_for_department": "Editing",
+     "name": "Lionel Cornistein",
+     "original_name": "Lionel Cornistein",
+     "popularity": 0.4135,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b4c1ea84c710910dcd2c",
+     "department": "Sound",
+     "gender": 2,
+     "id": 574183,
+     "job": "Sound Director",
+     "known_for_department": "Sound",
+     "name": "Pablo Isola",
+     "original_name": "Pablo Isola",
+     "popularity": 0.4547,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559aed5ea84c71096df3117",
+     "department": "Directing",
+     "gender": 2,
+     "id": 2377747,
+     "job": "Continuity",
+     "known_for_department": "Directing",
+     "name": "Bernardo Bronstein",
+     "original_name": "Bernardo Bronstein",
+     "popularity": 0.5675,
+     "profile_path": "/kMeGAKoPAtE62sGyBsRf3Ldqzgu.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6559afcfd4fe0400e1b50c37",
+     "department": "Camera",
+     "gender": 0,
+     "id": 3667873,
+     "job": "Second Assistant Camera",
+     "known_for_department": "Lighting",
+     "name": "Ciro Zanela",
+     "original_name": "Ciro Zanela",
+     "popularity": 0.482,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b167ea84c71096df325b",
+     "department": "Lighting",
+     "gender": 0,
+     "id": 2610587,
+     "job": "Lighting Director",
+     "known_for_department": "Lighting",
+     "name": "Matías Moccia",
+     "original_name": "Matías Moccia",
+     "popularity": 0.5655,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b3afd4fe04011b933c48",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4385228,
+     "job": "Still Photographer",
+     "known_for_department": "Camera",
+     "name": "Lucía Fernández",
+     "original_name": "Lucía Fernández",
+     "popularity": 0.3191,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b544d4fe04013983cbd3",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1583168,
+     "job": "Sound Mix Technician",
+     "known_for_department": "Sound",
+     "name": "Leandro de Loredo",
+     "original_name": "Leandro de Loredo",
+     "popularity": 0.4685,
+     "profile_path": "/xheje56NgewXAZrSDaDFUZmcf0o.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b501d4fe0400fe07f2f0",
+     "department": "Sound",
+     "gender": 0,
+     "id": 4232342,
+     "job": "Sound Effects Editor",
+     "known_for_department": "Sound",
+     "name": "Ricardo Lutsich",
+     "original_name": "Ricardo Lutsich",
+     "popularity": 0.2863,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b20822931a00e2675111",
+     "department": "Art",
+     "gender": 0,
+     "id": 2297741,
+     "job": "Set Designer",
+     "known_for_department": "Art",
+     "name": "Martín Conti",
+     "original_name": "Martín Conti",
+     "popularity": 0.4895,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b36cea84c71096df3372",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 3892889,
+     "job": "Hair Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Micaela Pimentel",
+     "original_name": "Micaela Pimentel",
+     "popularity": 0.316,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b46ed4fe04013983cb81",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 4325811,
+     "job": "VFX Artist",
+     "known_for_department": "Visual Effects",
+     "name": "Eleazar Figueroa",
+     "original_name": "Eleazar Figueroa",
+     "popularity": 0.4308,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b4e453866e00abad507c",
+     "department": "Sound",
+     "gender": 0,
+     "id": 4385233,
+     "job": "Sound Effects Editor",
+     "known_for_department": "Sound",
+     "name": "Julián Maurin López",
+     "original_name": "Julián Maurin López",
+     "popularity": 0.2954,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b1add4fe0400c4242b13",
+     "department": "Lighting",
+     "gender": 0,
+     "id": 4061189,
+     "job": "Lighting Technician",
+     "known_for_department": "Lighting",
+     "name": "Tomás Regidor",
+     "original_name": "Tomás Regidor",
+     "popularity": 0.3559,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b3c953866e00c5b3d4a1",
+     "department": "Production",
+     "gender": 0,
+     "id": 4167808,
+     "job": "Post Production Coordinator",
+     "known_for_department": "Visual Effects",
+     "name": "Paula Ceballos",
+     "original_name": "Paula Ceballos",
+     "popularity": 0.3977,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559ae4cea84c710959f746d",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1802997,
+     "job": "Camera Operator",
+     "known_for_department": "Camera",
+     "name": "Mariano Suárez",
+     "original_name": "Mariano Suárez",
+     "popularity": 0.4602,
+     "profile_path": "/VdwSIuwWvUITsdDQPY2YLVD6w4.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6559ae5d53866e011c09766f",
+     "department": "Art",
+     "gender": 0,
+     "id": 1374393,
+     "job": "Art Direction",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Laura Aguerrebehere",
+     "original_name": "Laura Aguerrebehere",
+     "popularity": 0.431,
+     "profile_path": "/r7qQy2ysJ0P97ME7nElW0pDY9H2.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6559afec0816c70137ead2d3",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4385203,
+     "job": "First Assistant Camera",
+     "known_for_department": "Camera",
+     "name": "Camila Melone",
+     "original_name": "Camila Melone",
+     "popularity": 0.3605,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b42a22931a01398eab86",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 4323899,
+     "job": "VFX Artist",
+     "known_for_department": "Visual Effects",
+     "name": "Abel Gómez",
+     "original_name": "Abel Gómez",
+     "popularity": 0.7388,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559af6f22931a00c58d3cba",
+     "department": "Production",
+     "gender": 0,
+     "id": 4385201,
+     "job": "Production Assistant",
+     "known_for_department": "Production",
+     "name": "María Julio Rojo",
+     "original_name": "María Julio Rojo",
+     "popularity": 0.3319,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b0e6ea84c7109229cde4",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4385206,
+     "job": "Grip",
+     "known_for_department": "Camera",
+     "name": "Juan Manuel Hagelstrom",
+     "original_name": "Juan Manuel Hagelstrom",
+     "popularity": 0.3366,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b37b22931a00ffbd0c47",
+     "department": "Production",
+     "gender": 0,
+     "id": 4332729,
+     "job": "Location Manager",
+     "known_for_department": "Acting",
+     "name": "Carlos Segane",
+     "original_name": "Carlos Segane",
+     "popularity": 0.4981,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559afbbb5400214d07018e2",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4385202,
+     "job": "First Assistant Camera",
+     "known_for_department": "Camera",
+     "name": "Ezequiel Calafell Díaz",
+     "original_name": "Ezequiel Calafell Díaz",
+     "popularity": 0.2761,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b27db5400214d0701adb",
+     "department": "Art",
+     "gender": 0,
+     "id": 4385220,
+     "job": "Props",
+     "known_for_department": "Art",
+     "name": "Carlos Riveros",
+     "original_name": "Carlos Riveros",
+     "popularity": 0.2807,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b2db22931a011c972e85",
+     "department": "Art",
+     "gender": 0,
+     "id": 4385224,
+     "job": "Props",
+     "known_for_department": "Art",
+     "name": "Marcelo Rossati",
+     "original_name": "Marcelo Rossati",
+     "popularity": 0.2908,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b216d4fe0400c4242b4a",
+     "department": "Art",
+     "gender": 0,
+     "id": 2317651,
+     "job": "Set Decoration",
+     "known_for_department": "Art",
+     "name": "Soledad Guerrero",
+     "original_name": "Soledad Guerrero",
+     "popularity": 0.4435,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b4a20816c700e01b5cf8",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 4385232,
+     "job": "VFX Artist",
+     "known_for_department": "Visual Effects",
+     "name": "Mauro Romero",
+     "original_name": "Mauro Romero",
+     "popularity": 0.3702,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b1210816c700e01b5b3f",
+     "department": "Camera",
+     "gender": 0,
+     "id": 4334286,
+     "job": "Grip",
+     "known_for_department": "Lighting",
+     "name": "Matías Buzzalino",
+     "original_name": "Matías Buzzalino",
+     "popularity": 0.281,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b1f353866e00ff09243d",
+     "department": "Art",
+     "gender": 0,
+     "id": 939475,
+     "job": "Set Designer",
+     "known_for_department": "Art",
+     "name": "Alicia Vázquez",
+     "original_name": "Alicia Vázquez",
+     "popularity": 0.5868,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6559b41fd4fe04011b933c7e",
+     "department": "Visual Effects",
+     "gender": 2,
+     "id": 1129914,
+     "job": "VFX Artist",
+     "known_for_department": "Directing",
+     "name": "Andrés Borghi",
+     "original_name": "Andrés Borghi",
+     "popularity": 0.5135,
+     "profile_path": "/c59VQb9L6VMlt1N8aet2N5IPGjW.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "660e1e7e95ce24017d6fb829",
+     "department": "Lighting",
+     "gender": 0,
+     "id": 4623572,
+     "job": "Genetator Operator",
+     "known_for_department": "Lighting",
+     "name": "Jorge Martínez",
+     "original_name": "Jorge Martínez",
+     "popularity": 0.5411,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "64cfe7d66d4c9700cb7e48ca",
+     "department": "Sound",
+     "gender": 0,
+     "id": 2457366,
+     "job": "Music",
+     "known_for_department": "Sound",
+     "name": "Fuu Pablo",
+     "original_name": "Fuu Pablo",
+     "popularity": 0.349,
+     "profile_path": "/uwZ41DNy7MTRdSt5KpJ9eJLpoP9.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "64cfe7cc85090f00e7975027",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1802997,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Mariano Suárez",
+     "original_name": "Mariano Suárez",
+     "popularity": 0.4602,
+     "profile_path": "/VdwSIuwWvUITsdDQPY2YLVD6w4.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5f66c3095a78840035bb6663",
+     "department": "Directing",
+     "gender": 2,
+     "id": 531105,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "Demián Rugna",
+     "original_name": "Demián Rugna",
+     "popularity": 0.8599,
+     "profile_path": "/f1H00UaLvTwDYG614SJWdVLy1SZ.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5f66c3145a78840035bb668d",
+     "department": "Writing",
+     "gender": 2,
+     "id": 531105,
+     "job": "Writer",
+     "known_for_department": "Directing",
+     "name": "Demián Rugna",
+     "original_name": "Demián Rugna",
+     "popularity": 0.8599,
+     "profile_path": "/f1H00UaLvTwDYG614SJWdVLy1SZ.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "67c03835b6c7e3425ca24c76",
+     "department": "Production",
+     "gender": 0,
+     "id": 4591220,
+     "job": "Production Manager",
+     "known_for_department": "Production",
+     "name": "Luciana Schnir",
+     "original_name": "Luciana Schnir",
+     "popularity": 0.4252,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c038528c386c4e5bc8d5eb",
+     "department": "Production",
+     "gender": 0,
+     "id": 4385204,
+     "job": "Production Assistant",
+     "known_for_department": "Crew",
+     "name": "Francisco Sarduy",
+     "original_name": "Francisco Sarduy",
+     "popularity": 0.29,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c038878c386c4e5bc8d621",
+     "department": "Production",
+     "gender": 0,
+     "id": 4916058,
+     "job": "Production Assistant",
+     "known_for_department": "Art",
+     "name": "Ariel Sanchez Arellano",
+     "original_name": "Ariel Sanchez Arellano",
+     "popularity": 0.3143,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c038af0d255c44c1c8d558",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1707724,
+     "job": "Sound Director",
+     "known_for_department": "Sound",
+     "name": "Damián Montes Calabró",
+     "original_name": "Damián Montes Calabró",
+     "popularity": 0.6579,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c03909834058f16ac8d3f0",
+     "department": "Camera",
+     "gender": 0,
+     "id": 3979404,
+     "job": "Key Grip",
+     "known_for_department": "Camera",
+     "name": "Juan Manuel Muñoz",
+     "original_name": "Juan Manuel Muñoz",
+     "popularity": 0.431,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "67c03995c153ece2e2a23995",
+     "department": "Lighting",
+     "gender": 0,
+     "id": 5272571,
+     "job": "Lighting Coordinator",
+     "known_for_department": "Lighting",
+     "name": "Antonella Jacob",
+     "original_name": "Antonella Jacob",
+     "popularity": 0.4984,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "68a4ebe888c41f824683485a",
+     "department": "Art",
+     "gender": 1,
+     "id": 2837502,
+     "job": "Art Department Assistant",
+     "known_for_department": "Art",
+     "name": "Florencia Gabelli",
+     "original_name": "Florencia Gabelli",
+     "popularity": 0.7596,
+     "profile_path": null
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   },
+   {
+    "id": 53,
+    "name": "Thriller"
+   }
+  ],
+  "homepage": "",
+  "id": 744857,
+  "imdb_id": "tt16300962",
+  "origin_country": [
+   "AR",
+   "US"
+  ],
+  "original_language": "es",
+  "original_title": "Cuando acecha la maldad",
+  "overview": "When brothers Pedro and Jimi discover that a demonic infection has been festering in a nearby farmhouse, they attempt to evict the victim from their land. Failing to adhere to the proper rites of exorcism, their reckless actions inadvertently trigger an epidemic of possessions across their rural community.",
+  "popularity": 11.1834,
+  "poster_path": "/iQ7G9LhP7NRRIUM4Vlai3eOxBAc.jpg",
+  "production_companies": [
+   {
+    "id": 28912,
+    "logo_path": "/jMjy9m6msnTVMEqrM22ULXJa45Y.png",
+    "name": "Machaco Films",
+    "origin_country": "AR"
+   },
+   {
+    "id": 165642,
+    "logo_path": null,
+    "name": "La Puerta Roja",
+    "origin_country": "AR"
+   },
+   {
+    "id": 135436,
+    "logo_path": "/4B3xLSierSSePQkwtiMAT3YDpJn.png",
+    "name": "Aramos Cine",
+    "origin_country": "AR"
+   },
+   {
+    "id": 102626,
+    "logo_path": "/hejnYBBwutw4U2dA6LGfMArjya0.png",
+    "name": "Cine Argentino",
+    "origin_country": "AR"
+   },
+   {
+    "id": 6458,
+    "logo_path": "/eT4oMUK7ODM0vvZue8yq3Ojwqf8.png",
+    "name": "INCAA",
+    "origin_country": "AR"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "AR",
+    "name": "Argentina"
+   }
+  ],
+  "release_date": "2023-10-05",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Mar del Plata Film Festival",
+       "release_date": "2023-11-03T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "+16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-11-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "MA 15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Monster Fest",
+       "release_date": "2023-10-12T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "MA 15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-10-27T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Brussels International Fantastic Film Festival",
+       "release_date": "2024-04-19T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-02-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Toronto International Film Festival",
+       "release_date": "2023-09-13T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Calgary International Film Festival",
+       "release_date": "2023-09-25T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Festival Fantasmagoria Medellín",
+       "release_date": "2023-10-21T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Fantasy Filmfest White Nights",
+       "release_date": "2024-01-27T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-02-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "EC",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-02-29T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Sitges Film Festival",
+       "release_date": "2023-10-10T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-01-19T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Barcelona",
+       "release_date": "2024-01-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FI",
+     "release_dates": [
+      {
+       "certification": "K-18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-03-08T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Fantastic'Arts Gérardmer",
+       "release_date": "2024-01-26T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "PIFFF Paris International Fantastic Film Festival",
+       "release_date": "2023-12-10T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Lyon Festival Hallucinations Collectives",
+       "release_date": "2024-03-30T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Toulouse Grindhouse Paradise festival",
+       "release_date": "2024-04-26T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-05-15T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-10-07T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Shudder",
+       "release_date": "2023-10-27T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-02-22T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HU",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-07-11T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-10-01T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IS",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-11-29T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IT",
+     "release_dates": [
+      {
+       "certification": "14+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-07-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "JP",
+     "release_dates": [
+      {
+       "certification": "R15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-01-31T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "19",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Jeonju International Film Festival",
+       "release_date": "2024-05-02T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "19",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-10-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LT",
+     "release_dates": [
+      {
+       "certification": "N-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Mondo Bizzaro Film Festival",
+       "release_date": "2024-08-22T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LU",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Luxembourg City Film Festival",
+       "release_date": "2024-03-09T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "C",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Mórbido Film Fest",
+       "release_date": "2023-11-11T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "C",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-01-11T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NO",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Tromsø International Film Festival",
+       "release_date": "2024-01-15T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-02-08T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PH",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2026-10-14T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "R-16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-12-06T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-03-21T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-10-27T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PR",
+     "release_dates": [
+      {
+       "certification": "NR",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-10-05T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PT",
+     "release_dates": [
+      {
+       "certification": "M/16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-01-11T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RU",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-11-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SE",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Göteborg Film Festival",
+       "release_date": "2024-01-26T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-05-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TH",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-05-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Golden Horse Fantastic Film Festival",
+       "release_date": "2024-04-12T00:00:00.000Z",
+       "type": 1
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-11-16T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Fantastic Fest",
+       "release_date": "2023-09-22T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Nashville Film Festival",
+       "release_date": "2023-10-02T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Beyond Fest",
+       "release_date": "2023-10-01T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "NR",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2023-10-06T00:00:00.000Z",
+       "type": 2
+      },
+      {
+       "certification": "NR",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Shudder",
+       "release_date": "2023-10-27T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "NR",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray",
+       "release_date": "2024-03-26T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-01-11T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "VE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-02-08T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 2090252,
+  "runtime": 100,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "Spanish",
+    "iso_639_1": "es",
+    "name": "Español"
+   }
+  ],
+  "status": "Released",
+  "tagline": "There's no point in praying.",
+  "title": "When Evil Lurks",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "653eb536c8a5ac0100faa019",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "yD8Bu_BMtbs",
+     "name": "The Scariest Film of the Year",
+     "official": true,
+     "published_at": "2023-10-24T18:55:52.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Teaser"
+    },
+    {
+     "id": "6536bcfc8cfcc7010af6fb48",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "m5xBzIOvdeQ",
+     "name": "Official Clip \"Don't Do It!\"",
+     "official": true,
+     "published_at": "2023-10-23T17:05:53.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "650c7b903d745400ac9c8975",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "YrTnV6gNzno",
+     "name": "Official Trailer [Subtitled]",
+     "official": true,
+     "published_at": "2023-09-21T16:00:46.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "64f8a368ffc9de00c4a1e3f7",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "YbJEiOOvBxc",
+     "name": "Teaser Trailer",
+     "official": true,
+     "published_at": "2023-09-06T15:01:51.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    }
+   ]
+  },
+  "vote_average": 7.16,
+  "vote_count": 1588
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/cavK9ox37pxDg11RvJINMH63onU.jpg",
+    "genre_ids": [
+     27,
+     53
+    ],
+    "id": 744857,
+    "original_language": "es",
+    "original_title": "Cuando acecha la maldad",
+    "overview": "When brothers Pedro and Jimi discover that a demonic infection has been festering in a nearby farmhouse, they attempt to evict the victim from their land. Failing to adhere to the proper rites of exorcism, their reckless actions inadvertently trigger an epidemic of possessions across their rural community.",
+    "popularity": 11.1834,
+    "poster_path": "/iQ7G9LhP7NRRIUM4Vlai3eOxBAc.jpg",
+    "release_date": "2023-10-05",
+    "softcore": false,
+    "title": "When Evil Lurks",
+    "video": false,
+    "vote_average": 7.16,
+    "vote_count": 1588
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     27,
+     53
+    ],
+    "id": 1502876,
+    "original_language": "es",
+    "original_title": "Cuando acecha la maldad 2",
+    "overview": "Sequel to the 2023 film.",
+    "popularity": 0.7857,
+    "poster_path": null,
+    "release_date": "",
+    "softcore": false,
+    "title": "When Evil Lurks 2",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   }
+  ],
+  "total_pages": 1,
+  "total_results": 2
+ }
+}

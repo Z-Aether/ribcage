@@ -1,0 +1,1720 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/nxWLeBDkzW9py6vBAkvQ7o68ZHM.jpg",
+  "belongs_to_collection": null,
+  "budget": 0,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Charlotte",
+     "credit_id": "63edfd88f92532007f1ce0b7",
+     "gender": 1,
+     "id": 2431565,
+     "known_for_department": "Acting",
+     "name": "Alyla Browne",
+     "order": 0,
+     "original_name": "Alyla Browne",
+     "popularity": 1.3508,
+     "profile_path": "/h9qYvAqEZS6HTQhE8zLA0q3u52n.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 3,
+     "character": "Ethan",
+     "credit_id": "63edfd76f92532009d93aaf1",
+     "gender": 2,
+     "id": 1213279,
+     "known_for_department": "Acting",
+     "name": "Ryan Corr",
+     "order": 1,
+     "original_name": "Ryan Corr",
+     "popularity": 1.7532,
+     "profile_path": "/lQwMEXNbABIN8LTODkYHU33q19C.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 5,
+     "character": "Heather",
+     "credit_id": "63edfda1699fb7008cd6c6d6",
+     "gender": 1,
+     "id": 1146114,
+     "known_for_department": "Acting",
+     "name": "Penelope Mitchell",
+     "order": 2,
+     "original_name": "Penelope Mitchell",
+     "popularity": 2.6953,
+     "profile_path": "/2CYFr9Lv7cKkQ0475PCgkXsiHnK.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 46,
+     "character": "Sandy",
+     "credit_id": "6645d67b4ed040b3922da800",
+     "gender": 1,
+     "id": 61114,
+     "known_for_department": "Acting",
+     "name": "Kate Walsh",
+     "order": 3,
+     "original_name": "Kate Walsh",
+     "popularity": 2.0871,
+     "profile_path": "/jRg4pmjvI2063YnQ6PJidclOc4L.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 6,
+     "character": "Gunter",
+     "credit_id": "63edfdb1f925320085349d40",
+     "gender": 1,
+     "id": 75893,
+     "known_for_department": "Acting",
+     "name": "Robyn Nevin",
+     "order": 4,
+     "original_name": "Robyn Nevin",
+     "popularity": 0.6814,
+     "profile_path": "/kSj8W81HQLkMXkzkIQm6l7zgB8F.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 7,
+     "character": "Helga",
+     "credit_id": "63edfdc3813cb60079435574",
+     "gender": 1,
+     "id": 37287,
+     "known_for_department": "Acting",
+     "name": "Noni Hazlehurst",
+     "order": 5,
+     "original_name": "Noni Hazlehurst",
+     "popularity": 0.9661,
+     "profile_path": "/yFWx4q5vr3AaSRzeKRI4uZtP2dz.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 24,
+     "character": "Erik",
+     "credit_id": "65ce8ee89f37b0018523d0fa",
+     "gender": 2,
+     "id": 3347562,
+     "known_for_department": "Acting",
+     "name": "Danny Kim",
+     "order": 6,
+     "original_name": "Danny Kim",
+     "popularity": 0.5925,
+     "profile_path": "/A1TM5ru3xB4gDkFI8iynFVywoZ0.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 12,
+     "character": "Maria",
+     "credit_id": "65b68203f6596f0163ff4e60",
+     "gender": 1,
+     "id": 141492,
+     "known_for_department": "Acting",
+     "name": "Silvia Colloca",
+     "order": 7,
+     "original_name": "Silvia Colloca",
+     "popularity": 1.1955,
+     "profile_path": "/4R0k04MNBnsGwkGmZ72gzNO5xzy.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 8,
+     "character": "Frank",
+     "credit_id": "63edfdd58e8702007a1b3717",
+     "gender": 2,
+     "id": 1488960,
+     "known_for_department": "Acting",
+     "name": "Jermaine Fowler",
+     "order": 8,
+     "original_name": "Jermaine Fowler",
+     "popularity": 1.5887,
+     "profile_path": "/tUovrCcFKncccMY7yarqeLBeVPk.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 22,
+     "character": "Officer Miller",
+     "credit_id": "65ce8e6110923001630f10d2",
+     "gender": 2,
+     "id": 4538396,
+     "known_for_department": "Acting",
+     "name": "Tony J. Black",
+     "order": 9,
+     "original_name": "Tony J. Black",
+     "popularity": 0.4073,
+     "profile_path": "/xP7LrCN2qiW77HeVdanUt67TNtR.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 49,
+     "character": "",
+     "credit_id": "6996938379ca6ab88084ff7d",
+     "gender": 0,
+     "id": 6009048,
+     "known_for_department": "Acting",
+     "name": "Alice Piccinelli",
+     "order": 10,
+     "original_name": "Alice Piccinelli",
+     "popularity": 0.3172,
+     "profile_path": "/cfKIl2ydTUJXVNxLf8YOtmh62jW.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 13,
+     "character": "News Anchor",
+     "credit_id": "65b682176e0d720184491345",
+     "gender": 1,
+     "id": 4504631,
+     "known_for_department": "Acting",
+     "name": "Alcira Carpio",
+     "order": 11,
+     "original_name": "Alcira Carpio",
+     "popularity": 0.2616,
+     "profile_path": "/g3cPn4OP3AsIq8oVBTdYZ723kXd.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 45,
+     "character": "Documentary Narrator",
+     "credit_id": "6645d671cee5ab90aa2db41f",
+     "gender": 2,
+     "id": 1445417,
+     "known_for_department": "Acting",
+     "name": "Lee Perry",
+     "order": 12,
+     "original_name": "Lee Perry",
+     "popularity": 0.4546,
+     "profile_path": "/zMpLa0qU9ByTvHxmkNyLLKIyH0I.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 47,
+     "character": "Baby Liam",
+     "credit_id": "6645d69ec7ceaa95da3d692a",
+     "gender": 0,
+     "id": 4717511,
+     "known_for_department": "Acting",
+     "name": "Jett Berry",
+     "order": 13,
+     "original_name": "Jett Berry",
+     "popularity": 0.25,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 48,
+     "character": "Baby Liam",
+     "credit_id": "6645d6de82e0c772262f0084",
+     "gender": 0,
+     "id": 4717512,
+     "known_for_department": "Acting",
+     "name": "Kade Berry",
+     "order": 14,
+     "original_name": "Kade Berry",
+     "popularity": 0.2668,
+     "profile_path": null
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "65b682cb4f33ad017a0ceffd",
+     "department": "Art",
+     "gender": 0,
+     "id": 1642832,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Fiona Donovan",
+     "original_name": "Fiona Donovan",
+     "popularity": 0.4467,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65b682a12faf4d00e7dc8885",
+     "department": "Editing",
+     "gender": 2,
+     "id": 1361546,
+     "job": "Editor",
+     "known_for_department": "Directing",
+     "name": "Kiah Roache-Turner",
+     "original_name": "Kiah Roache-Turner",
+     "popularity": 0.7218,
+     "profile_path": "/qYobNJ9HstH6FzcCkCOZAoR5CeU.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "65b682ba1c635b017b14bd6d",
+     "department": "Editing",
+     "gender": 2,
+     "id": 223690,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Luke Doolan",
+     "original_name": "Luke Doolan",
+     "popularity": 0.4425,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65b6826a4f33ad01610c21d2",
+     "department": "Production",
+     "gender": 2,
+     "id": 54204,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Adrian Politowski",
+     "original_name": "Adrian Politowski",
+     "popularity": 0.9913,
+     "profile_path": "/hqE3d8hi08RnY3JaYwCuHZoG7zi.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "65b6828f58efd3017ccbb1fe",
+     "department": "Camera",
+     "gender": 2,
+     "id": 979175,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Brad Shield",
+     "original_name": "Brad Shield",
+     "popularity": 0.4999,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65b682e4b6cff1017cf80178",
+     "department": "Art",
+     "gender": 0,
+     "id": 2966895,
+     "job": "Set Decoration",
+     "known_for_department": "Art",
+     "name": "Diana Robertson",
+     "original_name": "Diana Robertson",
+     "popularity": 0.3461,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d184d2c144dd017cbe7b82",
+     "department": "Production",
+     "gender": 1,
+     "id": 37281,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Nikki Barrett",
+     "original_name": "Nikki Barrett",
+     "popularity": 0.7595,
+     "profile_path": "/ssE4q12qbvB8BSxs8AXFRqEQ4tT.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "65d1876bbf31f20187615502",
+     "department": "Production",
+     "gender": 0,
+     "id": 1798488,
+     "job": "Executive Producer",
+     "known_for_department": "Visual Effects",
+     "name": "William Gammon",
+     "original_name": "William Gammon",
+     "popularity": 0.731,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d185b9a06645014a1953ed",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 4542974,
+     "job": "Costume Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Georgia Woods",
+     "original_name": "Georgia Woods",
+     "popularity": 0.2817,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d185dac144dd017cbe7c8a",
+     "department": "Visual Effects",
+     "gender": 0,
+     "id": 1798488,
+     "job": "Visual Effects Supervisor",
+     "known_for_department": "Visual Effects",
+     "name": "William Gammon",
+     "original_name": "William Gammon",
+     "popularity": 0.731,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d1874066751d018631ada5",
+     "department": "Production",
+     "gender": 2,
+     "id": 92736,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Mark Gooder",
+     "original_name": "Mark Gooder",
+     "popularity": 0.523,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d18672aa659e0186431f0a",
+     "department": "Production",
+     "gender": 2,
+     "id": 1542343,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Martin Metz",
+     "original_name": "Martin Metz",
+     "popularity": 0.5916,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d1861adb72c00186393772",
+     "department": "Sound",
+     "gender": 0,
+     "id": 1948186,
+     "job": "Sound Supervisor",
+     "known_for_department": "Sound",
+     "name": "Sam Gain-Emery",
+     "original_name": "Sam Gain-Emery",
+     "popularity": 0.4847,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d186cddb72c0016338e0eb",
+     "department": "Production",
+     "gender": 1,
+     "id": 2732043,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Alison Thompson",
+     "original_name": "Alison Thompson",
+     "popularity": 0.4515,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d184ecbf31f2016360f839",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 3374890,
+     "job": "Makeup Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "John Logue",
+     "original_name": "John Logue",
+     "popularity": 0.4241,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d184bca0664501631983d9",
+     "department": "Sound",
+     "gender": 1,
+     "id": 2005644,
+     "job": "Original Music Composer",
+     "known_for_department": "Sound",
+     "name": "Anna Drubich",
+     "original_name": "Анна Друбич",
+     "popularity": 0.6801,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d184f1db72c0016338df6a",
+     "department": "Costume & Make-Up",
+     "gender": 0,
+     "id": 3374890,
+     "job": "Hair Designer",
+     "known_for_department": "Costume & Make-Up",
+     "name": "John Logue",
+     "original_name": "John Logue",
+     "popularity": 0.4241,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d184dc66751d018631aa03",
+     "department": "Production",
+     "gender": 0,
+     "id": 82438,
+     "job": "Line Producer",
+     "known_for_department": "Production",
+     "name": "Lesley Parker",
+     "original_name": "Lesley Parker",
+     "popularity": 0.4737,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d186266eecee018a387b1a",
+     "department": "Sound",
+     "gender": 2,
+     "id": 1743030,
+     "job": "Music Supervisor",
+     "known_for_department": "Sound",
+     "name": "Rupert Hollier",
+     "original_name": "Rupert Hollier",
+     "popularity": 0.4916,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d187ccf9475b0149da0c0d",
+     "department": "Production",
+     "gender": 0,
+     "id": 1361567,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Josh Pomeranz",
+     "original_name": "Josh Pomeranz",
+     "popularity": 0.4391,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d188e2bf31f20187615680",
+     "department": "Production",
+     "gender": 1,
+     "id": 54205,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Nadia Khamlichi",
+     "original_name": "Nadia Khamlichi",
+     "popularity": 0.6066,
+     "profile_path": "/ngeXDXYulln8G5VQzhm1RvEiGi7.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "65d1891cc144dd0163be3570",
+     "department": "Production",
+     "gender": 0,
+     "id": 2164054,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Sierra Garcia",
+     "original_name": "Sierra Garcia",
+     "popularity": 0.4573,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d188876eecee018a387eef",
+     "department": "Production",
+     "gender": 0,
+     "id": 1883452,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Doris Pfardrescher",
+     "original_name": "Doris Pfardrescher",
+     "popularity": 0.4254,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d188f66eecee018a387f81",
+     "department": "Production",
+     "gender": 0,
+     "id": 3396540,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Nessa McGill",
+     "original_name": "Nessa McGill",
+     "popularity": 0.3822,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "65d188c8f9475b0186da8429",
+     "department": "Production",
+     "gender": 0,
+     "id": 3588839,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Diana Le Dean",
+     "original_name": "Diana Le Dean",
+     "popularity": 0.2602,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "63edff0f699fb700cee254a5",
+     "department": "Production",
+     "gender": 0,
+     "id": 2399307,
+     "job": "Producer",
+     "known_for_department": "Acting",
+     "name": "Michael Pontin",
+     "original_name": "Michael Pontin",
+     "popularity": 0.4459,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "63edfd5b1b729400e6f1cec6",
+     "department": "Writing",
+     "gender": 2,
+     "id": 1361546,
+     "job": "Writer",
+     "known_for_department": "Directing",
+     "name": "Kiah Roache-Turner",
+     "original_name": "Kiah Roache-Turner",
+     "popularity": 0.7218,
+     "profile_path": "/qYobNJ9HstH6FzcCkCOZAoR5CeU.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "63edfef01f3e600089dfb4a5",
+     "department": "Production",
+     "gender": 0,
+     "id": 1361565,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Jamie Hilton",
+     "original_name": "Jamie Hilton",
+     "popularity": 0.4315,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "63edff81813cb60084b39813",
+     "department": "Production",
+     "gender": 2,
+     "id": 2401645,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Chris Brown",
+     "original_name": "Chris Brown",
+     "popularity": 0.5192,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "63edfd44699fb70084e2666c",
+     "department": "Directing",
+     "gender": 2,
+     "id": 1361546,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "Kiah Roache-Turner",
+     "original_name": "Kiah Roache-Turner",
+     "popularity": 0.7218,
+     "profile_path": "/qYobNJ9HstH6FzcCkCOZAoR5CeU.jpg"
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   },
+   {
+    "id": 53,
+    "name": "Thriller"
+   }
+  ],
+  "homepage": "https://wellgousa.com/films/sting",
+  "id": 1087388,
+  "imdb_id": "tt20112746",
+  "origin_country": [
+   "AU",
+   "US"
+  ],
+  "original_language": "en",
+  "original_title": "Sting",
+  "overview": "After raising an unnervingly talented spider in secret, 12-year-old Charlotte must face the truth about her pet and fight for her family's survival.",
+  "popularity": 6.2631,
+  "poster_path": "/97XZtLd461e5e0WBIBJREK1lzqC.jpg",
+  "production_companies": [
+   {
+    "id": 25231,
+    "logo_path": "/q8aYQQd4eILlcgucbTPNu0o8Gte.png",
+    "name": "See Pictures",
+    "origin_country": "AU"
+   },
+   {
+    "id": 144803,
+    "logo_path": "/yXwiJ1poBK106mUDBLNfIWcaeQg.png",
+    "name": "Align",
+    "origin_country": "US"
+   },
+   {
+    "id": 3207,
+    "logo_path": null,
+    "name": "Pictures in Paradise",
+    "origin_country": "AU"
+   },
+   {
+    "id": 221102,
+    "logo_path": "/p3CHiolEOizR5MJzvyfxelmWEQl.png",
+    "name": "Cumulus VFX",
+    "origin_country": "AU"
+   },
+   {
+    "id": 14604,
+    "logo_path": "/nayCQwYiu9QfYn1IprLuo48d8q5.png",
+    "name": "Spectrum Films",
+    "origin_country": "AU"
+   },
+   {
+    "id": 118715,
+    "logo_path": "/mRCdjLcjvRvCqIMovDzOcqmRFfv.png",
+    "name": "Cornerstone Films",
+    "origin_country": "GB"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "AU",
+    "name": "Australia"
+   },
+   {
+    "iso_3166_1": "GB",
+    "name": "United Kingdom"
+   },
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   }
+  ],
+  "release_date": "2024-04-12",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Fantastic Film Festival",
+       "release_date": "2024-04-17T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "MA 15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-07-11T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "MA 15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-10-09T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BR",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-08-22T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-02-05T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CA",
+     "release_dates": [
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-04-12T00:00:00.000Z",
+       "type": 2
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CL",
+     "release_dates": [
+      {
+       "certification": "14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-01-09T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "CO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-02-27T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Fantasy Filmfest Nights",
+       "release_date": "2024-04-19T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "16",
+       "descriptors": [
+        "Injury"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-06-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-02-06T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2025-03-28T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "fr",
+       "note": "Canal+",
+       "release_date": "2025-04-08T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "fr",
+       "note": "Canal+",
+       "release_date": "2025-04-08T00:00:00.000Z",
+       "type": 6
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-05-31T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-07-15T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2024-10-31T00:00:00.000Z",
+       "type": 4
+      },
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Blu-ray & DVD",
+       "release_date": "2024-08-19T00:00:00.000Z",
+       "type": 5
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-10-29T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "LT",
+     "release_dates": [
+      {
+       "certification": "N-16",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "2024-05-03T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-12-19T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Prime Video",
+       "release_date": "2025-06-21T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MY",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-04-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NL",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [
+        "Violence",
+        "Coarse Language"
+       ],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-04-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NZ",
+     "release_dates": [
+      {
+       "certification": "R13",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "Terror-Fi Film Festival",
+       "release_date": "2024-04-27T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "R13",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "2024-07-18T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-12-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PL",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-05-03T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-07-19T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PT",
+     "release_dates": [
+      {
+       "certification": "M/14",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-04-25T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-04-26T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SG",
+     "release_dates": [
+      {
+       "certification": "NC16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-06-13T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-04-20T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-05-01T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "UA",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-06-13T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Miami Film Festival",
+       "release_date": "2024-04-06T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Panic Fest",
+       "release_date": "2024-04-04T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "R",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-04-12T00:00:00.000Z",
+       "type": 3
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-05-14T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "VN",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2024-06-21T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 2801252,
+  "runtime": 92,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   }
+  ],
+  "status": "Released",
+  "tagline": "Your biggest fear just got bigger.",
+  "title": "Sting",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "6669c1f54a282a7f125b407d",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "M7GALw8Q7T0",
+     "name": "STUDIOCANAL PRESENTS: THE PODCAST - STING",
+     "official": true,
+     "published_at": "2024-06-12T14:54:12.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Featurette"
+    },
+    {
+     "id": "6669c22d224e13490fa6e141",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "pPwO0r6s2dg",
+     "name": "Behind the Scenes With The Cast of STING",
+     "official": true,
+     "published_at": "2024-05-22T20:16:20.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Behind the Scenes"
+    },
+    {
+     "id": "664cdd816c5e66fe4d967a49",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "wm4susYbycg",
+     "name": "Spider in the vents",
+     "official": true,
+     "published_at": "2024-05-17T16:30:10.000Z",
+     "site": "YouTube",
+     "size": 720,
+     "type": "Clip"
+    },
+    {
+     "id": "664cdd55fd41d53caff2dff5",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "HM9AmEpCAOg",
+     "name": "Behind the Scenes of Creating The Monster in Sting",
+     "official": true,
+     "published_at": "2024-05-14T18:29:59.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Behind the Scenes"
+    },
+    {
+     "id": "664cdd6a658beb2b06967074",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "h_xAdwl_DSc",
+     "name": "Behind the Scenes ft. Director Kiah Roache-Turner",
+     "official": true,
+     "published_at": "2024-05-03T18:04:06.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Behind the Scenes"
+    },
+    {
+     "id": "6620fb46e4c9eb017cf59ccc",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "WwzOR4xEIJA",
+     "name": "\"A Noise\"",
+     "official": true,
+     "published_at": "2024-04-15T14:23:35.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "66199c2a4da3d4016291e0ea",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "diWnaW3kTw0",
+     "name": "\"MothBall\"",
+     "official": true,
+     "published_at": "2024-04-12T17:13:56.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "66199c49af3da6017c193c53",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "xoeC3Kuv18o",
+     "name": "\"Cool\"",
+     "official": true,
+     "published_at": "2024-04-11T17:41:01.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "66199c5966e4690165bc9211",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "fmbWKA-xWag",
+     "name": "\"Kitty\"",
+     "official": true,
+     "published_at": "2024-04-10T17:21:43.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "66199c67af3da6017c193c64",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "RckwRShGicw",
+     "name": "\"Call Frank\"",
+     "official": true,
+     "published_at": "2024-04-05T17:08:59.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "65f78e63242f94017dcd9236",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "syiiak2NQCM",
+     "name": "\"What The Hell\"",
+     "official": true,
+     "published_at": "2024-02-29T18:07:13.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Clip"
+    },
+    {
+     "id": "65ce434987f3f2017bf52f39",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "2cPHQxTVXMM",
+     "name": "Official International Trailer",
+     "official": true,
+     "published_at": "2024-02-15T17:00:04.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    },
+    {
+     "id": "65ce432013a38801879f4109",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "B73g786Izg0",
+     "name": "Official Trailer",
+     "official": true,
+     "published_at": "2024-02-15T16:48:44.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    }
+   ]
+  },
+  "vote_average": 6.2,
+  "vote_count": 564
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/1r9lH3DaSWKGyvZaoo6BF5STOk5.jpg",
+    "genre_ids": [
+     35,
+     80,
+     18
+    ],
+    "id": 9277,
+    "original_language": "en",
+    "original_title": "The Sting",
+    "overview": "A novice con man teams up with an acknowledged master to avenge the murder of a mutual friend by pulling off the ultimate big con and swindling a fortune from a big-time mobster.",
+    "popularity": 14.2881,
+    "poster_path": "/ckmYng37zey8INYf6d10cVgIG93.jpg",
+    "release_date": "1973-12-25",
+    "softcore": false,
+    "title": "The Sting",
+    "video": false,
+    "vote_average": 8.011,
+    "vote_count": 3143
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/nxWLeBDkzW9py6vBAkvQ7o68ZHM.jpg",
+    "genre_ids": [
+     27,
+     53
+    ],
+    "id": 1087388,
+    "original_language": "en",
+    "original_title": "Sting",
+    "overview": "After raising an unnervingly talented spider in secret, 12-year-old Charlotte must face the truth about her pet and fight for her family's survival.",
+    "popularity": 6.2631,
+    "poster_path": "/97XZtLd461e5e0WBIBJREK1lzqC.jpg",
+    "release_date": "2024-04-12",
+    "softcore": false,
+    "title": "Sting",
+    "video": false,
+    "vote_average": 6.2,
+    "vote_count": 564
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     18
+    ],
+    "id": 1113434,
+    "original_language": "en",
+    "original_title": "Sting",
+    "overview": "In the South Bronx's current fentanyl epidemic, a high stakes NYPD buy-and-bust operation revolves around a civilian volunteer: a 28-year-old undercover as his recently deceased street-addict twin. But what begins as a single night of revenge, becomes a crusade for his own redemption.",
+    "popularity": 1.4322,
+    "poster_path": null,
+    "release_date": "2020-01-01",
+    "softcore": false,
+    "title": "Sting",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/ncOlu2b89ZVeBpHUreqQXf7FcVC.jpg",
+    "genre_ids": [
+     35,
+     18,
+     28
+    ],
+    "id": 1273633,
+    "original_language": "en",
+    "original_title": "Sting",
+    "overview": "Arthur “Art” Prince finds escape from his otherwise unremarkable life by dominating the “Sting-Pong\" scene at a local underground club. However, when a mysterious challenger suddenly appears, Art is forced to confront his self-destructive tendencies.",
+    "popularity": 1.939,
+    "poster_path": "/xIyC9PHfVbk9p2cUSRHUf3HntJv.jpg",
+    "release_date": "2024-05-13",
+    "softcore": false,
+    "title": "Sting",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     80,
+     53,
+     35
+    ],
+    "id": 968012,
+    "original_language": "en",
+    "original_title": "Sting",
+    "overview": "Two punks decide to rob a drug dealer as he sleeps.",
+    "popularity": 1.7841,
+    "poster_path": "/12RjfNQJQZCvVW1c8psk3MDCb0R.jpg",
+    "release_date": "2021-04-20",
+    "softcore": false,
+    "title": "Sting",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/amRyFO6IvZMV8nYyEkp9saFceOK.jpg",
+    "genre_ids": [
+     10402
+    ],
+    "id": 146484,
+    "original_language": "en",
+    "original_title": "Sting Acústico",
+    "overview": "This video is the MTV Unplugged performance which was recorded in New York on 5 March 1991.",
+    "popularity": 1.8988,
+    "poster_path": null,
+    "release_date": "1991-04-10",
+    "softcore": false,
+    "title": "Sting Unplugged",
+    "video": false,
+    "vote_average": 4.0,
+    "vote_count": 2
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/gAsnSlPMDbNQAY6tpewvdjyAeuI.jpg",
+    "genre_ids": [
+     18
+    ],
+    "id": 825925,
+    "original_language": "ja",
+    "original_title": "詐話師 STING",
+    "overview": "Shunsuke, a coach who hangs out at the gambling track, is in jeopardy at the bicycle race track. The place is saved by a \"scammer\", and he himself will hone his skill in scamming, which skillfully raises a lot of money.",
+    "popularity": 1.2301,
+    "poster_path": "/fXTQzGrkCdRVJ7f6DhsrHVHsWYw.jpg",
+    "release_date": "1997-05-30",
+    "softcore": false,
+    "title": "Sting",
+    "video": false,
+    "vote_average": 6.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/rhjrFGJqNFnV2IVaPGrzaxI7moq.jpg",
+    "genre_ids": [
+     18,
+     10751
+    ],
+    "id": 367751,
+    "original_language": "no",
+    "original_title": "Stikk",
+    "overview": "Alexander’s schooldays aren’t the happiest. He’s the smallest kid in his class and not the most popular. His life doesn’t become easier when a girl films him under the shower and shares the video with the whole class, earning him the nickname “Mini”.",
+    "popularity": 0.9589,
+    "poster_path": "/RinBcFcd68PgcZKWKCVTa5Y35q.jpg",
+    "release_date": "2007-04-24",
+    "softcore": false,
+    "title": "Sting",
+    "video": false,
+    "vote_average": 5.4,
+    "vote_count": 5
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1738550,
+    "original_language": "en",
+    "original_title": "Bee Sting",
+    "overview": "Haunted by the shadows of a repressive childhood, a gay man drifts through nights of self-destruction, until a new lover offers him a potential lifeline.",
+    "popularity": 1.5586,
+    "poster_path": "/zJHsbHoJajPL9ah2p4GQNGHlRjr.jpg",
+    "release_date": "2025-10-17",
+    "softcore": false,
+    "title": "Bee Sting",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/xEDPHAZltnKIrMpHkhIehFsEkVb.jpg",
+    "genre_ids": [
+     18,
+     35
+    ],
+    "id": 1424578,
+    "original_language": "fr",
+    "original_title": "La piqûre",
+    "overview": "Lucien is on vacation in the country with his mother and grandmother. He finally decides to write to his uncle. When his mother finds out, she explodes with rage.",
+    "popularity": 1.8086,
+    "poster_path": "/t8ptBAVQFwUO2UlBBPOcq4ZKNai.jpg",
+    "release_date": "2025-01-27",
+    "softcore": false,
+    "title": "The Sting",
+    "video": false,
+    "vote_average": 10.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     10749,
+     36
+    ],
+    "id": 721167,
+    "original_language": "ko",
+    "original_title": "뺑덕어멈",
+    "overview": "",
+    "popularity": 1.3023,
+    "poster_path": "/wVK7xvb7YD5lT9918a4T6KwoCjQ.jpg",
+    "release_date": "2019-06-28",
+    "softcore": false,
+    "title": "A Sting",
+    "video": false,
+    "vote_average": 3.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/deL3YJtsB1ZrQhXvHiOjPiC9xtx.jpg",
+    "genre_ids": [
+     35,
+     80
+    ],
+    "id": 36912,
+    "original_language": "en",
+    "original_title": "The Sting II",
+    "overview": "Hooker and Gondorf pull a con on Macalinski, an especially nasty mob boss with the help of Veronica, a new grifter. They convince this new victim that Hooker is a somewhat dull boxer who is tired of taking dives for Gondorf. There is a ringer. Lonigan, their victim from the first movie, is setting them up to take the fall.",
+    "popularity": 2.5682,
+    "poster_path": "/oWySCxbLK4vB7BY5CzonJZuLYa7.jpg",
+    "release_date": "1983-02-18",
+    "softcore": false,
+    "title": "The Sting II",
+    "video": false,
+    "vote_average": 4.7,
+    "vote_count": 53
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/7mSJNCGHzzayBifdjUtixI5hLYm.jpg",
+    "genre_ids": [
+     28,
+     27,
+     53
+    ],
+    "id": 61698,
+    "original_language": "en",
+    "original_title": "Tail Sting",
+    "overview": "A pack of massive genetically altered Scorpions escape containment on an airplane, turning passengers into victims and forcing one ordinary woman to confront her worst fears.",
+    "popularity": 1.2223,
+    "poster_path": "/e3qRJrlw0q0DV1NeYgezCSoQYwv.jpg",
+    "release_date": "2001-08-01",
+    "softcore": false,
+    "title": "Tail Sting",
+    "video": false,
+    "vote_average": 3.4,
+    "vote_count": 16
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     35,
+     27
+    ],
+    "id": 333862,
+    "original_language": "en",
+    "original_title": "Bee Sting",
+    "overview": "Four teens spending the summer as camp counselors are thrust into danger with a bunch of Redneck Cannibals all because of a bee sting.",
+    "popularity": 1.691,
+    "poster_path": "/eeUfFBMkpIT9ZLUQHiHwuwSCnsn.jpg",
+    "release_date": "2014-10-10",
+    "softcore": false,
+    "title": "Bee Sting",
+    "video": false,
+    "vote_average": 1.0,
+    "vote_count": 2
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1215690,
+    "original_language": "en",
+    "original_title": "Bee Sting",
+    "overview": "Short movie about a bee",
+    "popularity": 1.1254,
+    "poster_path": null,
+    "release_date": "2022-11-19",
+    "softcore": false,
+    "title": "Bee Sting",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/rqrlJIbfP6c61xioYKouPbra1UK.jpg",
+    "genre_ids": [
+     35,
+     18
+    ],
+    "id": 534234,
+    "original_language": "en",
+    "original_title": "Bee Sting",
+    "overview": "Bee Sting takes in love and complications as a father and son fall for the same woman on the schoolyard.",
+    "popularity": 1.45,
+    "poster_path": "/cvsP6ficLSVK6tv45HzaTQbmqRi.jpg",
+    "release_date": "2010-01-01",
+    "softcore": false,
+    "title": "Bee Sting",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     16
+    ],
+    "id": 1311105,
+    "original_language": "en",
+    "original_title": "Sting Theory",
+    "overview": "It was autumn... Sting hated autumn...",
+    "popularity": 0.9348,
+    "poster_path": "/4X9vNKz1I7oKC3MvL5JLxlUuied.jpg",
+    "release_date": "2019-01-01",
+    "softcore": false,
+    "title": "Sting Theory",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/AcixmN8HznE6gqxW2tdRjbQwNgZ.jpg",
+    "genre_ids": [
+     35,
+     80
+    ],
+    "id": 356786,
+    "original_language": "cn",
+    "original_title": "俠聖",
+    "overview": "Simon Tam, \"The Sting\", has learnt some Chinese traditional skill from his master. To avoid misfortunes he has not accepted any business for 5 years. Now Simon is being employed to protect an accountant Law, but Law dies mysteriously. Law's legacy, 300 million dollars, which attracts the attention of a smuggling syndicate, is missing. This leads to a 300 million dollar big chase which Simon is involved inside.",
+    "popularity": 1.7459,
+    "poster_path": "/7HRxS0YxzYkH2AWcK1QM4MNnjfP.jpg",
+    "release_date": "1992-11-19",
+    "softcore": false,
+    "title": "The Sting",
+    "video": false,
+    "vote_average": 6.0,
+    "vote_count": 9
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     16
+    ],
+    "id": 1140727,
+    "original_language": "en",
+    "original_title": "Sting",
+    "overview": "A bee anime",
+    "popularity": 0.4285,
+    "poster_path": "/QOzZfiF2A0oFM0ROGlaRofOzrG.jpg",
+    "release_date": "2018-10-19",
+    "softcore": false,
+    "title": "Sting",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/nul277FMZedQRKNxKmPaxVg0PUa.jpg",
+    "genre_ids": [
+     99,
+     10402,
+     10770
+    ],
+    "id": 474784,
+    "original_language": "en",
+    "original_title": "Sting - Beyond The Police",
+    "overview": "The personal life and professional career of music superstar Gordon Matthew Thomas Sumner, universally known as Sting, who became passionate about music at a very early age and founded the trio The Police in 1977 with Stewart Copeland and Andy Summers, achieving an immediate success.",
+    "popularity": 1.2963,
+    "poster_path": "/95Jz2tNZheguvgG9Er4yWzg5u4J.jpg",
+    "release_date": "2017-08-18",
+    "softcore": false,
+    "title": "Sting: Beyond The Police",
+    "video": false,
+    "vote_average": 5.5,
+    "vote_count": 2
+   }
+  ],
+  "total_pages": 12,
+  "total_results": 222
+ }
+}

@@ -1,0 +1,1468 @@
+{
+ "detail": {
+  "adult": false,
+  "backdrop_path": "/3uwyXMZN93PRkShUxvLrufwVAc2.jpg",
+  "belongs_to_collection": null,
+  "budget": 5000000,
+  "credits": {
+   "cast": [
+    {
+     "adult": false,
+     "cast_id": 3,
+     "character": "Wilfred James",
+     "credit_id": "58f3f3d29251413da7017ef6",
+     "gender": 2,
+     "id": 11155,
+     "known_for_department": "Acting",
+     "name": "Thomas Jane",
+     "order": 0,
+     "original_name": "Thomas Jane",
+     "popularity": 3.4464,
+     "profile_path": "/9frnlc2zoDcoeqZALB6aeYSQddl.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 5,
+     "character": "Arlette James",
+     "credit_id": "58f3f44c9251413d95018695",
+     "gender": 1,
+     "id": 27125,
+     "known_for_department": "Acting",
+     "name": "Molly Parker",
+     "order": 1,
+     "original_name": "Molly Parker",
+     "popularity": 4.1404,
+     "profile_path": "/yxDfAinBmVkx8HHzRlJz4KvSnf8.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 7,
+     "character": "Henry James",
+     "credit_id": "58f3f470c3a36807fd01669a",
+     "gender": 2,
+     "id": 973518,
+     "known_for_department": "Acting",
+     "name": "Dylan Schmid",
+     "order": 2,
+     "original_name": "Dylan Schmid",
+     "popularity": 1.0663,
+     "profile_path": "/zFSRHnA4sIChdAjlOpgBIHSqvy6.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 9,
+     "character": "Shannon Cotterie",
+     "credit_id": "59ec39de925141189700621e",
+     "gender": 1,
+     "id": 1467169,
+     "known_for_department": "Acting",
+     "name": "Kaitlyn Bernard",
+     "order": 3,
+     "original_name": "Kaitlyn Bernard",
+     "popularity": 0.876,
+     "profile_path": "/l5zesIpNEfvtFErydGuM3O3YBjd.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 4,
+     "character": "Harlan Cotterie",
+     "credit_id": "58f3f4389251413d800175ec",
+     "gender": 2,
+     "id": 2203,
+     "known_for_department": "Acting",
+     "name": "Neal McDonough",
+     "order": 4,
+     "original_name": "Neal McDonough",
+     "popularity": 6.5844,
+     "profile_path": "/3mI3i1CpjATSCta1Tb2qsyl1KCh.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 19,
+     "character": "Sallie",
+     "credit_id": "59ec3d3a92514119fc00692f",
+     "gender": 1,
+     "id": 206669,
+     "known_for_department": "Acting",
+     "name": "Tanya Champoux",
+     "order": 5,
+     "original_name": "Tanya Champoux",
+     "popularity": 0.6278,
+     "profile_path": "/j1zg12Qiqmj4DcjLGbUXxETMYns.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 6,
+     "character": "Sheriff Jones",
+     "credit_id": "58f3f45ec3a368081e018a71",
+     "gender": 2,
+     "id": 175829,
+     "known_for_department": "Acting",
+     "name": "Brian d'Arcy James",
+     "order": 6,
+     "original_name": "Brian d'Arcy James",
+     "popularity": 1.4853,
+     "profile_path": "/2Gz3b0A20Vrq7aadGfjZekdgGFK.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 10,
+     "character": "Andrew Lester",
+     "credit_id": "59ec3a47c3a36879fe00ab59",
+     "gender": 2,
+     "id": 1235460,
+     "known_for_department": "Acting",
+     "name": "Bob Frazer",
+     "order": 7,
+     "original_name": "Bob Frazer",
+     "popularity": 0.8442,
+     "profile_path": "/alDdLXo3D0C0b17o85QnZJeFWfn.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 29,
+     "character": "Lars",
+     "credit_id": "59ec5419c3a36879fe00c9cc",
+     "gender": 2,
+     "id": 2250,
+     "known_for_department": "Acting",
+     "name": "Eric Keenleyside",
+     "order": 8,
+     "original_name": "Eric Keenleyside",
+     "popularity": 1.3278,
+     "profile_path": "/n7CFXU0redDCSHuLIPIKg45M0Do.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 11,
+     "character": "Mr. Stoppenhauser",
+     "credit_id": "59ec3a5fc3a3682edc005ef1",
+     "gender": 2,
+     "id": 112639,
+     "known_for_department": "Acting",
+     "name": "Patrick Keating",
+     "order": 9,
+     "original_name": "Patrick Keating",
+     "popularity": 0.9085,
+     "profile_path": "/4hmbEXWBeMtmjtmf2jZBs5HyKob.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 15,
+     "character": "Female Teller",
+     "credit_id": "59ec3bfac3a3685252001ab7",
+     "gender": 1,
+     "id": 1909848,
+     "known_for_department": "Acting",
+     "name": "Danielle Klaudt",
+     "order": 10,
+     "original_name": "Danielle Klaudt",
+     "popularity": 1.0708,
+     "profile_path": "/gezryVx97im1FlTET4SrgR7RP28.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 30,
+     "character": "Counterman",
+     "credit_id": "59ec5450c3a368535b003f0b",
+     "gender": 2,
+     "id": 83424,
+     "known_for_department": "Acting",
+     "name": "Peter New",
+     "order": 11,
+     "original_name": "Peter New",
+     "popularity": 0.836,
+     "profile_path": "/bT71ieZH2qhgxLNTPyorMlVp3PN.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 49,
+     "character": "Farmer",
+     "credit_id": "5e52de6aa76ac50011a4f136",
+     "gender": 2,
+     "id": 64676,
+     "known_for_department": "Acting",
+     "name": "Peter Hall",
+     "order": 12,
+     "original_name": "Peter Hall",
+     "popularity": 0.5152,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "cast_id": 17,
+     "character": "Funeral Operator",
+     "credit_id": "59ec3c8bc3a36852d8001c4c",
+     "gender": 2,
+     "id": 208146,
+     "known_for_department": "Acting",
+     "name": "Michael Bean",
+     "order": 13,
+     "original_name": "Michael Bean",
+     "popularity": 0.9955,
+     "profile_path": "/1iMfyq02yIRjbqQqXfMsebQkMqy.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 16,
+     "character": "Pawn Shop Clerk",
+     "credit_id": "59ec3c7592514121a6001b4c",
+     "gender": 2,
+     "id": 32751,
+     "known_for_department": "Acting",
+     "name": "Mark Acheson",
+     "order": 14,
+     "original_name": "Mark Acheson",
+     "popularity": 1.495,
+     "profile_path": "/gY6VEIa7BoLjzMCaO3slSnocuah.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 18,
+     "character": "Reverend Thursby",
+     "credit_id": "59ec3cb192514118970065d7",
+     "gender": 2,
+     "id": 158498,
+     "known_for_department": "Acting",
+     "name": "Bart Anderson",
+     "order": 15,
+     "original_name": "Bart Anderson",
+     "popularity": 0.7996,
+     "profile_path": "/l3bIAvfxqpRnccMjuPuKiZM8d2H.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 13,
+     "character": "Unarmed Guard",
+     "credit_id": "59ec3a86c3a36852d8001953",
+     "gender": 2,
+     "id": 1285611,
+     "known_for_department": "Acting",
+     "name": "Bruce Blain",
+     "order": 16,
+     "original_name": "Bruce Blain",
+     "popularity": 0.5864,
+     "profile_path": "/tBiGjSI6c0F4I5f8IFV3ylGrbOV.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 12,
+     "character": "Good Samaritan",
+     "credit_id": "59ec3a7392514119000064ef",
+     "gender": 2,
+     "id": 116972,
+     "known_for_department": "Acting",
+     "name": "Graeme Duffy",
+     "order": 17,
+     "original_name": "Graeme Duffy",
+     "popularity": 0.9972,
+     "profile_path": "/goVfm94sW0Seegygy7FWDZ6C2C7.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 14,
+     "character": "Train Employee",
+     "credit_id": "59ec3acbc3a3686f7000090d",
+     "gender": 0,
+     "id": 1909844,
+     "known_for_department": "Acting",
+     "name": "Spencer Brown",
+     "order": 18,
+     "original_name": "Spencer Brown",
+     "popularity": 0.3024,
+     "profile_path": "/rnTzsF41iHXf7fwkF1sg95a65Pb.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 20,
+     "character": "Victoria",
+     "credit_id": "59ec3d61c3a368535b002055",
+     "gender": 1,
+     "id": 1677354,
+     "known_for_department": "Acting",
+     "name": "Roan Curtis",
+     "order": 19,
+     "original_name": "Roan Curtis",
+     "popularity": 0.9138,
+     "profile_path": "/9UXVOFccWt6lqWjebLXqAzOtJLQ.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 31,
+     "character": "Hotel Maid",
+     "credit_id": "59ec5472c3a36852d800395b",
+     "gender": 0,
+     "id": 1909945,
+     "known_for_department": "Acting",
+     "name": "Anna Louise Sargeant",
+     "order": 20,
+     "original_name": "Anna Louise Sargeant",
+     "popularity": 0.6641,
+     "profile_path": "/acR4ZxvuquiMn2DdhtUyHW5TSyS.jpg"
+    },
+    {
+     "adult": false,
+     "cast_id": 32,
+     "character": "Concierge",
+     "credit_id": "59ec5533c3a3686f70002ce1",
+     "gender": 2,
+     "id": 1843783,
+     "known_for_department": "Acting",
+     "name": "Nikolai Witschl",
+     "order": 21,
+     "original_name": "Nikolai Witschl",
+     "popularity": 0.8257,
+     "profile_path": "/sU6VZJsc2avH6l1AjTTalDEp0Qd.jpg"
+    }
+   ],
+   "crew": [
+    {
+     "adult": false,
+     "credit_id": "656228ef028f14013822a411",
+     "department": "Crew",
+     "gender": 2,
+     "id": 1193924,
+     "job": "Stunt Double",
+     "known_for_department": "Crew",
+     "name": "Jason Bell",
+     "original_name": "Jason Bell",
+     "popularity": 0.6297,
+     "profile_path": "/uu2DHtWZnlE7seX1AaeWKzMcLa9.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "58f3f378c3a36807df016dd1",
+     "department": "Directing",
+     "gender": 2,
+     "id": 1323509,
+     "job": "Director",
+     "known_for_department": "Directing",
+     "name": "Zak Hilditch",
+     "original_name": "Zak Hilditch",
+     "popularity": 0.7729,
+     "profile_path": "/tD0eIy9YnJOaHoWB1454aDtvGpC.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "58f3f383c3a36808670193f9",
+     "department": "Writing",
+     "gender": 2,
+     "id": 1323509,
+     "job": "Screenplay",
+     "known_for_department": "Directing",
+     "name": "Zak Hilditch",
+     "original_name": "Zak Hilditch",
+     "popularity": 0.7729,
+     "profile_path": "/tD0eIy9YnJOaHoWB1454aDtvGpC.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "59ec4d28925141211f002f58",
+     "department": "Crew",
+     "gender": 2,
+     "id": 77623,
+     "job": "Stunt Coordinator",
+     "known_for_department": "Crew",
+     "name": "Ed Anders",
+     "original_name": "Ed Anders",
+     "popularity": 0.7169,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59ec4d64925141211f002f9c",
+     "department": "Costume & Make-Up",
+     "gender": 1,
+     "id": 1305455,
+     "job": "Costume Design",
+     "known_for_department": "Costume & Make-Up",
+     "name": "Claudia Da Ponte",
+     "original_name": "Claudia Da Ponte",
+     "popularity": 0.4953,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59ec4d7d925141211f002fbe",
+     "department": "Art",
+     "gender": 2,
+     "id": 18867,
+     "job": "Production Design",
+     "known_for_department": "Art",
+     "name": "Page Buckner",
+     "original_name": "Page Buckner",
+     "popularity": 0.3942,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59ec55ae9251411a450084e2",
+     "department": "Production",
+     "gender": 2,
+     "id": 59657,
+     "job": "Producer",
+     "known_for_department": "Production",
+     "name": "Ross M. Dinerstein",
+     "original_name": "Ross M. Dinerstein",
+     "popularity": 0.4098,
+     "profile_path": "/ehWP4rgOnrGeSgQ3X9C61f46Bjv.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "59ecc77f925141211f00d24b",
+     "department": "Writing",
+     "gender": 2,
+     "id": 3027,
+     "job": "Novel",
+     "known_for_department": "Writing",
+     "name": "Stephen King",
+     "original_name": "Stephen King",
+     "popularity": 3.7088,
+     "profile_path": "/7r5nEzNanuEhmxtpsKE1uCBU5Jd.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "59f37f2b9251412230017b64",
+     "department": "Production",
+     "gender": 1,
+     "id": 23811,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Maureen Webb",
+     "original_name": "Maureen Webb",
+     "popularity": 0.8407,
+     "profile_path": "/1FPC2jp55fKs204pAE5LrqSKqrQ.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "59f37f3f9251412230017b92",
+     "department": "Art",
+     "gender": 1,
+     "id": 1328753,
+     "job": "Set Decoration",
+     "known_for_department": "Art",
+     "name": "Jacqueline Miller",
+     "original_name": "Jacqueline Miller",
+     "popularity": 0.5775,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "59f37f60c3a36870e7018811",
+     "department": "Directing",
+     "gender": 1,
+     "id": 1912958,
+     "job": "Script Supervisor",
+     "known_for_department": "Directing",
+     "name": "Jessica L. Randall",
+     "original_name": "Jessica L. Randall",
+     "popularity": 0.5169,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6485e35de2726000c9310fcb",
+     "department": "Crew",
+     "gender": 1,
+     "id": 1288830,
+     "job": "Stunt Double",
+     "known_for_department": "Crew",
+     "name": "Crystal Dalman",
+     "original_name": "Crystal Dalman",
+     "popularity": 0.6584,
+     "profile_path": "/OHXsYYKZJAoKAW9j8P1PICeyC3.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "6485e367e375c0011c8057db",
+     "department": "Camera",
+     "gender": 2,
+     "id": 25744,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Pierre Gill",
+     "original_name": "Pierre Gill",
+     "popularity": 0.6555,
+     "profile_path": "/3ArCxrQdXL1s7l16EsOvbPxsZpd.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dc30f48b3400137181a2",
+     "department": "Production",
+     "gender": 0,
+     "id": 1282778,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Jamie Goehring",
+     "original_name": "Jamie Goehring",
+     "popularity": 0.8189,
+     "profile_path": "/8CLOcsrG733mo57kHBSqKbDpUNq.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dc3ea93d2500174b2a67",
+     "department": "Production",
+     "gender": 2,
+     "id": 1483773,
+     "job": "Executive Producer",
+     "known_for_department": "Writing",
+     "name": "Kevin Leeson",
+     "original_name": "Kevin Leeson",
+     "popularity": 0.6862,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dc6fd2c0c10015a3127f",
+     "department": "Production",
+     "gender": 2,
+     "id": 43901,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Shawn Williamson",
+     "original_name": "Shawn Williamson",
+     "popularity": 0.6695,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dc87d2c0c10011a318e2",
+     "department": "Production",
+     "gender": 2,
+     "id": 1323509,
+     "job": "Executive Producer",
+     "known_for_department": "Directing",
+     "name": "Zak Hilditch",
+     "original_name": "Zak Hilditch",
+     "popularity": 0.7729,
+     "profile_path": "/tD0eIy9YnJOaHoWB1454aDtvGpC.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dc92a93d2500174b2b16",
+     "department": "Production",
+     "gender": 1,
+     "id": 1323511,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Liz Kearney",
+     "original_name": "Liz Kearney",
+     "popularity": 0.7383,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dc9d35811d0015578293",
+     "department": "Production",
+     "gender": 1,
+     "id": 979489,
+     "job": "Executive Producer",
+     "known_for_department": "Production",
+     "name": "Samantha Housman",
+     "original_name": "Samantha Housman",
+     "popularity": 0.5043,
+     "profile_path": "/98GPIraIXCVWSu6pXRtMdnZ9tEZ.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dcb4b87aec001aa9e2e3",
+     "department": "Production",
+     "gender": 2,
+     "id": 70729,
+     "job": "Co-Producer",
+     "known_for_department": "Production",
+     "name": "Josh Kesselman",
+     "original_name": "Josh Kesselman",
+     "popularity": 0.5769,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dcdcd2c0c10015a31309",
+     "department": "Camera",
+     "gender": 2,
+     "id": 1118557,
+     "job": "Director of Photography",
+     "known_for_department": "Camera",
+     "name": "Ben Richardson",
+     "original_name": "Ben Richardson",
+     "popularity": 0.9517,
+     "profile_path": "/qWUyygrFlpfvYrS8NNCMnpevIdB.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dd0aa93d2500174b2cd2",
+     "department": "Editing",
+     "gender": 0,
+     "id": 1668247,
+     "job": "Editor",
+     "known_for_department": "Editing",
+     "name": "Merlin Eden",
+     "original_name": "Merlin Eden",
+     "popularity": 0.6251,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dd21d2c0c10011a3197a",
+     "department": "Sound",
+     "gender": 2,
+     "id": 122451,
+     "job": "Original Music Composer",
+     "known_for_department": "Acting",
+     "name": "Mike Patton",
+     "original_name": "Mike Patton",
+     "popularity": 0.7555,
+     "profile_path": "/mMXwr0PyDIkfR7Kn6XqpGzlIm8w.jpg"
+    },
+    {
+     "adult": false,
+     "credit_id": "5e52dd8735811d00135763e2",
+     "department": "Production",
+     "gender": 1,
+     "id": 65194,
+     "job": "Casting",
+     "known_for_department": "Production",
+     "name": "Colleen Bolton",
+     "original_name": "Colleen Bolton",
+     "popularity": 0.7047,
+     "profile_path": null
+    },
+    {
+     "adult": false,
+     "credit_id": "6a761f34c340db256645427b",
+     "department": "Art",
+     "gender": 1,
+     "id": 1109358,
+     "job": "Assistant Art Director",
+     "known_for_department": "Art",
+     "name": "Courtney Stockstad",
+     "original_name": "Courtney Stockstad",
+     "popularity": 0.7705,
+     "profile_path": null
+    }
+   ]
+  },
+  "genres": [
+   {
+    "id": 27,
+    "name": "Horror"
+   },
+   {
+    "id": 80,
+    "name": "Crime"
+   },
+   {
+    "id": 18,
+    "name": "Drama"
+   }
+  ],
+  "homepage": "https://www.netflix.com/title/80135164",
+  "id": 452507,
+  "imdb_id": "tt6214928",
+  "origin_country": [
+   "US",
+   "CA"
+  ],
+  "original_language": "en",
+  "original_title": "1922",
+  "overview": "A simple yet proud rancher conspires to murder his wife for financial gain, convincing his teenage son to participate.",
+  "popularity": 4.7633,
+  "poster_path": "/q4FQOiSRhTLWulHl5Vpg37FMArH.jpg",
+  "production_companies": [
+   {
+    "id": 55570,
+    "logo_path": "/mKD4k9RHPkauvQIQsyGb6tzNAWg.png",
+    "name": "Campfire Studios",
+    "origin_country": "US"
+   },
+   {
+    "id": 6345,
+    "logo_path": "/pctomojbRLZNdYB0muFoZiaYdPI.png",
+    "name": "Lighthouse Pictures",
+    "origin_country": "CA"
+   }
+  ],
+  "production_countries": [
+   {
+    "iso_3166_1": "US",
+    "name": "United States of America"
+   },
+   {
+    "iso_3166_1": "CA",
+    "name": "Canada"
+   }
+  ],
+  "release_date": "2017-10-20",
+  "release_dates": {
+   "results": [
+    {
+     "iso_3166_1": "AE",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AR",
+     "release_dates": [
+      {
+       "certification": "+16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "AU",
+     "release_dates": [
+      {
+       "certification": "MA15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "BE",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "DE",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "de",
+       "note": "",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "ES",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "FR",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "fr",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GB",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "GR",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HK",
+     "release_dates": [
+      {
+       "certification": "IIB",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "HU",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "IT",
+     "release_dates": [
+      {
+       "certification": "14+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "JP",
+     "release_dates": [
+      {
+       "certification": "R15+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "KR",
+     "release_dates": [
+      {
+       "certification": "19",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "MX",
+     "release_dates": [
+      {
+       "certification": "B-15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "NO",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PH",
+     "release_dates": [
+      {
+       "certification": "R-18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "PL",
+     "release_dates": [
+      {
+       "certification": "16",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "RO",
+     "release_dates": [
+      {
+       "certification": "18",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 3
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SE",
+     "release_dates": [
+      {
+       "certification": "15",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "SG",
+     "release_dates": [
+      {
+       "certification": "R21",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TH",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TR",
+     "release_dates": [
+      {
+       "certification": "18+",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "TW",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Netflix",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    },
+    {
+     "iso_3166_1": "US",
+     "release_dates": [
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "",
+       "note": "Fantastic Fest",
+       "release_date": "2017-09-23T00:00:00.000Z",
+       "type": 1
+      },
+      {
+       "certification": "",
+       "descriptors": [],
+       "iso_639_1": "en",
+       "note": "",
+       "release_date": "2017-10-20T00:00:00.000Z",
+       "type": 4
+      }
+     ]
+    }
+   ]
+  },
+  "revenue": 2943477,
+  "runtime": 102,
+  "softcore": false,
+  "spoken_languages": [
+   {
+    "english_name": "English",
+    "iso_639_1": "en",
+    "name": "English"
+   }
+  ],
+  "status": "Released",
+  "tagline": "Your darkest secrets never stay buried.",
+  "title": "1922",
+  "video": false,
+  "videos": {
+   "results": [
+    {
+     "id": "6a100a7a04a8216bed8256bc",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "260970399",
+     "name": "1922 - A Netflix Original Stephen King Film with Visual Effects by Siamese",
+     "official": false,
+     "published_at": "2018-03-20T15:55:14.000Z",
+     "site": "Vimeo",
+     "size": 1080,
+     "type": "Behind the Scenes"
+    },
+    {
+     "id": "59c54958c3a36813a902cc49",
+     "iso_3166_1": "US",
+     "iso_639_1": "en",
+     "key": "3E_fT0aTsjI",
+     "name": "1922 | Official Trailer [HD] | Netflix",
+     "official": true,
+     "published_at": "2017-09-22T15:30:14.000Z",
+     "site": "YouTube",
+     "size": 1080,
+     "type": "Trailer"
+    }
+   ]
+  },
+  "vote_average": 5.949,
+  "vote_count": 2990
+ },
+ "search": {
+  "page": 1,
+  "results": [
+   {
+    "adult": false,
+    "backdrop_path": "/3uwyXMZN93PRkShUxvLrufwVAc2.jpg",
+    "genre_ids": [
+     27,
+     80,
+     18
+    ],
+    "id": 452507,
+    "original_language": "en",
+    "original_title": "1922",
+    "overview": "A simple yet proud rancher conspires to murder his wife for financial gain, convincing his teenage son to participate.",
+    "popularity": 4.7633,
+    "poster_path": "/q4FQOiSRhTLWulHl5Vpg37FMArH.jpg",
+    "release_date": "2017-10-20",
+    "softcore": false,
+    "title": "1922",
+    "video": false,
+    "vote_average": 5.949,
+    "vote_count": 2990
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/9zjDRMwCoWXxe6Q039GMaDDhjHs.jpg",
+    "genre_ids": [
+     18,
+     36
+    ],
+    "id": 291519,
+    "original_language": "el",
+    "original_title": "1922",
+    "overview": "Based on the book by Ilias Venezis \"The Number 31328\", the film by Nikos Koundouros unfolds through the personal tragedies of three characters, the Asia Minor Disaster and the agonizing travails of the Asia Minor Greeks who had been arrested and led to death by Kemal's troops and armed groups of Muslims. The wife of a merchant, a teacher and a seventeen-year old boy try to survive, following the column of prisoners into the depths of Asia Minor.",
+    "popularity": 1.6443,
+    "poster_path": "/t4M91glA1308jgyxDfVqEjlgnhE.jpg",
+    "release_date": "1978-04-01",
+    "softcore": false,
+    "title": "1922",
+    "video": false,
+    "vote_average": 5.7,
+    "vote_count": 13
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1327930,
+    "original_language": "en",
+    "original_title": "1922",
+    "overview": "How to make a film about an event for which there are no moving images? In my search to make a project about Ecuador's largest worker's strike, which ended in the massacre of hundreds or thousands of workers in 1922 (and of which there are no moving images), I turn to other work from that same year. Inspired by Hito Steyerl's essay \"In Defense of the Poor Image\", this found-footage essay-film reclaims the \"poor image\" in the context of past and present class struggles in Ecuador.",
+    "popularity": 1.0644,
+    "poster_path": "/vJN6cyLNFCg96XyWPveoGRkEIGc.jpg",
+    "release_date": "2024-08-16",
+    "softcore": false,
+    "title": "1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     878,
+     16
+    ],
+    "id": 1683164,
+    "original_language": "pt",
+    "original_title": "Geist: 1922",
+    "overview": "",
+    "popularity": 1.2055,
+    "poster_path": "/qmafosUdrT2JySzYghTB1ZAvTfk.jpg",
+    "release_date": "2026-04-11",
+    "softcore": false,
+    "title": "Geist: 1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     9648
+    ],
+    "id": 938963,
+    "original_language": "zh",
+    "original_title": "密案1922",
+    "overview": "A detective uncovers a series of murders and discovers that the culprit is his own subordinate, who betrayed him years ago during a secret mission.",
+    "popularity": 0.6062,
+    "poster_path": "/avqufndIBYZzBQbTXDDG0BOLc2x.jpg",
+    "release_date": "2022-02-18",
+    "softcore": false,
+    "title": "Case 1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1678385,
+    "original_language": "sv",
+    "original_title": "Filmrevyn 1922",
+    "overview": "Illustrator Nils Melander draws cartoons (no animation) summarizing the year 1921.",
+    "popularity": 0.5278,
+    "poster_path": null,
+    "release_date": "1921-12-31",
+    "softcore": false,
+    "title": "The Film Revue of 1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1400431,
+    "original_language": "pt",
+    "original_title": "Piracicaba 1922",
+    "overview": "",
+    "popularity": 0.4274,
+    "poster_path": "/fWzkheFJl2hxDsJcDvyoLi49SvR.jpg",
+    "release_date": "2024-11-24",
+    "softcore": false,
+    "title": "Piracicaba 1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/dFARCpR7wu80dydkfc73ebHv6Cy.jpg",
+    "genre_ids": [
+     35,
+     18
+    ],
+    "id": 1740462,
+    "original_language": "it",
+    "original_title": "1922 Mio Amore",
+    "overview": "",
+    "popularity": 0.66,
+    "poster_path": "/oZJell5yy5ZvTbNdhN8EW7D3IHP.jpg",
+    "release_date": "",
+    "softcore": false,
+    "title": "1922 Mio Amore",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99,
+     16,
+     36,
+     10402
+    ],
+    "id": 815041,
+    "original_language": "es",
+    "original_title": "Cante jondo: Granada, 1922",
+    "overview": "Granada, Spain, 1922. The composer Manuel de Falla, who dreams every night of the ancestral songs sung to him by his nanny, fears that flamenco art will disappear, so with the help of his friend Miguel Cerón Rubio and the poet Federico García Lorca, he organizes a contest to revitalize and promote it.",
+    "popularity": 1.1481,
+    "poster_path": "/jsVvrmWJJFC9txEWAEF59KKzJAD.jpg",
+    "release_date": "2022-11-05",
+    "softcore": false,
+    "title": "Cante jondo: Granada, 1922",
+    "video": false,
+    "vote_average": 2.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 1693360,
+    "original_language": "xx",
+    "original_title": "Feesten te Brielle 1922",
+    "overview": "",
+    "popularity": 1.4042,
+    "poster_path": null,
+    "release_date": "1922-01-01",
+    "softcore": false,
+    "title": "Feesten te Brielle 1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     16
+    ],
+    "id": 336140,
+    "original_language": "en",
+    "original_title": "Komposition II/1922",
+    "overview": "Conceived in 1922, conceptual design published in \"De Stijl Nr. 5\" (1923), but not realised until 1959.",
+    "popularity": 0.6611,
+    "poster_path": null,
+    "release_date": "1959-01-01",
+    "softcore": false,
+    "title": "Komposition II/1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     16
+    ],
+    "id": 405065,
+    "original_language": "en",
+    "original_title": "Komposition I/1922",
+    "overview": "Conceived in 1922, but not realised until 1977.",
+    "popularity": 0.5611,
+    "poster_path": null,
+    "release_date": "1977-01-01",
+    "softcore": false,
+    "title": "Komposition I/1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 1719127,
+    "original_language": "en",
+    "original_title": "The Unmanned - 1922 - The Uncomputable",
+    "overview": "Fourth episode of The Unmanned series, “The Uncomputable” is the story of a failure: the building in the northern plains of Scotland of a giant climate prediction factory by meteorologist Lewis Fry Richardson. This enormous inverted terrestrial globe supposed to host 64,000 women-computers and able to forecast the world weather was never built. Partly shot in a wind tunnel (used for aerodynamics simulation), this episode shows the impossible attempt at building the factory and the collapse of its hypothesis of a global computation. As a storm breaks out over the construction site for the simulation, the film itself and all of the parameters are progressively turned inside out.",
+    "popularity": 0.6474,
+    "poster_path": "/ry1qiBNFhtqdGl98ZKZtt3UVuTD.jpg",
+    "release_date": "2014-03-01",
+    "softcore": false,
+    "title": "The Unmanned - 1922 - The Uncomputable",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 434721,
+    "original_language": "en",
+    "original_title": "The Cowgirl Queen 1922",
+    "overview": "Black and white Comedy produced and acted by Lily Long (Ada Lillian Gorman) a Drury lane Actress, Comedienne, Producer, Composer and Singer &amp; Dancer.",
+    "popularity": 0.6425,
+    "poster_path": null,
+    "release_date": "",
+    "softcore": false,
+    "title": "The Cowgirl Queen 1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99
+    ],
+    "id": 486125,
+    "original_language": "es",
+    "original_title": "Revolución de 1922",
+    "overview": "A 1922 documentary.",
+    "popularity": 0.8324,
+    "poster_path": null,
+    "release_date": "1922-01-01",
+    "softcore": false,
+    "title": "Revolución de 1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/bo0jA6J4Kqrd1MSzj7dXNrIkF2m.jpg",
+    "genre_ids": [
+     99
+    ],
+    "id": 763919,
+    "original_language": "en",
+    "original_title": "The Wampas Baby Stars of 1922",
+    "overview": "The WAMPAS Baby Stars was a promotional campaign sponsored by the United States Western Association of Motion Picture Advertisers, which honored 13 (15 in 1932) young actresses each year whom they believed to be on the threshold of movie stardom. 1922 was the first.",
+    "popularity": 1.1604,
+    "poster_path": "/79cftif0GR6zBAj1GkDsgJ431Pe.jpg",
+    "release_date": "1922-03-15",
+    "softcore": false,
+    "title": "The Wampas Baby Stars of 1922",
+    "video": false,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [],
+    "id": 907392,
+    "original_language": "en",
+    "original_title": "1922 The Greek Genocide",
+    "overview": "The Greek genocide was the systematic killing of the Christian Ottoman Greek population of Anatolia which was carried out during World War I and its aftermath (1914–1922) on the basis of their religion and ethnicity.  It was perpetrated by the government of the Ottoman Empire led by the Three Pashas, and the Government of the Grand National Assembly led by Mustafa Kemal Atatürk, against the indigenous Greek population of the Empire. The genocide included massacres, forced deportations involving death marches through the Syrian Desert, expulsions, summary executions, and the destruction of Eastern Orthodox cultural, historical, and religious monuments. Several hundred thousand Greeks died during this period.  By late 1922, most of the Greeks of Asia Minor had either fled or had been killed. Those remaining were transferred to Greece under the terms of the later 1923 population exchange between Greece and Turkey, which formalized the exodus and barred the return of the refugees.",
+    "popularity": 0.4244,
+    "poster_path": "/4Jy0KrkcWZWrWgQaa20XqppvD1l.jpg",
+    "release_date": "",
+    "softcore": false,
+    "title": "1922 The Greek Genocide",
+    "video": true,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": "/szEOXG9Gsng7cwW4N9Er4JXnVkh.jpg",
+    "genre_ids": [
+     16,
+     99
+    ],
+    "id": 1018802,
+    "original_language": "en",
+    "original_title": "Century of Animation Showcase: 1922",
+    "overview": "A snapshot of the state of animated filmmaking 100 years ago. Includes several 1922 films: Walt Disney's \"The Four Musicians of Bremen,\" Dave Fleischer's \"Birthday,\" Otto Messmer's \"Felix Makes Good,\" Paul Terry's \"The Farmer and His Cat,\" Earl Hund's \"Fresh Fish,\" Dave Fleischer's \"Mechanical Doll,\" Otto Messmer's \"Felix Fifty-Fifty,\" and Paul Terry's \"Henry's Busted Romance\".",
+    "popularity": 0.7393,
+    "poster_path": "/giC7q4kmC365xkQoBQpUj96kj5Q.jpg",
+    "release_date": "2022-09-29",
+    "softcore": false,
+    "title": "Century of Animation Showcase: 1922",
+    "video": false,
+    "vote_average": 8.0,
+    "vote_count": 1
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     35
+    ],
+    "id": 1561609,
+    "original_language": "en",
+    "original_title": "Max Linder Collection 1917-1922",
+    "overview": "Kino Classics and Lobster Films celebrate the legacy of Max Linder, a pioneer of comedy whom Charlie Chaplin referred to as \"the great master.\" With his trademark silk top hat and cane, the French-born Linder blended slapstick with sophistication, and invested his films with a layer of cleverness that elevated them above mere knockabout comedies, paving the way for such multi-dimensional screen comedians as Chaplin, Buster Keaton, and Harold Lloyd. The collection includes four of Linder's American-made productions, meticulously restored from archival materials: THE THREE MUST-GET-THERES (1922, a parody of The Three Musketeers), SEVEN YEARS BAD LUCK (1921, a masterpiece of physical comedy), and the romantic farces BE MY WIFE (1921) and MAX WANTS A DIVORCE (1917).  THE THREE MUST-GET-THERES  U.S. 1922 Color Tinted 57 Min.  Written and Directed by Max Linder",
+    "popularity": 0.9209,
+    "poster_path": "/3AhCZfEpeFnfjodFsX4lhu9FGmL.jpg",
+    "release_date": "2014-01-01",
+    "softcore": false,
+    "title": "Max Linder Collection 1917-1922",
+    "video": true,
+    "vote_average": 0.0,
+    "vote_count": 0
+   },
+   {
+    "adult": false,
+    "backdrop_path": null,
+    "genre_ids": [
+     99,
+     10770
+    ],
+    "id": 389171,
+    "original_language": "en",
+    "original_title": "Arthur Penn, 1922-: Themes and Variants",
+    "overview": "This documentary premiered at the 1970 Cannes Film Festival and combines black and white with color photography. Director Arthur Penn is the subject of the film. He is shown being interviewed along with his two children, 12 year old Mathew and 8 year old Molly. Scenes are shown from The Left Handed Gun, The Chase, The Miracle Worker, Bonny and Clyde, Alice's Restaurant and Little Big Man. Penn recalls how Warner Brothers insisted he change the ending for The Left Handed Gun and talks about the violence in Bonny and Clyde. His work from 1958 to 1970 received three Academy Award nominations. The director attended the world premiere of this film at Cannes and was pleased with the final effort.",
+    "popularity": 0.5414,
+    "poster_path": "/kWnZ6RwQzMqmWPcl3Uc2Zc53I57.jpg",
+    "release_date": "1970-03-21",
+    "softcore": false,
+    "title": "Arthur Penn, 1922-: Themes and Variants",
+    "video": false,
+    "vote_average": 8.0,
+    "vote_count": 1
+   }
+  ],
+  "total_pages": 2,
+  "total_results": 40
+ }
+}

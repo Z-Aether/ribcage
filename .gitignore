@@ -9,8 +9,10 @@ tmp/
 
 node_modules/
 
-# DoesTheDogDie topic vocabulary — raw third-party API output, kept local
+# DoesTheDogDie's raw API output — its vocabulary and the seed corpus's payloads — stays local
+# because DTDD's terms restrict redistribution (#40). TMDB's payloads are committed (#25).
 fixtures/dtdd/
+fixtures/films/dtdd/
 
 # Local Python environment, database, collected static files and caches
 /.venv/
