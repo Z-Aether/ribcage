@@ -24,7 +24,6 @@ RUN SECRET_KEY=collectstatic-only DEBUG=false ALLOWED_HOSTS=collectstatic.invali
 USER ribcage
 # Plain HTTP on 8000, the port the host's proxy forwards to; the container publishes none on the host (#31, #43).
 EXPOSE 8000
-# A few sync workers, each serving one request at a time (#14); preload fails startup once, before listening, on a bad env.
-# The log keeps time, request line, status and duration only: no client address, so never X-Forwarded-For (#31).
-CMD ["gunicorn", "ribcage.wsgi", "--bind", "0.0.0.0:8000", "--workers", "3", "--preload", "--no-control-socket", \
-     "--access-logfile", "-", "--access-logformat", "%(t)s \"%(r)s\" %(s)s %(M)sms"]
+# Migrating first brings a fresh volume up empty and working; exec hands PID 1 to gunicorn (#52).
+# Gunicorn's flags, the log format among them, live in ribcage/gunicorn_conf.py.
+CMD ["sh", "-c", "python manage.py migrate --noinput && exec gunicorn --config python:ribcage.gunicorn_conf"]

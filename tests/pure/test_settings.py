@@ -71,6 +71,14 @@ def test_a_relative_database_path_is_taken_from_the_repo_root(monkeypatch, tmp_p
     assert load_settings()["DATABASES"]["default"]["NAME"] == tmp_path / "db.sqlite3"
 
 
+def test_simultaneous_sqlite_writers_queue_in_wal_mode(monkeypatch):
+    options = load_settings()["DATABASES"]["default"]["OPTIONS"]
+
+    assert options["init_command"] == "PRAGMA journal_mode=WAL;"
+    assert options["transaction_mode"] == "IMMEDIATE"
+    assert options["timeout"] >= 20
+
+
 # Defaults as the tickets decided them: #17, #33, #13, #20 and #31.
 JUDGEMENT_DEFAULTS = {
     "DIVERSITY_CUT": 4,

@@ -10,7 +10,6 @@ from tests.image.docker import REPO_ROOT, docker, run_docker
 
 pytestmark = pytest.mark.slow
 
-IMAGE = "ribcage:pytest"
 PORT = 8000
 FORGED_ADDRESSES = {"X-Forwarded-For": "203.0.113.77", "X-Real-IP": "198.51.100.5", "Forwarded": "for=192.0.2.9"}
 # Time, request line, status, duration, and nothing else (#31).
@@ -27,20 +26,12 @@ ENVIRONMENT = dict(re.findall(r"^([A-Z][A-Z_]+)=(.*)$", EXAMPLE, re.MULTILINE)) 
 
 
 @pytest.fixture(scope="module")
-def image():
-    docker("build", "--platform", "linux/amd64", "--tag", IMAGE, str(REPO_ROOT))
-    return IMAGE
-
-
-@pytest.fixture(scope="module")
 def container(image, tmp_path_factory):
     env_file = tmp_path_factory.mktemp("image") / "image.env"
     env_file.write_text("".join(f"{name}={value}\n" for name, value in ENVIRONMENT.items()))
     name = f"ribcage-pytest-{uuid.uuid4().hex[:8]}"
     docker("run", "--detach", "--name", name, "--env-file", str(env_file), "--publish", f"127.0.0.1::{PORT}", image)
     try:
-        # Migrating is the compose stack's job (#52); here it gives the form a table to write to.
-        docker("exec", name, "python", "manage.py", "migrate", "--verbosity", "0")
         host_port = int(docker("port", name, f"{PORT}/tcp").splitlines()[0].rsplit(":", 1)[1])
         wait_until_serving(host_port)
         yield name, host_port
@@ -111,6 +102,19 @@ def test_the_app_runs_as_a_non_root_user(container):
     name, _ = container
 
     assert docker("exec", name, "id", "-u").strip() != "0"
+
+
+def test_the_container_migrates_a_fresh_database_before_serving(container):
+    name, _ = container
+
+    assert run_docker("exec", name, "python", "manage.py", "migrate", "--check").returncode == 0
+
+
+def test_gunicorn_takes_over_as_the_containers_first_process(container):
+    # Docker's stop signal reaches PID 1, so the migrating shell must have exec'd gunicorn.
+    name, _ = container
+
+    assert "gunicorn" in docker("exec", name, "cat", "/proc/1/cmdline")
 
 
 def test_the_hello_world_page_is_served(container):

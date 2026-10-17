@@ -76,6 +76,8 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
         # A relative path is taken from the repo root, so local runs work from any directory.
         "NAME": BASE_DIR / environment.required("DATABASE_PATH"),
+        # WAL on every connection (#14, #52); IMMEDIATE and a timeout make simultaneous writers queue, not fail (#14).
+        "OPTIONS": {"init_command": "PRAGMA journal_mode=WAL;", "transaction_mode": "IMMEDIATE", "timeout": 20},
     }
 }
 
