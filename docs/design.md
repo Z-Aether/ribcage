@@ -256,8 +256,6 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 **Stored vs derived.** The database stores only what is true in every phase: voters, suggestions with their film metadata, runtime and approval, notes, ballot entries, done markers, watched lists, DTDD snapshots and vocabulary, phase history, the timetable (anchor, budget, boxes) and the shortlist. Everything else is computed from it on demand: the phase, the reveal state, the candidates, the floor set, standings, readouts and now playing (#26).
 
-**Stack:** Python 3.14 / Django 6.1, server-rendered with htmx; SQLite; `highspy` in-process; WSGI with gunicorn and WhiteNoise; vendored htmx, SortableJS and a classless CSS base. Deployed as a locally built image run as a Komodo stack on the host (#14, #40).
-
 ---
 
 ## 10. Deliberately absent
