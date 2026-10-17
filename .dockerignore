@@ -1,0 +1,10 @@
+# An allowlist: nothing enters the image unless it is re-included below (#40).
+# tests/image/test_build_context.py holds the build context to this list.
+*
+!manage.py
+!requirements.txt
+!ribcage/
+**/__pycache__
+**/*.pyc
+**/.env*
+**/*.sqlite3*
