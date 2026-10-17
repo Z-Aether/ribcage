@@ -5,13 +5,27 @@ import yaml
 from ribcage.operations import backup
 from tests.image.docker import REPO_ROOT
 
-BASE = yaml.safe_load((REPO_ROOT / "compose.yaml").read_text(encoding="utf-8"))
-LOCAL = yaml.safe_load((REPO_ROOT / "compose.local.yaml").read_text(encoding="utf-8"))
+
+class Overriding(list):
+    """A list an override file tags !override, which replaces the base file's list rather than adding to it."""
+
+
+class ComposeLoader(yaml.SafeLoader):
+    pass
+
+
+ComposeLoader.add_constructor("!override", lambda loader, node: Overriding(loader.construct_sequence(node)))
+
+
+def load(name):
+    return yaml.load((REPO_ROOT / name).read_text(encoding="utf-8"), Loader=ComposeLoader)
+
+
+BASE = load("compose.yaml")
+LOCAL = load("compose.local.yaml")
 APP = BASE["services"]["ribcage"]
 BACKUP = BASE["services"]["backup"]
 EXAMPLE = (REPO_ROOT / ".env.example").read_text(encoding="utf-8")
-# Read by Compose itself rather than passed to the app.
-STACK_ONLY = {"PROXY_NETWORK"}
 # Facts of the stack rather than of the host, so they are written here instead of read from its environment.
 FIXED = {"DEBUG": "false", "DATABASE_PATH": "/data/db.sqlite3"}
 TAG_SCHEME = re.compile(r"\d{8}-\d{4}-[0-9a-f]{7,}")
@@ -33,16 +47,15 @@ def test_no_image_is_left_to_a_default_or_latest_tag():
         assert name and "/" not in tag and tag != "latest", image
 
 
-def test_no_service_in_the_base_file_publishes_a_host_port():
+def test_the_app_publishes_only_on_the_hosts_loopback_at_the_proxys_port():
+    assert APP["ports"] == ["127.0.0.1:8080:8000"]
+
+
+def test_no_other_service_publishes_a_port_and_none_joins_the_hosts_network():
     for service in BASE["services"].values():
-        assert "ports" not in service
+        assert service is APP or "ports" not in service
         assert service.get("network_mode") != "host"
-
-
-def test_the_app_joins_only_the_proxys_external_network_under_its_own_alias():
-    assert APP["networks"] == {"proxy": {"aliases": ["ribcage"]}}
-    assert BASE["networks"]["proxy"]["external"] is True
-    assert BASE["networks"]["proxy"]["name"].startswith("${PROXY_NETWORK:?")
+    assert "networks" not in BASE
 
 
 def test_every_service_caps_its_json_file_log():
@@ -61,7 +74,7 @@ def test_the_database_lives_on_a_named_volume_at_data():
 def test_the_app_is_handed_every_setting_in_the_example_env_file():
     named = set(re.findall(r"^#? ?([A-Z][A-Z_]+)=", EXAMPLE, re.MULTILINE))
 
-    assert set(APP["environment"]) == named - STACK_ONLY
+    assert set(APP["environment"]) == named
 
 
 def test_every_value_but_the_stacks_own_facts_is_an_empty_placeholder_for_the_hosts_environment():
@@ -69,13 +82,10 @@ def test_every_value_but_the_stacks_own_facts_is_an_empty_placeholder_for_the_ho
         assert value == FIXED.get(name, f"${{{name}:-}}"), name
 
 
-def test_the_local_override_publishes_the_app_on_loopback_at_the_example_origin():
+def test_the_local_override_publishes_the_app_on_loopback_at_the_example_origin_in_place_of_8080():
     assert LOCAL["services"]["ribcage"]["ports"] == ["127.0.0.1:8000:8000"]
+    assert isinstance(LOCAL["services"]["ribcage"]["ports"], Overriding)
     assert "http://127.0.0.1:8000" in re.search(r"^CSRF_TRUSTED_ORIGINS=(.*)$", EXAMPLE, re.MULTILINE)[1]
-
-
-def test_the_local_override_creates_the_proxy_network_itself():
-    assert LOCAL["networks"]["proxy"] == {"external": False}
 
 
 def test_the_local_override_builds_under_its_own_tag_never_the_pinned_one():

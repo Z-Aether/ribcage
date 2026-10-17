@@ -4,14 +4,9 @@ services:
     # Built from the working tree under its own tag, so no pinned tag is overwritten.
     image: ribcage:local
     build: .
-    # Loopback only, at the port .env.example's trusted origins name.
-    ports:
+    # Loopback only, at the port .env.example's trusted origins name, in place of the host's 8080.
+    ports: !override
       - 127.0.0.1:8000:8000
   backup:
     # The image the app's build makes, so one build serves both.
     image: ribcage:local
-
-networks:
-  proxy:
-    # There is no proxy here, so compose creates the network on up and removes it on down.
-    external: false

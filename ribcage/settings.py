@@ -14,7 +14,7 @@ ADMIN_PASSWORD = environment.required("ADMIN_PASSWORD")
 TMDB_API_KEY = environment.required("TMDB_API_KEY")
 DTDD_API_KEY = environment.required("DTDD_API_KEY")
 
-# The container publishes no port, so only the host's proxy can set this header and it is trusted (#31).
+# Published on the host's loopback alone, so only the host's proxy can set this header and it is trusted (#31, #54).
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = False
 USE_X_FORWARDED_PORT = False

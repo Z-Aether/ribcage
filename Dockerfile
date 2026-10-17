@@ -23,7 +23,7 @@ RUN SECRET_KEY=collectstatic-only DEBUG=false ALLOWED_HOSTS=collectstatic.invali
     python manage.py collectstatic --noinput --verbosity 0
 
 USER ribcage
-# Plain HTTP on 8000, the port the host's proxy forwards to; the container publishes none on the host (#31, #43).
+# Plain HTTP on 8000; the stack publishes it on the host's loopback at 8080, where the proxy forwards (#31, #54).
 EXPOSE 8000
 # Migrating first brings a fresh volume up empty and working; exec hands PID 1 to gunicorn (#52).
 # Gunicorn's flags, the log format among them, live in ribcage/gunicorn_conf.py.

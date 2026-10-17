@@ -30,12 +30,10 @@ services:
       LOGIN_BACKOFF_WAIT_MINUTES: ${LOGIN_BACKOFF_WAIT_MINUTES:-}
     volumes:
       - data:/data
-    # No ports: the proxy's network is the only way in, which is what makes X-Forwarded-Proto trustworthy (#31).
-    networks:
-      proxy:
-        # The proxy forwards here at port 8000; other stacks share the network, so no generic names like app (#43).
-        aliases:
-          - ribcage
+    # The host's proxy runs in host networking and forwards to 8080; loopback alone keeps it the only way in,
+    # which is what makes X-Forwarded-Proto trustworthy (#31, #54).
+    ports:
+      - 127.0.0.1:8080:8000
     # Logs sit on the host's disk until the container is removed, so they are capped (#16).
     logging:
       driver: json-file
@@ -68,8 +66,3 @@ volumes:
   data:
   # The backup sidecar's 7 newest backups; teardown removes it along with data (#30).
   backups:
-
-networks:
-  proxy:
-    name: ${PROXY_NETWORK:?Set PROXY_NETWORK to the name of the proxy's Docker network.}
-    external: true

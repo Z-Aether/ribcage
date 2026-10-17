@@ -9,8 +9,12 @@ from tests.image.docker import REPO_ROOT, docker, run_docker
 EXAMPLE_FILE = (REPO_ROOT / ".env.example").read_text(encoding="utf-8")
 EXAMPLE = dict(re.findall(r"^([A-Z][A-Z_]+)=(.*)$", EXAMPLE_FILE, re.MULTILINE))
 NAMED = set(re.findall(r"^#? ?([A-Z][A-Z_]+)=", EXAMPLE_FILE, re.MULTILINE))
-# The stack runs the image under test, never a pinned or local build; locally on an ephemeral port.
-ON_THE_IMAGE_UNDER_TEST = f"services:\n  ribcage:\n    image: {IMAGE}\n  backup:\n    image: {IMAGE}\n"
+# The stack runs the image under test, never a pinned or local build, on an ephemeral loopback port,
+# since the host's 8080 or 8000 may be taken; compose config pins the base file's own port.
+ON_THE_IMAGE_UNDER_TEST = (
+    f"services:\n  ribcage:\n    image: {IMAGE}\n    ports: !override\n      - 127.0.0.1::8000\n"
+    f"  backup:\n    image: {IMAGE}\n"
+)
 LOCALLY_ON_THE_IMAGE_UNDER_TEST = (
     f"services:\n  ribcage:\n    image: {IMAGE}\n    build: !reset null\n    ports: !override\n      - 127.0.0.1::8000\n"
     f"  backup:\n    image: {IMAGE}\n"
@@ -25,7 +29,6 @@ def without_the_settings():
 class Stack:
     def __init__(self, directory, files, environment):
         self.project = f"ribcage-pytest-{uuid.uuid4().hex[:8]}"
-        self.network = environment["PROXY_NETWORK"] = self.project
         env_file = directory / f"{self.project}.env"
         env_file.write_text("".join(f"{name}={value}\n" for name, value in environment.items()))
         self.arguments = ["compose", "--project-name", self.project, "--project-directory", str(REPO_ROOT)]

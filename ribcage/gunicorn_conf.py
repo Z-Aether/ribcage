@@ -1,5 +1,5 @@
 wsgi_app = "ribcage.wsgi"
-# Plain HTTP on 8000, the port the host's proxy forwards to; the container publishes none on the host (#31, #43).
+# Plain HTTP on 8000; the stack publishes it on the host's loopback at 8080, where the proxy forwards (#31, #54).
 bind = "0.0.0.0:8000"
 # A few sync workers, each serving one request at a time (#14).
 workers = 3
