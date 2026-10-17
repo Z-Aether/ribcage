@@ -15,8 +15,12 @@ The span of a few weeks in which one marathon is organised and run, from the app
 _Avoid_: season, cycle, iteration
 
 **Teardown**:
-The end of a window: the app's containers and volumes are removed and every copy of its data is deleted, snapshots included, leaving only the stack's definition for the next rebuild. Nothing it held is kept, except a pseudonymised score matrix the developer keeps privately for testing. The routine end of every marathon, including one abandoned partway. (#7, #15, #18, #25, #30)
+The end of a window: the app's containers and volumes are removed and every copy of its data is deleted, backups included, leaving only the stack's definition for the next rebuild. Nothing it held is kept, except a pseudonymised score matrix the developer keeps privately for testing. The routine end of every marathon, including one abandoned partway. (#7, #15, #18, #25, #30)
 _Avoid_: archive, cancel, shutdown, stop (stopping alone keeps the data)
+
+**Backup**:
+The whole database as it stood at one moment, kept apart from it so the database can be restored from it; one is taken each night or by hand, and the 7 newest are kept. (#30, #53)
+_Avoid_: snapshot (the DoesTheDogDie data stored per film), dump, copy
 
 **Phase**:
 Which of five stages the marathon is in: SUGGEST, APPROVE, VOTE, PICK, RUN. It decides which of the two user-writable surfaces, SUGGEST and VOTE, is live; it never gates the admin and moves one step at a time in either direction. Every voter action has a window of phases, and a post from a tab left open outside it is refused and reloaded into the current phase. A page that polls and finds the phase moved reloads the same way, so stepping RUN back to PICK takes the published evening down at once. A fresh database starts in SUGGEST — there is no phase before it, because standing the app up is the deployment's business, not a state the app is in. (#15, #28, #36)

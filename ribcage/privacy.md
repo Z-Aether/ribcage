@@ -19,7 +19,7 @@ A session cookie keeps you signed in, and a CSRF cookie protects the forms.
 
 ## Where it is kept
 
-All of it is kept in one database on the host's server, with a nightly backup snapshot; the last seven are kept. The developer may copy a snapshot to their own machine to test a restore.
+All of it is kept in one database on the host's server, with a nightly backup; the last seven are kept. The developer may copy a backup to their own machine to test a restore.
 
 Films are looked up at TMDB and DoesTheDogDie from the server. Those requests carry film titles and ids, never your name or your watched list: matching your watched list against a film happens inside the app.
 
@@ -33,6 +33,6 @@ The host's own proxy may log requests; those logs never contain what you flagged
 
 ## When it is deleted
 
-Everything the app holds is deleted at teardown, at the end of each marathon: the database, its snapshots, the app's logs and the developer's copies.
+Everything the app holds is deleted at teardown, at the end of each marathon: the database, its backups, the app's logs and the developer's copies.
 
 The one exception is a pseudonymised score matrix the developer keeps privately for testing. It holds the scores, vetoes and "seen it" flags with display names replaced by numbered labels, and no watched lists.

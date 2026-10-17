@@ -53,7 +53,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - A Hello World page plus one form POST, so CSRF and `X-Forwarded-Proto` are proven through the real proxy (#31).
 - HSTS, access logs without client addresses, trusting only the forwarded-protocol header (#16, #31).
 - Image: gunicorn, WhiteNoise, vendored static files, an allowlist `.dockerignore`, a pinned tag. Built locally, pushed to the GitLab registry, run as a Komodo stack (#40).
-- SQLite on a volume. Backup sidecar with 7 nightly snapshots and the automated row-count test (#25, #30).
+- SQLite on a volume. Backup sidecar taking a backup each night and keeping the 7 newest; the automated row-count test (#25, #30).
 - The public privacy policy page, rendered from its file (#16). Wording is finished in M10.
 - Test harness: pytest for the pure suite and HTTP tests, Playwright over MCP against a seeded local instance, a seed command skeleton (#25).
 - Written runbook for rebuild, restore and teardown.
