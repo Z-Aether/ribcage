@@ -14,7 +14,7 @@ ADMIN_PASSWORD = environment.required("ADMIN_PASSWORD")
 TMDB_API_KEY = environment.required("TMDB_API_KEY")
 DTDD_API_KEY = environment.required("DTDD_API_KEY")
 
-# Published on the host's loopback alone, so only the host's proxy can set this header and it is trusted (#31, #54).
+# Trusted although the host's LAN and VPN could forge it past the proxy: that only affects their own requests (#31, #54).
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = False
 USE_X_FORWARDED_PORT = False

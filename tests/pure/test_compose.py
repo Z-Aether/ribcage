@@ -47,8 +47,8 @@ def test_no_image_is_left_to_a_default_or_latest_tag():
         assert name and "/" not in tag and tag != "latest", image
 
 
-def test_the_app_publishes_only_on_the_hosts_loopback_at_the_proxys_port():
-    assert APP["ports"] == ["127.0.0.1:8080:8000"]
+def test_the_app_publishes_on_the_host_at_the_proxys_port():
+    assert APP["ports"] == ["8080:8000"]
 
 
 def test_no_other_service_publishes_a_port_and_none_joins_the_hosts_network():

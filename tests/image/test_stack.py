@@ -8,7 +8,7 @@ from tests.image.stack import EXAMPLE, LOCALLY_ON_THE_IMAGE_UNDER_TEST, ON_THE_I
 
 pytestmark = pytest.mark.slow
 
-# The host port the proxy forwards to, which the base file publishes on loopback (#54).
+# The host port the proxy forwards to, which the base file publishes on every interface (#54).
 PROXY_PORT = 8080
 
 
@@ -110,13 +110,13 @@ def test_an_empty_secret_stops_startup_naming_it(image, tmp_path):
 
 def published_ports(stack):
     resolved = json.loads(stack("config", "--format", "json"))
-    return [(port["host_ip"], port["published"], port["target"]) for port in resolved["services"]["ribcage"]["ports"]]
+    return [(port.get("host_ip", ""), port["published"], port["target"]) for port in resolved["services"]["ribcage"]["ports"]]
 
 
-def test_compose_resolves_the_base_file_to_loopback_at_the_proxys_port(tmp_path):
+def test_compose_resolves_the_base_file_to_the_proxys_port(tmp_path):
     stack = Stack(tmp_path, [REPO_ROOT / "compose.yaml"], dict(EXAMPLE))
 
-    assert published_ports(stack) == [("127.0.0.1", str(PROXY_PORT), 8000)]
+    assert published_ports(stack) == [("", str(PROXY_PORT), 8000)]
 
 
 def test_compose_resolves_the_local_stack_to_loopback_at_8000_in_place_of_the_proxys_port(tmp_path):

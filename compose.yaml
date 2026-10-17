@@ -30,10 +30,10 @@ services:
       LOGIN_BACKOFF_WAIT_MINUTES: ${LOGIN_BACKOFF_WAIT_MINUTES:-}
     volumes:
       - data:/data
-    # The host's proxy runs in host networking and forwards to 8080; loopback alone keeps it the only way in,
-    # which is what makes X-Forwarded-Proto trustworthy (#31, #54).
+    # The host's proxy runs in host networking and doesn't reach loopback, so 8080 is on every interface;
+    # the router doesn't forward 8080, so only the host's LAN and VPN reach it past the proxy (#31, #54).
     ports:
-      - 127.0.0.1:8080:8000
+      - 8080:8000
     # Logs sit on the host's disk until the container is removed, so they are capped (#16).
     logging:
       driver: json-file
