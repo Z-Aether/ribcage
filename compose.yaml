@@ -3,8 +3,9 @@ name: ribcage
 
 services:
   ribcage:
-    # A pinned tag, never latest: rolling back is editing this line. Komodo's auto-update stays off (#40).
-    image: ribcage:20261017-1007-2edddd4
+    # A pinned tag, never latest: rolling back is editing this line, which the backup sidecar shares through the anchor.
+    # Komodo's auto-update stays off (#40).
+    image: &pinned ribcage:20261017-1007-2edddd4
     restart: unless-stopped
     # Real values go in the Komodo stack's environment; an empty required one stops startup, naming it (#18, #45).
     environment:
@@ -42,9 +43,31 @@ services:
         max-size: 10m
         max-file: "3"
 
+  # One backup a night onto its own volume, keeping 7; it needs nothing from the host but that volume (#18, #30, #53).
+  backup:
+    image: *pinned
+    restart: unless-stopped
+    # Replaces the image's command, so the sidecar neither migrates nor serves.
+    command: ["python", "-m", "ribcage.operations.backup", "nightly"]
+    # The backup hour is in the deployment's zone, and that is all it is handed: no secrets.
+    environment:
+      TIME_ZONE: ${TIME_ZONE:-}
+    volumes:
+      # Read-write even so, because a WAL reader writes the -shm file beside the database.
+      - data:/data
+      - backups:/backups
+    network_mode: none
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
 volumes:
   # The SQLite database, in WAL mode (#14, #18).
   data:
+  # The backup sidecar's 7 newest backups; teardown removes it along with data (#30).
+  backups:
 
 networks:
   proxy:

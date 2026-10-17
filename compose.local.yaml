@@ -7,6 +7,9 @@ services:
     # Loopback only, at the port .env.example's trusted origins name.
     ports:
       - 127.0.0.1:8000:8000
+  backup:
+    # The image the app's build makes, so one build serves both.
+    image: ribcage:local
 
 networks:
   proxy:

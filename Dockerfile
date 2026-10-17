@@ -3,9 +3,10 @@ FROM python:3.14-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 
-# The app runs unprivileged; /data is where it may write, so a fresh volume mounted there inherits the owner.
+# The app runs unprivileged; it may write only to the volumes' mount points, so a fresh volume inherits the owner.
+# /data holds the database and /backups the backup sidecar's backups (#53).
 RUN useradd --system --uid 10001 --no-create-home --shell /usr/sbin/nologin ribcage \
-    && install -d -o ribcage -g ribcage /data
+    && install -d -o ribcage -g ribcage /data /backups
 
 WORKDIR /app
 COPY requirements.txt .

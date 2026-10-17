@@ -2,11 +2,13 @@ import re
 
 import yaml
 
+from ribcage.operations import backup
 from tests.image.docker import REPO_ROOT
 
 BASE = yaml.safe_load((REPO_ROOT / "compose.yaml").read_text(encoding="utf-8"))
 LOCAL = yaml.safe_load((REPO_ROOT / "compose.local.yaml").read_text(encoding="utf-8"))
 APP = BASE["services"]["ribcage"]
+BACKUP = BASE["services"]["backup"]
 EXAMPLE = (REPO_ROOT / ".env.example").read_text(encoding="utf-8")
 # Read by Compose itself rather than passed to the app.
 STACK_ONLY = {"PROXY_NETWORK"}
@@ -78,3 +80,43 @@ def test_the_local_override_creates_the_proxy_network_itself():
 
 def test_the_local_override_builds_under_its_own_tag_never_the_pinned_one():
     assert LOCAL["services"]["ribcage"]["image"] != APP["image"]
+
+
+def volume_sources(service):
+    return {mount.split(":")[0] for mount in service.get("volumes", [])}
+
+
+def test_no_service_mounts_anything_from_the_host_only_the_stacks_named_volumes():
+    for service in BASE["services"].values():
+        assert volume_sources(service) <= set(BASE["volumes"]), service["volumes"]
+
+
+def test_the_backup_sidecar_runs_the_apps_pinned_image_so_one_repin_moves_both():
+    assert BACKUP["image"] == APP["image"]
+
+
+def test_the_backup_sidecar_runs_its_nightly_loop_instead_of_migrating_and_serving():
+    assert BACKUP["command"] == ["python", "-m", "ribcage.operations.backup", "nightly"]
+    assert BACKUP["restart"] == "unless-stopped"
+
+
+def test_the_backup_sidecar_writes_backups_to_a_second_named_volume_at_its_default_path():
+    assert f"backups:{backup.BACKUPS.as_posix()}" in BACKUP["volumes"]
+    assert set(BASE["volumes"]) == {"data", "backups"}
+
+
+def test_the_backup_sidecar_reads_the_apps_database_without_a_read_only_mount():
+    # A WAL reader writes the -shm file, so a read-only mount would fail it.
+    assert "data:/data" in BACKUP["volumes"]
+    assert backup.DATABASE.as_posix() == FIXED["DATABASE_PATH"]
+
+
+def test_the_backup_sidecar_has_no_network_and_is_handed_only_the_time_zone():
+    assert BACKUP["network_mode"] == "none"
+    assert "networks" not in BACKUP
+    assert BACKUP["environment"] == {"TIME_ZONE": "${TIME_ZONE:-}"}
+
+
+def test_the_local_override_runs_the_sidecar_on_the_apps_local_build():
+    assert LOCAL["services"]["backup"]["image"] == LOCAL["services"]["ribcage"]["image"]
+    assert "build" not in LOCAL["services"]["backup"]

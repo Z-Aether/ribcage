@@ -1,24 +1,14 @@
 import json
-import os
-import re
-import uuid
 
 import pytest
 
 from tests.image.client import a_page_with_its_csrf_token, fetch, post_form, wait_until_serving
 from tests.image.conftest import IMAGE
 from tests.image.docker import REPO_ROOT, docker, run_docker
+from tests.image.stack import EXAMPLE, LOCALLY_ON_THE_IMAGE_UNDER_TEST, ON_THE_IMAGE_UNDER_TEST, Stack, override
 
 pytestmark = pytest.mark.slow
 
-EXAMPLE_FILE = (REPO_ROOT / ".env.example").read_text(encoding="utf-8")
-EXAMPLE = dict(re.findall(r"^([A-Z][A-Z_]+)=(.*)$", EXAMPLE_FILE, re.MULTILINE))
-NAMED = set(re.findall(r"^#? ?([A-Z][A-Z_]+)=", EXAMPLE_FILE, re.MULTILINE))
-# The stack runs the image under test, never a pinned or local build; locally on an ephemeral port.
-ON_THE_IMAGE_UNDER_TEST = f"services:\n  ribcage:\n    image: {IMAGE}\n"
-LOCALLY_ON_THE_IMAGE_UNDER_TEST = (
-    f"services:\n  ribcage:\n    image: {IMAGE}\n    build: !reset null\n    ports: !override\n      - 127.0.0.1::8000\n"
-)
 # What the proxy does: reach the app by its alias on the shared network, naming an allowed host.
 THROUGH_THE_PROXY_NETWORK = """
 import http.client, sys, time
@@ -33,48 +23,6 @@ for _ in range(120):
         time.sleep(0.5)
 sys.exit("The app never answered on the proxy network.")
 """
-
-
-def without_the_settings():
-    # Compose prefers the caller's environment to --env-file, and tests.settings fills it from .env.example.
-    return {name: value for name, value in os.environ.items() if name not in NAMED}
-
-
-class Stack:
-    def __init__(self, directory, files, environment):
-        self.project = f"ribcage-pytest-{uuid.uuid4().hex[:8]}"
-        self.network = environment["PROXY_NETWORK"] = self.project
-        env_file = directory / f"{self.project}.env"
-        env_file.write_text("".join(f"{name}={value}\n" for name, value in environment.items()))
-        self.arguments = ["compose", "--project-name", self.project, "--project-directory", str(REPO_ROOT)]
-        self.arguments += ["--env-file", str(env_file)]
-        for file in files:
-            self.arguments += ["--file", str(file)]
-
-    def run(self, *arguments, timeout=300):
-        return run_docker(*self.arguments, *arguments, timeout=timeout, env=without_the_settings())
-
-    def __call__(self, *arguments):
-        return docker(*self.arguments, *arguments, env=without_the_settings())
-
-    def container(self):
-        return self("ps", "--quiet", "ribcage").strip()
-
-    def inspect(self, template):
-        return json.loads(docker("inspect", self.container(), "--format", f"{{{{json {template}}}}}"))
-
-    def port(self):
-        return int(self("port", "ribcage", "8000").strip().rsplit(":", 1)[1])
-
-    def journal_mode(self):
-        query = "import sqlite3; print(sqlite3.connect('/data/db.sqlite3').execute('PRAGMA journal_mode').fetchone()[0])"
-        return self("exec", "ribcage", "python", "-c", query).strip()
-
-
-def override(directory, name, text):
-    path = directory / name
-    path.write_text(text)
-    return path
 
 
 @pytest.fixture(scope="module")
