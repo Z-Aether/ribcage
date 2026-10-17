@@ -25,7 +25,7 @@ The big-picture build schedule: ten milestones, each a vertical slice that is de
 | # | Milestone | Ships | Tickets |
 |---|---|---|---|
 | M1 | Walking skeleton on the real host | Hello World, deployed, backed up, restorable | ~14 |
-| M2 | Theme and component kit | The one theme, every shared component on fixture data | ~14 |
+| M2 | Theme and component kit | The one theme, the shared poster and film card on fixture data | 3 |
 | M3 | Identity, phases and the two shells | Register, log in, roster, phase moves, empty phase pages | ~20 |
 | M4 | SUGGEST and APPROVE | The pool, suggested by voters and curated by the admin | ~20 |
 | M5 | Trigger warnings | DTDD data, watched lists, matched topics | ~18 |
@@ -68,21 +68,18 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 
 **Why here.** One theme must be settled before any final UI is built (#39), and the first voter-facing pages (login, registration) arrive in M3. The prototype branches are the inputs.
 
-**Scope**
+**Scope** (#56)
 - The one full fetch of TMDB and DTDD payloads for the fifty seed films, stored in `fixtures/films/` for offline use (#25, #40).
-- The theme: tokens over the vendored classless base. The voter skin is rounded and roomy, the admin skin is dense ledgers, and RUN is dark (#29, #39).
-- Shared components as templates over plain data, so later milestones only bind models to them:
-  - the **film card**, collapsed and expanded, with each phase bar (#21);
-  - the **title card** for posterless films (#38);
-  - **tiles** in every frame state: amber ring, seen it, veto ribbon (#9, #35);
-  - the **slate ledger row** (#24);
-  - the **box** in both layouts, horizontal track and vertical evening (#22);
-  - the reveal matrix cell styles (#29).
-- A dev-only **gallery** route that renders every component on fixture films. It stays as the visual reference for later reviews.
+- The theme: tokens over the vendored classless base. The voter skin is rounded and roomy, the admin skin is dense ledgers, and RUN is dark (#29, #39). It fixes the state colours later surfaces share: the score scale, the veto, the amber ring, seen it.
+- Only the components more than one surface shares, as templates over plain data, so later milestones only bind models to them:
+  - the **poster** slot, with the **title card** for posterless films (#38);
+  - the **film card**, collapsed and expanded, with an empty slot for each phase bar (#21).
+- A dev-only **gallery** route that shows the theme and these components on fixture films. It stays as the visual reference for later reviews, and later milestones add their components to it.
+- A component serving one view is designed in that view's milestone: phase bars in M4, M6 and M8, the card's DTDD section in M5, tiles in M6, the box in M7 and M8, the reveal cells in M8, the slate ledger row in M9.
 
-**Deployable state:** unchanged app, plus the gallery locally.
+**Deployable state:** unchanged app, now themed, plus the gallery locally.
 
-**Dev's review:** the theme and each component in the gallery, against the prototypes. This is the gate where "intuitive or out" is cheapest to apply.
+**Dev's review:** the theme, the poster and the film card in the gallery, against the prototypes. This is the gate where "intuitive or out" is cheapest to apply.
 
 ---
 
