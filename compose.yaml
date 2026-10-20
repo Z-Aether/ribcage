@@ -28,6 +28,7 @@ services:
       LOGIN_BACKOFF_FAILURES: ${LOGIN_BACKOFF_FAILURES:-}
       LOGIN_BACKOFF_WINDOW_MINUTES: ${LOGIN_BACKOFF_WINDOW_MINUTES:-}
       LOGIN_BACKOFF_WAIT_MINUTES: ${LOGIN_BACKOFF_WAIT_MINUTES:-}
+      NOTE_TRIM_LENGTH: ${NOTE_TRIM_LENGTH:-}
     volumes:
       - data:/data
     # The host's proxy runs in host networking and doesn't reach loopback, so 8080 is on every interface;

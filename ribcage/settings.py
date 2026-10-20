@@ -138,3 +138,5 @@ TRIGGER_ICON_THRESHOLD = environment.positive_whole_number("TRIGGER_ICON_THRESHO
 LOGIN_BACKOFF_FAILURES = environment.positive_whole_number("LOGIN_BACKOFF_FAILURES", default=5)
 LOGIN_BACKOFF_WINDOW_MINUTES = environment.positive_whole_number("LOGIN_BACKOFF_WINDOW_MINUTES", default=15)
 LOGIN_BACKOFF_WAIT_MINUTES = environment.positive_whole_number("LOGIN_BACKOFF_WAIT_MINUTES", default=1)
+# A collapsed film card trims every note to this many characters, with an ellipsis (#21, #39).
+NOTE_TRIM_LENGTH = environment.positive_whole_number("NOTE_TRIM_LENGTH", default=120)
