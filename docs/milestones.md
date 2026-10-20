@@ -4,7 +4,7 @@ The big-picture build schedule: ten milestones, each a vertical slice that is de
 
 - Terms are used as defined in [`GLOSSARY.md`](../GLOSSARY.md). Ticket numbers (#n) point at the decision of record.
 - Where this doc and a ticket or `design.md` disagree, the newest of them wins; flag the conflict.
-- Each milestone's parent ticket is in the table below. A milestone's section here is the condensed scope; its parent carries the detail.
+- Each milestone's parent ticket is in the table below. A milestone's section here is the condensed scope; its parent carries the detail, as a baseline until the milestone's breakdown reviews it.
 
 ---
 

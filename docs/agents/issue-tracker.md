@@ -38,6 +38,7 @@ Run `gh issue view <number> --comments`.
 The build runs on milestone tickets, M1 to M10, as `docs/milestones.md` schedules them.
 
 - **Parent**: one unlabelled issue per milestone, titled `M<n> — <name>`, holding that milestone's scope, deployable state, gate checklist and notes. All ten exist; `docs/milestones.md`'s table lists their numbers.
+- **Baseline until the breakdown**: a parent written ahead of its milestone is a starting point, not a commitment. It binds once the milestone is broken down into its sub-issues, and that breakdown reviews and revises the parent's body with the dev.
 - **Implementation ticket**: a sub-issue of its parent (`gh api --method POST repos/Z-Aether/ribcage/issues/<parent>/sub_issues -F sub_issue_id=<child-db-id>`, the same database id blocking uses), labelled with its triage role and wired with native blocking edges as below.
 - **Recording a decision made during the build**: a dated comment on the milestone ticket where it came up, then, in the same commit as any code it changes, the lines of `docs/design.md` and `docs/milestones.md` it touches, citing that ticket.
 - **Detail for a later milestone**: a note on that milestone's parent, or a sub-issue opened early when it is already a whole ticket.
