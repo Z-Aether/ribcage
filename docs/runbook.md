@@ -32,6 +32,31 @@ docker compose -f compose.yaml -f compose.local.yaml cp backup:/backups/<name> p
 .venv/Scripts/python -m ribcage.operations.backup counts private/backups/<name>
 ```
 
+### Pull one from the host
+
+Komodo can't download a file, so for now a backup leaves the host as text, copied out of the `backup` container's *Terminal* (#54). M3 replaces this with a download on the admin side (#68).
+
+1. **In the terminal, note the backup's checksum and its length in lines.** Take one with `python -m ribcage.operations.backup now`, or pick one from `ls -l /backups`.
+   ```
+   sha256sum /backups/<name>
+   gzip -nc /backups/<name> | base64 | wc -l
+   ```
+2. **Print it in parts of 1000 lines,** and paste each part, in order, into one new file, `private/backups/<name>.b64`. `-n` makes gzip give the same output on every run, so the parts join up. Keep going until you reach step 1's line count. If the top of a part has scrolled out of the terminal, print smaller parts.
+   ```
+   gzip -nc /backups/<name> | base64 | sed -n "1,1000p"
+   gzip -nc /backups/<name> | base64 | sed -n "1001,2000p"
+   ```
+3. **Decode it in Git Bash** and check that the checksum matches step 1's:
+   ```
+   base64 -d private/backups/<name>.b64 | gunzip > private/backups/<name>
+   sha256sum private/backups/<name>
+   ```
+4. **Delete the `.b64` file,** then check that the backup opens, reading its row counts. They match the counts the host printed when it took the backup, in `now`'s output or the sidecar's log.
+   ```
+   rm private/backups/<name>.b64
+   .venv/Scripts/python -m ribcage.operations.backup counts private/backups/<name>
+   ```
+
 ## Restore
 
 A backup restores into a fresh stack and is checked by row count. Restoring over a running stack's database is steps 2 to 5.
