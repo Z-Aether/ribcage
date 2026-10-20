@@ -96,7 +96,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - **Phase check:** one server-side mechanism that refuses a post from outside its window and reloads the tab into the current phase. Polling pages reload the same way (#34).
 - **Voter shell:** header (phase page, name menu), footer (attributions, abuse `mailto:`, privacy policy), Welcome shown once, placeholder pages for all five phases (#23, #27, #37).
 - **Admin shell:** the four tabs, opening on the current phase's tab, with the *Voter side ↗ · signed in there as …* line (#28).
-- **Backup download:** a page outside the tabs that serves a backup for a one-time code created in the container's terminal, replacing the runbook's copy-paste route (#54, #68).
+- **Backup download and upload:** a page outside the tabs that serves a backup for a one-time code created in the container's terminal, and takes one back onto the host the same way for a restore, replacing the runbook's copy-paste routes in both directions (#54, #55, #68).
 
 **Deployable state:** people can register and log in, the admin can remove people and move phases, and each phase shows an empty page.
 
