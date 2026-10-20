@@ -1,0 +1,232 @@
+/*
+  Direction C: Peat and bone. Folk horror: soot on old paper, a parish register, a woodcut (#58).
+  Square corners and printer's rules, old-print type, lichen for the hand that acts, woad for wanting a film.
+  Rust only ever ornaments; it never marks a state, so it cannot be mistaken for the veto.
+*/
+
+@font-face {
+  font-family: "IM Fell English";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/im-fell-english/im-fell-english-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IM Fell English";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/im-fell-english/im-fell-english-latin-400-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IM Fell English SC";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/im-fell-english-sc/im-fell-english-sc-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Libre Caslon Text";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/libre-caslon-text/libre-caslon-text-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Libre Caslon Text";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../vendor/libre-caslon-text/libre-caslon-text-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Libre Caslon Text";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/libre-caslon-text/libre-caslon-text-latin-400-italic.woff2") format("woff2");
+}
+
+:root[data-direction="c"] {
+  --ground: #17140f;
+  --ground-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .91 0 0 0 0 .87 0 0 0 0 .79 .1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --ground-repeat: repeat;
+  --surface: #1f1b15;
+  --surface-raised: #26211a;
+  --field: #120f0b;
+  --line: #3a3328;
+  --line-strong: #574d3c;
+  --ink: #ddd3bc;
+  --ink-muted: #ab9f88;
+
+  --accent: #b3c07a;
+  --accent-hover: #c4d090;
+  --accent-ink: #191b0b;
+  --rust: #a65a3c;
+  --link: #bfcb88;
+  --link-hover: #d6dfa8;
+  --focus: rgb(179 192 122 / 0.35);
+  --focus-ring: #b3c07a;
+  --wordmark-ink: var(--ink);
+
+  --font-display: "IM Fell English", Georgia, serif;
+  --font-body: "Libre Caslon Text", Georgia, serif;
+  --font-label: "IM Fell English SC", Georgia, serif;
+  --label-case: lowercase;
+  --label-tracking: 0.06em;
+  --label-weight: 400;
+  --label-size: 0.95em;
+  --voter-text-size: 1rem;
+  --button-font: var(--font-label);
+  --button-case: lowercase;
+  --button-tracking: 0.05em;
+  --button-weight: 400;
+  --ledger-label-size: 0.9rem;
+
+  --voter-radius-card: 2px;
+  --voter-radius-control: 2px;
+  --voter-radius-poster: 0;
+  --admin-radius-card: 0;
+  --admin-radius-control: 2px;
+  --admin-radius-poster: 0;
+  --radius-pill: 2px;
+  --radius-ribbon: 0;
+  --radius-certificate: 0;
+
+  /* Woad for wanting it, heather for rather not, tallow for a watched topic; the veto is cinnabar, not rust. */
+  --score-top-pick: #a4bfe6;
+  --score-top-pick-ink: #0f1a2a;
+  --score-keen: #6f90bd;
+  --score-keen-ink: #0c1522;
+  --score-happy: #425c80;
+  --score-happy-ink: #e6eef9;
+  --score-dont-mind: #3f392e;
+  --score-dont-mind-ink: #e2d8c3;
+  --score-rather-not: #b590ad;
+  --score-rather-not-ink: #22141f;
+  --veto: #ec6a55;
+  --veto-ink: #f39a88;
+  --matched-ring: #e5b45c;
+  --seen-it-filter: grayscale(1) sepia(0.3) brightness(0.5);
+
+  /* Plant dyes on cloth: madder, woad, weld, walnut, oak gall, heather, lichen, peat. */
+  --fill-0: #4a2a22;
+  --fill-1: #233247;
+  --fill-2: #3e3c1f;
+  --fill-3: #3a2c1f;
+  --fill-4: #2c2c2a;
+  --fill-5: #3a2a38;
+  --fill-6: #2b3626;
+  --fill-7: #33251a;
+  --title-card-ink: #e8dfca;
+  --title-card-ink-muted: rgb(232 223 202 / 0.7);
+
+  --run-ground: #0f0d09;
+  --run-surface: #19160f;
+  --run-surface-raised: #201c14;
+  --run-line: #2e281f;
+  --run-line-strong: #463d2f;
+  --run-ink: #d8cdb6;
+  --run-ink-muted: #a3977f;
+  --run-now: #b3c07a;
+  --run-now-glow: 0 0 0 1px #b3c07a, inset 0 0 0 4px #19160f, inset 0 0 0 5px rgb(179 192 122 / 0.5);
+}
+
+[data-direction="c"] .wordmark {
+  letter-spacing: 0.02em;
+}
+[data-direction="c"] .wordmark::before,
+[data-direction="c"] .wordmark::after {
+  content: "❧";
+  display: inline-block;
+  margin: 0 0.3em;
+  color: var(--rust);
+  font-size: 0.6em;
+  vertical-align: 0.2em;
+}
+[data-direction="c"] .wordmark::before {
+  transform: scaleX(-1);
+}
+
+[data-direction="c"] [data-skin] button:not(.film-card__toggle) {
+  font-size: 1.1em;
+}
+[data-direction="c"] [data-skin="admin"] button:not(.film-card__toggle) {
+  font-size: 1rem;
+}
+
+[data-direction="c"] [data-skin] :is(h1, h2, h3) {
+  font-weight: 400;
+}
+
+/* A plate in a book: a double rule round the card and a hairline round the poster. */
+[data-direction="c"] .film-card {
+  box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--line);
+}
+[data-direction="c"] .film-card.is-open {
+  box-shadow: inset 0 0 0 3px var(--surface-raised), inset 0 0 0 4px var(--line-strong);
+}
+[data-direction="c"] [data-skin="admin"] .film-card {
+  box-shadow: none;
+}
+[data-direction="c"] .film-card__poster {
+  outline: 1px solid var(--line-strong);
+  outline-offset: 3px;
+}
+[data-direction="c"] .film-card__head {
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--line);
+}
+[data-direction="c"] .film-card__year {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.8em;
+}
+
+[data-direction="c"] .note__text {
+  font-style: italic;
+}
+[data-direction="c"] [data-skin] .note {
+  border-left-width: 1px;
+}
+[data-direction="c"] [data-skin] .note--pitch {
+  border-left: 3px double var(--accent);
+  padding-left: 0.9em;
+}
+[data-direction="c"] .note--pitch .note__text::before {
+  content: "¶ ";
+  font-style: normal;
+  color: var(--rust);
+}
+[data-direction="c"] .note__author {
+  font-family: var(--font-label);
+  font-size: 1em;
+}
+
+[data-direction="c"] .score {
+  font-family: var(--font-label);
+  font-weight: 400;
+  font-size: 1.05em;
+}
+[data-direction="c"] .score b {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85em;
+}
+
+/* A title page: the title framed by a printer's rule inside the fill. */
+[data-direction="c"] .title-card {
+  outline: 1px solid rgb(232 223 202 / 0.28);
+  outline-offset: -5px;
+}
+[data-direction="c"] .title-card__title {
+  font-size: clamp(0.6rem, 16cqi, 2.4rem);
+}
+[data-direction="c"] .title-card__year {
+  font-family: var(--font-label);
+}
+
+[data-direction="c"] .certificate {
+  font-family: var(--font-label);
+  font-size: 0.9em;
+}

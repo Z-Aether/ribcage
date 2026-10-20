@@ -1,0 +1,163 @@
+/*
+  Direction A: Neon orange. A sign in a wet street, an 80s slasher title card (#58).
+  The neon is an accent, not the wallpaper: only the wordmark, the pitch bar and RUN's now playing glow.
+*/
+
+@font-face {
+  font-family: "Tilt Neon";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/tilt-neon/tilt-neon-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Barlow";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/barlow/barlow-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Barlow";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../vendor/barlow/barlow-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../vendor/barlow-condensed/barlow-condensed-latin-600-normal.woff2") format("woff2");
+}
+
+:root[data-direction="a"] {
+  --ground: #141217;
+  --ground-texture: radial-gradient(70rem 26rem at 50% -8rem, rgb(255 143 74 / 0.07), transparent 70%);
+  --surface: #1c1920;
+  --surface-raised: #232027;
+  --field: #100e13;
+  --line: #2f2a35;
+  --line-strong: #463f4d;
+  --ink: #e4dacd;
+  --ink-muted: #a69c94;
+
+  --accent: #ff8f4a;
+  --accent-hover: #ffa26a;
+  --accent-ink: #1f0f05;
+  --glow: rgb(255 128 56 / 0.5);
+  --link: #ffa66e;
+  --link-hover: #ffc196;
+  --focus: rgb(255 143 74 / 0.35);
+  --focus-ring: #ff8f4a;
+
+  --font-display: "Tilt Neon", "Barlow", sans-serif;
+  --font-body: "Barlow", sans-serif;
+  --font-label: "Barlow Condensed", "Barlow", sans-serif;
+  --display-tracking: 0.01em;
+  --label-tracking: 0.1em;
+  --label-size: 0.8em;
+
+  --voter-radius-card: 16px;
+  --voter-radius-control: 12px;
+  --voter-radius-button: 999px;
+  --voter-button-padding: 1.4rem;
+  --voter-radius-poster: 8px;
+  --admin-radius-card: 8px;
+  --admin-radius-control: 6px;
+  --admin-radius-poster: 3px;
+  --radius-pill: 999px;
+
+  /* Cool against the orange: mint for wanting it, lavender for rather not, ice for a watched topic. */
+  --score-top-pick: #7fe0b2;
+  --score-top-pick-ink: #0f241a;
+  --score-keen: #4aa985;
+  --score-keen-ink: #0c1f17;
+  --score-happy: #2d6553;
+  --score-happy-ink: #e4f5ec;
+  --score-dont-mind: #3c3743;
+  --score-dont-mind-ink: #e2d9d2;
+  --score-rather-not: #a28fd8;
+  --score-rather-not-ink: #17112a;
+  --veto: #ff6b86;
+  --veto-ink: #ff9aac;
+  --matched-ring: #79d6ff;
+  --seen-it-filter: grayscale(1) brightness(0.5);
+
+  /* Unlit tubes: deep, dull versions of sign colours. */
+  --fill-0: #22343a;
+  --fill-1: #3a2230;
+  --fill-2: #2a2840;
+  --fill-3: #2c3624;
+  --fill-4: #40291f;
+  --fill-5: #33233f;
+  --fill-6: #1f2f40;
+  --fill-7: #3a3520;
+  --title-card-ink: #f0e3d4;
+  --title-card-ink-muted: rgb(240 227 212 / 0.7);
+
+  --run-ground: #0d0c10;
+  --run-surface: #17151b;
+  --run-surface-raised: #1e1b23;
+  --run-line: #2a2630;
+  --run-line-strong: #3b3542;
+  --run-ink: #ddd3c7;
+  --run-ink-muted: #9f968f;
+  --run-now: #ff8f4a;
+  --run-now-glow: 0 0 0 1px #ff8f4a, 0 0 18px rgb(255 128 56 / 0.35);
+}
+
+[data-direction="a"] .wordmark {
+  color: var(--accent);
+  text-shadow: 0 0 0.3em var(--glow), 0 0 0.05em rgb(255 200 160 / 0.6);
+}
+
+[data-direction="a"] [data-skin] :is(h1, h2) {
+  font-weight: 400;
+}
+
+[data-direction="a"] .film-card {
+  border-color: var(--line);
+}
+[data-direction="a"] .film-card.is-open {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+[data-direction="a"] .film-card__title {
+  font-family: var(--font-display);
+}
+[data-direction="a"] .film-card .poster {
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+/* The pitch bar is a lit tube: rounded ends and a soft glow, the card's one bright thing. */
+[data-direction="a"] [data-skin] .note--pitch {
+  position: relative;
+  border-left-color: transparent;
+}
+[data-direction="a"] [data-skin] .note--pitch::before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 0.2em;
+  bottom: 0.2em;
+  width: 3px;
+  border-radius: 3px;
+  background-color: var(--accent);
+  box-shadow: 0 0 8px var(--glow);
+}
+[data-direction="a"] [data-skin="admin"] .note--pitch::before {
+  box-shadow: none;
+}
+
+[data-direction="a"] .title-card {
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07);
+}
+[data-direction="a"] .title-card__title {
+  letter-spacing: 0.01em;
+}
+
+[data-direction="a"] .certificate {
+  font-family: var(--font-label);
+  letter-spacing: 0.06em;
+}

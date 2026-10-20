@@ -1,0 +1,18 @@
+{# The film card over plain data, a FilmCard (#21, #58). Opens in place; only the phase bar differs between surfaces. #}
+<article class="film-card{% if expanded %} is-open{% endif %}" data-film-card>
+  <div class="film-card__poster">{% include "components/poster.html" with film=card.film size="card" %}</div>
+  <div class="film-card__body">
+    <div class="film-card__head">
+      <h3 class="film-card__title"><button type="button" class="film-card__toggle" aria-expanded="{% if expanded %}true{% else %}false{% endif %}">{{ card.film.title }}</button>{% if card.film.year %} <span class="film-card__year">{{ card.film.year }}</span>{% endif %}</h3>
+      <p class="film-card__runtime">{% if card.film.runtime %}<span class="runtime__value">{{ card.film.runtime }}</span>&nbsp;min{% else %}No runtime{% endif %} <span class="runtime__source">{% if card.film.runtime_source == "tmdb" %}TMDB{% else %}by hand{% endif %}</span> <span class="runtime__pencil" aria-hidden="true">✎</span></p>
+    </div>
+    {% if card.film.original_title and card.film.original_title != card.film.title %}<p class="film-card__original"><span class="film-card__label">Original title</span> {{ card.film.original_title }}</p>{% endif %}
+    <p class="film-card__meta">{% if card.film.directors %}<span>{{ card.film.directors|join:", " }}</span>{% endif %}{% if card.film.certificate %}<span><span class="certificate">{{ card.film.certificate }}</span></span>{% endif %}{% if card.film.trailer_key %}<span><a href="https://www.youtube.com/watch?v={{ card.film.trailer_key }}" target="_blank" rel="noopener">trailer&nbsp;↗</a></span>{% endif %}{% if card.film.tmdb_id %}<span><a href="https://www.themoviedb.org/movie/{{ card.film.tmdb_id }}" target="_blank" rel="noopener">TMDB&nbsp;↗</a></span>{% endif %}</p>
+    <p class="film-card__by"><span class="film-card__label">suggested by</span> <span class="film-card__suggester{% if card.suggester_removed %} is-removed{% endif %}">{{ card.suggester }}</span>{% if card.suggester_removed %} <span class="removed-tag">removed</span>{% endif %}</p>
+    <ul class="film-card__notes">
+      {% if card.pitch %}{% include "components/note.html" with text=card.pitch author=card.suggester pitch=True %}{% endif %}
+      {% for note in card.notes %}{% include "components/note.html" with text=note.text author=note.author pitch=False %}{% endfor %}
+    </ul>
+    <div class="film-card__phase-bar" data-phase-bar>{% if phase_bar %}{% include phase_bar %}{% endif %}</div>
+  </div>
+</article>

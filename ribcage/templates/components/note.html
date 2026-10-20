@@ -1,0 +1,1 @@
+{% load films %}{% with short=text|trimmed_note %}<li class="note{% if pitch %} note--pitch{% endif %}"><p class="note__text">{% if short == text %}{{ text }}{% else %}<span class="note__trimmed">{{ short }}</span><span class="note__full">{{ text }}</span>{% endif %}</p><span class="note__author">{{ author }}</span></li>{% endwith %}
