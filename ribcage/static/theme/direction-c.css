@@ -71,7 +71,6 @@
   --focus: rgb(169 173 134 / 0.35);
   --focus-ring: #a9ad86;
   --wordmark-ink: var(--ink);
-  --print-wash: sepia(0.2) saturate(0.78) contrast(0.94) brightness(0.94);
 
   --font-display: "IM Fell English", Georgia, serif;
   --font-body: "Libre Caslon Text", Georgia, serif;
@@ -229,14 +228,6 @@
 [data-direction="c"] .certificate {
   font-family: var(--font-label);
   font-size: 0.9em;
-}
-
-/* Posters print a little faded, as if they had sat in the window. */
-[data-direction="c"] .poster {
-  filter: var(--print-wash);
-}
-[data-direction="c"] .is-seen-it .poster {
-  filter: var(--seen-it-filter);
 }
 
 /* A slow, faint fog drifts behind everything. Admin pages keep a plain ground, so ledgers stay quiet. */
