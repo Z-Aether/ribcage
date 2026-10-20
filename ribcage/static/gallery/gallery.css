@@ -1,0 +1,294 @@
+/* The gallery's own layout. Everything a later surface reuses lives in theme/, not here (#58). */
+
+body > main:has(.gallery-skin) {
+  max-width: 1180px;
+  padding-bottom: 6rem;
+}
+
+.gallery-head {
+  margin-bottom: 2.5rem;
+}
+.gallery-head h1 {
+  margin: 0.4rem 0 0.6rem;
+}
+.gallery-head__about {
+  max-width: 46rem;
+  color: var(--ink-muted);
+}
+.gallery-nav {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+
+.gallery-skin {
+  margin: 0 -1.5rem 3rem;
+  padding: 2rem 1.5rem 2.5rem;
+  border-top: 1px solid var(--line-strong);
+}
+[data-skin] .gallery-skin__name {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  font-weight: var(--label-weight, 600);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+[data-skin] .gallery-label {
+  margin: 2.5rem 0 1rem;
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  font-weight: var(--label-weight, 600);
+  letter-spacing: var(--label-tracking, 0.08em);
+  text-transform: var(--label-case, uppercase);
+  color: var(--ink-muted);
+}
+.gallery-note {
+  margin: 1.5rem 0 0.75rem;
+  color: var(--ink-muted);
+  font-size: 0.9em;
+}
+
+/* The empty phase-bar slot, outlined so its place on the card can be seen. */
+.gallery-skin .film-card__phase-bar:empty {
+  display: block;
+  min-height: 2.6rem;
+  margin-top: 1rem;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-control);
+}
+
+/* ---------- Specimen ---------- */
+
+.specimen {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+  margin-bottom: 1.5rem;
+}
+.specimen__type > :first-child {
+  margin-top: 0;
+}
+.specimen__type :is(h1, h2, h3) {
+  margin: 0 0 0.6rem;
+}
+.specimen__type p {
+  max-width: 36rem;
+}
+.specimen__small {
+  font-size: 0.85em;
+  color: var(--ink-muted);
+}
+.specimen__controls label {
+  display: block;
+}
+.specimen__check {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+}
+.specimen__inline {
+  display: flex;
+  gap: 0.75rem;
+}
+.specimen__inline label {
+  flex: 1;
+}
+.specimen__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+.specimen__buttons button {
+  width: auto;
+  margin: 0;
+}
+
+/* ---------- State colours and tiles ---------- */
+
+.states {
+  display: grid;
+  gap: 1.5rem;
+}
+[data-skin] .score-scale,
+[data-skin] .tiles,
+[data-skin] .poster-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+[data-skin] .score-scale li,
+[data-skin] .tiles li,
+[data-skin] .poster-row li {
+  margin: 0;
+  list-style: none;
+}
+[data-skin] .tiles {
+  gap: 1.25rem;
+}
+.tile {
+  display: grid;
+  gap: 0.3rem;
+  width: 7.5rem;
+  align-content: start;
+}
+.tile__poster {
+  position: relative;
+  display: block;
+}
+.tile__title {
+  font-weight: 600;
+  font-size: 0.9em;
+  line-height: 1.25;
+}
+.tile__caption {
+  font-size: 0.8em;
+  color: var(--ink-muted);
+}
+.tile.is-seen-it .tile__title {
+  color: var(--ink-muted);
+}
+
+[data-skin] .poster-row {
+  gap: 1rem;
+}
+.poster-row li {
+  display: grid;
+  gap: 0.35rem;
+  width: 7.5rem;
+  align-content: start;
+}
+.poster-row--title-cards li {
+  width: 6rem;
+}
+
+@media (max-width: 600px) {
+  .gallery-skin {
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+  }
+  .specimen {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+  .tile,
+  .poster-row li {
+    width: calc((100% - 2rem) / 3);
+  }
+  .poster-row--title-cards li {
+    width: calc((100% - 3rem) / 4);
+  }
+  [data-skin] .tiles {
+    gap: 1rem;
+  }
+  .ledger__directors,
+  .ledger th:nth-child(4),
+  .ledger td:nth-child(4) {
+    display: none;
+  }
+  [data-skin] .ledger .ledger__detail td {
+    padding-left: 0.6rem;
+  }
+}
+
+/* ---------- The RUN evening sample ---------- */
+
+.run-sample {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 390px);
+  gap: 2.5rem;
+  align-items: start;
+}
+.evening {
+  position: relative;
+  height: 720px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background-color: var(--ground);
+  overflow: hidden;
+}
+.evening__box {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  top: calc(var(--offset) / var(--evening-minutes) * 100% + 2px);
+  height: calc(var(--length) / var(--evening-minutes) * 100% - 4px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  background-color: var(--surface);
+  overflow: hidden;
+}
+.evening__box:not(.evening__box--film) {
+  background-color: transparent;
+  border-style: dashed;
+}
+.evening__box.is-past {
+  opacity: 0.45;
+}
+.evening__box.is-now {
+  border-color: transparent;
+  background-color: var(--surface-raised);
+  box-shadow: var(--run-now-glow);
+}
+.evening__kicker {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: var(--label-weight, 600);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--run-now);
+}
+.evening__title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+.evening__box.is-now .evening__title {
+  font-size: 1.5rem;
+}
+.evening__time {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.evening__progress {
+  position: relative;
+  height: 4px;
+  margin-top: 0.5rem;
+  border-radius: 2px;
+  background-color: var(--line);
+}
+.evening__progress::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc((var(--length) - var(--left)) / var(--length) * 100%);
+  border-radius: 2px;
+  background-color: var(--run-now);
+}
+.evening__now {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--evening-now) / var(--evening-minutes) * 100%);
+  height: 2px;
+  background-color: var(--run-now);
+  opacity: 0.8;
+}
+
+@media (max-width: 760px) {
+  .run-sample {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

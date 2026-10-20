@@ -1,0 +1,8 @@
+{% load static %}{# The switch between #58's theme directions, shown with DEBUG on; the pick deletes it. #}
+<link rel="stylesheet" href="{% static 'gallery/direction-switch.css' %}">
+<nav class="direction-switch" aria-label="Theme direction" data-direction-switch>
+  <button type="button" data-direction-step="-1" aria-label="Previous direction">←</button>
+  {% for key, name in theme_directions.items %}<a href="?direction={{ key }}" data-direction-choice="{{ key }}"{% if key == theme_direction %} aria-current="true"{% endif %}><b>{{ key|upper }}</b> {{ name }}</a>{% endfor %}
+  <button type="button" data-direction-step="1" aria-label="Next direction">→</button>
+</nav>
+<script src="{% static 'gallery/direction-switch.js' %}" defer></script>

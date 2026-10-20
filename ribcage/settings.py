@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "ribcage.films",
     "ribcage.hello",
     "ribcage.seeding",
+    "ribcage.gallery",
 ]
 
 MIDDLEWARE = [
@@ -68,6 +69,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
+                "ribcage.gallery.directions.theme_direction",
             ],
         },
     },
