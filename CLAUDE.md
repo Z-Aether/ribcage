@@ -7,9 +7,10 @@ A web app a group of friends uses to plan and run one film marathon. It is rebui
 ## Finding things
 
 - **Words** mean what `GLOSSARY.md` says they mean. Use its terms in code, tests and tickets, identifiers included.
-- **What** gets built is in `docs/design.md`, and **in what order** is in `docs/milestones.md`. Both are condensed from the tickets.
-- **Work to do** lives on milestone tickets: one parent per milestone, its implementation tickets as sub-issues wired with native blocking edges. They are kept apart from the map.
-- **Why** something is the way it is: look up the ticket cited beside it (`#n`, read with `gh issue view <n> --comments`). The ticket is the decision of record, and its last dated amendment wins. Map #4 links every design ticket.
+- **What** gets built is in `docs/design.md`, and **in what order** is in `docs/milestones.md`. They are the live docs: a decision made during the build changes their lines in the same commit, citing the ticket that made it.
+- **Work to do** lives on milestone tickets: one parent per milestone, all ten created up front, its implementation tickets as sub-issues wired with native blocking edges. Detail decided ahead of its milestone goes on that milestone's parent, or on a sub-issue opened early. See `docs/agents/issue-tracker.md`.
+- **Why** something is the way it is: look up the ticket cited beside it (`#n`, read with `gh issue view <n> --comments`). The ticket is the decision of record, and its last dated amendment wins.
+- **The design record** is map #4 and the design tickets it links. It is frozen: read it for the reasoning behind a design decision, and record anything that supersedes it on a milestone ticket and in the live docs.
 - **Prototypes and research write-ups** live on branches: `prototype/<screen>` and `research/<topic>`. The ticket that produced one names its branch. Read them with `git show <branch>:<path>`.
 
 ## Layout

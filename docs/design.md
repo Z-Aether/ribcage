@@ -1,9 +1,9 @@
 # Ribcage — design overview
 
-The whole shape of the app in one place: why it exists, the principles it is built on, the workflow it implements, and every surface and module that workflow needs. Not an implementation spec. Condensed from the wayfinder map ([#4](https://github.com/Z-Aether/ribcage/issues/4)) and its closed sub-tickets as of 2026-10-11.
+The whole shape of the app in one place: why it exists, the principles it is built on, the workflow it implements, and every surface and module that workflow needs. Not an implementation spec. Condensed from the wayfinder map ([#4](https://github.com/Z-Aether/ribcage/issues/4)) and its closed sub-tickets on 2026-10-11, and kept current since: a decision made during the build changes its line here, citing the milestone ticket that made it.
 
 - Terms are used as defined in [`GLOSSARY.md`](../GLOSSARY.md). Read it alongside this.
-- Ticket numbers (#n) point at the decision of record. A ticket's last dated amendment comment overrides the text above it. Where this doc and a ticket disagree, the ticket wins; flag the conflict.
+- Ticket numbers (#n) point at the decision of record. A ticket's last dated amendment comment overrides the text above it. Where this doc and a ticket disagree, the newer of the two wins; flag the conflict.
 
 ---
 

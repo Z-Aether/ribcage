@@ -33,9 +33,19 @@ Create a GitHub issue.
 
 Run `gh issue view <number> --comments`.
 
+## Milestone operations
+
+The build runs on milestone tickets, M1 to M10, as `docs/milestones.md` schedules them.
+
+- **Parent**: one unlabelled issue per milestone, titled `M<n> — <name>`, holding that milestone's scope, deployable state, gate checklist and notes. All ten exist; `docs/milestones.md`'s table lists their numbers.
+- **Implementation ticket**: a sub-issue of its parent (`gh api --method POST repos/Z-Aether/ribcage/issues/<parent>/sub_issues -F sub_issue_id=<child-db-id>`, the same database id blocking uses), labelled with its triage role and wired with native blocking edges as below.
+- **Recording a decision made during the build**: a dated comment on the milestone ticket where it came up, then, in the same commit as any code it changes, the lines of `docs/design.md` and `docs/milestones.md` it touches, citing that ticket.
+- **Detail for a later milestone**: a note on that milestone's parent, or a sub-issue opened early when it is already a whole ticket.
+- **The design record** (map #4 and its tickets) stays as design closed it. A decision that supersedes one of its tickets is recorded as above, on the milestone ticket.
+
 ## Wayfinding operations
 
-Used by `/wayfinder`. The **map** is a single issue with **child** issues as tickets.
+Used by `/wayfinder`. The **map** is a single issue with **child** issues as tickets. Map #4 is this repo's finished design map; these operations apply to a new one.
 
 - **Map**: a single issue labelled `wayfinder:map`, holding the Notes / Decisions-so-far / Fog body. `gh issue create --label wayfinder:map`.
 - **Child ticket**: an issue linked to the map as a GitHub sub-issue (`gh api` on the sub-issues endpoint). Where sub-issues aren't enabled, add the child to a task list in the map body and put `Part of #<map>` at the top of the child body. Labels: `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`). Once claimed, the ticket is assigned to the driving dev.

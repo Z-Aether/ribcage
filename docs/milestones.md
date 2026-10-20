@@ -3,7 +3,8 @@
 The big-picture build schedule: ten milestones, each a vertical slice that is deployed, reviewed and approved by the dev before the next one starts. Read alongside [`design.md`](design.md), which says *what* is built; this says *in what order*.
 
 - Terms are used as defined in [`GLOSSARY.md`](../GLOSSARY.md). Ticket numbers (#n) point at the decision of record.
-- Where this doc and a ticket or `design.md` disagree, the ticket wins; flag the conflict.
+- Where this doc and a ticket or `design.md` disagree, the newest of them wins; flag the conflict.
+- Each milestone's parent ticket is in the table below. A milestone's section here is the condensed scope; its parent carries the detail.
 
 ---
 
@@ -22,18 +23,18 @@ The big-picture build schedule: ten milestones, each a vertical slice that is de
 
 ### At a glance
 
-| # | Milestone | Ships | Tickets |
-|---|---|---|---|
-| M1 | Walking skeleton on the real host | Hello World, deployed, backed up, restorable | ~14 |
-| M2 | Theme and component kit | The one theme, the shared poster and film card on fixture data | 3 |
-| M3 | Identity, phases and the two shells | Register, log in, roster, phase moves, empty phase pages | ~20 |
-| M4 | SUGGEST and APPROVE | The pool, suggested by voters and curated by the admin | ~20 |
-| M5 | Trigger warnings | DTDD data, watched lists, matched topics | ~18 |
-| M6 | VOTE | The ballot, done markers, approval during VOTE | ~18 |
-| M7 | The timetable, without SOLVE | PICK's Timetable tab, hand-built slates, readouts | ~20 |
-| M8 | The reveal and the evening | Reveal, RUN, publishing | ~15 |
-| M9 | SOLVE and Compare | The solver, knobs, batch, shortlist, Compare tab | ~20 |
-| M10 | Rehearsal and launch | The gating end-to-end rehearsal on the real deployment | ~12 |
+| # | Milestone | Ships | Tickets | Parent |
+|---|---|---|---|---|
+| M1 | Walking skeleton on the real host | Hello World, deployed, backed up, restorable | ~14 | #42 |
+| M2 | Theme and component kit | The one theme, the shared poster and film card on fixture data | 3 | #56 |
+| M3 | Identity, phases and the two shells | Register, log in, roster, phase moves, empty phase pages | ~20 | #60 |
+| M4 | SUGGEST and APPROVE | The pool, suggested by voters and curated by the admin | ~20 | #61 |
+| M5 | Trigger warnings | DTDD data, watched lists, matched topics | ~18 | #62 |
+| M6 | VOTE | The ballot, done markers, approval during VOTE | ~18 | #63 |
+| M7 | The timetable, without SOLVE | PICK's Timetable tab, hand-built slates, readouts | ~20 | #64 |
+| M8 | The reveal and the evening | Reveal, RUN, publishing | ~15 | #65 |
+| M9 | SOLVE and Compare | The solver, knobs, batch, shortlist, Compare tab | ~20 | #66 |
+| M10 | Rehearsal and launch | The gating end-to-end rehearsal on the real deployment | ~12 | #67 |
 
 ```
 M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
@@ -213,7 +214,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 
 **Scope**
 - A copy pass over every surface, and the final privacy policy (#16, #39).
-- A review of the trap catalogue and invariant tests against the map.
+- A review of the trap catalogue and invariant tests against `design.md`.
 - The pseudonymised score-matrix extraction, scripted for shell access at the reveal (#25, #30).
 - **The rehearsal on the real deployment:** ten concurrent identities through every phase, RUN with the anchor in the past, a live restore, then a teardown followed by a rebuild (#25, #30).
 - Fixes found by the rehearsal.
