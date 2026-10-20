@@ -220,7 +220,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 ### Admin console
 
-**Shell:** four tabs (**Phase · Films · Pick · Roster**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*. The console opens on the tab for the current phase and stays put when the phase moves. There is no Django admin; break-glass is shell access on the host (#16, #28).
+**Shell:** four tabs (**Phase · Films · Pick · Roster**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*. The console opens on the tab for the current phase and stays put when the phase moves. There is no Django admin; break-glass is shell access on the host (#16, #28). One page sits outside the tabs: a backup download that serves the file only for a one-time code created in the container's terminal, so the admin password alone never yields the database (#68).
 
 | Tab | Contents |
 |---|---|
@@ -252,7 +252,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **Readouts** | Standing, tier, swap, film points, slate sum, slate order, set readouts. Shared by Compare and Timetable. |
 | **Timetable engine** | Boxes, anchor, ripple modes and push, flexible squeeze, arrange utilities, preview, overlap, presence strips, shared time, elapsed time, now playing. Pure, and computed on the server. |
 | **Reveal** | The score matrix, sorts, and the reopened-VOTE line read from the phase history. |
-| **Operations** | One container behind the host's proxy. SQLite on a volume. A backup sidecar taking a backup each night and keeping the 7 newest, with a row-count check. Configuration only through the environment. Teardown. The app reads nothing the proxy forwards and takes every request as HTTPS. HSTS. Access logs without client addresses (#16, #18, #30, #31). |
+| **Operations** | One container behind the host's proxy. SQLite on a volume. A backup sidecar taking a backup each night and keeping the 7 newest, with a row-count check. A backup pulled through the admin side with a one-time code from the container's terminal (#68). Configuration only through the environment. Teardown. The app reads nothing the proxy forwards and takes every request as HTTPS. HSTS. Access logs without client addresses (#16, #18, #30, #31). |
 
 **Stored vs derived.** The database stores only what is true in every phase: voters, suggestions with their film metadata, runtime and approval, notes, ballot entries, done markers, watched lists, DTDD snapshots and vocabulary, phase history, the timetable (anchor, budget, boxes) and the shortlist. Everything else is computed from it on demand: the phase, the reveal state, the candidates, the floor set, standings, readouts and now playing (#26).
 
@@ -269,7 +269,7 @@ Each was considered and ruled out. Returning one needs a new decision.
 - **Hardcoded referees.** No approval queue, no veto caps, no login lockout, no admin-as-voter flag, no Django admin (#8, #10, #16).
 - **Official metadata and extras.** No official synopsis or genres, no genre-mix readout, no embedded trailer, no admin poster link, no translation (#21, #24, #38).
 - **Visibility.** No display of how far a voter has got during VOTE beyond done. No aggregate of watched lists for anyone (#15, #20).
-- **Edge-case surfaces.** No renaming, no TV-series search (*Add it by hand* covers it), no admin backup button (#15, #18, #37).
+- **Edge-case surfaces.** No renaming, no TV-series search (*Add it by hand* covers it), no admin backup button: without the shell's code there is nothing to click (#15, #18, #37, #68).
 
 **Accepted risks**, named rather than solved:
 - Reopening VOTE leaves some voters having seen scores, so the re-vote is unevenly anchored.
