@@ -50,8 +50,8 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 
 **Scope**
 - Django 6.1 project on Python 3.14, the custom `Voter` user model in place from the first migration (#26), settings read only from the environment, judgement constants as named env-set values (#25).
-- A Hello World page plus one form POST, so CSRF and `X-Forwarded-Proto` are proven through the real proxy (#31).
-- HSTS, access logs without client addresses, trusting only the forwarded-protocol header (#16, #31).
+- A Hello World page plus one form POST, so CSRF and HTTPS are proven through the real proxy (#31).
+- HSTS, access logs without client addresses, reading nothing the proxy forwards (#16, #31, #54).
 - Image: gunicorn, WhiteNoise, vendored static files, an allowlist `.dockerignore`, a pinned tag. Built locally, pushed to the GitLab registry, run as a Komodo stack (#40).
 - SQLite on a volume. Backup sidecar taking a backup each night and keeping the 7 newest; the automated row-count test (#25, #30).
 - The public privacy policy page, rendered from its file (#16). Wording is finished in M10.

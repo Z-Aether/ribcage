@@ -34,7 +34,8 @@ def a_page_with_its_csrf_token(port):
 
 def post_form(port, fields, cookie=None, extra_headers=None):
     body = "&".join(f"{name}={value}" for name, value in fields.items())
-    headers = {"Content-Type": "application/x-www-form-urlencoded", "Origin": f"http://127.0.0.1:{port}"}
+    # As through the proxy, where the page is https: the image runs with DEBUG off and takes every request as HTTPS (#54).
+    headers = {"Content-Type": "application/x-www-form-urlencoded", "Origin": f"https://127.0.0.1:{port}"}
     headers.update(extra_headers or {})
     if cookie:
         headers["Cookie"] = cookie

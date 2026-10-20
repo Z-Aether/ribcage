@@ -1,6 +1,6 @@
 # Verifying in a browser
 
-How an agent checks a page by driving the seeded local instance with Playwright over MCP (#25). The walk shows what is in the DOM, what the console reports and how the layout holds at desktop width and at 390 px. It is blind to the proxy: CSRF and `X-Forwarded-Proto` failures show only on the real deployment (#16, #25).
+How an agent checks a page by driving the seeded local instance with Playwright over MCP (#25). The walk shows what is in the DOM, what the console reports and how the layout holds at desktop width and at 390 px. It is blind to the proxy: with DEBUG on, the app takes requests as plain HTTP, so CSRF and HSTS failures show only on the real deployment (#16, #25, #54).
 
 ## Before you start
 

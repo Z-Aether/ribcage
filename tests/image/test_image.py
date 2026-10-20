@@ -90,6 +90,14 @@ def test_the_hello_world_page_is_served(container):
     assert "Hello World" in page
 
 
+def test_a_plain_request_gets_hsts_as_the_image_takes_every_request_as_https(container):
+    _, port = container
+
+    _, headers, _ = fetch(port, "GET", "/", {"X-Forwarded-Proto": "http"})
+
+    assert headers["Strict-Transport-Security"] == "max-age=31536000; includeSubDomains"
+
+
 def test_static_files_are_collected_and_served_by_whitenoise(container):
     _, port = container
     stylesheet = re.search(r'href="(/static/[^"]+\.css)"', fetch(port, "GET", "/")[2])[1]

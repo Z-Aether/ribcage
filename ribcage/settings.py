@@ -14,8 +14,8 @@ ADMIN_PASSWORD = environment.required("ADMIN_PASSWORD")
 TMDB_API_KEY = environment.required("TMDB_API_KEY")
 DTDD_API_KEY = environment.required("DTDD_API_KEY")
 
-# Trusted although the host's LAN and VPN could forge it past the proxy: that only affects their own requests (#31, #54).
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# Nothing forwarded by the proxy is read: outside DEBUG, EveryRequestIsHttps sets the scheme (#31, #54).
+SECURE_PROXY_SSL_HEADER = None
 USE_X_FORWARDED_HOST = False
 USE_X_FORWARDED_PORT = False
 SECURE_HSTS_SECONDS = 365 * 24 * 60 * 60
@@ -24,7 +24,7 @@ SECURE_HSTS_PRELOAD = False
 SECURE_SSL_REDIRECT = False
 # The proxy redirects to https, and preload would commit the host's apex domain, so both warnings are decided (#16).
 SILENCED_SYSTEM_CHECKS = ["security.W008", "security.W021"]
-# Secure even without the header; over local http only Chromium and Firefox keep them, at localhost or 127.0.0.1 (#31).
+# Secure with DEBUG on or off; over local http only Chromium and Firefox keep them, at localhost or 127.0.0.1 (#31).
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "ribcage.https.EveryRequestIsHttps",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

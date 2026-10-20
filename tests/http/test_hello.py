@@ -31,7 +31,10 @@ def test_a_post_with_the_pages_csrf_token_is_accepted(db):
     browser = Client(enforce_csrf_checks=True)
     token = browser.get("/").context["csrf_token"]
 
-    response = browser.post("/", {"text": "Genuine", "csrfmiddlewaretoken": token})
+    # As a browser posts it: outside DEBUG the request is https, so CSRF wants a same-origin Origin (#54).
+    response = browser.post(
+        "/", {"text": "Genuine", "csrfmiddlewaretoken": token}, secure=True, headers={"origin": "https://testserver"}
+    )
 
     assert response.status_code == 302
 
