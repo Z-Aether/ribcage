@@ -1,14 +1,15 @@
 /*
   Direction B: Pumpkin and aubergine. The classic Halloween pair, warm and cosy: a lantern in a dark kitchen (#58).
-  Plump shapes, a soft serif with a wonky italic for the group's own words, and one candle's worth of glow in the ground.
+  Round 2: more play. A bouncy spooky display face, hand-cut shapes, a flickering candle on the pitch,
+  a bat, a dangling spider and spider-silk dividers. Admin ledgers stay plain and dense.
 */
 
 @font-face {
-  font-family: "Fraunces";
+  font-family: "Mystery Quest";
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   font-display: swap;
-  src: url("../vendor/fraunces/fraunces-latin-600-normal.woff2") format("woff2");
+  src: url("../vendor/mystery-quest/mystery-quest-latin-400-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Fraunces";
@@ -34,7 +35,7 @@
 
 :root[data-direction="b"] {
   --ground: #1b1420;
-  --ground-texture: radial-gradient(60rem 36rem at 12% -12rem, rgb(239 138 63 / 0.09), transparent 65%);
+  --ground-texture: radial-gradient(60rem 36rem at 12% -12rem, rgb(239 138 63 / 0.1), transparent 65%);
   --surface: #241b2b;
   --surface-raised: #2c2134;
   --field: #160f1a;
@@ -47,31 +48,34 @@
   --accent-hover: #f6a062;
   --accent-ink: #2a1205;
   --plum: #9a74c8;
+  --candle: rgb(255 170 80 / 0.55);
   --link: #c9a6f0;
   --link-hover: #ddc4f7;
   --focus: rgb(201 166 240 / 0.35);
   --focus-ring: #c9a6f0;
 
-  --font-display: "Fraunces", Georgia, serif;
+  --font-display: "Mystery Quest", "Alegreya Sans", sans-serif;
   --font-body: "Alegreya Sans", sans-serif;
   --font-label: "Alegreya Sans", sans-serif;
-  --display-weight: 600;
+  --display-weight: 400;
+  --display-tracking: 0.01em;
   --label-tracking: 0.08em;
   --label-weight: 700;
   --voter-text-size: 1.125rem;
 
-  --voter-radius-card: 24px;
-  --voter-radius-control: 14px;
-  --voter-radius-button: 999px;
+  /* Hand-cut corners: no two the same, like a carved pumpkin's. */
+  --voter-radius-card: 30px 20px 34px 22px / 22px 32px 20px 30px;
+  --voter-radius-control: 16px 12px 18px 12px / 12px 18px 12px 16px;
+  --voter-radius-button: 24px 16px 26px 18px / 18px 26px 16px 24px;
   --voter-button-padding: 1.5rem;
   --button-weight: 700;
-  --voter-radius-poster: 14px;
-  --admin-radius-card: 12px;
+  --voter-radius-poster: 16px 10px 18px 12px / 12px 18px 10px 16px;
+  --admin-radius-card: 10px;
   --admin-radius-control: 8px;
   --admin-radius-poster: 4px;
   --radius-pill: 999px;
   --radius-ribbon: 999px;
-  --radius-certificate: 6px;
+  --radius-certificate: 8px 5px 8px 5px;
 
   /* Sea-glass for wanting it, dusty rose for rather not, witch's lime for a watched topic: none of them pumpkin. */
   --score-top-pick: #7dd3c0;
@@ -90,17 +94,14 @@
   --matched-ring-width: 4px;
   --seen-it-filter: grayscale(1) brightness(0.5) contrast(0.9);
 
-  /* Pantry jars: plum, toffee, moss, midnight, wine, honey-brown, bottle green, smoke. */
-  --fill-0: #3b2647;
-  --fill-1: #4a2f1f;
-  --fill-2: #2c3a26;
-  --fill-3: #222a45;
-  --fill-4: #4a2230;
-  --fill-5: #43361d;
-  --fill-6: #1f3a37;
-  --fill-7: #3a3340;
-  --title-card-ink: #f3e5d2;
-  --title-card-ink-muted: rgb(243 229 210 / 0.72);
+  --title-card-fill: #3b2647;
+  --title-card-ink: #f6d9b8;
+  --title-card-ink-muted: rgb(246 217 184 / 0.72);
+  --title-card-font: "Mystery Quest", sans-serif;
+
+  --bat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 28'%3E%3Cpath fill='%239a74c8' d='M0 8C6 6 10 8 12 12c2-2 5-2 7 0 2-2 4-3 7-2l3-5 1 4 2-1 2 1 1-4 3 5c3-1 5 0 7 2 2-2 5-2 7 0 2-4 6-6 12-4-5 3-7 7-7 12-3-2-6-2-8 0-2-2-5-2-7 0-3-1-6 1-10 6-4-5-7-7-10-6-2-2-5-2-7 0-2-2-5-2-8 0 0-5-2-9-7-12z'/%3E%3C/svg%3E");
+  --spider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg fill='%23b8a6b4' stroke='%23b8a6b4' stroke-linecap='round'%3E%3Ccircle cx='10' cy='12' r='3.4'/%3E%3Ccircle cx='10' cy='7.2' r='2' stroke='none'/%3E%3Cpath fill='none' stroke-width='1.1' d='M7.2 10 3.5 6.5 2 8M7 12H2.5L1 13.5M7.3 14l-3.5 3.5L4 19M12.8 10l3.7-3.5L18 8M13 12h4.5l1.5 1.5M12.7 14l3.5 3.5L16 19'/%3E%3C/g%3E%3C/svg%3E");
+  --silk: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0 1Q25 9 50 6T100 1' fill='none' stroke='%2356456a' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
 
   --run-ground: #120d16;
   --run-surface: #1d1523;
@@ -110,32 +111,93 @@
   --run-ink: #e6d7c5;
   --run-ink-muted: #ad9ca9;
   --run-now: #ef8a3f;
-  --run-now-glow: 0 0 0 2px #ef8a3f, inset 0 0 40px rgb(239 138 63 / 0.12);
+  --run-now-glow: 0 0 0 2px #ef8a3f, 0 0 18px rgb(255 150 60 / 0.3), inset 0 0 40px rgb(239 138 63 / 0.14);
+  /* RUN: now playing breathes like a candle. */
+  --run-now-animation: b-candle 4.3s ease-in-out infinite;
 }
+
+/* ---------- Type and decoration ---------- */
 
 [data-direction="b"] .wordmark {
-  font-style: italic;
-  font-weight: 400;
+  color: var(--accent);
+  font-size: 3rem;
+  letter-spacing: 0.02em;
+}
+[data-direction="b"] .wordmark::after {
+  content: "";
+  display: inline-block;
+  width: 1.1em;
+  height: 0.48em;
+  margin-left: 0.25em;
+  vertical-align: 0.6em;
+  background: var(--bat) center / contain no-repeat;
+  transform: rotate(-12deg);
+}
+[data-direction="b"] [data-skin="voter"] h1 {
   color: var(--accent);
 }
-
-[data-direction="b"] [data-skin] h1 {
-  letter-spacing: -0.01em;
+[data-direction="b"] [data-skin="admin"] :is(h1, h2, h3) {
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+[data-direction="b"] [data-skin] .film-card__title {
+  letter-spacing: 0.01em;
+}
+[data-direction="b"] [data-skin="admin"] .film-card__title {
+  font-family: var(--font-body);
+  font-weight: 700;
 }
 
-/* A warm lip of light along each card's top edge, instead of a drop shadow. */
+[data-direction="b"] [data-skin="voter"] a:hover {
+  text-decoration-style: wavy;
+}
+
+/* ---------- The card: hand-cut, a warm lip of light, a tilt when you reach for it ---------- */
+
 [data-direction="b"] .film-card {
+  position: relative;
   border-color: transparent;
-  box-shadow: inset 0 1px 0 rgb(255 225 190 / 0.06);
+  box-shadow: inset 0 1px 0 rgb(255 225 190 / 0.07);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+[data-direction="b"] [data-skin="voter"] .film-card:not(.is-open):hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  transform: rotate(-0.4deg) translateY(-2px);
 }
 [data-direction="b"] .film-card.is-open {
-  border-color: color-mix(in srgb, var(--plum) 45%, transparent);
+  border-color: color-mix(in srgb, var(--plum) 50%, transparent);
 }
 [data-direction="b"] [data-skin="admin"] .film-card {
   border-color: var(--line);
+  transition: none;
 }
 
-/* The group's own words in Fraunces italic; the pitch a little larger, under a fat pumpkin bar. */
+/* A spider lets itself down below the open card's poster. */
+[data-direction="b"] [data-skin="voter"] .film-card.is-open .film-card__poster::after {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 4.5rem;
+  margin: 0 auto;
+  background: var(--spider) bottom / 28px 28px no-repeat,
+    linear-gradient(var(--ink-muted), var(--ink-muted)) center top / 1px calc(100% - 20px) no-repeat;
+  opacity: 0.8;
+  transform-origin: top center;
+  animation: b-dangle 5s ease-in-out infinite alternate;
+}
+
+/* Spider silk sags across the card above who suggested it. */
+[data-direction="b"] [data-skin="voter"] .film-card__by {
+  padding-top: 0.9rem;
+  background: var(--silk) top / 100% 10px no-repeat;
+}
+
+[data-direction="b"] .film-card .poster {
+  box-shadow: 0 0 0 1px rgb(255 225 190 / 0.05);
+}
+
+/* The group's own words in Fraunces italic. */
 [data-direction="b"] .note__text {
   font-family: "Fraunces", Georgia, serif;
   font-style: italic;
@@ -146,34 +208,107 @@
   border-left-color: var(--line-strong);
   padding-left: 1em;
 }
-[data-direction="b"] [data-skin] .note--pitch {
-  border-left: 5px solid var(--accent);
-  border-radius: 3px 0 0 3px;
-}
 [data-direction="b"] .note--pitch .note__text {
   font-size: 1.06em;
-}
-[data-direction="b"] [data-skin="admin"] .note--pitch .note__text {
-  font-size: 1em;
 }
 [data-direction="b"] [data-skin="admin"] .note__text {
   font-family: var(--font-body);
   font-style: normal;
+  font-size: 1em;
 }
 
-[data-direction="b"] .film-card .poster {
-  box-shadow: 0 0 0 1px rgb(255 225 190 / 0.05);
+/* The pitch bar is a hand-cut sliver of pumpkin with a candle behind it. */
+[data-direction="b"] [data-skin] .note--pitch {
+  position: relative;
+  border-left-color: transparent;
+  padding-left: 1.15em;
 }
+[data-direction="b"] [data-skin] .note--pitch::before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 0.1em;
+  bottom: 0.1em;
+  width: 7px;
+  background-color: var(--accent);
+  clip-path: polygon(0 4px, 100% 0, 85% 30%, 100% 55%, 80% 100%, 0 calc(100% - 6px), 15% 50%);
+  filter: drop-shadow(0 0 4px var(--candle));
+  animation: b-flicker 3.7s steps(1) infinite;
+}
+[data-direction="b"] [data-skin="admin"] .note--pitch::before {
+  width: 4px;
+  clip-path: none;
+  filter: none;
+  animation: none;
+}
+
+/* ---------- Controls: a little wobble ---------- */
+
+[data-direction="b"] [data-skin="voter"] button:not(.film-card__toggle) {
+  transition: transform 0.2s ease;
+}
+[data-direction="b"] [data-skin="voter"] button:not(.film-card__toggle):not(:disabled):hover {
+  transform: rotate(-2deg) scale(1.03);
+}
+[data-direction="b"] .score {
+  border-radius: 18px 12px 20px 12px / 12px 20px 12px 18px;
+}
+
+/* ---------- Title card ---------- */
 
 [data-direction="b"] .title-card {
   border-radius: var(--radius-poster);
+  box-shadow: inset 0 0 26px rgb(239 138 63 / 0.18);
 }
 [data-direction="b"] .title-card__title {
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
 }
 
 [data-direction="b"] .runtime__source,
 [data-direction="b"] .removed-tag {
   letter-spacing: 0.05em;
+}
+
+/* The gallery nests admin inside a voter page, so the voter's play is switched off there explicitly. */
+[data-direction="b"] [data-skin="admin"] .film-card.is-open .film-card__poster::after {
+  content: none;
+}
+[data-direction="b"] [data-skin="admin"] .film-card__by {
+  padding-top: 0;
+  background: none;
+}
+[data-direction="b"] [data-skin="admin"] button:not(.film-card__toggle):not(:disabled):hover {
+  transform: none;
+}
+
+@keyframes b-flicker {
+  0%, 100% { opacity: 1; }
+  23% { opacity: 0.82; }
+  27% { opacity: 1; }
+  61% { opacity: 0.9; }
+  64% { opacity: 1; }
+  86% { opacity: 0.86; }
+}
+@keyframes b-dangle {
+  from { transform: rotate(-3deg) scaleY(0.94); }
+  to { transform: rotate(3deg) scaleY(1); }
+}
+@keyframes b-candle {
+  0%, 100% { box-shadow: var(--run-now-glow); }
+  50% { box-shadow: 0 0 0 2px #ef8a3f, 0 0 26px rgb(255 150 60 / 0.4), inset 0 0 50px rgb(239 138 63 / 0.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-direction="b"] .film-card,
+  [data-direction="b"] [data-skin] button {
+    transition: none;
+  }
+  [data-direction="b"] [data-skin="voter"] .film-card:not(.is-open):hover,
+  [data-direction="b"] [data-skin="voter"] button:not(.film-card__toggle):not(:disabled):hover {
+    transform: none;
+  }
+  [data-direction="b"] [data-skin] .note--pitch::before,
+  [data-direction="b"] [data-skin="voter"] .film-card.is-open .film-card__poster::after {
+    animation: none;
+  }
 }

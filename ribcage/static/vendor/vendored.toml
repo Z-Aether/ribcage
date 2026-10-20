@@ -39,14 +39,6 @@ tarball_integrity = "sha512-kIDugA7Ps4U+2BHxiNHmvgPIQDWPDU4IeU6TNRdvXQM1uZX+Fibq
 files."pico.classless.min.css" = { from = "package/css/pico.classless.min.css", sha256 = "61207a40ffc02a42d1e50143651c121beab70ed413c934c1ff84fa263ba436b0" }
 files."LICENSE" = { from = "package/LICENSE.md", sha256 = "afaff063e044233f917b7807dccab022f09dca474f92b642846bee4850655bbf" }
 
-[tilt-neon]
-package = "@fontsource/tilt-neon"
-version = "5.3.0"
-licence = "OFL-1.1"
-tarball = "https://registry.npmjs.org/@fontsource/tilt-neon/-/tilt-neon-5.3.0.tgz"
-tarball_integrity = "sha512-A9C6HZEwi8TWuLiSzJQdpeb7F3rbB+nfe5MswkiR27iZVgZ9DAAB3fORtYIkAbndhH9ydnwfOJC2oR04HXyW5w=="
-files."tilt-neon-latin-400-normal.woff2" = { from = "package/files/tilt-neon-latin-400-normal.woff2", sha256 = "538a8fd6d7568ebeef52bbdd04b4352844f26d51974a80ae6ed8f8a25fbdd402" }
-files."LICENSE" = { from = "package/LICENSE", sha256 = "e38b8c56c020b602948344ddaf4a16a8c582980599effa200cfffe24b1c40bc3" }
 
 [barlow]
 package = "@fontsource/barlow"
@@ -73,7 +65,6 @@ version = "5.3.0"
 licence = "OFL-1.1"
 tarball = "https://registry.npmjs.org/@fontsource/fraunces/-/fraunces-5.3.0.tgz"
 tarball_integrity = "sha512-LEHTOBiZufQzAvnAe2rZ8ZknbDS28Q9kzwb0L+gZJEmjLGr8hhZ/5NuHXwDuHBWhVXYoiGGXmrb0H6Ko/RrHTg=="
-files."fraunces-latin-600-normal.woff2" = { from = "package/files/fraunces-latin-600-normal.woff2", sha256 = "3a1de7711d147bad4422825045f87597fd77cca72e7c96d3b0a81735d00dda82" }
 files."fraunces-latin-400-italic.woff2" = { from = "package/files/fraunces-latin-400-italic.woff2", sha256 = "475b154af19c6b4ef371db22078b5044a078ce2467e11ef22a7b87f77837caf3" }
 files."LICENSE" = { from = "package/LICENSE", sha256 = "cd3384cafac6f2bddc3955273958a2e029f97027c8037ac539ef5744a77b579e" }
 
@@ -116,3 +107,21 @@ files."libre-caslon-text-latin-400-normal.woff2" = { from = "package/files/libre
 files."libre-caslon-text-latin-700-normal.woff2" = { from = "package/files/libre-caslon-text-latin-700-normal.woff2", sha256 = "2819c345e64c715cc4235a5e9c3576351d28b4c0bbbeb934fcbd50ceab0406a0" }
 files."libre-caslon-text-latin-400-italic.woff2" = { from = "package/files/libre-caslon-text-latin-400-italic.woff2", sha256 = "20eac03c053229ce982a337fce41f12e42e18d33c4e29d8e89188ef4fa970425" }
 files."LICENSE" = { from = "package/LICENSE", sha256 = "f655e804b05a2ed71ec88ef3006394e51972ec20546d4a14328a43c53ccd2607" }
+
+[righteous]
+package = "@fontsource/righteous"
+version = "5.3.0"
+licence = "OFL-1.1"
+tarball = "https://registry.npmjs.org/@fontsource/righteous/-/righteous-5.3.0.tgz"
+tarball_integrity = "sha512-xr3w0E1jtc7xoXLfgJrcaKqWjvh5XiAAthVLrl9v9HKC7TfwMy3nARytetfi2GIgo51+aWsEJ51Uyd3XEXbj/A=="
+files."righteous-latin-400-normal.woff2" = { from = "package/files/righteous-latin-400-normal.woff2", sha256 = "17055c538efddf7a754a98bb7db3d15405316dfb4645c287421ed3e7f8769144" }
+files."LICENSE" = { from = "package/LICENSE", sha256 = "463e9f5e094063efea678dcd70cac0d868a67f52922a71d73706677353d587da" }
+
+[mystery-quest]
+package = "@fontsource/mystery-quest"
+version = "5.3.0"
+licence = "OFL-1.1"
+tarball = "https://registry.npmjs.org/@fontsource/mystery-quest/-/mystery-quest-5.3.0.tgz"
+tarball_integrity = "sha512-NF3tKzEIZCQVoJurDR8IaMrarMR0TVpZaBl7BlGSYiCCn8iOhA3QnL5MrZIb5NLsLxSjcafZn+HC5bjlDXL2Jw=="
+files."mystery-quest-latin-400-normal.woff2" = { from = "package/files/mystery-quest-latin-400-normal.woff2", sha256 = "cff3f0c2032a90d1a7e9f33858f9eea974bb636bda9a9a7f8786e67fe3111007" }
+files."LICENSE" = { from = "package/LICENSE", sha256 = "c4bc4c750697a5cea81eb0abbb49c6efee37be954368bcd2955f93965d1f2edd" }

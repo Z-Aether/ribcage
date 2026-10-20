@@ -12,10 +12,5 @@ def poster_url(film, size):
 
 
 @register.filter
-def title_card_fill(film):
-    return poster.title_card_fill(film)
-
-
-@register.filter
 def trimmed_note(text):
     return card.trimmed(text, settings.NOTE_TRIM_LENGTH)

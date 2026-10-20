@@ -5,7 +5,6 @@ a posterless film, a long title, a differing original title, a hand-entered runt
 against only a pitch, and a removed suggester.
 """
 
-import dataclasses
 from dataclasses import dataclass
 from functools import cache
 
@@ -160,11 +159,6 @@ def poster_row():
     return [film(key) for key in (THE_THING, EVENT_HORIZON, CABINET_OF_CURIOSITIES, INFESTED, CUBE, POOH_2, EXIT_8)]
 
 
-def title_card_row():
-    # Every film here has a real poster but one; dropping the path shows how neighbouring fills differ (#38).
-    return [dataclasses.replace(recorded.film, poster_path=None) for recorded in corpus.read_corpus()[:14]]
-
-
 def evening():
     return (
         EveningBox("The Thing", "18:00", "19:49", 0, 109, film=film(THE_THING), past=True),
@@ -180,7 +174,6 @@ def gallery():
         "score_scale": SCORE_SCALE,
         "tiles": tiles(),
         "poster_row": poster_row(),
-        "title_card_row": title_card_row(),
         "evening": evening(),
         "evening_minutes": 425,
         "evening_now": 245,

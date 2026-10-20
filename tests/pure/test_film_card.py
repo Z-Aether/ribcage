@@ -3,10 +3,9 @@ import dataclasses
 import pytest
 from django.template.loader import render_to_string
 
-from ribcage.films import corpus
 from ribcage.films.card import ELLIPSIS, FilmCard, Note, trimmed
 from ribcage.films.film import Film, RuntimeSource, hand_entered
-from ribcage.films.poster import TITLE_CARD_FILLS, poster_url, title_card_fill
+from ribcage.films.poster import poster_url
 
 THE_SHINING = Film(
     tmdb_id=694,
@@ -55,33 +54,12 @@ def test_a_poster_comes_from_tmdbs_keyless_image_cdn_at_the_size_asked_for():
     assert poster_url(THE_SHINING, "card") == "https://image.tmdb.org/t/p/w342/uAR0AWqhQL1hQa69UDEbb2rE5Wx.jpg"
 
 
-def test_the_title_card_fill_is_a_stable_pure_function_of_the_film():
-    # Pinned, so a salted hash() or a changed derivation fails here.
-    assert title_card_fill(THE_SHINING) == 3
-    assert title_card_fill(dataclasses.replace(THE_SHINING, poster_path=None, title="Retitled")) == 3
-    assert title_card_fill(hand_entered("Del Toro's Cabinet of Curiosities", 2022, 47)) == 5
-
-
-def test_hand_entered_films_take_their_fill_from_title_and_year():
-    assert title_card_fill(hand_entered("Home video", 2019, 30)) != title_card_fill(hand_entered("Home video", 2020, 30))
-
-
-def test_neighbouring_films_in_the_corpus_take_different_fills():
-    fills = [title_card_fill(recorded.film) for recorded in corpus.read_corpus()]
-    shared_with_neighbour = sum(left == right for left, right in zip(fills, fills[1:]))
-
-    assert set(fills) == set(range(TITLE_CARD_FILLS))
-    # A pure function of one film makes neighbours share a fill only by chance, 1 in TITLE_CARD_FILLS (#38).
-    assert shared_with_neighbour <= len(fills) // TITLE_CARD_FILLS
-
-
-def test_a_posterless_film_shows_its_title_card_with_title_year_and_fill():
+def test_a_posterless_film_shows_its_title_card_with_the_title_and_year_beneath():
     film = hand_entered("Del Toro's Cabinet of Curiosities", 2022, 47)
 
     page = render_to_string("components/poster.html", {"film": film, "size": "tile"})
 
-    assert 'data-fill="5"' in page
-    assert "Del Toro&#x27;s Cabinet of Curiosities" in page
+    assert '<span class="title-card__title">Del Toro&#x27;s Cabinet of Curiosities</span>' in page
     assert '<span class="title-card__year">2022</span>' in page
     assert "<img" not in page
 

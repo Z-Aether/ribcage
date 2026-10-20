@@ -235,14 +235,6 @@
 .poster--thumb .title-card__year {
   display: none;
 }
-.title-card[data-fill="0"] { --title-card-fill: var(--fill-0); }
-.title-card[data-fill="1"] { --title-card-fill: var(--fill-1); }
-.title-card[data-fill="2"] { --title-card-fill: var(--fill-2); }
-.title-card[data-fill="3"] { --title-card-fill: var(--fill-3); }
-.title-card[data-fill="4"] { --title-card-fill: var(--fill-4); }
-.title-card[data-fill="5"] { --title-card-fill: var(--fill-5); }
-.title-card[data-fill="6"] { --title-card-fill: var(--fill-6); }
-.title-card[data-fill="7"] { --title-card-fill: var(--fill-7); }
 
 /* ---------- Film card (#21) ---------- */
 

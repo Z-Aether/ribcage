@@ -44,11 +44,6 @@ body > main:has(.gallery-skin) {
   text-transform: var(--label-case, uppercase);
   color: var(--ink-muted);
 }
-.gallery-note {
-  margin: 1.5rem 0 0.75rem;
-  color: var(--ink-muted);
-  font-size: 0.9em;
-}
 
 /* The empty phase-bar slot, outlined so its place on the card can be seen. */
 .gallery-skin .film-card__phase-bar:empty {
@@ -164,9 +159,6 @@ body > main:has(.gallery-skin) {
   width: 7.5rem;
   align-content: start;
 }
-.poster-row--title-cards li {
-  width: 6rem;
-}
 
 @media (max-width: 600px) {
   .gallery-skin {
@@ -180,9 +172,6 @@ body > main:has(.gallery-skin) {
   .tile,
   .poster-row li {
     width: calc((100% - 2rem) / 3);
-  }
-  .poster-row--title-cards li {
-    width: calc((100% - 3rem) / 4);
   }
   [data-skin] .tiles {
     gap: 1rem;
@@ -240,6 +229,12 @@ body > main:has(.gallery-skin) {
   border-color: transparent;
   background-color: var(--surface-raised);
   box-shadow: var(--run-now-glow);
+  animation: var(--run-now-animation, none);
+}
+@media (prefers-reduced-motion: reduce) {
+  .evening__box.is-now {
+    animation: none;
+  }
 }
 .evening__kicker {
   font-family: var(--font-label);

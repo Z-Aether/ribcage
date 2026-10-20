@@ -24,7 +24,7 @@ def test_the_gallery_renders_with_debug_on_and_no_database_queries(client, db, d
 @pytest.mark.parametrize(
     "real_case",
     [
-        pytest.param('title-card" data-fill=', id="a posterless film"),
+        pytest.param('title-card"><span class="title-card__title">Del Toro', id="a posterless film"),
         pytest.param("Winnie-the-Pooh: Blood and Honey 2", id="a long title"),
         pytest.param("La casa lobo", id="an original title that differs"),
         pytest.param('<span class="runtime__source">by hand</span>', id="a hand-entered runtime"),

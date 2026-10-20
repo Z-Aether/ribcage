@@ -48,26 +48,30 @@
 }
 
 :root[data-direction="c"] {
-  --ground: #17140f;
-  --ground-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .91 0 0 0 0 .87 0 0 0 0 .79 .1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  /* Round 2: faded and tea-stained. Paper grain, uneven mottling and foxing sit in the ground, behind every word. */
+  --ground: #1b1813;
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .88 0 0 0 0 .83 0 0 0 0 .72 .19 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --ground-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .88 0 0 0 0 .83 0 0 0 0 .72 .19 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='680' height='860'%3E%3Cfilter id='b'%3E%3CfeGaussianBlur stdDeviation='16'/%3E%3C/filter%3E%3Cfilter id='s'%3E%3CfeGaussianBlur stdDeviation='1.2'/%3E%3C/filter%3E%3Cg filter='url(%23b)' fill='%23795330'%3E%3Ccircle cx='110' cy='140' r='46' opacity='.13'/%3E%3Ccircle cx='560' cy='90' r='30' opacity='.1'/%3E%3Ccircle cx='470' cy='520' r='58' opacity='.11'/%3E%3Ccircle cx='160' cy='690' r='36' opacity='.12'/%3E%3C/g%3E%3Cg filter='url(%23s)' fill='%238a6038'%3E%3Ccircle cx='132' cy='160' r='3' opacity='.35'/%3E%3Ccircle cx='96' cy='126' r='2' opacity='.3'/%3E%3Ccircle cx='488' cy='540' r='4' opacity='.3'/%3E%3Ccircle cx='452' cy='500' r='2' opacity='.3'/%3E%3Ccircle cx='600' cy='330' r='2.5' opacity='.28'/%3E%3Ccircle cx='250' cy='420' r='1.8' opacity='.3'/%3E%3C/g%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .05 0 0 0 0 .04 0 0 0 0 .02 0 0 0 -.9 .56'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
   --ground-repeat: repeat;
-  --surface: #1f1b15;
-  --surface-raised: #26211a;
-  --field: #120f0b;
-  --line: #3a3328;
-  --line-strong: #574d3c;
-  --ink: #ddd3bc;
-  --ink-muted: #ab9f88;
+  --surface: #221e18;
+  --surface-raised: #29241d;
+  --field: #15120e;
+  --line: #3d372d;
+  --line-strong: #554c3e;
+  --ink: #d4c9b0;
+  --ink-muted: #a39880;
+  --heading-ink: #cbbfa3;
 
-  --accent: #b3c07a;
-  --accent-hover: #c4d090;
-  --accent-ink: #191b0b;
-  --rust: #a65a3c;
-  --link: #bfcb88;
-  --link-hover: #d6dfa8;
-  --focus: rgb(179 192 122 / 0.35);
-  --focus-ring: #b3c07a;
+  --accent: #a9ad86;
+  --accent-hover: #bcbf9b;
+  --accent-ink: #1a1b10;
+  --rust: #8f5a43;
+  --link: #b8bb93;
+  --link-hover: #d0d2b0;
+  --focus: rgb(169 173 134 / 0.35);
+  --focus-ring: #a9ad86;
   --wordmark-ink: var(--ink);
+  --print-wash: sepia(0.2) saturate(0.78) contrast(0.94) brightness(0.94);
 
   --font-display: "IM Fell English", Georgia, serif;
   --font-body: "Libre Caslon Text", Georgia, serif;
@@ -93,43 +97,35 @@
   --radius-ribbon: 0;
   --radius-certificate: 0;
 
-  /* Woad for wanting it, heather for rather not, tallow for a watched topic; the veto is cinnabar, not rust. */
-  --score-top-pick: #a4bfe6;
-  --score-top-pick-ink: #0f1a2a;
-  --score-keen: #6f90bd;
-  --score-keen-ink: #0c1522;
-  --score-happy: #425c80;
-  --score-happy-ink: #e6eef9;
-  --score-dont-mind: #3f392e;
-  --score-dont-mind-ink: #e2d8c3;
-  --score-rather-not: #b590ad;
-  --score-rather-not-ink: #22141f;
-  --veto: #ec6a55;
-  --veto-ink: #f39a88;
-  --matched-ring: #e5b45c;
-  --seen-it-filter: grayscale(1) sepia(0.3) brightness(0.5);
+  /* Faded woad for wanting it, heather for rather not, tallow for a watched topic; the veto is cinnabar, not rust. */
+  --score-top-pick: #a3b3c8;
+  --score-top-pick-ink: #141a24;
+  --score-keen: #7488a3;
+  --score-keen-ink: #0f141c;
+  --score-happy: #4d5d74;
+  --score-happy-ink: #ece6d8;
+  --score-dont-mind: #3e392f;
+  --score-dont-mind-ink: #ddd2bb;
+  --score-rather-not: #a9909f;
+  --score-rather-not-ink: #20161d;
+  --veto: #d0624f;
+  --veto-ink: #e89585;
+  --matched-ring: #cfae6c;
+  --seen-it-filter: grayscale(1) sepia(0.35) brightness(0.48);
 
-  /* Plant dyes on cloth: madder, woad, weld, walnut, oak gall, heather, lichen, peat. */
-  --fill-0: #4a2a22;
-  --fill-1: #233247;
-  --fill-2: #3e3c1f;
-  --fill-3: #3a2c1f;
-  --fill-4: #2c2c2a;
-  --fill-5: #3a2a38;
-  --fill-6: #2b3626;
-  --fill-7: #33251a;
-  --title-card-ink: #e8dfca;
-  --title-card-ink-muted: rgb(232 223 202 / 0.7);
+  --title-card-fill: #3a2a20;
+  --title-card-ink: #ddd2bb;
+  --title-card-ink-muted: rgb(221 210 187 / 0.7);
 
-  --run-ground: #0f0d09;
-  --run-surface: #19160f;
-  --run-surface-raised: #201c14;
-  --run-line: #2e281f;
-  --run-line-strong: #463d2f;
-  --run-ink: #d8cdb6;
-  --run-ink-muted: #a3977f;
-  --run-now: #b3c07a;
-  --run-now-glow: 0 0 0 1px #b3c07a, inset 0 0 0 4px #19160f, inset 0 0 0 5px rgb(179 192 122 / 0.5);
+  --run-ground: #100e0a;
+  --run-surface: #1a1611;
+  --run-surface-raised: #211c15;
+  --run-line: #2f2920;
+  --run-line-strong: #463e31;
+  --run-ink: #d0c5ad;
+  --run-ink-muted: #a0957e;
+  --run-now: #a9ad86;
+  --run-now-glow: 0 0 0 1px #a9ad86, inset 0 0 0 4px #1a1611, inset 0 0 0 5px rgb(169 173 134 / 0.5);
 }
 
 [data-direction="c"] .wordmark {
@@ -157,16 +153,20 @@
 
 [data-direction="c"] [data-skin] :is(h1, h2, h3) {
   font-weight: 400;
+  color: var(--heading-ink);
 }
 
 /* A plate in a book: a double rule round the card and a hairline round the poster. */
+/* Worn edges: the plate darkens towards its rim, and the paper's grain shows through behind the words. */
 [data-direction="c"] .film-card {
-  box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--line);
+  background-image: var(--paper-grain);
+  box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--line), inset 0 0 36px rgb(0 0 0 / 0.38);
 }
 [data-direction="c"] .film-card.is-open {
-  box-shadow: inset 0 0 0 3px var(--surface-raised), inset 0 0 0 4px var(--line-strong);
+  box-shadow: inset 0 0 0 3px var(--surface-raised), inset 0 0 0 4px var(--line-strong), inset 0 0 44px rgb(0 0 0 / 0.42);
 }
 [data-direction="c"] [data-skin="admin"] .film-card {
+  background-image: none;
   box-shadow: none;
 }
 [data-direction="c"] .film-card__poster {
@@ -229,4 +229,41 @@
 [data-direction="c"] .certificate {
   font-family: var(--font-label);
   font-size: 0.9em;
+}
+
+/* Posters print a little faded, as if they had sat in the window. */
+[data-direction="c"] .poster {
+  filter: var(--print-wash);
+}
+[data-direction="c"] .is-seen-it .poster {
+  filter: var(--seen-it-filter);
+}
+
+/* A slow, faint fog drifts behind everything. Admin pages keep a plain ground, so ledgers stay quiet. */
+[data-direction="c"] body::before {
+  content: "";
+  position: fixed;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 26% at 28% 38%, rgb(214 203 180 / 0.075), transparent 70%),
+    radial-gradient(32% 22% at 72% 62%, rgb(214 203 180 / 0.06), transparent 70%),
+    radial-gradient(48% 18% at 50% 88%, rgb(214 203 180 / 0.055), transparent 70%);
+  filter: blur(24px);
+  animation: c-fog 90s ease-in-out infinite alternate;
+}
+[data-direction="c"] [data-skin="admin"] {
+  background-color: var(--ground);
+}
+
+@keyframes c-fog {
+  from { transform: translate3d(-6%, -2%, 0); }
+  to { transform: translate3d(6%, 3%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-direction="c"] body::before {
+    animation: none;
+  }
 }

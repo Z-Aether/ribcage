@@ -14,7 +14,7 @@
   </header>
 
   <section class="gallery-skin" data-skin="voter" id="voter" aria-labelledby="voter-name">
-    <h2 class="gallery-skin__name" id="voter-name">Voter</h2>
+    <p class="gallery-skin__name" id="voter-name">Voter</p>
 
     <div class="specimen">
       <div class="specimen__type">
@@ -38,7 +38,7 @@
       </form>
     </div>
 
-    <h3 class="gallery-label">State colours</h3>
+    <p class="gallery-label">State colours</p>
     <div class="states">
       <ul class="score-scale">
         {% for value, label, key in score_scale %}<li class="score score--{{ key }}"><b>{{ value }}</b> {{ label }}</li>{% endfor %}
@@ -55,23 +55,19 @@
       </ul>
     </div>
 
-    <h3 class="gallery-label">Posters and title cards</h3>
+    <p class="gallery-label">Posters and title cards</p>
     <ul class="poster-row">
       {% for film in poster_row %}<li>{% include "components/poster.html" with film=film size="tile" %}<span class="tile__title">{{ film.title }}</span></li>{% endfor %}
     </ul>
-    <p class="gallery-note">The corpus in its own order, each as its title card, so neighbouring fills can be judged. Only the hand-entered film lacks a poster really.</p>
-    <ul class="poster-row poster-row--title-cards">
-      {% for film in title_card_row %}<li>{% include "components/poster.html" with film=film size="tile" %}</li>{% endfor %}
-    </ul>
 
-    <h3 class="gallery-label">Film cards</h3>
+    <p class="gallery-label">Film cards</p>
     <div class="film-cards" data-film-cards>
       {% for card in cards %}{% include "components/film_card.html" with card=card expanded=forloop.first %}{% endfor %}
     </div>
   </section>
 
   <section class="gallery-skin" data-skin="admin" id="admin" aria-labelledby="admin-name">
-    <h2 class="gallery-skin__name" id="admin-name">Admin</h2>
+    <p class="gallery-skin__name" id="admin-name">Admin</p>
 
     <div class="specimen">
       <div class="specimen__type">
@@ -112,7 +108,7 @@
   </section>
 
   <section class="gallery-skin" data-skin="run" id="run" aria-labelledby="run-name">
-    <h2 class="gallery-skin__name" id="run-name">RUN</h2>
+    <p class="gallery-skin__name" id="run-name">RUN</p>
     <div class="run-sample">
       <div class="specimen__type">
         <h1>Tonight</h1>

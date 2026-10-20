@@ -1,14 +1,14 @@
 /*
   Direction A: Neon orange. A sign in a wet street, an 80s slasher title card (#58).
-  The neon is an accent, not the wallpaper: only the wordmark, the pitch bar and RUN's now playing glow.
+  Round 2: hotter neon. Titles, card frames and highlights are lit tubes; body text and admin ledgers stay calm.
 */
 
 @font-face {
-  font-family: "Tilt Neon";
+  font-family: "Righteous";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("../vendor/tilt-neon/tilt-neon-latin-400-normal.woff2") format("woff2");
+  src: url("../vendor/righteous/righteous-latin-400-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Barlow";
@@ -33,33 +33,38 @@
 }
 
 :root[data-direction="a"] {
-  --ground: #141217;
-  --ground-texture: radial-gradient(70rem 26rem at 50% -8rem, rgb(255 143 74 / 0.07), transparent 70%);
-  --surface: #1c1920;
-  --surface-raised: #232027;
-  --field: #100e13;
-  --line: #2f2a35;
-  --line-strong: #463f4d;
-  --ink: #e4dacd;
-  --ink-muted: #a69c94;
+  --ground: #120f16;
+  --ground-texture: radial-gradient(80rem 30rem at 50% -10rem, rgb(255 110 40 / 0.1), transparent 70%);
+  --surface: #19151e;
+  --surface-raised: #1f1925;
+  --field: #0d0b10;
+  --line: #2e2636;
+  --line-strong: #463b52;
+  --ink: #e1d7ca;
+  --ink-muted: #a99e96;
 
-  --accent: #ff8f4a;
-  --accent-hover: #ffa26a;
-  --accent-ink: #1f0f05;
-  --glow: rgb(255 128 56 / 0.5);
-  --link: #ffa66e;
+  --accent: #ff7a2f;
+  --accent-hover: #ff9452;
+  --accent-ink: #1f0c02;
+  --tube-core: #ffe4cf;
+  --glow-tight: rgb(255 122 47 / 0.9);
+  --glow-mid: rgb(255 100 30 / 0.55);
+  --glow-wide: rgb(255 80 20 / 0.28);
+  --neon-text: 0 0 1px #fff4ea, 0 0 6px var(--glow-tight), 0 0 16px var(--glow-mid), 0 0 38px var(--glow-wide);
+  --neon-text-soft: 0 0 8px var(--glow-mid), 0 0 22px var(--glow-wide);
+  --link: #ff9a5e;
   --link-hover: #ffc196;
-  --focus: rgb(255 143 74 / 0.35);
-  --focus-ring: #ff8f4a;
+  --focus: rgb(255 122 47 / 0.4);
+  --focus-ring: #ff7a2f;
 
-  --font-display: "Tilt Neon", "Barlow", sans-serif;
+  --font-display: "Righteous", "Barlow", sans-serif;
   --font-body: "Barlow", sans-serif;
   --font-label: "Barlow Condensed", "Barlow", sans-serif;
   --display-tracking: 0.01em;
   --label-tracking: 0.1em;
   --label-size: 0.8em;
 
-  --voter-radius-card: 16px;
+  --voter-radius-card: 18px;
   --voter-radius-control: 12px;
   --voter-radius-button: 999px;
   --voter-button-padding: 1.4rem;
@@ -69,68 +74,85 @@
   --admin-radius-poster: 3px;
   --radius-pill: 999px;
 
-  /* Cool against the orange: mint for wanting it, lavender for rather not, ice for a watched topic. */
-  --score-top-pick: #7fe0b2;
+  /* Cool neon against the orange: mint for wanting it, violet for rather not, pink for the veto, ice for a watched topic. */
+  --score-top-pick: #6ff5bd;
   --score-top-pick-ink: #0f241a;
-  --score-keen: #4aa985;
-  --score-keen-ink: #0c1f17;
-  --score-happy: #2d6553;
-  --score-happy-ink: #e4f5ec;
-  --score-dont-mind: #3c3743;
+  --score-keen: #34c48e;
+  --score-keen-ink: #0b1f16;
+  --score-happy: #1f7a5c;
+  --score-happy-ink: #e8fff4;
+  --score-dont-mind: #3a3242;
   --score-dont-mind-ink: #e2d9d2;
-  --score-rather-not: #a28fd8;
-  --score-rather-not-ink: #17112a;
-  --veto: #ff6b86;
-  --veto-ink: #ff9aac;
-  --matched-ring: #79d6ff;
-  --seen-it-filter: grayscale(1) brightness(0.5);
+  --score-rather-not: #b49bff;
+  --score-rather-not-ink: #160f2e;
+  --veto: #ff4f7b;
+  --veto-ink: #ff8fab;
+  --matched-ring: #5fd8ff;
+  --seen-it-filter: grayscale(1) brightness(0.45);
 
-  /* Unlit tubes: deep, dull versions of sign colours. */
-  --fill-0: #22343a;
-  --fill-1: #3a2230;
-  --fill-2: #2a2840;
-  --fill-3: #2c3624;
-  --fill-4: #40291f;
-  --fill-5: #33233f;
-  --fill-6: #1f2f40;
-  --fill-7: #3a3520;
-  --title-card-ink: #f0e3d4;
-  --title-card-ink-muted: rgb(240 227 212 / 0.7);
+  --title-card-fill: #221a2b;
+  --title-card-ink: var(--tube-core);
+  --title-card-ink-muted: rgb(255 228 207 / 0.7);
 
-  --run-ground: #0d0c10;
-  --run-surface: #17151b;
-  --run-surface-raised: #1e1b23;
-  --run-line: #2a2630;
-  --run-line-strong: #3b3542;
+  --run-ground: #0b090e;
+  --run-surface: #141118;
+  --run-surface-raised: #1b1620;
+  --run-line: #2a2330;
+  --run-line-strong: #3b3242;
   --run-ink: #ddd3c7;
   --run-ink-muted: #9f968f;
-  --run-now: #ff8f4a;
-  --run-now-glow: 0 0 0 1px #ff8f4a, 0 0 18px rgb(255 128 56 / 0.35);
+  --run-now: #ff7a2f;
+  --run-now-glow: 0 0 0 1.5px #ff7a2f, 0 0 14px var(--glow-mid), 0 0 44px var(--glow-wide), inset 0 0 22px rgb(255 122 47 / 0.14);
 }
 
+/* ---------- Lit type: the wordmark and voter headings are tubes; h3 and card titles glow softly ---------- */
+
+[data-direction="a"] .wordmark,
+[data-direction="a"] [data-skin="voter"] :is(h1, h2),
+[data-direction="a"] [data-skin="run"] :is(h1, h2) {
+  color: var(--tube-core);
+  text-shadow: var(--neon-text);
+}
 [data-direction="a"] .wordmark {
-  color: var(--accent);
-  text-shadow: 0 0 0.3em var(--glow), 0 0 0.05em rgb(255 200 160 / 0.6);
+  font-size: 3rem;
+  letter-spacing: 0.02em;
 }
-
-[data-direction="a"] [data-skin] :is(h1, h2) {
+[data-direction="a"] [data-skin] :is(h1, h2, h3) {
   font-weight: 400;
 }
+[data-direction="a"] [data-skin="voter"] h3,
+[data-direction="a"] .film-card__title {
+  text-shadow: var(--neon-text-soft);
+}
+[data-direction="a"] [data-skin="admin"] :is(h1, h2, h3),
+[data-direction="a"] [data-skin="admin"] .film-card__title {
+  color: var(--ink);
+  text-shadow: none;
+}
+
+/* ---------- Lit frames: every voter card is a tube, and the open one is switched on ---------- */
 
 [data-direction="a"] .film-card {
-  border-color: var(--line);
+  border: 1.5px solid rgb(255 122 47 / 0.45);
+  box-shadow: 0 0 10px rgb(255 100 30 / 0.18), inset 0 0 12px rgb(255 100 30 / 0.06);
+}
+[data-direction="a"] .film-card:hover {
+  border-color: rgb(255 122 47 / 0.75);
 }
 [data-direction="a"] .film-card.is-open {
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgb(255 160 110 / 0.5), 0 0 16px var(--glow-mid), 0 0 46px var(--glow-wide),
+    inset 0 0 22px rgb(255 100 30 / 0.12);
 }
-[data-direction="a"] .film-card__title {
-  font-family: var(--font-display);
+[data-direction="a"] [data-skin="admin"] .film-card {
+  border: 1px solid rgb(255 122 47 / 0.5);
+  box-shadow: none;
 }
 [data-direction="a"] .film-card .poster {
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
 }
 
-/* The pitch bar is a lit tube: rounded ends and a soft glow, the card's one bright thing. */
+/* The pitch bar is a lit tube with rounded ends. */
 [data-direction="a"] [data-skin] .note--pitch {
   position: relative;
   border-left-color: transparent;
@@ -143,18 +165,40 @@
   bottom: 0.2em;
   width: 3px;
   border-radius: 3px;
-  background-color: var(--accent);
-  box-shadow: 0 0 8px var(--glow);
+  background-color: var(--tube-core);
+  box-shadow: 0 0 3px var(--glow-tight), 0 0 10px var(--glow-mid), 0 0 20px var(--glow-wide);
 }
 [data-direction="a"] [data-skin="admin"] .note--pitch::before {
+  background-color: var(--accent);
   box-shadow: none;
 }
 
+/* ---------- Controls light up when touched ---------- */
+
+[data-direction="a"] [data-skin="voter"] button:not(.film-card__toggle):not(:disabled):hover {
+  box-shadow: 0 0 12px var(--glow-mid), 0 0 28px var(--glow-wide);
+}
+[data-direction="a"] [data-skin] :is(input, textarea, select):focus {
+  box-shadow: 0 0 0 1px var(--accent), 0 0 12px var(--glow-mid);
+}
+
+/* ---------- States glow in their own colours ---------- */
+
+[data-direction="a"] .is-matched .tile__poster {
+  box-shadow: 0 0 0 3px var(--matched-ring), 0 0 14px rgb(95 216 255 / 0.55);
+}
+[data-direction="a"] .score--veto,
+[data-direction="a"] .veto-ribbon {
+  box-shadow: 0 0 10px rgb(255 79 123 / 0.35);
+}
+
+/* ---------- Title card: an unlit sign box with the title lit ---------- */
+
 [data-direction="a"] .title-card {
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07);
+  box-shadow: inset 0 0 0 1px rgb(255 122 47 / 0.35), inset 0 0 18px rgb(255 100 30 / 0.12);
 }
 [data-direction="a"] .title-card__title {
-  letter-spacing: 0.01em;
+  text-shadow: var(--neon-text-soft);
 }
 
 [data-direction="a"] .certificate {
