@@ -9,6 +9,7 @@ from django.views import View
 from django.views.decorators.http import require_http_methods
 
 from ribcage.identity import admin_session
+from ribcage.identity.forced_change import reachable_before_the_change
 from ribcage.identity.forms import AdminLoginForm, ChangePasswordForm, JoinCodeForm, LoginForm, RegistrationForm
 from ribcage.identity.models import Voter
 from ribcage.phase.check import account_action
@@ -20,11 +21,13 @@ login = LoginView.as_view(template_name="identity/login.html", authentication_fo
 logout = account_action(login_not_required(LogoutView.as_view()))
 
 # Django's view keeps this session and, through the session hash, ends the voter's others (#37, #73).
-change_password = account_action(
-    PasswordChangeView.as_view(
-        template_name="identity/change_password.html",
-        form_class=ChangePasswordForm,
-        success_url=reverse_lazy("password_changed"),
+change_password = reachable_before_the_change(
+    account_action(
+        PasswordChangeView.as_view(
+            template_name="identity/change_password.html",
+            form_class=ChangePasswordForm,
+            success_url=reverse_lazy("password_changed"),
+        )
     )
 )
 password_changed = PasswordChangeDoneView.as_view(template_name="identity/password_changed.html")

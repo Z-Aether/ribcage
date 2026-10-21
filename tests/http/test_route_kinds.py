@@ -41,6 +41,15 @@ def signed_in_as_a_voter(client):
     return client
 
 
+def signed_in_as_a_voter_who_must_change_their_password(client):
+    voter = Voter.objects.create_voter("Ada")
+    voter.must_change_password = True
+    voter.save()
+    client.force_login(voter)
+    client.cookies["csrftoken"] = "a" * 32
+    return client
+
+
 def signed_in_as_the_admin(client):
     sign_in_as_the_admin(client)
     return client
@@ -70,7 +79,7 @@ def test_a_route_with_a_converter_is_requested_at_a_sample_address():
     [
         *[(name, PUBLIC) for name in ["privacy", "login", "join", "join_details", "logout", "admin_login", "admin_logout"]],
         *[(name, VOTER) for name in ["phase_page", "welcome", "change_password", "password_changed", "gallery"]],
-        *[(name, ADMIN) for name in ["console", "console_phase", "console_phase_move", "console_films", "console_pick", "console_roster", "console_roster_remove"]],
+        *[(name, ADMIN) for name in ["console", "console_phase", "console_phase_move", "console_films", "console_pick", "console_roster", "console_roster_remove", "console_roster_reset"]],
     ],
 )
 def test_each_known_route_is_found_as_its_kind(name, route_kind):
@@ -86,7 +95,8 @@ def test_every_querying_exception_is_still_a_public_page():
     assert QUERYING_PUBLIC_PAGES <= {entry.name for _, entry in routes_of(PUBLIC)}
 
 
-@pytest.mark.parametrize("visitor", [anonymous, with_stale_sessions, signed_in_as_a_voter, signed_in_as_the_admin])
+# The forced change after a reset never reads the session on a public page either (#80).
+@pytest.mark.parametrize("visitor", [anonymous, with_stale_sessions, signed_in_as_a_voter, signed_in_as_a_voter_who_must_change_their_password, signed_in_as_the_admin])
 @pytest.mark.parametrize("path", PUBLIC_PAGES_THAT_MUST_NOT_QUERY)
 def test_every_public_page_renders_with_no_database_queries(client, db, django_assert_num_queries, visitor, path):
     browser = visitor(client)

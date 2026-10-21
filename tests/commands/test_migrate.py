@@ -69,7 +69,7 @@ def test_a_write_after_a_read_waits_for_a_concurrent_writer_instead_of_failing(t
     assert outcome == ["committed"]
 
 
-def test_migrating_a_database_that_holds_voters_gives_each_the_key_of_its_name(tmp_path):
+def test_migrating_a_database_that_holds_voters_gives_each_the_key_of_its_name_and_forces_no_change(tmp_path):
     database = tmp_path / "old.sqlite3"
     environ = {**os.environ, "DJANGO_SETTINGS_MODULE": "ribcage.settings", "DATABASE_PATH": str(database)}
 
@@ -91,8 +91,9 @@ def test_migrating_a_database_that_holds_voters_gives_each_the_key_of_its_name(t
     migrate()
 
     with closing(sqlite3.connect(database)) as connection:
-        keys = connection.execute("SELECT display_name, display_name_key FROM identity_voter ORDER BY id").fetchall()
-    assert keys == [("\u00c9va", "\u00e9va"), ("Sam", "sam")]
+        voters = connection.execute("SELECT display_name, display_name_key, must_change_password FROM identity_voter ORDER BY id").fetchall()
+    # Only an admin reset forces a change, so no voter already registered is sent to the form (#80).
+    assert voters == [("\u00c9va", "\u00e9va", 0), ("Sam", "sam", 0)]
 
 
 def test_migrating_drops_the_removed_hello_apps_table(transactional_db):

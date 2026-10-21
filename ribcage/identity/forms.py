@@ -124,3 +124,8 @@ class ChangePasswordForm(PasswordChangeForm):
         # The voter skin carries no hint text (#58); a refused password says why.
         for field in self.fields.values():
             field.help_text = ""
+
+    def save(self, commit=True):
+        # The voter's own password ends the forced change (#80).
+        self.user.must_change_password = False
+        return super().save(commit)

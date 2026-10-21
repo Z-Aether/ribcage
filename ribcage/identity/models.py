@@ -28,6 +28,8 @@ class Voter(AbstractBaseUser):
     display_name = models.CharField(max_length=display_names.MAX_LENGTH)
     # Unique regardless of case, shown as typed; casefolding can lengthen a name (#37, #69).
     display_name_key = models.CharField(max_length=display_names.MAX_LENGTH * 3, unique=True, editable=False)
+    # Set by the admin's reset and cleared by the voter's own change, which until then is the only page they reach (#28, #80).
+    must_change_password = models.BooleanField(default=False)
 
     objects = VoterManager()
 

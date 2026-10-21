@@ -684,7 +684,7 @@ body > header.console-header {
   margin-left: auto;
 }
 
-/* ---------- The Roster tab: one row per voter, and removal's confirm under its row (#28, #79) ---------- */
+/* ---------- The Roster tab: one row per voter, and each act's confirm under its row (#28, #79, #80) ---------- */
 
 [data-skin] .roster .roster__actions {
   width: 1%;
@@ -716,6 +716,25 @@ body > header.console-header {
   margin: 0.75rem 0 0;
 }
 [data-skin] .roster-confirm__actions :is(a.button, button) {
+  width: auto;
+  margin: 0;
+}
+[data-skin] .roster .roster__actions a.button + a.button {
+  margin-left: 0.4rem;
+}
+[data-skin] .roster-reset p {
+  margin: 0 0 0.5rem;
+}
+/* One click selects the whole password, to copy and send (#80). */
+[data-skin] .roster-reset__password code {
+  font-size: 1.2em;
+  letter-spacing: 0.04em;
+  user-select: all;
+}
+[data-skin] .roster-reset .roster-reset__actions {
+  margin: 0.75rem 0 0;
+}
+[data-skin] .roster-reset__actions a.button {
   width: auto;
   margin: 0;
 }

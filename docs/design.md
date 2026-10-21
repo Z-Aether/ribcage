@@ -196,7 +196,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | Surface | Contents |
 |---|---|
 | **Welcome** | Shown once after registration, never linked again. Rough points, then two exits: set up warnings, or go to the current phase's page (#23, #27). |
-| **Forced password change** | After an admin reset (#28). |
+| **Forced password change** | After an admin reset (#28): the change-password form, with the password the admin sent as the current one. Until it's done, every other voter page leads back to it; log out and the public pages stay open (#80). |
 | **My warnings** (trigger list page) | One scrolling page in DTDD's grouping. Privacy disclosure and "I don't care" at the top, live search, ticked topics as chips. Every topic names the films carrying it: the pool through APPROVE, the ballot from VOTE (#23, #35). |
 | **SUGGEST** | A *Suggest a film* panel above the pool. Find, with a trailing year to narrow → picker of five poster tiles, never auto-advanced, films already in the pool marked → pitch box, with runtime on one line and a pencil. *Add it by hand* for anything TMDB can't find, and a message beside it during a TMDB outage. The pool lists film cards with a *Mine* filter (#21, #27). |
 | **APPROVE** | The same pool, frozen. Notes still writable. |
@@ -227,7 +227,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **Phase** | The five phases with their dates, from the phase history. Both possible moves, each with its consequences printed. Click, then an inline confirm. |
 | **Films** (approve screen) | Ledger rows: runtime box, a flag when it differs from TMDB, DTDD status, *Approve* / *Drop*. The title opens the film card inline. One quiet line lists films with stale or unfetched DTDD data. |
 | **Pick** | Budget and anchor in a header above two sub-tabs. **Compare:** knobs, solve and "more", the ledger (timetable row, shortlist, batch), the floor set line, keep, swap, *Use this slate*. **Timetable:** the **track**, ripple mode, arrange utilities, readouts, the selected box, the candidate list for adding films by hand, and the shortlist rows (#22, #24). |
-| **Roster** | View, remove, reset password (shown once, forces a change at next login). The floor set line is always shown. |
+| **Roster** | View, remove, reset password (shown once, forces a change at next login). A reload of the shown password resets nothing and shows no password, only a fresh confirm (#80). The floor set line is always shown. |
 
 ### Shared components
 

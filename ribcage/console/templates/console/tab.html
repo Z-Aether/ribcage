@@ -2,7 +2,8 @@
 {# One of the four tabs, each at its own address (#28). #}
 
 {% block content %}
-{% with here=request.resolver_match.url_name %}
+{# A tab's post that answers with the tab names it in `tab`, as the reset's shown password does (#80). #}
+{% with here=tab|default:request.resolver_match.url_name %}
 <nav class="console-tabs" aria-label="Console">
   <a href="{% url 'console_phase' %}"{% if here == "console_phase" %} aria-current="page"{% endif %}>Phase <span class="phase-badge">{{ phase }}</span></a>
   <a href="{% url 'console_films' %}"{% if here == "console_films" %} aria-current="page"{% endif %}>Films</a>

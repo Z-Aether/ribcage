@@ -13,14 +13,17 @@
       </thead>
       <tbody>
         {% for voter in voters %}
-          <tr data-voter="{{ voter.pk }}"{% if voter == armed %} class="is-armed"{% endif %}>
+          <tr data-voter="{{ voter.pk }}"{% if voter == armed or voter == was_reset %} class="is-armed"{% endif %}>
             <td class="roster__name">{{ voter.display_name }}</td>
             <td class="roster__actions">
-              {# The armed row gives up its arm, so a double click on it arms nothing further (#77, #79). #}
-              {% if voter != armed %}<a class="button button--quiet" href="{% url 'console_roster' %}?remove={{ voter.pk }}">Remove…</a>{% endif %}
+              {# The armed row gives up its arms, so a double click on it arms nothing further (#77, #79). #}
+              {% if voter != armed and voter != was_reset %}
+                <a class="button button--quiet" href="{% url 'console_roster' %}?reset={{ voter.pk }}">Reset password…</a>
+                <a class="button button--quiet" href="{% url 'console_roster' %}?remove={{ voter.pk }}">Remove…</a>
+              {% endif %}
             </td>
           </tr>
-          {% if voter == armed %}
+          {% if voter == armed and arming == "remove" %}
             <tr class="ledger__detail">
               <td colspan="2">
                 <form method="post" action="{% url 'console_roster_remove' %}" class="roster-confirm">
@@ -38,6 +41,38 @@
                     <button type="submit">Remove {{ voter.display_name }}</button>
                   </p>
                 </form>
+              </td>
+            </tr>
+          {% elif voter == armed and arming == "reset" %}
+            <tr class="ledger__detail">
+              <td colspan="2">
+                <form method="post" action="{% url 'console_roster_reset' %}" class="roster-confirm">
+                  {% csrf_token %}
+                  <input type="hidden" name="voter" value="{{ voter.pk }}">
+                  <input type="hidden" name="replacing" value="{{ replacing }}">
+                  {% if used %}
+                    <p>That confirm is out of date: {{ voter.display_name }}'s password has changed since it was shown, most likely by that same confirm. It can't be shown again. Reset again for a new one.</p>
+                  {% endif %}
+                  <p>Resetting {{ voter.display_name }}'s password signs them out everywhere and shows you a new one, once, to send them directly.</p>
+                  <p>At their next login they must choose their own before anything else.</p>
+                  <p class="roster-confirm__actions">
+                    <a class="button button--quiet" href="{% url 'console_roster' %}">Cancel</a>
+                    <button type="submit">Reset {{ voter.display_name }}'s password</button>
+                  </p>
+                </form>
+              </td>
+            </tr>
+          {% elif voter == was_reset %}
+            <tr class="ledger__detail">
+              <td colspan="2">
+                <div class="roster-reset">
+                  <p>{{ voter.display_name }}'s new password:</p>
+                  <p class="roster-reset__password"><code>{{ password }}</code></p>
+                  <p>Send it to {{ voter.display_name }} directly. It isn't shown again: once you leave or reload this page, it's gone.</p>
+                  <p class="roster-reset__actions">
+                    <a class="button" href="{% url 'console_roster' %}">Done</a>
+                  </p>
+                </div>
               </td>
             </tr>
           {% endif %}

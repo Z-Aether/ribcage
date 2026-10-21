@@ -60,6 +60,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     # Every page is walled unless it carries login_not_required (#16).
     "django.contrib.auth.middleware.LoginRequiredMiddleware",
+    # After the wall: a voter whose password was reset reaches only the change form and log out (#80).
+    "ribcage.identity.forced_change.ForcedChangeMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
