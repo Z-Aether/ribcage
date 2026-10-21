@@ -38,3 +38,31 @@ tarball = "https://registry.npmjs.org/@picocss/pico/-/pico-2.1.1.tgz"
 tarball_integrity = "sha512-kIDugA7Ps4U+2BHxiNHmvgPIQDWPDU4IeU6TNRdvXQM1uZX+FibqDQT2xUOnnO2yq/LUHcwnGlu1hvf4KfXnMg=="
 files."pico.classless.min.css" = { from = "package/css/pico.classless.min.css", sha256 = "61207a40ffc02a42d1e50143651c121beab70ed413c934c1ff84fa263ba436b0" }
 files."LICENSE" = { from = "package/LICENSE.md", sha256 = "afaff063e044233f917b7807dccab022f09dca474f92b642846bee4850655bbf" }
+
+[fraunces]
+package = "@fontsource/fraunces"
+version = "5.3.0"
+licence = "OFL-1.1"
+tarball = "https://registry.npmjs.org/@fontsource/fraunces/-/fraunces-5.3.0.tgz"
+tarball_integrity = "sha512-LEHTOBiZufQzAvnAe2rZ8ZknbDS28Q9kzwb0L+gZJEmjLGr8hhZ/5NuHXwDuHBWhVXYoiGGXmrb0H6Ko/RrHTg=="
+files."fraunces-latin-400-italic.woff2" = { from = "package/files/fraunces-latin-400-italic.woff2", sha256 = "475b154af19c6b4ef371db22078b5044a078ce2467e11ef22a7b87f77837caf3" }
+files."LICENSE" = { from = "package/LICENSE", sha256 = "cd3384cafac6f2bddc3955273958a2e029f97027c8037ac539ef5744a77b579e" }
+
+[alegreya-sans]
+package = "@fontsource/alegreya-sans"
+version = "5.3.0"
+licence = "OFL-1.1"
+tarball = "https://registry.npmjs.org/@fontsource/alegreya-sans/-/alegreya-sans-5.3.0.tgz"
+tarball_integrity = "sha512-Uf0RbuwzhSS3NQrBFcRzEUm7TxDQW3qdAbQ6JIOhsIW6V+YN2dqlR99lhfEE38R3GHgMCMJBzqSp7aJxhNXSOw=="
+files."alegreya-sans-latin-400-normal.woff2" = { from = "package/files/alegreya-sans-latin-400-normal.woff2", sha256 = "b2a5a35a2563a2f9bf9fb91939fc6ea6c115e9811cda5c4a37d02f623c7c4dbe" }
+files."alegreya-sans-latin-700-normal.woff2" = { from = "package/files/alegreya-sans-latin-700-normal.woff2", sha256 = "5acd19a588614d23e52b741a21dd8555178ab4932c3195c6d8fb4b296f84acae" }
+files."LICENSE" = { from = "package/LICENSE", sha256 = "88e1533e966154efb4a5279bbbc919d94e85d2a0d864849ecd6e1506b74a38c2" }
+
+[mystery-quest]
+package = "@fontsource/mystery-quest"
+version = "5.3.0"
+licence = "OFL-1.1"
+tarball = "https://registry.npmjs.org/@fontsource/mystery-quest/-/mystery-quest-5.3.0.tgz"
+tarball_integrity = "sha512-NF3tKzEIZCQVoJurDR8IaMrarMR0TVpZaBl7BlGSYiCCn8iOhA3QnL5MrZIb5NLsLxSjcafZn+HC5bjlDXL2Jw=="
+files."mystery-quest-latin-400-normal.woff2" = { from = "package/files/mystery-quest-latin-400-normal.woff2", sha256 = "cff3f0c2032a90d1a7e9f33858f9eea974bb636bda9a9a7f8786e67fe3111007" }
+files."LICENSE" = { from = "package/LICENSE", sha256 = "c4bc4c750697a5cea81eb0abbb49c6efee37be954368bcd2955f93965d1f2edd" }

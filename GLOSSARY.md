@@ -99,7 +99,7 @@ The one component that shows a film, shared by SUGGEST, APPROVE, VOTE and the re
 _Avoid_: movie card, film sheet (as a distinct thing), tile (that is a picker result or a poster on the ballot)
 
 **Title card**:
-What stands in for a poster when a film has none — hand-entered, or a TMDB film without a poster path. Same shape as a poster: a muted fill picked per film, the title large and the year beneath. Everywhere a poster appears, a title card can. (#26, #38)
+What stands in for a poster when a film has none — hand-entered, or a TMDB film without a poster path. Same shape as a poster: the theme's one muted fill, the title large and the year beneath. Everywhere a poster appears, a title card can. (#26, #38, #58)
 _Avoid_: placeholder, fallback poster, default image
 
 ### Voting

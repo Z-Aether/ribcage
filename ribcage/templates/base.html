@@ -1,18 +1,24 @@
 {% load static %}<!doctype html>
-<html lang="en">
+{# Dark only (#58): Pico takes its dark tokens, and the theme sets the rest. #}
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
   <title>{% block title %}Ribcage{% endblock %}</title>
-  {# An empty icon stops the browser's /favicon.ico request and its 404 until the theme brings one (#46). #}
-  <link rel="icon" href="data:,">
+  {# The theme's pumpkin also stops the browser's /favicon.ico request and its 404 (#46, #58). #}
+  <link rel="icon" href="{% static 'theme/pumpkin.svg' %}" type="image/svg+xml">
   <link rel="stylesheet" href="{% static 'vendor/pico/pico.classless.min.css' %}">
+  <link rel="stylesheet" href="{% static 'theme/theme.css' %}">
+  {% block head %}{% endblock %}
   {# Deferred scripts run in order, so the morph extension finds htmx already loaded (#22). #}
   <script src="{% static 'vendor/htmx/htmx.min.js' %}" defer></script>
   <script src="{% static 'vendor/idiomorph/idiomorph-ext.min.js' %}" defer></script>
   <script src="{% static 'vendor/sortablejs/Sortable.min.js' %}" defer></script>
+  <script src="{% static 'components/film-card.js' %}" defer></script>
 </head>
-<body>
+{# A page says which skin it wears, voter, admin or run, by overriding this block; a section may set data-skin too (#58). #}
+<body data-skin="{% block skin %}voter{% endblock %}">
   <main>
     {% block content %}{% endblock %}
   </main>

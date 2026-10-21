@@ -156,7 +156,7 @@ Informational only. They never feed the objective and never veto on anyone's beh
 
 - **Source:** DoesTheDogDie, keyed by TMDB id. A guarded retry by title and year when the id finds nothing, and a movie-type filter. DTDD returns crowd yes/no counts per **topic**, which are evidence, not verdicts. DTDD's own labels and grouping are used site-wide (#19, #23).
 - **Watched list:** the topics a voter wants to be told about. Private, admin included. Disclosed upfront. Opting out takes no surface: tick nothing, or press "I don't care" (#20).
-- **What voters see:** **matched topics** with raw counts in the opened card and beside the veto control. On a tile or closed card, the **trigger icon** (amber ring) is the only mark. The icon needs enough yes votes, more than the no votes, to make a claim. Matched films come first in the voter's Unsorted tray (#35, #38).
+- **What voters see:** **matched topics** with raw counts in the opened card and beside the veto control. On a tile or closed card, the **trigger icon** (a ring on the tile's frame, coloured by the theme, #58) is the only mark. The icon needs enough yes votes, more than the no votes, to make a claim. Matched films come first in the voter's Unsorted tray (#35, #38).
 - **Admin surfaces** show a film's DTDD data, match field and topic list, and nothing personal.
 - **Gaps are named, never shown as an all-clear.** A film is **uncovered** when DTDD has no evidence for it, and **not fetched** when DTDD hasn't answered. Notes cover whatever the crowd evidence misses.
 - **Snapshots** are stored, because the rate limit (30 requests a minute) forbids live fetching. Each phase move refreshes the vocabulary, then films oldest-first until the rate limit's floor or 20 s. The move never waits on it. Films not fetched go first next time, and a failed refresh keeps the old snapshot. Everything is purged on entering RUN (#32).
@@ -208,7 +208,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 - **Header:** `n of N scored`, the done roster by name, and the *I'm done* toggle.
 - **Ballot:** a sticky Unsorted tray, then five colour bands (+3 … −1) and a separate dashed-red Veto band. Dropping a tile into a band is the score.
 - **Veto band:** a tile dropped there widens to show matched topics and a reason box.
-- **Tiles:** poster, title and year only. Their state is on the frame: amber ring for a match, greyed for seen it, a red ribbon with initials for vetoes by others.
+- **Tiles:** poster, title and year only. Their state is on the frame: the ring for a match, its colour the theme's (#58), greyed for seen it, a red ribbon with initials for vetoes by others.
 - **Opening a tile:** the film card expands in place inside its band, with others' veto reasons and seen-it flags shown one line each.
 
 **Reveal** (#29):

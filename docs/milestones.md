@@ -71,7 +71,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 
 **Scope** (#56)
 - The one full fetch of TMDB and DTDD payloads for the fifty seed films, stored in `fixtures/films/` for offline use (#25, #40).
-- The theme: tokens over the vendored classless base. The voter skin is rounded and roomy, the admin skin is dense ledgers, and RUN is dark (#29, #39). It fixes the state colours later surfaces share: the score scale, the veto, the amber ring, seen it.
+- The theme: tokens over the vendored classless base. The voter skin is rounded and roomy, the admin skin is dense ledgers, and RUN is dark (#29, #39). It fixes the state colours later surfaces share: the score scale, the veto, the ring, seen it (#58).
 - Only the components more than one surface shares, as templates over plain data, so later milestones only bind models to them:
   - the **poster** slot, with the **title card** for posterless films (#38);
   - the **film card**, collapsed and expanded, with an empty slot for each phase bar (#21).

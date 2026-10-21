@@ -1,0 +1,806 @@
+/*
+  Ribcage's one theme: pumpkin and aubergine, over Pico's classless base (#58).
+  Cosy Halloween in a dark room: warm, soft, playful in its details. docs/theme.md says why each choice was made.
+  A page wears one skin, voter, admin or run, through data-skin on <body>; a section may set its own.
+*/
+
+@font-face {
+  font-family: "Mystery Quest";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/mystery-quest/mystery-quest-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/fraunces/fraunces-latin-400-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Alegreya Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../vendor/alegreya-sans/alegreya-sans-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Alegreya Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../vendor/alegreya-sans/alegreya-sans-latin-700-normal.woff2") format("woff2");
+}
+
+/* ---------- Tokens ---------- */
+
+:root {
+  --ground: #1b1420;
+  --surface: #241b2b;
+  --surface-raised: #2c2134;
+  --field: #160f1a;
+  --line: #3a2d44;
+  --line-strong: #56456a;
+  --ink: #eadccb;
+  --ink-muted: #b8a6b4;
+
+  --accent: #ef8a3f;
+  --accent-hover: #f6a062;
+  --accent-ink: #2a1205;
+  --plum: #9a74c8;
+  --candle: rgb(255 170 80 / 0.55);
+  --link: #c9a6f0;
+  --link-hover: #ddc4f7;
+  --focus: rgb(201 166 240 / 0.35);
+  --focus-ring: #c9a6f0;
+
+  --font-display: "Mystery Quest", "Alegreya Sans", sans-serif;
+  --font-body: "Alegreya Sans", sans-serif;
+  --font-label: "Alegreya Sans", sans-serif;
+  --font-notes: "Fraunces", Georgia, serif;
+
+  --radius-pill: 999px;
+
+  /* The state colours every later surface shares. None of them is pumpkin, plum or lilac, so none reads as the accent. */
+  --score-top-pick: #7dd3c0;
+  --score-top-pick-ink: #0e2622;
+  --score-keen: #4aa292;
+  --score-keen-ink: #0b201c;
+  --score-happy: #2e6a62;
+  --score-happy-ink: #e3f4f0;
+  --score-dont-mind: #43384b;
+  --score-dont-mind-ink: #e8dbe3;
+  --score-rather-not: #dca0b6;
+  --score-rather-not-ink: #2a1520;
+  --veto: #ff6363;
+  --veto-ink: #ff9a8f;
+  --trigger-icon-ring: #b9e46e;
+  --seen-it-filter: grayscale(1) brightness(0.5) contrast(0.9);
+
+  --title-card-fill: #3b2647;
+  --title-card-ink: #f6d9b8;
+  --title-card-ink-muted: rgb(246 217 184 / 0.72);
+
+  --bat: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 28'%3E%3Cpath fill='%239a74c8' d='M0 8C6 6 10 8 12 12c2-2 5-2 7 0 2-2 4-3 7-2l3-5 1 4 2-1 2 1 1-4 3 5c3-1 5 0 7 2 2-2 5-2 7 0 2-4 6-6 12-4-5 3-7 7-7 12-3-2-6-2-8 0-2-2-5-2-7 0-3-1-6 1-10 6-4-5-7-7-10-6-2-2-5-2-7 0-2-2-5-2-8 0 0-5-2-9-7-12z'/%3E%3C/svg%3E");
+  --spider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg fill='%23b8a6b4' stroke='%23b8a6b4' stroke-linecap='round'%3E%3Ccircle cx='10' cy='12' r='3.4'/%3E%3Ccircle cx='10' cy='7.2' r='2' stroke='none'/%3E%3Cpath fill='none' stroke-width='1.1' d='M7.2 10 3.5 6.5 2 8M7 12H2.5L1 13.5M7.3 14l-3.5 3.5L4 19M12.8 10l3.7-3.5L18 8M13 12h4.5l1.5 1.5M12.7 14l3.5 3.5L16 19'/%3E%3C/g%3E%3C/svg%3E");
+  --silk: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0 1Q25 9 50 6T100 1' fill='none' stroke='%2356456a' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+
+  --run-ground: #120d16;
+  --run-surface: #1d1523;
+  --run-surface-raised: #251b2c;
+  --run-line: #33273d;
+  --run-line-strong: #4a3b57;
+  --run-ink: #e6d7c5;
+  --run-ink-muted: #ad9ca9;
+  --run-now: #ef8a3f;
+  --run-now-glow: 0 0 0 2px #ef8a3f, 0 0 18px rgb(255 150 60 / 0.3), inset 0 0 40px rgb(239 138 63 / 0.14);
+  --run-now-animation: candle 4.3s ease-in-out infinite;
+}
+
+/* ---------- Pico, fed from the tokens ---------- */
+
+:root,
+[data-skin] {
+  --pico-background-color: var(--ground);
+  --pico-color: var(--ink);
+  --pico-muted-color: var(--ink-muted);
+  --pico-muted-border-color: var(--line);
+  --pico-border-color: var(--line);
+  --pico-primary: var(--link);
+  --pico-primary-hover: var(--link-hover);
+  --pico-primary-underline: color-mix(in srgb, var(--link) 45%, transparent);
+  --pico-primary-hover-underline: var(--link-hover);
+  --pico-primary-background: var(--accent);
+  --pico-primary-border: var(--accent);
+  --pico-primary-hover-background: var(--accent-hover);
+  --pico-primary-hover-border: var(--accent-hover);
+  --pico-primary-focus: transparent;
+  --pico-primary-inverse: var(--accent-ink);
+  --pico-secondary: var(--ink-muted);
+  --pico-font-family: var(--font-body);
+  --pico-border-radius: var(--radius-control);
+  --pico-form-element-background-color: var(--field);
+  --pico-form-element-active-background-color: var(--field);
+  --pico-form-element-selected-background-color: var(--surface-raised);
+  --pico-form-element-border-color: var(--line-strong);
+  --pico-form-element-active-border-color: var(--accent);
+  --pico-form-element-focus-color: var(--focus);
+  --pico-form-element-color: var(--ink);
+  --pico-form-element-placeholder-color: var(--ink-muted);
+  --pico-h1-color: var(--ink);
+  --pico-h2-color: var(--ink);
+  --pico-h3-color: var(--ink);
+  --pico-h4-color: var(--ink);
+  --pico-h5-color: var(--ink);
+  --pico-h6-color: var(--ink);
+  --pico-table-border-color: var(--line);
+  --pico-code-background-color: var(--surface-raised);
+  --pico-code-color: var(--ink);
+  --pico-text-selection-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  /* Pico appends its focus ring to these, so `none` would void the whole shadow (#58). */
+  --pico-button-box-shadow: 0 0 0 transparent;
+  --pico-button-hover-box-shadow: 0 0 0 transparent;
+  --pico-box-shadow: none;
+}
+
+/* One candle's worth of warm light in the corner of the room. */
+:root {
+  background-color: var(--ground);
+  background-image: radial-gradient(60rem 36rem at 12% -12rem, rgb(239 138 63 / 0.1), transparent 65%);
+  background-repeat: no-repeat;
+  color-scheme: dark;
+}
+
+[data-skin] {
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-size);
+  line-height: var(--text-leading);
+}
+
+/* Lilac and ember mist drifts slowly behind every page, never over the text. Admin pages keep a plain ground. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(34% 24% at 24% 30%, rgb(170 150 220 / 0.15), transparent 70%),
+    radial-gradient(30% 20% at 76% 52%, rgb(170 150 220 / 0.12), transparent 70%),
+    radial-gradient(40% 18% at 38% 78%, rgb(170 150 220 / 0.1), transparent 70%),
+    radial-gradient(26% 16% at 66% 18%, rgb(228 123 52 / 0.07), transparent 70%),
+    radial-gradient(36% 16% at 54% 94%, rgb(228 123 52 / 0.08), transparent 70%);
+  filter: blur(24px);
+  animation: mist 90s ease-in-out infinite alternate;
+}
+body[data-skin="admin"]::before {
+  content: none;
+}
+
+/* ---------- Skins ---------- */
+
+[data-skin="voter"] {
+  --text-size: 1.125rem;
+  --text-leading: 1.55;
+  /* Hand-cut corners, no two the same, like a carved pumpkin's. */
+  --radius-card: 30px 20px 34px 22px / 22px 32px 20px 30px;
+  --radius-control: 16px 12px 18px 12px / 12px 18px 12px 16px;
+  --radius-poster: 16px 10px 18px 12px / 12px 18px 10px 16px;
+  --button-radius: 24px 16px 26px 18px / 18px 26px 16px 24px;
+  --button-padding: 1.5rem;
+  --space: 1.25rem;
+  --card-padding: 1.25rem;
+  --card-gap: 1.25rem;
+  --card-poster-width: 6.5rem;
+  --card-poster-width-open: 9rem;
+  --card-title-size: 1.45rem;
+  --pico-form-element-spacing-vertical: 0.7rem;
+  --pico-form-element-spacing-horizontal: 1rem;
+}
+
+[data-skin="admin"] {
+  --text-size: 0.875rem;
+  --text-leading: 1.4;
+  --radius-card: 10px;
+  --radius-control: 8px;
+  --radius-poster: 4px;
+  --button-radius: 8px;
+  --button-padding: 0.75rem;
+  --space: 0.6rem;
+  --card-padding: 0.75rem;
+  --card-gap: 0.9rem;
+  --card-poster-width: 5rem;
+  --card-poster-width-open: 6rem;
+  --card-title-size: 1.1rem;
+  --pico-form-element-spacing-vertical: 0.3rem;
+  --pico-form-element-spacing-horizontal: 0.55rem;
+  background-color: var(--ground);
+}
+
+[data-skin="run"] {
+  --ground: var(--run-ground);
+  --surface: var(--run-surface);
+  --surface-raised: var(--run-surface-raised);
+  --line: var(--run-line);
+  --line-strong: var(--run-line-strong);
+  --ink: var(--run-ink);
+  --ink-muted: var(--run-ink-muted);
+  --text-size: 1.125rem;
+  --text-leading: 1.45;
+  --radius-card: 30px 20px 34px 22px / 22px 32px 20px 30px;
+  --radius-control: 16px 12px 18px 12px / 12px 18px 12px 16px;
+  --radius-poster: 16px 10px 18px 12px / 12px 18px 10px 16px;
+  --button-radius: 24px 16px 26px 18px / 18px 26px 16px 24px;
+  --button-padding: 1.5rem;
+  background-color: var(--ground);
+}
+
+/* ---------- Type ---------- */
+
+[data-skin] :is(h1, h2, h3) {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+}
+[data-skin] h1 { font-size: 2.4em; }
+[data-skin] h2 { font-size: 1.7em; }
+[data-skin] h3 { font-size: 1.3em; }
+[data-skin="voter"] h1 {
+  color: var(--accent);
+}
+[data-skin="admin"] :is(h1, h2, h3) {
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+[data-skin="admin"] h1 { font-size: 1.6em; }
+[data-skin="admin"] h2 { font-size: 1.25em; }
+[data-skin="admin"] h3 { font-size: 1.05em; }
+
+/* The bat roosts beside the wordmark and now and then takes off: the theme's one jump scare. */
+.wordmark {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+.wordmark::after {
+  content: "";
+  display: inline-block;
+  width: 1.1em;
+  height: 0.48em;
+  margin-left: 0.25em;
+  vertical-align: 0.6em;
+  background: var(--bat) center / contain no-repeat;
+  transform: rotate(-12deg);
+  animation: bat-flight 9s ease-in-out infinite;
+}
+[data-skin="admin"] .wordmark::after {
+  animation: none;
+}
+
+.film-card__label,
+.runtime__source,
+.removed-tag {
+  font-family: var(--font-label);
+  font-size: 0.74em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+[data-skin="voter"] a:hover {
+  text-decoration-style: wavy;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Controls ---------- */
+
+[data-skin] button:not(.film-card__toggle) {
+  border-radius: var(--button-radius);
+  padding-inline: var(--button-padding);
+  font-weight: 700;
+}
+[data-skin] button.button--quiet {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+[data-skin] button.button--quiet:hover {
+  border-color: var(--ink-muted);
+}
+[data-skin="voter"] button:not(.film-card__toggle):not(:disabled):hover {
+  animation: wobble 0.5s ease-in-out;
+}
+[data-skin="admin"] button:not(.film-card__toggle) {
+  padding-block: 0.3rem;
+  font-size: 0.875rem;
+}
+[data-skin="admin"] button:not(.film-card__toggle):not(:disabled):hover {
+  animation: none;
+}
+[data-skin] :is(button, [type="button"], [type="submit"], [type="reset"], [role="button"], a):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* ---------- Poster and title card (#38) ---------- */
+
+.poster {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-poster);
+  background-color: var(--surface-raised);
+  box-shadow: 0 0 0 1px rgb(255 225 190 / 0.05);
+}
+.poster--thumb {
+  width: 1.75rem;
+}
+
+.title-card {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35em;
+  padding: 10% 9%;
+  overflow: hidden;
+  text-align: center;
+  background-color: var(--title-card-fill);
+  color: var(--title-card-ink);
+  box-shadow: inset 0 0 26px rgb(239 138 63 / 0.18);
+}
+.title-card__title {
+  font-family: var(--font-display);
+  font-size: clamp(0.6rem, 17cqi, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+.title-card__year {
+  font-family: var(--font-body);
+  font-size: clamp(0.55rem, 9cqi, 1.1rem);
+  color: var(--title-card-ink-muted);
+  font-variant-numeric: lining-nums;
+}
+.poster--thumb .title-card__title,
+.poster--thumb .title-card__year {
+  display: none;
+}
+
+/* ---------- Film card (#21) ---------- */
+
+.film-cards {
+  display: grid;
+  gap: var(--space);
+}
+
+/* A warm lip of light along the top edge instead of a drop shadow, and a tilt when you reach for it. */
+.film-card {
+  display: grid;
+  grid-template-columns: var(--card-poster-width) minmax(0, 1fr);
+  gap: var(--card-gap);
+  align-items: start;
+  padding: var(--card-padding);
+  background-color: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 1px 0 rgb(255 225 190 / 0.07);
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+[data-skin="voter"] .film-card:not(.is-open):hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  transform: rotate(-0.7deg) translateY(-4px);
+}
+.film-card.is-open {
+  --card-poster-width: var(--card-poster-width-open);
+  cursor: auto;
+  background-color: var(--surface-raised);
+  border-color: color-mix(in srgb, var(--plum) 50%, transparent);
+}
+[data-skin="admin"] .film-card {
+  border-color: var(--line);
+  transition: none;
+}
+
+/* A spider lets itself down below the open card's poster, and bobs on its thread. */
+[data-skin="voter"] .film-card.is-open .film-card__poster::after {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 4.5rem;
+  margin: 0 auto;
+  background: var(--spider) bottom / 28px 28px no-repeat,
+    linear-gradient(var(--ink-muted), var(--ink-muted)) center top / 1px calc(100% - 20px) no-repeat;
+  opacity: 0.8;
+  transform-origin: top center;
+  animation: spider-bob 2.8s ease-in-out infinite alternate;
+}
+[data-skin="admin"] .film-card.is-open .film-card__poster::after {
+  content: none;
+}
+
+.film-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+}
+[data-skin] .film-card__title {
+  margin: 0;
+  font-size: var(--card-title-size);
+  line-height: 1.15;
+}
+[data-skin="admin"] .film-card__title {
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+.film-card__toggle {
+  all: unset;
+  cursor: pointer;
+  overflow-wrap: break-word;
+}
+.film-card__toggle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.film-card__year {
+  font-family: var(--font-body);
+  font-size: 0.72em;
+  color: var(--ink-muted);
+  font-variant-numeric: lining-nums;
+  white-space: nowrap;
+}
+
+.film-card__runtime {
+  margin: 0;
+  white-space: nowrap;
+  color: var(--ink-muted);
+}
+.runtime__value {
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1.15em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.runtime__source {
+  display: inline-block;
+  margin-left: 0.25em;
+  padding: 0.1em 0.55em;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  color: var(--ink-muted);
+  line-height: 1.3;
+}
+.runtime__pencil {
+  margin-left: 0.15em;
+  color: var(--ink-muted);
+}
+
+.film-card__original {
+  display: none;
+  margin: 0.2rem 0 0;
+  color: var(--ink);
+}
+.film-card.is-open .film-card__original {
+  display: block;
+}
+.film-card__original .film-card__label {
+  color: var(--ink-muted);
+  margin-right: 0.4em;
+}
+
+.film-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15em 0.55em;
+  margin: 0.35rem 0 0;
+  color: var(--ink-muted);
+}
+.film-card__meta > span + span::before {
+  content: "·";
+  margin-right: 0.55em;
+}
+.film-card__meta a {
+  white-space: nowrap;
+}
+.certificate {
+  display: inline-block;
+  padding: 0 0.4em;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px 5px 8px 5px;
+  font-size: 0.82em;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* Spider silk sags across the voter's card above who suggested it. */
+.film-card__by {
+  margin: 0.9rem 0 0;
+  color: var(--ink-muted);
+}
+[data-skin="voter"] .film-card__by {
+  padding-top: 0.9rem;
+  background: var(--silk) top / 100% 10px no-repeat;
+}
+[data-skin="admin"] .film-card__by {
+  padding-top: 0;
+  background: none;
+}
+.film-card__by .film-card__label {
+  margin-right: 0.3em;
+}
+.film-card__suggester {
+  color: var(--ink);
+  font-weight: 700;
+}
+.film-card__suggester.is-removed {
+  color: var(--ink-muted);
+}
+.removed-tag {
+  display: inline-block;
+  margin-left: 0.3em;
+  padding: 0.05em 0.55em;
+  border: 1px dashed var(--ink-muted);
+  border-radius: var(--radius-pill);
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+
+/* ---------- Notes: the group's own words, in Fraunces italic ---------- */
+
+[data-skin] .film-card__notes {
+  display: grid;
+  gap: 0.6em;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+[data-skin] .note {
+  position: relative;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 3px solid var(--line-strong);
+  list-style: none;
+}
+.note__text {
+  display: inline;
+  margin: 0;
+  font-family: var(--font-notes);
+  font-style: italic;
+}
+.note--pitch .note__text {
+  font-size: 1.06em;
+}
+[data-skin="admin"] .note__text {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 1em;
+}
+.note__author {
+  margin-left: 0.5em;
+  color: var(--ink-muted);
+  font-size: 0.88em;
+  white-space: nowrap;
+}
+.note__author::before {
+  content: "— ";
+}
+.note__full,
+.film-card.is-open .note__trimmed {
+  display: none;
+}
+.film-card.is-open .note__full {
+  display: inline;
+}
+
+/* The pitch sits under a hand-cut sliver of pumpkin, lit from behind. */
+[data-skin] .note--pitch {
+  border-left-color: transparent;
+  padding-left: 1.15em;
+}
+[data-skin] .note--pitch::before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 0.1em;
+  bottom: 0.1em;
+  width: 7px;
+  background-color: var(--accent);
+  clip-path: polygon(0 4px, 100% 0, 85% 30%, 100% 55%, 80% 100%, 0 calc(100% - 6px), 15% 50%);
+  filter: drop-shadow(0 0 4px var(--candle));
+}
+[data-skin="admin"] .note--pitch::before {
+  width: 4px;
+  clip-path: none;
+  filter: none;
+}
+
+.film-card__phase-bar:empty {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  [data-skin="voter"] {
+    --card-padding: 0.9rem;
+    --card-gap: 0.9rem;
+    --card-poster-width: 5rem;
+    --card-poster-width-open: 6.5rem;
+    --card-title-size: 1.25rem;
+  }
+}
+
+/* ---------- State colours every later surface shares ---------- */
+
+.score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  padding: 0.4em 0.9em;
+  border-radius: 18px 12px 20px 12px / 12px 20px 12px 18px;
+  background-color: var(--score-fill);
+  color: var(--score-ink);
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+[data-skin="voter"] .score:hover {
+  animation: wobble 0.45s ease-in-out;
+}
+.score b {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.score--top-pick { --score-fill: var(--score-top-pick); --score-ink: var(--score-top-pick-ink); }
+.score--keen { --score-fill: var(--score-keen); --score-ink: var(--score-keen-ink); }
+.score--happy { --score-fill: var(--score-happy); --score-ink: var(--score-happy-ink); }
+.score--dont-mind { --score-fill: var(--score-dont-mind); --score-ink: var(--score-dont-mind-ink); }
+.score--rather-not { --score-fill: var(--score-rather-not); --score-ink: var(--score-rather-not-ink); }
+.score--veto {
+  background-color: transparent;
+  color: var(--veto-ink);
+  border: 2px dashed var(--veto);
+  padding: calc(0.4em - 2px) calc(0.9em - 2px);
+}
+
+/* The ring sits on the poster's slot, so seen it's greying of the poster leaves it in colour. */
+.has-trigger-icon .tile__poster {
+  border-radius: var(--radius-poster);
+  box-shadow: 0 0 0 4px var(--trigger-icon-ring);
+}
+.is-seen-it .poster {
+  filter: var(--seen-it-filter);
+}
+.veto-ribbon {
+  position: absolute;
+  top: 0.5rem;
+  right: -0.35rem;
+  padding: 0.05rem 0.4rem;
+  border: 2px dashed var(--veto);
+  border-radius: var(--radius-pill);
+  background-color: var(--ground);
+  color: var(--veto-ink);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+}
+
+/* ---------- Dense ledger (admin) ---------- */
+
+[data-skin] .ledger {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+[data-skin] .ledger th {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--line-strong);
+  background-color: var(--surface);
+  color: var(--ink-muted);
+  font-family: var(--font-label);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+}
+[data-skin] .ledger td {
+  padding: 0.3rem 0.6rem;
+  border-bottom: 1px solid var(--line);
+  background-color: transparent;
+  color: var(--ink);
+  vertical-align: middle;
+}
+[data-skin] .ledger tr.is-open td,
+[data-skin] .ledger .ledger__detail td {
+  background-color: var(--surface);
+}
+[data-skin] .ledger .ledger__detail td {
+  padding: 0.4rem 0.6rem 0.9rem 2.95rem;
+}
+.ledger__poster {
+  width: 1.75rem;
+}
+.ledger__title {
+  font-weight: 700;
+}
+.ledger__muted {
+  color: var(--ink-muted);
+}
+.ledger__directors {
+  margin-left: 0.5em;
+}
+[data-skin] .ledger .ledger__number {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ---------- Motion: slow, small, and off when asked ---------- */
+
+@keyframes mist {
+  from { transform: translate3d(-6%, -2%, 0); }
+  to { transform: translate3d(6%, 3%, 0); }
+}
+@keyframes bat-flight {
+  0%, 78%, 100% { transform: rotate(-12deg) translate(0, 0); }
+  82% { transform: rotate(-4deg) translate(6px, -6px) scaleY(0.6); }
+  86% { transform: rotate(-16deg) translate(14px, -10px) scaleY(1); }
+  90% { transform: rotate(-6deg) translate(10px, -4px) scaleY(0.6); }
+  95% { transform: rotate(-12deg) translate(3px, -1px) scaleY(1); }
+}
+@keyframes spider-bob {
+  from { transform: translateY(-8px) rotate(-4deg); }
+  to { transform: translateY(4px) rotate(4deg); }
+}
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg) scale(1.03); }
+  25% { transform: rotate(-3deg) scale(1.04); }
+  60% { transform: rotate(2deg) scale(1.03); }
+}
+@keyframes candle {
+  0%, 100% { box-shadow: var(--run-now-glow); }
+  50% { box-shadow: 0 0 0 2px #ef8a3f, 0 0 26px rgb(255 150 60 / 0.4), inset 0 0 50px rgb(239 138 63 / 0.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --run-now-animation: none;
+  }
+  body::before,
+  .wordmark::after,
+  [data-skin="voter"] .film-card.is-open .film-card__poster::after,
+  [data-skin="voter"] button:not(.film-card__toggle):not(:disabled):hover,
+  [data-skin="voter"] .score:hover {
+    animation: none;
+  }
+  .film-card {
+    transition: none;
+  }
+  [data-skin="voter"] .film-card:not(.is-open):hover {
+    transform: none;
+  }
+}
