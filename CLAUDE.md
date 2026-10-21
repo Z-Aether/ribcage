@@ -19,7 +19,7 @@ A web app a group of friends uses to plan and run one film marathon. It is rebui
 Top-level directories sort by what a thing is, not by which ticket made it. A new kind of thing gets its directory and its line here.
 
 - `ribcage/` is the Django project: settings and URLs, plus an app per module of `docs/design.md` §9, except Operations, whose `operations` is a plain package, and two apps outside it.
-  - `identity` holds `Voter`, the user model, and login and log out. Its `home` is the signed-in placeholder at `/` until the phase pages replace it (#70).
+  - `identity` holds `Voter`, the user model, and login and log out. Its `backoff` slows repeated failed logins under a key of the caller's choosing, a voter's display name for login (#71). Its `home` is the signed-in placeholder at `/` until the phase pages replace it (#70).
   - `films` holds `Film` and `FilmCard`, the plain data the shared components and the models meet at, and `corpus`, the pure reader of the recorded seed corpus (#57).
   - `seeding` holds the dev-only seed commands, the only route to development data. Each milestone extends them to seed what it builds, and `--phase` picks which of the phases M3 adds to seed into (#25, #50). Its `fetchcorpus` is the one command that goes online: it refetches the seed corpus into `fixtures/films/`, replacing the last fetch, and needs real `TMDB_API_KEY` and `DTDD_API_KEY` values (#57).
   - `gallery` is the dev-only visual reference: the theme and every shared component on corpus films, with sample voters and notes written for it. It answers only with `DEBUG` on, and each milestone adds the components it builds (#58).

@@ -143,7 +143,7 @@ BATCH_SIZE = environment.positive_whole_number("BATCH_SIZE", default=5)
 POLL_INTERVAL_SECONDS = environment.positive_whole_number("POLL_INTERVAL_SECONDS", default=30)
 # Yes votes a matched topic needs, beyond outnumbering its no votes, to show the trigger icon (#20).
 TRIGGER_ICON_THRESHOLD = environment.positive_whole_number("TRIGGER_ICON_THRESHOLD", default=5)
-# Login backoff: this many failures for one display name within the window bring a wait (#31).
+# Login backoff: this many failures for one display name within the window bring a wait (#31, #71).
 LOGIN_BACKOFF_FAILURES = environment.positive_whole_number("LOGIN_BACKOFF_FAILURES", default=5)
 LOGIN_BACKOFF_WINDOW_MINUTES = environment.positive_whole_number("LOGIN_BACKOFF_WINDOW_MINUTES", default=15)
 LOGIN_BACKOFF_WAIT_MINUTES = environment.positive_whole_number("LOGIN_BACKOFF_WAIT_MINUTES", default=1)

@@ -41,3 +41,10 @@ class Voter(AbstractBaseUser):
 
     def __str__(self):
         return self.display_name
+
+
+class LoginFailure(models.Model):
+    """One failed login, counted by `backoff`; a model rather than the cache table, which `migrate` never makes (#71)."""
+
+    key = models.TextField(db_index=True)
+    at = models.DateTimeField()
