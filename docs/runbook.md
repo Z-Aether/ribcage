@@ -8,7 +8,7 @@ The steps for running a window: the rebuild at its start, backups and restores d
 
 ## Rebuild
 
-At the start of each window. Teardown left the stack definition and its environment on Komodo and removed both volumes, so this deploys an empty app. A redeploy mid-window follows the same steps; take a backup first.
+At the start of each window. Teardown left the stack definition and its environment on Komodo and removed both volumes, so this deploys an empty app. A redeploy mid-window follows the same steps; take a backup first and copy its row counts into a note, because *Deploy* replaces the containers and closes their terminals (#59). The `counts` check afterwards compares against them.
 
 1. **Release the image, off Adam's VPN,** from a clean tree at a commit already pushed to `main`. Each build pulls the patched base image, which is why every window rebuilds (#18, #59).
    ```
