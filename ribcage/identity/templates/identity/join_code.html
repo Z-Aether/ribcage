@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Join · Ribcage{% endblock %}
+
+{% block content %}
+  <p class="wordmark">Ribcage</p>
+  <h1>Join</h1>
+  <form class="form--short" method="post" action="{% url 'join' %}">
+    {% csrf_token %}
+    {% for field in form %}
+      {{ field.as_field_group }}
+    {% endfor %}
+    <button type="submit">Continue</button>
+  </form>
+  <p>Already registered? <a href="{% url 'login' %}">Log in</a></p>
+  <p><a href="{% url 'privacy' %}">Privacy policy</a></p>
+{% endblock %}

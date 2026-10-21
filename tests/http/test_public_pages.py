@@ -59,7 +59,7 @@ def test_every_public_page_renders_with_no_database_queries(client, db, django_a
     assert response.status_code == 200
 
 
-@pytest.mark.parametrize("name", ["privacy", "login"])
+@pytest.mark.parametrize("name", ["privacy", "login", "join", "join_details"])
 def test_each_known_public_page_is_found_as_one_that_must_not_query(name):
     assert name in [entry.name for _, entry in PAGES_THAT_MUST_NOT_QUERY]
 
