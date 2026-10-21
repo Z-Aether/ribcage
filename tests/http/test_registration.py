@@ -177,8 +177,8 @@ def test_the_pages_link_between_login_and_registration(client):
 
 
 def test_the_pages_wear_the_voter_skin(client, db):
-    assert '<body data-skin="voter">' in client.get("/join/").text
-    assert '<body data-skin="voter">' in enter_code(client).text
+    assert '<body data-skin="voter" ' in client.get("/join/").text
+    assert '<body data-skin="voter" ' in enter_code(client).text
 
 
 def test_the_new_voter_can_log_out_and_sign_in_again(client, db):

@@ -2,7 +2,6 @@ from datetime import timedelta
 
 import pytest
 from django.contrib.auth import get_user
-from django.utils import timezone
 
 from ribcage.identity import backoff
 from ribcage.identity.models import Voter
@@ -10,21 +9,6 @@ from tests.http.test_login import PASSWORD, as_answered, log_in
 
 WAIT_MESSAGE = "Too many attempts. Try again in a minute."
 WRONG = "not-the-password"
-
-
-class Clock:
-    def __init__(self):
-        self.now = timezone.now()
-
-    def advance(self, **delta):
-        self.now += timedelta(**delta)
-
-
-@pytest.fixture
-def clock(monkeypatch):
-    clock = Clock()
-    monkeypatch.setattr(timezone, "now", lambda: clock.now)
-    return clock
 
 
 @pytest.fixture(autouse=True)

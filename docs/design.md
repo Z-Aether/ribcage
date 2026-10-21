@@ -220,7 +220,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 ### Admin console
 
-**Shell:** four tabs (**Phase · Films · Pick · Roster**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*. The console opens on the tab for the current phase and stays put when the phase moves. There is no Django admin; break-glass is shell access on the host (#16, #28). One page sits outside the tabs: a backup download that serves the file only for a one-time code created in the container's terminal, so the admin password alone never yields the database. The same page takes a backup back onto the host for a restore, for a code made the same way (#68, #81).
+**Shell:** four tabs (**Phase · Films · Pick · Roster**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*, and the voter side's footer below, since the tabs show TMDB and DTDD data (#76). The console opens on the tab for the current phase and stays put when the phase moves. There is no Django admin; break-glass is shell access on the host (#16, #28). One page sits outside the tabs: a backup download that serves the file only for a one-time code created in the container's terminal, so the admin password alone never yields the database. The same page takes a backup back onto the host for a restore, for a code made the same way (#68, #81).
 
 | Tab | Contents |
 |---|---|

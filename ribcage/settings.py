@@ -31,7 +31,7 @@ SILENCED_SYSTEM_CHECKS = ["security.W008", "security.W021", "auth.W004"]
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
-# Scripts can't read this cookie, so htmx requests must take the token from the page, e.g. hx-headers (#16).
+# Scripts can't read this cookie, so base.html hands htmx the page's token through hx-headers (#16, #76).
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "ribcage.identity",
     "ribcage.films",
     "ribcage.phase",
+    "ribcage.console",
     "ribcage.seeding",
     "ribcage.gallery",
 ]

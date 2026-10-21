@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Admin log in · Ribcage{% endblock %}
+{% block skin %}admin{% endblock %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% include "components/footer.html" %}{% endblock %}
+
+{% block content %}
+  <p class="wordmark">Ribcage</p>
+  <h1>Admin log in</h1>
+  <form class="form--short" method="post" action="{% url 'admin_login' %}">
+    {% csrf_token %}
+    {% for error in form.non_field_errors %}
+      <p role="alert">{{ error }}</p>
+    {% endfor %}
+    {% for field in form %}
+      {{ field.as_field_group }}
+    {% endfor %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit">Log in</button>
+  </form>
+{% endblock %}

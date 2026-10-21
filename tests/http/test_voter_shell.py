@@ -5,14 +5,14 @@ from django.templatetags.static import static
 
 from ribcage.identity.models import Voter
 from ribcage.phase.views import WELCOME_PENDING
-from tests.http.test_public_pages import PAGES_THAT_MUST_NOT_QUERY, PUBLIC_PAGES, answers_get, routes
+from tests.http.routes import VOTER, as_a_page, pages_of, public_pages
 
 TMDB_NOTICE = "This product uses the TMDB API but is not endorsed or certified by TMDB."
 DTDD_CREDIT = '<a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a>'
 
-PUBLIC_NAMES = {entry.name for _, entry in PUBLIC_PAGES}
-# Every walled page that answers GET; the gallery among them, which needs DEBUG on.
-WALLED_PAGES = [path for path, entry in routes() if entry.name not in PUBLIC_NAMES and answers_get(entry)]
+PUBLIC_PAGES = [path for path, _ in public_pages()]
+# Every fixed-address voter route, each held as a page if it answers GET; the gallery among them, which needs DEBUG on.
+WALLED_PAGES = [path for path, _ in pages_of(VOTER)]
 
 
 @pytest.fixture
@@ -32,7 +32,7 @@ def visit(client, path):
     session = client.session
     session[WELCOME_PENDING] = True
     session.save()
-    return client.get(path)
+    return as_a_page(client.get(path))
 
 
 def footer(page):
@@ -107,7 +107,7 @@ def test_the_abuse_address_comes_from_its_setting(client, settings):
     assert 'href="mailto:someone@example.org"' in footer(client.get("/").text)
 
 
-@pytest.mark.parametrize("path", [path for path, _ in PAGES_THAT_MUST_NOT_QUERY])
+@pytest.mark.parametrize("path", PUBLIC_PAGES)
 def test_every_public_page_has_the_footers_links_but_no_abuse_mailto_or_header_menu(client, settings, path):
     page = client.get(path).text
 

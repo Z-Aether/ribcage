@@ -488,6 +488,77 @@ body > header.voter-header {
   animation: none;
 }
 
+/* ---------- Console shell: the admin header and the four tabs (#28, #37, #76) ---------- */
+
+body > header.console-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.25rem;
+  padding-block: 0.6rem;
+  border-bottom: 1px solid var(--line);
+}
+[data-skin] .console-header__wordmark {
+  margin-right: auto;
+  font-size: 1.6rem;
+  white-space: nowrap;
+  text-decoration: none;
+}
+[data-skin] .console-header__end {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0.2rem 1.25rem;
+}
+[data-skin] .console-header__voter-side {
+  margin: 0;
+  color: var(--ink-muted);
+}
+[data-skin] .console-header form {
+  margin: 0;
+}
+/* A plain Log out, read as a link though it posts (#37). */
+[data-skin] .console-header button.console-header__log-out {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--link);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--pico-primary-underline);
+  text-underline-offset: 0.15em;
+}
+[data-skin] .console-header button.console-header__log-out:hover {
+  color: var(--link-hover);
+}
+
+[data-skin] nav.console-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+[data-skin] nav.console-tabs a {
+  margin: 0 0 -1px;
+  padding: 0.5rem 0.9rem;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-muted);
+  font-weight: 700;
+  text-decoration: none;
+}
+[data-skin] nav.console-tabs a:hover {
+  color: var(--ink);
+}
+[data-skin] nav.console-tabs a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
 body > footer.site-footer {
   margin-top: 3rem;
   padding-block: 1.5rem 2.5rem;

@@ -9,6 +9,9 @@ from django.utils import timezone
 from ribcage.identity import display_names
 from ribcage.identity.models import LoginFailure
 
+# The admin login's one count, apart from every voter's (#60, #76).
+ADMIN_KEY = "admin"
+
 
 def voter_key(display_name):
     # Every spelling login accepts for a name shares its count, whether or not the name exists (#71).

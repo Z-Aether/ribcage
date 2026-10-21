@@ -27,8 +27,8 @@ def log_in(client, display_name, password, **extra):
 
 
 def as_answered(response, typed_name):
-    # The page echoes the typed name and a fresh CSRF token; everything else must match.
-    page = re.sub(r'name="csrfmiddlewaretoken" value="[^"]+"', "", response.text)
+    # The page echoes the typed name and a fresh CSRF token, twice; everything else must match.
+    page = re.sub(r'name="csrfmiddlewaretoken" value="[^"]+"|"X-CSRFToken": "[^"]+"', "", response.text)
     return response.status_code, page.replace(f'value="{typed_name}"', 'value=""')
 
 
@@ -110,7 +110,7 @@ def test_the_login_page_links_the_privacy_policy(client):
 
 
 def test_the_login_page_wears_the_voter_skin(client):
-    assert '<body data-skin="voter">' in client.get("/login/").text
+    assert '<body data-skin="voter" ' in client.get("/login/").text
 
 
 def test_making_log_out_public_leaves_djangos_logout_view_unmarked():

@@ -4,9 +4,12 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeDoneV
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views import View
 from django.views.decorators.http import require_http_methods
 
-from ribcage.identity.forms import ChangePasswordForm, JoinCodeForm, LoginForm, RegistrationForm
+from ribcage.identity import admin_session
+from ribcage.identity.forms import AdminLoginForm, ChangePasswordForm, JoinCodeForm, LoginForm, RegistrationForm
 from ribcage.identity.models import Voter
 from ribcage.phase.views import WELCOME_PENDING
 
@@ -65,3 +68,29 @@ def join_details(request):
             request.session[WELCOME_PENDING] = True
             return redirect(AFTER_REGISTRATION)
     return render_details_step(request, code, form)
+
+
+@login_not_required
+@require_http_methods(["GET", "POST"])
+def admin_login(request):
+    destination = request.POST.get("next", request.GET.get("next", ""))
+    form = AdminLoginForm(request.POST if request.method == "POST" else None)
+    if not form.is_valid():
+        return render(request, "identity/admin_login.html", {"form": form, "next": destination})
+    safe = url_has_allowed_host_and_scheme(destination, allowed_hosts={request.get_host()}, require_https=request.is_secure())
+    response = redirect(destination if safe else "console")
+    admin_session.sign_in(request, response)
+    return response
+
+
+class AdminLogout(View):
+    http_method_names = ["post"]
+
+    def post(self, request):
+        response = redirect("admin_login")
+        admin_session.sign_out(request, response)
+        return response
+
+
+# Outside both walls, like the voter's log out, so a stale tab's lands on the admin login (#70, #76).
+admin_logout = login_not_required(AdminLogout.as_view())

@@ -42,6 +42,32 @@ def refuse_while_waiting(key):
         raise ValidationError(backoff.describe(remaining), code="backoff")
 
 
+def matches_secret(typed, secret):
+    # Constant time, over bytes so a non-ASCII guess is refused rather than raising (#8, #72).
+    return secrets.compare_digest(typed.encode(), secret.encode())
+
+
+class AdminLoginForm(forms.Form):
+    # A password alone: there is no admin name, and no admin row (#8).
+    password = forms.CharField(label="Admin password", strip=False, widget=forms.PasswordInput(attrs={"autocomplete": "current-password", "autofocus": True}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, label_suffix="", **kwargs)
+
+    def clean(self):
+        password = self.cleaned_data.get("password")
+        if password is None:
+            return super().clean()
+        # The voter login's backoff, under the admin's own key (#60, #71).
+        refuse_while_waiting(backoff.ADMIN_KEY)
+        if not matches_secret(password, settings.ADMIN_PASSWORD):
+            backoff.record_failure(backoff.ADMIN_KEY)
+            refuse_while_waiting(backoff.ADMIN_KEY)
+            raise ValidationError("The admin password is wrong.", code="wrong_password")
+        backoff.clear(backoff.ADMIN_KEY)
+        return super().clean()
+
+
 class JoinCodeForm(forms.Form):
     code = forms.CharField(label="Join code", strip=True, widget=forms.TextInput(attrs={"autocomplete": "off", "autofocus": True}))
 
@@ -49,9 +75,7 @@ class JoinCodeForm(forms.Form):
         super().__init__(*args, label_suffix="", **kwargs)
 
     def clean_code(self):
-        # Constant time, over bytes so a non-ASCII guess is refused rather than raising (#8, #72).
-        typed = self.cleaned_data["code"].encode()
-        if not secrets.compare_digest(typed, settings.JOIN_CODE.encode()):
+        if not matches_secret(self.cleaned_data["code"], settings.JOIN_CODE):
             raise ValidationError("That isn't the join code.", code="wrong_code")
         return self.cleaned_data["code"]
 

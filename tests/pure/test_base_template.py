@@ -1,6 +1,8 @@
+import json
 import re
 
 import pytest
+from django.middleware.csrf import CSRF_TOKEN_LENGTH
 from django.template import engines
 from django.template.loader import render_to_string
 from django.templatetags.static import static
@@ -61,10 +63,20 @@ def test_a_theme_stylesheet_the_base_template_loads_declares_each_vendored_font(
 
 
 def test_a_page_wears_the_voter_skin_unless_it_names_another():
-    assert '<body data-skin="voter">' in a_page_extending_the_base_template()
+    assert '<body data-skin="voter" ' in a_page_extending_the_base_template()
 
     admin_page = engines["django"].from_string('{% extends "base.html" %}{% block skin %}admin{% endblock %}')
-    assert '<body data-skin="admin">' in admin_page.render(request=RequestFactory().get("/"))
+    assert '<body data-skin="admin" ' in admin_page.render(request=RequestFactory().get("/"))
+
+
+def test_the_base_template_hands_htmx_the_pages_csrf_token():
+    # The CSRF cookie is HttpOnly, so htmx can't read it and takes the page's token instead (#48, #76).
+    page = render_to_string("base.html", request=RequestFactory().get("/"))
+
+    headers = json.loads(re.search(r"<body [^>]*hx-headers='([^']+)'", page)[1])
+
+    assert list(headers) == ["X-CSRFToken"]
+    assert re.fullmatch(rf"[A-Za-z0-9]{{{CSRF_TOKEN_LENGTH}}}", headers["X-CSRFToken"])
 
 
 def test_the_base_template_carries_the_themes_icon():

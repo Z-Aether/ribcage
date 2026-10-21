@@ -97,7 +97,7 @@ def heading(page):
 
 
 def skin(page):
-    return re.search(r'<body data-skin="([a-z]+)">', page)[1]
+    return re.search(r'<body data-skin="([a-z]+)"', page)[1]
 
 
 @pytest.mark.parametrize("phase", PHASES)

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{# Every admin page: the admin skin under the console header, in place of the voter's (#28, #76). #}
+
+{% block skin %}admin{% endblock %}
+
+{% block header %}
+<header class="console-header">
+  <a class="wordmark console-header__wordmark" href="{% url 'console' %}">Ribcage</a>
+  <div class="console-header__end">
+    {# Read from the voter session, which the admin's leaves alone (#8, #28). #}
+    <p class="console-header__voter-side"><a href="{% url 'phase_page' %}" target="_blank">Voter side ↗</a> · {% if user.is_authenticated %}signed in there as {{ user.display_name }}{% else %}not signed in there{% endif %}</p>
+    <form method="post" action="{% url 'admin_logout' %}">
+      {% csrf_token %}
+      <button class="console-header__log-out" type="submit">Log out</button>
+    </form>
+  </div>
+</header>
+{% endblock %}
