@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.test import RequestFactory
 
-from tests.vendored import STATIC, vendored_fonts, vendored_scripts_and_styles
+from tests.vendored import STATIC, vendored_fonts, vendored_files_pages_load
 
 PLAIN_STATIC_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
@@ -37,7 +37,7 @@ def test_a_page_extending_the_base_template_gets_its_content_inside_main():
     assert re.search(r"<main>\s*<p>A child page</p>\s*</main>", page)
 
 
-@pytest.mark.parametrize("name", vendored_scripts_and_styles())
+@pytest.mark.parametrize("name", vendored_files_pages_load())
 def test_the_base_template_loads_each_vendored_asset(name):
     page = a_page_extending_the_base_template()
 

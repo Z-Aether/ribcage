@@ -16,11 +16,16 @@
   <script src="{% static 'vendor/idiomorph/idiomorph-ext.min.js' %}" defer></script>
   <script src="{% static 'vendor/sortablejs/Sortable.min.js' %}" defer></script>
   <script src="{% static 'components/film-card.js' %}" defer></script>
+  <script src="{% static 'components/voter-menu.js' %}" defer></script>
 </head>
 {# A page says which skin it wears, voter, admin or run, by overriding this block; a section may set data-skin too (#58). #}
 <body data-skin="{% block skin %}voter{% endblock %}">
+  {# A public page empties this block: naming the voter reads the session, and public pages never query (#73). #}
+  {% block header %}{% include "components/voter_header.html" %}{% endblock %}
   <main>
     {% block content %}{% endblock %}
   </main>
+  {# A public page overrides this to drop the abuse contact, which sits behind the login wall (#16, #73). #}
+  {% block footer %}{% include "components/footer.html" with abuse_contact=True %}{% endblock %}
 </body>
 </html>

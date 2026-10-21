@@ -19,6 +19,7 @@ REQUIRED = [
     "ADMIN_PASSWORD",
     "TMDB_API_KEY",
     "DTDD_API_KEY",
+    "ABUSE_EMAIL",
 ]
 
 

@@ -3,7 +3,7 @@ import secrets
 from django import forms
 from django.conf import settings
 from django.contrib.auth import password_validation
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.core.exceptions import ValidationError
 
 from ribcage.identity import backoff, display_names
@@ -81,3 +81,21 @@ class RegistrationForm(forms.Form):
             except ValidationError as error:
                 self.add_error("password", error)
         return cleaned_data
+
+
+class ChangePasswordForm(PasswordChangeForm):
+    # Also the forced change after an admin reset (#37, #80).
+    error_messages = {
+        **PasswordChangeForm.error_messages,
+        "password_incorrect": "Your current password is wrong.",
+        "password_mismatch": "The two passwords differ.",
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, label_suffix="", **kwargs)
+        self.fields["old_password"].label = "Current password"
+        self.fields["new_password1"].label = "New password"
+        self.fields["new_password2"].label = "New password again"
+        # The voter skin carries no hint text (#58); a refused password says why.
+        for field in self.fields.values():
+            field.help_text = ""

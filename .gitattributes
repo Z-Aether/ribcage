@@ -3,3 +3,6 @@ ribcage/static/vendor/** -text
 
 # Bash reads a CRLF script as commands ending in a carriage return, so scripts keep LF on every checkout (#59).
 *.sh text eol=lf
+
+# The vendoring record is our own text, not a published file, so it keeps LF (#73).
+ribcage/static/vendor/vendored.toml text eol=lf

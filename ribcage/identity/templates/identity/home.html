@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <p class="wordmark">Ribcage</p>
+  {# A plain placeholder until the phase pages take over / (#74). #}
   <p>Signed in as {{ user.display_name }}.</p>
-  <form class="form--short" method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button class="button--quiet" type="submit">Log out</button>
-  </form>
 {% endblock %}

@@ -342,6 +342,146 @@ body[data-skin="admin"]::before {
   max-width: 26rem;
 }
 
+/* ---------- Voter shell: the thin header and every page's footer (#27, #37, #73) ---------- */
+
+body > header.voter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+[data-skin] .voter-header__wordmark {
+  flex-shrink: 0;
+  font-size: 2.1rem;
+  white-space: nowrap;
+  text-decoration: none;
+}
+[data-skin] .voter-header__wordmark:hover {
+  color: var(--accent-hover);
+  text-decoration: none;
+}
+
+[data-skin] details.voter-menu {
+  position: relative;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+[data-skin] .voter-menu > summary.voter-menu__name {
+  margin: 0;
+  padding: 0.4rem 1rem;
+  /* A name up to 20 characters wide wraps rather than pushing past a phone's edge (#37). */
+  overflow-wrap: anywhere;
+  text-align: right;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--button-radius);
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.4;
+}
+/* A small hand-drawn caret in place of Pico's chevron, turning when the menu opens. */
+[data-skin] .voter-menu > summary.voter-menu__name::after {
+  content: "";
+  display: inline-block;
+  float: none;
+  width: 0.42em;
+  height: 0.42em;
+  margin: 0 0 0.2em 0.6em;
+  background: none;
+  border-right: 2px solid var(--ink-muted);
+  border-bottom: 2px solid var(--ink-muted);
+  border-radius: 0 2px 0 0;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+[data-skin] .voter-menu[open] > summary.voter-menu__name::after {
+  transform: rotate(225deg) translate(-0.15em, -0.15em);
+}
+[data-skin] .voter-menu > summary.voter-menu__name:hover,
+[data-skin] .voter-menu[open] > summary.voter-menu__name {
+  border-color: var(--plum);
+}
+[data-skin] .voter-menu > summary.voter-menu__name:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+[data-skin] .voter-menu__items {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 10;
+  min-width: 12rem;
+  margin: 0;
+  padding: 0.4rem;
+  list-style: none;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-card);
+  box-shadow: 0 14px 32px rgb(8 4 10 / 0.55);
+}
+[data-skin] .voter-menu__items li {
+  margin: 0;
+  list-style: none;
+}
+[data-skin] .voter-menu__items form {
+  margin: 0;
+}
+[data-skin] .voter-menu__items a,
+[data-skin] .voter-menu__items button.voter-menu__log-out {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.55rem 0.9rem;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 400;
+  text-align: left;
+  text-decoration: none;
+}
+[data-skin] .voter-menu__items a:hover,
+[data-skin] .voter-menu__items button.voter-menu__log-out:hover {
+  background-color: var(--surface);
+  text-decoration: none;
+  animation: none;
+}
+
+body > footer.site-footer {
+  margin-top: 3rem;
+  padding-block: 1.5rem 2.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: 0.85em;
+}
+.site-footer__tmdb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+  margin: 0 0 0.75rem;
+}
+/* Smaller than the wordmark, as TMDB's terms ask of its logo (#5). */
+.site-footer__tmdb-logo {
+  width: 110px;
+  height: auto;
+}
+[data-skin] .site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+[data-skin] .site-footer__links li {
+  margin: 0;
+  list-style: none;
+}
+
 /* ---------- Poster and title card (#38) ---------- */
 
 .poster {

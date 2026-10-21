@@ -13,6 +13,8 @@ JOIN_CODE = environment.required("JOIN_CODE")
 ADMIN_PASSWORD = environment.required("ADMIN_PASSWORD")
 TMDB_API_KEY = environment.required("TMDB_API_KEY")
 DTDD_API_KEY = environment.required("DTDD_API_KEY")
+# The footer's abuse mailto:, kept out of the public repo (#5, #73).
+ABUSE_EMAIL = environment.required("ABUSE_EMAIL")
 
 # Nothing forwarded by the proxy is read: outside DEBUG, EveryRequestIsHttps sets the scheme (#31, #54).
 SECURE_PROXY_SSL_HEADER = None
@@ -71,6 +73,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
+                "ribcage.context_processors.footer",
             ],
         },
     },

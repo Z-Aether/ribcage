@@ -19,6 +19,7 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
       TMDB_API_KEY: ${TMDB_API_KEY:-}
       DTDD_API_KEY: ${DTDD_API_KEY:-}
+      ABUSE_EMAIL: ${ABUSE_EMAIL:-}
       # Judgement constants: left empty, each keeps its default (#25).
       DIVERSITY_CUT: ${DIVERSITY_CUT:-}
       FLOOR_WEIGHT_MULTIPLIER: ${FLOOR_WEIGHT_MULTIPLIER:-}

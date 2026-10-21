@@ -2,6 +2,9 @@
 
 {% block title %}Join · Ribcage{% endblock %}
 
+{% block header %}{% endblock %}
+{% block footer %}{% include "components/footer.html" %}{% endblock %}
+
 {% block content %}
   <p class="wordmark">Ribcage</p>
   <h1>Choose your name</h1>
@@ -14,5 +17,4 @@
     <button type="submit">Join</button>
   </form>
   <p>Already registered? <a href="{% url 'login' %}">Log in</a></p>
-  <p><a href="{% url 'privacy' %}">Privacy policy</a></p>
 {% endblock %}

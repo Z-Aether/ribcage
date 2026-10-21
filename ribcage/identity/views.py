@@ -1,17 +1,26 @@
 from django.contrib.auth import login as sign_in
 from django.contrib.auth.decorators import login_not_required
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeDoneView, PasswordChangeView
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
 
-from ribcage.identity.forms import JoinCodeForm, LoginForm, RegistrationForm
+from ribcage.identity.forms import ChangePasswordForm, JoinCodeForm, LoginForm, RegistrationForm
 from ribcage.identity.models import Voter
 
 login = LoginView.as_view(template_name="identity/login.html", authentication_form=LoginForm)
 
 # Outside the wall, so a stale tab's log out lands on login rather than signing in to a GET-less page (#70).
 logout = login_not_required(LogoutView.as_view())
+
+# Django's view keeps this session and, through the session hash, ends the voter's others (#37, #73).
+change_password = PasswordChangeView.as_view(
+    template_name="identity/change_password.html",
+    form_class=ChangePasswordForm,
+    success_url=reverse_lazy("password_changed"),
+)
+password_changed = PasswordChangeDoneView.as_view(template_name="identity/password_changed.html")
 
 # Where a new voter lands; #75 points it at Welcome.
 AFTER_REGISTRATION = "home"

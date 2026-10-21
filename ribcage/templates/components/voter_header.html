@@ -1,0 +1,16 @@
+{# The thin voter header: the wordmark home to the phase page, and the voter's name opening their menu (#27, #37). #}
+<header class="voter-header">
+  <a class="wordmark voter-header__wordmark" href="{% url 'home' %}">Ribcage</a>
+  <details class="voter-menu" data-voter-menu>
+    <summary class="voter-menu__name">{{ user.display_name }}</summary>
+    <ul class="voter-menu__items">
+      <li><a href="{% url 'change_password' %}">Change password</a></li>
+      <li>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="voter-menu__log-out" type="submit">Log out</button>
+        </form>
+      </li>
+    </ul>
+  </details>
+</header>

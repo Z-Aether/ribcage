@@ -189,7 +189,7 @@ Nothing about trigger warnings appears in PICK or RUN: by then they have already
 **Shell** (#27, #37):
 - **Header:** the phase page, *My warnings* (every phase but RUN), and the voter's name opening *Change password* and *Log out*.
 - **Nag bar:** shown until the reveal, and only until the voter ticks a topic or presses "I don't care".
-- **Footer:** TMDB attribution, DTDD link, abuse `mailto:`, privacy policy.
+- **Footer:** TMDB attribution, DTDD link, abuse `mailto:`, privacy policy. The public pages (login, join, privacy) carry all but the abuse `mailto:`, which stays behind the login wall (#73).
 
 The page *is* the phase: one page per phase, no hub, no tabs.
 

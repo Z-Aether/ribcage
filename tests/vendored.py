@@ -20,7 +20,7 @@ def vendored_assets():
     return [path.relative_to(STATIC).as_posix() for path in recorded_files() if path.name != "LICENSE"]
 
 
-def vendored_scripts_and_styles():
+def vendored_files_pages_load():
     return [name for name in vendored_assets() if not name.endswith(FONT_SUFFIX)]
 
 

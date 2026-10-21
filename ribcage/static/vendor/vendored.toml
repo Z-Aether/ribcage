@@ -1,4 +1,4 @@
-# Each vendored front-end file, byte for byte as its npm package publishes it (#14, #46).
+# Each vendored front-end file, byte for byte as its npm package, or its publisher, publishes it (#14, #46).
 # To upgrade a library: download its tarball at the new version, check it against the registry's
 # integrity value (https://registry.npmjs.org/<package>/<version>, under dist), copy the files over,
 # then update its entry here. tests/pure/test_vendored_files.py holds the files to these checksums.
@@ -66,3 +66,12 @@ tarball = "https://registry.npmjs.org/@fontsource/mystery-quest/-/mystery-quest-
 tarball_integrity = "sha512-NF3tKzEIZCQVoJurDR8IaMrarMR0TVpZaBl7BlGSYiCCn8iOhA3QnL5MrZIb5NLsLxSjcafZn+HC5bjlDXL2Jw=="
 files."mystery-quest-latin-400-normal.woff2" = { from = "package/files/mystery-quest-latin-400-normal.woff2", sha256 = "cff3f0c2032a90d1a7e9f33858f9eea974bb636bda9a9a7f8786e67fe3111007" }
 files."LICENSE" = { from = "package/LICENSE", sha256 = "c4bc4c750697a5cea81eb0abbb49c6efee37be954368bcd2955f93965d1f2edd" }
+
+# Not an npm package: TMDB's own logo, which its terms require beside the attribution sentence (#5, #73).
+# To upgrade: open the brand-assets page in a browser (it challenges scripts), save "Primary short (blue)",
+# check its sha256 against the fingerprint in its asset name, copy it over, and update this entry.
+[tmdb]
+source = "https://www.themoviedb.org/about/logos-attribution"
+retrieved = "2026-10-21"
+terms = "https://www.themoviedb.org/api-terms-of-use"
+files."blue_short.svg" = { from = "https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg", sha256 = "8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c" }

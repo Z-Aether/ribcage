@@ -24,7 +24,7 @@ At the start of each window. Teardown left the stack definition and its environm
 2. **Set the stack's environment in Komodo,** with your copy in `private/komodo-stack.env`.
    - **Values are URL-safe text,** with no `$`, `#`, quotes or spaces. Komodo's `.env` handling cuts a value at `$` and treats ` #` as a comment. Generate each secret with `.venv/Scripts/python -c "import secrets; print(secrets.token_urlsafe(50))"`.
    - **New for each window:** `SECRET_KEY`, `JOIN_CODE` and `ADMIN_PASSWORD`. The last window's join code went round the group chat.
-   - **Carried over:** `TMDB_API_KEY` and `DTDD_API_KEY` from `private/credentials/`, and `TIME_ZONE` (`Europe/Budapest`).
+   - **Carried over:** `TMDB_API_KEY` and `DTDD_API_KEY` from `private/credentials/`, `TIME_ZONE` (`Europe/Budapest`), and `ABUSE_EMAIL`, the address the footer's abuse link mails (#73).
    - **The address:** `ALLOWED_HOSTS` is `<subdomain>`, and `CSRF_TRUSTED_ORIGINS` is `https://<subdomain>`.
    - **Tuning constants** stay empty, which keeps each one's default. Changing one later is an environment edit and a redeploy, with no rebuild (#25).
    - **Auto-update stays off.** In the stack's settings, *Poll for Updates* and *Auto Update* are both off (#40).
