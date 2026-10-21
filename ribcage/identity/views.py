@@ -23,12 +23,7 @@ change_password = PasswordChangeView.as_view(
 password_changed = PasswordChangeDoneView.as_view(template_name="identity/password_changed.html")
 
 # Where a new voter lands; #75 points it at Welcome.
-AFTER_REGISTRATION = "home"
-
-
-def home(request):
-    # A plain signed-in placeholder until the phase pages take over / (#70, #74).
-    return render(request, "identity/home.html")
+AFTER_REGISTRATION = "phase_page"
 
 
 def render_code_step(request, form):

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ribcage.identity",
     "ribcage.films",
+    "ribcage.phase",
     "ribcage.seeding",
     "ribcage.gallery",
 ]
@@ -92,7 +93,7 @@ DATABASES = {
 AUTH_USER_MODEL = "identity.Voter"
 AUTHENTICATION_BACKENDS = ["ribcage.identity.backends.DisplayNameBackend"]
 LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "phase_page"
 LOGOUT_REDIRECT_URL = "login"
 # Longer than any window, so a voter signs in once; teardown ends every session anyway (#8, #16).
 SESSION_COOKIE_AGE = 60 * 24 * 60 * 60

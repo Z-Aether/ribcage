@@ -8,6 +8,8 @@ import pytest
 LOGIN = "/login/"
 VOTER = "Sam"
 PASSWORD = "popcorn-before-midnight"
+# The voter header names whoever is signed in, on every walled page (#73).
+SIGNED_IN_AS_THE_VOTER = f'<summary class="voter-menu__name">{VOTER}</summary>'
 # Run inside the app's container: no registration yet, so the voter is made in its shell (#70).
 CREATE_THE_VOTER = [
     "python",

@@ -3,7 +3,14 @@ import time
 import pytest
 
 from ribcage.operations.backup import KEPT_BACKUPS, is_backup, row_counts
-from tests.image.client import CREATE_THE_VOTER, home_page, session_of, sign_in, wait_until_serving
+from tests.image.client import (
+    CREATE_THE_VOTER,
+    SIGNED_IN_AS_THE_VOTER,
+    home_page,
+    session_of,
+    sign_in,
+    wait_until_serving,
+)
 from tests.image.docker import REPO_ROOT
 from tests.image.stack import EXAMPLE, LOCALLY_ON_THE_IMAGE_UNDER_TEST, Stack, override
 
@@ -130,6 +137,6 @@ def test_a_pulled_backup_restores_into_a_fresh_stack_with_every_row_count(stack,
 
         assert counts_in_the_container(fresh) == as_text(expected)
         # The session row came back with the backup, so the voter is still signed in.
-        assert "Signed in as Sam" in home_page(fresh.port(), session)[2]
+        assert SIGNED_IN_AS_THE_VOTER in home_page(fresh.port(), session)[2]
     finally:
         fresh.run("down", "--volumes")

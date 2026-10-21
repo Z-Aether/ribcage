@@ -9,6 +9,7 @@ from django.contrib.auth.views import LogoutView
 from ribcage.identity.models import Voter
 
 PASSWORD = "popcorn-before-midnight"
+SIGNED_IN_AS_SAM = '<summary class="voter-menu__name">Sam</summary>'
 
 
 @pytest.fixture(autouse=True)
@@ -52,7 +53,7 @@ def test_signing_in_with_no_destination_lands_on_home(client, sam):
     response = log_in(client, "Sam", PASSWORD)
 
     assert response.headers["Location"] == "/"
-    assert "Signed in as Sam" in client.get("/").text
+    assert SIGNED_IN_AS_SAM in client.get("/").text
 
 
 @pytest.mark.parametrize("typed", ["Sam", "sam", "SAM", " sAm "])

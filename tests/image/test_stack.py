@@ -2,7 +2,16 @@ import json
 
 import pytest
 
-from tests.image.client import CREATE_THE_VOTER, LOGIN, fetch, home_page, session_of, sign_in, wait_until_serving
+from tests.image.client import (
+    CREATE_THE_VOTER,
+    LOGIN,
+    SIGNED_IN_AS_THE_VOTER,
+    fetch,
+    home_page,
+    session_of,
+    sign_in,
+    wait_until_serving,
+)
 from tests.image.docker import REPO_ROOT
 from tests.image.stack import EXAMPLE, LOCALLY_ON_THE_IMAGE_UNDER_TEST, ON_THE_IMAGE_UNDER_TEST, Stack, override
 
@@ -79,7 +88,7 @@ def test_the_local_stack_accepts_the_form_post_with_the_pages_csrf_token(local_s
     status, headers, _ = sign_in(port)
 
     assert (status, headers["Location"]) == (302, "/")
-    assert "Signed in as Sam" in home_page(port, session_of(headers))[2]
+    assert SIGNED_IN_AS_THE_VOTER in home_page(port, session_of(headers))[2]
 
 
 def test_a_written_row_survives_down_then_up(local_stack):
@@ -90,7 +99,7 @@ def test_a_written_row_survives_down_then_up(local_stack):
     local_stack("up", "--detach", "--wait")
     wait_until_serving(local_stack.port())
 
-    assert "Signed in as Sam" in home_page(local_stack.port(), session)[2]
+    assert SIGNED_IN_AS_THE_VOTER in home_page(local_stack.port(), session)[2]
 
 
 def test_an_empty_secret_stops_startup_naming_it(image, tmp_path):

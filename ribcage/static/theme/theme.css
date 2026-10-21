@@ -236,6 +236,13 @@ body[data-skin="admin"]::before {
   --button-padding: 1.5rem;
   background-color: var(--ground);
 }
+/* A run page sets its darker ground on the root, so it fills the window with the mist over it (#74). */
+:root:has(> body[data-skin="run"]) {
+  --ground: var(--run-ground);
+}
+body[data-skin="run"] {
+  background-color: transparent;
+}
 
 /* ---------- Type ---------- */
 

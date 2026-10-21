@@ -1,11 +1,12 @@
 from django.urls import path
 
 from ribcage.gallery.views import gallery
-from ribcage.identity.views import change_password, home, join, join_details, login, logout, password_changed
+from ribcage.identity.views import change_password, join, join_details, login, logout, password_changed
+from ribcage.phase.views import phase_page
 from ribcage.privacy import privacy_policy
 
 urlpatterns = [
-    path("", home, name="home"),
+    path("", phase_page, name="phase_page"),
     path("login/", login, name="login"),
     path("join/", join, name="join"),
     path("join/details/", join_details, name="join_details"),

@@ -8,6 +8,7 @@ import pytest
 from tests.image.client import (
     CREATE_THE_VOTER,
     LOGIN,
+    SIGNED_IN_AS_THE_VOTER,
     fetch,
     home_page,
     post_form,
@@ -125,7 +126,7 @@ def test_the_form_post_with_the_pages_csrf_token_is_accepted(container):
     status, headers, _ = sign_in(port)
 
     assert (status, headers["Location"]) == (302, "/")
-    assert "Signed in as Sam" in home_page(port, session_of(headers))[2]
+    assert SIGNED_IN_AS_THE_VOTER in home_page(port, session_of(headers))[2]
 
 
 def test_a_form_post_without_a_csrf_token_is_refused(container):
