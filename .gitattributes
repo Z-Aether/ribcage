@@ -1,2 +1,5 @@
 # Vendored files stay byte for byte as published, so their recorded checksums hold on every checkout (#46).
 ribcage/static/vendor/** -text
+
+# Bash reads a CRLF script as commands ending in a carriage return, so scripts keep LF on every checkout (#59).
+*.sh text eol=lf

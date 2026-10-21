@@ -10,32 +10,26 @@ The steps for running a window: the rebuild at its start, backups and restores d
 
 At the start of each window. Teardown left the stack definition and its environment on Komodo and removed both volumes, so this deploys an empty app. A redeploy mid-window follows the same steps; take a backup first.
 
-1. **Build from a clean tree** at a commit already pushed to `main`. `git status --short` prints nothing. `--pull` fetches the patched base image, which is why every window rebuilds (#18).
+1. **Release the image, off Adam's VPN,** from a clean tree at a commit already pushed to `main`. Each build pulls the patched base image, which is why every window rebuilds (#18, #59).
    ```
-   TAG=$(date -u +%Y%m%d-%H%M)-$(git rev-parse --short HEAD)
-   docker build --pull --platform linux/amd64 -t ribcage:$TAG .
+   scripts/release.sh "<what changed>" <n>
    ```
-2. **Run the tests.** `tests/image` builds its own `ribcage:pytest` from the same clean tree, so it checks this build's Dockerfile and stack.
-   ```
-   .venv/Scripts/python -m pytest
-   .venv/Scripts/python -m pytest tests/image -m slow
-   ```
-3. **Push it, off Adam's VPN.** On the VPN the registry resolves to a LAN address and the push times out. If the push asks for a login, run `docker login registry.brabulla.xyz:5050` first.
-   ```
-   REGISTRY=registry.brabulla.xyz:5050/z-aether/ribcage_deploy/ribcage
-   docker tag ribcage:$TAG $REGISTRY:$TAG
-   docker push $REGISTRY:$TAG
-   ```
-4. **Re-pin `compose.yaml`.** Put the new tag on the `image: &pinned` line. The `backup` sidecar follows it through the anchor. Commit the change as `Pin the stack to <what changed> (#n)`.
-5. **Set the stack's environment in Komodo,** with your copy in `private/komodo-stack.env`.
+   It stops at the first failure, naming it. In order, it:
+   - **refuses while the registry resolves to a private address.** On the VPN it resolves to a LAN address and the push times out.
+   - **builds** `ribcage:<UTC minute>-<commit>`.
+   - **runs every suite.** `tests/image` builds its own `ribcage:pytest` from the same clean tree, so it checks this build's Dockerfile and stack.
+   - **pushes** it to the registry path the pin carries. If the push asks for a login, run `docker login registry.brabulla.xyz:5050`, then rerun with `--skip-tests` after the suites.
+   - **re-pins** the `image: &pinned` line, which the `backup` sidecar follows through the anchor, and commits it as `Pin the stack to <what changed> (#n)`. Push that commit before the next release, which needs it on `origin/main`.
+   - **removes** every other local `ribcage` image and the build cache: older images stay in the registry.
+2. **Set the stack's environment in Komodo,** with your copy in `private/komodo-stack.env`.
    - **Values are URL-safe text,** with no `$`, `#`, quotes or spaces. Komodo's `.env` handling cuts a value at `$` and treats ` #` as a comment. Generate each secret with `.venv/Scripts/python -c "import secrets; print(secrets.token_urlsafe(50))"`.
    - **New for each window:** `SECRET_KEY`, `JOIN_CODE` and `ADMIN_PASSWORD`. The last window's join code went round the group chat.
    - **Carried over:** `TMDB_API_KEY` and `DTDD_API_KEY` from `private/credentials/`, and `TIME_ZONE` (`Europe/Budapest`).
    - **The address:** `ALLOWED_HOSTS` is `<subdomain>`, and `CSRF_TRUSTED_ORIGINS` is `https://<subdomain>`.
    - **Tuning constants** stay empty, which keeps each one's default. Changing one later is an environment edit and a redeploy, with no rebuild (#25).
    - **Auto-update stays off.** In the stack's settings, *Poll for Updates* and *Auto Update* are both off (#40).
-6. **Paste `compose.yaml` into the stack's compose editor, then *Deploy*.** Komodo lists both services, `ribcage` and `backup`, on the new tag.
-7. **Check it.** A missing required variable stops startup with `Set the <NAME> environment variable.` in `ribcage`'s log, and the container restarts in a loop.
+3. **Paste `compose.yaml` into the stack's compose editor, then *Deploy*.** Komodo lists both services, `ribcage` and `backup`, on the new tag.
+4. **Check it.** A missing required variable stops startup with `Set the <NAME> environment variable.` in `ribcage`'s log, and the container restarts in a loop.
    - **From outside the host's network,** a phone on mobile data for instance, `https://<subdomain>/` loads with a valid certificate. `curl -I http://<subdomain>/` returns `301` to `https://`.
    - **HSTS:** the host's proxy removes it from responses (#54), so check it in the `ribcage` container's *Terminal*. It prints `200 max-age=31536000; includeSubDomains`.
      ```
