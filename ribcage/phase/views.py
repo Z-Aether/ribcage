@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_safe
 
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
@@ -12,6 +13,7 @@ PHASE_PAGES = {
 }
 
 
+@require_safe
 def phase_page(request):
     # The page is the phase: / shows the current phase's page and nothing else (#27).
     return render(request, PHASE_PAGES[current()])
@@ -30,6 +32,7 @@ WELCOME_EXITS = {
 }
 
 
+@require_safe
 def welcome(request):
     # Anyone who arrives without having just registered goes to the phase page (#75).
     if not request.session.pop(WELCOME_PENDING, False):

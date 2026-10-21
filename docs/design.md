@@ -99,7 +99,7 @@ A fresh database starts in SUGGEST. The admin moves the phase one step at a time
 - **PICK → RUN** publishes the timetable and purges the DTDD cache. **RUN → PICK** takes the evening down at once.
 - Nothing follows RUN. The marathon ending is a fact about the world, and the app stays in RUN until teardown (#13).
 
-**Phase check.** Every voter action has a window of phases. One server-side check refuses a post from outside its window and reloads the tab into the current phase (#34).
+**Phase check.** Every voter action has a window of phases. One server-side check refuses a post from outside its window and reloads the tab into the current phase (#34). Log out and changing a password are account actions, outside the check, and work in every phase (#78).
 
 | Action | Window |
 |---|---|
