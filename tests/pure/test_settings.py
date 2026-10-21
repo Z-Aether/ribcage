@@ -79,7 +79,7 @@ def test_simultaneous_sqlite_writers_queue_in_wal_mode(monkeypatch):
     assert options["timeout"] >= 20
 
 
-# Defaults as the tickets decided them: #17, #33, #13, #20 and #31.
+# Defaults as the tickets decided them: #17, #33, #13, #20, #31 and #21.
 JUDGEMENT_DEFAULTS = {
     "DIVERSITY_CUT": 4,
     "FLOOR_WEIGHT_MULTIPLIER": 1,
@@ -89,6 +89,7 @@ JUDGEMENT_DEFAULTS = {
     "LOGIN_BACKOFF_FAILURES": 5,
     "LOGIN_BACKOFF_WINDOW_MINUTES": 15,
     "LOGIN_BACKOFF_WAIT_MINUTES": 1,
+    "NOTE_TRIM_LENGTH": 120,
 }
 
 
