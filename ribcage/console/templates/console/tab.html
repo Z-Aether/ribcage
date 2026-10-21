@@ -4,7 +4,7 @@
 {% block content %}
 {% with here=request.resolver_match.url_name %}
 <nav class="console-tabs" aria-label="Console">
-  <a href="{% url 'console_phase' %}"{% if here == "console_phase" %} aria-current="page"{% endif %}>Phase</a>
+  <a href="{% url 'console_phase' %}"{% if here == "console_phase" %} aria-current="page"{% endif %}>Phase <span class="phase-badge">{{ phase }}</span></a>
   <a href="{% url 'console_films' %}"{% if here == "console_films" %} aria-current="page"{% endif %}>Films</a>
   <a href="{% url 'console_pick' %}"{% if here == "console_pick" %} aria-current="page"{% endif %}>Pick</a>
   <a href="{% url 'console_roster' %}"{% if here == "console_roster" %} aria-current="page"{% endif %}>Roster</a>

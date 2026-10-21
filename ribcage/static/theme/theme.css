@@ -559,6 +559,131 @@ body > header.console-header {
   border-bottom-color: var(--accent);
 }
 
+/* ---------- The Phase tab: the five phases, both moves and the status lines (#28, #77) ---------- */
+
+[data-skin] .phase-badge {
+  margin-left: 0.3rem;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  background-color: var(--surface-raised);
+  color: var(--ink);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  vertical-align: 0.1em;
+}
+
+[data-skin] ol.phase-list {
+  display: flex;
+  margin: 0 0 1.25rem;
+  padding: 0;
+}
+[data-skin] .phase-list__phase {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  padding: 0.35rem 0.6rem 0;
+  border-top: 3px solid var(--line);
+  color: var(--ink-muted);
+  list-style: none;
+}
+[data-skin] .phase-list__phase[aria-current="step"] {
+  border-top-color: var(--ink);
+  color: var(--ink);
+}
+.phase-list__name {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.phase-list__phase time {
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 40rem) {
+  [data-skin] ol.phase-list {
+    flex-direction: column;
+  }
+  [data-skin] .phase-list__phase {
+    flex-direction: row;
+    gap: 1rem;
+    padding: 0.3rem 0.6rem;
+    border-top: 0;
+    border-left: 3px solid var(--line);
+  }
+  [data-skin] .phase-list__phase[aria-current="step"] {
+    border-left-color: var(--ink);
+  }
+  .phase-list__name {
+    width: 5.5rem;
+  }
+}
+
+[data-skin] .phase-moves {
+  display: grid;
+  gap: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+@media (min-width: 48rem) {
+  [data-skin] .phase-moves {
+    grid-template-columns: 1fr 1fr;
+  }
+  /* Forward keeps the right-hand column, even at SUGGEST, where it stands alone. */
+  [data-skin] .phase-move--forward {
+    grid-column: 2;
+  }
+}
+[data-skin] .phase-move {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background-color: var(--surface);
+}
+[data-skin] .phase-move.is-armed {
+  border-color: var(--ink-muted);
+}
+[data-skin] .phase-move h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.05em;
+}
+[data-skin] .phase-move p {
+  margin: 0 0 0.6rem;
+}
+[data-skin] .phase-move :is(form, .phase-move__actions) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+[data-skin] .phase-move form :is(a.button, button) {
+  width: auto;
+  margin: 0;
+}
+
+[data-skin] ul.console-status {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+[data-skin] .console-status li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.4rem 0.2rem;
+  border-bottom: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+  list-style: none;
+}
+.console-status__label {
+  width: 5rem;
+  font-weight: 700;
+}
+[data-skin] .console-status li a {
+  margin-left: auto;
+}
+
 body > footer.site-footer {
   margin-top: 3rem;
   padding-block: 1.5rem 2.5rem;

@@ -3,6 +3,42 @@
 {% block title %}Phase · Admin · Ribcage{% endblock %}
 
 {% block tab %}
-  <h1>Phase</h1>
-  <p>The five phases with their dates, and the moves back and forward, will be here.</p>
+  <h1>The marathon is in {{ phase }}</h1>
+
+  {# A fresh database starts in SUGGEST, so SUGGEST has no date until the phase is moved back to it (#74, #77). #}
+  <ol class="phase-list">
+    {% for name, entered in phases %}
+      <li class="phase-list__phase"{% if name == phase %} aria-current="step"{% endif %}>
+        <span class="phase-list__name">{{ name }}</span>
+        {% if entered %}<time datetime="{{ entered|date:'c' }}">{{ entered|date:"D j M, H:i" }}</time>{% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+
+  <div class="phase-moves">
+    {% for move in moves %}
+      <section class="phase-move phase-move--{% if move.forward %}forward{% else %}back{% endif %}{% if move.armed %} is-armed{% endif %}" data-to="{{ move.to }}">
+        <h2>{% if move.forward %}Forward to {{ move.to }} ▶{% else %}◀ Back to {{ move.to }}{% endif %}</h2>
+        {% for sentence in move.consequences %}
+          <p>{{ sentence }}</p>
+        {% endfor %}
+        {% if move.armed %}
+          {# Cancel takes the arm's place, so a double click on the arm cancels rather than moves (#28, #77). #}
+          <form method="post" action="{% url 'console_phase_move' %}">
+            {% csrf_token %}
+            <input type="hidden" name="from_phase" value="{{ phase }}">
+            <input type="hidden" name="to_phase" value="{{ move.to }}">
+            <a class="button button--quiet" href="{% url 'console_phase' %}">Cancel</a>
+            <button type="submit">{{ move.act }}</button>
+          </form>
+        {% else %}
+          <p class="phase-move__actions"><a class="button button--quiet" href="{% url 'console_phase' %}?from={{ phase }}&amp;arm={{ move.to }}">{% if move.forward %}Move to {{ move.to }} ▶…{% else %}◀ Move back to {{ move.to }}…{% endif %}</a></p>
+        {% endif %}
+      </section>
+    {% endfor %}
+  </div>
+
+  <ul class="console-status">
+    <li><span class="console-status__label">Voters</span> {{ voters }} registered <a href="{% url 'console_roster' %}">Roster tab</a></li>
+  </ul>
 {% endblock %}

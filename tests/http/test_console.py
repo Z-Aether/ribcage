@@ -5,18 +5,11 @@ import pytest
 from ribcage.identity.models import Voter
 from ribcage.phase.history import move
 from ribcage.phase.order import Phase
-from tests.http.test_admin_login import sign_in_as_the_admin
 from tests.http.test_phase import walk_to
 from tests.http.test_voter_shell import missing_from_the_footer
 
 SUGGEST, APPROVE, VOTE, PICK, RUN = Phase
 TABS = {"Phase": "/console/phase/", "Films": "/console/films/", "Pick": "/console/pick/", "Roster": "/console/roster/"}
-
-
-@pytest.fixture
-def admin(client, db):
-    sign_in_as_the_admin(client)
-    return client
 
 
 def header(page):
@@ -28,8 +21,16 @@ def voter_side(page):
     return re.sub(r"<[^>]+>", "", line)
 
 
+def nav(page):
+    return re.search(r"<nav\b.*?</nav>", page, re.S)[0]
+
+
 def tabs(page):
-    return re.findall(r'<a href="([^"]+)"( aria-current="page")?>([^<]+)</a>', re.search(r"<nav\b.*?</nav>", page, re.S)[0])
+    return re.findall(r'<a href="([^"]+)"( aria-current="page")?>([^<]+?)\s*(?:<span class="phase-badge">\w+</span>)?</a>', nav(page))
+
+
+def phase_badge(page):
+    return re.search(r'<a href="/console/phase/"[^>]*>Phase <span class="phase-badge">(\w+)</span></a>', nav(page))[1]
 
 
 @pytest.mark.parametrize(("phase", "tab"), [(SUGGEST, "Films"), (APPROVE, "Films"), (VOTE, "Films"), (PICK, "Pick"), (RUN, "Pick")])
@@ -56,6 +57,14 @@ def test_every_tab_shows_the_four_tabs_in_order_marking_its_own(admin, label, pa
 
     assert [(href, name) for href, _, name in shown] == [(href, name) for name, href in TABS.items()]
     assert [name for _, current, name in shown if current] == [label]
+
+
+@pytest.mark.parametrize("path", TABS.values())
+@pytest.mark.parametrize("phase", [SUGGEST, VOTE, RUN])
+def test_every_tab_carries_the_current_phase_as_a_badge_on_the_phase_tab(admin, phase, path):
+    walk_to(phase)
+
+    assert phase_badge(admin.get(path).text) == phase
 
 
 @pytest.mark.parametrize("path", TABS.values())

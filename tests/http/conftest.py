@@ -3,6 +3,8 @@ from datetime import timedelta
 import pytest
 from django.utils import timezone
 
+from tests.http.test_admin_login import sign_in_as_the_admin
+
 
 @pytest.fixture(autouse=True)
 def _static_files_collected(collected_static_files):
@@ -24,3 +26,9 @@ def clock(monkeypatch):
     clock = Clock()
     monkeypatch.setattr(timezone, "now", lambda: clock.now)
     return clock
+
+
+@pytest.fixture
+def admin(client, db):
+    sign_in_as_the_admin(client)
+    return client

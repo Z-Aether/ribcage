@@ -1,6 +1,6 @@
 from django.urls import path
 
-from ribcage.console.views import console, films_tab, phase_tab, pick_tab, roster_tab
+from ribcage.console.views import console, films_tab, move_phase, phase_tab, pick_tab, roster_tab
 from ribcage.gallery.views import gallery
 from ribcage.identity.views import (
     admin_login,
@@ -28,6 +28,7 @@ urlpatterns = [
     path("gallery/", gallery, name="gallery"),
     path("console/", console, name="console"),
     path("console/phase/", phase_tab, name="console_phase"),
+    path("console/phase/move/", move_phase, name="console_phase_move"),
     path("console/films/", films_tab, name="console_films"),
     path("console/pick/", pick_tab, name="console_pick"),
     path("console/roster/", roster_tab, name="console_roster"),

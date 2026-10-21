@@ -5,7 +5,7 @@ import pytest
 from django.utils import timezone
 
 from ribcage.identity.models import Voter
-from ribcage.phase.history import current, move
+from ribcage.phase.history import current, last_entered, move
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import PHASES, MoveRefused, Phase, neighbours
 
@@ -84,6 +84,30 @@ def test_a_move_more_than_one_step_is_refused_and_appends_nothing(db, to_phase):
         move(SUGGEST, to_phase)
 
     assert history() == []
+
+
+def test_with_no_history_no_phase_has_been_entered(db):
+    assert last_entered() == {}
+
+
+def test_each_phase_was_last_entered_at_its_newest_move(db, clock):
+    entered = {}
+    for before, after in [(SUGGEST, APPROVE), (APPROVE, VOTE), (VOTE, PICK), (PICK, VOTE), (VOTE, APPROVE)]:
+        clock.advance(days=1)
+        move(before, after)
+        entered[after] = clock.now
+
+    assert last_entered() == {APPROVE: entered[APPROVE], VOTE: entered[VOTE], PICK: entered[PICK]}
+    assert [type(phase) for phase in last_entered()] == [Phase] * 3
+
+
+def test_a_phase_is_last_entered_at_its_newest_move_even_when_its_clock_reads_earlier(db):
+    walk_to(VOTE)
+    move(VOTE, APPROVE)
+    newest = PhaseMove.objects.filter(phase=APPROVE).last()
+    PhaseMove.objects.filter(pk=newest.pk).update(at=timezone.now() - timedelta(days=30))
+
+    assert last_entered()[APPROVE] == PhaseMove.objects.get(pk=newest.pk).at
 
 
 @pytest.fixture

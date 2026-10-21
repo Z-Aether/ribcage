@@ -2,11 +2,17 @@ from django.db import transaction
 from django.utils import timezone
 
 from ribcage.phase.models import PhaseMove
-from ribcage.phase.order import check_move, derived_phase
+from ribcage.phase.order import Phase, check_move, derived_phase
 
 
 def current():
     return derived_phase(PhaseMove.objects.values_list("phase", flat=True))
+
+
+def last_entered():
+    """When each phase was last entered, for the phases the history holds; a fresh SUGGEST has no date (#74, #77)."""
+    # Oldest first, so each phase keeps its newest move's time, whatever the clock said.
+    return {Phase(phase): at for phase, at in PhaseMove.objects.values_list("phase", "at")}
 
 
 def move(from_phase, to_phase):
