@@ -8,6 +8,7 @@ from django.views.decorators.http import require_http_methods
 
 from ribcage.identity.forms import ChangePasswordForm, JoinCodeForm, LoginForm, RegistrationForm
 from ribcage.identity.models import Voter
+from ribcage.phase.views import WELCOME_PENDING
 
 login = LoginView.as_view(template_name="identity/login.html", authentication_form=LoginForm)
 
@@ -22,8 +23,8 @@ change_password = PasswordChangeView.as_view(
 )
 password_changed = PasswordChangeDoneView.as_view(template_name="identity/password_changed.html")
 
-# Where a new voter lands; #75 points it at Welcome.
-AFTER_REGISTRATION = "phase_page"
+# Where a new voter lands (#75).
+AFTER_REGISTRATION = "welcome"
 
 
 def render_code_step(request, form):
@@ -61,5 +62,6 @@ def join_details(request):
             form.add_error("display_name", error)
         else:
             sign_in(request, voter)
+            request.session[WELCOME_PENDING] = True
             return redirect(AFTER_REGISTRATION)
     return render_details_step(request, code, form)

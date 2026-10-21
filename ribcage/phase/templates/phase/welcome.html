@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome · Ribcage{% endblock %}
+
+{% block content %}
+  <h1>Welcome</h1>
+  <p>Ribcage is where the group plans and runs one film marathon: suggest films, vote on them, and follow the evening.</p>
+
+  <h2>The five phases</h2>
+  <p>The marathon moves through five phases, and you act mainly in SUGGEST and VOTE.</p>
+  <ol>
+    <li><strong>SUGGEST</strong>: everyone puts forward films, each with a line on why.</li>
+    <li><strong>APPROVE</strong>: the admin chooses which suggestions go to the vote. You can still read the pool and add notes.</li>
+    <li><strong>VOTE</strong>: you score the films on the ballot and veto any you won't be in the room for.</li>
+    <li><strong>PICK</strong>: voting closes and everyone's scores open, by name, while the admin chooses the evening's films.</li>
+    <li><strong>RUN</strong>: the evening itself, with what's on now and what's next.</li>
+  </ol>
+
+  <h2>Content warnings</h2>
+  <p>You can name topics you want to be warned about, and films that carry them are marked for you alone. That list is private to you in the app.</p>
+  <p>The admin and the host of the server can technically read it, as they can read everything stored here. It is deleted when the marathon is torn down.</p>
+
+  <p>
+    {% for label, page in exits %}
+      <a href="{% url page %}" class="button">{{ label }}</a>
+    {% endfor %}
+  </p>
+{% endblock %}

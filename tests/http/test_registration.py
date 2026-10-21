@@ -1,7 +1,11 @@
+import re
+
 import pytest
 from django.contrib.auth import get_user
 
 from ribcage.identity.models import Voter
+from ribcage.phase.order import PHASES, Phase
+from tests.http.test_phase import PAGE_HEADINGS, walk_to
 
 PASSWORD = "popcorn-before-midnight"
 CODE = "local-join-code"
@@ -17,10 +21,11 @@ def enter_code(client, code=CODE):
     return client.post("/join/", {"code": code})
 
 
-def register(client, display_name="Sam", password=PASSWORD, again=None, code=CODE):
+def register(client, display_name="Sam", password=PASSWORD, again=None, code=CODE, **extra):
     return client.post(
         "/join/details/",
         {"code": code, "display_name": display_name, "password": password, "password_again": password if again is None else again},
+        **extra,
     )
 
 
@@ -53,7 +58,7 @@ def test_success_creates_the_voter_signs_them_in_and_redirects(client, db):
     response = register(client, " Sam  Q ")
 
     assert response.status_code == 302
-    assert response.headers["Location"] == "/"
+    assert response.headers["Location"] == "/welcome/"
     voter = Voter.objects.get()
     assert voter.display_name == "Sam Q"
     assert voter.check_password(PASSWORD)
@@ -182,3 +187,48 @@ def test_the_new_voter_can_log_out_and_sign_in_again(client, db):
     response = client.post("/login/", {"username": "sam", "password": PASSWORD})
 
     assert response.headers["Location"] == "/"
+
+
+EXIT_LABELS = {
+    Phase.SUGGEST: "Suggest films",
+    Phase.APPROVE: "See the suggestions",
+    Phase.VOTE: "Vote",
+    Phase.PICK: "See the scores",
+    Phase.RUN: "Follow the evening",
+}
+
+
+@pytest.mark.parametrize("phase", PHASES)
+def test_registration_lands_on_welcome_whose_exit_names_and_links_the_current_phase_page(client, db, phase):
+    walk_to(phase)
+
+    response = register(client, follow=True)
+
+    assert response.redirect_chain == [("/welcome/", 302)]
+    assert "<h1>Welcome</h1>" in response.text
+    exit_link = re.search(r'<a ([^>]*class="button"[^>]*)>([^<]*)</a>', response.text)
+    assert exit_link.group(2).strip() == EXIT_LABELS[phase]
+    assert 'href="/"' in exit_link.group(1)
+    assert f"<h1>{PAGE_HEADINGS[phase]}</h1>" in client.get("/").text
+
+
+def test_a_later_visit_to_welcome_shows_the_phase_page(client, db):
+    register(client)
+    client.get("/welcome/")
+
+    response = client.get("/welcome/", follow=True)
+
+    assert response.redirect_chain == [("/", 302)]
+    assert "<h1>Suggest films</h1>" in response.text
+
+
+def test_welcome_is_not_shown_to_a_voter_who_did_not_just_register(client, db):
+    client.force_login(Voter.objects.create_voter("Ada"))
+
+    assert client.get("/welcome/", follow=True).redirect_chain == [("/", 302)]
+
+
+def test_welcome_says_the_admin_and_host_can_read_a_watched_list(client, db):
+    text = register(client, follow=True).text
+
+    assert "admin and the host" in text and "technically read" in text

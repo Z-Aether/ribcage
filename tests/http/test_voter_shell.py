@@ -4,6 +4,7 @@ import pytest
 from django.templatetags.static import static
 
 from ribcage.identity.models import Voter
+from ribcage.phase.views import WELCOME_PENDING
 from tests.http.test_public_pages import PAGES_THAT_MUST_NOT_QUERY, PUBLIC_PAGES, answers_get, routes
 
 TMDB_NOTICE = "This product uses the TMDB API but is not endorsed or certified by TMDB."
@@ -24,6 +25,14 @@ def client(client, voter, settings):
     settings.DEBUG = True
     client.force_login(voter)
     return client
+
+
+def visit(client, path):
+    # Welcome answers only a voter who has just registered (#75).
+    session = client.session
+    session[WELCOME_PENDING] = True
+    session.save()
+    return client.get(path)
 
 
 def footer(page):
@@ -60,7 +69,7 @@ def test_some_walled_page_is_found():
 
 @pytest.mark.parametrize("path", WALLED_PAGES)
 def test_every_walled_voter_page_has_the_footer(client, settings, path):
-    response = client.get(path)
+    response = visit(client, path)
 
     assert response.status_code == 200
     assert missing_from_the_footer(response.text, settings) == []
@@ -68,7 +77,7 @@ def test_every_walled_voter_page_has_the_footer(client, settings, path):
 
 @pytest.mark.parametrize("path", WALLED_PAGES)
 def test_every_walled_voter_page_has_the_header_naming_the_signed_in_voter(client, path):
-    shown = header(client.get(path).text)
+    shown = header(visit(client, path).text)
 
     assert '<a class="wordmark voter-header__wordmark" href="/">Ribcage</a>' in shown
     assert re.search(r"<summary[^>]*>\s*Ada\s*</summary>", shown)

@@ -316,28 +316,46 @@ body[data-skin="run"] {
 }
 
 /* ---------- Controls ---------- */
+/* A link wearing the primary button look is `<a class="button">`, which keeps the link's role (#75). */
 
-[data-skin] button:not(.film-card__toggle) {
+[data-skin] a.button {
+  display: inline-block;
+  padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
+  border: var(--pico-border-width) solid var(--pico-primary-border);
+  background-color: var(--pico-primary-background);
+  color: var(--pico-primary-inverse);
+  font-size: 1rem;
+  line-height: var(--pico-line-height);
+  text-align: center;
+  text-decoration: none;
+}
+[data-skin] a.button:is(:hover, :active, :focus) {
+  background-color: var(--pico-primary-hover-background);
+  border-color: var(--pico-primary-hover-border);
+  color: var(--pico-primary-inverse);
+}
+
+[data-skin] :is(button:not(.film-card__toggle), a.button) {
   border-radius: var(--button-radius);
   padding-inline: var(--button-padding);
   font-weight: 700;
 }
-[data-skin] button.button--quiet {
+[data-skin] :is(button, a.button).button--quiet {
   background: transparent;
   color: var(--ink);
   border-color: var(--line-strong);
 }
-[data-skin] button.button--quiet:hover {
+[data-skin] :is(button, a.button).button--quiet:hover {
   border-color: var(--ink-muted);
 }
-[data-skin="voter"] button:not(.film-card__toggle):not(:disabled):hover {
+[data-skin="voter"] :is(button:not(.film-card__toggle):not(:disabled), a.button):hover {
   animation: wobble 0.5s ease-in-out;
 }
-[data-skin="admin"] button:not(.film-card__toggle) {
+[data-skin="admin"] :is(button:not(.film-card__toggle), a.button) {
   padding-block: 0.3rem;
   font-size: 0.875rem;
 }
-[data-skin="admin"] button:not(.film-card__toggle):not(:disabled):hover {
+[data-skin="admin"] :is(button:not(.film-card__toggle):not(:disabled), a.button):hover {
   animation: none;
 }
 [data-skin] :is(button, [type="button"], [type="submit"], [type="reset"], [role="button"], a):focus-visible {
@@ -944,7 +962,7 @@ body > footer.site-footer {
   body::before,
   .wordmark::after,
   [data-skin="voter"] .film-card.is-open .film-card__poster::after,
-  [data-skin="voter"] button:not(.film-card__toggle):not(:disabled):hover,
+  [data-skin="voter"] :is(button:not(.film-card__toggle):not(:disabled), a.button):hover,
   [data-skin="voter"] .score:hover {
     animation: none;
   }

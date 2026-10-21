@@ -17,7 +17,7 @@ A page wears the voter skin unless it names admin or run in base.html's `skin` b
 ## Tokens that matter
 
 - **Ground and ink:** ground `#1b1420`, surface `#241b2b`, raised `#2c2134`, lines `#3a2d44` and `#56456a`. Ink `#eadccb` and muted ink `#b8a6b4`, both warm off-whites rather than dimmed text.
-- **Accent:** pumpkin `#ef8a3f`, for primary buttons, the wordmark and the pitch. Plum `#9a74c8` frames the open card, and lilac `#c9a6f0` is for links and the focus ring every control shows.
+- **Accent:** pumpkin `#ef8a3f`, for primary buttons (a link wears one as `a.button`), the wordmark and the pitch. Plum `#9a74c8` frames the open card, and lilac `#c9a6f0` is for links and the focus ring every control shows.
 - **State colours**, shared by every later surface:
   - the score scale: sea-glass for wanting it, +3 Top pick `#7dd3c0`, +2 Keen `#4aa292`, +1 Happy `#2e6a62`; grey for 0 Don't mind `#43384b`; dusty rose for −1 Rather not `#dca0b6`;
   - the **veto**: a dashed red border, `#ff6363`, unlike any score;
