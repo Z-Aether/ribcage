@@ -75,7 +75,7 @@ The dev votes through an ordinary voter registration, with a separate sign-in, a
 
 1. **Rebuild.** Build the image locally, push it to the host's registry, and deploy the stack. Set the environment: join code, admin password, API keys, time zone, tuning constants.
 2. **Rehearse** end to end on the real deployment, including a restore and a teardown followed by a rebuild. The group is invited only after this passes (#25).
-3. **Invite.** The join code goes into the group chat. Voters register themselves: join code → display name → password (#8).
+3. **Invite.** The join code goes into the group chat. Voters register themselves: the join code, then display name and password (#8, #60).
 4. **Phases,** SUGGEST → … → RUN, each one moved by the admin (below).
 5. **Teardown** after the evening. Remove the containers and both volumes and delete every local copy. Only the stack definition is kept, plus a pseudonymised **score** matrix taken at the reveal for the dev's private testing (#25, #30). No mechanism reminds anyone that teardown is due; it is a habit tied to the anchor date (#16).
 
@@ -179,10 +179,10 @@ Nothing about trigger warnings appears in PICK or RUN: by then they have already
 
 ## 8. Surfaces
 
-### Public (outside the login wall, no database)
+### Public (outside the login wall, no database read to show them)
 
 - **Privacy policy:** rendered from a file in the public repo (#16).
-- **Login** and **registration** (join code → display name → password). Login errors never say whether the name or the password was wrong. Repeated failures get a timed backoff, never a lockout (#16, #31).
+- **Login** and **registration**: the join code, then display name and password (#60). Only their submits touch the database. Login errors never say whether the name or the password was wrong. Repeated failures get a timed backoff, never a lockout, and the admin login gets the same (#16, #31, #60).
 
 ### Voter side
 
@@ -195,7 +195,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 | Surface | Contents |
 |---|---|
-| **Welcome** | Shown once after registration, never linked again. Rough points, then two exits that depend on the phase: set up warnings, or go suggest (#23). |
+| **Welcome** | Shown once after registration, never linked again. Rough points, then two exits: set up warnings, or go to the current phase's page (#23, #27). |
 | **Forced password change** | After an admin reset (#28). |
 | **My warnings** (trigger list page) | One scrolling page in DTDD's grouping. Privacy disclosure and "I don't care" at the top, live search, ticked topics as chips. Every topic names the films carrying it: the pool through APPROVE, the ballot from VOTE (#23, #35). |
 | **SUGGEST** | A *Suggest a film* panel above the pool. Find, with a trailing year to narrow → picker of five poster tiles, never auto-advanced, films already in the pool marked → pitch box, with runtime on one line and a pencil. *Add it by hand* for anything TMDB can't find, and a message beside it during a TMDB outage. The pool lists film cards with a *Mine* filter (#21, #27). |
@@ -220,7 +220,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 ### Admin console
 
-**Shell:** four tabs (**Phase · Films · Pick · Roster**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*. The console opens on the tab for the current phase and stays put when the phase moves. There is no Django admin; break-glass is shell access on the host (#16, #28). One page sits outside the tabs: a backup download that serves the file only for a one-time code created in the container's terminal, so the admin password alone never yields the database (#68).
+**Shell:** four tabs (**Phase · Films · Pick · Roster**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*. The console opens on the tab for the current phase and stays put when the phase moves. There is no Django admin; break-glass is shell access on the host (#16, #28). One page sits outside the tabs: a backup download that serves the file only for a one-time code created in the container's terminal, so the admin password alone never yields the database. The same page takes a backup back onto the host for a restore, for a code made the same way (#68, #81).
 
 | Tab | Contents |
 |---|---|
@@ -242,7 +242,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 | Module | Responsibility |
 |---|---|
-| **Identity and access** | Registration through the join code (a 24-character random string). Display names unique regardless of case, 1–20 characters, never renamed. Password login with sessions that outlive the window. Admin authentication from the environment, kept separate. Login backoff. Password change and reset. Removal (#8, #16, #37). |
+| **Identity and access** | Registration through the join code (a 24-character random string). Display names unique regardless of case, 1–20 characters, never renamed. Password login with sessions of about 60 days, outliving the window. Admin authentication from the environment, kept separate. Login backoff, keyed on the display name (#8, #31, #60). Password change and reset. Removal (#8, #16, #37). |
 | **Phase** | Phase derived from the phase history. One step at a time, both directions. The phase check. What each move triggers: DTDD refresh, RUN purge, reveal state. |
 | **Films and metadata** | TMDB search (debounced) and one detail fetch per film, never refreshed. Manual entry. One suggestion per TMDB id. Runtime with its source. Title card. |
 | **Suggestions, notes, approval** | Suggest and withdraw. One note per voter per film, the suggester's being the pitch. Approval states and the done-marker rule. |

@@ -27,7 +27,7 @@ The big-picture build schedule: ten milestones, each a vertical slice that is de
 |---|---|---|---|---|
 | M1 | Walking skeleton on the real host | Hello World, deployed, backed up, restorable | ~14 | #42 |
 | M2 | Theme and component kit | The one theme, the shared poster and film card on fixture data | 3 | #56 |
-| M3 | Identity, phases and the two shells | Register, log in, roster, phase moves, empty phase pages | ~20 | #60 |
+| M3 | Identity, phases and the two shells | Register, log in, roster, phase moves, empty phase pages | 15 | #60 |
 | M4 | SUGGEST and APPROVE | The pool, suggested by voters and curated by the admin | ~20 | #61 |
 | M5 | Trigger warnings | DTDD data, watched lists, matched topics | ~18 | #62 |
 | M6 | VOTE | The ballot, done markers, approval during VOTE | ~18 | #63 |
@@ -89,18 +89,18 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 **Why here.** Every later surface hangs off a logged-in voter, the admin console, and the phase that decides which voter page is shown. The phase module is a foundation, not a feature.
 
 **Scope**
-- **Identity:** registration through the join code (code → display name → password), display-name rules, login with the generic error and timed backoff, long sessions, log out, change password (#8, #16, #31, #37).
-- **Admin:** environment credential, separate login and session cookie, held alongside a voter session (#8).
+- **Identity:** registration through the join code (the code, then display name and password), display-name rules, login with the generic error and timed backoff, ~60-day sessions, log out, change password (#8, #16, #31, #37, #60).
+- **Admin:** a password-only login against the environment credential, with a separate session cookie held alongside a voter session, and the same backoff and session length (#8, #60).
 - **Roster tab:** view, remove (the routine, extended by later milestones), reset password shown once with a forced change at next login (#28).
 - **Phase:** phase history, the derived phase, one step in either direction. The Phase tab shows the track with dates, both moves with their consequences, and click then inline confirm (#15, #28).
-- **Phase check:** one server-side mechanism that refuses a post from outside its window and reloads the tab into the current phase. Polling pages reload the same way (#34).
-- **Voter shell:** header (phase page, name menu), footer (attributions, abuse `mailto:`, privacy policy), Welcome shown once, placeholder pages for all five phases (#23, #27, #37).
+- **Phase check:** one server-side mechanism that refuses a post from outside its window and reloads the tab into the current phase. Polling pages reload the same way, and no voter page polls before RUN (#34, #60).
+- **Voter shell:** header (phase page, name menu), footer (attributions, abuse `mailto:`, privacy policy), Welcome shown once, placeholder pages for all five phases (#23, #27, #37). Welcome's *Set up my warnings* exit waits for M5 (#60).
 - **Admin shell:** the four tabs, opening on the current phase's tab, with the *Voter side ↗ · signed in there as …* line (#28).
-- **Backup download and upload:** a page outside the tabs that serves a backup for a one-time code created in the container's terminal, and takes one back onto the host the same way for a restore, replacing the runbook's copy-paste routes in both directions (#54, #55, #68).
+- **Backup download and upload:** a page outside the tabs that serves a backup for a one-time code created in the container's terminal, and takes one back onto the host the same way for a restore, replacing the runbook's copy-paste routes in both directions (#54, #55, #68, #81).
 
 **Deployable state:** people can register and log in, the admin can remove people and move phases, and each phase shows an empty page.
 
-**Dev's review:** register several voters, log in as admin and voter at once, reset and force a change, remove a voter, walk the phases both ways with a stale tab open.
+**Dev's review:** register several voters, log in as admin and voter at once, reset and force a change, remove a voter, walk the phases both ways with a stale tab open (it lands on the current phase at its next click).
 
 ---
 
