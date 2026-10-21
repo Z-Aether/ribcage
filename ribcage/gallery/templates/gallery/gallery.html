@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Gallery · Ribcage{% endblock %}
+
+{% block head %}<link rel="stylesheet" href="{% static 'gallery/gallery.css' %}">{% endblock %}
+
+{% block content %}
+  <header class="gallery-head">
+    <p class="wordmark">Ribcage</p>
+    <h1>Gallery</h1>
+    <p class="gallery-head__about">The theme and its shared components, each in the skin of the surface that uses it, on films from the recorded corpus. It exists only with <code>DEBUG</code> on. The voters and their notes are written for the gallery.</p>
+    <nav class="gallery-nav" aria-label="Skins"><a href="#voter">Voter</a><a href="#admin">Admin</a><a href="#run">RUN</a></nav>
+  </header>
+
+  <section class="gallery-skin" data-skin="voter" id="voter" aria-labelledby="voter-name">
+    <p class="gallery-skin__name" id="voter-name">Voter</p>
+
+    <div class="specimen">
+      <div class="specimen__type">
+        <p class="wordmark">Ribcage</p>
+        <h1>Suggest a film</h1>
+        <h2>The pool</h2>
+        <h3>Midsommar</h3>
+        <p>Everyone's notes are open to the group, and the suggester's pitch comes first. Body text is set for reading in a dark room, at a size you can take in from the sofa.</p>
+        <p class="specimen__small">suggested by Hanna</p>
+      </div>
+      <form class="specimen__controls">
+        <label>Title <input type="text" value="the thing 1982"></label>
+        <label>Your pitch <textarea rows="3">The one with the dog kennel scene. Late in the evening, lights off.</textarea></label>
+        <label>Runtime <input type="number" value="109"></label>
+        <label class="specimen__check"><input type="checkbox" checked> Seen it</label>
+        <div class="specimen__buttons">
+          <button type="button">Add to the pool</button>
+          <button type="button" class="button--quiet">Back</button>
+          <button type="button" disabled>Add to the pool</button>
+        </div>
+      </form>
+    </div>
+
+    <p class="gallery-label">State colours</p>
+    <div class="states">
+      <ul class="score-scale">
+        {% for value, label, key in score_scale %}<li class="score score--{{ key }}"><b>{{ value }}</b> {{ label }}</li>{% endfor %}
+        <li class="score score--veto"><b>Veto</b></li>
+      </ul>
+      <ul class="tiles">
+        {% for tile in tiles %}
+          <li class="tile{% if tile.trigger_icon %} has-trigger-icon{% endif %}{% if tile.seen_it %} is-seen-it{% endif %}">
+            <span class="tile__poster">{% include "components/poster.html" with film=tile.film size="tile" %}{% if tile.vetoed_by %}<span class="veto-ribbon">{{ tile.vetoed_by }}</span>{% endif %}</span>
+            <span class="tile__title">{{ tile.film.title }}</span>
+            <span class="tile__caption">{{ tile.caption }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <p class="gallery-label">Posters and title cards</p>
+    <ul class="poster-row">
+      {% for film in poster_row %}<li>{% include "components/poster.html" with film=film size="tile" %}<span class="tile__title">{{ film.title }}</span></li>{% endfor %}
+    </ul>
+
+    <p class="gallery-label">Film cards</p>
+    <div class="film-cards" data-film-cards>
+      {% for card in cards %}{% include "components/film_card.html" with card=card expanded=forloop.first %}{% endfor %}
+    </div>
+  </section>
+
+  <section class="gallery-skin" data-skin="admin" id="admin" aria-labelledby="admin-name">
+    <p class="gallery-skin__name" id="admin-name">Admin</p>
+
+    <div class="specimen">
+      <div class="specimen__type">
+        <h1>Films</h1>
+        <h2>Approve</h2>
+        <h3>The Wolf House</h3>
+        <p>Admin screens are function-first: one row per item, dense, with the title opening the shared card under its row.</p>
+        <p class="specimen__small">6 suggestions · 2 undecided</p>
+      </div>
+      <form class="specimen__controls">
+        <div class="specimen__inline">
+          <label>Runtime <input type="number" value="74"></label>
+          <label>Phase <select><option>SUGGEST</option><option selected>APPROVE</option><option>VOTE</option></select></label>
+        </div>
+        <div class="specimen__buttons">
+          <button type="button">Approve</button>
+          <button type="button" class="button--quiet">Drop</button>
+          <button type="button" disabled>Move to VOTE</button>
+        </div>
+      </form>
+    </div>
+
+    <table class="ledger" data-film-cards>
+      <thead><tr><th scope="col"><span class="visually-hidden">Poster</span></th><th scope="col">Film</th><th scope="col">Suggested by</th><th scope="col" class="ledger__number">Notes</th><th scope="col" class="ledger__number">Runtime</th></tr></thead>
+      <tbody>
+        {% for card in cards %}
+          <tr{% if forloop.counter == 3 %} class="is-open"{% endif %}>
+            <td class="ledger__poster">{% include "components/poster.html" with film=card.film size="thumb" %}</td>
+            <td><span class="ledger__title">{{ card.film.title }}</span> <span class="ledger__muted">{{ card.film.year|default:"" }}</span> <span class="ledger__muted ledger__directors">{{ card.film.directors|join:", " }}</span></td>
+            <td>{{ card.suggester }}{% if card.suggester_removed %} <span class="removed-tag">removed</span>{% endif %}</td>
+            <td class="ledger__number">{% if card.pitch %}{{ card.notes|length|add:1 }}{% else %}{{ card.notes|length }}{% endif %}</td>
+            <td class="ledger__number">{{ card.film.runtime }} <span class="runtime__source">{% if card.film.runtime_source == "tmdb" %}TMDB{% else %}by hand{% endif %}</span></td>
+          </tr>
+          {% if forloop.counter == 3 %}<tr class="ledger__detail"><td colspan="5">{% include "components/film_card.html" with card=card expanded=True %}</td></tr>{% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="gallery-skin" data-skin="run" id="run" aria-labelledby="run-name">
+    <p class="gallery-skin__name" id="run-name">RUN</p>
+    <div class="run-sample">
+      <div class="specimen__type">
+        <h1>Tonight</h1>
+        <p>The voter's evening: the whole night fitted to one phone screen, the past dimmed, now playing inside its box. The box itself is M7's and M8's; this is its ground.</p>
+      </div>
+      <div class="evening" style="--evening-minutes: {{ evening_minutes }}; --evening-now: {{ evening_now }}">
+        {% for box in evening %}
+          <div class="evening__box{% if box.film %} evening__box--film{% endif %}{% if box.past %} is-past{% endif %}{% if box.now %} is-now{% endif %}" style="--offset: {{ box.offset }}; --length: {{ box.length }}">
+            {% if box.now %}<span class="evening__kicker">Now playing</span>{% endif %}
+            <span class="evening__title">{{ box.label }}</span>
+            <span class="evening__time">{{ box.start }}–{{ box.end }}{% if box.now %} · {{ box.minutes_left }} min left{% endif %}</span>
+            {% if box.now %}<span class="evening__progress" style="--left: {{ box.minutes_left }}"></span>{% endif %}
+          </div>
+        {% endfor %}
+        <div class="evening__now" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

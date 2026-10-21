@@ -17,11 +17,12 @@ A web app a group of friends uses to plan and run one film marathon. It is rebui
 
 Top-level directories sort by what a thing is, not by which ticket made it. A new kind of thing gets its directory and its line here.
 
-- `ribcage/` is the Django project: settings and URLs, plus an app per module of `docs/design.md` §9, except Operations, whose `operations` is a plain package, and two apps outside it.
+- `ribcage/` is the Django project: settings and URLs, plus an app per module of `docs/design.md` §9, except Operations, whose `operations` is a plain package, and three apps outside it.
   - `identity` holds `Voter`, the user model.
   - `films` holds `Film` and `FilmCard`, the plain data the shared components and the models meet at, and `corpus`, the pure reader of the recorded seed corpus (#57).
   - `hello` is M1 scaffolding that M3 removes (#42, #47).
   - `seeding` holds the dev-only seed commands, the only route to development data. Each milestone extends them to seed what it builds, and `--phase` picks which of the phases M3 adds to seed into (#25, #50). Its `fetchcorpus` is the one command that goes online: it refetches the seed corpus into `fixtures/films/`, replacing the last fetch, and needs real `TMDB_API_KEY` and `DTDD_API_KEY` values (#57).
+  - `gallery` is the dev-only visual reference: the theme and every shared component on corpus films, with sample voters and notes written for it. It answers only with `DEBUG` on, and each milestone adds the components it builds (#58).
   - `operations` is the plain package for §9's Operations module and holds only the backup sidecar, run as `python -m ribcage.operations.backup` (`--help` lists its commands). It never loads the settings, so the sidecar is handed no secrets (#53).
   - Every page extends `templates/base.html`. A page outside the login wall carries `login_not_required`, which is how `tests/http/test_public_pages.py` finds it and holds it to zero queries.
   - `privacy.md` is the public privacy policy's one copy, rendered at `/privacy/` (#16, #49).
@@ -48,6 +49,7 @@ Python 3.14, with every dependency pinned exactly in `requirements.txt` (the app
 - **Run the server:** `python manage.py migrate`, then `python manage.py runserver`. The local database is `db.sqlite3`, gitignored. With `DEBUG` off, run `python manage.py collectstatic` first.
 - **Browse it** at `localhost` or `127.0.0.1` in Chromium or Firefox, Playwright's Chromium included: only they keep the always-`Secure` cookies over plain http, so from other browsers or a LAN address every POST gets a 403 (#31).
 - **Seeded instance:** `python manage.py seededserver` rebuilds the local database from nothing with known voters and serves it at `http://127.0.0.1:8000/`; `python manage.py seed` only rebuilds. Both refuse unless `DEBUG` is on, which the deployment never sets (#50).
+- **Gallery:** with the seeded instance running, open `http://127.0.0.1:8000/gallery/` (#58).
 - **Verify a page in a browser** by following `docs/agents/browser-verification.md`: Playwright over MCP against the seeded instance, at desktop width and at 390 px (#25).
 - **Test:** `python -m pytest` runs every suite; `python -m pytest tests/pure`, `tests/http` or `tests/commands` runs one. The suite runs under `tests.settings`, which reads `.env.example`'s placeholders rather than `.env`.
 - **Slow tests** are marked `@pytest.mark.slow` and stay out of the default run: `python -m pytest -m slow` runs only them, `-m ""` runs everything. Use the mark for on-demand checks such as #6's enumeration oracle.

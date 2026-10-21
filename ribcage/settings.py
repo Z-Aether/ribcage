@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "ribcage.films",
     "ribcage.hello",
     "ribcage.seeding",
+    "ribcage.gallery",
 ]
 
 MIDDLEWARE = [
