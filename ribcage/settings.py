@@ -23,7 +23,8 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = False
 SECURE_SSL_REDIRECT = False
 # The proxy redirects to https, and preload would commit the host's apex domain, so both warnings are decided (#16).
-SILENCED_SYSTEM_CHECKS = ["security.W008", "security.W021"]
+# auth.W004 cannot see the case-insensitive unique constraint on Lower(display_name) (#69).
+SILENCED_SYSTEM_CHECKS = ["security.W008", "security.W021", "auth.W004"]
 # Secure with DEBUG on or off; over local http only Chromium and Firefox keep them, at localhost or 127.0.0.1 (#31).
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -85,6 +86,7 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = "identity.Voter"
+AUTHENTICATION_BACKENDS = ["ribcage.identity.backends.DisplayNameBackend"]
 
 AUTH_PASSWORD_VALIDATORS = [
     {

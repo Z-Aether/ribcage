@@ -66,3 +66,29 @@ def test_a_write_after_a_read_waits_for_a_concurrent_writer_instead_of_failing(t
     rival.join(10)
 
     assert outcome == ["committed"]
+
+
+def test_migrating_a_database_that_holds_voters_gives_each_the_key_of_its_name(tmp_path):
+    database = tmp_path / "old.sqlite3"
+    environ = {**os.environ, "DJANGO_SETTINGS_MODULE": "ribcage.settings", "DATABASE_PATH": str(database)}
+
+    def migrate(*target):
+        run = subprocess.run(
+            [sys.executable, "manage.py", "migrate", "--verbosity", "0", *target],
+            cwd=REPO_ROOT,
+            env=environ,
+            capture_output=True,
+            text=True,
+        )
+        assert run.returncode == 0, run.stderr
+
+    migrate("identity", "0001")
+    with closing(sqlite3.connect(database)) as connection, connection:
+        connection.executemany(
+            "INSERT INTO identity_voter (password, display_name) VALUES ('', ?)", [("\u00c9va",), ("Sam",)]
+        )
+    migrate()
+
+    with closing(sqlite3.connect(database)) as connection:
+        keys = connection.execute("SELECT display_name, display_name_key FROM identity_voter ORDER BY id").fetchall()
+    assert keys == [("\u00c9va", "\u00e9va"), ("Sam", "sam")]

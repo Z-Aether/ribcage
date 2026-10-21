@@ -38,7 +38,7 @@ def with_a_stale_session(client):
 
 
 def signed_in_as_a_voter(client):
-    client.force_login(Voter.objects.create(display_name="Ada"))
+    client.force_login(Voter.objects.create_voter("Ada"))
     client.cookies["csrftoken"] = "a" * 32
     return client
 

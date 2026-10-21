@@ -76,7 +76,7 @@ def seeded_state(client):
 
 
 def test_seeding_starts_from_nothing(transactional_db, debug_on, client):
-    Voter.objects.create(display_name="Interloper")
+    Voter.objects.create_voter("Interloper")
     Message.objects.create(text="Written before the seed")
 
     call_command("seed")

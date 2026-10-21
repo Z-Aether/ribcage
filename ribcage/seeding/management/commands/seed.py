@@ -35,7 +35,7 @@ class Command(BaseCommand):
         with transaction.atomic():
             password = make_password(SEEDED_PASSWORD)
             for display_name in SEEDED_DISPLAY_NAMES:
-                Voter.objects.create(display_name=display_name, password=password)
+                Voter.objects.create_voter(display_name, password_hash=password)
             # One create each, never bulk_create, so Message's own trimming runs (#47).
             for text in SEEDED_MESSAGES:
                 Message.objects.create(text=text)
