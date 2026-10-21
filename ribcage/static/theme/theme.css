@@ -684,6 +684,42 @@ body > header.console-header {
   margin-left: auto;
 }
 
+/* ---------- The Roster tab: one row per voter, and removal's confirm under its row (#28, #79) ---------- */
+
+[data-skin] .roster .roster__actions {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+}
+[data-skin] .roster .roster__actions a.button {
+  margin: 0;
+  padding-block: 0.1rem;
+}
+[data-skin] .ledger.roster tr.is-armed td {
+  background-color: var(--surface);
+}
+[data-skin] .ledger.roster .ledger__detail td {
+  padding: 0.2rem 0.6rem 0.75rem;
+}
+[data-skin] .roster-confirm p,
+[data-skin] .roster-confirm ul {
+  margin: 0 0 0.5rem;
+}
+[data-skin] .roster-confirm li {
+  margin: 0;
+}
+[data-skin] .roster-confirm .roster-confirm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+}
+[data-skin] .roster-confirm__actions :is(a.button, button) {
+  width: auto;
+  margin: 0;
+}
+
 body > footer.site-footer {
   margin-top: 3rem;
   padding-block: 1.5rem 2.5rem;

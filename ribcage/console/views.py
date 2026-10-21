@@ -4,8 +4,10 @@ from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
 from ribcage.console.moves import offered
+from ribcage.console.roster import what_goes
 from ribcage.identity.admin_session import admin_required
 from ribcage.identity.models import Voter
+from ribcage.identity.removal import remove
 from ribcage.phase.history import current, last_entered, move
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 
@@ -63,6 +65,30 @@ def pick_tab(request):
     return render_tab(request, "console/pick.html")
 
 
+def named_voter(pk):
+    """The voter a form or a link names by id, or None for an id that names nobody, or no id at all."""
+    try:
+        return Voter.objects.filter(pk=pk).first()
+    except (TypeError, ValueError):
+        return None
+
+
 @admin_required
 def roster_tab(request):
-    return render_tab(request, "console/roster.html")
+    # Arming is a plain GET that removes nothing, naming the voter by id (#28, #79).
+    armed = named_voter(request.GET.get("remove"))
+    context = {
+        "voters": Voter.objects.order_by("display_name_key"),
+        "armed": armed,
+        "goes": armed and what_goes(armed),
+    }
+    return render_tab(request, "console/roster.html", context)
+
+
+@admin_required
+@require_POST
+def remove_voter(request):
+    # A confirm for a voter already removed, or for nobody, removes nobody and reloads the tab (#79).
+    if voter := named_voter(request.POST.get("voter")):
+        remove(voter)
+    return redirect("console_roster")

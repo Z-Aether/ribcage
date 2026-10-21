@@ -4,5 +4,47 @@
 
 {% block tab %}
   <h1>Roster</h1>
-  <p>Everyone registered will be here, to remove or to reset a password.</p>
+
+  {% if voters %}
+    {# One row per voter; later milestones add their columns, and the floor set line above (#28, #79). #}
+    <table class="ledger roster">
+      <thead>
+        <tr><th scope="col">Voter</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
+      </thead>
+      <tbody>
+        {% for voter in voters %}
+          <tr data-voter="{{ voter.pk }}"{% if voter == armed %} class="is-armed"{% endif %}>
+            <td class="roster__name">{{ voter.display_name }}</td>
+            <td class="roster__actions">
+              {# The armed row gives up its arm, so a double click on it arms nothing further (#77, #79). #}
+              {% if voter != armed %}<a class="button button--quiet" href="{% url 'console_roster' %}?remove={{ voter.pk }}">Remove…</a>{% endif %}
+            </td>
+          </tr>
+          {% if voter == armed %}
+            <tr class="ledger__detail">
+              <td colspan="2">
+                <form method="post" action="{% url 'console_roster_remove' %}" class="roster-confirm">
+                  {% csrf_token %}
+                  <input type="hidden" name="voter" value="{{ voter.pk }}">
+                  <p>Removing {{ voter.display_name }} deletes:</p>
+                  <ul>
+                    {% for item in goes %}
+                      <li class="roster-confirm__goes">{{ item }}</li>
+                    {% endfor %}
+                  </ul>
+                  <p>Removal is not a ban: the join code still lets them register again.</p>
+                  <p class="roster-confirm__actions">
+                    <a class="button button--quiet" href="{% url 'console_roster' %}">Cancel</a>
+                    <button type="submit">Remove {{ voter.display_name }}</button>
+                  </p>
+                </form>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Nobody has registered yet.</p>
+  {% endif %}
 {% endblock %}
