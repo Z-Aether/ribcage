@@ -76,3 +76,9 @@ def test_the_gallery_shows_every_skin(client, debug):
 
     for skin in ("voter", "admin", "run"):
         assert f'data-skin="{skin}"' in page
+
+
+def test_the_gallery_shows_the_password_confirmation(client, debug):
+    page = client.get(GALLERY).content.decode()
+
+    assert 'data-confirms-password="gallery_password"' in page

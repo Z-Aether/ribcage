@@ -1,4 +1,5 @@
 import pytest
+from django.templatetags.static import static
 from django.test import Client
 
 from ribcage.identity.models import Voter
@@ -116,3 +117,11 @@ def test_a_successful_change_says_so(client):
 
 def test_password_change_is_behind_the_login_wall(db):
     assert Client().get(PASSWORD_CHANGE).headers["Location"] == f"/login/?next={PASSWORD_CHANGE}"
+
+
+def test_the_form_wires_its_second_field_to_the_live_match_line(client):
+    page = client.get(PASSWORD_CHANGE).text
+
+    assert 'data-confirms-password="id_new_password1"' in page
+    assert 'id="id_new_password1"' in page
+    assert f'src="{static("components/password-match.js")}"' in page

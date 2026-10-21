@@ -367,6 +367,19 @@ body[data-skin="run"] {
   max-width: 26rem;
 }
 
+/* The live line under a confirmation field: sea-glass when the two match, rose when they differ (#72). */
+[data-skin] .password-match {
+  min-height: 1.5em;
+  margin-top: -0.5rem;
+  font-size: 0.9rem;
+}
+[data-skin] .password-match[data-state="match"] {
+  color: var(--score-top-pick);
+}
+[data-skin] .password-match[data-state="differ"] {
+  color: var(--score-rather-not);
+}
+
 /* ---------- Voter shell: the thin header and every page's footer (#27, #37, #73) ---------- */
 
 body > header.voter-header {

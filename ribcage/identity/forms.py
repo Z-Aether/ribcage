@@ -59,7 +59,7 @@ class JoinCodeForm(forms.Form):
 class RegistrationForm(forms.Form):
     display_name = forms.CharField(label="Display name", strip=False, widget=forms.TextInput(attrs={"autocomplete": "username", "autofocus": True}))
     password = forms.CharField(label="Password", strip=False, widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}))
-    password_again = forms.CharField(label="Password again", strip=False, widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}))
+    password_again = forms.CharField(label="Password again", strip=False, widget=forms.PasswordInput(attrs={"autocomplete": "new-password", "data-confirms-password": "id_password"}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, label_suffix="", **kwargs)
@@ -96,6 +96,7 @@ class ChangePasswordForm(PasswordChangeForm):
         self.fields["old_password"].label = "Current password"
         self.fields["new_password1"].label = "New password"
         self.fields["new_password2"].label = "New password again"
+        self.fields["new_password2"].widget.attrs["data-confirms-password"] = "id_new_password1"
         # The voter skin carries no hint text (#58); a refused password says why.
         for field in self.fields.values():
             field.help_text = ""

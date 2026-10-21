@@ -2,6 +2,7 @@ import re
 
 import pytest
 from django.contrib.auth import get_user
+from django.templatetags.static import static
 
 from ribcage.identity.models import Voter
 from ribcage.phase.order import PHASES, Phase
@@ -232,3 +233,11 @@ def test_welcome_says_the_admin_and_host_can_read_a_watched_list(client, db):
     text = register(client, follow=True).text
 
     assert "admin and the host" in text and "technically read" in text
+
+
+def test_the_second_step_wires_its_second_field_to_the_live_match_line(client, db):
+    page = enter_code(client).text
+
+    assert 'data-confirms-password="id_password"' in page
+    assert 'id="id_password"' in page
+    assert f'src="{static("components/password-match.js")}"' in page
