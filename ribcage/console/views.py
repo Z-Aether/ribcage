@@ -1,15 +1,20 @@
 from contextlib import suppress
 
+from django.conf import settings
+from django.http import FileResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods, require_POST
 
+from ribcage.console.forms import BackupCodeForm
 from ribcage.console.moves import offered
 from ribcage.console.roster import what_goes
 from ribcage.identity.admin_session import admin_required
 from ribcage.identity.models import Voter
 from ribcage.identity.removal import remove
 from ribcage.identity.reset import replacing, reset
+from ribcage.operations import offer
 from ribcage.phase.history import current, last_entered, move
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 
@@ -116,3 +121,27 @@ def reset_password(request):
         # A confirm out of date (a double click, a reload's resubmit) is refused, so say so and offer a fresh one (#80).
         return roster(request, armed_reset(voter, used=True))
     return redirect("console_roster")
+
+
+REFUSALS = {
+    offer.NoOffer: "No backup is on offer. Make a code first, in the ribcage container's terminal.",
+    offer.Expired: "That code had expired, so the offer is void. Make a new code.",
+    offer.WrongCode: "That code is wrong, so the offer is void. Make a new code.",
+}
+
+
+@admin_required
+@require_http_methods(["GET", "HEAD", "POST"])
+def backup_page(request):
+    # Outside the tabs: the admin password alone never yields the database, only with a code from the shell (#54, #68).
+    form = BackupCodeForm(request.POST if request.method == "POST" else None)
+    if not form.is_valid():
+        offer.void_if_expired(settings.BACKUP_OFFER_DIRECTORY, timezone.now())
+        return render(request, "console/backup.html", {"form": form})
+    try:
+        redeemed = offer.redeem(settings.BACKUP_OFFER_DIRECTORY, form.cleaned_data["code"], timezone.now())
+    except offer.Refused as refusal:
+        return render(request, "console/backup.html", {"form": BackupCodeForm(), "refusal": REFUSALS[type(refusal)]})
+    response = FileResponse(offer.opened(redeemed), as_attachment=True, filename=redeemed.file.name, content_type="application/octet-stream")
+    response["Cache-Control"] = "no-store"
+    return response

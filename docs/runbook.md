@@ -84,28 +84,29 @@ docker compose -f compose.yaml -f compose.local.yaml cp backup:/backups/<name> p
 
 ### Pull one from the host
 
-Komodo can't download a file, so for now a backup leaves the host as text, copied out of the `backup` container's *Terminal* (#54). M3 replaces this with a download on the admin side (#68).
+Komodo can't download a file, so the admin side serves one, but only for a one-time code made in the `ribcage` container's *Terminal*. The admin password alone never yields the database (#54, #68). The code works once, for 10 minutes, and a wrong code voids it.
 
-1. **In the terminal, note the backup's checksum and its length in lines.** Take one with `python -m ribcage.operations.backup now`, or pick one from `ls -l /backups`.
+1. **Make a code.** In Komodo, open a *Terminal* in the `ribcage` container, not `backup`: only `ribcage` has the settings the command reads. Run:
    ```
-   sha256sum /backups/<name>
-   gzip -nc /backups/<name> | base64 | wc -l
+   python manage.py backupcode download
    ```
-2. **Print it in parts of 1000 lines,** and paste each part, in order, into one new file, `private/backups/<name>.b64`. `-n` makes gzip give the same output on every run, so the parts join up. Keep going until you reach step 1's line count. If the top of a part has scrolled out of the terminal, print smaller parts.
+   It takes a fresh backup, checks its integrity, and prints three lines:
+   - `Offered backup-<UTC date>-<UTC time>.sqlite3:` and every table's row count. Copy the counts into a note for step 4.
+   - `Code:` and 32 letters and digits. Copy them.
+   - the page's path, `/console/backup/`, and the time the code expires.
+
+   Running it again replaces the offer: the earlier code is then wrong, and entering it voids the new one too.
+   - **If it says to run it as the image's user,** the terminal is root: open it without choosing a user.
+2. **Open `https://<subdomain>/console/backup/`** and log in as the admin if it asks. No tab links to the page.
+3. **Paste the code and press *Download*.** Save the file into `private/backups/`, never Downloads or a synced folder (#30). If the browser saves it without asking, move it from Downloads into `private/backups/` straight away.
+   - **If the page says the code is wrong or expired,** the offer is void: go back to step 1 for a new code.
+   - **If it says no backup is on offer,** the code was used already, or a wrong or expired code voided it: go back to step 1.
+4. **Check that it opens, reading its row counts.** They match the counts you noted in step 1.
    ```
-   gzip -nc /backups/<name> | base64 | sed -n "1,1000p"
-   gzip -nc /backups/<name> | base64 | sed -n "1001,2000p"
-   ```
-3. **Decode it in Git Bash** and check that the checksum matches step 1's:
-   ```
-   base64 -d private/backups/<name>.b64 | gunzip > private/backups/<name>
-   sha256sum private/backups/<name>
-   ```
-4. **Delete the `.b64` file,** then check that the backup opens, reading its row counts. They match the counts the host printed when it took the backup, in `now`'s output or the sidecar's log.
-   ```
-   rm private/backups/<name>.b64
    .venv/Scripts/python -m ribcage.operations.backup counts private/backups/<name>
    ```
+
+Nothing is left to clean up on the host. The offered file is deleted once it is downloaded, and an unused one once it has expired and the page or the command next runs. Teardown's wipe of the data volume removes anything else.
 
 ## Restore
 
@@ -150,7 +151,7 @@ When the database is damaged but the `backups` volume holds a good backup, the s
 
 ### On the host, from a pulled copy
 
-When the host's volumes are lost, the pulled copy goes back in the way it came out, pasted into the `backup` container's *Terminal* as text. **Not yet run on the host:** the pipeline is checked against the deployed image locally, but not yet through Komodo's terminal (#55). M3's download page is to carry a backup back in by the same one-time code (#68).
+When the host's volumes are lost, the pulled copy goes back in the way it came out, pasted into the `backup` container's *Terminal* as text. **Not yet run on the host:** the pipeline is checked against the deployed image locally, but not yet through Komodo's terminal (#55). M3's backup page is to take a backup back in for the same kind of one-time code (#81).
 
 1. **Bring up a fresh stack:** *Destroy* the stack, delete both volumes as in Teardown, then *Deploy*. Wait until `https://<subdomain>/` answers, then stop the `ribcage` service.
 2. **In Git Bash, note the backup's checksum and its length in lines.**
@@ -184,7 +185,7 @@ At the end of every window, the morning after the evening, and also when a marat
 2. **Delete both volumes** on the server's page in Komodo: the two whose names end in `_data` and `_backups`. Docker won't delete a volume a container still uses, which is why *Destroy* comes first.
    - **If the account can't delete volumes** (Adam may narrow it), empty them before step 1's *Destroy*, then ask Adam to remove the two empty volumes. With `ribcage` stopped, run this in the `backup` container's *Terminal*:
      ```
-     rm -f /data/db.sqlite3* /backups/*
+     rm -rf /data/db.sqlite3* /data/backup-offer /backups/*
      ```
 3. **Check that nothing of ours answers:** `https://<subdomain>/` returns the proxy's bare 502.
 4. **Delete every local copy.** Pulled backups are in `private/backups/`. A local stack a real backup was restored into goes with `down -v`.

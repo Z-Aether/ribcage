@@ -92,6 +92,8 @@ DATABASES = {
         "OPTIONS": {"init_command": "PRAGMA journal_mode=WAL;", "transaction_mode": "IMMEDIATE", "timeout": 20},
     }
 }
+# The backup page's one offer sits beside the database on its volume, and never in it (#68).
+BACKUP_OFFER_DIRECTORY = DATABASES["default"]["NAME"].parent / "backup-offer"
 
 AUTH_USER_MODEL = "identity.Voter"
 AUTHENTICATION_BACKENDS = ["ribcage.identity.backends.DisplayNameBackend"]

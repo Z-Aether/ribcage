@@ -14,9 +14,10 @@ node_modules/
 fixtures/dtdd/
 fixtures/films/dtdd/
 
-# Local Python environment, database, collected static files and caches
+# Local Python environment, database and its backup offer, collected static files and caches
 /.venv/
 /db.sqlite3*
+/backup-offer/
 /staticfiles/
 __pycache__/
 .pytest_cache/

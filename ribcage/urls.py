@@ -1,6 +1,6 @@
 from django.urls import path
 
-from ribcage.console.views import console, films_tab, move_phase, phase_tab, pick_tab, remove_voter, reset_password, roster_tab
+from ribcage.console.views import backup_page, console, films_tab, move_phase, phase_tab, pick_tab, remove_voter, reset_password, roster_tab
 from ribcage.gallery.views import gallery
 from ribcage.identity.views import (
     admin_login,
@@ -34,6 +34,7 @@ urlpatterns = [
     path("console/roster/", roster_tab, name="console_roster"),
     path("console/roster/remove/", remove_voter, name="console_roster_remove"),
     path("console/roster/reset/", reset_password, name="console_roster_reset"),
+    path("console/backup/", backup_page, name="console_backup"),
     path("console/login/", admin_login, name="admin_login"),
     path("console/logout/", admin_logout, name="admin_logout"),
 ]

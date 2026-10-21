@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 import sqlite3
 import subprocess
@@ -8,9 +9,10 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
+from django.core.management import CommandError, call_command
 
 import ribcage
-from ribcage.operations import backup
+from ribcage.operations import backup, offer
 from ribcage.operations.backup import KEPT_BACKUPS, BackupFailed, restore, row_counts, take_backup
 
 REPO_ROOT = Path(ribcage.__file__).parents[1]
@@ -178,3 +180,62 @@ def test_restore_refuses_a_broken_backup_and_leaves_the_database_alone(live_data
 
     assert restoring.returncode != 0
     assert row_counts(live_database) == before
+
+
+def offered_files(directory):
+    return [path for path in directory.iterdir() if backup.is_backup(path.name)]
+
+
+def test_the_backup_code_command_offers_a_backup_that_passes_the_integrity_check_with_the_databases_counts(live_database):
+    offering = run_in_a_child("manage.py", "backupcode", "download", DATABASE_PATH=str(live_database))
+
+    assert offering.returncode == 0, offering.stderr
+    [backup_file] = offered_files(live_database.parent / "backup-offer")
+    with closing(sqlite3.connect(backup_file)) as connection:
+        assert not backup.fails_integrity_check(connection)
+    assert row_counts(backup_file) == row_counts(live_database)
+    assert f"Offered {backup_file.name}: " in offering.stdout
+    assert "/console/backup/" in offering.stdout
+
+
+def test_the_code_the_command_prints_redeems_its_offer(live_database):
+    offering = run_in_a_child("manage.py", "backupcode", "download", DATABASE_PATH=str(live_database))
+    [code] = re.findall(r"^Code: ([0-9a-f]{32})$", offering.stdout, re.M)
+
+    redeemed = offer.redeem(live_database.parent / "backup-offer", code, datetime.now(UTC))
+
+    assert redeemed.purpose == offer.DOWNLOAD
+    assert row_counts(redeemed.file) == row_counts(live_database)
+
+
+def test_a_new_offer_voids_the_last_and_deletes_its_file(live_database, tmp_path):
+    directory = tmp_path / "backup-offer"
+    first_code, first_file = offer.offer_download(live_database, directory, TAKEN_AT)
+
+    _, second_file = offer.offer_download(live_database, directory, TAKEN_AT + timedelta(minutes=1))
+
+    assert offered_files(directory) == [second_file]
+    assert not first_file.exists()
+    with pytest.raises(offer.WrongCode):
+        offer.redeem(directory, first_code, TAKEN_AT + timedelta(minutes=2))
+
+
+def test_with_no_database_the_command_fails_and_offers_nothing(tmp_path):
+    missing = tmp_path / "data" / "db.sqlite3"
+
+    offering = run_in_a_child("manage.py", "backupcode", "download", DATABASE_PATH=str(missing))
+
+    assert offering.returncode != 0
+    assert "No backup offered" in offering.stderr
+    assert not missing.exists()
+    assert list((tmp_path / "data" / "backup-offer").iterdir()) == []
+
+
+def test_the_backup_code_command_refuses_to_run_as_root_and_touches_nothing(tmp_path, monkeypatch, settings):
+    settings.BACKUP_OFFER_DIRECTORY = tmp_path / "backup-offer"
+    monkeypatch.setattr(os, "geteuid", lambda: 0, raising=False)
+
+    with pytest.raises(CommandError, match="not root"):
+        call_command("backupcode", "download")
+
+    assert not (tmp_path / "backup-offer").exists()

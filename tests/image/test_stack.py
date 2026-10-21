@@ -1,15 +1,19 @@
 import json
+import re
 
 import pytest
 
+from ribcage.operations.backup import describe, row_counts
 from tests.image.client import (
     CREATE_THE_VOTER,
     LOGIN,
     SIGNED_IN_AS_THE_VOTER,
+    download_a_backup,
     fetch,
     home_page,
     session_of,
     sign_in,
+    sign_in_as_the_admin,
     wait_until_serving,
 )
 from tests.image.docker import REPO_ROOT
@@ -100,6 +104,22 @@ def test_a_written_row_survives_down_then_up(local_stack):
     wait_until_serving(local_stack.port())
 
     assert SIGNED_IN_AS_THE_VOTER in home_page(local_stack.port(), session)[2]
+
+
+def test_a_code_made_in_the_apps_container_downloads_its_backup_once_from_the_admin_side(local_stack, tmp_path):
+    offering = local_stack("exec", "ribcage", "python", "manage.py", "backupcode", "download")
+    offered_counts = re.search(r"^Offered backup-\d{8}-\d{6}\.sqlite3: (.*)\.$", offering, re.M)[1]
+    code = re.search(r"^Code: (\w+)$", offering, re.M)[1]
+    admin = sign_in_as_the_admin(local_stack.port(), EXAMPLE["ADMIN_PASSWORD"])
+
+    status, headers, content = download_a_backup(local_stack.port(), admin, code)
+
+    assert (status, headers["Cache-Control"]) == (200, "no-store")
+    downloaded = tmp_path / "downloaded.sqlite3"
+    downloaded.write_bytes(content)
+    assert describe(row_counts(downloaded)) == offered_counts
+    assert local_stack("exec", "ribcage", "ls", "-A", "/data/backup-offer").strip() == ""
+    assert download_a_backup(local_stack.port(), admin, code)[1].get("Content-Disposition") is None
 
 
 def test_an_empty_secret_stops_startup_naming_it(image, tmp_path):

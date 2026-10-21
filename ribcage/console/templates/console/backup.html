@@ -1,0 +1,17 @@
+{% extends "console/page.html" %}
+{# An admin page outside the tabs, linked from none of them (#68). #}
+
+{% block title %}Backup · Admin · Ribcage{% endblock %}
+
+{% block content %}
+  <h1>Download a backup</h1>
+  <p>Make a code in the <code>ribcage</code> container's terminal with <code>python manage.py backupcode download</code>, then enter it here. It works once, for 10 minutes, and a wrong code voids it.</p>
+  <form class="form--short" method="post" action="{% url 'console_backup' %}">
+    {% csrf_token %}
+    {% if refusal %}
+      <p role="alert">{{ refusal }}</p>
+    {% endif %}
+    {{ form.code.as_field_group }}
+    <button type="submit">Download</button>
+  </form>
+{% endblock %}

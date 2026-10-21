@@ -12,6 +12,12 @@ def _static_files_collected(collected_static_files):
     pass
 
 
+@pytest.fixture(autouse=True)
+def _backup_offer_directory(settings, tmp_path):
+    # Every test's backup offer is its own, never one beside the developer's database (#68).
+    settings.BACKUP_OFFER_DIRECTORY = tmp_path / "backup-offer"
+
+
 class Clock:
     def __init__(self):
         self.now = timezone.now()
