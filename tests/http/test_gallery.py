@@ -1,6 +1,9 @@
 import re
 
 import pytest
+from django.test import Client
+
+from ribcage.identity.models import Voter
 
 GALLERY = "/gallery/"
 
@@ -10,9 +13,20 @@ def debug(settings):
     settings.DEBUG = True
 
 
+@pytest.fixture
+def client(client, db):
+    # The gallery sits behind the login wall like any page that doesn't opt out (#58, #70).
+    client.force_login(Voter.objects.create_voter("Ada"))
+    return client
+
+
 def notes_on_each_card(page):
     cards = re.findall(r'class="film-card__toggle"[^>]*>([^<]+)</button>(.*?)</article>', page, re.S)
     return {title: re.findall(r'<li class="(note[^"]*)"', card) for title, card in cards}
+
+
+def query_table(sql):
+    return re.search(r'FROM "(\w+)"', sql)[1]
 
 
 def test_the_gallery_does_not_exist_with_debug_off(client, settings):
@@ -21,11 +35,18 @@ def test_the_gallery_does_not_exist_with_debug_off(client, settings):
     assert client.get(GALLERY).status_code == 404
 
 
-def test_the_gallery_renders_with_debug_on_and_no_database_queries(client, db, debug, django_assert_num_queries):
-    with django_assert_num_queries(0):
+def test_the_gallery_renders_with_debug_on_and_no_queries_beyond_the_session_and_voter_lookup(
+    client, debug, django_assert_num_queries
+):
+    with django_assert_num_queries(2) as captured:
         response = client.get(GALLERY)
 
     assert response.status_code == 200
+    assert [query_table(query["sql"]) for query in captured.captured_queries] == ["django_session", "identity_voter"]
+
+
+def test_the_gallery_is_behind_the_login_wall(debug, db):
+    assert Client().get(GALLERY).headers["Location"] == f"/login/?next={GALLERY}"
 
 
 @pytest.mark.parametrize(

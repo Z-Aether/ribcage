@@ -337,6 +337,10 @@ body[data-skin="admin"]::before {
   outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
 }
+/* A form of a field or two, such as login, keeps to a column rather than spanning the page. */
+[data-skin] form.form--short {
+  max-width: 26rem;
+}
 
 /* ---------- Poster and title card (#38) ---------- */
 

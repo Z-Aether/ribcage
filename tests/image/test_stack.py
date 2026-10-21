@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from tests.image.client import a_page_with_its_csrf_token, fetch, post_form, wait_until_serving
+from tests.image.client import CREATE_THE_VOTER, LOGIN, fetch, home_page, session_of, sign_in, wait_until_serving
 from tests.image.docker import REPO_ROOT
 from tests.image.stack import EXAMPLE, LOCALLY_ON_THE_IMAGE_UNDER_TEST, ON_THE_IMAGE_UNDER_TEST, Stack, override
 
@@ -21,6 +21,7 @@ def local_stack(image, tmp_path_factory):
     try:
         stack("up", "--detach", "--wait")
         wait_until_serving(stack.port())
+        stack("exec", "ribcage", *CREATE_THE_VOTER)
         yield stack
     finally:
         stack.run("down", "--volumes")
@@ -48,10 +49,10 @@ def test_the_running_stack_publishes_the_app_on_the_hosts_loopback_alone(hosted_
 
 
 def test_the_proxy_on_the_host_reaches_the_app_at_its_port(hosted_stack):
-    status, _, page = fetch(hosted_stack.port(), "GET", "/")
+    status, _, page = fetch(hosted_stack.port(), "GET", LOGIN)
 
     assert status == 200
-    assert "Hello World" in page
+    assert "Log in" in page
 
 
 def test_the_log_is_json_file_with_a_size_and_file_count_cap(hosted_stack):
@@ -65,33 +66,31 @@ def test_the_database_on_the_volume_is_in_wal_mode(hosted_stack):
     assert hosted_stack.journal_mode() == "wal"
 
 
-def test_the_local_stack_migrates_a_fresh_volume_and_serves_hello_world(local_stack):
-    status, _, page = fetch(local_stack.port(), "GET", "/")
+def test_the_local_stack_migrates_a_fresh_volume_and_serves_the_login_page(local_stack):
+    status, _, page = fetch(local_stack.port(), "GET", LOGIN)
 
     assert status == 200
-    assert "Hello World" in page
+    assert "Log in" in page
 
 
 def test_the_local_stack_accepts_the_form_post_with_the_pages_csrf_token(local_stack):
     port = local_stack.port()
-    cookie, token = a_page_with_its_csrf_token(port)
 
-    status, headers, _ = post_form(port, {"csrfmiddlewaretoken": token, "text": "Posted+through+the+stack"}, cookie)
+    status, headers, _ = sign_in(port)
 
     assert (status, headers["Location"]) == (302, "/")
-    assert "Posted through the stack" in fetch(port, "GET", "/")[2]
+    assert "Signed in as Sam" in home_page(port, session_of(headers))[2]
 
 
 def test_a_written_row_survives_down_then_up(local_stack):
-    port = local_stack.port()
-    cookie, token = a_page_with_its_csrf_token(port)
-    post_form(port, {"csrfmiddlewaretoken": token, "text": "Kept+on+the+volume"}, cookie)
+    # Signing in writes the session row.
+    session = session_of(sign_in(local_stack.port())[1])
 
     local_stack("down")
     local_stack("up", "--detach", "--wait")
     wait_until_serving(local_stack.port())
 
-    assert "Kept on the volume" in fetch(local_stack.port(), "GET", "/")[2]
+    assert "Signed in as Sam" in home_page(local_stack.port(), session)[2]
 
 
 def test_an_empty_secret_stops_startup_naming_it(image, tmp_path):

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <p class="wordmark">Ribcage</p>
+  <p>Signed in as {{ user.display_name }}.</p>
+  <form class="form--short" method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button class="button--quiet" type="submit">Log out</button>
+  </form>
+{% endblock %}

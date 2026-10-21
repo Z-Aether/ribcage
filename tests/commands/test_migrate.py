@@ -8,7 +8,8 @@ from contextlib import closing
 from pathlib import Path
 
 import pytest
-from django.db import transaction
+from django.core.management import call_command
+from django.db import connection, transaction
 from django.db.utils import ConnectionHandler
 
 import ribcage
@@ -92,3 +93,14 @@ def test_migrating_a_database_that_holds_voters_gives_each_the_key_of_its_name(t
     with closing(sqlite3.connect(database)) as connection:
         keys = connection.execute("SELECT display_name, display_name_key FROM identity_voter ORDER BY id").fetchall()
     assert keys == [("\u00c9va", "\u00e9va"), ("Sam", "sam")]
+
+
+def test_migrating_drops_the_removed_hello_apps_table(transactional_db):
+    # The deployed database still holds M1's hello table, and the hello app is gone (#47, #70).
+    call_command("migrate", "identity", "0002", verbosity=0)
+    with connection.cursor() as cursor:
+        cursor.execute("CREATE TABLE hello_message (id INTEGER PRIMARY KEY, text VARCHAR(200))")
+
+    call_command("migrate", verbosity=0)
+
+    assert "hello_message" not in connection.introspection.table_names()

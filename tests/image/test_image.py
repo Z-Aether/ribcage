@@ -5,7 +5,16 @@ import uuid
 
 import pytest
 
-from tests.image.client import a_page_with_its_csrf_token, fetch, post_form, wait_until_serving
+from tests.image.client import (
+    CREATE_THE_VOTER,
+    LOGIN,
+    fetch,
+    home_page,
+    post_form,
+    session_of,
+    sign_in,
+    wait_until_serving,
+)
 from tests.image.docker import REPO_ROOT, docker, run_docker
 
 pytestmark = pytest.mark.slow
@@ -34,6 +43,7 @@ def container(image, tmp_path_factory):
     try:
         host_port = int(docker("port", name, f"{PORT}/tcp").splitlines()[0].rsplit(":", 1)[1])
         wait_until_serving(host_port)
+        docker("exec", name, *CREATE_THE_VOTER)
         yield name, host_port
     finally:
         docker("rm", "--force", name)
@@ -81,13 +91,14 @@ def test_gunicorn_takes_over_as_the_containers_first_process(container):
     assert "gunicorn" in docker("exec", name, "cat", "/proc/1/cmdline")
 
 
-def test_the_hello_world_page_is_served(container):
+def test_the_login_page_is_served_and_walls_the_rest(container):
     _, port = container
 
-    status, _, page = fetch(port, "GET", "/")
+    status, _, page = fetch(port, "GET", LOGIN)
 
     assert status == 200
-    assert "Hello World" in page
+    assert "Log in" in page
+    assert fetch(port, "GET", "/")[1]["Location"] == "/login/?next=/"
 
 
 def test_a_plain_request_gets_hsts_as_the_image_takes_every_request_as_https(container):
@@ -100,7 +111,7 @@ def test_a_plain_request_gets_hsts_as_the_image_takes_every_request_as_https(con
 
 def test_static_files_are_collected_and_served_by_whitenoise(container):
     _, port = container
-    stylesheet = re.search(r'href="(/static/[^"]+\.css)"', fetch(port, "GET", "/")[2])[1]
+    stylesheet = re.search(r'href="(/static/[^"]+\.css)"', fetch(port, "GET", LOGIN)[2])[1]
 
     status, headers, _ = fetch(port, "GET", stylesheet)
 
@@ -110,18 +121,17 @@ def test_static_files_are_collected_and_served_by_whitenoise(container):
 
 def test_the_form_post_with_the_pages_csrf_token_is_accepted(container):
     _, port = container
-    cookie, token = a_page_with_its_csrf_token(port)
 
-    status, headers, _ = post_form(port, {"csrfmiddlewaretoken": token, "text": "Posted+inside+the+image"}, cookie)
+    status, headers, _ = sign_in(port)
 
     assert (status, headers["Location"]) == (302, "/")
-    assert "Posted inside the image" in fetch(port, "GET", "/")[2]
+    assert "Signed in as Sam" in home_page(port, session_of(headers))[2]
 
 
 def test_a_form_post_without_a_csrf_token_is_refused(container):
     _, port = container
 
-    assert post_form(port, {"text": "Forged"})[0] == 403
+    assert post_form(port, {"username": "Sam", "password": "Forged"})[0] == 403
 
 
 def test_the_privacy_policy_is_rendered_from_the_file_inside_the_image(container):
@@ -159,10 +169,10 @@ def logs_once_they_show(name, text):
 
 def test_a_server_error_leaves_its_traceback_on_stderr_without_any_client_address(container):
     name, port = container
-    cookie, token = a_page_with_its_csrf_token(port)
     docker("exec", name, "chmod", "-R", "a-w", "/data")
     try:
-        status, _, _ = post_form(port, {"csrfmiddlewaretoken": token, "text": "Unwritable"}, cookie, FORGED_ADDRESSES)
+        # Signing in writes the session row, which the read-only database refuses.
+        status, _, _ = sign_in(port, FORGED_ADDRESSES)
     finally:
         docker("exec", name, "chmod", "-R", "u+w", "/data")
 

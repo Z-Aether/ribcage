@@ -4,10 +4,7 @@ from django.urls import URLResolver, get_resolver
 from ribcage.identity.models import Voter
 
 # Public pages allowed to query, by URL name: the one place an exception goes, with its ticket.
-QUERYING_PUBLIC_PAGES = {
-    # Scaffolding whose whole job is a write path and rows to back up; M3 removes it (#42, #47).
-    "hello",
-}
+QUERYING_PUBLIC_PAGES = set()
 
 
 def routes(patterns=None, prefix="/"):
@@ -23,8 +20,16 @@ def public_pages():
     return [(path, entry) for path, entry in routes() if getattr(entry.callback, "login_required", True) is False]
 
 
+def answers_get(entry):
+    # Log out is public but a POST alone (#70); a function view is taken to answer GET.
+    view_class = getattr(entry.callback, "view_class", None)
+    return view_class is None or "get" in view_class.http_method_names
+
+
 PUBLIC_PAGES = public_pages()
-PAGES_THAT_MUST_NOT_QUERY = [(path, entry) for path, entry in PUBLIC_PAGES if entry.name not in QUERYING_PUBLIC_PAGES]
+PAGES_THAT_MUST_NOT_QUERY = [
+    (path, entry) for path, entry in PUBLIC_PAGES if entry.name not in QUERYING_PUBLIC_PAGES and answers_get(entry)
+]
 
 
 def anonymous(client):
@@ -54,8 +59,13 @@ def test_every_public_page_renders_with_no_database_queries(client, db, django_a
     assert response.status_code == 200
 
 
-def test_the_privacy_policy_is_found_as_a_public_page_that_must_not_query():
-    assert "privacy" in [entry.name for _, entry in PAGES_THAT_MUST_NOT_QUERY]
+@pytest.mark.parametrize("name", ["privacy", "login"])
+def test_each_known_public_page_is_found_as_one_that_must_not_query(name):
+    assert name in [entry.name for _, entry in PAGES_THAT_MUST_NOT_QUERY]
+
+
+def test_log_out_is_public_but_never_requested_as_a_page():
+    assert "logout" in {entry.name for _, entry in PUBLIC_PAGES} - {entry.name for _, entry in PAGES_THAT_MUST_NOT_QUERY}
 
 
 def test_every_public_page_has_a_fixed_address_the_invariant_can_request():

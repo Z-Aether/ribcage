@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ribcage.identity",
     "ribcage.films",
-    "ribcage.hello",
     "ribcage.seeding",
     "ribcage.gallery",
 ]
@@ -55,6 +54,8 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Every page is walled unless it carries login_not_required (#16).
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -87,6 +88,11 @@ DATABASES = {
 
 AUTH_USER_MODEL = "identity.Voter"
 AUTHENTICATION_BACKENDS = ["ribcage.identity.backends.DisplayNameBackend"]
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "login"
+# Longer than any window, so a voter signs in once; teardown ends every session anyway (#8, #16).
+SESSION_COOKIE_AGE = 60 * 24 * 60 * 60
 
 AUTH_PASSWORD_VALIDATORS = [
     {

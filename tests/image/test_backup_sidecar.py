@@ -3,7 +3,7 @@ import time
 import pytest
 
 from ribcage.operations.backup import KEPT_BACKUPS, is_backup, row_counts
-from tests.image.client import a_page_with_its_csrf_token, fetch, post_form, wait_until_serving
+from tests.image.client import CREATE_THE_VOTER, home_page, session_of, sign_in, wait_until_serving
 from tests.image.docker import REPO_ROOT
 from tests.image.stack import EXAMPLE, LOCALLY_ON_THE_IMAGE_UNDER_TEST, Stack, override
 
@@ -26,6 +26,7 @@ def stack(image, tmp_path_factory):
     try:
         stack("up", "--detach", "--wait")
         wait_until_serving(stack.port())
+        stack("exec", "ribcage", *CREATE_THE_VOTER)
         yield stack
     finally:
         stack.run("down", "--volumes")
@@ -45,12 +46,6 @@ def counts_in_the_container(stack, path="/data/db.sqlite3"):
 
 def as_text(counts):
     return {table: str(count) for table, count in counts.items()}
-
-
-def post_a_message(stack, text):
-    port = stack.port()
-    cookie, token = a_page_with_its_csrf_token(port)
-    post_form(port, {"csrfmiddlewaretoken": token, "text": text.replace(" ", "+")}, cookie)
 
 
 def take_a_backup_now(stack):
@@ -81,7 +76,8 @@ def test_the_sidecar_waits_for_four_oclock_in_the_deployments_zone(stack):
 
 
 def test_a_backup_taken_now_lands_on_the_second_volume_with_every_row(stack):
-    post_a_message(stack, "Kept in the backup")
+    # Signing in writes a session row through the app.
+    sign_in(stack.port())
 
     taken = take_a_backup_now(stack)
 
@@ -89,7 +85,7 @@ def test_a_backup_taken_now_lands_on_the_second_volume_with_every_row(stack):
     assert (mounts["/backups"]["Type"], mounts["/backups"]["Name"]) == ("volume", f"{stack.project}_backups")
     assert is_backup(taken)
     assert counts_in_the_container(stack, f"/backups/{taken}") == counts_in_the_container(stack)
-    assert int(counts_in_the_container(stack)["hello_message"]) >= 1
+    assert int(counts_in_the_container(stack)["django_session"]) >= 1
 
 
 def test_retention_on_the_volume_keeps_the_seven_newest(stack):
@@ -117,7 +113,7 @@ def test_the_sidecar_stops_promptly_restarts_and_schedules_the_next_night_again(
 
 
 def test_a_pulled_backup_restores_into_a_fresh_stack_with_every_row_count(stack, tmp_path):
-    post_a_message(stack, "Restored from a backup")
+    session = session_of(sign_in(stack.port())[1])
     taken = take_a_backup_now(stack)
     pulled = tmp_path / "private" / "backups"
     pulled.mkdir(parents=True)
@@ -133,6 +129,7 @@ def test_a_pulled_backup_restores_into_a_fresh_stack_with_every_row_count(stack,
         wait_until_serving(fresh.port())
 
         assert counts_in_the_container(fresh) == as_text(expected)
-        assert "Restored from a backup" in fetch(fresh.port(), "GET", "/")[2]
+        # The session row came back with the backup, so the voter is still signed in.
+        assert "Signed in as Sam" in home_page(fresh.port(), session)[2]
     finally:
         fresh.run("down", "--volumes")

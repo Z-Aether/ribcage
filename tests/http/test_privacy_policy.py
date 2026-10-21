@@ -19,12 +19,6 @@ def test_the_page_is_rendered_from_the_policy_file_as_markdown(client, tmp_path,
     assert "<p>Kept <em>only</em> in this file.</p>" in page
 
 
-def test_the_hello_world_page_links_the_privacy_policy(client, db):
-    page = client.get("/").text
-
-    assert '<a href="/privacy/">Privacy policy</a>' in page
-
-
 def test_the_page_extends_the_base_template(client):
     response = client.get("/privacy/")
 

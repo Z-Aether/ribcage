@@ -33,9 +33,9 @@ At the start of each window. Teardown left the stack definition and its environm
    - **From outside the host's network,** a phone on mobile data for instance, `https://<subdomain>/` loads with a valid certificate. `curl -I http://<subdomain>/` returns `301` to `https://`.
    - **HSTS:** the host's proxy removes it from responses (#54), so check it in the `ribcage` container's *Terminal*. It prints `200 max-age=31536000; includeSubDomains`.
      ```
-     python -c "import http.client as h; c = h.HTTPConnection('127.0.0.1', 8000); c.request('HEAD', '/', headers={'Host': '<subdomain>'}); r = c.getresponse(); print(r.status, r.getheader('Strict-Transport-Security'))"
+     python -c "import http.client as h; c = h.HTTPConnection('127.0.0.1', 8000); c.request('HEAD', '/login/', headers={'Host': '<subdomain>'}); r = c.getresponse(); print(r.status, r.getheader('Strict-Transport-Security'))"
      ```
-   - **A form POST** through `https://<subdomain>/` succeeds: the hello form until M3 removes it, then registration. A `403` means `CSRF_TRUSTED_ORIGINS` doesn't match the address in the browser.
+   - **A form POST** through `https://<subdomain>/login/` gets past CSRF: logging in with any name and password answers *The display name or the password is wrong.* A `403` means `CSRF_TRUSTED_ORIGINS` doesn't match the address in the browser.
    - **The `backup` log** says `Next backup at … 04:00 Europe/Budapest.`
 
 ### Roll back
@@ -132,7 +132,7 @@ A backup restores into a fresh stack and is checked by row count. Restoring over
    ```
    docker compose -f compose.yaml -f compose.local.yaml start ribcage
    ```
-6. **Check the row counts.** The live database's counts must match those of the pulled backup, apart from any migrations step 5 applied, then the app must serve its data at `http://127.0.0.1:8000/`.
+6. **Check the row counts.** The live database's counts must match those of the pulled backup, apart from any migrations step 5 applied, then logging in at `http://127.0.0.1:8000/login/` as a voter from the backup must reach `/`.
    ```
    docker compose -f compose.yaml -f compose.local.yaml exec backup python -m ribcage.operations.backup counts
    ```

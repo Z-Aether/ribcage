@@ -4,14 +4,12 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, transaction
 
-from ribcage.hello.models import Message
 from ribcage.identity.models import Voter
 
 SEEDED_DISPLAY_NAMES = ["Ada", "Anne-Marie", "O'Brien", "Zoë", "Sam", "Bartholomew Winthrop"]
 SEEDED_PASSWORD = "popcorn-before-midnight"
 # A fresh database starts in SUGGEST; M3 adds the five phases, and each milestone seeds what it builds (#25).
 FRESH_PHASE = "SUGGEST"
-SEEDED_MESSAGES = ["Seeded for the local instance", "Who is bringing the projector?", "Popcorn at seven"]
 
 
 class Command(BaseCommand):
@@ -36,14 +34,11 @@ class Command(BaseCommand):
             password = make_password(SEEDED_PASSWORD)
             for display_name in SEEDED_DISPLAY_NAMES:
                 Voter.objects.create_voter(display_name, password_hash=password)
-            # One create each, never bulk_create, so Message's own trimming runs (#47).
-            for text in SEEDED_MESSAGES:
-                Message.objects.create(text=text)
         # Redirected on Windows, stdout would be cp1252 and mangle Zoë in a log read as UTF-8 (#50).
         # This reconfigures the whole process's stdout, not just this command's.
         if hasattr(self.stdout, "reconfigure"):
             self.stdout.reconfigure(encoding="utf-8")
-        self.stdout.write(f"Seeded {FRESH_PHASE} with {len(SEEDED_MESSAGES)} hello messages and these voters:")
+        self.stdout.write(f"Seeded {FRESH_PHASE} with these voters:")
         self.stdout.write(f"  {', '.join(SEEDED_DISPLAY_NAMES)}")
         self.stdout.write(f"  each signing in with the password {SEEDED_PASSWORD}")
 
