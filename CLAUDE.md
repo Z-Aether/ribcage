@@ -19,7 +19,7 @@ Top-level directories sort by what a thing is, not by which ticket made it. A ne
 
 - `ribcage/` is the Django project: settings and URLs, plus an app per module of `docs/design.md` §9, except Operations, whose `operations` is a plain package, and two apps outside it.
   - `identity` holds `Voter`, the user model.
-  - `films` holds `Film`, the plain data the shared components and the models meet at, and `corpus`, the pure reader of the recorded seed corpus (#57).
+  - `films` holds `Film` and `FilmCard`, the plain data the shared components and the models meet at, and `corpus`, the pure reader of the recorded seed corpus (#57).
   - `hello` is M1 scaffolding that M3 removes (#42, #47).
   - `seeding` holds the dev-only seed commands, the only route to development data. Each milestone extends them to seed what it builds, and `--phase` picks which of the phases M3 adds to seed into (#25, #50). Its `fetchcorpus` is the one command that goes online: it refetches the seed corpus into `fixtures/films/`, replacing the last fetch, and needs real `TMDB_API_KEY` and `DTDD_API_KEY` values (#57).
   - `operations` is the plain package for §9's Operations module and holds only the backup sidecar, run as `python -m ribcage.operations.backup` (`--help` lists its commands). It never loads the settings, so the sidecar is handed no secrets (#53).
