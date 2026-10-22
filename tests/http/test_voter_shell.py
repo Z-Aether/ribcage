@@ -4,7 +4,7 @@ import pytest
 from django.templatetags.static import static
 
 from ribcage.identity.models import Voter
-from ribcage.phase.views import WELCOME_PENDING
+from ribcage.identity.views import WELCOME_PENDING
 from tests.http.routes import VOTER, as_a_page, pages_of, public_pages
 
 TMDB_NOTICE = "This product uses the TMDB API but is not endorsed or certified by TMDB."

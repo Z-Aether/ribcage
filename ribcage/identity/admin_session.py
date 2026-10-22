@@ -29,9 +29,8 @@ def signed_in(request):
 
 
 def sign_in(request, response):
-    # Always a fresh key, so a key planted before sign-in never becomes the admin's.
-    # The CSRF token is left as it is, unlike a voter's login, so a voter tab open beside it can still post (#76).
-    end(request)
+    # A fresh key, so a planted one never becomes the admin's; the CSRF token stays, so a voter tab can still post (#76).
+    end_the_session(request)
     session = session_store()
     session[PASSWORD_DIGEST] = password_digest()
     session.save()
@@ -49,7 +48,7 @@ def sign_in(request, response):
 
 
 def sign_out(request, response):
-    end(request)
+    end_the_session(request)
     response.delete_cookie(
         COOKIE_NAME,
         path=settings.SESSION_COOKIE_PATH,
@@ -58,13 +57,16 @@ def sign_out(request, response):
     )
 
 
-def end(request):
+def end_the_session(request):
     if key := request.COOKIES.get(COOKIE_NAME):
         session_store(key).delete()
 
 
 def admin_required(view):
-    """Outside the voter wall and behind the admin's: without the admin session, the admin login (#76)."""
+    """Outside the voter wall and behind the admin's: without the admin session, the admin login (#76).
+
+    It goes outermost, over `require_POST` and the like, so a visitor without the session gets the login, not a 405.
+    """
 
     @login_not_required
     @wraps(view)

@@ -16,10 +16,10 @@ class ForcedChangeMiddleware(MiddlewareMixin):
     """Sends every other voter request, a post or an htmx request included, to the change form, before its view runs (#80)."""
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        # Public and admin views sit outside the voter wall, so the session is never read there, and public pages stay at zero queries (#73, #76).
+        # Public and admin views are outside the voter wall, so public pages still read no session (#73, #76).
         if getattr(view_func, "login_required", True) is False or getattr(view_func, "reachable_before_the_change", False):
             return None
-        # The login wall ran first, so the voter is already loaded.
+        # The login wall ran first, so the voter is already loaded (#80).
         if not getattr(request.user, "must_change_password", False):
             return None
         if request.headers.get("HX-Request") == "true":

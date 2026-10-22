@@ -13,7 +13,7 @@ from ribcage.console.roster import what_goes
 from ribcage.identity.admin_session import admin_required
 from ribcage.identity.models import Voter
 from ribcage.identity.removal import remove
-from ribcage.identity.reset import replacing, reset
+from ribcage.identity.reset import password_digest, reset
 from ribcage.operations import offer
 from ribcage.operations.backup import describe
 from ribcage.phase.history import current, last_entered, move
@@ -86,7 +86,7 @@ def roster(request, context):
 
 
 def armed_reset(voter, used=False):
-    return {"armed": voter, "arming": "reset", "replacing": replacing(voter), "used": used}
+    return {"armed": voter, "arming": "reset", "replacing": password_digest(voter), "used": used}
 
 
 @admin_required

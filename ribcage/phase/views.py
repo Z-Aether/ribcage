@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_safe
 
+from ribcage.identity.views import WELCOME_PENDING
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 
@@ -18,9 +19,6 @@ def phase_page(request):
     # The page is the phase: / shows the current phase's page and nothing else (#27).
     return render(request, PHASE_PAGES[current()])
 
-
-# Set by registration, consumed by Welcome: the whole of "shown once" (#75).
-WELCOME_PENDING = "welcome_pending"
 
 # Each phase's exit from Welcome, naming what the voter does there (#75).
 WELCOME_EXITS = {

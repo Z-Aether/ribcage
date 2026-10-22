@@ -13,7 +13,6 @@ from ribcage.identity.forced_change import reachable_before_the_change
 from ribcage.identity.forms import AdminLoginForm, ChangePasswordForm, JoinCodeForm, LoginForm, RegistrationForm
 from ribcage.identity.models import Voter
 from ribcage.phase.check import account_action
-from ribcage.phase.views import WELCOME_PENDING
 
 login = LoginView.as_view(template_name="identity/login.html", authentication_form=LoginForm)
 
@@ -34,6 +33,8 @@ password_changed = PasswordChangeDoneView.as_view(template_name="identity/passwo
 
 # Where a new voter lands (#75).
 AFTER_REGISTRATION = "welcome"
+# Set by registration, consumed by Welcome: the whole of "shown once" (#75).
+WELCOME_PENDING = "welcome_pending"
 
 
 def render_code_step(request, form):
@@ -59,9 +60,11 @@ def join(request):
 @require_http_methods(["GET", "POST"])
 def join_details(request):
     # The code rides in a hidden field, so a GET or a code that fails again falls back to the first step (#72).
-    code_form = JoinCodeForm(request.POST if request.method == "POST" else None)
-    if request.method == "GET" or not code_form.is_valid():
-        return render_code_step(request, code_form if request.method == "POST" else JoinCodeForm())
+    if request.method == "GET":
+        return render_code_step(request, JoinCodeForm())
+    code_form = JoinCodeForm(request.POST)
+    if not code_form.is_valid():
+        return render_code_step(request, code_form)
     code = code_form.cleaned_data["code"]
     form = RegistrationForm(request.POST)
     if form.is_valid():

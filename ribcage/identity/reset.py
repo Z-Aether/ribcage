@@ -18,17 +18,17 @@ def generated_password():
     return "-".join("".join(secrets.choice(ALPHABET) for _ in range(GROUP_LENGTH)) for _ in range(GROUPS))
 
 
-def replacing(voter):
+def password_digest(voter):
     """Names the password a reset will replace, so the confirm posted again by a reload resets nothing (#80)."""
     return salted_hmac("ribcage.identity.reset", voter.password, algorithm="sha256").hexdigest()
 
 
-def reset(voter, replaced):
-    """The voter's new password, or None when they are gone or their password is no longer the one `replaced` names."""
-    # The new hash fails each session's auth hash, so every session of theirs ends at its next request, with no rows to delete (#37, #80).
+def reset(voter, digest):
+    """The voter's new password, or None when they are gone or their password is no longer the one `digest` names."""
+    # The new hash fails each session's auth hash, so their sessions end with no rows deleted (#37, #80).
     with transaction.atomic():
         voter = Voter.objects.filter(pk=voter.pk).first()
-        if voter is None or not constant_time_compare(replacing(voter), replaced or ""):
+        if voter is None or not constant_time_compare(password_digest(voter), digest or ""):
             return None
         password = generated_password()
         voter.set_password(password)
