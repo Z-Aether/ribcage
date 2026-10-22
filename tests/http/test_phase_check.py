@@ -18,7 +18,7 @@ ACTION = "/test-only/rename/"
 HTMX = {"HX-Request": "true"}
 
 
-@phase_window(SUGGEST, APPROVE)
+@phase_window(*WINDOW)
 def a_windowed_rename(request):
     if request.method == "GET":
         return HttpResponse("the form")
@@ -87,6 +87,18 @@ def test_an_htmx_post_outside_its_window_writes_nothing_and_has_htmx_load_the_ph
 
 
 @with_the_test_action
+@pytest.mark.parametrize("method", ["options", "trace"])
+def test_only_get_and_head_pass_unchecked_outside_the_window(client, ada, method):
+    # Django lets OPTIONS and TRACE past CSRF, so the check mustn't let them past the window too (#78).
+    walk_to(VOTE)
+
+    response = getattr(client, method)(ACTION)
+
+    assert (response.status_code, response.headers["Location"]) == (302, "/")
+    assert display_name(ada) == "Ada"
+
+
+@with_the_test_action
 def test_a_refused_post_lands_on_the_current_phase_page(client):
     walk_to(VOTE)
 
@@ -112,17 +124,19 @@ def marks(entry):
     return {mark for mark in ["phase_window", "account_action"] if getattr(entry.callback, mark, None)}
 
 
-def accepts_a_write(path, voter):
+def accepts_a_write(address, voter):
     # A client of its own per route, so a probe that ends its session can't skew the next (#78).
     probe = Client()
     probe.force_login(voter)
-    return any(getattr(probe, method)(path).status_code != 405 for method in ["post", "put", "patch", "delete"])
+    return any(getattr(probe, method)(address).status_code != 405 for method in ["post", "put", "patch", "delete"])
 
 
 def voter_posts():
     """Voter routes, by name, that accept a POST, PUT, PATCH or DELETE from a signed-in voter, each with its phase-check marks."""
     voter = Voter.objects.create_voter("Probe")
-    return {entry.name or path: marks(entry) for path, entry in routes_of(VOTER) if accepts_a_write(path, voter)}
+    # In RUN, which no voter write's window holds, so a windowed view refuses the probe without running (#78).
+    walk_to(RUN)
+    return {entry.name or address: marks(entry) for address, entry in routes_of(VOTER) if accepts_a_write(address, voter)}
 
 
 def test_every_voter_post_either_declares_a_window_or_is_an_account_action(db):
@@ -159,6 +173,7 @@ def test_change_password_works_in_every_phase(client, ada, settings, phase):
     settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
     ada.set_password("first-password-of-ours")
     ada.save()
+    # A new password ends the session the client fixture opened (#37).
     client.force_login(ada)
     walk_to(phase)
     new_password = "a-second-one-entirely"

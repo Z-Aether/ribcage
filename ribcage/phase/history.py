@@ -6,13 +6,14 @@ from ribcage.phase.order import Phase, check_move, derived_phase
 
 
 def current():
-    return derived_phase(PhaseMove.objects.values_list("phase", flat=True))
+    # The newest move alone, as the phase check reads it on every voter write (#74, #78).
+    return derived_phase(PhaseMove.objects.order_by("-pk").values_list("phase", flat=True)[:1])
 
 
 def last_entered():
     """When each phase was last entered, for the phases the history holds; a fresh SUGGEST has no date (#74, #77)."""
-    # Oldest first, so each phase keeps its newest move's time, whatever the clock said.
-    return {Phase(phase): at for phase, at in PhaseMove.objects.values_list("phase", "at")}
+    # Oldest first, so each phase keeps its newest move's time, whatever the clock said (#77).
+    return {Phase(phase): at for phase, at in PhaseMove.objects.order_by("pk").values_list("phase", "at")}
 
 
 def move(from_phase, to_phase):

@@ -10,5 +10,5 @@ class PhaseMove(models.Model):
     at = models.DateTimeField()
 
     class Meta:
-        # Appended in order, so the newest move is the highest key whatever the clock said.
+        # Appended in order, so the newest move is the highest key whatever the clock said (#74).
         ordering = ["pk"]

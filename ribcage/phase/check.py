@@ -9,7 +9,8 @@ from django.urls import reverse
 
 from ribcage.phase.history import current
 
-SAFE_METHODS = {"GET", "HEAD", "OPTIONS", "TRACE"}
+# The reads require_safe allows; OPTIONS and TRACE are checked, as CSRF lets them through unchecked (#78).
+READS = {"GET", "HEAD"}
 
 
 def phase_window(*phases):
@@ -22,7 +23,7 @@ def phase_window(*phases):
     def declare(view):
         @wraps(view)
         def checked(request, *args, **kwargs):
-            if request.method in SAFE_METHODS:
+            if request.method in READS:
                 return view(request, *args, **kwargs)
             # One transaction, so a phase move can't land between the check and the write (#14, #74).
             with transaction.atomic():
