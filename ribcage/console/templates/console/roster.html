@@ -13,11 +13,11 @@
       </thead>
       <tbody>
         {% for voter in voters %}
-          <tr data-voter="{{ voter.pk }}"{% if voter == armed or voter == was_reset %} class="is-armed"{% endif %}>
+          <tr data-voter="{{ voter.pk }}"{% if voter == open_row %} class="is-armed"{% endif %}>
             <td class="roster__name">{{ voter.display_name }}</td>
             <td class="roster__actions">
-              {# The armed row gives up its arms, so a double click on it arms nothing further (#77, #79). #}
-              {% if voter != armed and voter != was_reset %}
+              {# The open row loses its arms, so a second click on one lands on nothing (#79). #}
+              {% if voter != open_row %}
                 <a class="button button--quiet" href="{% url 'console_roster' %}?reset={{ voter.pk }}">Reset password…</a>
                 <a class="button button--quiet" href="{% url 'console_roster' %}?remove={{ voter.pk }}">Remove…</a>
               {% endif %}
@@ -29,7 +29,7 @@
                 <form method="post" action="{% url 'console_roster_remove' %}" class="roster-confirm">
                   {% csrf_token %}
                   <input type="hidden" name="voter" value="{{ voter.pk }}">
-                  <p>Removing {{ voter.display_name }} deletes:</p>
+                  <p>Removing {{ voter.display_name }} takes away:</p>
                   <ul>
                     {% for item in goes %}
                       <li class="roster-confirm__goes">{{ item }}</li>

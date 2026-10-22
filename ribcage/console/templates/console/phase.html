@@ -17,8 +17,8 @@
 
   <div class="phase-moves">
     {% for move in moves %}
-      <section class="phase-move phase-move--{% if move.forward %}forward{% else %}back{% endif %}{% if move.armed %} is-armed{% endif %}" data-to="{{ move.to }}">
-        <h2>{% if move.forward %}Forward to {{ move.to }} ▶{% else %}◀ Back to {{ move.to }}{% endif %}</h2>
+      <section class="phase-move phase-move--{{ move.direction }}{% if move.armed %} is-armed{% endif %}" data-to="{{ move.to }}">
+        <h2>{{ move.heading }}</h2>
         {% for sentence in move.consequences %}
           <p>{{ sentence }}</p>
         {% endfor %}
@@ -32,7 +32,7 @@
             <button type="submit">{{ move.act }}</button>
           </form>
         {% else %}
-          <p class="phase-move__actions"><a class="button button--quiet" href="{% url 'console_phase' %}?from={{ phase }}&amp;arm={{ move.to }}">{% if move.forward %}Move to {{ move.to }} ▶…{% else %}◀ Move back to {{ move.to }}…{% endif %}</a></p>
+          <p class="phase-move__actions"><a class="button button--quiet" href="{% url 'console_phase' %}?from={{ phase }}&amp;arm={{ move.to }}">{{ move.arm }}</a></p>
         {% endif %}
       </section>
     {% endfor %}

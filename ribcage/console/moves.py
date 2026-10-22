@@ -20,7 +20,7 @@ ACTS = {
     (RUN, PICK): "Unpublish",
 }
 
-# The heading of the page every voter sees in each phase.
+# The heading of the page every voter sees in each phase; tests/http/test_phase.py pins it to the templates (#77).
 VOTER_PAGES = {
     SUGGEST: "Suggest films",
     APPROVE: "Suggestions are closed",
@@ -32,10 +32,19 @@ VOTER_PAGES = {
 
 class OfferedMove(NamedTuple):
     to: Phase
-    forward: bool
+    direction: str
+    heading: str
+    arm: str
     act: str
     consequences: list
     armed: bool
+
+
+# Each direction's heading and arm-link wording, given the phase the move goes to (#28).
+WORDINGS = {
+    "back": ("◀ Back to {}", "◀ Move back to {}…"),
+    "forward": ("Forward to {} ▶", "Move to {} ▶…"),
+}
 
 
 def consequences(from_phase, to_phase):
@@ -43,11 +52,12 @@ def consequences(from_phase, to_phase):
     return [format_html("Everyone's page becomes “{}”.", VOTER_PAGES[to_phase])]
 
 
+def offered_move(phase, to, direction, armed_to):
+    heading, arm = (wording.format(to) for wording in WORDINGS[direction])
+    return OfferedMove(to, direction, heading, arm, ACTS[phase, to], consequences(phase, to), to == armed_to)
+
+
 def offered(phase, armed_to=None):
     """One step back and one forward from the phase, or one at either end, with the one named by `armed_to` armed."""
     back, forward = neighbours(phase)
-    return [
-        OfferedMove(to, to is forward, ACTS[phase, to], consequences(phase, to), to == armed_to)
-        for to in (back, forward)
-        if to is not None
-    ]
+    return [offered_move(phase, to, direction, armed_to) for to, direction in [(back, "back"), (forward, "forward")] if to is not None]

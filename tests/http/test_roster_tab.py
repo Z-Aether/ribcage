@@ -105,8 +105,8 @@ def test_the_confirm_lists_what_goes_and_says_the_join_code_still_lets_them_back
 
     *_, said = confirm(page)
     goes = [text(item) for item in re.findall(r'<li class="roster-confirm__goes">(.*?)</li>', page, re.S)]
-    assert said.startswith("Removing Dani deletes: ")
-    assert goes == ["their account, with its display name and password", "their sessions, so they are signed out everywhere"]
+    assert said.startswith("Removing Dani takes away: ")
+    assert goes == ["their display name and password", "their sessions, so they are signed out everywhere"]
     assert said.endswith("Removal is not a ban: the join code still lets them register again.")
 
 

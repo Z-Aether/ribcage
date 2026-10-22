@@ -1,10 +1,19 @@
-"""Removal: the admin taking a voter off the roster, the one routine later milestones extend with what goes with them (#28, #79)."""
+"""Removal: the admin taking a voter off the roster, and what the confirm says goes with them (#28, #79)."""
 
 from django.db import transaction
 
+# M4 and M6 extend both: suggestions kept marked removed, notes on other films, scores, vetoes, done (#28).
+
+
+def what_goes(voter):
+    """What the Roster tab's confirm lists as going with the voter, kept beside `remove` so the two stay in step."""
+    return [
+        "their display name and password",
+        "their sessions, so they are signed out everywhere",
+    ]
+
 
 def remove(voter):
-    """Deletes the voter's row, which ends their sessions, since each holds only its id (#79)."""
-    # M4 keeps their suggestions and pitches, marked removed, and deletes their notes on other films; M6 their scores, vetoes and done marker (#28).
+    # Their sessions hold only the row's id, so they end with it (#79).
     with transaction.atomic():
         voter.delete()
