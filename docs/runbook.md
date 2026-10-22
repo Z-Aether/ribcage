@@ -95,7 +95,7 @@ Komodo can't download a file, so the admin side serves one, but only for a one-t
    - `Code:` and 32 letters and digits. Copy them.
    - the page's path, `/console/backup/`, and the time the code expires.
 
-   Running it again replaces the offer: the earlier code is then wrong, and entering it voids the new one too.
+   Running it again, for either purpose, replaces the offer: the earlier code is then wrong, and entering it voids the new one too.
    - **If it says to run it as the image's user,** the terminal is root: open it without choosing a user.
 2. **Open `https://<subdomain>/console/backup/`** and log in as the admin if it asks. No tab links to the page.
 3. **Paste the code and press *Download*.** Save the file into `private/backups/`, never Downloads or a synced folder (#30). If the browser saves it without asking, move it from Downloads into `private/backups/` straight away.
@@ -151,31 +151,37 @@ When the database is damaged but the `backups` volume holds a good backup, the s
 
 ### On the host, from a pulled copy
 
-When the host's volumes are lost, the pulled copy goes back in the way it came out, pasted into the `backup` container's *Terminal* as text. **Not yet run on the host:** the pipeline is checked against the deployed image locally, but not yet through Komodo's terminal (#55). M3's backup page is to take a backup back in for the same kind of one-time code (#81).
+When the host's volumes are lost, the pulled copy goes back in through the admin side, for a one-time code made in the `ribcage` container's *Terminal*: the pull's route in reverse (#81). The page only checks the file and keeps it on the data volume, `/data`, beside the database. The restore stays a step in the `backup` container's *Terminal*, which mounts `/data` too. The code works once, for 10 minutes, and a wrong code voids it. **Not yet run on the host:** the deploy ticket checks it there (#82).
 
-1. **Bring up a fresh stack:** *Destroy* the stack, delete both volumes as in Teardown, then *Deploy*. Wait until `https://<subdomain>/` answers, then stop the `ribcage` service.
-2. **In Git Bash, note the backup's checksum and its length in lines.**
+1. **Bring up a fresh stack:** *Destroy* the stack, delete both volumes as in Teardown, then *Deploy*. Wait until `https://<subdomain>/` answers. Leave `ribcage` running: it serves the page.
+2. **In Git Bash, note the pulled copy's row counts** for step 7:
    ```
-   sha256sum private/backups/<name>
-   gzip -nc private/backups/<name> | base64 | wc -l
+   .venv/Scripts/python -m ribcage.operations.backup counts private/backups/<name>
    ```
-3. **Paste it in parts of 1000 lines.** Copy a part to the clipboard in Git Bash:
+3. **Make a code.** In Komodo, open a *Terminal* in the `ribcage` container, not `backup`, and run:
    ```
-   gzip -nc private/backups/<name> | base64 | sed -n "1,1000p" | clip
+   python manage.py backupcode upload
    ```
-   Then, in the `backup` container's terminal, type the first line below, paste the part, and type `END` on a line of its own. Repeat with `"1001,2000p"` and so on, until you reach step 2's line count. If a paste comes through incomplete, use smaller parts.
+   It prints `Code:` and 32 letters and digits, then the page's path and the time the code expires. Copy the code. Running the command again, for either purpose, replaces it.
+   - **If it says to run it as the image's user,** the terminal is root: open it without choosing a user.
+4. **Open `https://<subdomain>/console/backup/`** and log in as the admin if it asks. Under *Upload a backup*, paste the code, choose `private/backups/<name>`, and press *Upload*.
+   - **The page answers** `Kept backup-<UTC date>-<UTC time>.sqlite3:` and the file's row counts, which match step 2's, then the restore command for step 6. The kept name is the time of the upload, not the pulled copy's name: copy it.
+   - **If it says the file is over 25 MB, is not an SQLite database, or failed the integrity check,** nothing was kept and the code wasn't tried: choose the right file and press *Upload* again with the same code. The cap is several times a marathon's database, which is a few MB, so a file over it is the wrong file; it stays low enough to arrive within the app server's 30-second limit over a 10 Mbit/s upload.
+   - **If it says the code is wrong, expired or made for a download, or that no code is on offer,** nothing was kept and the code is void: go back to step 3.
+5. **Stop the `ribcage` service,** leaving `backup` running, so nothing writes while the database is replaced.
+6. **Restore it** in the `backup` container's *Terminal*, with the kept name from step 4. `--backups /data` makes the sidecar read it from the data volume instead of its own. It checks the file's integrity again, writes it over the database through SQLite, and prints the restored row counts.
    ```
-   cat >> /backups/<name>.b64 <<'END'
-   END
+   python -m ribcage.operations.backup restore <kept name> --backups /data
    ```
-4. **Decode it in the terminal.** The line count and the checksum must match step 2's. Then delete the `.b64` file.
+7. **Start the `ribcage` service, then check the row counts** in the same terminal. They match step 2's, apart from any migrations the start applied. Then logging in at `https://<subdomain>/login/` as a voter from the backup must reach `/`.
    ```
-   wc -l < /backups/<name>.b64
-   base64 -d /backups/<name>.b64 | gunzip > /backups/<name>
-   sha256sum /backups/<name>
-   rm /backups/<name>.b64
+   python -m ribcage.operations.backup counts
    ```
-5. **Restore, start and check** as steps 2 and 3 of *On the host, from its own volume*. The counts match those `counts` printed for the pulled copy.
+8. **Delete the uploaded file** in the same terminal. It is a whole copy of the database, so it doesn't wait for teardown. Afterwards `ls` lists only `backup-offer`, `db.sqlite3`, `db.sqlite3-shm` and `db.sqlite3-wal`. The `*` also takes the `-wal` and `-shm` files that restoring a WAL-mode upload leaves.
+   ```
+   rm /data/<kept name>*
+   ls /data
+   ```
 
 ## Teardown
 
@@ -185,7 +191,7 @@ At the end of every window, the morning after the evening, and also when a marat
 2. **Delete both volumes** on the server's page in Komodo: the two whose names end in `_data` and `_backups`. Docker won't delete a volume a container still uses, which is why *Destroy* comes first.
    - **If the account can't delete volumes** (Adam may narrow it), empty them before step 1's *Destroy*, then ask Adam to remove the two empty volumes. With `ribcage` stopped, run this in the `backup` container's *Terminal*:
      ```
-     rm -rf /data/db.sqlite3* /data/backup-offer /backups/*
+     rm -rf /data/db.sqlite3* /data/backup-* /backups/*
      ```
 3. **Check that nothing of ours answers:** `https://<subdomain>/` returns the proxy's bare 502.
 4. **Delete every local copy.** Pulled backups are in `private/backups/`. A local stack a real backup was restored into goes with `down -v`.

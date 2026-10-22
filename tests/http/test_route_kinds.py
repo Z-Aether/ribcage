@@ -79,7 +79,7 @@ def test_a_route_with_a_converter_is_requested_at_a_sample_address():
     [
         *[(name, PUBLIC) for name in ["privacy", "login", "join", "join_details", "logout", "admin_login", "admin_logout"]],
         *[(name, VOTER) for name in ["phase_page", "welcome", "change_password", "password_changed", "gallery"]],
-        *[(name, ADMIN) for name in ["console", "console_phase", "console_phase_move", "console_films", "console_pick", "console_roster", "console_roster_remove", "console_roster_reset", "console_backup"]],
+        *[(name, ADMIN) for name in ["console", "console_phase", "console_phase_move", "console_films", "console_pick", "console_roster", "console_roster_remove", "console_roster_reset", "console_backup", "console_backup_upload"]],
     ],
 )
 def test_each_known_route_is_found_as_its_kind(name, route_kind):

@@ -16,6 +16,9 @@ def _static_files_collected(collected_static_files):
 def _backup_offer_directory(settings, tmp_path):
     # Every test's backup offer is its own, never one beside the developer's database (#68).
     settings.BACKUP_OFFER_DIRECTORY = tmp_path / "backup-offer"
+    # And its uploads land in its own stand-in for the data volume (#81).
+    settings.BACKUP_UPLOAD_DIRECTORY = tmp_path / "data"
+    settings.BACKUP_UPLOAD_DIRECTORY.mkdir()
 
 
 class Clock:

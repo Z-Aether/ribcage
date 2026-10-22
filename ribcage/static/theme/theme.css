@@ -366,6 +366,11 @@ body[data-skin="run"] {
 [data-skin] form.form--short {
   max-width: 26rem;
 }
+/* A command to copy wraps inside a short form rather than hiding its end (#81). */
+[data-skin] pre.command {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 
 /* The live line under a confirmation field: sea-glass when the two match, rose when they differ (#72). */
 [data-skin] .password-match {

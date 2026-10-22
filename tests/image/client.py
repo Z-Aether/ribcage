@@ -1,6 +1,7 @@
 import http.client
 import re
 import time
+import uuid
 
 import pytest
 
@@ -9,6 +10,8 @@ LOGIN = "/login/"
 ADMIN_LOGIN = "/console/login/"
 # Its code is made in the app's container, by the command an admin runs in Komodo's terminal (#68).
 BACKUP_PAGE = "/console/backup/"
+# Its form posts here, from the same page, with a code made by the same command (#81).
+BACKUP_UPLOAD = "/console/backup/upload/"
 VOTER = "Sam"
 PASSWORD = "popcorn-before-midnight"
 # The voter header names whoever is signed in, on every walled page (#73).
@@ -85,10 +88,24 @@ def sign_in_as_the_admin(port, password):
     return f"{csrf_cookie}; {cookie_named(headers, 'adminsessionid')}"
 
 
-def download_a_backup(port, admin_cookies, code):
+def backup_pages_csrf_token(port, admin_cookies):
     _, _, page = fetch(port, "GET", BACKUP_PAGE, {"Cookie": admin_cookies})
-    token = re.search(r'name="csrfmiddlewaretoken" value="([^"]+)"', page)[1]
+    return re.search(r'name="csrfmiddlewaretoken" value="([^"]+)"', page)[1]
+
+
+def download_a_backup(port, admin_cookies, code):
+    token = backup_pages_csrf_token(port, admin_cookies)
     return post_form(port, {"csrfmiddlewaretoken": token, "code": code}, admin_cookies, path=BACKUP_PAGE, fetcher=fetch_bytes)
+
+
+def upload_a_backup(port, admin_cookies, code, backup_file):
+    boundary = uuid.uuid4().hex
+    fields = {"csrfmiddlewaretoken": backup_pages_csrf_token(port, admin_cookies), "code": code}
+    parts = [f'--{boundary}\r\nContent-Disposition: form-data; name="{name}"\r\n\r\n{value}\r\n'.encode() for name, value in fields.items()]
+    parts.append(f'--{boundary}\r\nContent-Disposition: form-data; name="backup"; filename="{backup_file.name}"\r\n\r\n'.encode())
+    parts += [backup_file.read_bytes(), f"\r\n--{boundary}--\r\n".encode()]
+    headers = {"Content-Type": f"multipart/form-data; boundary={boundary}", "Origin": f"https://127.0.0.1:{port}", "Cookie": admin_cookies}
+    return fetch(port, "POST", BACKUP_UPLOAD, headers, b"".join(parts))
 
 
 def home_page(port, session):

@@ -1,5 +1,7 @@
 import json
 import re
+import sqlite3
+from contextlib import closing
 
 import pytest
 
@@ -14,6 +16,7 @@ from tests.image.client import (
     session_of,
     sign_in,
     sign_in_as_the_admin,
+    upload_a_backup,
     wait_until_serving,
 )
 from tests.image.docker import REPO_ROOT
@@ -109,7 +112,7 @@ def test_a_written_row_survives_down_then_up(local_stack):
 def test_a_code_made_in_the_apps_container_downloads_its_backup_once_from_the_admin_side(local_stack, tmp_path):
     offering = local_stack("exec", "ribcage", "python", "manage.py", "backupcode", "download")
     offered_counts = re.search(r"^Offered backup-\d{8}-\d{6}\.sqlite3: (.*)\.$", offering, re.M)[1]
-    code = re.search(r"^Code: (\w+)$", offering, re.M)[1]
+    code = code_in(offering)
     admin = sign_in_as_the_admin(local_stack.port(), EXAMPLE["ADMIN_PASSWORD"])
 
     status, headers, content = download_a_backup(local_stack.port(), admin, code)
@@ -120,6 +123,41 @@ def test_a_code_made_in_the_apps_container_downloads_its_backup_once_from_the_ad
     assert describe(row_counts(downloaded)) == offered_counts
     assert local_stack("exec", "ribcage", "ls", "-A", "/data/backup-offer").strip() == ""
     assert download_a_backup(local_stack.port(), admin, code)[1].get("Content-Disposition") is None
+
+
+def code_in(offering):
+    return re.search(r"^Code: (\w+)$", offering, re.M)[1]
+
+
+def backup_command(*arguments):
+    return ["exec", "backup", "python", "-m", "ribcage.operations.backup", *arguments]
+
+
+def test_a_backup_uploaded_from_the_admin_side_restores_in_the_sidecar_from_the_data_volume(local_stack, tmp_path):
+    admin = sign_in_as_the_admin(local_stack.port(), EXAMPLE["ADMIN_PASSWORD"])
+    offering = local_stack("exec", "ribcage", "python", "manage.py", "backupcode", "download")
+    pulled = tmp_path / "pulled.sqlite3"
+    pulled.write_bytes(download_a_backup(local_stack.port(), admin, code_in(offering))[2])
+    # A table the stack lacks marks the restore, and its size, past Django's in-memory limit, takes a temporary file.
+    with closing(sqlite3.connect(pulled)) as connection:
+        connection.execute("CREATE TABLE ballast (b BLOB)")
+        connection.execute("INSERT INTO ballast VALUES (randomblob(3 * 1024 * 1024))")
+        connection.commit()
+    upload_code = code_in(local_stack("exec", "ribcage", "python", "manage.py", "backupcode", "upload"))
+
+    status, _, page = upload_a_backup(local_stack.port(), admin, upload_code, pulled)
+
+    assert status == 200
+    name = re.search(r"Kept <code>(backup-\d{8}-\d{6}\.sqlite3)</code>", page)[1]
+    assert f"restore {name} --backups /data" in page
+    local_stack("stop", "ribcage")
+    restored = local_stack(*backup_command("restore", name, "--backups", "/data"))
+    local_stack("start", "ribcage")
+    wait_until_serving(local_stack.port())
+    assert f"Restored {name}: {describe(row_counts(pulled))}." in restored
+    assert local_stack(*backup_command("counts")).strip() == describe(row_counts(pulled))
+    local_stack("exec", "backup", "rm", f"/data/{name}")
+    assert local_stack("exec", "ribcage", "ls", "-A", "/data").split() == ["backup-offer", "db.sqlite3", "db.sqlite3-shm", "db.sqlite3-wal"]
 
 
 def test_an_empty_secret_stops_startup_naming_it(image, tmp_path):

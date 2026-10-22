@@ -202,7 +202,7 @@ def test_the_code_the_command_prints_redeems_its_offer(live_database):
     offering = run_in_a_child("manage.py", "backupcode", "download", DATABASE_PATH=str(live_database))
     [code] = re.findall(r"^Code: ([0-9a-f]{32})$", offering.stdout, re.M)
 
-    redeemed = offer.redeem(live_database.parent / "backup-offer", code, datetime.now(UTC))
+    redeemed = offer.redeem(live_database.parent / "backup-offer", code, datetime.now(UTC), offer.DOWNLOAD)
 
     assert redeemed.purpose == offer.DOWNLOAD
     assert row_counts(redeemed.file) == row_counts(live_database)
@@ -217,7 +217,7 @@ def test_a_new_offer_voids_the_last_and_deletes_its_file(live_database, tmp_path
     assert offered_files(directory) == [second_file]
     assert not first_file.exists()
     with pytest.raises(offer.WrongCode):
-        offer.redeem(directory, first_code, TAKEN_AT + timedelta(minutes=2))
+        offer.redeem(directory, first_code, TAKEN_AT + timedelta(minutes=2), offer.DOWNLOAD)
 
 
 def test_with_no_database_the_command_fails_and_offers_nothing(tmp_path):
@@ -239,3 +239,88 @@ def test_the_backup_code_command_refuses_to_run_as_root_and_touches_nothing(tmp_
         call_command("backupcode", "download")
 
     assert not (tmp_path / "backup-offer").exists()
+
+
+def test_the_upload_code_the_command_prints_accepts_one_upload_and_offers_no_file(live_database):
+    offering = run_in_a_child("manage.py", "backupcode", "upload", DATABASE_PATH=str(live_database))
+    [code] = re.findall(r"^Code: ([0-9a-f]{32})$", offering.stdout, re.M)
+
+    assert offering.returncode == 0, offering.stderr
+    assert "/console/backup/ with the backup by " in offering.stdout
+    assert offered_files(live_database.parent / "backup-offer") == []
+    assert offer.redeem(live_database.parent / "backup-offer", code, datetime.now(UTC), offer.UPLOAD).file is None
+
+
+def test_an_upload_code_voids_a_download_offer_and_deletes_its_file(live_database, tmp_path):
+    directory = tmp_path / "backup-offer"
+    download_code, offered = offer.offer_download(live_database, directory, TAKEN_AT)
+
+    offer.offer_upload(directory, TAKEN_AT + timedelta(minutes=1))
+
+    assert not offered.exists()
+    with pytest.raises(offer.WrongCode):
+        offer.redeem(directory, download_code, TAKEN_AT + timedelta(minutes=2), offer.DOWNLOAD)
+
+
+def uploaded(pulled, data, at):
+    """An upload of the pulled backup through the page's own path, onto a data volume's directory."""
+    code = offer.offer_upload(data / "backup-offer", at)
+    with open(pulled, "rb") as file:
+        return offer.accept_upload(data / "backup-offer", code, iter(lambda: file.read(64 * 1024), b""), data, at)
+
+
+def test_an_upload_lands_beside_the_live_database_under_a_backups_name_and_leaves_it_alone(live_database, backups):
+    pulled = take_backup(live_database, backups, TAKEN_AT)
+    data = live_database.parent
+    wal = Path(f"{live_database}-wal")
+    before = (live_database.read_bytes(), wal.read_bytes())
+
+    kept, counts = uploaded(pulled, data, TAKEN_AT + timedelta(days=1))
+
+    assert backup.is_backup(kept.name)
+    assert not any(backup.is_backup(name) for name in ["db.sqlite3", "db.sqlite3-wal", "db.sqlite3-shm", "backup-offer"])
+    assert (live_database.read_bytes(), wal.read_bytes()) == before
+    assert counts == row_counts(kept) == row_counts(pulled)
+    assert sorted(path.name for path in data.iterdir() if backup.is_backup(path.name)) == [kept.name]
+
+
+def test_the_sidecar_restores_an_uploaded_backup_from_the_data_volume_and_its_counts_match(live_database, seeded_template, backups, tmp_path):
+    pulled = take_backup(live_database, backups, TAKEN_AT)
+    # The fresh stack's database, migrated and empty of the pulled backup's later writes.
+    data = tmp_path / "fresh-data"
+    data.mkdir()
+    fresh = data / "db.sqlite3"
+    shutil.copy(seeded_template, fresh)
+    kept, _ = uploaded(pulled, data, TAKEN_AT + timedelta(days=1))
+    assert row_counts(fresh) != row_counts(pulled)
+
+    restoring = run_in_a_child(
+        "-m", "ribcage.operations.backup", "restore", kept.name, "--backups", str(data), "--database", str(fresh)
+    )
+
+    assert restoring.returncode == 0, restoring.stderr
+    assert row_counts(fresh) == row_counts(pulled) == row_counts(live_database)
+    assert f"Restored {kept.name}: " in restoring.stdout
+
+
+def test_a_failed_upload_leaves_nothing_on_the_data_volume(tmp_path):
+    data = tmp_path / "data"
+    data.mkdir()
+    code = offer.offer_upload(data / "backup-offer", TAKEN_AT)
+
+    with pytest.raises(offer.NotADatabase):
+        offer.accept_upload(data / "backup-offer", code, [b"not a database" * 100], data, TAKEN_AT)
+
+    assert sorted(path.name for path in data.iterdir()) == ["backup-offer"]
+
+
+def test_an_upload_over_the_cap_is_refused_as_it_is_written(tmp_path, monkeypatch):
+    monkeypatch.setattr(offer, "UPLOAD_CAP_BYTES", 10)
+    data = tmp_path / "data"
+    data.mkdir()
+    code = offer.offer_upload(data / "backup-offer", TAKEN_AT)
+
+    with pytest.raises(offer.TooLarge):
+        offer.accept_upload(data / "backup-offer", code, [b"x" * 6, b"x" * 6], data, TAKEN_AT)
+
+    assert sorted(path.name for path in data.iterdir()) == ["backup-offer"]

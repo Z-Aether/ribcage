@@ -4,7 +4,8 @@
 {% block title %}Backup · Admin · Ribcage{% endblock %}
 
 {% block content %}
-  <h1>Download a backup</h1>
+  <h1>Backup</h1>
+  <h2>Download a backup</h2>
   <p>Make a code in the <code>ribcage</code> container's terminal with <code>python manage.py backupcode download</code>, then enter it here. It works once, for 10 minutes, and a wrong code voids it.</p>
   <form class="form--short" method="post" action="{% url 'console_backup' %}">
     {% csrf_token %}
@@ -13,5 +14,24 @@
     {% endif %}
     {{ form.code.as_field_group }}
     <button type="submit">Download</button>
+  </form>
+
+  {# Both forms always show: the code says which it is for, and the wrong form refuses it (#81). #}
+  <h2>Upload a backup</h2>
+  <p>Make a code with <code>python manage.py backupcode upload</code>, then enter it here with the backup. The page checks the file and keeps it beside the database for the <code>backup</code> container to restore. It restores nothing itself.</p>
+  <form class="form--short" method="post" action="{% url 'console_backup_upload' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if upload_refusal %}
+      <p role="alert">{{ upload_refusal }}</p>
+    {% elif kept %}
+      <div role="status">
+        <p>Kept <code>{{ kept }}</code>: {{ kept_counts }}.</p>
+        <p>To restore it, stop the <code>ribcage</code> service, then run this in the <code>backup</code> container's terminal:</p>
+        <pre class="command"><code>python -m ribcage.operations.backup restore {{ kept }} --backups {{ upload_directory }}</code></pre>
+      </div>
+    {% endif %}
+    {{ upload_form.code.as_field_group }}
+    {{ upload_form.backup.as_field_group }}
+    <button type="submit">Upload</button>
   </form>
 {% endblock %}

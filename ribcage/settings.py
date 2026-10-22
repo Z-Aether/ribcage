@@ -94,6 +94,17 @@ DATABASES = {
 }
 # The backup page's one offer sits beside the database on its volume, and never in it (#68).
 BACKUP_OFFER_DIRECTORY = DATABASES["default"]["NAME"].parent / "backup-offer"
+# An uploaded backup lands beside the database, where the sidecar restores it from with --backups /data (#81).
+BACKUP_UPLOAD_DIRECTORY = DATABASES["default"]["NAME"].parent
+# Ahead of Django's own, so no request stores a file over the backup cap, even before the admin wall (#81).
+FILE_UPLOAD_HANDLERS = [
+    "ribcage.console.uploads.CappedUploadHandler",
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+]
+
+# No form takes more than one file, so a request can park only one capped file (#81).
+DATA_UPLOAD_MAX_NUMBER_FILES = 1
 
 AUTH_USER_MODEL = "identity.Voter"
 AUTHENTICATION_BACKENDS = ["ribcage.identity.backends.DisplayNameBackend"]

@@ -16,7 +16,6 @@ FILMS = [("Alien",), ("Heat",), ("Ran",)]
 @pytest.fixture
 def database(tmp_path):
     database = tmp_path / "data" / "db.sqlite3"
-    database.parent.mkdir()
     with closing(sqlite3.connect(database)) as connection:
         connection.execute("CREATE TABLE films (title TEXT)")
         connection.executemany("INSERT INTO films VALUES (?)", FILMS)
@@ -44,7 +43,7 @@ def content_of(response):
 
 
 def offer_is_still_there(code, clock):
-    return offer.redeem(settings.BACKUP_OFFER_DIRECTORY, code, clock.now).file.exists()
+    return offer.redeem(settings.BACKUP_OFFER_DIRECTORY, code, clock.now, offer.DOWNLOAD).file.exists()
 
 
 def test_the_right_code_returns_the_offered_backup_as_an_uncached_attachment(admin, offered, tmp_path):
@@ -181,13 +180,26 @@ def test_without_the_admin_session_the_right_code_gets_the_admin_login_and_leave
     assert offer_is_still_there(code, clock)
 
 
-def test_the_page_is_one_form_with_one_code_field_under_no_tab(admin):
+def test_the_page_is_a_download_form_and_an_upload_form_under_no_tab(admin):
     page = admin.get(PAGE).text
 
     assert "console-tabs" not in page
-    assert page.count("<form") == 2  # the code's, and the header's log out
+    assert page.count("<form") == 3  # the download's, the upload's, and the header's log out
     assert '<form class="form--short" method="post" action="/console/backup/">' in page
-    assert 'name="code"' in page
+    assert '<form class="form--short" method="post" action="/console/backup/upload/" enctype="multipart/form-data">' in page
+    assert page.count('name="code"') == 2
+    assert 'type="file" name="backup"' in page
+
+
+def test_an_upload_code_entered_to_download_gets_no_file_and_voids_it(admin, clock):
+    code = offer.offer_upload(settings.BACKUP_OFFER_DIRECTORY, clock.now)
+
+    response = download(admin, code)
+
+    assert not is_the_file(response)
+    assert "That code was made for an upload, so the offer is void." in response.text
+    with pytest.raises(offer.NoOffer):
+        offer.redeem(settings.BACKUP_OFFER_DIRECTORY, code, clock.now, offer.UPLOAD)
 
 
 def test_no_tab_links_to_the_page(admin):

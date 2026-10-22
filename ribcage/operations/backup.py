@@ -73,11 +73,12 @@ def quoted(name):
 
 def row_counts(database):
     with closing(open_existing(database, mode="ro")) as connection:
-        tables = [name for (name,) in connection.execute("SELECT name FROM sqlite_master WHERE type = 'table'")]
-        return {
-            table: connection.execute(f"SELECT COUNT(*) FROM {quoted(table)}").fetchone()[0]
-            for table in sorted(tables)
-        }
+        return table_counts(connection)
+
+
+def table_counts(connection):
+    tables = [name for (name,) in connection.execute("SELECT name FROM sqlite_master WHERE type = 'table'")]
+    return {table: connection.execute(f"SELECT COUNT(*) FROM {quoted(table)}").fetchone()[0] for table in sorted(tables)}
 
 
 def take_backup(database, backups, taken_at):

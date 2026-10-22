@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods, require_POST
 
-from ribcage.console.forms import BackupCodeForm
+from ribcage.console.forms import BackupCodeForm, BackupUploadForm
 from ribcage.console.moves import offered
 from ribcage.console.roster import what_goes
 from ribcage.identity.admin_session import admin_required
@@ -15,6 +15,7 @@ from ribcage.identity.models import Voter
 from ribcage.identity.removal import remove
 from ribcage.identity.reset import replacing, reset
 from ribcage.operations import offer
+from ribcage.operations.backup import describe
 from ribcage.phase.history import current, last_entered, move
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 
@@ -127,7 +128,21 @@ REFUSALS = {
     offer.NoOffer: "No backup is on offer. Make a code first, in the ribcage container's terminal.",
     offer.Expired: "That code had expired, so the offer is void. Make a new code.",
     offer.WrongCode: "That code is wrong, so the offer is void. Make a new code.",
+    offer.WrongPurpose: "That code was made for an upload, so the offer is void. Make a new code with backupcode download.",
 }
+UPLOAD_REFUSALS = {
+    offer.NoOffer: "No code is on offer. Make one first, in the ribcage container's terminal.",
+    offer.Expired: "That code had expired, so it is void and the file was not kept. Make a new code.",
+    offer.WrongCode: "That code is wrong, so it is void and the file was not kept. Make a new code.",
+    offer.WrongPurpose: "That code was made for a download, so it is void and the file was not kept. Make a new code with backupcode upload.",
+    offer.TooLarge: f"That file is over {offer.UPLOAD_CAP_MB} MB, far larger than a marathon's backup, so it was not kept. The code wasn't tried, so if it was right it still works.",
+    offer.NotADatabase: "That file is not an SQLite database, so it was not kept. The code wasn't tried, so if it was right it still works.",
+    offer.FailsIntegrityCheck: "That file failed SQLite's integrity check, so it was not kept. The code wasn't tried, so if it was right it still works.",
+}
+
+
+def backup(request, **context):
+    return render(request, "console/backup.html", {"form": BackupCodeForm(), "upload_form": BackupUploadForm(), **context})
 
 
 @admin_required
@@ -137,11 +152,44 @@ def backup_page(request):
     form = BackupCodeForm(request.POST if request.method == "POST" else None)
     if not form.is_valid():
         offer.void_if_expired(settings.BACKUP_OFFER_DIRECTORY, timezone.now())
-        return render(request, "console/backup.html", {"form": form})
+        return backup(request, form=form)
     try:
-        redeemed = offer.redeem(settings.BACKUP_OFFER_DIRECTORY, form.cleaned_data["code"], timezone.now())
+        redeemed = offer.redeem(settings.BACKUP_OFFER_DIRECTORY, form.cleaned_data["code"], timezone.now(), offer.DOWNLOAD)
     except offer.Refused as refusal:
-        return render(request, "console/backup.html", {"form": BackupCodeForm(), "refusal": REFUSALS[type(refusal)]})
+        return backup(request, refusal=REFUSALS[type(refusal)])
     response = FileResponse(offer.opened(redeemed), as_attachment=True, filename=redeemed.file.name, content_type="application/octet-stream")
     response["Cache-Control"] = "no-store"
     return response
+
+
+def skipped_over_the_cap(request):
+    # The upload handler drops a file over the cap, so only the body's length is left to tell it from no file (#81).
+    return "backup" not in request.FILES and int(request.META.get("CONTENT_LENGTH") or 0) > offer.UPLOAD_CAP_BYTES
+
+
+@admin_required
+@require_POST
+def upload_backup(request):
+    # The page only keeps the file, beside the database; the restore is a step in the sidecar's terminal (#81).
+    if skipped_over_the_cap(request):
+        return refused_upload(request, offer.TooLarge, request.POST.get("code", ""))
+    form = BackupUploadForm(request.POST, request.FILES)
+    if not form.is_valid():
+        return backup(request, upload_form=form)
+    try:
+        kept, counts = offer.accept_upload(
+            settings.BACKUP_OFFER_DIRECTORY,
+            form.cleaned_data["code"],
+            form.cleaned_data["backup"].chunks(),
+            settings.BACKUP_UPLOAD_DIRECTORY,
+            timezone.now(),
+        )
+    except (offer.Refused, offer.Unkept) as refusal:
+        return refused_upload(request, type(refusal), form.cleaned_data["code"])
+    return backup(request, kept=kept.name, kept_counts=describe(counts), upload_directory=settings.BACKUP_UPLOAD_DIRECTORY)
+
+
+def refused_upload(request, refusal, code):
+    # A file refused for what it is never tries the code, so it stays in the field for the right file (#81).
+    still_works = issubclass(refusal, offer.Unkept)
+    return backup(request, upload_refusal=UPLOAD_REFUSALS[refusal], upload_form=BackupUploadForm(initial={"code": code if still_works else ""}))
