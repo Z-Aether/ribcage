@@ -129,7 +129,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 **Scope**
 - **DTDD client:** lookup by TMDB id, the guarded retry by title and year, the movie-type filter (#19, #23).
 - **Snapshots and vocabulary:** stored per film. Every phase move refreshes the vocabulary, then films oldest-first, within the rate limit's floor or 20 s, never blocking the move; a failed refresh keeps the old snapshot (#32).
-- **Match correction:** the paste-a-link control, tagged `auto` or `set by <name>`, windowed SUGGEST–VOTE (#32, #34).
+- **Match correction:** the paste-a-link control, tagged `auto` or `set by <name>`, windowed SUGGEST–VOTE for voters and never for the admin (#32, #34, #78).
 - **My warnings:** the scrolling page in DTDD's grouping, privacy disclosure, *I don't care*, live search, chips, carrying films per topic. The nag bar. Topics travel in request bodies (#16, #20, #23).
 - **On the card:** matched topics with raw counts, the trigger icon and its threshold, *uncovered* and *not fetched* named as gaps (#35).
 - **Films tab:** DTDD status per row and the quiet stale-or-unfetched line (#28).

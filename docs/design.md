@@ -106,7 +106,7 @@ A fresh database starts in SUGGEST. The admin moves the phase one step at a time
 | Suggest, write a note | SUGGEST–APPROVE. Suggesting is only offered in SUGGEST; the window just catches stale tabs. |
 | Withdraw, runtime pencil | SUGGEST. Only on an unapproved film nothing downstream holds. |
 | Score, veto, seen it, done | VOTE |
-| Correct the DTDD match | SUGGEST–VOTE (the admin as well) |
+| Correct the DTDD match | SUGGEST–VOTE. The admin's correction is never gated (#78). |
 | Edit the watched list | Every phase but RUN |
 
 Pages that poll and find the phase moved reload the same way.
@@ -160,7 +160,7 @@ Informational only. They never feed the objective and never veto on anyone's beh
 - **Admin surfaces** show a film's DTDD data, match field and topic list, and nothing personal.
 - **Gaps are named, never shown as an all-clear.** A film is **uncovered** when DTDD has no evidence for it, and **not fetched** when DTDD hasn't answered. Notes cover whatever the crowd evidence misses.
 - **Snapshots** are stored, because the rate limit (30 requests a minute) forbids live fetching. Each phase move refreshes the vocabulary, then films oldest-first until the rate limit's floor or 20 s. The move never waits on it. Films not fetched go first next time, and a failed refresh keeps the old snapshot. Everything is purged on entering RUN (#32).
-- **Match correction:** one paste-a-link control, open to any voter and the admin through VOTE. It is tagged `auto` or `set by <name>`.
+- **Match correction:** one paste-a-link control, open to any voter through VOTE; the admin's is never phase-gated (#78). It is tagged `auto` or `set by <name>`.
 - **Obligations:** a "Powered by DoesTheDogDie.com" link on every view that shows DTDD data, a public privacy policy, and an abuse contact (#5, #16).
 
 Nothing about trigger warnings appears in PICK or RUN: by then they have already been acted on as vetoes.
