@@ -1,6 +1,6 @@
 # Ribcage — milestones
 
-The big-picture build schedule: ten milestones, each a vertical slice that is deployed, reviewed and approved by the dev before the next one starts. Read alongside [`design.md`](design.md), which says *what* is built; this says *in what order*.
+The big-picture build schedule: ten milestones, each a vertical slice that is reviewed and approved by the dev before the next one starts. Read alongside [`design.md`](design.md), which says *what* is built; this says *in what order*.
 
 - Terms are used as defined in [`GLOSSARY.md`](../GLOSSARY.md). Ticket numbers (#n) point at the decision of record.
 - Where this doc and a ticket or `design.md` disagree, the newest of them wins; flag the conflict.
@@ -11,8 +11,9 @@ The big-picture build schedule: ten milestones, each a vertical slice that is de
 ## How a milestone runs
 
 - **Size.** About 20 implementation tickets, each one agent session and itself a vertical slice (model → endpoint → template → test). One orchestrator session implements, reviews and tests a whole milestone.
-- **Gate.** A milestone ends deployed to the real host, then the dev tests it by hand and approves it. Nothing in the next milestone starts before that.
-- **Deployable at every gate.** Every milestone leaves the app in a state that runs end to end on the real host. Unbuilt phase pages are placeholders, never broken pages.
+- **Gate.** A milestone ends tested locally, then the dev tests it by hand and approves it. Nothing in the next milestone starts before that.
+- **The host only where it is what's tested.** A milestone carries a host step only for a change the host itself must prove, such as the proxy, the network or the volumes, and that step blocks nothing it doesn't gate. The dev may redeploy at any gate; it is never required (#61).
+- **Deployable at every gate.** Every milestone leaves the app in a state that would run end to end on the real host. Unbuilt phase pages are placeholders, never broken pages.
 - **Cross-cutting work grows with its owner.** Each milestone extends these as its entities and actions arrive, rather than leaving them to the end:
   - the **phase check**: one window per new voter action (#34);
   - **removal**: what a removed voter's new data does (#28);
