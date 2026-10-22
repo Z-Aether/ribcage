@@ -3,8 +3,7 @@ import unicodedata
 from django.core.exceptions import ValidationError
 
 MAX_LENGTH = 20
-# Control, format, surrogate, private-use and unassigned. Format includes U+200D, so ZWJ emoji sequences are refused on
-# purpose: the simpler rule also stops invisible lookalikes such as Sa<ZWJ>m (#69).
+# Cf includes ZWJ, so ZWJ emoji are refused on purpose, stopping lookalikes like Sa<ZWJ>m (#69).
 REFUSED_CATEGORIES = {"Cc", "Cf", "Cs", "Co", "Cn"}
 
 

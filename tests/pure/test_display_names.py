@@ -10,6 +10,8 @@ from ribcage.identity import display_names
         ("  Sam  ", "Sam"),
         ("Anne   Marie", "Anne Marie"),
         ("Anne\t\n Marie", "Anne Marie"),
+        ("Anne Marie", "Anne Marie"),
+        ("Anne Marie", "Anne Marie"),
         ("Anne Marie", "Anne Marie"),
         ("Ｓam", "Sam"),
         ("ﬁnn", "finn"),

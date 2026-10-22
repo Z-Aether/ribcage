@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
+from django.db.models import QuerySet
 
 from ribcage.identity.models import Voter
 
@@ -30,6 +31,18 @@ def test_the_manager_refuses_a_name_taken_in_another_case(db):
 
     with pytest.raises(ValidationError):
         Voter.objects.create_voter("Sam")
+
+
+def test_a_name_taken_by_a_registration_racing_this_one_is_refused_as_taken(db, monkeypatch):
+    Voter.objects.create_voter("sam")
+    # As if the racing registration saved after any check this one makes (#69).
+    monkeypatch.setattr(QuerySet, "exists", lambda queryset: False)
+
+    with pytest.raises(ValidationError) as refused:
+        Voter.objects.create_voter("Sam")
+
+    assert refused.value.code == "taken"
+    assert Voter.objects.count() == 1
 
 
 def test_the_database_refuses_a_name_taken_in_another_case(db):

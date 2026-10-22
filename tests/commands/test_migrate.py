@@ -17,19 +17,23 @@ import ribcage
 REPO_ROOT = Path(ribcage.__file__).parents[1]
 
 
-def test_a_fresh_database_comes_up_in_wal_mode(tmp_path):
-    database = tmp_path / "fresh.sqlite3"
+def migrate(database, *target):
     environ = {**os.environ, "DJANGO_SETTINGS_MODULE": "ribcage.settings", "DATABASE_PATH": str(database)}
-
-    migrate = subprocess.run(
-        [sys.executable, "manage.py", "migrate", "--verbosity", "0"],
+    run = subprocess.run(
+        [sys.executable, "manage.py", "migrate", "--verbosity", "0", *target],
         cwd=REPO_ROOT,
         env=environ,
         capture_output=True,
         text=True,
     )
+    assert run.returncode == 0, run.stderr
 
-    assert migrate.returncode == 0, migrate.stderr
+
+def test_a_fresh_database_comes_up_in_wal_mode(tmp_path):
+    database = tmp_path / "fresh.sqlite3"
+
+    migrate(database)
+
     # WAL is recorded in the file, so a plain connection that sets nothing still reads it.
     with closing(sqlite3.connect(database)) as connection:
         assert connection.execute("PRAGMA journal_mode").fetchone()[0] == "wal"
@@ -71,24 +75,13 @@ def test_a_write_after_a_read_waits_for_a_concurrent_writer_instead_of_failing(t
 
 def test_migrating_a_database_that_holds_voters_gives_each_the_key_of_its_name_and_forces_no_change(tmp_path):
     database = tmp_path / "old.sqlite3"
-    environ = {**os.environ, "DJANGO_SETTINGS_MODULE": "ribcage.settings", "DATABASE_PATH": str(database)}
 
-    def migrate(*target):
-        run = subprocess.run(
-            [sys.executable, "manage.py", "migrate", "--verbosity", "0", *target],
-            cwd=REPO_ROOT,
-            env=environ,
-            capture_output=True,
-            text=True,
-        )
-        assert run.returncode == 0, run.stderr
-
-    migrate("identity", "0001")
+    migrate(database, "identity", "0001")
     with closing(sqlite3.connect(database)) as connection, connection:
         connection.executemany(
             "INSERT INTO identity_voter (password, display_name) VALUES ('', ?)", [("\u00c9va",), ("Sam",)]
         )
-    migrate()
+    migrate(database)
 
     with closing(sqlite3.connect(database)) as connection:
         voters = connection.execute("SELECT display_name, display_name_key, must_change_password FROM identity_voter ORDER BY id").fetchall()

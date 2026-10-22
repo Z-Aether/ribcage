@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import IntegrityError, models, transaction
 
 from ribcage.identity import display_names
 
@@ -8,15 +8,17 @@ from ribcage.identity import display_names
 class VoterManager(BaseUserManager):
     def create_voter(self, display_name, password=None, *, password_hash=None):
         """The one way to make a voter; `password_hash` lets seed hash once (#69)."""
-        display_name = display_names.clean(display_name)
-        if self.filter(display_name_key=display_names.key(display_name)).exists():
-            raise ValidationError("That display name is taken.", code="taken")
-        voter = self.model(display_name=display_name)
+        voter = self.model(display_name=display_names.clean(display_name))
         if password_hash is not None:
             voter.password = password_hash
         else:
             voter.set_password(password)
-        voter.save(using=self._db)
+        try:
+            # The unique key alone decides, so two registrations racing for one name can't both pass a check (#69).
+            with transaction.atomic(using=self._db):
+                voter.save(using=self._db)
+        except IntegrityError:
+            raise ValidationError("That display name is taken.", code="taken") from None
         return voter
 
     def get_by_natural_key(self, display_name):
