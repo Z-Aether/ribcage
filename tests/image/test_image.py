@@ -9,8 +9,9 @@ from tests.image.client import (
     CREATE_THE_VOTER,
     LOGIN,
     SIGNED_IN_AS_THE_VOTER,
+    VOTER,
     fetch,
-    home_page,
+    phase_page,
     post_form,
     session_of,
     sign_in,
@@ -126,13 +127,13 @@ def test_the_form_post_with_the_pages_csrf_token_is_accepted(container):
     status, headers, _ = sign_in(port)
 
     assert (status, headers["Location"]) == (302, "/")
-    assert SIGNED_IN_AS_THE_VOTER in home_page(port, session_of(headers))[2]
+    assert SIGNED_IN_AS_THE_VOTER in phase_page(port, session_of(headers))[2]
 
 
 def test_a_form_post_without_a_csrf_token_is_refused(container):
     _, port = container
 
-    assert post_form(port, {"username": "Sam", "password": "Forged"})[0] == 403
+    assert post_form(port, {"username": VOTER, "password": "Forged"})[0] == 403
 
 
 def test_the_privacy_policy_is_rendered_from_the_file_inside_the_image(container):
@@ -172,7 +173,7 @@ def test_a_server_error_leaves_its_traceback_on_stderr_without_any_client_addres
     name, port = container
     docker("exec", name, "chmod", "-R", "a-w", "/data")
     try:
-        # Signing in writes the session row, which the read-only database refuses.
+        # Signing in writes the session row, which the read-only database refuses (#70).
         status, _, _ = sign_in(port, FORGED_ADDRESSES)
     finally:
         docker("exec", name, "chmod", "-R", "u+w", "/data")

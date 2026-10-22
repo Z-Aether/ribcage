@@ -5,15 +5,11 @@ from django.contrib.auth import get_user
 
 from ribcage.identity import backoff
 from ribcage.identity.models import Voter
-from tests.http.test_login import PASSWORD, as_answered, log_in
+from tests.http.signing_in import PASSWORD, log_in
+from tests.http.test_login import as_answered
 
 WAIT_MESSAGE = "Too many attempts. Try again in a minute."
 WRONG = "not-the-password"
-
-
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 
 @pytest.fixture

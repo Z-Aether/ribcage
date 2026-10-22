@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST
 
 import ribcage.urls
 from ribcage.identity.models import Voter
-from tests.http.test_admin_login import sign_in_as_the_admin
+from tests.http.signing_in import sign_in_as_the_admin
 from tests.http.test_proxy_boundary import HOST, ORIGIN, at_the_host
 
 

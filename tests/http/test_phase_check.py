@@ -169,8 +169,7 @@ def test_log_out_works_in_every_phase(client, phase):
 
 
 @pytest.mark.parametrize("phase", PHASES)
-def test_change_password_works_in_every_phase(client, ada, settings, phase):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+def test_change_password_works_in_every_phase(client, ada, phase):
     ada.set_password("first-password-of-ours")
     ada.save()
     # A new password ends the session the client fixture opened (#37).

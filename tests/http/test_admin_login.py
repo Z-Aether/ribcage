@@ -9,26 +9,15 @@ from django.utils import timezone
 
 from ribcage.identity import admin_session, backoff
 from ribcage.identity.models import Voter
-from tests.http.test_login import PASSWORD, log_in
+from tests.http.signing_in import ADMIN_LOGIN, PASSWORD, log_in, sign_in_as_the_admin
 from tests.http.test_login_backoff import WAIT_MESSAGE
 
-ADMIN_LOGIN = "/console/login/"
 CONSOLE = "/console/films/"
 WRONG_PASSWORD = "The admin password is wrong."
 
 
-def sign_in_as_the_admin(client, password=None, headers=None, **extra):
-    fields = {"password": settings.ADMIN_PASSWORD if password is None else password, **extra}
-    return client.post(ADMIN_LOGIN, fields, headers=headers)
-
-
 def reaches_the_console(client):
     return client.get(CONSOLE).status_code == 200
-
-
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 
 @pytest.fixture(autouse=True)
@@ -94,6 +83,15 @@ def test_the_admin_session_lasts_as_long_as_a_voters(client, db, settings):
     lasts = Session.objects.get(session_key=key).expire_date - timezone.now()
 
     assert abs(lasts - timedelta(seconds=settings.SESSION_COOKIE_AGE)) < timedelta(minutes=1)
+
+
+def test_an_expired_admin_session_is_sent_to_the_admin_login(client, db, settings, clock):
+    sign_in_as_the_admin(client)
+    clock.advance(seconds=settings.SESSION_COOKIE_AGE + 60)
+
+    response = client.get(CONSOLE)
+
+    assert response.headers["Location"].startswith(f"{ADMIN_LOGIN}?next=")
 
 
 def test_an_admin_page_sends_a_signed_out_visitor_to_the_admin_login_and_back(client, db):

@@ -4,11 +4,11 @@ import pytest
 from django.test import Client
 
 from ribcage.identity.models import Voter
+from tests.http.signing_in import PASSWORD
 
 HOST = "ribcage.example.org"
 # Public, so a request reaches the page itself rather than the wall's redirect (#70).
 LOGIN = "/login/"
-PASSWORD = "popcorn-before-midnight"
 ORIGIN = f"https://{HOST}"
 ONE_YEAR_WITH_SUBDOMAINS = "max-age=31536000; includeSubDomains"
 WHATEVER_THE_PROXY_SAYS = [
@@ -29,8 +29,7 @@ def _deployed_hostname(settings):
 
 
 @pytest.fixture
-def sam(db, settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+def sam(db):
     return Voter.objects.create_voter("Sam", PASSWORD)
 
 

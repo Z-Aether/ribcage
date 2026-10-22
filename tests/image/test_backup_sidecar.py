@@ -6,7 +6,7 @@ from ribcage.operations.backup import KEPT_BACKUPS, is_backup, row_counts
 from tests.image.client import (
     CREATE_THE_VOTER,
     SIGNED_IN_AS_THE_VOTER,
-    home_page,
+    phase_page,
     session_of,
     sign_in,
     wait_until_serving,
@@ -83,7 +83,7 @@ def test_the_sidecar_waits_for_four_oclock_in_the_deployments_zone(stack):
 
 
 def test_a_backup_taken_now_lands_on_the_second_volume_with_every_row(stack):
-    # Signing in writes a session row through the app.
+    # Signing in writes a session row through the app (#70).
     sign_in(stack.port())
 
     taken = take_a_backup_now(stack)
@@ -136,7 +136,7 @@ def test_a_pulled_backup_restores_into_a_fresh_stack_with_every_row_count(stack,
         wait_until_serving(fresh.port())
 
         assert counts_in_the_container(fresh) == as_text(expected)
-        # The session row came back with the backup, so the voter is still signed in.
-        assert SIGNED_IN_AS_THE_VOTER in home_page(fresh.port(), session)[2]
+        # The session row came back with the backup, so the voter is still signed in (#70).
+        assert SIGNED_IN_AS_THE_VOTER in phase_page(fresh.port(), session)[2]
     finally:
         fresh.run("down", "--volumes")

@@ -16,7 +16,7 @@ from tests.http.routes import (
     routes,
     routes_of,
 )
-from tests.http.test_admin_login import sign_in_as_the_admin
+from tests.http.signing_in import sign_in_as_the_admin
 
 # Public pages allowed to query, by URL name: the one place an exception goes, with its ticket.
 QUERYING_PUBLIC_PAGES = set()
@@ -60,11 +60,11 @@ def signed_in_as_both(client):
 
 
 def test_every_route_is_exactly_one_of_public_voter_or_admin():
-    """Guards hand-set marks only: admin_required always sets login_not_required too."""
+    # Guards hand-set marks only: admin_required always sets login_not_required too (#76).
     assert [path for path, entry in routes() if kind(entry) not in {PUBLIC, VOTER, ADMIN}] == []
 
 
-def test_every_public_page_has_a_fixed_address_that_renders():
+def test_every_public_page_has_a_fixed_address():
     # The zero-query check needs the page itself, which a sample id might not find (#76).
     public_page_names = {entry.name for _, entry in public_pages()}
     assert [template for template, entry in route_templates() if entry.name in public_page_names and "<" in template] == []
@@ -84,6 +84,12 @@ def test_a_route_with_a_converter_is_requested_at_a_sample_address():
 )
 def test_each_known_route_is_found_as_its_kind(name, route_kind):
     assert name in [entry.name for _, entry in routes_of(route_kind)]
+
+
+def test_every_route_under_the_console_but_the_admin_login_and_logout_is_an_admin_route():
+    # A decorator without wraps over admin_required would drop its marks and leave the route voter-walled (#76).
+    outside_the_admin_wall = {entry.name for _, entry in routes_of(ADMIN)} | {"admin_login", "admin_logout"}
+    assert [entry.name for path, entry in routes() if path.startswith("/console/") and entry.name not in outside_the_admin_wall] == []
 
 
 def test_the_public_routes_that_answer_post_alone_are_exactly_the_two_log_outs(client, db):

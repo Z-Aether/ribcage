@@ -6,15 +6,12 @@ import pytest
 from django.contrib.auth import get_user
 from django.contrib.auth.views import LogoutView
 
+# Loaded before the log-out test reads Django's view, so that test holds when run alone (#70).
+import ribcage.identity.views  # noqa: F401
 from ribcage.identity.models import Voter
+from tests.http.signing_in import PASSWORD, log_in
 
-PASSWORD = "popcorn-before-midnight"
 SIGNED_IN_AS_SAM = '<summary class="voter-menu__name">Sam</summary>'
-
-
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 
 @pytest.fixture
@@ -22,12 +19,8 @@ def sam(db):
     return Voter.objects.create_voter("Sam", PASSWORD)
 
 
-def log_in(client, display_name, password, **extra):
-    return client.post("/login/", {"username": display_name, "password": password, **extra})
-
-
 def as_answered(response, typed_name):
-    # The page echoes the typed name and a fresh CSRF token, twice; everything else must match.
+    # The page echoes the typed name and a fresh CSRF token, twice; everything else must match (#71).
     page = re.sub(r'name="csrfmiddlewaretoken" value="[^"]+"|"X-CSRFToken": "[^"]+"', "", response.text)
     return response.status_code, page.replace(f'value="{typed_name}"', 'value=""')
 
@@ -49,7 +42,7 @@ def test_signing_in_goes_back_where_the_visitor_was_going(client, sam):
     assert response.headers["Location"] == "/?from=somewhere"
 
 
-def test_signing_in_with_no_destination_lands_on_home(client, sam):
+def test_signing_in_with_no_destination_lands_on_the_phase_page(client, sam):
     response = log_in(client, "Sam", PASSWORD)
 
     assert response.headers["Location"] == "/"

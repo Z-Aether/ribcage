@@ -7,16 +7,11 @@ from django.test import Client
 
 from ribcage.identity.models import Voter
 from ribcage.identity.removal import remove
-from tests.http.test_registration import CODE, PASSWORD, register
+from tests.http.signing_in import PASSWORD
+from tests.http.test_registration import register
 
 TAB = "/console/roster/"
 REMOVE = "/console/roster/remove/"
-
-
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
-    settings.JOIN_CODE = CODE
 
 
 def text(fragment):
@@ -29,12 +24,13 @@ def rows(page):
     return [(int(pk), html.unescape(name), text(rest)) for pk, name, rest in found]
 
 
-def arm_links(page):
-    return [html.unescape(href) for href in re.findall(r'<a class="button button--quiet" href="([^"]+)">Remove…</a>', page)]
+def act_links(page, label):
+    """Where each row's link labelled `label` points, such as Remove… or Reset password…."""
+    return [html.unescape(href) for href in re.findall(rf'<a class="button button--quiet" href="([^"]+)">{label}</a>', page)]
 
 
 def confirm(page):
-    """The armed removal's form: where it posts, its fields, the act its button names, Cancel's address and the text above them."""
+    """The armed act's confirm: where it posts, its fields, the act its button names, Cancel's address and the text above them."""
     form = re.search(r'<form method="post" action="([^"]+)" class="roster-confirm">(.*?)</form>', page, re.S)
     if form is None:
         return None
@@ -50,11 +46,6 @@ def signed_in(voter, password=PASSWORD):
     browser = Client()
     assert browser.login(username=voter.display_name, password=password)
     return browser
-
-
-@pytest.fixture
-def voters(db):
-    return {name: Voter.objects.create_voter(name, PASSWORD) for name in ["Hanna", "ada", "Dani"]}
 
 
 def test_the_roster_lists_every_voter_one_row_each_by_name_regardless_of_case(admin, voters):
@@ -82,7 +73,7 @@ def test_an_empty_roster_says_nobody_has_registered(admin):
 def test_every_row_offers_removal_armed_by_a_link_to_the_tab(admin, voters):
     page = admin.get(TAB).text
 
-    assert arm_links(page) == [f"{TAB}?remove={voters[name].pk}" for name in ["ada", "Dani", "Hanna"]]
+    assert act_links(page, "Remove…") == [f"{TAB}?remove={voters[name].pk}" for name in ["ada", "Dani", "Hanna"]]
     assert confirm(page) is None
 
 
@@ -113,7 +104,7 @@ def test_the_confirm_lists_what_goes_and_says_the_join_code_still_lets_them_back
 def test_the_armed_row_gives_up_its_arm_and_the_others_keep_theirs(admin, voters):
     page = admin.get(TAB, {"remove": voters["Dani"].pk}).text
 
-    assert arm_links(page) == [f"{TAB}?remove={voters[name].pk}" for name in ["ada", "Hanna"]]
+    assert act_links(page, "Remove…") == [f"{TAB}?remove={voters[name].pk}" for name in ["ada", "Hanna"]]
 
 
 @pytest.mark.parametrize("arm", ["", "x", "-1", "1.0", "99999999999999999999999"])
@@ -122,7 +113,7 @@ def test_an_arm_for_no_voter_arms_nothing(admin, voters, arm):
 
     assert response.status_code == 200
     assert confirm(response.text) is None
-    assert len(arm_links(response.text)) == 3
+    assert len(act_links(response.text, "Remove…")) == 3
 
 
 def test_an_arm_for_a_voter_already_removed_arms_nothing(admin, voters):

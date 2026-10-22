@@ -1,21 +1,15 @@
-import re
+import secrets
 
 import pytest
 from django.contrib.auth import get_user
 from django.templatetags.static import static
+from django.test import Client
 
 from ribcage.identity.models import Voter
 from ribcage.phase.order import PHASES, Phase
+from tests.http.signing_in import CODE, PASSWORD
 from tests.http.test_phase import PAGE_HEADINGS, walk_to
 
-PASSWORD = "popcorn-before-midnight"
-CODE = "local-join-code"
-
-
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
-    settings.JOIN_CODE = CODE
 
 
 def enter_code(client, code=CODE):
@@ -67,10 +61,15 @@ def test_success_creates_the_voter_signs_them_in_and_redirects(client, db):
 
 
 def test_registering_does_not_sign_out_or_touch_anyone_else(client, db):
-    Voter.objects.create_voter("Ada", PASSWORD)
+    ada = Voter.objects.create_voter("Ada", PASSWORD)
+    signed_in_ada = Client()
+    signed_in_ada.force_login(ada)
     register(client)
 
     assert Voter.objects.count() == 2
+    assert get_user(signed_in_ada) == ada
+    ada.refresh_from_db()
+    assert ada.check_password(PASSWORD)
 
 
 def test_a_name_taken_in_another_case_is_refused_with_the_taken_message(client, db):
@@ -140,8 +139,6 @@ def test_a_missing_code_on_the_second_submit_creates_no_voter(client, db):
 
 def test_the_code_is_checked_in_constant_time(client, db, monkeypatch):
     seen = []
-    import secrets
-
     real = secrets.compare_digest
     monkeypatch.setattr(secrets, "compare_digest", lambda a, b: seen.append((a, b)) or real(a, b))
 
@@ -207,9 +204,7 @@ def test_registration_lands_on_welcome_whose_exit_names_and_links_the_current_ph
 
     assert response.redirect_chain == [("/welcome/", 302)]
     assert "<h1>Welcome</h1>" in response.text
-    exit_link = re.search(r'<a ([^>]*class="button"[^>]*)>([^<]*)</a>', response.text)
-    assert exit_link.group(2).strip() == EXIT_LABELS[phase]
-    assert 'href="/"' in exit_link.group(1)
+    assert f'<a href="/" class="button">{EXIT_LABELS[phase]}</a>' in response.text
     assert f"<h1>{PAGE_HEADINGS[phase]}</h1>" in client.get("/").text
 
 

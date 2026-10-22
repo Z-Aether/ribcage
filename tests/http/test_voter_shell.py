@@ -11,7 +11,7 @@ TMDB_NOTICE = "This product uses the TMDB API but is not endorsed or certified b
 DTDD_CREDIT = '<a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a>'
 
 PUBLIC_PAGES = [path for path, _ in public_pages()]
-# Every fixed-address voter route, each held as a page if it answers GET; the gallery among them, which needs DEBUG on.
+# Every fixed-address voter route, each held as a page if it answers GET; the gallery among them, which needs DEBUG on (#76).
 WALLED_PAGES = [path for path, _ in pages_of(VOTER)]
 
 
@@ -27,7 +27,7 @@ def client(client, voter, settings):
     return client
 
 
-def visit(client, path):
+def get_as_just_registered(client, path):
     # Welcome answers only a voter who has just registered (#75).
     session = client.session
     session[WELCOME_PENDING] = True
@@ -44,8 +44,7 @@ def header(page):
     return found[0] if found else ""
 
 
-def the_footers_four_parts(abuse_email):
-    # TMDB's attribution is two of these: the logo and the notice (#5).
+def footer_parts(abuse_email):
     return {
         "the TMDB logo": f'src="{static("vendor/tmdb/blue_short.svg")}"',
         "the TMDB notice": TMDB_NOTICE,
@@ -60,7 +59,7 @@ ABUSE_MAILTO = "the abuse mailto:"
 
 def missing_from_the_footer(page, settings):
     shown = footer(page)
-    return [part for part, html in the_footers_four_parts(settings.ABUSE_EMAIL).items() if html not in shown]
+    return [part for part, html in footer_parts(settings.ABUSE_EMAIL).items() if html not in shown]
 
 
 def test_some_walled_page_is_found():
@@ -69,7 +68,7 @@ def test_some_walled_page_is_found():
 
 @pytest.mark.parametrize("path", WALLED_PAGES)
 def test_every_walled_voter_page_has_the_footer(client, settings, path):
-    response = visit(client, path)
+    response = get_as_just_registered(client, path)
 
     assert response.status_code == 200
     assert missing_from_the_footer(response.text, settings) == []
@@ -77,7 +76,7 @@ def test_every_walled_voter_page_has_the_footer(client, settings, path):
 
 @pytest.mark.parametrize("path", WALLED_PAGES)
 def test_every_walled_voter_page_has_the_header_naming_the_signed_in_voter(client, path):
-    shown = header(visit(client, path).text)
+    shown = header(get_as_just_registered(client, path).text)
 
     assert '<a class="wordmark voter-header__wordmark" href="/">Ribcage</a>' in shown
     assert re.search(r"<summary[^>]*>\s*Ada\s*</summary>", shown)

@@ -13,10 +13,7 @@ from ribcage.phase.order import PHASES, Phase
 SEEDED_DISPLAY_NAMES = ["Ada", "Anne-Marie", "O'Brien", "Zoë", "Sam", "Bartholomew Winthrop"]
 SEEDED_PASSWORD = "popcorn-before-midnight"
 
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    # The default hasher costs about a second per check, and hashing is Django's to test.
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+pytestmark = pytest.mark.usefixtures("fast_hashing")
 
 
 @pytest.mark.parametrize("display_name", SEEDED_DISPLAY_NAMES)

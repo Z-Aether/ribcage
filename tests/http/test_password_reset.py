@@ -1,4 +1,3 @@
-import html
 import re
 
 import pytest
@@ -9,25 +8,11 @@ from ribcage.console import views
 from ribcage.identity import reset as reset_module
 from ribcage.identity.models import Voter
 from ribcage.identity.removal import remove
-from tests.http.test_registration import PASSWORD
-from tests.http.test_roster_tab import TAB, confirm, signed_in, text
+from tests.http.signing_in import PASSWORD
+from tests.http.test_roster_tab import TAB, act_links, confirm, signed_in, text
 
 RESET = "/console/roster/reset/"
 NEW_PASSWORD = "carved-pumpkin-grin"
-
-
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
-
-
-@pytest.fixture
-def voters(db):
-    return {name: Voter.objects.create_voter(name, PASSWORD) for name in ["Hanna", "ada", "Dani"]}
-
-
-def reset_links(page):
-    return [html.unescape(href) for href in re.findall(r'<a class="button button--quiet" href="([^"]+)">Reset password…</a>', page)]
 
 
 def shown_password(page):
@@ -53,7 +38,7 @@ def stored(voter):
 def test_every_row_offers_a_reset_armed_by_a_link_to_the_tab(admin, voters):
     page = admin.get(TAB).text
 
-    assert reset_links(page) == [f"{TAB}?reset={voters[name].pk}" for name in ["ada", "Dani", "Hanna"]]
+    assert act_links(page, "Reset password…") == [f"{TAB}?reset={voters[name].pk}" for name in ["ada", "Dani", "Hanna"]]
 
 
 def test_arming_resets_nothing_and_prints_the_confirm_under_the_voters_row(admin, voters):
@@ -78,7 +63,7 @@ def test_arming_resets_nothing_and_prints_the_confirm_under_the_voters_row(admin
 def test_the_armed_row_gives_up_both_its_arms_and_the_others_keep_theirs(admin, voters):
     page = arm(admin, voters["Dani"]).text
 
-    assert reset_links(page) == [f"{TAB}?reset={voters[name].pk}" for name in ["ada", "Hanna"]]
+    assert act_links(page, "Reset password…") == [f"{TAB}?reset={voters[name].pk}" for name in ["ada", "Hanna"]]
     assert f"?remove={voters['Dani'].pk}" not in page
 
 
@@ -121,7 +106,7 @@ def test_each_reset_generates_a_new_password(admin, voters):
     assert first != second
 
 
-def test_the_generated_password_skips_djangos_checks():
+def test_the_generated_password_is_drawn_from_the_unambiguous_alphabet():
     assert all(character in reset_module.ALPHABET for character in reset_module.generated_password().replace("-", ""))
     assert not set("0o1li") & set(reset_module.ALPHABET)
 

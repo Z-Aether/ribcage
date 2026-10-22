@@ -6,18 +6,14 @@ from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
 
 from ribcage.identity.models import Voter
-
-
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+from tests.http.signing_in import PASSWORD
 
 
 def test_creating_a_voter_normalises_and_keeps_the_case_as_typed(db):
-    voter = Voter.objects.create_voter("  sAM   Q ", "popcorn-before-midnight")
+    voter = Voter.objects.create_voter("  sAM   Q ", PASSWORD)
 
     assert Voter.objects.get().display_name == "sAM Q"
-    assert voter.check_password("popcorn-before-midnight")
+    assert voter.check_password(PASSWORD)
 
 
 def test_creating_a_voter_validates(db):
@@ -54,16 +50,16 @@ def test_the_database_refuses_a_name_taken_in_another_case(db):
 
 @pytest.mark.parametrize("typed", ["Sam", "SAM", "sam", " sAm "])
 def test_signing_in_ignores_case(db, typed):
-    voter = Voter.objects.create_voter("Sam", "popcorn-before-midnight")
+    voter = Voter.objects.create_voter("Sam", PASSWORD)
 
-    assert authenticate(display_name=typed, password="popcorn-before-midnight") == voter
+    assert authenticate(display_name=typed, password=PASSWORD) == voter
 
 
 def test_signing_in_refuses_a_wrong_password_and_an_unknown_name(db):
-    Voter.objects.create_voter("Sam", "popcorn-before-midnight")
+    Voter.objects.create_voter("Sam", PASSWORD)
 
     assert authenticate(display_name="SAM", password="wrong") is None
-    assert authenticate(display_name="Nobody", password="popcorn-before-midnight") is None
+    assert authenticate(display_name="Nobody", password=PASSWORD) is None
 
 
 def test_the_manager_and_the_database_refuse_a_name_taken_in_another_case_beyond_ascii(db):
@@ -76,14 +72,14 @@ def test_the_manager_and_the_database_refuse_a_name_taken_in_another_case_beyond
 
 
 def test_signing_in_ignores_case_beyond_ascii(db):
-    voter = Voter.objects.create_voter("éva", "popcorn-before-midnight")
+    voter = Voter.objects.create_voter("éva", PASSWORD)
 
-    assert authenticate(display_name="ÉVA", password="popcorn-before-midnight") == voter
+    assert authenticate(display_name="ÉVA", password=PASSWORD) == voter
 
 
 def test_signing_in_answers_to_username_as_django_forms_send_it(db):
-    voter = Voter.objects.create_voter("Sam", "popcorn-before-midnight")
-    form = AuthenticationForm(data={"username": "SAM", "password": "popcorn-before-midnight"})
+    voter = Voter.objects.create_voter("Sam", PASSWORD)
+    form = AuthenticationForm(data={"username": "SAM", "password": PASSWORD})
 
     assert form.is_valid()
     assert form.get_user() == voter

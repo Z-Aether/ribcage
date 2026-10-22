@@ -116,5 +116,5 @@ def upload_a_backup(port, admin_cookies, code, backup_file):
     return fetch(port, "POST", BACKUP_UPLOAD, headers, b"".join(parts))
 
 
-def home_page(port, session):
+def phase_page(port, session):
     return fetch(port, "GET", "/", {"Cookie": session})

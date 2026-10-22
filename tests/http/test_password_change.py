@@ -9,11 +9,6 @@ PASSWORD = "lantern-in-the-kitchen"
 NEW_PASSWORD = "carved-pumpkin-grin"
 
 
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
-
-
 @pytest.fixture
 def voter(db):
     return Voter.objects.create_voter("Ada", PASSWORD)

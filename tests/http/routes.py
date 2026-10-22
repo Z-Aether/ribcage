@@ -57,7 +57,7 @@ def public_pages():
 
 
 def as_a_page(response):
-    """The response to a GET, or the test skipped where the route answers POST alone and so is no page."""
+    """The response to a GET, or the test skipped where the route answers POST alone and so is no page (#76)."""
     if response.status_code == 405:
         pytest.skip("answers POST alone, so is no page")
     return response

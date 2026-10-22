@@ -3,13 +3,24 @@ from datetime import timedelta
 import pytest
 from django.utils import timezone
 
-from tests.http.test_admin_login import sign_in_as_the_admin
+from ribcage.identity.models import Voter
+from tests.http.signing_in import CODE, PASSWORD, sign_in_as_the_admin
 
 
 @pytest.fixture(autouse=True)
 def _static_files_collected(collected_static_files):
     # Every page here renders base.html's static tags; the pure suite never pays for collectstatic (#46).
     pass
+
+
+@pytest.fixture(autouse=True)
+def _fast_hashing(fast_hashing):
+    pass
+
+
+@pytest.fixture(autouse=True)
+def _known_join_code(settings):
+    settings.JOIN_CODE = CODE
 
 
 @pytest.fixture(autouse=True)
@@ -41,3 +52,9 @@ def clock(monkeypatch):
 def admin(client, db):
     sign_in_as_the_admin(client)
     return client
+
+
+@pytest.fixture
+def voters(db):
+    # The Roster tab's voters, the second lower-case so its order is case-blind (#79).
+    return {name: Voter.objects.create_voter(name, PASSWORD) for name in ["Hanna", "ada", "Dani"]}

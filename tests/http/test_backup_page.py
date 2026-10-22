@@ -7,7 +7,7 @@ from django.conf import settings
 from ribcage.identity.models import Voter
 from ribcage.operations import offer
 from ribcage.operations.backup import backup_name, row_counts
-from tests.http.test_admin_login import sign_in_as_the_admin
+from tests.http.signing_in import sign_in_as_the_admin
 
 PAGE = "/console/backup/"
 FILMS = [("Alien",), ("Heat",), ("Ran",)]

@@ -12,7 +12,7 @@ from ribcage.phase.order import PHASES
 from tests.http.routes import VOTER, routes_of
 from tests.http.test_password_reset import NEW_PASSWORD, reset, shown_password
 from tests.http.test_phase import walk_to
-from tests.http.test_registration import PASSWORD
+from tests.http.signing_in import PASSWORD
 
 CHANGE = "/password/"
 WRITE = "/test-only/write/"
@@ -29,11 +29,6 @@ def a_voter_write(request):
 
 # A test-only voter write, open in every phase, so only the forced change can refuse it (#78, #80).
 urlpatterns = [*ribcage.urls.urlpatterns, path("test-only/write/", a_voter_write)]
-
-
-@pytest.fixture(autouse=True)
-def fast_hashing(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 
 @pytest.fixture

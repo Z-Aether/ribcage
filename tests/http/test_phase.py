@@ -125,7 +125,7 @@ def skin(page):
 
 
 @pytest.mark.parametrize("phase", PHASES)
-def test_home_shows_the_page_of_the_phase_walked_forward_to(voter_client, phase):
+def test_the_phase_page_shows_the_page_of_the_phase_walked_forward_to(voter_client, phase):
     walk_to(phase)
 
     response = voter_client.get("/")
@@ -135,7 +135,7 @@ def test_home_shows_the_page_of_the_phase_walked_forward_to(voter_client, phase)
 
 
 @pytest.mark.parametrize("phase", PHASES[:-1])
-def test_home_shows_the_page_of_the_phase_walked_back_to(voter_client, phase):
+def test_the_phase_page_shows_the_page_of_the_phase_walked_back_to(voter_client, phase):
     walk_to(RUN)
     while current() is not phase:
         move(current(), neighbours(current()).back)
@@ -144,7 +144,7 @@ def test_home_shows_the_page_of_the_phase_walked_back_to(voter_client, phase):
     assert heading(voter_client.get("/").text) == PAGE_HEADINGS[phase]
 
 
-def test_home_follows_a_move_forward_then_a_move_back(voter_client):
+def test_the_phase_page_follows_a_move_forward_then_a_move_back(voter_client):
     move(SUGGEST, APPROVE)
     assert heading(voter_client.get("/").text) == PAGE_HEADINGS[APPROVE]
 

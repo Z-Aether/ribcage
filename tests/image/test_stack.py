@@ -12,7 +12,7 @@ from tests.image.client import (
     SIGNED_IN_AS_THE_VOTER,
     download_a_backup,
     fetch,
-    home_page,
+    phase_page,
     session_of,
     sign_in,
     sign_in_as_the_admin,
@@ -95,18 +95,18 @@ def test_the_local_stack_accepts_the_form_post_with_the_pages_csrf_token(local_s
     status, headers, _ = sign_in(port)
 
     assert (status, headers["Location"]) == (302, "/")
-    assert SIGNED_IN_AS_THE_VOTER in home_page(port, session_of(headers))[2]
+    assert SIGNED_IN_AS_THE_VOTER in phase_page(port, session_of(headers))[2]
 
 
 def test_a_written_row_survives_down_then_up(local_stack):
-    # Signing in writes the session row.
+    # Signing in writes the session row (#70).
     session = session_of(sign_in(local_stack.port())[1])
 
     local_stack("down")
     local_stack("up", "--detach", "--wait")
     wait_until_serving(local_stack.port())
 
-    assert SIGNED_IN_AS_THE_VOTER in home_page(local_stack.port(), session)[2]
+    assert SIGNED_IN_AS_THE_VOTER in phase_page(local_stack.port(), session)[2]
 
 
 def test_a_code_made_in_the_apps_container_downloads_its_backup_once_from_the_admin_side(local_stack, tmp_path):
