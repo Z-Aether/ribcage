@@ -3,11 +3,10 @@
 from functools import wraps
 
 from django.db import transaction
-from django.http import HttpResponse
-from django.shortcuts import redirect
 from django.urls import reverse
 
 from ribcage.phase.history import current
+from ribcage.reload import reload_the_tab
 
 # The reads require_safe allows; OPTIONS and TRACE are checked, as CSRF lets them through unchecked (#78).
 READS = {"GET", "HEAD"}
@@ -45,7 +44,4 @@ def account_action(view):
 
 def reload_into_the_current_phase(request):
     """The whole tab onto the phase page: the phase check's refusal, and a polling page's answer to a moved phase (#13, #78)."""
-    if request.headers.get("HX-Request") == "true":
-        # HX-Redirect rather than HX-Refresh: the phase page, not the tab's own address, as a plain post lands (#78).
-        return HttpResponse(headers={"HX-Redirect": reverse("phase_page")})
-    return redirect("phase_page")
+    return reload_the_tab(request, reverse("phase_page"))

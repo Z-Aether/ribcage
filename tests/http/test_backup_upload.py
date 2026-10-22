@@ -244,8 +244,10 @@ def test_without_the_admin_session_the_right_code_gets_the_admin_login_and_keeps
     assert offer.redeem(settings.BACKUP_OFFER_DIRECTORY, code, clock.now, offer.UPLOAD).file is None
 
 
-def test_the_upload_takes_posts_alone(admin):
-    assert admin.get(UPLOAD).status_code == 405
+def test_a_get_at_the_upload_address_goes_to_the_backup_page(admin):
+    response = admin.get(UPLOAD)
+
+    assert (response.status_code, response.headers["Location"]) == (302, "/console/backup/")
 
 
 def test_a_refused_file_leaves_its_working_code_in_the_field(admin, code, tmp_path):

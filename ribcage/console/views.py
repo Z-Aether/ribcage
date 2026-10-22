@@ -111,9 +111,12 @@ def remove_voter(request):
 
 
 @admin_required
-@require_POST
+@require_http_methods(["GET", "HEAD", "POST"])
 @never_cache
 def reset_password(request):
+    # A GET is a reload onto the page a reset's result was shown at, so it lands on the Roster tab (#76, #80).
+    if request.method != "POST":
+        return redirect("console_roster")
     # The password is in this response alone, never a redirect's target, so no reload or address can show it again (#80).
     voter = named_voter(request.POST.get("voter"))
     password = voter and reset(voter, request.POST.get("replacing"))
@@ -170,8 +173,11 @@ def skipped_over_the_cap(request):
 
 
 @admin_required
-@require_POST
+@require_http_methods(["GET", "HEAD", "POST"])
 def upload_backup(request):
+    # A GET is a reload onto the page an upload's result was shown at, so it lands on the backup page (#76, #81).
+    if request.method != "POST":
+        return redirect("console_backup")
     # The page only keeps the file, beside the database; the restore is a step in the sidecar's terminal (#81).
     if skipped_over_the_cap(request):
         return refused_upload(request, offer.TooLarge, request.POST.get("code", ""))

@@ -68,10 +68,11 @@ def test_an_htmx_post_from_a_walled_page_passes_csrf(db, signed_in):
     assert (response.status_code, response.text) == (200, "posted")
 
 
-def test_the_same_htmx_post_without_the_pages_token_is_refused(db):
+def test_the_same_htmx_post_without_the_pages_token_is_refused_and_reloads_the_tab(db):
     browser, walled_page = a_browser(as_a_voter)
     browser.get(walled_page, headers=at_the_host())
 
     response = browser.post("/test-only/htmx-action/", headers=at_the_host(**{"HX-Request": "true", "origin": ORIGIN}))
 
-    assert response.status_code == 403
+    # The tab sent no Referer, so it reloads onto the phase page (#76).
+    assert (response.status_code, response.text, response.headers["HX-Redirect"]) == (200, "", "/")

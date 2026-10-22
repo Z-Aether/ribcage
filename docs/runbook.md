@@ -35,7 +35,7 @@ At the start of each window. Teardown left the stack definition and its environm
      ```
      python -c "import http.client as h; c = h.HTTPConnection('127.0.0.1', 8000); c.request('HEAD', '/login/', headers={'Host': '<subdomain>'}); r = c.getresponse(); print(r.status, r.getheader('Strict-Transport-Security'))"
      ```
-   - **A form POST** through `https://<subdomain>/login/` gets past CSRF: logging in with any name and password answers *The display name or the password is wrong.* A `403` means `CSRF_TRUSTED_ORIGINS` doesn't match the address in the browser.
+   - **A form POST** through `https://<subdomain>/login/` gets past CSRF: logging in with any name and password answers *The display name or the password is wrong.* A `403` means `CSRF_TRUSTED_ORIGINS` doesn't match the address in the browser. A silent return to the empty login form means the CSRF cookie never came back (#76).
    - **The `backup` log** says `Next backup at … 04:00 Europe/Budapest.`
 
 ### Roll back

@@ -237,8 +237,10 @@ def test_a_confirm_that_names_no_password_of_theirs_resets_nothing(admin, voters
     assert stored(dani) == before
 
 
-def test_the_reset_route_answers_post_alone(admin):
-    assert admin.get(RESET).status_code == 405
+def test_a_get_at_the_reset_address_goes_to_the_roster_tab(admin):
+    response = admin.get(RESET)
+
+    assert (response.status_code, response.headers["Location"]) == (302, "/console/roster/")
 
 
 @pytest.mark.parametrize("path", ["/", "/password/"])

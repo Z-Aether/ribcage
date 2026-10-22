@@ -35,6 +35,8 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
+# A stale token reloads the tab, as a login elsewhere leaves it; a cross-site post still gets the 403 (#76).
+CSRF_FAILURE_VIEW = "ribcage.csrf.reload_on_a_stale_token"
 
 INSTALLED_APPS = [
     "django.contrib.auth",
