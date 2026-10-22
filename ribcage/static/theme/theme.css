@@ -316,11 +316,11 @@ body[data-skin="run"] {
 }
 
 /* ---------- Controls ---------- */
-/* A link wearing the primary button look is `<a class="button">`, which keeps the link's role (#75). */
+/* `<a class="button">` keeps the link's role and mirrors Pico's [role=button] paint: recheck it on a Pico upgrade (#75). */
 
 [data-skin] a.button {
   display: inline-block;
-  padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
+  padding-block: var(--pico-form-element-spacing-vertical);
   border: var(--pico-border-width) solid var(--pico-primary-border);
   background-color: var(--pico-primary-background);
   color: var(--pico-primary-inverse);
@@ -358,11 +358,11 @@ body[data-skin="run"] {
 [data-skin="admin"] :is(button:not(.film-card__toggle):not(:disabled), a.button):hover {
   animation: none;
 }
-[data-skin] :is(button, [type="button"], [type="submit"], [type="reset"], [role="button"], a):focus-visible {
+[data-skin] :is(button, [type="button"], [type="submit"], [type="reset"], a):focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
 }
-/* A form of a field or two, such as login, keeps to a column rather than spanning the page. */
+/* A form of a field or two, such as login, keeps to a column rather than spanning the page (#70). */
 [data-skin] form.form--short {
   max-width: 26rem;
 }
@@ -424,7 +424,7 @@ body > header.voter-header {
   font-weight: 700;
   line-height: 1.4;
 }
-/* A small hand-drawn caret in place of Pico's chevron, turning when the menu opens. */
+/* Pico's chevron is too crisp beside the hand-drawn theme, so a caret drawn from two borders replaces it (#73). */
 [data-skin] .voter-menu > summary.voter-menu__name::after {
   content: "";
   display: inline-block;

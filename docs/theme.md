@@ -23,6 +23,7 @@ A page wears the voter skin unless it names admin or run in base.html's `skin` b
   - the **veto**: a dashed red border, `#ff6363`, unlike any score;
   - the **trigger icon**: a lime ring, `#b9e46e`, on a tile's frame;
   - **seen it**: the poster greyed and dimmed. It is the only filter a poster ever gets: every other poster keeps its own colours.
+  - The password confirmation's live line borrows two of them, sea-glass when the passwords match and rose when they differ, since no score shows beside it (#72).
 - **Title card fill:** the one muted fill is `#3b2647`, with the title in `#f6d9b8`.
 - **Type:**
   - Mystery Quest for display: headings, card titles, the wordmark and title cards. It is bouncy and spooky but legible.
