@@ -14,7 +14,7 @@ At the start of each window. Teardown left the stack definition and its environm
    ```
    scripts/release.sh "<what changed>" <n>
    ```
-   It stops at the first failure, naming it. In order, it:
+   It stops at the first failure, naming it, so run it in a Git Bash window that's already open: started from PowerShell or Explorer, it opens a window of its own, which closes at the failure before you can read it (#82). In order, it:
    - **refuses while the registry resolves to a private address.** On the VPN it resolves to a LAN address and the push times out.
    - **builds** `ribcage:<UTC minute>-<commit>`.
    - **runs every suite.** `tests/image` builds its own `ribcage:pytest` from the same clean tree, so it checks this build's Dockerfile and stack.
@@ -90,7 +90,7 @@ Komodo can't download a file, so the admin side serves one, but only for a one-t
    ```
    python manage.py backupcode download
    ```
-   It takes a fresh backup, checks its integrity, and prints three lines:
+   It takes a fresh backup, not one of the sidecar's, so its counts differ from an earlier backup's by whatever was written in between, such as a login's `django_session` row (#82). It checks the backup's integrity and prints three lines:
    - `Offered backup-<UTC date>-<UTC time>.sqlite3:` and every table's row count. Copy the counts into a note for step 4.
    - `Code:` and 32 letters and digits. Copy them.
    - the page's path, `/console/backup/`, and the time the code expires.
@@ -151,7 +151,7 @@ When the database is damaged but the `backups` volume holds a good backup, the s
 
 ### On the host, from a pulled backup
 
-When the host's volumes are lost, the pulled backup goes back in through the admin side, for a one-time code made in the `ribcage` container's *Terminal*: the pull's route in reverse (#81). The page only checks the file and keeps it on the data volume, `/data`, beside the database. The restore stays a step in the `backup` container's *Terminal*, which mounts `/data` too. The code works once, for 10 minutes, and a wrong code voids it. **Not yet run on the host:** the deploy ticket checks it there (#82).
+When the host's volumes are lost, the pulled backup goes back in through the admin side, for a one-time code made in the `ribcage` container's *Terminal*: the pull's route in reverse (#81). The page only checks the file and keeps it on the data volume, `/data`, beside the database. The restore stays a step in the `backup` container's *Terminal*, which mounts `/data` too. The code works once, for 10 minutes, and a wrong code voids it.
 
 1. **Bring up a fresh stack:** *Destroy* the stack, delete both volumes as in Teardown, then *Deploy*. Wait until `https://<subdomain>/` answers. Leave `ribcage` running: it serves the page.
 2. **In Git Bash, note the pulled backup's row counts** for step 7:
