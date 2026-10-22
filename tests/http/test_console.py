@@ -10,7 +10,7 @@ from tests.http.test_phase import walk_to
 from tests.http.test_voter_shell import missing_from_the_footer
 
 SUGGEST, APPROVE, VOTE, PICK, RUN = Phase
-TABS = {"Phase": "/console/phase/", "Films": "/console/films/", "Pick": "/console/pick/", "Roster": "/console/roster/"}
+TABS = {"Phase": "/console/phase/", "Films": "/console/films/", "Pick": "/console/pick/", "Roster": "/console/roster/", "Backup": "/console/backup/"}
 
 
 def header(page):
@@ -53,7 +53,7 @@ def test_each_tab_stays_put_when_the_phase_moves(admin, path):
 
 
 @pytest.mark.parametrize(("label", "path"), TABS.items())
-def test_every_tab_shows_the_four_tabs_in_order_marking_its_own(admin, label, path):
+def test_every_tab_shows_the_five_tabs_in_order_marking_its_own(admin, label, path):
     shown = tabs(admin.get(path).text)
 
     assert [(href, name) for href, _, name in shown] == [(href, name) for name, href in TABS.items()]
@@ -119,3 +119,9 @@ def test_a_tabs_arms_and_the_resets_confirm_sit_in_its_kept_scroll_region(admin,
     page = admin.get(address.format(dani=voters["Dani"].pk)).text
 
     assert re.search(rf'<(?:div|table) class="[^"]+" data-keeps-scroll>.*{re.escape(inside)}', page, re.S)
+
+
+def test_a_backup_uploads_answer_marks_the_backup_tab_active(admin):
+    page = admin.post("/console/backup/upload/", {"code": "x"}).text
+
+    assert [name for _, current, name in tabs(page) if current] == ["Backup"]

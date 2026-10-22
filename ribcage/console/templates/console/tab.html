@@ -1,6 +1,6 @@
 {% extends "console/page.html" %}
 {% load static %}
-{# One of the four tabs, each at its own address (#28). #}
+{# One of the five tabs, each at its own address (#28). #}
 
 {# It acts only on a data-keeps-scroll region, so a tab without one is untouched (#85). #}
 {% block head %}<script src="{% static 'console/keeps-scroll.js' %}" defer></script>{% endblock %}
@@ -13,6 +13,7 @@
   <a href="{% url 'console_films' %}"{% if here == "console_films" %} aria-current="page"{% endif %}>Films</a>
   <a href="{% url 'console_pick' %}"{% if here == "console_pick" %} aria-current="page"{% endif %}>Pick</a>
   <a href="{% url 'console_roster' %}"{% if here == "console_roster" %} aria-current="page"{% endif %}>Roster</a>
+  <a href="{% url 'console_backup' %}"{% if here == "console_backup" %} aria-current="page"{% endif %}>Backup</a>
 </nav>
 {% endwith %}
 {% block tab %}{% endblock %}

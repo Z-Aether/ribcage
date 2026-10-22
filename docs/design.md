@@ -222,7 +222,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 ### Admin console
 
-**Shell:** four tabs (**Phase · Films · Pick · Roster**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*, and the voter side's footer below, since the tabs show TMDB and DTDD data (#76). The console opens on the tab for the current phase and stays put when the phase moves. Back and Forward show a tab as it is now, as on the voter side (#84). There is no Django admin; break-glass is shell access on the host (#16, #28). One page sits outside the tabs: a backup download that serves the file only for a one-time code created in the container's terminal, so the admin password alone never yields the database. The same page takes a backup back onto the host for a restore, for a code made the same way (#68, #81).
+**Shell:** five tabs (**Phase · Films · Pick · Roster · Backup**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*, and the voter side's footer below, since the tabs show TMDB and DTDD data (#76). The console opens on the tab for the current phase and stays put when the phase moves. Back and Forward show a tab as it is now, as on the voter side (#84). There is no Django admin; break-glass is shell access on the host (#16, #28). The Backup tab opens a page that serves a backup download only for a one-time code created in the container's terminal, so the admin password alone never yields the database. The same page takes a backup back onto the host for a restore, for a code made the same way. The tab is a way to reach the page, not a backup button (#68, #81, #86).
 
 | Tab | Contents |
 |---|---|
@@ -230,6 +230,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **Films** (approve screen) | Ledger rows: runtime box, a flag when it differs from TMDB, DTDD status, *Approve* / *Drop*. The title opens the film card inline. One quiet line lists films with stale or unfetched DTDD data. |
 | **Pick** | Budget and anchor in a header above two sub-tabs. **Compare:** knobs, solve and "more", the ledger (timetable row, shortlist, batch), the floor set line, keep, swap, *Use this slate*. **Timetable:** the **track**, ripple mode, arrange utilities, readouts, the selected box, the candidate list for adding films by hand, and the shortlist rows (#22, #24). |
 | **Roster** | View, remove, reset password (shown once, forces a change at next login). A reload of the shown password resets nothing and shows no password, only a fresh confirm (#80). The floor set line is always shown. |
+| **Backup** | The backup page: download or upload for a one-time code made in the container's terminal, never for the admin password alone (#68, #81, #86). |
 
 ### Shared components
 

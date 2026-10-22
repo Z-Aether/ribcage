@@ -95,8 +95,8 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - **Phase:** phase history, the derived phase, one step in either direction. The Phase tab shows the track with dates, both moves with their consequences, and click then inline confirm (#15, #28).
 - **Phase check:** one server-side mechanism that refuses a post from outside its window and reloads the tab into the current phase. Polling pages reload the same way, and no voter page polls before RUN (#34, #60).
 - **Voter shell:** header (phase page, name menu; public pages the wordmark alone, #83), footer (attributions, abuse `mailto:`, privacy policy), Welcome shown once, placeholder pages for all five phases (#23, #27, #37), and Back and Forward showing every page as it is now (#84). Welcome's *Set up my warnings* exit waits for M5 (#60).
-- **Admin shell:** the four tabs, opening on the current phase's tab, with the *Voter side ↗ · signed in there as …* line (#28), and Back and Forward showing every tab as it is now (#84).
-- **Backup download and upload:** a page outside the tabs that serves a backup for a one-time code created in the container's terminal, and takes one back onto the host the same way for a restore, replacing the runbook's copy-paste routes in both directions (#54, #55, #68, #81).
+- **Admin shell:** the five tabs, Backup the fifth after Roster (#86), opening on the current phase's tab, with the *Voter side ↗ · signed in there as …* line (#28), and Back and Forward showing every tab as it is now (#84).
+- **Backup download and upload:** the Backup tab, a page that serves a backup for a one-time code created in the container's terminal, and takes one back onto the host the same way for a restore, replacing the runbook's copy-paste routes in both directions (#54, #55, #68, #81, #86).
 
 **Deployable state:** people can register and log in, the admin can remove people and move phases, and each phase shows an empty page.
 

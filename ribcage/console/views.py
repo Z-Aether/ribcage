@@ -147,13 +147,14 @@ UPLOAD_REFUSALS = {
 
 
 def render_backup(request, **context):
-    return render(request, "console/backup.html", {"form": BackupCodeForm(), "upload_form": BackupUploadForm(), **context})
+    # An upload's answer is at the upload's address, so name the tab it belongs to (#86).
+    return render_tab(request, "console/backup.html", {"form": BackupCodeForm(), "upload_form": BackupUploadForm(), "tab": "console_backup", **context})
 
 
 @admin_required
 @require_http_methods(["GET", "HEAD", "POST"])
 def backup_page(request):
-    # Outside the tabs: the admin password alone never yields the database, only with a code from the shell (#54, #68).
+    # A tab, yet only a code from the shell yields the database, never the admin password alone (#54, #68, #86).
     form = BackupCodeForm(request.POST if request.method == "POST" else None)
     if not form.is_valid():
         offer.void_if_expired(settings.BACKUP_OFFER_DIRECTORY, timezone.now())

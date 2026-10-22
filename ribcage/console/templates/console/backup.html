@@ -1,9 +1,9 @@
-{% extends "console/page.html" %}
-{# An admin page outside the tabs, linked from none of them (#68). #}
+{% extends "console/tab.html" %}
+{# The Backup tab: the page for a backup's one-time code, which the tab only reaches (#68, #86). #}
 
 {% block title %}Backup · Admin · Ribcage{% endblock %}
 
-{% block content %}
+{% block tab %}
   <h1>Backup</h1>
   <h2>Download a backup</h2>
   <p>Make a code in the <code>ribcage</code> container's terminal with <code>python manage.py backupcode download</code>, then enter it here. It works once, for 10 minutes, and a wrong code voids it.</p>

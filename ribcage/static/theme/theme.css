@@ -493,7 +493,7 @@ body > header.voter-header {
   animation: none;
 }
 
-/* ---------- Console shell: the admin header and the four tabs (#28, #37, #76) ---------- */
+/* ---------- Console shell: the admin header and the five tabs (#28, #37, #76) ---------- */
 
 body > header.console-header {
   display: flex;
@@ -555,6 +555,15 @@ body > header.console-header {
   color: var(--ink-muted);
   font-weight: 700;
   text-decoration: none;
+}
+/* Five tabs stay on one row at 390 px (#86). */
+@media (max-width: 30rem) {
+  [data-skin] nav.console-tabs {
+    gap: 0;
+  }
+  [data-skin] nav.console-tabs a {
+    padding-inline: 0.55rem;
+  }
 }
 [data-skin] nav.console-tabs a:hover {
   color: var(--ink);

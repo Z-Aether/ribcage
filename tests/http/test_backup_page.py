@@ -180,10 +180,10 @@ def test_without_the_admin_session_the_right_code_gets_the_admin_login_and_leave
     assert offer_is_still_there(code, clock)
 
 
-def test_the_page_is_a_download_form_and_an_upload_form_under_no_tab(admin):
+def test_the_page_is_a_download_form_and_an_upload_form_under_the_backup_tab(admin):
     page = admin.get(PAGE).text
 
-    assert "console-tabs" not in page
+    assert page.count('aria-current="page">Backup</a>') == 1
     assert page.count("<form") == 3  # the download's, the upload's, and the header's log out
     assert '<form class="form--short" method="post" action="/console/backup/">' in page
     assert '<form class="form--short" method="post" action="/console/backup/upload/" enctype="multipart/form-data">' in page
@@ -202,9 +202,9 @@ def test_an_upload_code_entered_to_download_gets_no_file_and_voids_it(admin, clo
         offer.redeem(settings.BACKUP_OFFER_DIRECTORY, code, clock.now, offer.UPLOAD)
 
 
-def test_no_tab_links_to_the_page(admin):
-    for tab in ["/console/phase/", "/console/films/", "/console/pick/", "/console/roster/"]:
-        assert PAGE not in admin.get(tab).text
+def test_every_tab_links_to_the_page(admin):
+    for tab in ["/console/phase/", "/console/films/", "/console/pick/", "/console/roster/", PAGE]:
+        assert f'<a href="{PAGE}"' in admin.get(tab).text
 
 
 def test_signing_in_as_the_admin_leads_back_to_the_page(client, db):
