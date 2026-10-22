@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import shutil
@@ -220,6 +221,19 @@ def test_a_new_offer_voids_the_last_and_deletes_its_file(live_database, tmp_path
         offer.redeem(directory, first_code, TAKEN_AT + timedelta(minutes=2), offer.DOWNLOAD)
 
 
+def test_a_record_naming_a_file_outside_the_offer_reads_as_no_offer(live_database, tmp_path):
+    directory = tmp_path / "backup-offer"
+    code, _ = offer.offer_download(live_database, directory, TAKEN_AT)
+    record = json.loads((directory / offer.RECORD).read_text(encoding="utf-8"))
+    (directory / offer.RECORD).write_text(json.dumps({**record, "file": "../data/db.sqlite3"}), encoding="utf-8")
+
+    offer.void_if_expired(directory, TAKEN_AT + timedelta(days=1))
+    with pytest.raises(offer.NoOffer):
+        offer.redeem(directory, code, TAKEN_AT + timedelta(minutes=1), offer.DOWNLOAD)
+
+    assert live_database.exists()
+
+
 def test_with_no_database_the_command_fails_and_offers_nothing(tmp_path):
     missing = tmp_path / "data" / "db.sqlite3"
 
@@ -286,7 +300,7 @@ def test_an_upload_lands_beside_the_live_database_under_a_backups_name_and_leave
 
 def test_the_sidecar_restores_an_uploaded_backup_from_the_data_volume_and_its_counts_match(live_database, seeded_template, backups, tmp_path):
     pulled = take_backup(live_database, backups, TAKEN_AT)
-    # The fresh stack's database, migrated and empty of the pulled backup's later writes.
+    # The fresh stack's database, migrated and empty of the pulled backup's later writes (#81).
     data = tmp_path / "fresh-data"
     data.mkdir()
     fresh = data / "db.sqlite3"

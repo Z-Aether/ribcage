@@ -138,7 +138,7 @@ def test_a_backup_uploaded_from_the_admin_side_restores_in_the_sidecar_from_the_
     offering = local_stack("exec", "ribcage", "python", "manage.py", "backupcode", "download")
     pulled = tmp_path / "pulled.sqlite3"
     pulled.write_bytes(download_a_backup(local_stack.port(), admin, code_in(offering))[2])
-    # A table the stack lacks marks the restore, and its size, past Django's in-memory limit, takes a temporary file.
+    # A table the stack lacks marks the restore; its size, past Django's in-memory limit, takes a temporary file (#81).
     with closing(sqlite3.connect(pulled)) as connection:
         connection.execute("CREATE TABLE ballast (b BLOB)")
         connection.execute("INSERT INTO ballast VALUES (randomblob(3 * 1024 * 1024))")

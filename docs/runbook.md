@@ -149,12 +149,12 @@ When the database is damaged but the `backups` volume holds a good backup, the s
    ```
 3. **Start the `ribcage` service,** then run `python -m ribcage.operations.backup counts` in the same terminal and compare with the counts `restore` printed.
 
-### On the host, from a pulled copy
+### On the host, from a pulled backup
 
-When the host's volumes are lost, the pulled copy goes back in through the admin side, for a one-time code made in the `ribcage` container's *Terminal*: the pull's route in reverse (#81). The page only checks the file and keeps it on the data volume, `/data`, beside the database. The restore stays a step in the `backup` container's *Terminal*, which mounts `/data` too. The code works once, for 10 minutes, and a wrong code voids it. **Not yet run on the host:** the deploy ticket checks it there (#82).
+When the host's volumes are lost, the pulled backup goes back in through the admin side, for a one-time code made in the `ribcage` container's *Terminal*: the pull's route in reverse (#81). The page only checks the file and keeps it on the data volume, `/data`, beside the database. The restore stays a step in the `backup` container's *Terminal*, which mounts `/data` too. The code works once, for 10 minutes, and a wrong code voids it. **Not yet run on the host:** the deploy ticket checks it there (#82).
 
 1. **Bring up a fresh stack:** *Destroy* the stack, delete both volumes as in Teardown, then *Deploy*. Wait until `https://<subdomain>/` answers. Leave `ribcage` running: it serves the page.
-2. **In Git Bash, note the pulled copy's row counts** for step 7:
+2. **In Git Bash, note the pulled backup's row counts** for step 7:
    ```
    .venv/Scripts/python -m ribcage.operations.backup counts private/backups/<name>
    ```
@@ -165,8 +165,8 @@ When the host's volumes are lost, the pulled copy goes back in through the admin
    It prints `Code:` and 32 letters and digits, then the page's path and the time the code expires. Copy the code. Running the command again, for either purpose, replaces it.
    - **If it says to run it as the image's user,** the terminal is root: open it without choosing a user.
 4. **Open `https://<subdomain>/console/backup/`** and log in as the admin if it asks. Under *Upload a backup*, paste the code, choose `private/backups/<name>`, and press *Upload*.
-   - **The page answers** `Kept backup-<UTC date>-<UTC time>.sqlite3:` and the file's row counts, which match step 2's, then the restore command for step 6. The kept name is the time of the upload, not the pulled copy's name: copy it.
-   - **If it says the file is over 25 MB, is not an SQLite database, or failed the integrity check,** nothing was kept and the code wasn't tried: choose the right file and press *Upload* again with the same code. The cap is several times a marathon's database, which is a few MB, so a file over it is the wrong file; it stays low enough to arrive within the app server's 30-second limit over a 10 Mbit/s upload.
+   - **The page answers** `Kept backup-<UTC date>-<UTC time>.sqlite3:` and the file's row counts, which match step 2's, then the restore command for step 6. The kept name is the time of the upload, not the pulled backup's name: copy it. If you lose it, `ls /data` in the `backup` container's *Terminal* shows it; reloading the page only resubmits the used code.
+   - **If it says the file is over 25 MB, is not an SQLite database, or failed the integrity check,** nothing was kept and the code wasn't tried: choose the right file and press *Upload* again with the same code. The cap is several times a marathon's database, which is a few MB, so a file over it is the wrong file; it stays low enough to arrive within the app server's 30-second limit at 10 Mbit/s even if the proxy passes the upload on unbuffered.
    - **If it says the code is wrong, expired or made for a download, or that no code is on offer,** nothing was kept and the code is void: go back to step 3.
 5. **Stop the `ribcage` service,** leaving `backup` running, so nothing writes while the database is replaced.
 6. **Restore it** in the `backup` container's *Terminal*, with the kept name from step 4. `--backups /data` makes the sidecar read it from the data volume instead of its own. It checks the file's integrity again, writes it over the database through SQLite, and prints the restored row counts.
@@ -177,7 +177,7 @@ When the host's volumes are lost, the pulled copy goes back in through the admin
    ```
    python -m ribcage.operations.backup counts
    ```
-8. **Delete the uploaded file** in the same terminal. It is a whole copy of the database, so it doesn't wait for teardown. Afterwards `ls` lists only `backup-offer`, `db.sqlite3`, `db.sqlite3-shm` and `db.sqlite3-wal`. The `*` also takes the `-wal` and `-shm` files that restoring a WAL-mode upload leaves.
+8. **Delete the uploaded file** in the same terminal. It holds the whole database, so it doesn't wait for teardown. Afterwards `ls` lists only `backup-offer`, `db.sqlite3`, `db.sqlite3-shm` and `db.sqlite3-wal`. The `*` also takes the `-wal` and `-shm` files that restoring a WAL-mode upload leaves.
    ```
    rm /data/<kept name>*
    ls /data

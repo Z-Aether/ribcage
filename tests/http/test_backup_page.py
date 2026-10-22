@@ -38,7 +38,7 @@ def is_the_file(response):
 
 
 def content_of(response):
-    # Read to the end, as a browser would, which closes the response.
+    # Read to the end, as a browser would, which closes the response (#68).
     return b"".join(response.streaming_content)
 
 

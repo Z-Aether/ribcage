@@ -57,18 +57,26 @@ def cookie_named(headers, name):
 
 def a_page_with_its_csrf_token(port, path=LOGIN):
     status, headers, page = fetch(port, "GET", path)
-    token = re.search(r'name="csrfmiddlewaretoken" value="([^"]+)"', page)[1]
-    return cookie_named(headers, "csrftoken"), token
+    return cookie_named(headers, "csrftoken"), csrf_token_in(page)
 
 
-def post_form(port, fields, cookie=None, extra_headers=None, path=LOGIN, fetcher=fetch):
+def csrf_token_in(page):
+    return re.search(r'name="csrfmiddlewaretoken" value="([^"]+)"', page)[1]
+
+
+def form_post(port, fields, cookie=None, extra_headers=None):
+    """The headers and body of a form's POST."""
     body = "&".join(f"{name}={value}" for name, value in fields.items())
     # As through the proxy, where the page is https: the image runs with DEBUG off and takes every request as HTTPS (#54).
     headers = {"Content-Type": "application/x-www-form-urlencoded", "Origin": f"https://127.0.0.1:{port}"}
     headers.update(extra_headers or {})
     if cookie:
         headers["Cookie"] = cookie
-    return fetcher(port, "POST", path, headers, body)
+    return headers, body
+
+
+def post_form(port, fields, cookie=None, extra_headers=None, path=LOGIN):
+    return fetch(port, "POST", path, *form_post(port, fields, cookie, extra_headers))
 
 
 def sign_in(port, extra_headers=None):
@@ -90,12 +98,12 @@ def sign_in_as_the_admin(port, password):
 
 def backup_pages_csrf_token(port, admin_cookies):
     _, _, page = fetch(port, "GET", BACKUP_PAGE, {"Cookie": admin_cookies})
-    return re.search(r'name="csrfmiddlewaretoken" value="([^"]+)"', page)[1]
+    return csrf_token_in(page)
 
 
 def download_a_backup(port, admin_cookies, code):
     token = backup_pages_csrf_token(port, admin_cookies)
-    return post_form(port, {"csrfmiddlewaretoken": token, "code": code}, admin_cookies, path=BACKUP_PAGE, fetcher=fetch_bytes)
+    return fetch_bytes(port, "POST", BACKUP_PAGE, *form_post(port, {"csrfmiddlewaretoken": token, "code": code}, admin_cookies))
 
 
 def upload_a_backup(port, admin_cookies, code, backup_file):

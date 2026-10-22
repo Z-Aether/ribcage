@@ -1,6 +1,5 @@
 import os
 import sqlite3
-from datetime import UTC, datetime
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
@@ -20,10 +19,12 @@ class Command(BaseCommand):
     def handle(self, *args, purpose, **options):
         if getattr(os, "geteuid", lambda: None)() == 0:
             raise CommandError("Run this as the image's user, not root: a root-owned offer can't be served or replaced (#68).")
-        now = datetime.now(UTC)
-        code = offer.offer_upload(settings.BACKUP_OFFER_DIRECTORY, now) if purpose == offer.UPLOAD else self.offer_download(now)
+        now = timezone.now()
+        if purpose == offer.UPLOAD:
+            code, with_what = offer.offer_upload(settings.BACKUP_OFFER_DIRECTORY, now), " with the backup"
+        else:
+            code, with_what = self.offer_download(now), ""
         until = timezone.localtime(now + offer.LIFETIME)
-        with_what = " with the backup" if purpose == offer.UPLOAD else ""
         self.stdout.write(f"Code: {code}")
         self.stdout.write(
             f"Enter it at {reverse('console_backup')}{with_what} by {until:%H:%M} {settings.TIME_ZONE}. It works once, and a wrong code voids it."

@@ -23,7 +23,7 @@ def a_database(path, films=FILMS):
 
 
 def a_database_failing_its_integrity_check(path):
-    # Its index still lists a film its table no longer holds.
+    # Its index still lists a film its table no longer holds (#81).
     a_database(path)
     with closing(sqlite3.connect(path)) as connection:
         connection.execute("CREATE INDEX by_title ON films (title)")
@@ -175,7 +175,6 @@ def test_a_file_that_is_not_an_sqlite_database_is_deleted(admin, code, tmp_path)
 
 
 def test_an_empty_file_is_refused_as_empty(admin, code, tmp_path):
-    # Else it would pass the integrity check as an empty database.
     empty = tmp_path / "empty.sqlite3"
     empty.write_bytes(b"")
 
@@ -196,7 +195,7 @@ def test_a_database_in_wal_mode_is_kept_with_nothing_beside_it(admin, code, pull
 
 @pytest.fixture
 def cap_of_a_few_pages(monkeypatch, pulled):
-    # The pulled file exactly fills the cap, so one byte more is over it.
+    # The pulled file exactly fills the cap, so one byte more is over it (#81).
     monkeypatch.setattr(offer, "UPLOAD_CAP_BYTES", pulled.stat().st_size)
 
 

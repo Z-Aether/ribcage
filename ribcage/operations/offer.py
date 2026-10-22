@@ -1,5 +1,4 @@
-# The backup page's offers, for one-time codes made in the ribcage container's terminal (#68, #81).
-# Plain Python like the sidecar's module: the command and the page hand it their paths and clock.
+# The backup page's offers, plain Python handed its paths and clock, for codes made in the ribcage container (#68, #81).
 import hashlib
 import io
 import json
@@ -11,14 +10,14 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from ribcage.operations.backup import PARTIAL_SUFFIX, backup_name, fails_integrity_check, table_counts, take_backup
+from ribcage.operations.backup import PARTIAL_SUFFIX, backup_name, fails_integrity_check, is_backup, table_counts, take_backup
 
 DOWNLOAD = "download"
 UPLOAD = "upload"
 LIFETIME = timedelta(minutes=10)
 # The code's record sits beside the offered file, outside the database, so no backup ever holds it (#68).
 RECORD = "code.json"
-# Several times a marathon's few MB, yet inside gunicorn's 30-second timeout over a 10 Mbit/s upstream (#81).
+# Several times a marathon's few MB, and inside gunicorn's 30-second timeout even unbuffered at 10 Mbit/s (#81).
 UPLOAD_CAP_MB = 25
 UPLOAD_CAP_BYTES = UPLOAD_CAP_MB * 1024 * 1024
 SQLITE_HEADER = b"SQLite format 3\x00"
@@ -67,20 +66,20 @@ class Offer:
 
 
 def digest(code):
-    # A code of 128 random bits needs no slow hash: there is nothing to brute-force in ten minutes and one guess.
+    # 128 random bits need no slow hash: there is nothing to brute-force in ten minutes and one guess (#68).
     return hashlib.sha256(code.encode()).hexdigest()
 
 
 def offer_download(database, directory, now):
     """Take a fresh backup into the directory as its one offer, voiding any earlier one, and return the code and the file."""
-    withdraw(directory)
+    void_any_offer(directory)
     backup_file = take_backup(database, directory, now)
     return new_code(directory, DOWNLOAD, now, backup_file.name), backup_file
 
 
 def offer_upload(directory, now):
     """Void any earlier offer and return a code that accepts one upload."""
-    withdraw(directory)
+    void_any_offer(directory)
     return new_code(directory, UPLOAD, now)
 
 
@@ -90,10 +89,10 @@ def new_code(directory, purpose, now, file=None):
     return code
 
 
-def withdraw(directory):
+def void_any_offer(directory):
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
-    # The record goes first, so no post can claim an offer whose file is already gone.
+    # The record goes first, so no post can claim an offer whose file is already gone (#68).
     (directory / RECORD).unlink(missing_ok=True)
     for path in directory.iterdir():
         path.unlink(missing_ok=True)
@@ -105,8 +104,20 @@ def write_record(directory, record):
     os.replace(partial, Path(directory) / RECORD)
 
 
-def expires(record):
-    return datetime.fromisoformat(record["expires"])
+def read_record(path):
+    """The record at `path`, or NoOffer if there is none or it names a file other than a backup in its own directory."""
+    try:
+        record = json.loads(Path(path).read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        raise NoOffer from None
+    # Only the shell writes the record, yet its file name still never reaches outside the directory (#68).
+    if record["file"] is not None and not is_backup(record["file"]):
+        raise NoOffer
+    return record
+
+
+def expired(record, now):
+    return now >= datetime.fromisoformat(record["expires"])
 
 
 def offered_file(directory, record):
@@ -120,10 +131,10 @@ def delete_offered_file(directory, record):
 
 def void_if_expired(directory, now):
     try:
-        record = json.loads((Path(directory) / RECORD).read_text(encoding="utf-8"))
-    except FileNotFoundError:
+        record = read_record(Path(directory) / RECORD)
+    except NoOffer:
         return
-    if now >= expires(record):
+    if expired(record, now):
         void(directory, record)
 
 
@@ -141,13 +152,13 @@ def claim(directory):
     except FileNotFoundError:
         raise NoOffer from None
     try:
-        return json.loads(claimed.read_text(encoding="utf-8"))
+        return read_record(claimed)
     finally:
         claimed.unlink(missing_ok=True)
 
 
 def refusal(record, code, now, purpose):
-    if now >= expires(record):
+    if expired(record, now):
         return Expired
     if not secrets.compare_digest(digest(code), record["digest"]):
         return WrongCode
@@ -168,7 +179,7 @@ def redeem(directory, code, now, purpose):
 
 def accept_upload(directory, code, chunks, backups, now):
     """Keep an uploaded backup in backups for the sidecar to restore, once it passes its checks and the code redeems."""
-    # Named as the sidecar names its own, and only once kept, so a failed or half-written upload never looks like a backup.
+    # Named as the sidecar names its own once kept, so a failed or half-written upload never looks like a backup (#81).
     backup_file = Path(backups) / backup_name(now)
     # Its own partial per upload, so two in one second can't delete each other's (#81).
     partial = backup_file.with_name(f"{backup_file.name}.{secrets.token_hex(4)}{PARTIAL_SUFFIX}")
@@ -195,7 +206,7 @@ def write_capped(chunks, path):
 def checked(path):
     """The row counts of the file, if it is an SQLite database that passes its integrity check."""
     with open(path, "rb") as file:
-        # An empty file would pass the integrity check as an empty database.
+        # An empty file would pass the integrity check as an empty database (#81).
         if file.read(len(SQLITE_HEADER)) != SQLITE_HEADER:
             raise NotADatabase
     # Immutable, so a database uploaded in WAL mode leaves no -wal or -shm file beside it (#81).

@@ -143,7 +143,7 @@ UPLOAD_REFUSALS = {
 }
 
 
-def backup(request, **context):
+def render_backup(request, **context):
     return render(request, "console/backup.html", {"form": BackupCodeForm(), "upload_form": BackupUploadForm(), **context})
 
 
@@ -154,11 +154,11 @@ def backup_page(request):
     form = BackupCodeForm(request.POST if request.method == "POST" else None)
     if not form.is_valid():
         offer.void_if_expired(settings.BACKUP_OFFER_DIRECTORY, timezone.now())
-        return backup(request, form=form)
+        return render_backup(request, form=form)
     try:
         redeemed = offer.redeem(settings.BACKUP_OFFER_DIRECTORY, form.cleaned_data["code"], timezone.now(), offer.DOWNLOAD)
     except offer.Refused as refusal:
-        return backup(request, refusal=REFUSALS[type(refusal)])
+        return render_backup(request, refusal=REFUSALS[type(refusal)])
     response = FileResponse(offer.opened(redeemed), as_attachment=True, filename=redeemed.file.name, content_type="application/octet-stream")
     response["Cache-Control"] = "no-store"
     return response
@@ -177,7 +177,7 @@ def upload_backup(request):
         return refused_upload(request, offer.TooLarge, request.POST.get("code", ""))
     form = BackupUploadForm(request.POST, request.FILES)
     if not form.is_valid():
-        return backup(request, upload_form=form)
+        return render_backup(request, upload_form=form)
     try:
         kept, counts = offer.accept_upload(
             settings.BACKUP_OFFER_DIRECTORY,
@@ -188,10 +188,10 @@ def upload_backup(request):
         )
     except (offer.Refused, offer.Unkept) as refusal:
         return refused_upload(request, type(refusal), form.cleaned_data["code"])
-    return backup(request, kept=kept.name, kept_counts=describe(counts), upload_directory=settings.BACKUP_UPLOAD_DIRECTORY)
+    return render_backup(request, kept=kept.name, kept_counts=describe(counts), upload_directory=settings.BACKUP_UPLOAD_DIRECTORY)
 
 
 def refused_upload(request, refusal, code):
     # A file refused for what it is never tries the code, so it stays in the field for the right file (#81).
     still_works = issubclass(refusal, offer.Unkept)
-    return backup(request, upload_refusal=UPLOAD_REFUSALS[refusal], upload_form=BackupUploadForm(initial={"code": code if still_works else ""}))
+    return render_backup(request, upload_refusal=UPLOAD_REFUSALS[refusal], upload_form=BackupUploadForm(initial={"code": code if still_works else ""}))
