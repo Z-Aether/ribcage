@@ -8,8 +8,9 @@ REPO_ROOT = Path(ribcage.__file__).parents[1]
 CONTEXT_COPY = "FROM scratch\nCOPY . /\n"
 
 
+# UTF-8, since Windows would decode docker's output as cp1252.
 def run_docker(*arguments, input=None, timeout=600, env=None):
-    return subprocess.run(["docker", *arguments], input=input, capture_output=True, text=True, timeout=timeout, env=env)
+    return subprocess.run(["docker", *arguments], input=input, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout, env=env)
 
 
 def docker(*arguments, input=None, timeout=600, env=None):

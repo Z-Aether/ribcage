@@ -8,8 +8,10 @@ import pytest
 from tests.image.client import (
     CREATE_THE_VOTER,
     LOGIN,
+    PASSWORD,
     SIGNED_IN_AS_THE_VOTER,
     VOTER,
+    a_page_with_its_csrf_token,
     fetch,
     phase_page,
     post_form,
@@ -130,10 +132,21 @@ def test_the_form_post_with_the_pages_csrf_token_is_accepted(container):
     assert SIGNED_IN_AS_THE_VOTER in phase_page(port, session_of(headers))[2]
 
 
-def test_a_form_post_without_a_csrf_token_is_refused(container):
+def test_a_form_post_without_a_csrf_token_reloads_the_tab_without_signing_in(container):
     _, port = container
 
-    assert post_form(port, {"username": VOTER, "password": "Forged"})[0] == 403
+    status, headers, _ = post_form(port, {"username": VOTER, "password": PASSWORD})
+
+    assert (status, headers["Location"]) == (302, "/")
+    assert not any(cookie.startswith("sessionid=") for cookie in headers.get_all("Set-Cookie") or [])
+
+
+def test_a_cross_site_form_post_is_refused(container):
+    _, port = container
+    cookie, token = a_page_with_its_csrf_token(port)
+    fields = {"csrfmiddlewaretoken": token, "username": VOTER, "password": PASSWORD}
+
+    assert post_form(port, fields, cookie, {"Origin": "https://elsewhere.example"})[0] == 403
 
 
 def test_the_privacy_policy_is_rendered_from_the_file_inside_the_image(container):
