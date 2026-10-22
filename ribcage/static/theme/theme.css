@@ -564,6 +564,33 @@ body > header.console-header {
   border-bottom-color: var(--accent);
 }
 
+/* ---------- Click, then an inline confirm: the console's one shape for an act that asks first (#28, #85) ---------- */
+
+/* A confirm that makes the page scroll mustn't shift it sideways, or Cancel would miss the arm's place. */
+html:has(> body[data-skin="admin"]) {
+  scrollbar-gutter: stable;
+}
+/* Cancel takes the clicked arm's place at the arm's size: an invisible copy of the arm's label widens it. */
+[data-skin] a.button.console-cancel {
+  display: inline-grid;
+  justify-items: center;
+}
+.console-cancel > span {
+  grid-area: 1 / 1;
+}
+.console-cancel__keep,
+[data-skin] a.button.console-kept {
+  visibility: hidden;
+}
+/* The act's button stands apart, at the start of a line of its own after what the act does. */
+[data-skin] p.console-confirm {
+  margin: 0.75rem 0 0;
+}
+[data-skin] .console-confirm button {
+  width: auto;
+  margin: 0;
+}
+
 /* ---------- The Phase tab: the five phases, both moves and the status lines (#28, #77) ---------- */
 
 [data-skin] .phase-badge {
@@ -647,23 +674,30 @@ body > header.console-header {
 [data-skin] .phase-move.is-armed {
   border-color: var(--ink-muted);
 }
-[data-skin] .phase-move h2 {
-  margin: 0 0 0.4rem;
-  font-size: 1.05em;
-}
-[data-skin] .phase-move p {
-  margin: 0 0 0.6rem;
-}
-[data-skin] .phase-move :is(form, .phase-move__actions) {
+/* The heading and its arm share the top line; the arm keeps the far end even when the line wraps. */
+[data-skin] .phase-move__head {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem 1rem;
+  margin-bottom: 0.4rem;
+}
+[data-skin] .phase-move h2 {
+  margin: 0;
+  font-size: 1.05em;
+}
+[data-skin] .phase-move__head a.button {
+  margin: 0 0 0 auto;
+}
+[data-skin] .phase-move > p {
+  margin: 0 0 0.6rem;
+}
+[data-skin] .phase-move form {
   margin: 0;
 }
-[data-skin] .phase-move form :is(a.button, button) {
-  width: auto;
-  margin: 0;
+/* A move's few consequences leave its confirm close under Cancel, so it keeps more room above it (#85). */
+[data-skin] .phase-move p.console-confirm {
+  margin-top: 1.25rem;
 }
 
 [data-skin] ul.console-status {
@@ -703,21 +737,16 @@ body > header.console-header {
 [data-skin] .ledger.roster .ledger__detail td {
   padding: 0.2rem 0.6rem 0.75rem;
 }
-[data-skin] :is(.roster-confirm, .roster-reset) :is(p, ul) {
+[data-skin] :is(.roster-confirm, .roster-reset) :where(p, ul) {
   margin: 0 0 0.5rem;
 }
 [data-skin] .roster-confirm li {
   margin: 0;
 }
-[data-skin] :is(.roster-confirm, .roster-reset) :is(.roster-confirm__actions, .roster-reset__actions) {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
+[data-skin] .roster-reset .roster-reset__actions {
   margin: 0.75rem 0 0;
 }
-[data-skin] :is(.roster-confirm__actions, .roster-reset__actions) :is(a.button, button) {
-  width: auto;
+[data-skin] .roster-reset__actions a.button {
   margin: 0;
 }
 [data-skin] .roster .roster__actions a.button + a.button {

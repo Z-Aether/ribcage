@@ -1,6 +1,7 @@
 import re
 
 import pytest
+from django.templatetags.static import static
 
 from ribcage.identity.models import Voter
 from ribcage.phase.history import move
@@ -99,3 +100,22 @@ def test_the_header_ends_with_a_log_out_that_posts_to_the_admin_log_out(admin):
 
 def test_the_wordmark_leads_back_to_the_console(admin):
     assert '<a class="wordmark console-header__wordmark" href="/console/">Ribcage</a>' in header(admin.get("/console/films/").text)
+
+
+@pytest.mark.parametrize("tab", TABS)
+def test_every_tab_loads_the_script_that_keeps_its_scroll(admin, tab):
+    # Read at test time: with DEBUG off the collected static files' names carry their hashes (#46).
+    assert f'<script src="{static("console/keeps-scroll.js")}" defer></script>' in admin.get(TABS[tab]).text
+
+
+@pytest.mark.parametrize(("address", "inside"), [
+    ("/console/phase/", "?from=VOTE&amp;arm=PICK"),
+    ("/console/roster/", "?remove="),
+    ("/console/roster/?reset={dani}", '<form method="post" action="/console/roster/reset/"'),
+])
+def test_a_tabs_arms_and_the_resets_confirm_sit_in_its_kept_scroll_region(admin, voters, address, inside):
+    walk_to(VOTE)
+
+    page = admin.get(address.format(dani=voters["Dani"].pk)).text
+
+    assert re.search(rf'<(?:div|table) class="[^"]+" data-keeps-scroll>.*{re.escape(inside)}', page, re.S)

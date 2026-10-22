@@ -1,5 +1,9 @@
 {% extends "console/page.html" %}
+{% load static %}
 {# One of the four tabs, each at its own address (#28). #}
+
+{# It acts only on a data-keeps-scroll region, so a tab without one is untouched (#85). #}
+{% block head %}<script src="{% static 'console/keeps-scroll.js' %}" defer></script>{% endblock %}
 
 {% block content %}
 {# A tab's post that answers with the tab names it in `tab`, as the reset's shown password does (#80). #}

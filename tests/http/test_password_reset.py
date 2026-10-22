@@ -9,7 +9,7 @@ from ribcage.identity import reset as reset_module
 from ribcage.identity.models import Voter
 from ribcage.identity.removal import remove
 from tests.http.signing_in import PASSWORD
-from tests.http.test_roster_tab import TAB, act_links, confirm, signed_in, text
+from tests.http.test_roster_tab import TAB, act_links, actions, confirm, signed_in, text
 
 RESET = "/console/roster/reset/"
 NEW_PASSWORD = "carved-pumpkin-grin"
@@ -65,6 +65,14 @@ def test_the_armed_row_gives_up_both_its_arms_and_the_others_keep_theirs(admin, 
 
     assert act_links(page, "Reset password…") == [f"{TAB}?reset={voters[name].pk}" for name in ["ada", "Hanna"]]
     assert f"?remove={voters['Dani'].pk}" not in page
+
+
+def test_an_armed_reset_puts_cancel_in_the_reset_arms_place_and_its_confirm_in_the_row_below(admin, voters):
+    page = arm(admin, voters["Dani"]).text
+
+    assert actions(page, voters["Dani"]) == [("cancel", "Reset password…"), ("kept", "Remove…")]
+    armed_row = re.search(rf'<tr data-voter="{voters["Dani"].pk}" class="is-armed">(.*?)</tr>', page, re.S)[1]
+    assert "<button" not in armed_row
 
 
 @pytest.mark.parametrize("arming", ["", "x", "-1", "99999999999999999999999"])

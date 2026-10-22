@@ -15,24 +15,29 @@
     {% endfor %}
   </ol>
 
-  <div class="phase-moves">
+  {% url 'console_phase' as tab_address %}
+  <div class="phase-moves" data-keeps-scroll>
     {% for move in moves %}
       <section class="phase-move phase-move--{{ move.direction }}{% if move.armed %} is-armed{% endif %}" data-to="{{ move.to }}">
-        <h2>{{ move.heading }}</h2>
+        <div class="phase-move__head">
+          <h2>{{ move.heading }}</h2>
+          {% if move.armed %}
+            {% include "console/cancel.html" with href=tab_address arm=move.arm %}
+          {% else %}
+            <a class="button button--quiet" href="{{ tab_address }}?from={{ phase }}&amp;arm={{ move.to }}">{{ move.arm }}</a>
+          {% endif %}
+        </div>
         {% for sentence in move.consequences %}
           <p>{{ sentence }}</p>
         {% endfor %}
         {% if move.armed %}
-          {# Cancel takes the arm's place, so a double click on the arm cancels rather than moves (#28, #77). #}
+          {# The act's button comes after what it does, away from the arm Cancel replaced (#28, #77, #85). #}
           <form method="post" action="{% url 'console_phase_move' %}">
             {% csrf_token %}
             <input type="hidden" name="from_phase" value="{{ phase }}">
             <input type="hidden" name="to_phase" value="{{ move.to }}">
-            <a class="button button--quiet" href="{% url 'console_phase' %}">Cancel</a>
-            <button type="submit">{{ move.act }}</button>
+            <p class="console-confirm"><button type="submit">{{ move.act }}</button></p>
           </form>
-        {% else %}
-          <p class="phase-move__actions"><a class="button button--quiet" href="{% url 'console_phase' %}?from={{ phase }}&amp;arm={{ move.to }}">{{ move.arm }}</a></p>
         {% endif %}
       </section>
     {% endfor %}

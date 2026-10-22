@@ -12,6 +12,7 @@ A page wears the voter skin unless it names admin or run in base.html's `skin` b
 
 - **voter**: rounded, roomy and uncluttered, with bigger values and no hint text. This is where the play lives.
 - **admin**: dense, plain ledgers with one row per item. No decoration, no motion and no mist.
+  - An act that asks first is a click and then an inline confirm. *Cancel* takes the clicked button's place at its size (`console/cancel.html`), and the button naming the act stands apart, at the start of a line after what the act does. The tab keeps its scroll across the click and Cancel, and from a reset's confirm onto the password it shows, through a `data-keeps-scroll` region round its arms and confirms, so Cancel comes up under the pointer and the password in view (#85).
 - **run**: the voter's evening, darker still, because the room is dark.
 
 ## Tokens that matter

@@ -14,6 +14,10 @@ TAB = "/console/roster/"
 REMOVE = "/console/roster/remove/"
 
 
+# Cancel at the size of the arm it replaces, whose label it keeps hidden (#85).
+CANCEL = r'<a class="button button--quiet console-cancel" href="([^"]+)"><span>Cancel</span><span class="console-cancel__keep" aria-hidden="true">([^<]+)</span></a>'
+
+
 def text(fragment):
     return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", fragment)).split())
 
@@ -36,10 +40,17 @@ def confirm(page):
         return None
     fields = dict(re.findall(r'<input type="hidden" name="(\w+)" value="([^"]+)">', form[2]))
     fields.pop("csrfmiddlewaretoken")
-    act = html.unescape(re.search(r'<button type="submit">([^<]+)</button>', form[2])[1])
-    cancel = re.search(r'<a class="button button--quiet" href="([^"]+)">Cancel</a>', form[2])[1]
-    said = text(re.sub(r'<p class="roster-confirm__actions">.*?</p>', "", form[2], flags=re.S))
+    act = html.unescape(re.search(r'<p class="console-confirm"><button type="submit">([^<]+)</button></p>', form[2])[1])
+    cancel = re.search(CANCEL, page)[1]
+    said = text(re.sub(r'<p class="console-confirm">.*?</p>', "", form[2], flags=re.S))
     return form[1], fields, act, cancel, said
+
+
+def actions(page, voter):
+    """What stands in each place in `voter`'s actions cell: ("arm", label), ("cancel", the arm it stands for) or ("kept", an empty arm's place)."""
+    cell = re.search(rf'<tr data-voter="{voter.pk}"[^>]*>.*?<td class="roster__actions">(.*?)</td>', page, re.S)[1]
+    found = re.findall(rf'<a class="button button--quiet" href="[^"]+">([^<]+)</a>|{CANCEL}|<a class="button button--quiet console-kept" aria-hidden="true">([^<]+)</a>', cell)
+    return [("arm", arm) if arm else ("cancel", stands_for) if stands_for else ("kept", kept) for arm, _, stands_for, kept in found]
 
 
 def signed_in(voter, password=PASSWORD):
@@ -105,6 +116,15 @@ def test_the_armed_row_gives_up_its_arm_and_the_others_keep_theirs(admin, voters
     page = admin.get(TAB, {"remove": voters["Dani"].pk}).text
 
     assert act_links(page, "Remove…") == [f"{TAB}?remove={voters[name].pk}" for name in ["ada", "Hanna"]]
+
+
+def test_armed_removal_puts_cancel_in_the_remove_arms_place_and_its_confirm_in_the_row_below(admin, voters):
+    page = admin.get(TAB, {"remove": voters["Dani"].pk}).text
+
+    assert actions(page, voters["ada"]) == [("arm", "Reset password…"), ("arm", "Remove…")]
+    assert actions(page, voters["Dani"]) == [("kept", "Reset password…"), ("cancel", "Remove…")]
+    armed_row = re.search(rf'<tr data-voter="{voters["Dani"].pk}" class="is-armed">(.*?)</tr>', page, re.S)[1]
+    assert "<button" not in armed_row
 
 
 @pytest.mark.parametrize("arm", ["", "x", "-1", "1.0", "99999999999999999999999"])

@@ -6,8 +6,9 @@
   <h1>Roster</h1>
 
   {% if voters %}
+    {% url 'console_roster' as tab_address %}
     {# One row per voter; later milestones add their columns, and the floor set line above (#28, #79). #}
-    <table class="ledger roster">
+    <table class="ledger roster" data-keeps-scroll>
       <thead>
         <tr><th scope="col">Voter</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
       </thead>
@@ -16,10 +17,16 @@
           <tr data-voter="{{ voter.pk }}"{% if voter == open_row %} class="is-armed"{% endif %}>
             <td class="roster__name">{{ voter.display_name }}</td>
             <td class="roster__actions">
-              {# The open row loses its arms, so a second click on one lands on nothing (#79). #}
-              {% if voter != open_row %}
-                <a class="button button--quiet" href="{% url 'console_roster' %}?reset={{ voter.pk }}">Reset password…</a>
-                <a class="button button--quiet" href="{% url 'console_roster' %}?remove={{ voter.pk }}">Remove…</a>
+              {# The open row loses its arms; Cancel takes the clicked one's place, and the other's stays empty (#79, #85). #}
+              {% if voter == armed and arming == "reset" %}
+                {% include "console/cancel.html" with href=tab_address arm="Reset password…" %}
+                <a class="button button--quiet console-kept" aria-hidden="true">Remove…</a>
+              {% elif voter == armed %}
+                <a class="button button--quiet console-kept" aria-hidden="true">Reset password…</a>
+                {% include "console/cancel.html" with href=tab_address arm="Remove…" %}
+              {% elif voter != open_row %}
+                <a class="button button--quiet" href="{{ tab_address }}?reset={{ voter.pk }}">Reset password…</a>
+                <a class="button button--quiet" href="{{ tab_address }}?remove={{ voter.pk }}">Remove…</a>
               {% endif %}
             </td>
           </tr>
@@ -36,10 +43,7 @@
                     {% endfor %}
                   </ul>
                   <p>Removal is not a ban: the join code still lets them register again.</p>
-                  <p class="roster-confirm__actions">
-                    <a class="button button--quiet" href="{% url 'console_roster' %}">Cancel</a>
-                    <button type="submit">Remove {{ voter.display_name }}</button>
-                  </p>
+                  <p class="console-confirm"><button type="submit">Remove {{ voter.display_name }}</button></p>
                 </form>
               </td>
             </tr>
@@ -55,10 +59,7 @@
                   {% endif %}
                   <p>Resetting {{ voter.display_name }}'s password signs them out everywhere and shows you a new one, once, to send them directly.</p>
                   <p>At their next login they must choose their own before anything else.</p>
-                  <p class="roster-confirm__actions">
-                    <a class="button button--quiet" href="{% url 'console_roster' %}">Cancel</a>
-                    <button type="submit">Reset {{ voter.display_name }}'s password</button>
-                  </p>
+                  <p class="console-confirm"><button type="submit">Reset {{ voter.display_name }}'s password</button></p>
                 </form>
               </td>
             </tr>

@@ -8,6 +8,7 @@ from ribcage.identity.models import Voter
 from ribcage.phase.history import current, move
 from ribcage.phase.order import PHASES, Phase, neighbours
 from tests.http.test_phase import PAGE_HEADINGS, history, walk_to
+from tests.http.test_roster_tab import CANCEL
 
 SUGGEST, APPROVE, VOTE, PICK, RUN = Phase
 TAB = "/console/phase/"
@@ -48,9 +49,20 @@ def heading(fragment):
     return text(re.search(r"<h2>(.*?)</h2>", fragment, re.S)[1])
 
 
+def head(fragment):
+    """The move's top line, its heading and the arm or the Cancel that stands in the arm's place."""
+    return re.search(r'<div class="phase-move__head">(.*?)</div>', fragment, re.S)[1]
+
+
 def arm_link(fragment):
-    found = re.search(r'<p class="phase-move__actions"><a class="button button--quiet" href="([^"]+)">([^<]+)</a></p>', fragment)
+    found = re.search(r'<a class="button button--quiet" href="([^"]+)">([^<]+)</a>', head(fragment))
     return found and (html.unescape(found[1]), html.unescape(found[2]))
+
+
+def cancel_link(fragment):
+    """Where the Cancel in the arm's place leads, and the arm whose label it keeps hidden to keep the arm's size (#85)."""
+    found = re.search(CANCEL, head(fragment))
+    return found and (found[1], html.unescape(found[2]))
 
 
 def confirm(fragment):
@@ -60,9 +72,8 @@ def confirm(fragment):
         return None
     fields = dict(re.findall(r'<input type="hidden" name="(\w+)" value="([^"]+)">', form[2]))
     fields.pop("csrfmiddlewaretoken")
-    act = re.search(r'<button type="submit">([^<]+)</button>', form[2])[1]
-    cancel = re.search(r'<a class="button button--quiet" href="([^"]+)">Cancel</a>', form[2])[1]
-    return form[1], fields, html.unescape(act), cancel
+    act = re.search(r'<p class="console-confirm"><button type="submit">([^<]+)</button></p>', form[2])[1]
+    return form[1], fields, html.unescape(act), cancel_link(fragment)[0]
 
 
 def armed(admin, from_phase, to_phase):
@@ -144,7 +155,7 @@ def test_each_moves_consequence_is_the_page_voters_see_after_it(admin, from_phas
 
 
 @pytest.mark.parametrize(("from_phase", "to_phase"), EVERY_MOVE)
-def test_arming_a_move_prints_the_act_beside_cancel_and_moves_nothing(admin, from_phase, to_phase):
+def test_arming_a_move_prints_the_act_and_cancel_and_moves_nothing(admin, from_phase, to_phase):
     walk_to(from_phase)
     before = history()
 
@@ -153,6 +164,19 @@ def test_arming_a_move_prints_the_act_beside_cancel_and_moves_nothing(admin, fro
     assert history() == before
     assert confirm(shown[to_phase]) == (MOVE, {"from_phase": from_phase, "to_phase": to_phase}, ACTS[from_phase, to_phase], TAB)
     assert arm_link(shown[to_phase]) is None
+
+
+@pytest.mark.parametrize(("from_phase", "to_phase"), EVERY_MOVE)
+def test_armed_cancel_takes_the_arms_place_on_the_top_line_and_the_confirm_comes_after_the_consequences(admin, from_phase, to_phase):
+    walk_to(from_phase)
+    _, arm = arm_link(moves(admin.get(TAB).text)[to_phase])
+
+    fragment = moves(armed(admin, from_phase, to_phase))[to_phase]
+
+    assert cancel_link(fragment) == (TAB, arm)
+    assert "<form" not in head(fragment)
+    after_head = fragment.split("</div>", 1)[1]
+    assert re.search(r"\A\s*(?:<p>[^<]*</p>\s*)+<form ", after_head)
 
 
 def test_arming_one_move_leaves_the_other_unarmed(admin):
