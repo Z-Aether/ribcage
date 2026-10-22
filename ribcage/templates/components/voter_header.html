@@ -1,6 +1,6 @@
 {# The thin voter header: the wordmark home to the phase page, and the voter's name opening their menu (#27, #37). #}
 <header class="voter-header">
-  <a class="wordmark voter-header__wordmark" href="{% url 'phase_page' %}">Ribcage</a>
+  {% include "components/wordmark.html" %}
   <details class="voter-menu" data-voter-menu>
     <summary class="voter-menu__name">{{ user.display_name }}</summary>
     <ul class="voter-menu__items">

@@ -22,7 +22,7 @@
 {# A page says which skin it wears, voter, admin or run, by overriding this block; a section may set data-skin too (#58). #}
 {# The CSRF cookie is HttpOnly, so every htmx request carries the page's token instead (#48, #76). #}
 <body data-skin="{% block skin %}voter{% endblock %}" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-  {# A public page empties this block: naming the voter reads the session, and public pages never query (#73). #}
+  {# A public page swaps in the wordmark alone: naming the voter reads the session, and public pages never query (#73, #83). #}
   {% block header %}{% include "components/voter_header.html" %}{% endblock %}
   <main>
     {% block content %}{% endblock %}

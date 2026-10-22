@@ -2,6 +2,7 @@ import re
 
 import pytest
 from django.templatetags.static import static
+from django.test import Client
 
 from ribcage.identity.models import Voter
 from ribcage.identity.views import WELCOME_PENDING
@@ -106,11 +107,49 @@ def test_the_abuse_address_comes_from_its_setting(client, settings):
     assert 'href="mailto:someone@example.org"' in footer(client.get("/").text)
 
 
+# The admin login keeps its own wordmark, which is no link home to the voter side (#76).
+VOTER_FACING_PUBLIC_PAGES = [path for path in PUBLIC_PAGES if path != "/console/login/"]
+
+
 @pytest.mark.parametrize("path", PUBLIC_PAGES)
-def test_every_public_page_has_the_footers_links_but_no_abuse_mailto_or_header_menu(client, settings, path):
+def test_every_public_page_has_the_footers_links_but_no_abuse_mailto_or_name_menu(client, settings, path):
     page = client.get(path).text
 
     assert missing_from_the_footer(page, settings) == [ABUSE_MAILTO]
     assert "mailto:" not in footer(page)
-    assert "voter-header" not in page
     assert "<details" not in page
+
+
+@pytest.mark.parametrize("path", [*VOTER_FACING_PUBLIC_PAGES, "/join/details/"])
+def test_every_voter_facing_public_page_has_the_wordmark_home_and_no_name_menu(client, path):
+    page = client.get(path).text
+
+    assert header(page).count('<a class="wordmark voter-header__wordmark" href="/">Ribcage</a>') == 1
+    assert "<details" not in header(page)
+    assert page.count("wordmark") == 2  # the link's class and its modifier, with no second wordmark in the content
+
+
+def test_the_join_details_step_has_the_wordmark_home(client, db):
+    page = client.post("/join/", {"code": "local-join-code"}).text
+
+    assert 'name="display_name"' in page
+    assert '<a class="wordmark voter-header__wordmark" href="/">Ribcage</a>' in header(page)
+
+
+def test_the_wordmark_on_privacy_leads_a_signed_in_voter_to_the_phase_page(client):
+    href = re.search(r'<a class="wordmark[^"]*" href="([^"]+)"', client.get("/privacy/").text)[1]
+    response = client.get(href)
+
+    assert href == "/"
+    assert response.status_code == 200
+    assert "phase/" in response.templates[0].name  # the phase page, not login
+    assert re.search(r"<summary[^>]*>\s*Ada\s*</summary>", response.text)
+
+
+def test_the_wordmark_on_privacy_leads_anyone_else_to_login(db):
+    anonymous_client = Client()
+    href = re.search(r'<a class="wordmark[^"]*" href="([^"]+)"', anonymous_client.get("/privacy/").text)[1]
+    response = anonymous_client.get(href)
+
+    assert response.status_code == 302
+    assert response["Location"].startswith("/login/")

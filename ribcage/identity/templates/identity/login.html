@@ -2,11 +2,10 @@
 
 {% block title %}Log in · Ribcage{% endblock %}
 
-{% block header %}{% endblock %}
+{% block header %}{% include "components/public_header.html" %}{% endblock %}
 {% block footer %}{% include "components/footer.html" %}{% endblock %}
 
 {% block content %}
-  <p class="wordmark">Ribcage</p>
   <h1>Log in</h1>
   <form class="form--short" method="post" action="{% url 'login' %}">
     {% csrf_token %}
