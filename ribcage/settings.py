@@ -64,6 +64,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.LoginRequiredMiddleware",
     # After the wall: a voter whose password was reset reaches only the change form and log out (#80).
     "ribcage.identity.forced_change.ForcedChangeMiddleware",
+    # Behind either wall, Back and Forward fetch the page again rather than show the browser's copy (#84).
+    "ribcage.as_it_is_now.NoStoreBehindTheWalls",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -80,6 +82,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "ribcage.context_processors.footer",
+                "ribcage.context_processors.as_it_is_now",
             ],
         },
     },

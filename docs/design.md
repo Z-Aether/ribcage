@@ -191,6 +191,7 @@ Nothing about trigger warnings appears in PICK or RUN: by then they have already
 - **Nag bar:** shown until the reveal, and only until the voter ticks a topic or presses "I don't care".
 - **Public pages:** login, join and privacy wear the wordmark alone in the header, linking home, with no name menu, since naming the voter reads the session and public pages never query (#73, #83).
 - **Footer:** TMDB attribution, DTDD link, abuse `mailto:`, privacy policy. The public pages (login, join, privacy) carry all but the abuse `mailto:`, which stays behind the login wall (#73).
+- **Back and Forward:** a page reached by Back or Forward is the page as it is now, never the browser's copy: after a phase move it is the current phase's page, and after log out it is login. A voter who leaves a page with unsent typing loses it on coming back, and Back onto a page a form answered may ask to send the form again, which is harmless. The public pages are left to the browser (#84).
 
 The page *is* the phase: one page per phase, no hub, no tabs.
 
@@ -221,7 +222,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 ### Admin console
 
-**Shell:** four tabs (**Phase · Films · Pick · Roster**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*, and the voter side's footer below, since the tabs show TMDB and DTDD data (#76). The console opens on the tab for the current phase and stays put when the phase moves. There is no Django admin; break-glass is shell access on the host (#16, #28). One page sits outside the tabs: a backup download that serves the file only for a one-time code created in the container's terminal, so the admin password alone never yields the database. The same page takes a backup back onto the host for a restore, for a code made the same way (#68, #81).
+**Shell:** four tabs (**Phase · Films · Pick · Roster**) under a header with the line *Voter side ↗ · signed in there as …* and *Log out*, and the voter side's footer below, since the tabs show TMDB and DTDD data (#76). The console opens on the tab for the current phase and stays put when the phase moves. Back and Forward show a tab as it is now, as on the voter side (#84). There is no Django admin; break-glass is shell access on the host (#16, #28). One page sits outside the tabs: a backup download that serves the file only for a one-time code created in the container's terminal, so the admin password alone never yields the database. The same page takes a backup back onto the host for a restore, for a code made the same way (#68, #81).
 
 | Tab | Contents |
 |---|---|
