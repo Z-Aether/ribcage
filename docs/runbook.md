@@ -96,7 +96,7 @@ Komodo can't download a file, so the admin side serves one, but only for a one-t
    - the page's path, `/console/backup/`, and the time the code expires.
 
    Running it again, for either purpose, replaces the offer: the earlier code is then wrong, and entering it voids the new one too.
-   - **If it says to run it as the image's user,** the terminal is root: open it without choosing a user.
+   - **Komodo's terminal opens as the image's user,** `ribcage` (#82). If one ever opens as root, the command says to run it as the image's user: run `su ribcage -s /bin/sh -c 'python manage.py backupcode download'` instead.
 2. **Open `https://<subdomain>/console/backup/`** and log in as the admin if it asks. The console's Backup tab links to it (#86).
 3. **Paste the code and press *Download*.** Save the file into `private/backups/`, never Downloads or a synced folder (#30). If the browser saves it without asking, move it from Downloads into `private/backups/` straight away.
    - **If the page says the code is wrong or expired,** the offer is void: go back to step 1 for a new code.
@@ -163,10 +163,10 @@ When the host's volumes are lost, the pulled backup goes back in through the adm
    python manage.py backupcode upload
    ```
    It prints `Code:` and 32 letters and digits, then the page's path and the time the code expires. Copy the code. Running the command again, for either purpose, replaces it.
-   - **If it says to run it as the image's user,** the terminal is root: open it without choosing a user.
+   - **Komodo's terminal opens as the image's user,** `ribcage` (#82). If one ever opens as root, the command says to run it as the image's user: run `su ribcage -s /bin/sh -c 'python manage.py backupcode upload'` instead.
 4. **Open `https://<subdomain>/console/backup/`** and log in as the admin if it asks. The console's Backup tab links to it (#86). Under *Upload a backup*, paste the code, choose `private/backups/<name>`, and press *Upload*.
    - **The page answers** `Kept backup-<UTC date>-<UTC time>.sqlite3:` and the file's row counts, which match step 2's, then the restore command for step 6. The kept name is the time of the upload, not the pulled backup's name: copy it. If you lose it, `ls /data` in the `backup` container's *Terminal* shows it; reloading the page only resubmits the used code.
-   - **If it says the file is over 25 MB, is not an SQLite database, or failed the integrity check,** nothing was kept and the code wasn't tried: choose the right file and press *Upload* again with the same code. The cap is several times a marathon's database, which is a few MB, so a file over it is the wrong file; it stays low enough to arrive within the app server's 30-second limit at 10 Mbit/s even if the proxy passes the upload on unbuffered.
+   - **If it says the file is over 25 MB, is not an SQLite database, or failed the integrity check,** nothing was kept and the code wasn't tried: choose the right file and press *Upload* again with the same code. The cap is several times a marathon's database, which is a few MB, so a file over it is the wrong file; it stays low enough to arrive within the app server's 30-second limit at 10 Mbit/s even if the proxy passes the upload on unbuffered. The host's proxy passed a 5 MB upload (#82).
    - **If it says the code is wrong, expired or made for a download, or that no code is on offer,** nothing was kept and the code is void: go back to step 3.
 5. **Stop the `ribcage` service,** leaving `backup` running, so nothing writes while the database is replaced.
 6. **Restore it** in the `backup` container's *Terminal*, with the kept name from step 4. `--backups /data` makes the sidecar read it from the data volume instead of its own. It checks the file's integrity again, writes it over the database through SQLite, and prints the restored row counts.
