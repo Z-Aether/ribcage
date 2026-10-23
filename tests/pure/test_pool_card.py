@@ -126,3 +126,24 @@ def test_a_removed_suggesters_card_is_mine_for_no_one():
     suggestion = a_suggestion(suggester=None)
 
     assert not film_card(suggestion, [], ADA).mine
+
+
+def test_the_viewers_own_note_stays_in_the_list_flagged_for_the_open_card_to_leave_out():
+    notes = [a_note(ADA, "Heeere's Johnny."), a_note(BO, "I'm in."), a_note(CY, "Lights off.")]
+
+    shown = film_card(a_suggestion(), notes, viewer=BO)
+
+    assert shown.notes == (card.Note("Bo", "I'm in.", yours=True), card.Note("Cy", "Lights off."))
+
+
+def test_no_note_is_the_viewers_without_a_viewer():
+    shown = film_card(a_suggestion(), [a_note(ADA, "Heeere's Johnny."), a_note(BO, "I'm in.")])
+
+    assert not any(note.yours for note in shown.notes)
+
+
+def test_the_pitch_on_the_viewers_own_card_is_theirs_and_on_others_it_is_not():
+    notes = [a_note(ADA, "Heeere's Johnny.")]
+
+    assert film_card(a_suggestion(), notes, viewer=ADA).mine
+    assert not film_card(a_suggestion(), notes, viewer=BO).mine

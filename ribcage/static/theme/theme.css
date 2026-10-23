@@ -1129,6 +1129,10 @@ body > footer.site-footer {
 .film-card.is-open .note__full {
   display: inline;
 }
+/* An opened card shows the viewer's own note only in their box below (#88). */
+.film-card.is-open .note--yours {
+  display: none;
+}
 
 /* The pitch sits under a hand-cut sliver of pumpkin, lit from behind. */
 [data-skin] .note--pitch {

@@ -156,7 +156,13 @@ def cards():
 def own(sample, armed=False):
     """The sample as its suggester sees it: their pitch in the box, and Withdraw on the card (#88, #89)."""
     withdraw = Withdraw(goes=what_goes(len(sample.notes)), armed=armed)
-    return replace(sample, note_box=NoteBox(text=sample.pitch, is_pitch=True), withdraw=withdraw)
+    return replace(sample, mine=True, note_box=NoteBox(text=sample.pitch, is_pitch=True), withdraw=withdraw)
+
+
+def yours(sample, index):
+    """The sample's note at that index as the viewer's own, which the opened card leaves to their box (#88)."""
+    notes = tuple(replace(note, yours=True) if i == index else note for i, note in enumerate(sample.notes))
+    return replace(sample, notes=notes)
 
 
 def phase_bars():
@@ -170,7 +176,7 @@ def phase_bars():
         (
             "SUGGEST's runtime pencil, open on Hanna's suggestion, as Dani typed the director's cut in hours",
             replace(
-                midsommar,
+                yours(midsommar, 2),
                 note_box=NoteBox(text=midsommar.notes[2].text, is_pitch=False),
                 runtime_pencil=RuntimePencil(open=True, typed="2h 51", refusal=NOT_WHOLE_MINUTES),
             ),
@@ -188,7 +194,7 @@ def phase_bars():
         ),
         (
             "APPROVE's phase bar, on Cass's suggestion, as Dani just saved her note",
-            replace(wolf_house, note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, saved=True)),
+            replace(yours(wolf_house, 0), note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, saved=True)),
             "components/approve_bar.html",
         ),
     )

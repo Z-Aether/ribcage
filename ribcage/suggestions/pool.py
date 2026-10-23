@@ -32,7 +32,12 @@ def film_card(suggestion, notes, viewer=None, phase=None):
     """The card for a suggestion and its notes, oldest first. The pitch is the note by the suggester, blank or not."""
     pitch = next((note for note in notes if note.author_id == suggestion.suggester_id), None)
     # A removed voter's notes on other films stay hidden until #98 deletes them (#28).
-    others = tuple(card.Note(note.author.display_name, note.text) for note in notes if note is not pitch and note.author)
+    # The viewer's own note stays in the list, flagged: a collapsed card shows it, an opened one leaves it to their box (#88).
+    others = tuple(
+        card.Note(note.author.display_name, note.text, yours=viewer is not None and note.author_id == viewer.pk)
+        for note in notes
+        if note is not pitch and note.author
+    )
     return card.FilmCard(
         film=suggestion.film,
         suggester=suggestion.suggester_name,

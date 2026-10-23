@@ -11,6 +11,8 @@ class Note:
 
     author: str
     text: str
+    # The viewing voter's own, which an opened card leaves out because their note box holds it (#88).
+    yours: bool = False
 
 
 @dataclass(frozen=True)

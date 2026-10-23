@@ -97,8 +97,32 @@ def test_the_save_answers_with_the_one_card_open_its_note_list_updated_not_the_p
     assert page.count("<article") == 1
     assert '<article class="film-card is-open"' in page
     assert "Cube" not in page and "<main>" not in page
-    assert re.search(r'<li class="note">.*I&#x27;m in\..*Dani</span></li>', page)
+    assert re.search(r'<li class="note note--yours">.*I&#x27;m in\..*Dani</span></li>', page)
     assert (box_text(page), said(page)) == ("I'm in.", "Saved.")
+
+
+def test_a_saved_note_is_in_the_list_once_flagged_as_the_viewers_for_the_open_card_to_leave_out(dani, voters, the_thing):
+    the_thing.notes.create(author=voters["ada"], text="Seen it twice.")
+
+    page = save(dani, the_thing, "I'm in.").text
+
+    assert page.count('class="note note--yours"') == 1
+    assert 'class="note"><p class="note__text">Seen it twice.' in page
+
+
+def test_a_cleared_note_leaves_the_list_and_the_box(dani, voters, the_thing):
+    the_thing.notes.create(author=voters["Dani"], text="I'm in.")
+
+    page = save(dani, the_thing, "").text
+
+    assert "note--yours" not in page and "I&#x27;m in." not in page
+    assert (box_text(page), said(page)) == ("", "Cleared.")
+
+
+def test_the_pitch_on_the_viewers_own_card_is_flagged_as_theirs(hanna, the_thing):
+    page = save(hanna, the_thing, PITCH + " More.").text
+
+    assert 'class="note note--pitch note--yours"' in page
 
 
 def test_a_plain_save_inside_the_window_writes_and_is_sent_to_the_phase_page(dani, the_thing):
