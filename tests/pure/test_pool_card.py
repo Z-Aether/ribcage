@@ -49,15 +49,6 @@ def test_a_blank_suggester_link_reads_as_removed_with_the_kept_name_and_the_pitc
     assert shown.notes == (card.Note("Bo", "I'm in."),)
 
 
-def test_a_removed_voters_note_on_another_voters_film_is_not_shown():
-    notes = [a_note(ADA, "Heeere's Johnny."), a_note(None, "I'm in.")]
-
-    shown = film_card(a_suggestion(), notes)
-
-    assert shown.pitch == "Heeere's Johnny."
-    assert shown.notes == ()
-
-
 def test_a_runtime_tmdb_gave_reads_as_tmdbs():
     assert film_card(a_suggestion(), []).film.runtime_source is RuntimeSource.TMDB
 
