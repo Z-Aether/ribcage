@@ -1,0 +1,10 @@
+{# The pool as voters read it, newest first, with no mark of approval (#27). #}
+<section class="pool" aria-label="Suggested films">
+  {% if pool %}
+    <div class="film-cards" data-film-cards>
+      {% for card in pool %}{% include "components/film_card.html" with card=card %}{% endfor %}
+    </div>
+  {% else %}
+    <p class="pool__empty">No films have been suggested.</p>
+  {% endif %}
+</section>

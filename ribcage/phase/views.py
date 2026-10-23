@@ -4,6 +4,7 @@ from django.views.decorators.http import require_safe
 from ribcage.identity.views import WELCOME_PENDING
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
+from ribcage.suggestions import pool
 
 PHASE_PAGES = {
     Phase.SUGGEST: "phase/suggest.html",
@@ -14,10 +15,22 @@ PHASE_PAGES = {
 }
 
 
+def the_pool():
+    return {"pool": pool.film_cards()}
+
+
+# Voters read the pool in SUGGEST and APPROVE only; from VOTE on, the ballot takes its place (#27).
+PHASE_CONTEXTS = {
+    Phase.SUGGEST: the_pool,
+    Phase.APPROVE: the_pool,
+}
+
+
 @require_safe
 def phase_page(request):
     # The page is the phase: / shows the current phase's page and nothing else (#27).
-    return render(request, PHASE_PAGES[current()])
+    phase = current()
+    return render(request, PHASE_PAGES[phase], PHASE_CONTEXTS.get(phase, dict)())
 
 
 # Each phase's exit from Welcome, naming what the voter does there (#75).

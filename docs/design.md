@@ -200,7 +200,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **Welcome** | Shown once after registration, never linked again. Rough points, then two exits: set up warnings, or go to the current phase's page (#23, #27). |
 | **Forced password change** | After an admin reset (#28): the change-password form, with the password the admin sent as the current one. Until it's done, every other voter page leads back to it; log out and the public pages stay open (#80). |
 | **My warnings** (trigger list page) | One scrolling page in DTDD's grouping. Privacy disclosure and "I don't care" at the top, live search, ticked topics as chips. Every topic names the films carrying it: the pool through APPROVE, the ballot from VOTE (#23, #35). |
-| **SUGGEST** | A *Suggest a film* panel above the pool. Find, with a trailing year to narrow → picker of five poster tiles, never auto-advanced, films already in the pool marked → pitch box, with runtime on one line and a pencil. *Add it by hand* for anything TMDB can't find, and a message beside it during a TMDB outage. The pool lists film cards with a *Mine* filter (#21, #27). |
+| **SUGGEST** | A *Suggest a film* panel above the pool. Find, with a trailing year to narrow → picker of five poster tiles, never auto-advanced, films already in the pool marked → pitch box, with runtime on one line and a pencil. *Add it by hand* for anything TMDB can't find, and a message beside it during a TMDB outage. The pool lists film cards, newest first, with a *Mine* filter (#21, #27, #61). |
 | **APPROVE** | The same pool, frozen. Notes still writable. |
 | **VOTE** (ballot) | See below. |
 | **PICK** (reveal) | See below. |

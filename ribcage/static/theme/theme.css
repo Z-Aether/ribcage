@@ -956,10 +956,6 @@ body > footer.site-footer {
   color: var(--ink-muted);
   line-height: 1.3;
 }
-.runtime__pencil {
-  margin-left: 0.15em;
-  color: var(--ink-muted);
-}
 
 .film-card__original {
   display: none;

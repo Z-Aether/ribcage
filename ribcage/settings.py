@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ribcage.identity",
     "ribcage.films",
+    "ribcage.suggestions",
     "ribcage.phase",
     "ribcage.console",
     "ribcage.seeding",
