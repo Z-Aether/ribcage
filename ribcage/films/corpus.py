@@ -62,8 +62,13 @@ def read_corpus(directory=CORPUS_DIRECTORY):
     return [read_film(entry, directory) for entry in read_entries(directory)]
 
 
+def read_tmdb(entry, directory=CORPUS_DIRECTORY):
+    """The raw TMDB recording for one entry: the search by its written title, and the detail of its film, None if hand-entered."""
+    return json.loads((Path(directory) / TMDB_RECORDINGS / f"{entry.recording_name}.json").read_text(encoding="utf-8"))
+
+
 def read_film(entry, directory):
-    recording = json.loads((directory / TMDB_RECORDINGS / f"{entry.recording_name}.json").read_text(encoding="utf-8"))
+    recording = read_tmdb(entry, directory)
     if entry.is_hand_entered:
         film = hand_entered(entry.written_title, entry.written_year, entry.runtime)
     else:

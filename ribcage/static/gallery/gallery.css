@@ -109,7 +109,6 @@ body > main:has(.gallery-skin) {
   gap: 1.5rem;
 }
 [data-skin] .score-scale,
-[data-skin] .tiles,
 [data-skin] .poster-row {
   display: flex;
   flex-wrap: wrap;
@@ -119,37 +118,10 @@ body > main:has(.gallery-skin) {
   list-style: none;
 }
 [data-skin] .score-scale li,
-[data-skin] .tiles li,
 [data-skin] .poster-row li {
   margin: 0;
   list-style: none;
 }
-[data-skin] .tiles {
-  gap: 1.25rem;
-}
-.tile {
-  display: grid;
-  gap: 0.3rem;
-  width: 7.5rem;
-  align-content: start;
-}
-.tile__poster {
-  position: relative;
-  display: block;
-}
-.tile__title {
-  font-weight: 600;
-  font-size: 0.9em;
-  line-height: 1.25;
-}
-.tile__caption {
-  font-size: 0.8em;
-  color: var(--ink-muted);
-}
-.tile.is-seen-it .tile__title {
-  color: var(--ink-muted);
-}
-
 [data-skin] .poster-row {
   gap: 1rem;
 }
@@ -169,12 +141,8 @@ body > main:has(.gallery-skin) {
     grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
   }
-  .tile,
   .poster-row li {
     width: calc((100% - 2rem) / 3);
-  }
-  [data-skin] .tiles {
-    gap: 1rem;
   }
   .ledger__directors,
   .ledger th:nth-child(4),

@@ -3,6 +3,7 @@ from datetime import timedelta
 import pytest
 from django.utils import timezone
 
+from ribcage.films import client
 from ribcage.identity.models import Voter
 from tests.http.signing_in import CODE, PASSWORD, sign_in_as_the_admin
 
@@ -30,6 +31,15 @@ def _backup_offer_directory(settings, tmp_path):
     # And its uploads land in its own stand-in for the data volume (#81).
     settings.BACKUP_UPLOAD_DIRECTORY = tmp_path / "data"
     settings.BACKUP_UPLOAD_DIRECTORY.mkdir()
+
+
+@pytest.fixture(autouse=True)
+def _tmdb_never_reached(monkeypatch):
+    # No test goes online: TMDB is answered by a fake transport, or not at all (#25, #92).
+    def offline(path, parameters, headers):
+        raise ConnectionError(f"A test asked TMDB for {path}; give it a fake transport.")
+
+    monkeypatch.setattr(client, "over_the_network", offline)
 
 
 class Clock:

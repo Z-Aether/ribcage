@@ -9,9 +9,8 @@ import urllib.request
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
-from ribcage.films import corpus, tmdb
+from ribcage.films import client, corpus, tmdb
 
-TMDB_API = "https://api.themoviedb.org/3"
 DTDD_API = "https://www.doesthedogdie.com/api/v3"
 # DoesTheDogDie's free tier allows 30 requests a minute; #19 measured this pace as safe.
 DTDD_SECONDS_BETWEEN_CALLS = 2.15
@@ -88,13 +87,8 @@ class Client:
         self.next_dtdd_call = 0.0
 
     def tmdb(self, path, **parameters):
-        headers = {"accept": "application/json"}
-        # A v4 read token goes in a header; a v3 key can only travel as a query parameter.
-        if self.tmdb_key.count(".") == 2:
-            headers["Authorization"] = f"Bearer {self.tmdb_key}"
-        else:
-            parameters["api_key"] = self.tmdb_key
-        return get_json("TMDB", TMDB_API, path, parameters, headers)
+        parameters, headers = client.authorised(self.tmdb_key, parameters, {"accept": "application/json"})
+        return get_json("TMDB", client.TMDB_API, path, parameters, headers)
 
     def dtdd(self, path, **parameters):
         time.sleep(max(0.0, self.next_dtdd_call - time.monotonic()))

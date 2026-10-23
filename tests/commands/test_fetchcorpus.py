@@ -186,7 +186,7 @@ def test_a_server_error_is_tried_again_before_the_fetch_gives_up(monkeypatch):
 
     monkeypatch.setattr(fetchcorpus.urllib.request, "urlopen", flaky)
 
-    assert fetchcorpus.get_json("TMDB", fetchcorpus.TMDB_API, "/search/movie", {}, {}) == {
+    assert fetchcorpus.get_json("TMDB", "https://api.themoviedb.org/3", "/search/movie", {}, {}) == {
         "page": 1,
         "results": [],
         "total_results": 0,

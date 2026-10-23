@@ -53,14 +53,16 @@
       </ul>
       <ul class="tiles">
         {% for tile in tiles %}
-          <li class="tile{% if tile.trigger_icon %} has-trigger-icon{% endif %}{% if tile.seen_it %} is-seen-it{% endif %}">
-            <span class="tile__poster">{% include "components/poster.html" with film=tile.film size="tile" %}{% if tile.vetoed_by %}<span class="veto-ribbon">{{ tile.vetoed_by }}</span>{% endif %}</span>
-            <span class="tile__title">{{ tile.film.title }}</span>
-            <span class="tile__caption">{{ tile.caption }}</span>
-          </li>
+          <li class="tile{% if tile.trigger_icon %} has-trigger-icon{% endif %}{% if tile.seen_it %} is-seen-it{% endif %}">{% include "components/tile.html" with film=tile.film caption=tile.caption vetoed_by=tile.vetoed_by %}</li>
         {% endfor %}
       </ul>
     </div>
+
+    <p class="gallery-label">The picker, for "evil dead", with a film already in the pool and a title card</p>
+    <div class="picker">{% include "components/picker.html" with picker=picker %}</div>
+
+    <p class="gallery-label">The picker while TMDB isn't answering</p>
+    <div class="picker">{% include "components/picker.html" with picker=picker_outage %}</div>
 
     <p class="gallery-label">Posters and title cards</p>
     <ul class="poster-row">

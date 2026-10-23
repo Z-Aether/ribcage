@@ -1,0 +1,18 @@
+{# The picker over plain data, a Picker: five tiles in TMDB's order, none chosen, never advancing on its own (#5, #19, #21, #92). #}{% spaceless %}
+{% if picker.outage %}
+  <p class="picker__outage">TMDB isn't answering right now. Try again in a bit, or add it by hand.</p>
+{% elif picker.searched and not picker.tiles %}
+  <p class="picker__none">TMDB has no film by that title.</p>
+{% elif picker.tiles %}
+  <ul class="tiles picker__tiles" aria-label="Which film did you mean?">
+    {% for tile in picker.tiles %}
+      <li>
+        {# A film already in the pool opens its card there; any other leads to the pitch step, which #93 fills from its TMDB id. #}
+        <button type="button" class="tile tile--choice{% if tile.suggested_by %} is-suggested{% endif %}" data-tmdb-id="{{ tile.film.tmdb_id }}"{% if tile.suggestion_id %} data-opens-suggestion="{{ tile.suggestion_id }}"{% endif %}>
+          {% include "components/tile.html" with film=tile.film show_original=True caption=tile.caption vetoed_by="" %}
+        </button>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endspaceless %}

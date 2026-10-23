@@ -11,6 +11,7 @@ from functools import cache
 
 from ribcage.films import corpus
 from ribcage.films.card import FilmCard, Note, NoteBox, RuntimePencil, Withdraw
+from ribcage.films.picker import Picker, PickerTile
 from ribcage.suggestions.runtime import NOT_WHOLE_MINUTES
 from ribcage.suggestions.views import PITCH_REQUIRED
 from ribcage.suggestions.withdrawal import what_goes
@@ -63,6 +64,22 @@ class EveningBox:
     past: bool = False
     now: bool = False
     minutes_left: int = 0
+
+
+@cache
+def searches():
+    return {recorded.entry.written_title: recorded.search_results for recorded in corpus.read_corpus()}
+
+
+def picker():
+    """The picker for "evil dead", with Evil Dead Burn already in the pool and Insidious (2008)'s title card in the last slot (#92).
+
+    The mix is the gallery's own: a real search never puts the two together. Choosing a tile here does nothing.
+    """
+    evil_dead = searches()["Evil Dead"]
+    insidious_2008 = next(result for result in searches()["Insidious"] if result.year == 2008)
+    tiles = (PickerTile(evil_dead[0], suggested_by="Ash"), *map(PickerTile, evil_dead[1:4]), PickerTile(insidious_2008))
+    return Picker(searched=True, tiles=tiles)
 
 
 @cache
@@ -229,6 +246,8 @@ def gallery():
         "phase_bars": phase_bars(),
         "score_scale": SCORE_SCALE,
         "tiles": tiles(),
+        "picker": picker(),
+        "picker_outage": Picker(searched=True, outage=True),
         "poster_row": poster_row(),
         "evening": evening(),
         "evening_minutes": 425,

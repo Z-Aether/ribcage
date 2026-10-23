@@ -3,13 +3,15 @@ from dataclasses import replace
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_safe
+
+from ribcage.films.client import tmdb_client
 
 from ribcage.phase.check import phase_window
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
-from ribcage.suggestions import notes, pool, runtime, withdrawal
+from ribcage.suggestions import notes, picker, pool, runtime, withdrawal
 from ribcage.suggestions.models import Suggestion
 
 PITCH_REQUIRED = "A suggestion needs its pitch, so yours is back as it was. Change it however you like."
@@ -140,3 +142,15 @@ def save_runtime(request):
     if refusal:
         card = replace(card, runtime_pencil=replace(card.runtime_pencil, open=True, typed=typed, refusal=refusal))
     return runtime_line(request, card)
+
+
+@require_safe
+def find(request):
+    """Find, a read: the picker for what was typed, swapped in under the box by htmx in SUGGEST (#21, #78, #92)."""
+    # Only htmx swaps the picker in; a plain GET is a search from before htmx loaded (#89).
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    # A tab left open past SUGGEST reloads onto the phase page as it is now (#78).
+    if current() is not Phase.SUGGEST:
+        return reload_the_tab(request, reverse("phase_page"))
+    return render(request, "components/picker.html", {"picker": picker.the_picker(request.GET.get("q", ""), tmdb_client())})

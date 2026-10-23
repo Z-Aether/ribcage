@@ -335,7 +335,7 @@ body[data-skin="run"] {
   color: var(--pico-primary-inverse);
 }
 
-[data-skin] :is(button:not(.film-card__toggle), a.button) {
+[data-skin] :is(button:not(.film-card__toggle, .tile), a.button) {
   border-radius: var(--button-radius);
   padding-inline: var(--button-padding);
   font-weight: 700;
@@ -348,14 +348,14 @@ body[data-skin="run"] {
 [data-skin] :is(button, a.button).button--quiet:hover {
   border-color: var(--ink-muted);
 }
-[data-skin="voter"] :is(button:not(.film-card__toggle):not(:disabled), a.button):hover {
+[data-skin="voter"] :is(button:not(.film-card__toggle, .tile):not(:disabled), a.button):hover {
   animation: wobble 0.5s ease-in-out;
 }
-[data-skin="admin"] :is(button:not(.film-card__toggle), a.button) {
+[data-skin="admin"] :is(button:not(.film-card__toggle, .tile), a.button) {
   padding-block: 0.3rem;
   font-size: 0.875rem;
 }
-[data-skin="admin"] :is(button:not(.film-card__toggle):not(:disabled), a.button):hover {
+[data-skin="admin"] :is(button:not(.film-card__toggle, .tile):not(:disabled), a.button):hover {
   animation: none;
 }
 [data-skin] :is(button, [type="button"], [type="submit"], [type="reset"], a):focus-visible {
@@ -1357,6 +1357,123 @@ body > footer.site-footer {
   }
 }
 
+/* ---------- Poster tile: a picker result, and in M6 a ballot tile (#5, #9, #61, #92) ---------- */
+
+[data-skin] .tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+[data-skin] .tiles > li {
+  margin: 0;
+  list-style: none;
+}
+.tile {
+  display: grid;
+  gap: 0.3rem;
+  width: 7.5rem;
+  align-content: start;
+}
+.tile__poster {
+  position: relative;
+  display: block;
+}
+.tile__title {
+  font-weight: 600;
+  font-size: 0.9em;
+  line-height: 1.25;
+  overflow-wrap: break-word;
+}
+.tile__year {
+  font-weight: 400;
+  color: var(--ink-muted);
+  font-variant-numeric: lining-nums;
+}
+.tile__original,
+.tile__caption {
+  font-size: 0.8em;
+  line-height: 1.25;
+  color: var(--ink-muted);
+  overflow-wrap: break-word;
+}
+.tile.is-seen-it .tile__title {
+  color: var(--ink-muted);
+}
+/* A tile to choose is a button that keeps the tile's look; reached for, its poster lifts and takes a pumpkin edge. */
+.tile--choice {
+  all: unset;
+  display: grid;
+  gap: 0.3rem;
+  width: 7.5rem;
+  align-content: start;
+  cursor: pointer;
+  color: var(--ink);
+}
+.tile--choice .poster {
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.tile--choice:is(:hover, :focus-visible) .poster {
+  transform: translateY(-3px) rotate(-1deg);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+[data-skin] .tile--choice:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+  border-radius: var(--radius-poster);
+}
+/* A card the picker opens scrolls to just under the window's top edge, not flush against it. */
+[data-film-card] {
+  scroll-margin-top: 1.5rem;
+}
+.tile--choice.is-suggested .tile__caption {
+  color: var(--accent);
+}
+
+/* ---------- The Suggest a film panel: find, then the picker, above the pool (#21, #27, #92) ---------- */
+
+.suggest-panel {
+  margin: 0 0 2rem;
+  padding: var(--card-padding);
+  border-radius: var(--radius-card);
+  background-color: var(--surface);
+}
+[data-skin] .suggest-panel h2 {
+  margin: 0 0 0.75rem;
+}
+[data-skin] .suggest-panel__find {
+  display: block;
+  max-width: 30rem;
+}
+[data-skin] .suggest-panel__find input {
+  margin-bottom: 0;
+}
+.picker:not(:empty) {
+  margin-top: 1.25rem;
+}
+[data-skin] .picker p {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 600px) {
+  .tile,
+  .tile--choice {
+    width: calc((100% - 2rem) / 3);
+  }
+  [data-skin] .tiles {
+    gap: 1rem;
+  }
+  [data-skin] .tiles > li:has(> .tile--choice) {
+    width: calc((100% - 2rem) / 3);
+  }
+  [data-skin] .tiles > li > .tile--choice {
+    width: 100%;
+  }
+}
+
 /* ---------- State colours every later surface shares ---------- */
 
 .score {
@@ -1498,14 +1615,18 @@ body > footer.site-footer {
   body::before,
   .wordmark::after,
   [data-skin="voter"] .film-card.is-open .film-card__poster::after,
-  [data-skin="voter"] :is(button:not(.film-card__toggle):not(:disabled), a.button):hover,
+  [data-skin="voter"] :is(button:not(.film-card__toggle, .tile):not(:disabled), a.button):hover,
   [data-skin="voter"] .score:hover {
     animation: none;
   }
   .film-card,
   .film-card.htmx-swapping,
-  [data-skin] .runtime__pencil {
+  [data-skin] .runtime__pencil,
+  .tile--choice .poster {
     transition: none;
+  }
+  .tile--choice:is(:hover, :focus-visible) .poster {
+    transform: none;
   }
   [data-skin] .runtime__pencil:hover {
     transform: none;

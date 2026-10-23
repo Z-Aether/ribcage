@@ -41,6 +41,14 @@ A **phase bar** is the foot of an opened film card, where a voter acts on it, an
 
 *Everyone's* and *Mine* sit above the pool as two pills, the chosen one in pumpkin and the other quiet, with the choice exposed as `aria-pressed`. They show only once their script has run, so without script the whole pool shows. An empty *Mine* says *You haven't suggested any films.* in the body voice, and the pool's own empty line stays hidden then (#91).
 
+## The poster tile
+
+A **tile** is a poster or its title card with the title and a muted year beneath, in `components/tile.html`; the caller frames it and sets its state classes. The picker's tiles add the original title where it differs, and are buttons that keep the tile's look: reached for, the poster lifts and takes a pumpkin edge. A film already in the pool says *already suggested by …* in pumpkin under its tile. M6's ballot tiles extend the same tile with the state colours below (#61, #92).
+
+## The Suggest a film panel
+
+The panel sits above the pool's filter on a surface of its own: the heading, one *Title* box, and the picker under it, five tiles in a row on a desktop and three to a row on a phone. TMDB not answering, or finding nothing, is one line in muted ink where the tiles would be (#92).
+
 ## The runtime pencil
 
 Where a voter may correct a film's runtime, the card's runtime line ends in a quiet ✎ in muted ink, which turns pumpkin and tips when reached for. A click turns the line into a small box of minutes with *Save* and a quiet *Cancel*, in place on an open or closed card alike. A refusal takes a line of its own beneath, in the note box's dusty rose, and the typed value stays in the box. Saved, the line shows the new runtime with its *by hand* tag, or *TMDB* again when it is corrected back to TMDB's value (#90).

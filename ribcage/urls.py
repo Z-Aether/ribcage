@@ -25,7 +25,7 @@ from ribcage.identity.views import (
 )
 from ribcage.phase.views import phase_page, welcome
 from ribcage.privacy import privacy_policy
-from ribcage.suggestions.views import correct_runtime, withdraw, write_note
+from ribcage.suggestions.views import correct_runtime, find, withdraw, write_note
 
 urlpatterns = [
     path("", phase_page, name="phase_page"),
@@ -33,6 +33,7 @@ urlpatterns = [
     path("note/", write_note, name="note"),
     path("withdraw/", withdraw, name="withdraw"),
     path("runtime/", correct_runtime, name="runtime"),
+    path("find/", find, name="find"),
     path("login/", login, name="login"),
     path("join/", join, name="join"),
     path("join/details/", join_details, name="join_details"),

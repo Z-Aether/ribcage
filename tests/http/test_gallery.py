@@ -25,6 +25,10 @@ def notes_on_each_card(page):
     return {title: re.findall(r'<li class="(note[^"]*)"', card) for title, card in cards}
 
 
+def picker_tiles(page):
+    return re.findall(r'<button type="button" class="tile tile--choice.*?</button>', page, re.S)
+
+
 def query_table(sql):
     return re.search(r'FROM "(\w+)"', sql)[1]
 
@@ -65,6 +69,9 @@ def test_the_gallery_is_behind_the_login_wall(debug, db):
         pytest.param('<a class="runtime__pencil"', id="the runtime pencil"),
         pytest.param('<p class="runtime__refusal" role="status">', id="the runtime pencil open, refusing"),
         pytest.param("written for the gallery", id="saying the voters and notes are samples"),
+        pytest.param(lambda page: "already suggested by Ash" in picker_tiles(page)[0], id="the picker's already suggested tile"),
+        pytest.param(lambda page: 'title-card"><span class="title-card__title">Insidious' in picker_tiles(page)[-1], id="the picker's title-card tile"),
+        pytest.param("answering right now. Try again in a bit", id="the picker's outage message"),
     ],
 )
 def test_the_gallery_shows_each_real_case(client, debug, real_case):
