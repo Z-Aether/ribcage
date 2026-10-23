@@ -8,8 +8,9 @@
       <label class="runtime__field"><span class="visually-hidden">Runtime of {{ film.title }}, in minutes</span><input type="text"{% if suggestion %} id="runtime-{{ suggestion }}"{% endif %} name="runtime" value="{% if pencil.typed is None %}{{ film.runtime|default_if_none:'' }}{% else %}{{ pencil.typed }}{% endif %}" inputmode="numeric" autocomplete="off" autofocus>&nbsp;min</label>
       <button type="submit">Save</button>
       <a class="button button--quiet runtime__cancel" href="{{ runtime_address }}?suggestion={{ suggestion }}&amp;cancel" hx-get="{{ runtime_address }}?suggestion={{ suggestion }}&amp;cancel" hx-target="closest [data-runtime]" hx-swap="outerHTML">Cancel</a>
-      {% if pencil.refusal %}<p class="runtime__refusal" role="status">{{ pencil.refusal }}</p>{% endif %}
     </form>
+    {# Beneath the form, not in it, so the refusal never widens the row the box sits in (#90). #}
+    {% if pencil.refusal %}<p class="runtime__refusal" role="status">{{ pencil.refusal }}</p>{% endif %}
   {% else %}
     {% if film.runtime %}<span class="runtime__value">{{ film.runtime }}</span>&nbsp;min{% else %}No runtime{% endif %} <span class="runtime__source">{% if film.runtime_source == "tmdb" %}TMDB{% else %}by hand{% endif %}</span>{% if pencil %} <a class="runtime__pencil"{% if suggestion %} id="runtime-{{ suggestion }}"{% endif %} href="{{ runtime_address }}?suggestion={{ suggestion }}" hx-get="{{ runtime_address }}?suggestion={{ suggestion }}" hx-target="closest [data-runtime]" hx-swap="outerHTML" aria-label="Correct the runtime">✎</a>{% endif %}
   {% endif %}

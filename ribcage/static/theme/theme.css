@@ -1007,9 +1007,10 @@ body > footer.site-footer {
   font-size: 0.9rem;
 }
 /* A refusal is said kindly on a line of its own, in the note box's rose (#88). */
+/* Contained, it wraps to the open line's width rather than widening the line off the title's row (#90). */
 [data-skin] .runtime__refusal {
-  flex-basis: 100%;
-  margin: 0;
+  contain: inline-size;
+  margin: 0.5rem 0 0;
   color: var(--score-rather-not);
 }
 

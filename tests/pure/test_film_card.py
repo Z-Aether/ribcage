@@ -169,3 +169,11 @@ def test_a_refused_runtime_stays_as_typed_beside_the_refusal():
 
     assert re.search(r'<input [^>]*name="runtime"[^>]*value="2h 31"', line)
     assert '<p class="runtime__refusal" role="status">A runtime is whole minutes, like 144.</p>' in line
+
+
+def test_the_refusal_sits_beneath_the_form_so_the_box_stays_put():
+    pencil = RuntimePencil(open=True, typed="0", refusal="A runtime is at least a minute long.")
+
+    line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=pencil)))
+
+    assert line.index("</form>") < line.index("runtime__refusal")
