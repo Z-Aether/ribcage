@@ -1,5 +1,11 @@
 .agents/*
 .claude/*
+# The project's own skills are tracked; installed ones are links into .agents/.
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/milestone-to-tickets/
+!.claude/skills/orchestrate-milestone/
+!.claude/skills/ticket-review/
 /skills-lock.json
 
 # Credentials and the group's real data — never commit
