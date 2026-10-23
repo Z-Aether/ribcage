@@ -64,6 +64,11 @@ def text(fragment):
     return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", fragment)).split())
 
 
+def plain(fragment):
+    # A link ends the outage sentence, so its full stop trails a space once the tags are gone.
+    return text(fragment).replace(" .", ".")
+
+
 def test_find_is_a_read():
     assert getattr(find, "phase_window", None) is None
 
@@ -122,14 +127,14 @@ def test_cabinet_of_curiosities_shows_no_results_not_the_outage(hanna, recorded)
     page = search(hanna, "Del Toro's Cabinet of Curiosities").text
 
     assert NO_RESULTS in page
-    assert OUTAGE not in page
+    assert OUTAGE not in plain(page)
     assert tiles(page) == []
 
 
 def test_a_failing_transport_shows_the_outage_message(hanna, failing):
     page = search(hanna, "evil dead").text
 
-    assert OUTAGE in page
+    assert OUTAGE in plain(page)
     assert NO_RESULTS not in page
 
 
@@ -140,11 +145,11 @@ def test_a_malformed_result_in_a_valid_reply_shows_the_outage_message(hanna, mon
     response = search(hanna, "evil dead")
 
     assert response.status_code == 200
-    assert OUTAGE in response.text
+    assert OUTAGE in plain(response.text)
 
 
 def test_an_unrecorded_search_shows_the_outage_message(hanna, recorded):
-    assert OUTAGE in search(hanna, "blade runner 2049").text
+    assert OUTAGE in plain(search(hanna, "blade runner 2049").text)
 
 
 def test_a_blank_search_shows_nothing(hanna, failing):
@@ -163,6 +168,16 @@ def test_a_film_already_in_the_pool_is_marked_with_its_suggesters_name(hanna, vo
     assert f'data-opens-suggestion="{burn.pk}"' in marked
     assert "already suggested" not in tile(page, 109428)
     assert "data-opens-suggestion" not in tile(page, 109428)
+
+
+def test_your_own_film_is_marked_as_suggested_by_you(hanna, voters, recorded):
+    # Your own film reads by you, not your name (#92; the dev, 2026-10-23).
+    burn = Suggestion.objects.suggest(voters["Hanna"], a_tmdb_film(EVIL_DEAD_BURN, "Evil Dead Burn"), "Burn it all.")
+
+    marked = tile(search(hanna, "evil dead").text, EVIL_DEAD_BURN)
+
+    assert text(marked).endswith("already suggested by you")
+    assert f'data-opens-suggestion="{burn.pk}"' in marked
 
 
 def test_a_removed_suggesters_film_keeps_their_name_on_its_tile(hanna, voters, recorded):
@@ -235,3 +250,45 @@ def test_the_key_reaches_tmdb_in_the_request(hanna, settings, monkeypatch):
     search(hanna, "evil dead")
 
     assert asked == [{"query": "evil dead", "language": "en-US", "api_key": KEYS[1]}]
+
+
+# Add it by hand (#94)
+
+
+HAND = "/suggest/?by_hand=1"
+
+
+def test_the_picker_offers_adding_it_by_hand_under_its_tiles(hanna, recorded):
+    page = search(hanna, "evil dead").text
+
+    assert page.index("picker__tiles") < page.index("None of these?")
+    link = re.search(r'<a class="picker__by-hand"[^>]*>', page)[0]
+    assert f'hx-get="{HAND}"' in link and 'hx-target="#picker"' in link
+    assert "None of these? Add it by hand." in plain(page)
+
+
+def test_the_outage_message_ends_in_a_link_to_adding_it_by_hand(hanna, failing):
+    page = search(hanna, "evil dead").text
+
+    assert f'hx-get="{HAND}"' in re.search(r'<p class="picker__outage">.*?</p>', page, re.S)[0]
+
+
+def test_no_results_offers_adding_it_by_hand_too(hanna, recorded):
+    assert f'hx-get="{HAND}"' in search(hanna, "Del Toro's Cabinet of Curiosities").text
+
+
+def by_hand_links(page):
+    return re.findall(r'<a class="picker__by-hand"[^>]*>', page)
+
+
+def test_every_link_to_adding_it_by_hand_takes_the_find_boxs_text_along(hanna, recorded):
+    # The hand step's boxes start from what was searched (#94; the dev, 2026-10-23).
+    links = by_hand_links(search(hanna, "evil dead").text) + by_hand_links(search(hanna, "Del Toro's Cabinet of Curiosities").text)
+
+    assert len(links) == 2
+    assert all('hx-include="[name=q]"' in link for link in links)
+    assert 'name="q"' in hanna.get("/").text
+
+
+def test_the_outage_link_to_adding_it_by_hand_takes_the_find_boxs_text_along(hanna, failing):
+    assert 'hx-include="[name=q]"' in by_hand_links(search(hanna, "evil dead").text)[0]

@@ -12,17 +12,17 @@
   {% endblock %}
   <div class="pitch-step__words">
     {# No maxlength, as in the note box: the server refuses a pitch over the cap whole (#88). #}
-    <label class="pitch-step__pitch"><span class="note-box__name">Your pitch</span><textarea name="pitch" rows="5" autofocus>{{ step.pitch }}</textarea></label>
+    <label class="pitch-step__pitch"><span class="note-box__name">Your pitch</span><textarea name="pitch" rows="5"{% block pitch_focus %} autofocus{% endblock %}>{{ step.pitch }}</textarea></label>
     {% if step.pitch_refusal %}<p class="pitch-step__refusal" role="status">{{ step.pitch_refusal }}</p>{% endif %}
     {# One quiet line; its pencil opens the box in place, and whatever the box holds goes with Add (#21, #90). #}
     <div class="film-card__runtime pitch-step__runtime{% if step.runtime_open %} is-editing{% endif %}" data-runtime>
       <span class="pitch-step__label">Runtime</span>
       {% if step.film.runtime %}<span class="pitch-step__runtime-line"{% if step.runtime_open %} hidden{% endif %}><span class="runtime__value">{{ step.film.runtime }}</span>&nbsp;min <span class="runtime__source">TMDB</span> <a class="runtime__pencil" href="#pitch-runtime" data-runtime-pencil aria-label="Correct the runtime">✎</a></span>{% endif %}
       {# Text, not a number field, so every refusal is the server's own gentle one, as on the card (#90). #}
-      <label class="runtime__field"{% if not step.runtime_open %} hidden{% endif %}><span class="visually-hidden">Runtime of {{ step.film.title }}, in minutes</span><input type="text" id="pitch-runtime" name="runtime" value="{{ step.runtime }}" inputmode="numeric" autocomplete="off">&nbsp;min</label>
+      <label class="runtime__field"{% if not step.runtime_open %} hidden{% endif %}><span class="visually-hidden">Runtime of {{ step.film.title|default:'the film' }}, in minutes</span><input type="text" id="pitch-runtime" name="runtime" value="{{ step.runtime }}" inputmode="numeric" autocomplete="off">&nbsp;min</label>
     </div>
     {% if step.runtime_refusal %}<p class="runtime__refusal" role="status">{{ step.runtime_refusal }}</p>{% endif %}
     {# The boxes Add needs filled: the script disables it until they are, and without it the server refuses (the dev, 2026-10-23). #}
-    <button type="submit" class="pitch-step__add" data-add-needs="pitch runtime">Add</button>
+    <button type="submit" class="pitch-step__add" data-add-needs="{% block add_needs %}pitch runtime{% endblock %}">Add</button>
   </div>
 </form>

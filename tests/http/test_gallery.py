@@ -116,3 +116,11 @@ def test_the_gallerys_picker_tiles_lead_nowhere(client, debug):
     tiles = picker_tiles(client.get(GALLERY).content.decode())
 
     assert tiles and not any("hx-get" in tile for tile in tiles)
+
+
+def test_the_gallerys_pickers_hold_no_link_that_fires_a_request(client, debug):
+    # The gallery has no #picker to swap into, so the by-hand offers there are inert (#94).
+    page = client.get(GALLERY).content.decode()
+
+    assert "add it by hand" in page
+    assert "by_hand=1" not in page

@@ -1,0 +1,13 @@
+{% extends "suggestions/pitch_step.html" %}
+{# The pitch step for a film TMDB can't find, a HandStep: title and year boxes in place of a poster, which a hand-entered film has none of (#21, #38, #94). #}
+{% block film %}
+  <input type="hidden" name="by_hand" value="1">
+  <div class="pitch-step__film pitch-step__film--typed">
+    <label class="pitch-step__box"><span class="pitch-step__label">Title</span><input type="text" name="title" value="{{ step.title }}" autocomplete="off" autofocus></label>
+    {% if step.title_refusal %}<p class="pitch-step__refusal" role="status">{{ step.title_refusal }}</p>{% endif %}
+    <label class="pitch-step__box"><span class="pitch-step__label">Year <span class="pitch-step__optional">(optional)</span></span><input type="text" name="year" value="{{ step.year }}" inputmode="numeric" autocomplete="off"></label>
+    {% if step.year_refusal %}<p class="pitch-step__refusal" role="status">{{ step.year_refusal }}</p>{% endif %}
+  </div>
+{% endblock %}
+{% block pitch_focus %}{% endblock %}
+{% block add_needs %}title pitch runtime{% endblock %}

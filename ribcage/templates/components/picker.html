@@ -1,8 +1,10 @@
 {# The picker over plain data, a Picker: five tiles in TMDB's order, none chosen, never advancing on its own (#5, #19, #21, #92). #}{% spaceless %}
+{% url 'suggest' as suggest_address %}
 {% if picker.outage %}
-  <p class="picker__outage">TMDB isn't answering right now. Try again in a bit, or add it by hand.</p>
+  <p class="picker__outage">TMDB isn't answering right now. Try again in a bit, or {% if picker.choosable %}<a class="picker__by-hand" href="{{ suggest_address }}?by_hand=1" hx-get="{{ suggest_address }}?by_hand=1" hx-include="[name=q]" hx-target="#picker" hx-swap="innerHTML">add it by hand</a>{% else %}add it by hand{% endif %}.</p>
 {% elif picker.searched and not picker.tiles %}
   <p class="picker__none">TMDB has no film by that title.</p>
+  <p class="picker__hand">{% if picker.choosable %}<a class="picker__by-hand" href="{{ suggest_address }}?by_hand=1" hx-get="{{ suggest_address }}?by_hand=1" hx-include="[name=q]" hx-target="#picker" hx-swap="innerHTML">Add it by hand.</a>{% else %}Add it by hand.{% endif %}</p>
 {% elif picker.tiles %}
   <ul class="tiles picker__tiles" aria-label="Which film did you mean?">
     {% for tile in picker.tiles %}
@@ -14,5 +16,7 @@
       </li>
     {% endfor %}
   </ul>
+  {# For anything TMDB can't find: it swaps the hand-entry step in for the picker, as a tile swaps the pitch step, taking the find box's text along to start its boxes from (#21, #94). #}
+  <p class="picker__hand">None of these? {% if picker.choosable %}<a class="picker__by-hand" href="{{ suggest_address }}?by_hand=1" hx-get="{{ suggest_address }}?by_hand=1" hx-include="[name=q]" hx-target="#picker" hx-swap="innerHTML">Add it by hand.</a>{% else %}Add it by hand.{% endif %}</p>
 {% endif %}
 {% endspaceless %}

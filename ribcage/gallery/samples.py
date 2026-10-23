@@ -247,7 +247,7 @@ def gallery():
         "score_scale": SCORE_SCALE,
         "tiles": tiles(),
         "picker": picker(),
-        "picker_outage": Picker(searched=True, outage=True),
+        "picker_outage": Picker(searched=True, outage=True, choosable=False),
         "poster_row": poster_row(),
         "evening": evening(),
         "evening_minutes": 425,

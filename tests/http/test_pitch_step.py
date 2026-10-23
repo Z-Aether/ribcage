@@ -14,6 +14,7 @@ from ribcage.phase.order import Phase
 from ribcage.seeding.recorded import RecordedTmdb
 from ribcage.suggestions import notes, runtime
 from ribcage.suggestions.models import Approval, Note, Suggestion
+from ribcage.suggestions.pitch import TITLE_MAX_LENGTH
 from ribcage.suggestions.views import suggest
 from tests.films import a_tmdb_film
 from tests.http.test_phase import walk_to
@@ -90,6 +91,11 @@ def recorded_film(recordings, tmdb_id):
 
 def text(fragment):
     return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", fragment)).split())
+
+
+def plain(fragment):
+    # A link ends the outage sentence, so its full stop trails a space once the tags are gone.
+    return text(fragment).replace(" .", ".")
 
 
 def runtime_line(page):
@@ -171,14 +177,14 @@ def test_a_failing_detail_fetch_shows_the_outage_message(hanna, failing):
     response = step(hanna, EVIL_DEAD)
 
     assert response.status_code == 200
-    assert OUTAGE in response.text
+    assert OUTAGE in plain(response.text)
     assert "pitch-step" not in response.text
 
 
 def test_a_malformed_detail_shows_the_outage_message(hanna, monkeypatch, recordings):
     monkeypatch.setattr(client, "over_the_network", Counted(recordings, {"id": EVIL_DEAD, "title": "Evil Dead"}))
 
-    assert OUTAGE in step(hanna, EVIL_DEAD).text
+    assert OUTAGE in plain(step(hanna, EVIL_DEAD).text)
 
 
 @pytest.mark.parametrize("phase", [Phase.APPROVE, Phase.VOTE, Phase.PICK, Phase.RUN])
@@ -462,3 +468,178 @@ def test_a_blank_kept_pitch_leaves_the_box_as_it_was(hanna, voters, burn_by_ada,
     assert card.startswith('<article class="film-card is-open"')
     assert "autofocus>I'm in.</textarea>" in card
     assert "ada suggested it first." in card
+
+
+# Add it by hand (#94)
+
+CABINET = "Del Toro's Cabinet of Curiosities"
+HAND = {"by_hand": "1"}
+
+
+def hand_step(client, headers=HTMX):
+    return client.get(SUGGEST, HAND, headers=headers)
+
+
+def add_by_hand(client, title=CABINET, year="", pitch=PITCH, runtime_typed="47", headers=HTMX):
+    return client.post(SUGGEST, {"by_hand": "1", "title": title, "year": year, "pitch": pitch, "runtime": runtime_typed}, headers=headers)
+
+
+def typed(page, name):
+    return html.unescape(re.search(rf'<input type="text" name="{name}" value="([^"]*)"', page)[1])
+
+
+def test_the_hand_step_has_title_and_year_boxes_an_open_empty_runtime_box_and_no_poster_or_fetch(hanna, tmdb):
+    page = hand_step(hanna).text
+
+    assert (typed(page, "title"), typed(page, "year"), typed_runtime(page)) == ("", "", "")
+    assert text(page).count("optional") == 1
+    assert '<input type="hidden" name="by_hand" value="1">' in page
+    assert 'name="film"' not in page and "poster" not in page
+    line = runtime_line(page)
+    assert "runtime__pencil" not in line
+    assert re.search(r'<label class="runtime__field">', line)
+    assert ">Add</button>" in page
+    assert tmdb.asked == []
+
+
+@pytest.mark.parametrize("phase", [Phase.APPROVE, Phase.VOTE, Phase.PICK, Phase.RUN])
+def test_the_hand_steps_get_from_outside_suggest_reloads_the_tab(hanna, phase):
+    walk_to(phase)
+
+    response = hand_step(hanna)
+
+    assert (response.status_code, response.headers["HX-Redirect"]) == (200, "/")
+
+
+def test_a_plain_get_of_the_hand_step_is_sent_to_the_phase_page(hanna):
+    response = hand_step(hanna, headers={})
+
+    assert (response.status_code, response["Location"]) == (302, "/")
+
+
+def test_cabinet_of_curiosities_lands_in_the_pool_with_a_title_card_and_a_runtime_by_hand(hanna, tmdb):
+    response = add_by_hand(hanna)
+
+    assert (response.status_code, response.headers["HX-Redirect"]) == (200, "/")
+    suggestion = Suggestion.objects.get()
+    assert (suggestion.title, suggestion.year, suggestion.tmdb_id) == (CABINET, None, None)
+    assert (suggestion.runtime, suggestion.tmdb_runtime) == (47, None)
+    assert suggestion.notes.get().text == PITCH
+    assert tmdb.asked == []
+    card = card_of(hanna.get("/").text, suggestion)
+    assert "title-card__title" in card and "<img" not in card
+    assert text(runtime_line(card)).startswith("47 min by hand")
+
+
+def test_a_year_typed_is_kept(hanna):
+    add_by_hand(hanna, title="Dune", year="1984")
+
+    assert Suggestion.objects.get().year == 1984
+
+
+def test_a_second_hand_entered_film_with_the_same_title_is_kept_beside_the_first(hanna, voters):
+    add_by_hand(hanna)
+    add_by_hand(hanna)
+
+    assert list(Suggestion.objects.values_list("title", flat=True)) == [CABINET, CABINET]
+
+
+@pytest.mark.parametrize(
+    ("changed", "refusal"),
+    [
+        ({"title": "  "}, "A film needs a title. Type what it's called."),
+        ({"runtime_typed": ""}, runtime.EMPTY),
+        ({"pitch": " "}, notes.PITCH_EMPTY),
+        ({"year": "nineteen"}, "A year is four digits, like 1994. Type it that way, or leave it empty."),
+    ],
+)
+def test_a_missing_title_runtime_or_pitch_is_refused_gently_keeping_the_rest(hanna, changed, refusal):
+    typing = {"title": "Dune", "year": "1984", "pitch": PITCH, "runtime_typed": "137"} | changed
+
+    response = add_by_hand(hanna, **typing)
+
+    assert refusals(response.text) == [refusal]
+    assert Suggestion.objects.count() == Note.objects.count() == 0
+    assert (typed(response.text, "title"), typed(response.text, "year")) == (typing["title"], typing["year"])
+    assert typed_pitch(response.text) == typing["pitch"]
+    assert typed_runtime(response.text) == typing["runtime_typed"]
+    assert re.search(r'<label class="runtime__field">', runtime_line(response.text))
+
+
+def test_everything_missing_is_refused_at_once(hanna):
+    response = add_by_hand(hanna, title="", pitch="", runtime_typed="")
+
+    assert len(refusals(response.text)) == 3
+
+
+def test_a_plain_hand_add_that_is_refused_lands_on_the_pool(hanna):
+    response = add_by_hand(hanna, title="", headers={})
+
+    assert (response.status_code, response["Location"]) == (302, "/")
+    assert Suggestion.objects.count() == 0
+
+
+@pytest.mark.parametrize("phase", [Phase.APPROVE])
+def test_hand_add_works_in_approve(hanna, phase):
+    walk_to(phase)
+
+    add_by_hand(hanna)
+
+    assert Suggestion.objects.count() == 1
+
+
+@pytest.mark.parametrize("phase", [Phase.VOTE, Phase.PICK, Phase.RUN])
+def test_hand_add_is_refused_from_vote_on_with_the_reload(hanna, phase):
+    walk_to(phase)
+
+    response = add_by_hand(hanna)
+
+    assert (response.status_code, response.headers["HX-Redirect"]) == (200, "/")
+    assert Suggestion.objects.count() == 0
+
+
+def hand_step_from(client, searched):
+    return client.get(SUGGEST, HAND | {"q": searched}, headers=HTMX)
+
+
+@pytest.mark.parametrize(
+    ("searched", "title", "year"),
+    [
+        ("some home video 1994", "some home video", "1994"),
+        ("some home video (1994)", "some home video", "1994"),
+        ("  Del Toro's   Cabinet of Curiosities ", CABINET, ""),
+        ("", "", ""),
+        ("   ", "", ""),
+    ],
+)
+def test_the_hand_step_starts_from_the_find_boxs_text_with_a_trailing_year_in_its_own_box(hanna, searched, title, year):
+    # The dev, 2026-10-23 (#94).
+    page = hand_step_from(hanna, searched).text
+
+    assert (typed(page, "title"), typed(page, "year")) == (title, year)
+
+
+def test_hand_add_waits_in_the_browser_for_a_title_a_pitch_and_a_runtime_but_is_sent_enabled(hanna):
+    # The year is optional, so Add never waits for it (the dev, 2026-10-23).
+    page = hand_step(hanna).text
+
+    assert sorted(boxes_add_needs(page)) == ["pitch", "runtime", "title"]
+    assert "disabled" not in add_button(page)
+
+
+def test_a_title_over_the_cap_is_refused_whole_and_kept(hanna):
+    # Refused gently and whole, like a note over its cap (#94; the dev, 2026-10-23).
+    long_title = "A" * (TITLE_MAX_LENGTH + 1)
+
+    response = add_by_hand(hanna, title=long_title)
+
+    assert refusals(response.text) == [f"That's {len(long_title):,} characters, and a title holds {TITLE_MAX_LENGTH:,}. Trim it a little."]
+    assert typed(response.text, "title") == long_title
+    assert typed_pitch(response.text) == PITCH
+    assert Suggestion.objects.count() == 0
+
+
+def test_a_title_at_the_cap_is_kept(hanna):
+    add_by_hand(hanna, title="A" * TITLE_MAX_LENGTH)
+
+    assert len(Suggestion.objects.get().title) == TITLE_MAX_LENGTH

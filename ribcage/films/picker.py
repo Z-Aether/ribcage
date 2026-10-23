@@ -12,9 +12,13 @@ class PickerTile:
     suggested_by: str | None = None
     # The pool's suggestion of it, whose card choosing the tile opens; the gallery's sample has none.
     suggestion_id: int | None = None
+    # The searching voter's own film reads by you, not their name (#92; the dev, 2026-10-23).
+    yours: bool = False
 
     @property
     def caption(self):
+        if self.yours:
+            return "already suggested by you"
         return f"already suggested by {self.suggested_by}" if self.suggested_by else ""
 
 

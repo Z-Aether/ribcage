@@ -1458,6 +1458,9 @@ body > footer.site-footer {
   color: var(--ink-muted);
 }
 
+.picker__hand {
+  margin-top: 0.75rem;
+}
 /* The pitch step takes the picker's place: the film beside its poster, a large pitch box, the runtime line, then Add (#21, #93). */
 .pitch-step {
   display: grid;
@@ -1474,6 +1477,29 @@ body > footer.site-footer {
   margin: 0;
   font-size: var(--card-title-size);
   line-height: 1.15;
+}
+/* A film by hand has no poster, so its boxes and the rest take the step's whole width (#38, #94). */
+.pitch-step__film--typed {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0.5rem;
+  max-width: 30rem;
+}
+.pitch-step__film--typed ~ .pitch-step__words {
+  grid-column: 1 / -1;
+}
+[data-skin] .pitch-step__box {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+}
+[data-skin] .pitch-step__box input {
+  margin: 0;
+}
+.pitch-step__optional {
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 .pitch-step__words {
   grid-column: 2;

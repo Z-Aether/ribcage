@@ -5,8 +5,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST, require_safe
 
+from ribcage.films import find as find_text
 from ribcage.films import signed
 from ribcage.films.client import NotAnswering, tmdb_client
+from ribcage.films.film import hand_entered
 from ribcage.films.picker import Picker
 
 from ribcage.phase.check import phase_window
@@ -147,12 +149,12 @@ def find(request):
     # A tab left open past SUGGEST reloads onto the phase page as it is now (#78).
     if current() is not Phase.SUGGEST:
         return reload_the_tab(request, reverse("phase_page"))
-    return render(request, "components/picker.html", {"picker": picker.the_picker(request.GET.get("q", ""), tmdb_client())})
+    return render(request, "components/picker.html", {"picker": picker.the_picker(request.GET.get("q", ""), tmdb_client(), request.user)})
 
 
 @phase_window(Phase.SUGGEST, Phase.APPROVE)
 def suggest(request):
-    """The pitch step: a GET from a picker tile fetches the film and shows the step, writing nothing, and Add's POST suggests it (#21, #93).
+    """The pitch step: a GET from a picker tile fetches the film and shows the step, writing nothing, and Add's POST suggests it; a film by hand has its own step (#21, #93, #94).
 
     Suggesting is only offered in SUGGEST; APPROVE's window just catches a tab left open (#34).
     """
@@ -168,6 +170,8 @@ def pitch_step(request):
     # A tab left open past SUGGEST reloads onto the phase page as it is now (#78, #92).
     if current() is not Phase.SUGGEST:
         return reload_the_tab(request, reverse("phase_page"))
+    if "by_hand" in request.GET:
+        return render(request, "suggestions/hand_step.html", {"step": hand_step_from(request.GET.get("q", ""))})
     try:
         tmdb_id = int(request.GET.get("tmdb_id", ""))
     except ValueError:
@@ -182,7 +186,38 @@ def pitch_step(request):
     return render(request, "suggestions/pitch_step.html", {"step": pitch.PitchStep(film, signed.signed(film))})
 
 
+def hand_step_from(searched):
+    # The boxes start from what was searched, a trailing year in its own box (the dev, 2026-10-23; #94).
+    query = find_text.parsed(searched)
+    return pitch.HandStep(hand_entered("", None, None), title=query.title, year="" if query.year is None else str(query.year))
+
+
+def add_by_hand(request):
+    typed = {name: request.POST.get(name, "") for name in ("title", "year", "pitch", "runtime")}
+    try:
+        pitch.add_by_hand(request.user, typed["title"], typed["year"], typed["pitch"], typed["runtime"])
+    except pitch.Refused as refused:
+        # Only htmx shows the step again; a plain post is answered with the page (#88).
+        if request.headers.get("HX-Request") != "true":
+            return redirect("phase_page")
+        step = pitch.HandStep(
+            hand_entered("", None, None),
+            pitch=typed["pitch"],
+            typed_runtime=typed["runtime"],
+            pitch_refusal=refused.pitch,
+            runtime_refusal=refused.runtime,
+            title=typed["title"],
+            year=typed["year"],
+            title_refusal=refused.title,
+            year_refusal=refused.year,
+        )
+        return render(request, "suggestions/hand_step.html", {"step": step})
+    return reload_the_tab(request, reverse("phase_page"))
+
+
 def add(request):
+    if "by_hand" in request.POST:
+        return add_by_hand(request)
     try:
         film = signed.unsigned(request.POST.get("film", ""))
     except signed.Tampered:
