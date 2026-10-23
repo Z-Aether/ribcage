@@ -20,7 +20,7 @@ HTMX = {"HX-Request": "true"}
 
 @phase_window(*WINDOW)
 def a_windowed_rename(request):
-    if request.method == "GET":
+    if request.method in {"GET", "HEAD"}:
         return HttpResponse("the form")
     request.user.display_name = request.POST["display_name"]
     request.user.save()
@@ -45,6 +45,13 @@ def client(client, ada):
 
 def rename(client, headers=None):
     return client.post(ACTION, {"display_name": "Grete"}, headers=headers)
+
+
+def send(client, method, address, form):
+    """A request by any method, carrying the form as its body where the test client lets it (TRACE has none)."""
+    if method == "trace":
+        return client.trace(address)
+    return getattr(client, method)(address, form, content_type="application/x-www-form-urlencoded")
 
 
 def display_name(voter):
@@ -87,15 +94,23 @@ def test_an_htmx_post_outside_its_window_writes_nothing_and_has_htmx_load_the_ph
 
 
 @with_the_test_action
-@pytest.mark.parametrize("method", ["options", "trace"])
-def test_only_get_and_head_pass_unchecked_outside_the_window(client, ada, method):
-    # Django lets OPTIONS and TRACE past CSRF, so the check mustn't let them past the window too (#78).
+@pytest.mark.parametrize("phase", [SUGGEST, VOTE], ids=["inside the window", "outside the window"])
+@pytest.mark.parametrize("method", ["options", "trace", "put", "patch", "delete"])
+def test_a_windowed_view_answers_every_method_but_get_head_and_post_with_405(client, ada, phase, method):
+    # Django lets OPTIONS and TRACE past CSRF, so none of them may reach a windowed view's body (#61, #88).
+    walk_to(phase)
+
+    response = send(client, method, ACTION, "display_name=Grete")
+
+    assert (response.status_code, response.headers["Allow"]) == (405, "GET, HEAD, POST")
+    assert display_name(ada) == "Ada"
+
+
+@with_the_test_action
+def test_head_reads_a_windowed_view_outside_its_window(client):
     walk_to(VOTE)
 
-    response = getattr(client, method)(ACTION)
-
-    assert (response.status_code, response.headers["Location"]) == (302, "/")
-    assert display_name(ada) == "Ada"
+    assert client.head(ACTION).status_code == 200
 
 
 @with_the_test_action
