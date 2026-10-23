@@ -1,14 +1,18 @@
+import socket
 from io import BytesIO, StringIO, TextIOWrapper
 
 import pytest
 from django.contrib.auth import authenticate
 from django.core.management import CommandError, call_command
+from django.db.models import F
 from django.utils import timezone
 
+from ribcage.films.corpus import read_entries
 from ribcage.identity.models import Voter
 from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import PHASES, Phase
+from ribcage.suggestions.models import Approval, Note, Suggestion
 
 SEEDED_DISPLAY_NAMES = ["Ada", "Anne-Marie", "O'Brien", "Zoë", "Sam", "Bartholomew Winthrop"]
 SEEDED_PASSWORD = "popcorn-before-midnight"
@@ -111,3 +115,70 @@ def test_the_voter_list_reaches_a_redirected_cp1252_stdout_as_utf8(transactional
 
     redirected.flush()
     assert "Zoë" in redirected.buffer.getvalue().decode("utf-8")
+
+
+CABINET_OF_CURIOSITIES = "Del Toro's Cabinet of Curiosities"
+
+
+def pitch_of(suggestion):
+    return suggestion.notes.filter(author=suggestion.suggester).first()
+
+
+@pytest.mark.parametrize("phase", PHASES)
+def test_each_phase_is_seeded_with_a_pool_from_the_recorded_corpus(transactional_db, debug_on, phase):
+    call_command("seed", "--phase", phase)
+
+    pool = list(Suggestion.objects.select_related("suggester"))
+    corpus_ids = {entry.tmdb_id for entry in read_entries()}
+    assert len(pool) >= 10
+    assert {suggestion.tmdb_id for suggestion in pool} <= corpus_ids
+    assert all(suggestion.suggester.display_name == suggestion.suggester_name for suggestion in pool)
+    assert len({suggestion.suggester_name for suggestion in pool}) >= 4
+    assert all(pitch_of(suggestion) is not None for suggestion in pool)
+    assert Note.objects.exclude(author=F("suggestion__suggester")).exists()
+
+
+@pytest.mark.parametrize("phase", PHASES)
+def test_each_phase_is_seeded_with_the_corpus_hand_entered_film(transactional_db, debug_on, phase):
+    call_command("seed", "--phase", phase)
+
+    cabinet = Suggestion.objects.get(title=CABINET_OF_CURIOSITIES)
+    assert (cabinet.tmdb_id, cabinet.runtime, cabinet.tmdb_runtime, cabinet.poster_path) == (None, 47, None, None)
+
+
+def test_a_seeded_suggest_has_every_suggestion_undecided(transactional_db, debug_on):
+    call_command("seed")
+
+    assert set(Suggestion.objects.values_list("approval", flat=True)) == {Approval.UNDECIDED}
+
+
+@pytest.mark.parametrize("phase", PHASES[1:])
+def test_from_approve_on_the_pool_is_a_mix_of_undecided_approved_and_dropped(transactional_db, debug_on, phase):
+    call_command("seed", "--phase", phase)
+
+    assert set(Suggestion.objects.values_list("approval", flat=True)) == set(Approval)
+
+
+def test_the_pool_is_seeded_offline(transactional_db, debug_on, monkeypatch):
+    def refuse(*args, **kwargs):
+        raise AssertionError("seed went online")
+
+    monkeypatch.setattr(socket, "create_connection", refuse)
+    monkeypatch.setattr(socket.socket, "connect", refuse)
+
+    call_command("seed", "--phase", "APPROVE")
+
+    assert Suggestion.objects.exists()
+
+
+def seeded_pool():
+    return list(Suggestion.objects.order_by("pk").values_list("pk", "title", "suggester_name", "approval"))
+
+
+def test_seeding_twice_gives_the_same_pool(transactional_db, debug_on):
+    call_command("seed", "--phase", "APPROVE")
+    first = seeded_pool()
+
+    call_command("seed", "--phase", "APPROVE")
+
+    assert seeded_pool() == first

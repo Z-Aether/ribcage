@@ -10,6 +10,7 @@ from django.utils import timezone
 from ribcage.identity.models import Voter
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import FRESH_PHASE, PHASES, Phase
+from ribcage.seeding.pool import SEEDED_POOL, seed_the_pool
 
 SEEDED_DISPLAY_NAMES = ["Ada", "Anne-Marie", "O'Brien", "Zoë", "Sam", "Bartholomew Winthrop"]
 SEEDED_PASSWORD = "popcorn-before-midnight"
@@ -41,6 +42,7 @@ class Command(BaseCommand):
             for display_name in SEEDED_DISPLAY_NAMES:
                 Voter.objects.create_voter(display_name, password_hash=password)
             walk_the_phase_to(phase)
+            seed_the_pool(phase)
         # Redirected on Windows, stdout would be cp1252 and mangle Zoë in a log read as UTF-8 (#50).
         # This reconfigures the whole process's stdout, not just this command's.
         if hasattr(self.stdout, "reconfigure"):
@@ -48,6 +50,7 @@ class Command(BaseCommand):
         self.stdout.write(f"Seeded {phase} with these voters:")
         self.stdout.write(f"  {', '.join(SEEDED_DISPLAY_NAMES)}")
         self.stdout.write(f"  each signing in with the password {SEEDED_PASSWORD}")
+        self.stdout.write(f"and {len(SEEDED_POOL)} films in the pool.")
 
 
 def add_phase_argument(parser):
