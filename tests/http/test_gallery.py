@@ -87,6 +87,15 @@ def test_the_gallery_shows_both_phase_bars_on_opened_cards(client, debug):
     assert "Your pitch" in page and "Your note" in page
 
 
+def test_the_gallery_shows_withdraw_on_an_opened_card_and_armed_on_another(client, debug):
+    page = client.get(GALLERY).content.decode()
+
+    opened = [card for card in re.findall(r"<article.*?</article>", page, re.S) if 'class="film-card is-open"' in card]
+    withdraws = [re.search(r'<div class="withdraw([^"]*)" data-withdraw>', card) for card in opened]
+    assert sorted(found[1] for found in withdraws if found) == ["", " is-armed"]
+    assert "V/H/S/99 leaves the pool, and takes your pitch and 2 notes from the group with it." in re.sub(r"<[^>]+>", "", page)
+
+
 def test_the_gallery_shows_the_password_confirmation(client, debug):
     page = client.get(GALLERY).content.decode()
 

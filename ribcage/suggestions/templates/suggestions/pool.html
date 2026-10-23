@@ -4,7 +4,7 @@
     <div class="film-cards" data-film-cards>
       {% for card in pool %}{% include "components/film_card.html" with card=card %}{% endfor %}
     </div>
-  {% else %}
-    <p class="pool__empty">No films have been suggested.</p>
   {% endif %}
+  {# Hidden while any card is shown, so a withdraw of the last one leaves it saying so in place (#89). #}
+  <p class="pool__empty">No films have been suggested.</p>
 </section>

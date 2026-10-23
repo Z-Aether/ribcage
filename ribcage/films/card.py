@@ -25,6 +25,14 @@ class NoteBox:
 
 
 @dataclass(frozen=True)
+class Withdraw:
+    """Withdraw on the viewer's own card, offered only while the film is withdrawable; armed, it says what goes (#27, #89)."""
+
+    goes: str
+    armed: bool = False
+
+
+@dataclass(frozen=True)
 class FilmCard:
     """Everything the film card shows, as plain data, so a model binds to it without touching the template (#21, #58)."""
 
@@ -38,6 +46,7 @@ class FilmCard:
     # The suggestion a phase bar acts on; the gallery's sample cards have none.
     suggestion_id: int | None = None
     note_box: NoteBox | None = None
+    withdraw: Withdraw | None = None
 
 
 def trimmed(text, length):

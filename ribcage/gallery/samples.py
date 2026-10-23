@@ -9,8 +9,9 @@ from dataclasses import dataclass, replace
 from functools import cache
 
 from ribcage.films import corpus
-from ribcage.films.card import FilmCard, Note, NoteBox
+from ribcage.films.card import FilmCard, Note, NoteBox, Withdraw
 from ribcage.suggestions.views import PITCH_REQUIRED
+from ribcage.suggestions.withdrawal import what_goes
 
 MIDSOMMAR = 530385
 POOH_2 = 1079485
@@ -145,13 +146,27 @@ def cards():
     )
 
 
+def own(sample, armed=False):
+    """The sample as its suggester sees it: their pitch in the box, and Withdraw on the card (#88, #89)."""
+    withdraw = Withdraw(goes=what_goes(len(sample.notes)), armed=armed)
+    return replace(sample, note_box=NoteBox(text=sample.pitch, is_pitch=True), withdraw=withdraw)
+
+
 def phase_bars():
-    """Each pool phase's bar on an opened card, with no suggestion, so a save here only reloads onto the phase page (#88)."""
-    wolf_house, exit_8 = cards()[2], cards()[5]
+    """Each pool phase's bar on an opened card, with no suggestion, so a save here only reloads onto the phase page (#88).
+
+    A withdraw confirmed here names no suggestion, so it takes nothing, and the sample card only leaves until a reload (#89).
+    """
+    wolf_house, vhs_99, exit_8 = cards()[2], cards()[4], cards()[5]
     return (
         (
             "SUGGEST's phase bar, on Bex's own suggestion, after she saved her pitch empty",
-            replace(exit_8, note_box=NoteBox(text=exit_8.pitch, is_pitch=True, refusal=PITCH_REQUIRED)),
+            replace(own(exit_8), note_box=NoteBox(text=exit_8.pitch, is_pitch=True, refusal=PITCH_REQUIRED)),
+            "components/suggest_bar.html",
+        ),
+        (
+            "SUGGEST's phase bar, on Eli's own suggestion, with Withdraw armed",
+            own(vhs_99, armed=True),
             "components/suggest_bar.html",
         ),
         (

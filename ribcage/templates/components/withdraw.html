@@ -1,0 +1,15 @@
+{# Withdraw on your own card, a Withdraw: a click, then an inline confirm. Cancel takes the arm's place, and the confirm stands apart, after what goes (#85, #89). #}
+{% url 'withdraw' as withdraw_address %}{% with act=card.withdraw suggestion=card.suggestion_id|default_if_none:'' %}<div class="withdraw{% if act.armed %} is-armed{% endif %}" data-withdraw>
+  {# One id for the arm and Cancel, so htmx keeps the focus on whichever stands there (#89). #}
+  {% if act.armed %}
+    <a class="button button--quiet withdraw__act withdraw__cancel"{% if suggestion %} id="withdraw-{{ suggestion }}"{% endif %} href="{{ withdraw_address }}?suggestion={{ suggestion }}&amp;cancel" hx-get="{{ withdraw_address }}?suggestion={{ suggestion }}&amp;cancel" hx-target="closest [data-withdraw]" hx-swap="outerHTML"><span>Cancel</span><span class="withdraw__keep" aria-hidden="true">Withdraw…</span></a>
+    <form class="withdraw__confirm" method="post" action="{{ withdraw_address }}" hx-post="{{ withdraw_address }}" hx-target="closest [data-film-card]" hx-swap="outerHTML swap:0.4s">
+      {% csrf_token %}
+      <input type="hidden" name="suggestion" value="{{ suggestion }}">
+      <p class="withdraw__goes"><cite>{{ card.film.title }}</cite> leaves the pool, and takes {{ act.goes }} with it.</p>
+      <p class="withdraw__go"><button type="submit">Withdraw {{ card.film.title }}</button></p>
+    </form>
+  {% else %}
+    <a class="button button--quiet withdraw__act"{% if suggestion %} id="withdraw-{{ suggestion }}"{% endif %} href="{{ withdraw_address }}?suggestion={{ suggestion }}" hx-get="{{ withdraw_address }}?suggestion={{ suggestion }}" hx-target="closest [data-withdraw]" hx-swap="outerHTML">Withdraw…</a>
+  {% endif %}
+</div>{% endwith %}

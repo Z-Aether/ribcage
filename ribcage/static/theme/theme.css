@@ -1170,12 +1170,85 @@ body > footer.site-footer {
 [data-skin] .note-box__said.is-refusal {
   color: var(--score-rather-not);
 }
+/* Withdraw ends the line Save starts, far from it; armed, its confirm takes lines of its own below (#85, #89). */
+.phase-bar--suggest:has(> .withdraw) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 1.1rem;
+}
+.phase-bar--suggest:has(> .withdraw) :is(.note-box, .note-box__foot, .withdraw) {
+  display: contents;
+}
+.phase-bar--suggest:has(> .withdraw) .note-box__label {
+  grid-area: 1 / 1 / 2 / -1;
+}
+.phase-bar--suggest:has(> .withdraw) .note-box__foot > button {
+  grid-area: 2 / 1;
+  margin-top: 0.75rem;
+}
+.phase-bar--suggest:has(> .withdraw) .note-box__said {
+  grid-area: 2 / 2;
+  margin-top: 0.75rem;
+}
+[data-skin] .withdraw__act {
+  grid-area: 2 / 3;
+  margin: 0.75rem 0 0;
+}
+/* Cancel takes the arm's place at its size, as on the console: an invisible copy of the arm's label widens it (#85). */
+[data-skin] a.button.withdraw__cancel {
+  display: inline-grid;
+  justify-items: center;
+}
+.withdraw__cancel > span {
+  grid-area: 1 / 1;
+}
+.withdraw__keep {
+  visibility: hidden;
+}
+.withdraw__confirm {
+  grid-area: 3 / 1 / 4 / -1;
+  margin: 1.1rem 0 0;
+}
+[data-skin] .withdraw__confirm p {
+  margin: 0;
+}
+.withdraw__goes cite {
+  font-style: normal;
+  font-weight: 700;
+}
+[data-skin] p.withdraw__go {
+  margin-top: 0.75rem;
+}
+[data-skin] .withdraw__go button {
+  width: auto;
+  margin: 0;
+}
+/* A withdrawn card fades as it leaves the pool. */
+.film-card.htmx-swapping {
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+}
+/* The pool's empty line waits under its cards, for when the last one is withdrawn in place (#89). */
+.pool:has([data-film-card]) > .pool__empty {
+  display: none;
+}
 @media (max-width: 600px) {
   .film-card.is-open:has(> .film-card__phase-bar:not(:empty)) > .film-card__poster {
     grid-row: auto;
   }
   .film-card__phase-bar {
     grid-column: 1 / -1;
+  }
+  /* A refusal beside Save would be squeezed between it and Withdraw, so it takes the line below. */
+  .phase-bar--suggest:has(> .withdraw) .note-box__said {
+    grid-area: 3 / 1 / 4 / -1;
+  }
+  .phase-bar--suggest:has(> .withdraw) .note-box__said:empty {
+    margin-top: 0;
+  }
+  .withdraw__confirm {
+    grid-area: 4 / 1 / 5 / -1;
   }
 }
 
@@ -1334,7 +1407,8 @@ body > footer.site-footer {
   [data-skin="voter"] .score:hover {
     animation: none;
   }
-  .film-card {
+  .film-card,
+  .film-card.htmx-swapping {
     transition: none;
   }
   [data-skin="voter"] .film-card:not(.is-open):hover {
