@@ -33,6 +33,16 @@ class Withdraw:
 
 
 @dataclass(frozen=True)
+class RuntimePencil:
+    """The pencil on the runtime line, any voter's in SUGGEST on a withdrawable film; open, the line edits it (#21, #34, #90)."""
+
+    open: bool = False
+    # A refused runtime stays as typed beside a gentle refusal, never cut or coerced (#90).
+    typed: str | None = None
+    refusal: str = ""
+
+
+@dataclass(frozen=True)
 class FilmCard:
     """Everything the film card shows, as plain data, so a model binds to it without touching the template (#21, #58)."""
 
@@ -47,6 +57,7 @@ class FilmCard:
     suggestion_id: int | None = None
     note_box: NoteBox | None = None
     withdraw: Withdraw | None = None
+    runtime_pencil: RuntimePencil | None = None
 
 
 def trimmed(text, length):

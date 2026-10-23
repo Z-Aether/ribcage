@@ -1,9 +1,10 @@
 import dataclasses
+import re
 
 import pytest
 from django.template.loader import render_to_string
 
-from ribcage.films.card import ELLIPSIS, FilmCard, Note, trimmed
+from ribcage.films.card import ELLIPSIS, FilmCard, Note, RuntimePencil, trimmed
 from ribcage.films.film import Film, RuntimeSource, hand_entered
 from ribcage.films.poster import poster_url
 
@@ -129,3 +130,42 @@ def test_the_card_says_whether_it_is_open(expanded):
 
     assert ("film-card is-open" in page) is expanded
     assert f'aria-expanded="{str(expanded).lower()}"' in page
+
+
+# The runtime pencil (#90)
+
+
+def runtime_line(page):
+    return re.search(r'<div class="film-card__runtime[^"]*" data-runtime>.*?</div>', page, re.S)[0]
+
+
+def test_the_runtime_line_offers_no_pencil_unless_the_card_carries_one():
+    assert "runtime__pencil" not in render(a_card(suggestion_id=7))
+
+
+def test_the_pencil_ends_the_runtime_line_and_opens_it_in_place():
+    line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=RuntimePencil())))
+
+    pencil = re.search(r'<a class="runtime__pencil"[^>]*>', line)[0]
+    assert 'hx-get="/runtime/?suggestion=7"' in pencil
+    assert 'hx-target="closest [data-runtime]"' in pencil
+    assert 'aria-label="Correct the runtime"' in pencil
+    assert line.index("runtime__source") < line.index("runtime__pencil")
+
+
+def test_the_open_pencil_edits_the_current_runtime():
+    line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=RuntimePencil(open=True))))
+
+    assert 'hx-post="/runtime/"' in line
+    assert '<input type="hidden" name="suggestion" value="7">' in line
+    assert re.search(r'<input [^>]*name="runtime"[^>]*value="144"', line)
+    assert "runtime__refusal" not in line
+
+
+def test_a_refused_runtime_stays_as_typed_beside_the_refusal():
+    pencil = RuntimePencil(open=True, typed="2h 31", refusal="A runtime is whole minutes, like 144.")
+
+    line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=pencil)))
+
+    assert re.search(r'<input [^>]*name="runtime"[^>]*value="2h 31"', line)
+    assert '<p class="runtime__refusal" role="status">A runtime is whole minutes, like 144.</p>' in line

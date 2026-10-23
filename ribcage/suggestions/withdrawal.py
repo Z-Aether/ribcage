@@ -13,7 +13,7 @@ def withdrawable(suggestion):
     """Whether nothing downstream holds the suggestion, so a withdraw can only take the film and its notes (#34).
 
     Reads only what the suggestion was loaded with, so the pool asks it of every card at no query each,
-    and a later hold joins it as an annotation in `with_holds`. The runtime pencil is to reuse it (#90).
+    and a later hold joins it as an annotation in `with_holds`. The runtime pencil reads it too (#90).
     """
     return suggestion.approval != Approval.APPROVED
 

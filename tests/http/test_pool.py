@@ -40,6 +40,10 @@ def main(page):
     return re.sub(r'name="csrfmiddlewaretoken" value="\w+"', "", re.search(r"<main>.*</main>", page, re.S)[0])
 
 
+def without_the_pencil(page, suggestion):
+    return re.sub(rf' <a class="runtime__pencil" id="runtime-{suggestion.pk}"[^>]*>✎</a>', "", page)
+
+
 def titles_shown(page):
     return re.findall(r'class="film-card__toggle"[^>]*>([^<]+)</button>', page)
 
@@ -58,11 +62,14 @@ def test_the_pool_shows_no_mark_of_approval(voter_client, voters, phase):
     walk_to(phase)
     undecided = main(voter_client.get("/").text)
 
-    for suggestion, approval in zip(suggestions[1:], [Approval.APPROVED, Approval.DROPPED]):
-        Suggestion.objects.filter(pk=suggestion.pk).update(approval=approval)
+    approved, dropped = suggestions[1:]
+    Suggestion.objects.filter(pk=approved.pk).update(approval=Approval.APPROVED)
+    Suggestion.objects.filter(pk=dropped.pk).update(approval=Approval.DROPPED)
     decided = main(voter_client.get("/").text)
 
-    assert decided == undecided
+    # In SUGGEST an approved film's runtime pencil is absent, with no word on why: no mark, by design (#34, #90).
+    expected = without_the_pencil(undecided, approved) if phase is Phase.SUGGEST else undecided
+    assert decided == expected
     assert not re.search(r"approved|dropped|undecided|ballot", decided, re.I)
 
 
@@ -115,17 +122,6 @@ def test_an_empty_pool_says_so(voter_client, phase):
 
     assert "No films have been suggested." in page
     assert "<article" not in main(page)
-
-
-@pytest.mark.parametrize("phase", POOL_PHASES)
-def test_no_card_offers_the_runtime_pencil_before_it_works(voter_client, voters, phase):
-    suggest(voters, ["The Thing"])
-    walk_to(phase)
-
-    page = voter_client.get("/").text
-
-    assert "film-card" in page
-    assert "✎" not in page
 
 
 @pytest.mark.parametrize("phase", LATER_PHASES)

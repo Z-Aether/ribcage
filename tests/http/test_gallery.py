@@ -62,6 +62,8 @@ def test_the_gallery_is_behind_the_login_wall(debug, db):
             id="a film with only a pitch",
         ),
         pytest.param('<span class="removed-tag">removed</span>', id="a removed suggester"),
+        pytest.param('<a class="runtime__pencil"', id="the runtime pencil"),
+        pytest.param('<p class="runtime__refusal" role="status">', id="the runtime pencil open, refusing"),
         pytest.param("written for the gallery", id="saying the voters and notes are samples"),
     ],
 )

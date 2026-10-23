@@ -956,6 +956,62 @@ body > footer.site-footer {
   color: var(--ink-muted);
   line-height: 1.3;
 }
+/* The runtime pencil ends the line, quiet until reached for; open, the line becomes a box of minutes in place (#21, #90). */
+[data-skin] .runtime__pencil {
+  display: inline-block;
+  margin-left: 0.15em;
+  padding: 0.15em 0.4em;
+  border-radius: 7px 10px 6px 9px;
+  color: var(--ink-muted);
+  font-size: 1.15em;
+  line-height: 1;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+[data-skin] .runtime__pencil:hover {
+  color: var(--accent);
+  text-decoration: none;
+  transform: rotate(-14deg);
+}
+.film-card__runtime.is-editing {
+  white-space: normal;
+}
+.runtime__edit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.6rem;
+  margin: 0;
+}
+[data-skin] .runtime__field {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  white-space: nowrap;
+}
+[data-skin] .runtime__field input {
+  width: 4.2em;
+  height: auto;
+  margin: 0 0.3em 0 0;
+  padding: 0.25rem 0.5rem;
+  color: var(--ink);
+  font-size: 1.15em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums lining-nums;
+  text-align: right;
+}
+[data-skin] .runtime__edit :is(button, a.button) {
+  width: auto;
+  margin: 0;
+  padding-block: 0.3rem;
+  font-size: 0.9rem;
+}
+/* A refusal is said kindly on a line of its own, in the note box's rose (#88). */
+[data-skin] .runtime__refusal {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--score-rather-not);
+}
 
 .film-card__original {
   display: none;
@@ -1408,8 +1464,12 @@ body > footer.site-footer {
     animation: none;
   }
   .film-card,
-  .film-card.htmx-swapping {
+  .film-card.htmx-swapping,
+  [data-skin] .runtime__pencil {
     transition: none;
+  }
+  [data-skin] .runtime__pencil:hover {
+    transform: none;
   }
   [data-skin="voter"] .film-card:not(.is-open):hover {
     transform: none;

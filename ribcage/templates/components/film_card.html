@@ -4,7 +4,7 @@
   <div class="film-card__body">
     <div class="film-card__head">
       <h3 class="film-card__title"><button type="button" class="film-card__toggle" aria-expanded="{% if expanded %}true{% else %}false{% endif %}">{{ card.film.title }}</button>{% if card.film.year %} <span class="film-card__year">{{ card.film.year }}</span>{% endif %}</h3>
-      <p class="film-card__runtime">{% if card.film.runtime %}<span class="runtime__value">{{ card.film.runtime }}</span>&nbsp;min{% else %}No runtime{% endif %} <span class="runtime__source">{% if card.film.runtime_source == "tmdb" %}TMDB{% else %}by hand{% endif %}</span></p>
+      {% include "components/runtime.html" %}
     </div>
     {% if card.film.original_title and card.film.original_title != card.film.title %}<p class="film-card__original"><span class="film-card__label">Original title</span> {{ card.film.original_title }}</p>{% endif %}
     <p class="film-card__meta">{% if card.film.directors %}<span>{{ card.film.directors|join:", " }}</span>{% endif %}{% if card.film.certificate %}<span><span class="certificate">{{ card.film.certificate }}</span></span>{% endif %}{% if card.film.trailer_key %}<span><a href="https://www.youtube.com/watch?v={{ card.film.trailer_key }}" target="_blank" rel="noopener">trailer&nbsp;↗</a></span>{% endif %}{% if card.film.tmdb_id %}<span><a href="https://www.themoviedb.org/movie/{{ card.film.tmdb_id }}" target="_blank" rel="noopener">TMDB&nbsp;↗</a></span>{% endif %}</p>

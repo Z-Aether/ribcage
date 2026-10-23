@@ -9,7 +9,7 @@ from ribcage.phase.check import phase_window
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
-from ribcage.suggestions import notes, pool, withdrawal
+from ribcage.suggestions import notes, pool, runtime, withdrawal
 from ribcage.suggestions.models import Suggestion
 
 PITCH_REQUIRED = "A suggestion needs its pitch, so yours is back as it was. Change it however you like."
@@ -35,7 +35,8 @@ def write_note(request):
     if (suggestion := named_suggestion(request.POST.get("suggestion"))) is None:
         return reload_the_tab(request, reverse("phase_page"))
     typed = request.POST.get("text", "")
-    card = pool.the_card(suggestion, request.user)
+    phase = current()
+    card = pool.the_card(suggestion, request.user, phase)
     try:
         notes.write(suggestion, request.user, typed)
     except notes.TooLong as refusal:
@@ -43,12 +44,12 @@ def write_note(request):
     except notes.PitchRequired:
         box = replace(card.note_box, refusal=PITCH_REQUIRED)
     else:
-        card = pool.the_card(suggestion, request.user)
+        card = pool.the_card(suggestion, request.user, phase)
         box = replace(card.note_box, saved=True)
     # Only htmx swaps the card in place; a plain post is answered with the page (#88).
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
-    context = {"card": replace(card, note_box=box), "expanded": True, "phase_bar": pool.PHASE_BARS[current()]}
+    context = {"card": replace(card, note_box=box), "expanded": True, "phase_bar": pool.PHASE_BARS[phase]}
     return render(request, "components/film_card.html", context)
 
 
@@ -68,7 +69,7 @@ def arm_withdraw(request):
     # A tab left open past SUGGEST, or a card withdrawn since, reloads onto the phase page as it is now (#78, #88).
     if suggestion is None or current() is not Phase.SUGGEST:
         return reload_the_tab(request, reverse("phase_page"))
-    card = pool.the_card(suggestion, request.user)
+    card = pool.the_card(suggestion, request.user, Phase.SUGGEST)
     # Not the viewer's to withdraw, or approved since: the act leaves the card, with no explanation (#27).
     if card.withdraw is None:
         return HttpResponse()
@@ -88,5 +89,54 @@ def confirm_withdraw(request):
     if suggestion is None:
         return HttpResponse()
     # Refused: the card as it is now, which offers no withdraw (#27).
-    context = {"card": pool.the_card(suggestion, request.user), "expanded": True, "phase_bar": pool.PHASE_BARS[Phase.SUGGEST]}
+    card = pool.the_card(suggestion, request.user, Phase.SUGGEST)
+    context = {"card": card, "expanded": True, "phase_bar": pool.PHASE_BARS[Phase.SUGGEST]}
     return render(request, "components/film_card.html", context)
+
+
+@phase_window(Phase.SUGGEST)
+def correct_runtime(request):
+    """The runtime pencil, any voter's: a GET opens the runtime line or closes it, writing nothing, and its POST saves (#89, #90)."""
+    if request.method == "POST":
+        return save_runtime(request)
+    return open_runtime(request)
+
+
+def runtime_line(request, card):
+    # Only the line is swapped, so a note being typed on the same card is left alone (#90).
+    return render(request, "components/runtime.html", {"card": card})
+
+
+def open_runtime(request):
+    # Only htmx opens the line in place; a plain GET is a click from before htmx loaded (#89).
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    suggestion = named_suggestion(request.GET.get("suggestion"))
+    # A tab left open past SUGGEST, or a card withdrawn since, reloads onto the phase page as it is now (#78, #89).
+    if suggestion is None or current() is not Phase.SUGGEST:
+        return reload_the_tab(request, reverse("phase_page"))
+    card = pool.the_card(suggestion, request.user, Phase.SUGGEST)
+    # Approved since: the line comes back without its pencil, with no explanation (#27).
+    if card.runtime_pencil is not None:
+        card = replace(card, runtime_pencil=replace(card.runtime_pencil, open="cancel" not in request.GET))
+    return runtime_line(request, card)
+
+
+def save_runtime(request):
+    if (suggestion := named_suggestion(request.POST.get("suggestion"))) is None:
+        return reload_the_tab(request, reverse("phase_page"))
+    typed = request.POST.get("runtime", "")
+    refusal = ""
+    # Approved since: nothing is written, and the line comes back as it is now, without its pencil (#34).
+    if withdrawal.withdrawable(suggestion):
+        try:
+            runtime.correct(suggestion, typed)
+        except runtime.Refused as refused:
+            refusal = str(refused)
+    # Only htmx swaps the line in place; a plain post is answered with the page (#88).
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    card = pool.the_card(suggestion, request.user, Phase.SUGGEST)
+    if refusal:
+        card = replace(card, runtime_pencil=replace(card.runtime_pencil, open=True, typed=typed, refusal=refusal))
+    return runtime_line(request, card)

@@ -2,14 +2,16 @@
 
 None of the names or notes here came from the group. They exist to put each real case on screen:
 a posterless film, a long title, a differing original title, a hand-entered runtime, many notes
-against only a pitch, and a removed suggester.
+against only a pitch, and a removed suggester. Every card but Cass's carries the runtime pencil, as SUGGEST
+shows it on a film nothing holds; hers also stands for APPROVE's bar and the admin's ledger, which show none (#90).
 """
 
 from dataclasses import dataclass, replace
 from functools import cache
 
 from ribcage.films import corpus
-from ribcage.films.card import FilmCard, Note, NoteBox, Withdraw
+from ribcage.films.card import FilmCard, Note, NoteBox, RuntimePencil, Withdraw
+from ribcage.suggestions.runtime import NOT_WHOLE_MINUTES
 from ribcage.suggestions.views import PITCH_REQUIRED
 from ribcage.suggestions.withdrawal import what_goes
 
@@ -80,6 +82,7 @@ def cards():
     return (
         FilmCard(
             film=film(MIDSOMMAR),
+            runtime_pencil=RuntimePencil(),
             suggester="Hanna",
             suggester_removed=False,
             pitch=(
@@ -104,6 +107,7 @@ def cards():
         ),
         FilmCard(
             film=film(POOH_2),
+            runtime_pencil=RuntimePencil(),
             suggester="Gus",
             suggester_removed=False,
             pitch="It is bad. It knows it is bad. It is the one we will still be quoting at the next marathon.",
@@ -121,6 +125,7 @@ def cards():
         ),
         FilmCard(
             film=film(CABINET_OF_CURIOSITIES),
+            runtime_pencil=RuntimePencil(),
             suggester="Ivo",
             suggester_removed=True,
             pitch="Just the one episode, The Autopsy. 47 minutes of my copy, so it fits in the gap after dinner.",
@@ -128,6 +133,7 @@ def cards():
         ),
         FilmCard(
             film=film(VHS_99),
+            runtime_pencil=RuntimePencil(),
             suggester="Eli",
             suggester_removed=False,
             pitch="Five shorts and a frame story, so if one is dull the next is ten minutes away.",
@@ -138,6 +144,7 @@ def cards():
         ),
         FilmCard(
             film=film(EXIT_8),
+            runtime_pencil=RuntimePencil(),
             suggester="Bex",
             suggester_removed=False,
             pitch="A man is stuck walking one corridor of the Tokyo metro, over and over.",
@@ -156,9 +163,19 @@ def phase_bars():
     """Each pool phase's bar on an opened card, with no suggestion, so a save here only reloads onto the phase page (#88).
 
     A withdraw confirmed here names no suggestion, so it takes nothing, and the sample card only leaves until a reload (#89).
+    The runtime pencil names none either, so opening or saving it here reloads onto the phase page (#90).
     """
-    wolf_house, vhs_99, exit_8 = cards()[2], cards()[4], cards()[5]
+    midsommar, wolf_house, vhs_99, exit_8 = cards()[0], cards()[2], cards()[4], cards()[5]
     return (
+        (
+            "SUGGEST's runtime pencil, open on Hanna's suggestion, as Dani typed the director's cut in hours",
+            replace(
+                midsommar,
+                note_box=NoteBox(text=midsommar.notes[2].text, is_pitch=False),
+                runtime_pencil=RuntimePencil(open=True, typed="2h 51", refusal=NOT_WHOLE_MINUTES),
+            ),
+            "components/suggest_bar.html",
+        ),
         (
             "SUGGEST's phase bar, on Bex's own suggestion, after she saved her pitch empty",
             replace(own(exit_8), note_box=NoteBox(text=exit_8.pitch, is_pitch=True, refusal=PITCH_REQUIRED)),

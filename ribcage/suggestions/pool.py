@@ -18,17 +18,17 @@ def notes_in_order():
     return Note.objects.select_related("author").order_by("pk")
 
 
-def film_cards(viewer):
+def film_cards(viewer, phase):
     pool = withdrawal.with_holds(Suggestion.objects.prefetch_related(Prefetch("notes", queryset=notes_in_order()))).order_by("-pk")
-    return [film_card(suggestion, suggestion.notes.all(), viewer) for suggestion in pool]
+    return [film_card(suggestion, suggestion.notes.all(), viewer, phase) for suggestion in pool]
 
 
-def the_card(suggestion, viewer):
-    """One suggestion's card as the pool shows it to the viewer, to swap in where it was acted on (#88, #89)."""
-    return film_card(suggestion, notes_in_order().filter(suggestion=suggestion), viewer)
+def the_card(suggestion, viewer, phase):
+    """One suggestion's card as the pool shows it to the viewer in the phase, to swap in where it was acted on (#88, #89)."""
+    return film_card(suggestion, notes_in_order().filter(suggestion=suggestion), viewer, phase)
 
 
-def film_card(suggestion, notes, viewer=None):
+def film_card(suggestion, notes, viewer=None, phase=None):
     """The card for a suggestion and its notes, oldest first. The pitch is the note by the suggester, blank or not."""
     pitch = next((note for note in notes if note.author_id == suggestion.suggester_id), None)
     # A removed voter's notes on other films stay hidden until #98 deletes them (#28).
@@ -42,6 +42,7 @@ def film_card(suggestion, notes, viewer=None):
         suggestion_id=suggestion.pk,
         note_box=None if viewer is None else note_box(suggestion, notes, viewer),
         withdraw=offered_withdraw(suggestion, others, viewer),
+        runtime_pencil=offered_pencil(suggestion, viewer, phase),
     )
 
 
@@ -55,3 +56,10 @@ def offered_withdraw(suggestion, others, viewer):
     if viewer is None or not withdrawal.may_withdraw(viewer, suggestion):
         return None
     return card.Withdraw(goes=withdrawal.what_goes(len(others)))
+
+
+def offered_pencil(suggestion, viewer, phase):
+    # Any voter's in SUGGEST, on a film its suggester could still withdraw; absent elsewhere, with no explanation (#27, #34).
+    if viewer is None or phase != Phase.SUGGEST or not withdrawal.withdrawable(suggestion):
+        return None
+    return card.RuntimePencil()
