@@ -1,5 +1,10 @@
 {# The pool as voters read it, newest first, with no mark of approval (#27). #}
-<section class="pool" aria-label="Suggested films">
+<section class="pool" aria-label="Suggested films" data-pool data-filter="everyone">
+  {# Hidden until the script that makes it work has run, so without script the whole pool shows (#91). #}
+  <div class="pool__filter" role="group" aria-label="Show" data-pool-filter hidden>
+    <button type="button" data-choice="everyone" aria-pressed="true">Everyone's</button>
+    <button type="button" data-choice="mine" aria-pressed="false">Mine</button>
+  </div>
   {% if pool %}
     <div class="film-cards" data-film-cards>
       {% for card in pool %}{% include "components/film_card.html" with card=card %}{% endfor %}
@@ -7,4 +12,6 @@
   {% endif %}
   {# Hidden while any card is shown, so a withdraw of the last one leaves it saying so in place (#89). #}
   <p class="pool__empty">No films have been suggested.</p>
+  {# Shown by the filter alone, while Mine is on and none of the cards showing is the viewer's own (#91). #}
+  <p class="pool__mine-empty">You haven't suggested any films.</p>
 </section>

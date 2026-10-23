@@ -112,3 +112,17 @@ def test_on_the_viewers_own_suggestion_the_note_box_is_the_pitch():
     notes = [a_note(BO, "I'm in."), a_note(ADA, "Heeere's Johnny.")]
 
     assert film_card(a_suggestion(), notes, viewer=ADA).note_box == card.NoteBox(text="Heeere's Johnny.", is_pitch=True)
+
+
+def test_a_card_is_mine_only_for_its_own_suggester():
+    suggestion = a_suggestion()
+
+    assert film_card(suggestion, [], ADA).mine
+    assert not film_card(suggestion, [], BO).mine
+    assert not film_card(suggestion, [], None).mine
+
+
+def test_a_removed_suggesters_card_is_mine_for_no_one():
+    suggestion = a_suggestion(suggester=None)
+
+    assert not film_card(suggestion, [], ADA).mine

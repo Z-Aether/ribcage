@@ -1,5 +1,5 @@
 {# The film card over plain data, a FilmCard (#21, #58). Opens in place; only the phase bar differs between surfaces. #}
-<article class="film-card{% if expanded %} is-open{% endif %}" data-film-card{% if card.suggestion_id %} data-suggestion="{{ card.suggestion_id }}"{% endif %}>
+<article class="film-card{% if expanded %} is-open{% endif %}" data-film-card{% if card.suggestion_id %} data-suggestion="{{ card.suggestion_id }}"{% endif %}{% if card.mine %} data-mine{% endif %}>
   <div class="film-card__poster">{% include "components/poster.html" with film=card.film size="card" %}</div>
   <div class="film-card__body">
     <div class="film-card__head">

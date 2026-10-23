@@ -37,6 +37,10 @@ A page wears the voter skin unless it names admin or run in base.html's `skin` b
 
 A **phase bar** is the foot of an opened film card, where a voter acts on it, and the one part of the card that changes between surfaces. It sits under a dashed line, in a row of its own beside the poster, and takes the card's whole width on a phone. SUGGEST's and APPROVE's hold the **note box**: a label, *Your pitch* in pumpkin on your own suggestion and *Your note* on the rest, a box with no placeholder or hint, and *Save*. Its line beside *Save* says *Saved.* or *Cleared.*, or gives a refusal kindly, in the dusty rose the password confirmation borrows. It has no `maxlength`, since a browser cuts a long paste silently; the server refuses it whole instead (#88). On your own card while it can be withdrawn, SUGGEST's bar ends Save's line with a quiet *Withdraw…*. It asks first, as the console's acts do: *Cancel* takes its place at its size, and below come what goes with the film and the pumpkin button naming it, at the start of a line of its own. A withdrawn card fades as it leaves the pool (#85, #89).
 
+## The pool filter
+
+*Everyone's* and *Mine* sit above the pool as two pills, the chosen one in pumpkin and the other quiet, with the choice exposed as `aria-pressed`. They show only once their script has run, so without script the whole pool shows. An empty *Mine* says *You haven't suggested any films.* in the body voice, and the pool's own empty line stays hidden then (#91).
+
 ## The runtime pencil
 
 Where a voter may correct a film's runtime, the card's runtime line ends in a quiet ✎ in muted ink, which turns pumpkin and tips when reached for. A click turns the line into a small box of minutes with *Save* and a quiet *Cancel*, in place on an open or closed card alike. A refusal takes a line of its own beneath, in the note box's dusty rose, and the typed value stays in the box. Saved, the line shows the new runtime with its *by hand* tag, or *TMDB* again when it is corrected back to TMDB's value (#90).

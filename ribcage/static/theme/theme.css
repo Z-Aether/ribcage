@@ -1289,6 +1289,40 @@ body > footer.site-footer {
 .pool:has([data-film-card]) > .pool__empty {
   display: none;
 }
+/* The Everyone's / Mine filter: a pair of pills above the pool, the chosen one in pumpkin (#91). */
+.pool__filter {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+.pool__filter[hidden] {
+  display: none;
+}
+[data-skin] .pool__filter button[data-choice] {
+  flex: none;
+  width: auto;
+  margin: 0;
+}
+[data-skin] .pool__filter button[aria-pressed="false"] {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+[data-skin] .pool__filter button[aria-pressed="false"]:hover {
+  border-color: var(--ink-muted);
+}
+.pool[data-filter="mine"] [data-film-card]:not([data-mine]) {
+  display: none;
+}
+.pool[data-filter="mine"] > .pool__empty {
+  display: none;
+}
+.pool__mine-empty {
+  display: none;
+}
+.pool[data-filter="mine"]:not(:has([data-film-card][data-mine])) > .pool__mine-empty {
+  display: block;
+}
 @media (max-width: 600px) {
   .film-card.is-open:has(> .film-card__phase-bar:not(:empty)) > .film-card__poster {
     grid-row: auto;

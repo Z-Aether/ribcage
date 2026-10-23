@@ -133,3 +133,60 @@ def test_from_vote_on_there_is_no_pool(voter_client, voters, phase):
 
     assert "The Thing" not in page
     assert "film-card" not in main(page)
+
+
+def own_cards(page):
+    return re.findall(r'<article class="film-card[^"]*" data-film-card data-suggestion="(\d+)" data-mine>', page)
+
+
+@pytest.mark.parametrize("phase", POOL_PHASES)
+def test_the_page_marks_which_cards_are_the_viewers_own(voter_client, voters, phase):
+    suggest(voters, ["The Thing"])
+    (mine,) = suggest(voters, ["Cube"], suggester="Hanna")
+    suggest(voters, ["Coco"])
+    walk_to(phase)
+
+    page = voter_client.get("/").text
+
+    assert own_cards(page) == [str(mine.pk)]
+    assert page.count("<article") == 3
+
+
+@pytest.mark.parametrize("phase", POOL_PHASES)
+def test_a_voter_with_no_suggestions_sees_no_card_marked(voter_client, voters, phase):
+    suggest(voters, ["The Thing", "Cube"])
+    walk_to(phase)
+
+    assert not own_cards(voter_client.get("/").text)
+
+
+@pytest.mark.parametrize("phase", POOL_PHASES)
+def test_the_filter_is_offered_above_the_pool_unpressed_for_mine_and_hidden_until_its_script_runs(voter_client, voters, phase):
+    suggest(voters, ["The Thing"])
+    walk_to(phase)
+
+    page = voter_client.get("/").text
+
+    filter_bar = re.search(r"<div class=\"pool__filter\".*?</div>", page, re.S)[0]
+    assert re.search(r"\bhidden\b", filter_bar.split(">", 1)[0])
+    assert re.findall(r'data-choice="(\w+)" aria-pressed="(\w+)">([^<]+)<', filter_bar) == [("everyone", "true", "Everyone's"), ("mine", "false", "Mine")]
+    assert 'data-filter="everyone"' in page
+    assert page.index("pool__filter") < page.index("<article")
+
+
+@pytest.mark.parametrize("phase", LATER_PHASES)
+def test_from_vote_on_there_is_no_filter(voter_client, voters, phase):
+    suggest(voters, ["The Thing"])
+    walk_to(phase)
+
+    assert "pool__filter" not in voter_client.get("/").text
+
+
+@pytest.mark.parametrize("phase", POOL_PHASES)
+def test_the_empty_mine_line_is_its_own_line_beside_the_empty_pools(voter_client, phase):
+    walk_to(phase)
+
+    page = voter_client.get("/").text
+
+    assert page.count("No films have been suggested.") == 1
+    assert page.count("You haven't suggested any films.") == 1

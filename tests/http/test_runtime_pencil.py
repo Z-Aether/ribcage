@@ -84,7 +84,7 @@ def refusal(line):
 
 def pencils_on(page):
     """The suggestion of each card in the page whose runtime line carries the pencil."""
-    cards = re.findall(r'<article class="film-card[^"]*" data-film-card data-suggestion="(\d+)">(.*?)</article>', page, re.S)
+    cards = re.findall(r'<article class="film-card[^"]*" data-film-card data-suggestion="(\d+)"[^>]*>(.*?)</article>', page, re.S)
     return [int(pk) for pk, shown in cards if "runtime__pencil" in runtime_line(shown)]
 
 

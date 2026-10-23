@@ -79,7 +79,7 @@ def withdraw_region(page):
 
 def arms_on(page):
     """The suggestion of each card in the page that offers Withdraw…, armed or not."""
-    cards = re.findall(r'<article class="film-card[^"]*" data-film-card data-suggestion="(\d+)">(.*?)</article>', page, re.S)
+    cards = re.findall(r'<article class="film-card[^"]*" data-film-card data-suggestion="(\d+)"[^>]*>(.*?)</article>', page, re.S)
     return [int(pk) for pk, shown in cards if withdraw_region(shown)]
 
 

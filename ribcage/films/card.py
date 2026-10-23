@@ -55,6 +55,8 @@ class FilmCard:
     notes: tuple[Note, ...]
     # The suggestion a phase bar acts on; the gallery's sample cards have none.
     suggestion_id: int | None = None
+    # The viewing voter's own suggestion, which the pool's Mine filter keeps (#27, #91).
+    mine: bool = False
     note_box: NoteBox | None = None
     withdraw: Withdraw | None = None
     runtime_pencil: RuntimePencil | None = None

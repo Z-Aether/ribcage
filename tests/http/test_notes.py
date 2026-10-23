@@ -244,3 +244,8 @@ def test_a_save_in_approve_answers_with_approves_bar(dani, the_thing):
     walk_to(Phase.APPROVE)
 
     assert 'class="phase-bar phase-bar--approve"' in save(dani, the_thing, "I'm in.").text
+
+
+def test_a_saved_note_swaps_in_a_card_marked_mine_for_its_suggester_only(client, voters, the_thing):
+    assert " data-mine>" in save(signed_in(client, voters["Hanna"]), the_thing, "Still the pitch.").text
+    assert " data-mine" not in save(signed_in(client, voters["Dani"]), the_thing, "A note.").text

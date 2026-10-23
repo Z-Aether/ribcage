@@ -1,6 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Suggestions are closed · Ribcage{% endblock %}
+
+{% block head %}<script src="{% static 'pool/pool-filter.js' %}" defer></script>{% endblock %}
 
 {% block content %}
   <h1>Suggestions are closed</h1>

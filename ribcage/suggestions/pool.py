@@ -40,6 +40,7 @@ def film_card(suggestion, notes, viewer=None, phase=None):
         pitch=pitch.text if pitch else None,
         notes=others,
         suggestion_id=suggestion.pk,
+        mine=viewer is not None and suggestion.suggester_id == viewer.pk,
         note_box=None if viewer is None else note_box(suggestion, notes, viewer),
         withdraw=offered_withdraw(suggestion, others, viewer),
         runtime_pencil=offered_pencil(suggestion, viewer, phase),
