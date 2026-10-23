@@ -22,7 +22,7 @@ You are implementing ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{pa
 
 ## Leave to the dev
 - **GitHub stays untouched.** Draft any ticket comment the work warrants, such as a decision made during the build, in `tmp/m{m}/{n}-comment.md`.
-- **Open questions:** where the ticket and the live docs leave a choice open, make the one most consistent with them and list it as a question.
+- **Design questions:** where the ticket and the live docs leave open what the app does or what a voter or the admin can do (a rule, a limit, a flow, what is kept or lost), make the choice most consistent with them and list it as a design question. Wording, looks, layout, code placement and dev tooling are yours to choose: record each choice in the drafted ticket comment. The dev meets them while testing.
 - **`private/`** stays untouched.
 
 ## Report (concise)
@@ -31,5 +31,5 @@ You are implementing ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{pa
 - each acceptance criterion and the test that covers it;
 - the suite counts;
 - the states you browsed and the screenshot paths;
-- the questions for the dev;
+- the design questions;
 - anything left undone or uncertain.

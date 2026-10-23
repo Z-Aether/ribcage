@@ -22,7 +22,7 @@ A **finding** is something in the change that can cause a problem. Grade each on
 
 Every finding gets fixed, so the grade orders the work. A remark that can't cause a problem, such as a preference, a polish idea or a nicer name, is no finding: leave it out of the report entirely.
 
-Behaviour a voter would find wrong, like a note shown twice, a field that jumps or typing that is lost, is a finding even where no doc covers it. A **question** is a choice between behaviours that both work, which the ticket and the live docs leave to the dev.
+Behaviour a voter would find wrong, like a note shown twice, a field that jumps or typing that is lost, is a finding even where no doc covers it. A **design question** is a choice the ticket and the live docs leave open about what the app does or what a voter or the admin can do: a rule, a limit, a flow, what is kept or lost. Wording, looks, layout, code placement and dev tooling are the implementer's to choose, and the dev meets them while testing.
 
 ## Steps
 
@@ -52,7 +52,7 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
    - **Verdict:** clean, or the number of findings.
    - **Findings**, highest grade first. Give each one its grade, `file:line`, the problem it causes and the direction of the fix.
    - **Criteria**, first review only: each acceptance criterion and the test that proves it.
-   - **Questions for the dev**, each with the options you see.
+   - **Design questions** the implementer's report doesn't already raise, each with the options you see.
    - **Suite counts.**
 
 ## Re-review

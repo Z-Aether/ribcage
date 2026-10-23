@@ -10,11 +10,11 @@ You are fixing review findings on ticket #{n}, "{title}", a sub-issue of milesto
 - **Run the full default suite** with `.venv/Scripts/python -m pytest`. Done when it passes.
 - **Browse** the state a page finding names, following `docs/agents/browser-verification.md`.
 - **Commit once,** with `git commit --fixup={ticket_sha}` and the trailer `{trailer}`. Leave the history as it is, and push nothing.
-- **Open questions:** where a fix leaves a choice open, make the one most consistent with the ticket and list it as a question.
+- **Design questions:** where a fix leaves open what the app does or what a voter or the admin can do (a rule, a limit, a flow, what is kept or lost), make the choice most consistent with the ticket and list it as a design question. Wording, looks, layout, code placement and dev tooling are yours to choose: record each choice in `tmp/m{m}/{n}-comment.md`. The dev meets them while testing.
 - **GitHub and `private/` stay untouched.**
 
 ## Report (concise)
 - the fixup SHA;
 - per finding, what changed and the test that covers it;
 - the suite counts;
-- the questions for the dev.
+- the design questions.

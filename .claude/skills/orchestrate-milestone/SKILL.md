@@ -41,7 +41,11 @@ Report to the dev:
 - each ticket's commits and what it built;
 - the decisions made during the build, from the drafts in `tmp/m<n>/`;
 - the handoff notes for tickets outside the scope;
-- the questions, numbered and in full.
+- the design questions, numbered and in full.
+
+A choice appears under decisions or under design questions, never both.
+
+**Answers that change the build** run through `briefs/implement.md` again, one ticket at a time, as new commits on top of the batch ending in that ticket's number, then through the review and fix loop. Copy each answer into the drafted comment of its ticket.
 
 Then, on the dev's word:
 
@@ -52,7 +56,7 @@ Then, on the dev's word:
 ## Rules
 
 - **Fix every finding, and drop everything else.** A review reports only what can cause a problem (`ticket-review`), and the fix loop fixes all of it. A remark that can't cause a problem is ignored for good. It gets no fix, no handoff note, no later pass and no line in your report.
-- **Questions go to the dev in chat**, never on a ticket. Subagents make the choice most consistent with the docs and list it as a question, and you batch those questions into the wrap-up.
+- **Design questions go to the dev in chat**, never on a ticket. Subagents make the choice most consistent with the docs and list it as a design question, as the briefs define it. Batch those into the wrap-up, dropping any that fail the definition; the dropped choices stay in the drafted comments.
 - **Map #4 and its design tickets are frozen.** A decision made during the build goes on the milestone ticket and into the live docs.
 - **You alone post on GitHub.** Subagents draft into `tmp/m<n>/`, and you post at the wrap-up.
 - **Push only on the dev's explicit word** (`CLAUDE.md`).
