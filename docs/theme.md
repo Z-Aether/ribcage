@@ -49,6 +49,8 @@ A **tile** is a poster or its title card with the title and a muted year beneath
 
 The panel sits above the pool's filter on a surface of its own: the heading, one *Title* box, and the picker under it, five tiles in a row on a desktop and three to a row on a phone. TMDB not answering, or finding nothing, is one line in muted ink where the tiles would be (#92).
 
+The **pitch step** takes the picker's place: the poster beside the title, a muted year, the director and the certificate, then *Your pitch* in pumpkin over a large box in the notes' hand with the pitch's pumpkin edge, autofocused. Under it one quiet line reads *Runtime 144 min TMDB ✎*, whose pencil turns it into the runtime pencil's box of minutes, with no *Save* or *Cancel*, since *Add* takes what it holds. A refusal is a line of its own under its box, in the note box's dusty rose. *Add* is the pumpkin button at the start of the last line. On a phone the pitch box and what follows take the step's whole width under the poster (#93).
+
 ## The runtime pencil
 
 Where a voter may correct a film's runtime, the card's runtime line ends in a quiet ✎ in muted ink, which turns pumpkin and tips when reached for. A click turns the line into a small box of minutes with *Save* and a quiet *Cancel*, in place on an open or closed card alike. A refusal takes a line of its own beneath, in the note box's dusty rose, and the typed value stays in the box. Saved, the line shows the new runtime with its *by hand* tag, or *TMDB* again when it is corrected back to TMDB's value (#90).

@@ -24,6 +24,8 @@ class NoteBox:
     # A refusal, gently worded, leaves the text as typed so nothing is lost (#88).
     refusal: str = ""
     saved: bool = False
+    # Words typed at the pitch step for a film already in the pool, unsaved, with the focus on them (#93).
+    kept: bool = False
 
 
 @dataclass(frozen=True)

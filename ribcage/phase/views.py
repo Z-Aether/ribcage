@@ -16,7 +16,8 @@ PHASE_PAGES = {
 
 
 def the_pool(request, phase):
-    return {"pool": pool.film_cards(request.user, phase), "phase_bar": pool.PHASE_BARS[phase]}
+    cards, opened = pool.kept_for_its_card(pool.film_cards(request.user, phase), request.session)
+    return {"pool": cards, "phase_bar": pool.PHASE_BARS[phase], "opened": opened}
 
 
 # Voters read the pool in SUGGEST and APPROVE only; from VOTE on, the ballot takes its place (#27).

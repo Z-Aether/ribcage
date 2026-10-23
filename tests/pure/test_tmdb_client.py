@@ -8,6 +8,7 @@ import pytest
 
 from ribcage.films import client
 from ribcage.films.client import Client, NotAnswering
+from ribcage.seeding.recorded import RecordedTmdb
 
 V3_KEY = "0123456789abcdef0123456789abcdef"
 V4_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJ4In0.c2lnbmF0dXJl"
@@ -64,6 +65,22 @@ def test_detail_asks_for_the_film_in_en_us():
     path, parameters, _ = transport.requests[0]
     assert path == "/movie/109428"
     assert parameters["language"] == "en-US"
+
+
+def test_film_reads_the_one_detail_fetch_with_credits_videos_and_release_dates():
+    transport = Transport(RecordedTmdb().details[109428])
+
+    film = Client(V3_KEY, transport).film(109428)
+
+    assert (film.title, film.year, film.directors, film.runtime) == ("Evil Dead", 2013, ("Fede Álvarez",), 91)
+    path, parameters, _ = transport.requests[0]
+    assert (path, parameters["append_to_response"]) == ("/movie/109428", "credits,videos,release_dates")
+
+
+@pytest.mark.parametrize("detail", [{"id": 109428}, {"id": 109428, "title": "Evil Dead", "credits": "none"}])
+def test_a_malformed_detail_reads_as_tmdb_not_answering(detail):
+    with pytest.raises(NotAnswering):
+        Client(V3_KEY, Transport(detail)).film(109428)
 
 
 @pytest.mark.parametrize(

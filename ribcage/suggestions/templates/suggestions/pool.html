@@ -7,7 +7,8 @@
   </div>
   {% if pool %}
     <div class="film-cards" data-film-cards>
-      {% for card in pool %}{% include "components/film_card.html" with card=card %}{% endfor %}
+      {# A card the pitch step found already in the pool comes opened, holding the words typed there (#93). #}
+      {% for card in pool %}{% if opened and card.suggestion_id == opened %}{% include "components/film_card.html" with card=card expanded=True %}{% else %}{% include "components/film_card.html" with card=card %}{% endif %}{% endfor %}
     </div>
   {% endif %}
   {# Hidden while any card is shown, so a withdraw of the last one leaves it saying so in place (#89). #}

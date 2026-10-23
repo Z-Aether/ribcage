@@ -1,5 +1,7 @@
 """The pool as voters read it: every suggestion as a film card, newest first, whatever its approval (#27)."""
 
+from dataclasses import replace
+
 from django.db.models import Prefetch
 
 from ribcage.films import card
@@ -12,6 +14,10 @@ PHASE_BARS = {
     Phase.SUGGEST: "components/suggest_bar.html",
     Phase.APPROVE: "components/approve_bar.html",
 }
+
+
+# A film the voter tried to add when it was already in the pool: the next pool opens its card with their words (#26 §3, #93).
+KEPT_FOR_ITS_CARD = "suggestions.kept_for_its_card"
 
 
 def notes_in_order():
@@ -69,3 +75,32 @@ def offered_pencil(suggestion, viewer, phase):
     if viewer is None or phase != Phase.SUGGEST or not withdrawal.withdrawable(suggestion):
         return None
     return card.RuntimePencil()
+
+
+def keep_for_its_card(session, suggestion, typed):
+    session[KEPT_FOR_ITS_CARD] = {"suggestion": suggestion.pk, "text": typed}
+
+
+def kept_for_its_card(cards, session):
+    """The cards with the one a voter's words were kept for holding them in its box, unsaved, and that card's id, or None (#93)."""
+    kept = session.pop(KEPT_FOR_ITS_CARD, None)
+    if kept is None or not cards or cards[0].note_box is None:
+        return cards, None
+    for index, card in enumerate(cards):
+        if card.suggestion_id == kept["suggestion"]:
+            box = with_kept_words(card, kept["text"])
+            return [*cards[:index], replace(card, note_box=box), *cards[index + 1 :]], card.suggestion_id
+    # Withdrawn since: the pool as it is now.
+    return cards, None
+
+
+def with_kept_words(card, typed):
+    """The card's box with the typed words under whatever it already held, so Save loses neither (#93)."""
+    said = "You've already suggested it" if card.mine else f"{card.suggester} suggested it first"
+    box, words = card.note_box, typed.replace("\r\n", "\n").strip()
+    if not words:
+        return replace(box, refusal=f"{said}.", kept=True)
+    if not box.text:
+        return replace(box, text=words, refusal=f"{said}, so your words are here, not yet saved.", kept=True)
+    under = "your pitch" if box.is_pitch else "your note"
+    return replace(box, text=f"{box.text}\n\n{words}", refusal=f"{said}, so your words are under {under}, not yet saved.", kept=True)

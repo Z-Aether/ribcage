@@ -7,8 +7,8 @@
   <ul class="tiles picker__tiles" aria-label="Which film did you mean?">
     {% for tile in picker.tiles %}
       <li>
-        {# A film already in the pool opens its card there; any other leads to the pitch step, which #93 fills from its TMDB id. #}
-        <button type="button" class="tile tile--choice{% if tile.suggested_by %} is-suggested{% endif %}" data-tmdb-id="{{ tile.film.tmdb_id }}"{% if tile.suggestion_id %} data-opens-suggestion="{{ tile.suggestion_id }}"{% endif %}>
+        {# A film already in the pool opens its card there; any other swaps the pitch step in for the picker (#93). #}
+        <button type="button" class="tile tile--choice{% if tile.suggested_by %} is-suggested{% endif %}" data-tmdb-id="{{ tile.film.tmdb_id }}"{% if tile.suggestion_id %} data-opens-suggestion="{{ tile.suggestion_id }}"{% elif picker.choosable %} hx-get="{% url 'suggest' %}?tmdb_id={{ tile.film.tmdb_id }}" hx-target="#picker" hx-swap="innerHTML"{% endif %}>
           {% include "components/tile.html" with film=tile.film show_original=True caption=tile.caption vetoed_by="" %}
         </button>
       </li>

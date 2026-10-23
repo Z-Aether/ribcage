@@ -109,3 +109,10 @@ def test_the_gallery_shows_the_password_confirmation(client, debug):
     page = client.get(GALLERY).content.decode()
 
     assert 'data-confirms-password="gallery_password"' in page
+
+
+def test_the_gallerys_picker_tiles_lead_nowhere(client, debug):
+    # The gallery has no step to swap in, so a tile there must fire no request (#93).
+    tiles = picker_tiles(client.get(GALLERY).content.decode())
+
+    assert tiles and not any("hx-get" in tile for tile in tiles)

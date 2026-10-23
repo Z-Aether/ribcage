@@ -26,3 +26,5 @@ class Picker:
     tiles: tuple[PickerTile, ...] = ()
     # TMDB not answering, which is not the same as no results (#21, #32).
     outage: bool = False
+    # Whether choosing a tile leads anywhere; the gallery's sample stands alone, with no step to swap in (#93).
+    choosable: bool = True

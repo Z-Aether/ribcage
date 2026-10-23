@@ -1458,7 +1458,84 @@ body > footer.site-footer {
   color: var(--ink-muted);
 }
 
+/* The pitch step takes the picker's place: the film beside its poster, a large pitch box, the runtime line, then Add (#21, #93). */
+.pitch-step {
+  display: grid;
+  grid-template-columns: var(--card-poster-width-open) minmax(0, 1fr);
+  gap: 0.75rem var(--card-gap);
+  align-items: start;
+  max-width: 46rem;
+  margin: 0;
+}
+.pitch-step__poster {
+  grid-row: span 2;
+}
+[data-skin] .pitch-step__title {
+  margin: 0;
+  font-size: var(--card-title-size);
+  line-height: 1.15;
+}
+.pitch-step__words {
+  grid-column: 2;
+  display: grid;
+  gap: 0.75rem;
+}
+[data-skin] .pitch-step__pitch {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+}
+.pitch-step__pitch .note-box__name {
+  color: var(--accent);
+}
+[data-skin] .pitch-step__pitch textarea {
+  field-sizing: content;
+  min-height: 8rem;
+  max-height: 24rem;
+  margin: 0;
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-control);
+  font-family: var(--font-notes);
+  font-style: italic;
+  font-size: 1.05em;
+  line-height: var(--text-leading);
+  resize: vertical;
+}
+/* A refusal is said kindly under its box, in the note box's rose, and what was typed stays (#88, #93). */
+[data-skin] .pitch-step .pitch-step__refusal,
+[data-skin] .pitch-step .runtime__refusal {
+  margin: 0;
+  color: var(--score-rather-not);
+}
+.pitch-step__runtime {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.5em;
+}
+.pitch-step__label {
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+[data-skin] .pitch-step__add {
+  justify-self: start;
+  width: auto;
+  margin: 0.25rem 0 0;
+}
+
 @media (max-width: 600px) {
+  .pitch-step {
+    grid-template-columns: var(--card-poster-width) minmax(0, 1fr);
+  }
+  .pitch-step__poster {
+    grid-row: auto;
+  }
+  .pitch-step__words {
+    grid-column: 1 / -1;
+  }
   .tile,
   .tile--choice {
     width: calc((100% - 2rem) / 3);

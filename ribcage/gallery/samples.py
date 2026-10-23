@@ -79,7 +79,7 @@ def picker():
     evil_dead = searches()["Evil Dead"]
     insidious_2008 = next(result for result in searches()["Insidious"] if result.year == 2008)
     tiles = (PickerTile(evil_dead[0], suggested_by="Ash"), *map(PickerTile, evil_dead[1:4]), PickerTile(insidious_2008))
-    return Picker(searched=True, tiles=tiles)
+    return Picker(searched=True, tiles=tiles, choosable=False)
 
 
 @cache

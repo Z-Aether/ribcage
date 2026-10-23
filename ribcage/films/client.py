@@ -64,6 +64,15 @@ class Client:
     def detail(self, tmdb_id):
         return self.get(f"/movie/{tmdb_id}", **tmdb.DETAIL_PARAMETERS)
 
+    def film(self, tmdb_id):
+        """The film as the one detail fetch gives it, read by film_from_detail (#5, #93)."""
+        detail = self.detail(tmdb_id)
+        try:
+            return tmdb.film_from_detail(detail)
+        except Exception:
+            # A malformed detail reads as TMDB not answering, never as a 500, as a malformed search does (#92).
+            raise NotAnswering(f"TMDB failed on /movie/{tmdb_id}.") from None
+
 
 def answer_from(transport):
     """Answer TMDB from `transport` rather than the network, as the seeded instance does from its recordings (#92)."""
