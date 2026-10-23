@@ -1,26 +1,20 @@
 from dataclasses import replace
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST, require_safe
 
-from ribcage.films.client import tmdb_client
+from ribcage.films import signed
+from ribcage.films.client import NotAnswering, tmdb_client
+from ribcage.films.picker import Picker
 
 from ribcage.phase.check import phase_window
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
-from ribcage.suggestions import notes, picker, pool, runtime, withdrawal
+from ribcage.suggestions import notes, picker, pitch, pool, runtime, withdrawal
 from ribcage.suggestions.models import Suggestion
-
-PITCH_REQUIRED = "A suggestion needs its pitch, so yours is back as it was. Change it however you like."
-
-
-def too_long(refusal, is_pitch):
-    kind = "pitch" if is_pitch else "note"
-    return f"That's {refusal.length:,} characters, and a {kind} holds {refusal.cap:,}. Trim it a little and save again."
-
 
 def named_suggestion(pk):
     """The suggestion a post names by id, or None for one withdrawn since, or no id at all (#88, #89)."""
@@ -42,9 +36,9 @@ def write_note(request):
     try:
         notes.write(suggestion, request.user, typed)
     except notes.TooLong as refusal:
-        box = replace(card.note_box, text=typed, refusal=too_long(refusal, card.note_box.is_pitch))
+        box = replace(card.note_box, text=typed, refusal=notes.too_long(refusal, card.note_box.is_pitch))
     except notes.PitchRequired:
-        box = replace(card.note_box, refusal=PITCH_REQUIRED)
+        box = replace(card.note_box, refusal=notes.PITCH_REQUIRED)
     else:
         card = pool.the_card(suggestion, request.user, phase)
         box = replace(card.note_box, saved=True)
@@ -154,3 +148,63 @@ def find(request):
     if current() is not Phase.SUGGEST:
         return reload_the_tab(request, reverse("phase_page"))
     return render(request, "components/picker.html", {"picker": picker.the_picker(request.GET.get("q", ""), tmdb_client())})
+
+
+@phase_window(Phase.SUGGEST, Phase.APPROVE)
+def suggest(request):
+    """The pitch step: a GET from a picker tile fetches the film and shows the step, writing nothing, and Add's POST suggests it (#21, #93).
+
+    Suggesting is only offered in SUGGEST; APPROVE's window just catches a tab left open (#34).
+    """
+    if request.method == "POST":
+        return add(request)
+    return pitch_step(request)
+
+
+def pitch_step(request):
+    # Only htmx swaps the step in; a plain GET is a click from before htmx loaded (#89).
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    # A tab left open past SUGGEST reloads onto the phase page as it is now (#78, #92).
+    if current() is not Phase.SUGGEST:
+        return reload_the_tab(request, reverse("phase_page"))
+    try:
+        tmdb_id = int(request.GET.get("tmdb_id", ""))
+    except ValueError:
+        return HttpResponseBadRequest()
+    if tmdb_id <= 0:
+        return HttpResponseBadRequest()
+    # The film's one detail fetch, here and never inside Add's write lock, and never refreshed (#5, #26, #78).
+    try:
+        film = tmdb_client().film(tmdb_id)
+    except NotAnswering:
+        return render(request, "components/picker.html", {"picker": Picker(searched=True, outage=True)})
+    return render(request, "suggestions/pitch_step.html", {"step": pitch.PitchStep(film, signed.signed(film))})
+
+
+def add(request):
+    try:
+        film = signed.unsigned(request.POST.get("film", ""))
+    except signed.Tampered:
+        return HttpResponseBadRequest()
+    typed_pitch, typed_runtime = request.POST.get("pitch", ""), request.POST.get("runtime", "")
+    try:
+        pitch.add(request.user, film, typed_pitch, typed_runtime)
+    except pitch.AlreadySuggested as already:
+        # No second suggestion: the voter lands on the film's card, opened, with what they typed in its box (#26 §3).
+        pool.keep_for_its_card(request.session, already.suggestion, typed_pitch)
+    except pitch.Refused as refused:
+        # Only htmx shows the step again; a plain post is answered with the page (#88).
+        if request.headers.get("HX-Request") != "true":
+            return redirect("phase_page")
+        step = pitch.PitchStep(
+            film,
+            request.POST["film"],
+            pitch=typed_pitch,
+            typed_runtime=typed_runtime,
+            pitch_refusal=refused.pitch,
+            runtime_refusal=refused.runtime,
+        )
+        return render(request, "suggestions/pitch_step.html", {"step": step})
+    # Back at the pool, where the new card is on top (#21).
+    return reload_the_tab(request, reverse("phase_page"))

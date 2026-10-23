@@ -12,8 +12,8 @@ from functools import cache
 from ribcage.films import corpus
 from ribcage.films.card import FilmCard, Note, NoteBox, RuntimePencil, Withdraw
 from ribcage.films.picker import Picker, PickerTile
+from ribcage.suggestions.notes import PITCH_REQUIRED
 from ribcage.suggestions.runtime import NOT_WHOLE_MINUTES
-from ribcage.suggestions.views import PITCH_REQUIRED
 from ribcage.suggestions.withdrawal import what_goes
 
 MIDSOMMAR = 530385

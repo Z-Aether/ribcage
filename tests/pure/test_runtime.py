@@ -47,6 +47,12 @@ def test_anything_but_positive_whole_minutes_is_refused_with_a_gentle_word(typed
 
 
 
+@pytest.mark.parametrize("said", [runtime.EMPTY, runtime.NOT_WHOLE_MINUTES, runtime.NOT_POSITIVE, runtime.TOO_LONG])
+def test_no_refusal_names_an_act_so_every_caller_can_say_it(said):
+    # The pencil saves, the pitch step adds and the Films tab's box saves again (#93, #97).
+    assert not any(act in said.casefold() for act in ["save", "add", "again"])
+
+
 # The pencil on the card
 
 

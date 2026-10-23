@@ -5,10 +5,11 @@ import re
 # The most a PositiveSmallIntegerField holds on every database Django supports.
 LONGEST = 32767
 
-EMPTY = "The runtime is empty. Type its length in minutes, like 144, and save again."
-NOT_WHOLE_MINUTES = "A runtime is whole minutes, like 144. Type it that way and save again."
-NOT_POSITIVE = "A runtime is at least a minute long. Check the number and save again."
-TOO_LONG = "No copy runs that long. Check the number and save again."
+# Worded without naming an act, so the pencil, the pitch step's Add and the Films tab's box share them (#93).
+EMPTY = "The runtime is empty. Type its length in minutes, like 144."
+NOT_WHOLE_MINUTES = "A runtime is whole minutes, like 144. Type it that way."
+NOT_POSITIVE = "A runtime is at least a minute long. Check the number."
+TOO_LONG = "No copy runs that long. Check the number."
 
 
 class Refused(ValueError):

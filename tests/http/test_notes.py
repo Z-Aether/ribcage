@@ -199,7 +199,7 @@ def test_a_note_over_the_cap_is_refused_whole_with_a_message_and_the_text_kept_i
 
     assert notes_on(the_thing) == {"Hanna": PITCH}
     assert box_text(page) == long_note
-    assert said(page) == "That's 33 characters, and a note holds 20. Trim it a little and save again."
+    assert said(page) == "That's 33 characters, and a note holds 20. Trim it a little."
 
 
 def test_a_pitch_over_the_cap_is_refused_and_the_old_pitch_kept(hanna, the_thing, settings):
@@ -208,7 +208,7 @@ def test_a_pitch_over_the_cap_is_refused_and_the_old_pitch_kept(hanna, the_thing
     page = save(hanna, the_thing, "A pitch that runs well past the cap.").text
 
     assert notes_on(the_thing) == {"Hanna": PITCH}
-    assert said(page) == "That's 36 characters, and a pitch holds 20. Trim it a little and save again."
+    assert said(page) == "That's 36 characters, and a pitch holds 20. Trim it a little."
 
 
 def test_a_note_at_the_cap_is_kept_whole(dani, the_thing, settings):

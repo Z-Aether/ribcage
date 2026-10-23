@@ -4,6 +4,15 @@ from django.conf import settings
 
 from ribcage.suggestions.models import Note
 
+# The note refusals, said by the note box and by the pitch step's Add alike, so none names an act (#88, #93).
+PITCH_REQUIRED = "A suggestion needs its pitch, so yours is back as it was. Change it however you like."
+PITCH_EMPTY = "A suggestion needs its pitch. Say a line or two on why you'd like to watch it."
+
+
+def too_long(refusal, is_pitch):
+    kind = "pitch" if is_pitch else "note"
+    return f"That's {refusal.length:,} characters, and a {kind} holds {refusal.cap:,}. Trim it a little."
+
 
 class TooLong(ValueError):
     def __init__(self, length, cap):
