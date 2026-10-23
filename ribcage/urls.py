@@ -25,10 +25,12 @@ from ribcage.identity.views import (
 )
 from ribcage.phase.views import phase_page, welcome
 from ribcage.privacy import privacy_policy
+from ribcage.suggestions.views import write_note
 
 urlpatterns = [
     path("", phase_page, name="phase_page"),
     path("welcome/", welcome, name="welcome"),
+    path("note/", write_note, name="note"),
     path("login/", login, name="login"),
     path("join/", join, name="join"),
     path("join/details/", join_details, name="join_details"),

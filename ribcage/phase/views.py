@@ -15,8 +15,8 @@ PHASE_PAGES = {
 }
 
 
-def the_pool():
-    return {"pool": pool.film_cards()}
+def the_pool(request, phase):
+    return {"pool": pool.film_cards(request.user), "phase_bar": pool.PHASE_BARS[phase]}
 
 
 # Voters read the pool in SUGGEST and APPROVE only; from VOTE on, the ballot takes its place (#27).
@@ -30,7 +30,8 @@ PHASE_CONTEXTS = {
 def phase_page(request):
     # The page is the phase: / shows the current phase's page and nothing else (#27).
     phase = current()
-    return render(request, PHASE_PAGES[phase], PHASE_CONTEXTS.get(phase, dict)())
+    context = PHASE_CONTEXTS[phase](request, phase) if phase in PHASE_CONTEXTS else {}
+    return render(request, PHASE_PAGES[phase], context)
 
 
 # Each phase's exit from Welcome, naming what the voter does there (#75).

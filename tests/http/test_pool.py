@@ -36,7 +36,8 @@ def suggest(voters, titles, suggester="ada"):
 
 
 def main(page):
-    return re.search(r"<main>.*</main>", page, re.S)[0]
+    # Without the CSRF token, which is masked afresh on every render.
+    return re.sub(r'name="csrfmiddlewaretoken" value="\w+"', "", re.search(r"<main>.*</main>", page, re.S)[0])
 
 
 def titles_shown(page):

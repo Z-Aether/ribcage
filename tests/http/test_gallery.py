@@ -78,6 +78,15 @@ def test_the_gallery_shows_every_skin(client, debug):
         assert f'data-skin="{skin}"' in page
 
 
+def test_the_gallery_shows_both_phase_bars_on_opened_cards(client, debug):
+    page = client.get(GALLERY).content.decode()
+
+    opened = [card for card in re.findall(r"<article.*?</article>", page, re.S) if 'class="film-card is-open"' in card]
+    for bar in ("phase-bar--suggest", "phase-bar--approve"):
+        assert any(f'class="phase-bar {bar}"' in card for card in opened)
+    assert "Your pitch" in page and "Your note" in page
+
+
 def test_the_gallery_shows_the_password_confirmation(client, debug):
     page = client.get(GALLERY).content.decode()
 

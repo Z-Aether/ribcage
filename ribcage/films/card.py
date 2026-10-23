@@ -14,6 +14,17 @@ class Note:
 
 
 @dataclass(frozen=True)
+class NoteBox:
+    """The viewing voter's own note on a film, their pitch on their own suggestion, as the phase bar's box edits it (#21, #88)."""
+
+    text: str
+    is_pitch: bool
+    # A refusal, gently worded, leaves the text as typed so nothing is lost (#88).
+    refusal: str = ""
+    saved: bool = False
+
+
+@dataclass(frozen=True)
 class FilmCard:
     """Everything the film card shows, as plain data, so a model binds to it without touching the template (#21, #58)."""
 
@@ -24,6 +35,9 @@ class FilmCard:
     pitch: str | None
     # Every other voter's note, in the order the card shows them after the pitch.
     notes: tuple[Note, ...]
+    # The suggestion a phase bar acts on; the gallery's sample cards have none.
+    suggestion_id: int | None = None
+    note_box: NoteBox | None = None
 
 
 def trimmed(text, length):

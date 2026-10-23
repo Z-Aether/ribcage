@@ -1,5 +1,5 @@
 {# The film card over plain data, a FilmCard (#21, #58). Opens in place; only the phase bar differs between surfaces. #}
-<article class="film-card{% if expanded %} is-open{% endif %}" data-film-card>
+<article class="film-card{% if expanded %} is-open{% endif %}" data-film-card{% if card.suggestion_id %} data-suggestion="{{ card.suggestion_id }}"{% endif %}>
   <div class="film-card__poster">{% include "components/poster.html" with film=card.film size="card" %}</div>
   <div class="film-card__body">
     <div class="film-card__head">
@@ -13,6 +13,7 @@
       {% if card.pitch %}{% include "components/note.html" with text=card.pitch author=card.suggester pitch=True %}{% endif %}
       {% for note in card.notes %}{% include "components/note.html" with text=note.text author=note.author pitch=False %}{% endfor %}
     </ul>
-    <div class="film-card__phase-bar" data-phase-bar>{% if phase_bar %}{% include phase_bar %}{% endif %}</div>
   </div>
+  {# A row of its own under the body, so on a phone it can take the card's whole width (#88). #}
+  <div class="film-card__phase-bar" data-phase-bar>{% if phase_bar %}{% include phase_bar %}{% endif %}</div>
 </article>

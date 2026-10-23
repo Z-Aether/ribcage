@@ -1,0 +1,11 @@
+{# The viewing voter's own note, a NoteBox, saved in place: htmx morphs the one card, so nothing else on the page is lost (#21, #88). #}
+{% with box=card.note_box %}<form class="note-box{% if box.is_pitch %} note-box--pitch{% endif %}" method="post" action="{% url 'note' %}" hx-post="{% url 'note' %}" hx-target="closest [data-film-card]" hx-swap="morph" hx-ext="morph">
+  {% csrf_token %}
+  <input type="hidden" name="suggestion" value="{{ card.suggestion_id|default_if_none:'' }}">
+  {# No maxlength: a browser cuts a long paste silently, and the server refuses it whole instead (#88). #}
+  <label class="note-box__label"><span class="note-box__name">{% if box.is_pitch %}Your pitch{% else %}Your note{% endif %}</span><textarea name="text" rows="3">{{ box.text }}</textarea></label>
+  <div class="note-box__foot">
+    <button type="submit">Save</button>
+    <p class="note-box__said{% if box.refusal %} is-refusal{% endif %}" role="status">{% if box.refusal %}{{ box.refusal }}{% elif box.saved and box.text %}Saved.{% elif box.saved %}Cleared.{% endif %}</p>
+  </div>
+</form>{% endwith %}

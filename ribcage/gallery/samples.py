@@ -5,11 +5,12 @@ a posterless film, a long title, a differing original title, a hand-entered runt
 against only a pitch, and a removed suggester.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import cache
 
 from ribcage.films import corpus
-from ribcage.films.card import FilmCard, Note
+from ribcage.films.card import FilmCard, Note, NoteBox
+from ribcage.suggestions.views import PITCH_REQUIRED
 
 MIDSOMMAR = 530385
 POOH_2 = 1079485
@@ -144,6 +145,23 @@ def cards():
     )
 
 
+def phase_bars():
+    """Each pool phase's bar on an opened card, with no suggestion, so a save here only reloads onto the phase page (#88)."""
+    wolf_house, exit_8 = cards()[2], cards()[5]
+    return (
+        (
+            "SUGGEST's phase bar, on Bex's own suggestion, after she saved her pitch empty",
+            replace(exit_8, note_box=NoteBox(text=exit_8.pitch, is_pitch=True, refusal=PITCH_REQUIRED)),
+            "components/suggest_bar.html",
+        ),
+        (
+            "APPROVE's phase bar, on Cass's suggestion, as Dani just saved her note",
+            replace(wolf_house, note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, saved=True)),
+            "components/approve_bar.html",
+        ),
+    )
+
+
 def tiles():
     return (
         Tile(film(THE_SHINING), "A topic you watch for", trigger_icon=True),
@@ -170,6 +188,7 @@ def evening():
 def gallery():
     return {
         "cards": cards(),
+        "phase_bars": phase_bars(),
         "score_scale": SCORE_SCALE,
         "tiles": tiles(),
         "poster_row": poster_row(),

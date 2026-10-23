@@ -29,9 +29,13 @@ A page wears the voter skin unless it names admin or run in base.html's `skin` b
 - **Type:**
   - Mystery Quest for display: headings, card titles, the wordmark and title cards. It is bouncy and spooky but legible.
   - Alegreya Sans for body text and labels, chosen for reading.
-  - Fraunces italic for **notes**, so the group's own words read as handwritten and warm, apart from the app's voice.
+  - Fraunces italic for **notes**, so the group's own words read as handwritten and warm, apart from the app's voice. A voter writes their own in the same hand, in the note box (#88).
   - Admin uses Alegreya Sans throughout.
 - **Shape:** voter corners are hand-cut, no two alike, like a carved pumpkin. The pitch sits under a jagged sliver of pumpkin. Admin corners are small and regular.
+
+## Phase bars
+
+A **phase bar** is the foot of an opened film card, where a voter acts on it, and the one part of the card that changes between surfaces. It sits under a dashed line, in a row of its own beside the poster, and takes the card's whole width on a phone. SUGGEST's and APPROVE's hold the **note box**: a label, *Your pitch* in pumpkin on your own suggestion and *Your note* on the rest, a box with no placeholder or hint, and *Save*. Its line beside *Save* says *Saved.* or *Cleared.*, or gives a refusal kindly, in the dusty rose the password confirmation borrows. It has no `maxlength`, since a browser cuts a long paste silently; the server refuses it whole instead (#88).
 
 ## Motion
 

@@ -86,3 +86,29 @@ def test_every_director_reads_back_in_order():
     codirected = dataclasses.replace(THE_SHINING, directors=("Severin Fiala", "Veronika Franz"))
 
     assert film_card(a_suggestion(codirected), []).film.directors == ("Severin Fiala", "Veronika Franz")
+
+
+def test_the_card_carries_its_suggestions_key():
+    assert film_card(a_suggestion(), []).suggestion_id == 10
+
+
+def test_without_a_viewer_the_card_has_no_note_box():
+    assert film_card(a_suggestion(), [a_note(BO, "I'm in.")]).note_box is None
+
+
+def test_the_note_box_holds_the_viewers_own_note():
+    notes = [a_note(ADA, "Heeere's Johnny."), a_note(BO, "I'm in."), a_note(CY, "Lights off.")]
+
+    assert film_card(a_suggestion(), notes, viewer=BO).note_box == card.NoteBox(text="I'm in.", is_pitch=False)
+
+
+def test_the_note_box_is_empty_for_a_viewer_with_no_note():
+    assert film_card(a_suggestion(), [a_note(ADA, "Heeere's Johnny.")], viewer=CY).note_box == card.NoteBox(
+        text="", is_pitch=False
+    )
+
+
+def test_on_the_viewers_own_suggestion_the_note_box_is_the_pitch():
+    notes = [a_note(BO, "I'm in."), a_note(ADA, "Heeere's Johnny.")]
+
+    assert film_card(a_suggestion(), notes, viewer=ADA).note_box == card.NoteBox(text="Heeere's Johnny.", is_pitch=True)

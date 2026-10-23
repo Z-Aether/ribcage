@@ -200,8 +200,8 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **Welcome** | Shown once after registration, never linked again. Rough points, then two exits: set up warnings, or go to the current phase's page (#23, #27). |
 | **Forced password change** | After an admin reset (#28): the change-password form, with the password the admin sent as the current one. Until it's done, every other voter page leads back to it; log out and the public pages stay open (#80). |
 | **My warnings** (trigger list page) | One scrolling page in DTDD's grouping. Privacy disclosure and "I don't care" at the top, live search, ticked topics as chips. Every topic names the films carrying it: the pool through APPROVE, the ballot from VOTE (#23, #35). |
-| **SUGGEST** | A *Suggest a film* panel above the pool. Find, with a trailing year to narrow → picker of five poster tiles, never auto-advanced, films already in the pool marked → pitch box, with runtime on one line and a pencil. *Add it by hand* for anything TMDB can't find, and a message beside it during a TMDB outage. The pool lists film cards, newest first, with a *Mine* filter (#21, #27, #61). |
-| **APPROVE** | The same pool, frozen. Notes still writable. |
+| **SUGGEST** | A *Suggest a film* panel above the pool. Find, with a trailing year to narrow → picker of five poster tiles, never auto-advanced, films already in the pool marked → pitch box, with runtime on one line and a pencil. *Add it by hand* for anything TMDB can't find, and a message beside it during a TMDB outage. The pool lists film cards, newest first, with a *Mine* filter (#21, #27, #61). An opened card ends in SUGGEST's phase bar, your own note box, saved in place; on your own suggestion it is your pitch (#88). |
+| **APPROVE** | The same pool, frozen. Notes still writable, in APPROVE's phase bar, which holds the note box alone (#88). |
 | **VOTE** (ballot) | See below. |
 | **PICK** (reveal) | See below. |
 | **RUN** | The evening (§7), with the reveal one header link away. |
@@ -248,7 +248,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **Identity and access** | Registration through the join code (a 24-character random string). Display names unique regardless of case, 1–20 characters, never renamed. Password login with sessions of about 60 days, outliving the window. Admin authentication from the environment, kept separate. Login backoff, keyed on the display name (#8, #31, #60). Password change and reset. Removal (#8, #16, #37). |
 | **Phase** | Phase derived from the phase history. One step at a time, both directions. The phase check. What each move triggers: DTDD refresh, RUN purge, reveal state. |
 | **Films and metadata** | TMDB search (debounced) and one detail fetch per film, never refreshed. Manual entry. One suggestion per TMDB id. Runtime with its source. Title card. |
-| **Suggestions, notes, approval** | Suggest and withdraw. One note per voter per film, the suggester's being the pitch. Approval states and the done-marker rule. |
+| **Suggestions, notes, approval** | Suggest and withdraw. One note per voter per film, the suggester's being the pitch. Saving a note empty deletes it, but a pitch is required, so emptying one is refused gently; a note over the length cap is refused whole, never cut (#88). Approval states and the done-marker rule. |
 | **Ballot** | Score, veto with reason, seen it, done. Per-voter Unsorted order: matched films first, then the rest, in a stable per-voter shuffle. |
 | **Trigger warnings** | DTDD matching and correction, snapshots and vocabulary, refresh scheduling against the live rate limit, watched lists, matched topics, icon threshold, purge. |
 | **Solver** | Floor set, objective, knobs, batch with diversity cut, the solver's own reasons for a short batch. Pure function over plain data. |

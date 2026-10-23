@@ -49,7 +49,7 @@ body > main:has(.gallery-skin) {
 .gallery-skin .film-card__phase-bar:empty {
   display: block;
   min-height: 2.6rem;
-  margin-top: 1rem;
+  margin-top: 0;
   border: 1px dashed var(--line-strong);
   border-radius: var(--radius-control);
 }

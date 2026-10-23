@@ -175,3 +175,5 @@ LOGIN_BACKOFF_WINDOW_MINUTES = environment.positive_whole_number("LOGIN_BACKOFF_
 LOGIN_BACKOFF_WAIT_MINUTES = environment.positive_whole_number("LOGIN_BACKOFF_WAIT_MINUTES", default=1)
 # A collapsed film card trims every note to this many characters, with an ellipsis (#21, #39).
 NOTE_TRIM_LENGTH = environment.positive_whole_number("NOTE_TRIM_LENGTH", default=120)
+# A note or pitch longer than this is refused with a message, never cut: about a page of text (#88).
+NOTE_MAX_LENGTH = environment.positive_whole_number("NOTE_MAX_LENGTH", default=2000)

@@ -71,6 +71,11 @@
     <div class="film-cards" data-film-cards>
       {% for card in cards %}{% include "components/film_card.html" with card=card expanded=forloop.first %}{% endfor %}
     </div>
+
+    {% for label, card, bar in phase_bars %}
+      <p class="gallery-label">{{ label }}</p>
+      <div class="film-cards" data-film-cards>{% include "components/film_card.html" with card=card expanded=True phase_bar=bar %}</div>
+    {% endfor %}
   </section>
 
   <section class="gallery-skin" data-skin="admin" id="admin" aria-labelledby="admin-name">
