@@ -4,7 +4,7 @@ The steps for running a window: the rebuild at its start, backups and restores d
 
 - **Local commands** run in Git Bash from the repo root. Those against the local stack expect `.env` copied from `.env.example`.
 - **Host steps** go through the dev's Komodo account (v2.3.3). It reaches each service's logs, stop, start and restart, the stack's *Deploy* and *Destroy*, a *Terminal* in either container, and the server's volumes. It can't download or upload a file. Anything it can't do is asked of Adam (#18, #54).
-- **`<subdomain>`** stands for the live address, the bare name in `ALLOWED_HOSTS`.
+- **`<subdomain>`** stands for the live address, the full host name in `ALLOWED_HOSTS`, without `https://`. The first label alone is not it: the app answers it `400`.
 
 ## Rebuild
 
@@ -34,6 +34,25 @@ At the start of each window. Teardown left the stack definition and its environm
    - **HSTS:** the host's proxy removes it from responses (#54), so check it in the `ribcage` container's *Terminal*. It prints `200 max-age=31536000; includeSubDomains`.
      ```
      python -c "import http.client as h; c = h.HTTPConnection('127.0.0.1', 8000); c.request('HEAD', '/login/', headers={'Host': '<subdomain>'}); r = c.getresponse(); print(r.status, r.getheader('Strict-Transport-Security'))"
+     ```
+   - **TMDB:** the app's search and film details call TMDB from the host, so check the stack's key reaches it, in the same *Terminal*. It prints `200 application/json;charset=utf-8`, and never the key. `HTTP 401` means `TMDB_API_KEY` is wrong; `FAILED` means the host's network blocks the call, which is a question for Adam (#100).
+     ```
+     python - <<'EOF'
+     import os, urllib.request, urllib.error
+     key = os.environ["TMDB_API_KEY"]
+     url, headers = "https://api.themoviedb.org/3/configuration", {"accept": "application/json"}
+     if key.count(".") == 2:
+         headers["Authorization"] = "Bearer " + key
+     else:
+         url += "?api_key=" + key
+     try:
+         r = urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=15)
+         print(r.status, r.headers["Content-Type"])
+     except urllib.error.HTTPError as e:
+         print("HTTP", e.code)
+     except Exception as e:
+         print("FAILED", type(e).__name__)
+     EOF
      ```
    - **A form POST** through `https://<subdomain>/login/` gets past CSRF: logging in with any name and password answers *The display name or the password is wrong.* A `403` means `CSRF_TRUSTED_ORIGINS` doesn't match the address in the browser. A silent return to the empty login form means the CSRF cookie never came back (#76).
    - **The `backup` log** says `Next backup at … 04:00 Europe/Budapest.`
