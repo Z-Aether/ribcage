@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "ribcage.identity",
     "ribcage.films",
     "ribcage.suggestions",
+    "ribcage.triggers",
     "ribcage.phase",
     "ribcage.console",
     "ribcage.seeding",
