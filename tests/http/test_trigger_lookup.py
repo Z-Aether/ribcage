@@ -14,7 +14,8 @@ from ribcage.triggers import fetch, stored
 from ribcage.triggers.dtdd import Record, Snapshot, TopicCount
 from ribcage.triggers.models import Topic, TriggerData
 from ribcage.triggers.status import State
-from ribcage.triggers.vocabulary import Vocabulary
+from ribcage.triggers.vocabulary import UNCATEGORIZED, SuperCategory, Vocabulary
+from ribcage.triggers.vocabulary import Topic as VocabularyTopic
 from tests.dtdd import VOCABULARY_PATHS, Dtdd, detail, item
 from tests.films import CABINET_OF_CURIOSITIES, THE_SHINING, a_tmdb_film
 from tests.http.signing_in import PASSWORD
@@ -133,6 +134,21 @@ def test_a_lookup_without_a_vocabulary_fetches_the_vocabulary_first(hanna, dtdd,
     vocabulary = stored.stored_vocabulary()
     assert [topic.label for topic in vocabulary.topics] == ["dog death", "cat death", "jump scares"]
     assert [(group.name, [topic.topic_id for topic in topics]) for group, topics in vocabulary.groups] == [("Animals", [153, 158]), ("Scary stuff", [200])]
+
+
+def test_a_stored_topic_that_resolves_nowhere_reads_back_as_uncategorized_after_dtdds_own_other(db):
+    other = SuperCategory(9, "Other")
+    vocabulary = Vocabulary(
+        (
+            VocabularyTopic(1, "lost", "", "", UNCATEGORIZED),
+            VocabularyTopic(2, "misc", "", "", other),
+        ),
+        (other,),
+    )
+
+    stored.replace_vocabulary(vocabulary)
+
+    assert [(group.name, [topic.topic_id for topic in topics]) for group, topics in stored.stored_vocabulary().groups] == [("Other", [2]), ("Uncategorized", [1])]
 
 
 def test_a_lookup_with_a_vocabulary_leaves_it_alone(hanna, dtdd, django_capture_on_commit_callbacks):

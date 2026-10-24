@@ -3,7 +3,7 @@
 import pytest
 
 from ribcage.triggers.client import Client, NotAnswering
-from ribcage.triggers.vocabulary import OTHER, SuperCategory, Topic
+from ribcage.triggers.vocabulary import UNCATEGORIZED, SuperCategory, Topic
 
 KEY = "dtdd-key-that-must-not-leak"
 
@@ -31,17 +31,20 @@ TOPICS = [
         "altTopicCategoryId": None,
     },
     {"id": 400, "name": "a new one", "keywords": "", "description": "", "minimalName": "new ones", "topicCategoryId": 99},
+    {"id": 402, "name": "a thing", "keywords": "", "description": "", "minimalName": "other things", "topicCategoryId": 4},
     {"id": 401, "name": "an orphan", "keywords": None, "description": None, "minimalName": "orphans", "topicCategoryId": 3},
 ]
 CATEGORIES = [
     {"id": 1, "name": "Animal death", "topicSuperCategoryId": 54},
     {"id": 2, "name": "Pregnancy", "topicSuperCategoryId": 53},
     {"id": 3, "name": "Unfiled", "topicSuperCategoryId": 77},
+    {"id": 4, "name": "Misc", "topicSuperCategoryId": 60},
 ]
 SUPER_CATEGORIES = [
     {"id": 54, "name": "Animals", "shortName": "Animals"},
     {"id": 53, "name": "Children & Babies", "shortName": "Kids"},
     {"id": 50, "name": "Violence", "shortName": "Violence"},
+    {"id": 60, "name": "Other", "shortName": "Other"},
 ]
 ANSWERS = {"/topics": TOPICS, "/topiccategories": CATEGORIES, "/topicsupercategories": SUPER_CATEGORIES}
 
@@ -59,6 +62,7 @@ class Dtdd:
 
 ANIMALS = SuperCategory(54, "Animals")
 KIDS = SuperCategory(53, "Children & Babies")
+DTDD_OTHER = SuperCategory(60, "Other")
 
 
 def test_the_vocabulary_is_three_calls_each_the_whole_list():
@@ -78,15 +82,16 @@ def test_each_topic_reads_its_minimal_name_keywords_description_and_super_catego
     )
 
 
-def test_a_topic_whose_category_or_super_category_does_not_resolve_is_grouped_last_under_other():
+def test_a_topic_whose_category_or_super_category_does_not_resolve_is_grouped_last_under_uncategorized_apart_from_dtdds_own_other():
     vocabulary = Client(KEY, Dtdd()).vocabulary().value
 
     assert [(group, [topic.label for topic in topics]) for group, topics in vocabulary.groups] == [
         (ANIMALS, ["dog death"]),
         (KIDS, ["stillbirths"]),
-        (OTHER, ["new ones", "orphans"]),
+        (DTDD_OTHER, ["other things"]),
+        (UNCATEGORIZED, ["new ones", "orphans"]),
     ]
-    assert OTHER.name == "Other"
+    assert UNCATEGORIZED.name == "Uncategorized"
 
 
 def test_a_topic_is_found_by_its_id():

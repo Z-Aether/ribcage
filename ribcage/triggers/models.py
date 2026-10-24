@@ -26,7 +26,7 @@ class Topic(models.Model):
     label = models.TextField()
     keywords = models.TextField(blank=True, default="")
     description = models.TextField(blank=True, default="")
-    # All three null for Other.
+    # All three null for Uncategorized.
     super_category = models.IntegerField(null=True)
     super_category_name = models.TextField(null=True)
     super_category_position = models.PositiveIntegerField(null=True)

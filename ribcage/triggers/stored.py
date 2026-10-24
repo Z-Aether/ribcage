@@ -5,7 +5,7 @@ from django.db import transaction
 from ribcage.suggestions.models import Suggestion
 from ribcage.triggers import section, status
 from ribcage.triggers.models import Topic, TriggerData
-from ribcage.triggers.vocabulary import OTHER, SuperCategory, Vocabulary
+from ribcage.triggers.vocabulary import UNCATEGORIZED, SuperCategory, Vocabulary
 from ribcage.triggers.vocabulary import Topic as VocabularyTopic
 
 
@@ -25,7 +25,7 @@ def replace_vocabulary(vocabulary):
                 keywords=topic.keywords,
                 description=topic.description,
                 super_category=topic.super_category.super_category_id,
-                super_category_name=None if topic.super_category == OTHER else topic.super_category.name,
+                super_category_name=None if topic.super_category == UNCATEGORIZED else topic.super_category.name,
                 super_category_position=positions.get(topic.super_category),
             )
             for position, topic in enumerate(vocabulary.topics)
@@ -36,8 +36,8 @@ def stored_vocabulary():
     """The vocabulary in one query, empty when none is stored, as on a fresh database or in RUN (#32)."""
     groups, topics = {}, []
     for row in Topic.objects.order_by("position"):
-        group = OTHER if row.super_category_position is None else SuperCategory(row.super_category, row.super_category_name)
-        if group != OTHER:
+        group = UNCATEGORIZED if row.super_category_position is None else SuperCategory(row.super_category, row.super_category_name)
+        if group != UNCATEGORIZED:
             groups[row.super_category_position] = group
         topics.append(VocabularyTopic(row.topic_id, row.label, row.keywords, row.description, group))
     return Vocabulary(tuple(topics), tuple(groups[position] for position in sorted(groups)))

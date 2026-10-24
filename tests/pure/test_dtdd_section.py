@@ -11,7 +11,7 @@ from ribcage.films.card import DtddMatch, FilmCard, TopicGroup, TopicRow
 from ribcage.triggers.dtdd import NO_MATCH, Record, Snapshot, TopicCount
 from ribcage.triggers.section import GAPS, section
 from ribcage.triggers.status import Fetched, State, Status
-from ribcage.triggers.vocabulary import OTHER, SuperCategory, Topic, Vocabulary
+from ribcage.triggers.vocabulary import UNCATEGORIZED, SuperCategory, Topic, Vocabulary
 from tests.films import THE_SHINING
 
 AT = datetime(2026, 10, 24, 18, 30, tzinfo=UTC)
@@ -22,7 +22,7 @@ VOCABULARY = Vocabulary(
         Topic(153, "dogs dying", "", "", ANIMALS),
         Topic(158, "cats dying", "", "", ANIMALS),
         Topic(161, "horses dying", "", "", ANIMALS),
-        Topic(200, "jump scares", "", "", OTHER),
+        Topic(200, "jump scares", "", "", UNCATEGORIZED),
         Topic(300, "gun violence", "", "", VIOLENCE),
     ),
     # DoesTheDogDie's own order, which the My warnings page uses: Violence before Animals here.
@@ -61,7 +61,7 @@ def test_the_topics_follow_the_vocabularys_groups_with_the_most_yes_votes_first_
         ("Violence", ["gun violence"]),
         # Equal yes votes keep the vocabulary's order.
         ("Animals", ["horses dying", "dogs dying", "cats dying"]),
-        ("Other", ["jump scares"]),
+        ("Uncategorized", ["jump scares"]),
     ]
     assert shown.topic_count == 5
 

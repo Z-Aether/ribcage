@@ -236,7 +236,7 @@ def test_vocabulary_refetches_the_three_lists_alone_and_leaves_every_film_record
     recorded = {path: json.loads((vocabulary_directory / name).read_text(encoding="utf-8")) for path, name in fetchcorpus.VOCABULARY_FILES.items()}
     assert recorded == VOCABULARY
     assert "2 topics, 2 super-categories" in output.getvalue()
-    assert "Under Other: new ones (470)" in output.getvalue()
+    assert "Under Uncategorized: new ones (470)" in output.getvalue()
     assert DTDD_KEY not in output.getvalue() + "".join(recorded_files(vocabulary_directory).values())
 
 

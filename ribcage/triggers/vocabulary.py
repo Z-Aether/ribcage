@@ -11,8 +11,8 @@ class SuperCategory:
     name: str
 
 
-# Where a topic goes when its category or super-category doesn't resolve, after every real one (#101).
-OTHER = SuperCategory(None, "Other")
+# Where a topic goes when its category or super-category doesn't resolve, after every real one, DoesTheDogDie's own "Other" among them, so it takes another name (#101).
+UNCATEGORIZED = SuperCategory(None, "Uncategorized")
 
 
 @dataclass(frozen=True)
@@ -32,8 +32,8 @@ class Vocabulary:
 
     @property
     def groups(self):
-        """Each super-category with its topics, in DoesTheDogDie's order, Other last, and none left empty."""
-        groups = [(group, [topic for topic in self.topics if topic.super_category == group]) for group in (*self.super_categories, OTHER)]
+        """Each super-category with its topics, in DoesTheDogDie's order, Uncategorized last, and none left empty."""
+        groups = [(group, [topic for topic in self.topics if topic.super_category == group]) for group in (*self.super_categories, UNCATEGORIZED)]
         return [(group, topics) for group, topics in groups if topics]
 
     def topic(self, topic_id):
@@ -68,7 +68,7 @@ def topics_from(answer):
                 label=a_string(each["minimalName"]),
                 keywords=text(each.get("keywords")),
                 description=text(each.get("description")),
-                super_category=OTHER,
+                super_category=UNCATEGORIZED,
             ),
             an_int_or_none(each.get("topicCategoryId")),
         )
@@ -77,11 +77,11 @@ def topics_from(answer):
 
 
 def assembled(topics, categories, super_categories):
-    """`topics_from`, `categories_from` and `super_categories_from` put together, unresolved topics under Other."""
+    """`topics_from`, `categories_from` and `super_categories_from` put together, unresolved topics under Uncategorized."""
     by_id = {group.super_category_id: group for group in super_categories}
     return Vocabulary(
         topics=tuple(
-            replace(topic, super_category=by_id.get(categories.get(category_id), OTHER)) for topic, category_id in topics
+            replace(topic, super_category=by_id.get(categories.get(category_id), UNCATEGORIZED)) for topic, category_id in topics
         ),
         super_categories=super_categories,
     )

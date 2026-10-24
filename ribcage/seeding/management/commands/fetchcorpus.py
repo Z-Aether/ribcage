@@ -59,8 +59,8 @@ class Command(BaseCommand):
         for path, name in VOCABULARY_FILES.items():
             write_json(VOCABULARY_DIRECTORY / name, lists[path])
         self.stdout.write(f"Recorded {len(read.topics)} topics, {len(read.super_categories)} super-categories into {VOCABULARY_DIRECTORY}.")
-        under_other = [f"{topic.label} ({topic.topic_id})" for topic in read.topics if topic.super_category == vocabulary.OTHER]
-        self.stdout.write(f"Under Other: {', '.join(under_other) or 'none'}")
+        under_uncategorized = [f"{topic.label} ({topic.topic_id})" for topic in read.topics if topic.super_category == vocabulary.UNCATEGORIZED]
+        self.stdout.write(f"Under Uncategorized: {', '.join(under_uncategorized) or 'none'}")
 
     def fetch_corpus(self, client):
         directory = corpus.CORPUS_DIRECTORY
