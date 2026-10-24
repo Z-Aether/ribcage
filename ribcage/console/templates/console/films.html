@@ -25,7 +25,7 @@
             <th scope="col">Film</th>
             <th scope="col">Suggested by</th>
             <th scope="col" class="ledger__number">Notes</th>
-            <th scope="col" class="ledger__number">Runtime</th>
+            <th scope="col">Runtime</th>
             <th scope="col">Approval</th>
             <th scope="col"><span class="visually-hidden">Decide</span></th>
           </tr>
@@ -38,7 +38,7 @@
                 <td class="films-ledger__film"><button type="button" class="ledger__title ledger__opens" aria-expanded="false" aria-controls="film-{{ card.suggestion_id }}">{{ card.film.title }}</button> <span class="ledger__muted">{{ card.film.year|default:"" }}</span> <span class="ledger__muted ledger__directors">{{ card.film.directors|join:", " }}</span></td>
                 <td class="films-ledger__suggester">{{ card.suggester }}{% if card.suggester_removed %} <span class="removed-tag">removed</span>{% endif %}</td>
                 <td class="ledger__number films-ledger__notes">{{ row.note_count }}</td>
-                <td class="ledger__number films-ledger__runtime">{% if card.film.runtime %}{{ card.film.runtime }} <span class="runtime__source">{% if card.film.runtime_source == "tmdb" %}TMDB{% else %}by hand{% endif %}</span>{% else %}No runtime{% endif %}</td>
+                <td class="films-ledger__runtime">{% include "console/runtime_box.html" %}</td>
                 <td class="films-ledger__approval"><span class="approval-tag approval-tag--{{ row.approval }}">{{ row.approval.label|lower }}</span></td>
                 <td class="films-ledger__decide">
                   {# Instant, as nothing is lost; the post names the approval it changes, so a stale one changes nothing (#26 §5, #96). #}

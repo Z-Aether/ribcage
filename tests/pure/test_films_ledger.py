@@ -79,3 +79,29 @@ def test_a_row_offers_the_acts_that_would_change_its_approval(approval, runtime,
     row = a_row(approval, runtime)
 
     assert (row.may_approve, row.may_drop) == acts
+
+
+def a_timed_row(runtime, tmdb_runtime, approval=UNDECIDED):
+    return replace(a_row(approval, runtime), tmdb_runtime=tmdb_runtime)
+
+
+@pytest.mark.parametrize(("runtime", "tmdb_runtime", "says"), [
+    (144, 144, None),
+    (146, 144, 144),
+    (120, 144, 144),
+    # A cleared runtime differs from TMDB's too (#97).
+    (None, 144, 144),
+    # A hand-entered film, or one TMDB gave no runtime, has nothing to differ from.
+    (47, None, None),
+    (None, None, None),
+])
+def test_tmdb_says_its_runtime_only_while_the_runtime_differs_from_it(runtime, tmdb_runtime, says):
+    assert a_timed_row(runtime, tmdb_runtime).tmdb_says == says
+
+
+@pytest.mark.parametrize(("runtime", "required"), [(None, True), (1, False), (144, False)])
+def test_a_runtime_is_required_exactly_when_approve_is_unavailable_for_want_of_one(runtime, required):
+    row = a_row(UNDECIDED, runtime)
+
+    assert row.runtime_required is required
+    assert row.may_approve is (not required)

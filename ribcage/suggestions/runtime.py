@@ -37,4 +37,5 @@ def minutes(typed):
 def correct(suggestion, typed):
     """Set the suggestion's runtime as typed. TMDB's stays as fetched, so the card reads the new one as by hand (#21)."""
     suggestion.runtime = minutes(typed)
-    suggestion.save(update_fields=["runtime"])
+    # A filtered update, so a suggestion withdrawn since it was read changes nothing rather than raising (#97).
+    type(suggestion).objects.filter(pk=suggestion.pk).update(runtime=suggestion.runtime)

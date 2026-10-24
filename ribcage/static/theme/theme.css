@@ -1768,6 +1768,50 @@ body > footer.site-footer {
   margin: 0;
   padding-block: 0.1rem;
 }
+/* The runtime box: minutes, its source or what it lacks, TMDB's when it differs, and a quiet Save, on one line (#97). */
+[data-skin] .films-ledger .films-ledger__runtime {
+  white-space: nowrap;
+}
+[data-skin] .films-ledger .runtime-box {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+}
+[data-skin] .runtime-box input[name="runtime"] {
+  width: 3.6em;
+  height: auto;
+  margin: 0;
+  padding: 0.1rem 0.4rem;
+  font-variant-numeric: tabular-nums lining-nums;
+  text-align: right;
+}
+[data-skin] .runtime-box .runtime__source {
+  margin-left: 0;
+}
+[data-skin] .runtime-box button {
+  width: auto;
+  margin: 0;
+  padding-block: 0.1rem;
+}
+.runtime-box__required,
+.runtime-box__differs {
+  font-size: 0.9em;
+}
+.runtime-box__required {
+  color: var(--veto-ink);
+}
+.runtime-box__differs {
+  color: var(--accent);
+}
+/* A refusal is said kindly under the box, in the note box's rose, never the veto's red (#88, #97). */
+[data-skin] .runtime-box__refusal {
+  margin: 0.3rem 0 0;
+  max-width: 18rem;
+  white-space: normal;
+  color: var(--score-rather-not);
+  font-size: 0.9em;
+}
 /* On a phone the directors give way, and what still overflows scrolls within the ledger rather than the page (#95). */
 .films-ledger__frame {
   /* Positioned, so a visually hidden header past the frame's edge scrolls with it rather than widening the page (#96). */

@@ -64,11 +64,16 @@ def move_phase(request):
     return redirect("console_phase")
 
 
+def render_films(request, show, refused=None):
+    ledger = films.ledger(show)
+    context = {"ledger": ledger, "screen_time": films.screen_time_words(ledger.screen_time), "refused": refused, "tab": "console_films"}
+    return render_tab(request, "console/films.html", context)
+
+
 @admin_required
 def films_tab(request):
     # A filter is a plain link, so the tab needs no script to read it (the dev, 2026-10-23, on #61).
-    ledger = films.ledger(films.chosen(request.GET.get("show")))
-    return render_tab(request, "console/films.html", {"ledger": ledger, "screen_time": films.screen_time_words(ledger.screen_time)})
+    return render_films(request, films.chosen(request.GET.get("show")))
 
 
 @admin_required
@@ -78,6 +83,19 @@ def decide_approval(request):
     post = request.POST
     films.decide(post.get("suggestion"), post.get("from_approval"), post.get("to_approval"))
     return redirect(films.chosen(post.get("show")).address)
+
+
+@admin_required
+@require_http_methods(["GET", "HEAD", "POST"])
+def edit_runtime(request):
+    # A GET is a reload onto the page a refusal was shown at, so it lands on the tab (#80, #97).
+    show = films.chosen(request.POST.get("show"))
+    if request.method != "POST":
+        return redirect(show.address)
+    # A refusal renders the tab here under the posted filter, as the typed value has to stay in its box (#97).
+    if refused := films.edit_runtime(request.POST.get("suggestion"), request.POST.get("runtime", "")):
+        return render_films(request, show, refused)
+    return redirect(show.address)
 
 
 @admin_required

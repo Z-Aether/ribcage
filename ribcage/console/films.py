@@ -8,6 +8,7 @@ from django.urls import reverse
 from ribcage.films.card import FilmCard
 from ribcage.suggestions import pool
 from ribcage.suggestions.models import Approval, Suggestion
+from ribcage.suggestions.runtime import Refused, correct
 
 
 @dataclass(frozen=True)
@@ -55,6 +56,7 @@ class Row:
 
     card: FilmCard
     approval: Approval
+    tmdb_runtime: int | None = None
 
     @property
     def note_count(self):
@@ -68,6 +70,17 @@ class Row:
     @property
     def may_drop(self):
         return self.approval != Approval.DROPPED
+
+    @property
+    def runtime_required(self):
+        # Red on the box while Approve is unavailable for want of a runtime, by the same rule (#28, #97).
+        return not may_approve(self.card.film.runtime)
+
+    @property
+    def tmdb_says(self):
+        """TMDB's runtime while the box's differs from it, a cleared one included; the derived source reads the same two (#21, #97)."""
+        differs = self.tmdb_runtime is not None and self.card.film.runtime != self.tmdb_runtime
+        return self.tmdb_runtime if differs else None
 
 
 @dataclass(frozen=True)
@@ -102,7 +115,10 @@ def ledger(show):
     """The tab's ledger, in a query for the suggestions and one for their notes, however large the pool."""
     suggestions = Suggestion.objects.prefetch_related(Prefetch("notes", queryset=pool.notes_in_order())).order_by("-pk")
     # No viewer: the admin's card has no note box, withdraw or pencil, and shows nothing personal (#28, #95).
-    rows = [Row(pool.film_card(suggestion, suggestion.notes.all()), Approval(suggestion.approval)) for suggestion in suggestions]
+    rows = [
+        Row(pool.film_card(suggestion, suggestion.notes.all()), Approval(suggestion.approval), suggestion.tmdb_runtime)
+        for suggestion in suggestions
+    ]
     return Ledger.of(rows, show)
 
 
@@ -120,7 +136,47 @@ def decide(suggestion, expected, to):
         return False
     if found is None or (to == Approval.APPROVED and not may_approve(found.runtime)):
         return False
+    # Approving also needs a runtime still there, so a clear landing since the read changes nothing (#97).
+    if to == Approval.APPROVED:
+        matching = matching.filter(runtime__isnull=False)
     return matching.update(approval=to) == 1
+
+
+# Worded as `runtime.minutes`' lines are, naming no act (#93, #97).
+ON_THE_BALLOT = "A film on the ballot needs a runtime. Type its length in minutes, like 144."
+
+
+@dataclass(frozen=True)
+class BoxRefused:
+    """A runtime box's refused post: the row it was on, what was typed, kept in the box, and why (#97)."""
+
+    suggestion: int
+    typed: str
+    says: str
+
+
+def edit_runtime(suggestion, typed):
+    """The admin's runtime edit, in any phase: whole minutes, or blank on a film not on the ballot (#28, #97).
+
+    TMDB's runtime stays as fetched, so the source reads by hand. Returns BoxRefused for a refusal; a suggestion
+    withdrawn since, or none named, changes nothing.
+    """
+    try:
+        found = Suggestion.objects.filter(pk=suggestion).first()
+    except (TypeError, ValueError):
+        return None
+    if found is None:
+        return None
+    if not typed.strip():
+        # The update names the approval too, so an approve landing first is refused, as `approved_has_a_runtime` would (#26 §8).
+        if Suggestion.objects.filter(pk=found.pk).exclude(approval=Approval.APPROVED).update(runtime=None):
+            return None
+        return BoxRefused(found.pk, typed, ON_THE_BALLOT)
+    try:
+        correct(found, typed)
+    except Refused as refusal:
+        return BoxRefused(found.pk, typed, str(refusal))
+    return None
 
 
 def screen_time_words(minutes):

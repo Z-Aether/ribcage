@@ -22,9 +22,12 @@
   });
   // Remove and the phase move redirect elsewhere, so the key they leave goes stale unread (#85);
   // a form that redirects back names the page it lands on in data-lands-on, as approve and drop do (#96).
+  // Kept at its action too, where a refusal renders the tab in place, as the runtime box's does (#97).
   addEventListener("submit", (event) => {
     const form = event.target.closest("[data-keeps-scroll] form");
-    if (form && !event.defaultPrevented) keep(form.dataset.landsOn ?? form.action, form);
+    if (!form || event.defaultPrevented) return;
+    keep(form.action, form);
+    if (form.dataset.landsOn) keep(form.dataset.landsOn, form);
   });
   const kept = JSON.parse(sessionStorage.getItem(key(location.pathname)));
   sessionStorage.removeItem(key(location.pathname));

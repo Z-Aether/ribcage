@@ -1,0 +1,15 @@
+{# The admin's runtime edit, in any phase, saved apart from Approve; a refusal keeps what was typed in the box (#28, #97). #}
+<form method="post" action="{% url 'console_films_runtime' %}" class="runtime-box" data-lands-on="{{ ledger.show.address }}">
+  {% csrf_token %}
+  <input type="hidden" name="suggestion" value="{{ card.suggestion_id }}">
+  <input type="hidden" name="show" value="{{ ledger.show.show }}">
+  {% if refused and refused.suggestion == card.suggestion_id %}
+    <input type="text" name="runtime" value="{{ refused.typed }}" inputmode="numeric" autocomplete="off" aria-label="Runtime of {{ card.film.title }} in minutes" aria-describedby="runtime-refusal-{{ card.suggestion_id }}" autofocus>
+  {% else %}
+    <input type="text" name="runtime" value="{{ card.film.runtime|default_if_none:'' }}" inputmode="numeric" autocomplete="off" aria-label="Runtime of {{ card.film.title }} in minutes">
+    {% if row.runtime_required %}<span class="runtime-box__required">required to approve</span>{% else %}<span class="runtime__source">{% if card.film.runtime_source == "tmdb" %}TMDB{% else %}by hand{% endif %}</span>{% endif %}
+    {% if row.tmdb_says %}<span class="runtime-box__differs">⚠ TMDB says {{ row.tmdb_says }}</span>{% endif %}
+  {% endif %}
+  <button type="submit" class="button--quiet">Save</button>
+</form>
+{% if refused and refused.suggestion == card.suggestion_id %}<p class="runtime-box__refusal" id="runtime-refusal-{{ card.suggestion_id }}">{{ refused.says }}</p>{% endif %}
