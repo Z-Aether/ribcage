@@ -1,3 +1,5 @@
+import json
+import shutil
 import socket
 from io import BytesIO, StringIO, TextIOWrapper
 
@@ -7,12 +9,17 @@ from django.core.management import CommandError, call_command
 from django.db.models import F
 from django.utils import timezone
 
+from ribcage.films import corpus
 from ribcage.films.corpus import read_entries
 from ribcage.identity.models import Voter
 from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import PHASES, Phase
 from ribcage.suggestions.models import Approval, Note, Suggestion
+from ribcage.triggers import stored
+from ribcage.triggers.models import Topic
+from ribcage.triggers.status import State
+from tests.dtdd import VOCABULARY, detail, item
 
 SEEDED_DISPLAY_NAMES = ["Ada", "Anne-Marie", "O'Brien", "Zoë", "Sam", "Bartholomew Winthrop"]
 SEEDED_PASSWORD = "popcorn-before-midnight"
@@ -182,3 +189,73 @@ def test_seeding_twice_gives_the_same_pool(transactional_db, debug_on):
     call_command("seed", "--phase", "APPROVE")
 
     assert seeded_pool() == first
+
+
+# Trigger data (#102)
+
+THE_THING, WEREWOLF_BY_NIGHT, WEAPONS = 1091, 894205, 1078605
+
+
+@pytest.fixture
+def corpus_without_dtdd(tmp_path, monkeypatch):
+    """The corpus as a fresh clone has it: the committed files only, with no DoesTheDogDie recordings or vocabulary (#40)."""
+    films, vocabulary = tmp_path / "films", tmp_path / "dtdd"
+    films.mkdir()
+    vocabulary.mkdir()
+    shutil.copy(corpus.CORPUS_DIRECTORY / corpus.CORPUS_LIST, films)
+    shutil.copytree(corpus.CORPUS_DIRECTORY / corpus.TMDB_RECORDINGS, films / corpus.TMDB_RECORDINGS)
+    monkeypatch.setattr(corpus, "CORPUS_DIRECTORY", films)
+    monkeypatch.setattr(corpus, "VOCABULARY_DIRECTORY", vocabulary)
+    return films, vocabulary
+
+
+def seeded_states():
+    suggestions = list(Suggestion.objects.all())
+    statuses = stored.statuses_of(suggestions)
+    return {suggestion.tmdb_id or suggestion.title: statuses[suggestion.pk].state for suggestion in suggestions}
+
+
+def test_without_the_recordings_seed_runs_leaving_every_film_not_fetched_and_says_so(transactional_db, debug_on, corpus_without_dtdd):
+    output = StringIO()
+
+    call_command("seed", stdout=output)
+
+    states = seeded_states()
+    assert states.pop(CABINET_OF_CURIOSITIES) is State.NO_MATCH
+    assert set(states.values()) == {State.NOT_FETCHED}
+    assert not Topic.objects.exists()
+    assert "DoesTheDogDie's recordings are missing, so every film is left not fetched and the vocabulary empty." in output.getvalue()
+    assert "python manage.py fetchcorpus" in output.getvalue()
+
+
+def record(directory, tmdb_id, recording):
+    entry = next(entry for entry in corpus.read_entries(directory) if entry.tmdb_id == tmdb_id)
+    (directory / corpus.DTDD_RECORDINGS).mkdir(exist_ok=True)
+    (directory / corpus.DTDD_RECORDINGS / f"{entry.recording_name}.json").write_text(json.dumps(recording), encoding="utf-8")
+
+
+def test_seed_fills_the_vocabulary_and_each_recorded_films_snapshot_by_the_lookup_rule(transactional_db, debug_on, corpus_without_dtdd):
+    films, vocabulary = corpus_without_dtdd
+    for path, name in corpus.VOCABULARY_FILES.items():
+        (vocabulary / name).write_text(json.dumps(VOCABULARY[path]), encoding="utf-8")
+    thing, werewolf, weapons = item(12243, "The Thing", 1982), item(1210242, "Werewolf By Night", 2022), item(1, "Weapons", 2025)
+    record(films, THE_THING, {"lookup": [thing], "retry": None, "items": {"12243": detail(thing, (153, 3, 1))}})
+    # Its real record has no year, so the retry by title rejects it and the film is uncovered on the empty one (#62).
+    werewolf_real = {**item(834224, "Werewolf by Night", None), "topicItemStats": []}
+    werewolf_items = {"1210242": detail(werewolf), "834224": detail(werewolf_real, (153, 9, 0))}
+    record(films, WEREWOLF_BY_NIGHT, {"lookup": [werewolf], "retry": [werewolf_real], "items": werewolf_items})
+    record(films, WEAPONS, {"lookup": [weapons], "retry": None, "items": {"1": detail(weapons, (200, 4, 0))}})
+    output = StringIO()
+
+    call_command("seed", stdout=output)
+
+    states = seeded_states()
+    assert (states[THE_THING], states[WEREWOLF_BY_NIGHT], states[WEAPONS], states[CABINET_OF_CURIOSITIES]) == (
+        State.MATCHED,
+        State.UNCOVERED,
+        State.NOT_FETCHED,
+        State.NO_MATCH,
+    )
+    assert Topic.objects.count() == len(VOCABULARY["/topics"])
+    assert "DoesTheDogDie: 1 matched, 1 uncovered, 17 not fetched, 1 no match." in output.getvalue()
+    assert "recordings are missing" not in output.getvalue()

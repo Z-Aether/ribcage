@@ -12,6 +12,13 @@ CORPUS_LIST = "corpus.json"
 TMDB_RECORDINGS = "tmdb"
 # Gitignored under DoesTheDogDie's redistribution terms, so a fresh clone has none (#40).
 DTDD_RECORDINGS = "dtdd"
+# DoesTheDogDie's vocabulary as last recorded, gitignored under the same terms (#40, #101).
+VOCABULARY_DIRECTORY = CORPUS_DIRECTORY.parent / "dtdd"
+VOCABULARY_FILES = {
+    "/topics": "dtdd_topics.json",
+    "/topiccategories": "dtdd_topiccategories.json",
+    "/topicsupercategories": "dtdd_topicsupercategories.json",
+}
 FETCH_COMMAND = "python manage.py fetchcorpus"
 
 
@@ -93,6 +100,17 @@ def read_dtdd(entry, directory=CORPUS_DIRECTORY):
             f"so a fresh clone has none: run {FETCH_COMMAND} with the keys set to record them."
         )
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_vocabulary(directory=VOCABULARY_DIRECTORY):
+    """DoesTheDogDie's three vocabulary lists as recorded, raw, keyed by the path each answers (#23, #101)."""
+    paths = {path: Path(directory) / name for path, name in VOCABULARY_FILES.items()}
+    if not all(path.is_file() for path in paths.values()):
+        raise DtddNotRecorded(
+            f"DoesTheDogDie's vocabulary isn't recorded in {directory}. It is gitignored under DTDD's terms, "
+            f"so a fresh clone has none: run {FETCH_COMMAND} --vocabulary with the keys set to record it."
+        )
+    return {path: json.loads(file.read_text(encoding="utf-8")) for path, file in paths.items()}
 
 
 def dtdd_path(entry, directory):

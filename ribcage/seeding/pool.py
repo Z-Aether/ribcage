@@ -5,15 +5,23 @@ Evil Dead, Insidious, Good Boy and Willy's Wonderland, are left out, so they can
 Sam suggests nothing, so one seeded voter's Mine is empty.
 """
 
+from collections import Counter
 from dataclasses import dataclass
+
+from django.conf import settings
 
 from ribcage.films import corpus
 from ribcage.identity.models import Voter
 from ribcage.phase.order import Phase
+from ribcage.seeding.recorded import RecordedDtdd
 from ribcage.suggestions.models import Approval, Suggestion
+from ribcage.triggers import fetch, stored
+from ribcage.triggers.client import Client
 
 CABINET_OF_CURIOSITIES = "Del Toro's Cabinet of Curiosities"
 APPROVED, UNDECIDED, DROPPED = Approval.APPROVED, Approval.UNDECIDED, Approval.DROPPED
+# Weapons is left not fetched, so the Films tab shows the gap and the next phase move fills it from the recordings (#102, #104).
+NOT_FETCHED = 1078605
 
 
 @dataclass(frozen=True)
@@ -207,3 +215,22 @@ def recorded_films():
         recorded.film.tmdb_id if recorded.film.tmdb_id is not None else recorded.film.title: recorded.film
         for recorded in corpus.read_corpus()
     }
+
+
+def seed_the_trigger_data():
+    """Each seeded TMDB film's lookup, answered from the recordings by the rule a suggestion's is, and the state each lands in (#102).
+
+    Returns the recordings, so the seed can say when they are missing, as in a fresh clone.
+    """
+    # Read at call time, so a test can point the seed at a corpus of its own.
+    recordings = RecordedDtdd(corpus.CORPUS_DIRECTORY, corpus.VOCABULARY_DIRECTORY)
+    client = Client(settings.DTDD_API_KEY, recordings)
+    for suggestion in Suggestion.objects.exclude(tmdb_id=NOT_FETCHED).order_by("pk"):
+        fetch.look_up(suggestion, client)
+    return recordings
+
+
+def trigger_states():
+    """How many seeded films are in each state, for the seed's output."""
+    suggestions = list(Suggestion.objects.all())
+    return Counter(each.state for each in stored.statuses_of(suggestions).values())

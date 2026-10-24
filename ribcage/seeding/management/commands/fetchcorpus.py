@@ -19,13 +19,9 @@ DTDD_SECONDS_BETWEEN_CALLS = 2.15
 # A server error or a dropped connection is retried, so one blip doesn't cost a four-minute run.
 ATTEMPTS = 3
 SECONDS_BEFORE_ANOTHER_ATTEMPT = 10
-# DoesTheDogDie's vocabulary, gitignored under its terms like the film recordings (#40, #101).
-VOCABULARY_DIRECTORY = corpus.CORPUS_DIRECTORY.parent / "dtdd"
-VOCABULARY_FILES = {
-    "/topics": "dtdd_topics.json",
-    "/topiccategories": "dtdd_topiccategories.json",
-    "/topicsupercategories": "dtdd_topicsupercategories.json",
-}
+# Named here too, so a test can point the fetch at a directory of its own.
+VOCABULARY_DIRECTORY = corpus.VOCABULARY_DIRECTORY
+VOCABULARY_FILES = corpus.VOCABULARY_FILES
 
 
 class Command(BaseCommand):

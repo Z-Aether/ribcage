@@ -6,7 +6,8 @@ from ribcage.identity.models import Voter
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 from ribcage.seeding.management.commands import seededserver
-from ribcage.seeding.recorded import RecordedTmdb
+from ribcage.seeding.recorded import RecordedDtdd, RecordedTmdb
+from ribcage.triggers import client as dtdd_client
 
 
 def test_with_debug_off_it_refuses_before_seeding_or_serving(transactional_db, settings):
@@ -64,3 +65,23 @@ def test_it_answers_tmdb_from_the_recordings_before_serving(transactional_db, de
 
     assert isinstance(answering[0], RecordedTmdb)
     assert client.tmdb_client().search("Evil Dead")["results"][0]["id"] == 1212763
+
+
+def test_it_answers_dtdd_from_the_recordings_before_serving(transactional_db, debug_on, monkeypatch):
+    # Reset after the test, so no other test's client finds the recordings installed (#102).
+    monkeypatch.setattr(client, "stand_in", None)
+    monkeypatch.setattr(dtdd_client, "stand_in", None)
+    answering = []
+    real_call_command = seededserver.call_command
+
+    def serve_nothing(name, *args, **options):
+        if name == "runserver":
+            answering.append(dtdd_client.dtdd_client().transport)
+        else:
+            real_call_command(name, *args, **options)
+
+    monkeypatch.setattr(seededserver, "call_command", serve_nothing)
+
+    call_command("seededserver")
+
+    assert isinstance(answering[0], RecordedDtdd)
