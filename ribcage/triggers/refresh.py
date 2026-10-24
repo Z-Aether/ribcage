@@ -5,13 +5,14 @@ DoesTheDogDie is made while the write lock is held (#74, #104).
 """
 
 import time
+import urllib.error
 
 from django.db import transaction
 from django.utils import timezone
 
 from ribcage.suggestions.models import Suggestion
 from ribcage.triggers import stored
-from ribcage.triggers.client import Client, NotAnswering, dtdd_client, remaining_of
+from ribcage.triggers.client import Client, NoSuchRecord, NotAnswering, dtdd_client, remaining_of
 from ribcage.triggers.status import State
 
 # Left for a suggestion's lookup in the same minute (#32 §1, #104).
@@ -36,7 +37,15 @@ class Rationed:
         # Checked before every call, not every film, since a film with no match is several (#104).
         if (self.remaining is not None and self.remaining <= FLOOR) or self.clock() - self.started >= SECONDS:
             raise Spent
-        body, answered = self.transport(path, parameters, headers)
+        try:
+            body, answered = self.transport(path, parameters, headers)
+        except urllib.error.HTTPError as error:
+            # A 404 spends a call too, so it counts toward the floor; with no header, one off the last count (#104).
+            counted = remaining_of(error.headers or {})
+            if counted is None and self.remaining is not None:
+                counted = self.remaining - 1
+            self.remaining = counted
+            raise
         self.remaining = remaining_of(answered)
         return body, answered
 
@@ -61,8 +70,9 @@ def in_line(statuses):
 def refresh(client=None, clock=time.monotonic):
     """Refresh the vocabulary, then films in line, until the floor, the time, or DoesTheDogDie's first failure.
 
-    A failure ends the whole batch: a film keeps its old snapshot and is first in line next move, never dropped to
-    not fetched. Nothing tells the admin; the Films tab's stale line names what is still old (#32 §3, #104).
+    A failure ends the whole batch, but a 404 skips only its film: either way a film keeps its old snapshot and is first
+    in line next move, never dropped to not fetched. Nothing tells the admin how it went; the Films tab's stale line
+    names what is still old (#32 §3, #104).
     """
     client = client or dtdd_client()
     rationed = Client(client.key, Rationed(client.transport, clock))
@@ -72,7 +82,11 @@ def refresh(client=None, clock=time.monotonic):
         suggestions = Suggestion.objects.in_bulk()
         statuses = stored.statuses_of(list(suggestions.values()))
         for pk in in_line(statuses):
-            refresh_one(suggestions[pk], statuses[pk].match, rationed)
+            try:
+                refresh_one(suggestions[pk], statuses[pk].match, rationed)
+            except NoSuchRecord:
+                # A record gone from DoesTheDogDie skips only its film, which keeps its snapshot and match (#104, 2026-10-24).
+                continue
     except NotAnswering:
         return
 

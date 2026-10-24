@@ -25,7 +25,7 @@ class NotAnswering(Exception):
 
 
 class NoSuchRecord(NotAnswering):
-    """DoesTheDogDie answered 404: a pasted link names no record. Every other caller reads it as not answering (#105)."""
+    """DoesTheDogDie answered 404: a pasted link names no record. Every caller but `refresh.refresh`, which skips only its film, reads it as not answering (#104, #105)."""
 
 
 @dataclass(frozen=True)

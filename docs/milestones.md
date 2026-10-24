@@ -129,7 +129,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 
 **Scope**
 - **DTDD client:** lookup by TMDB id, the guarded retry by title and year, the movie-type filter (#19, #23).
-- **Snapshots and vocabulary:** stored per film. Every phase move refreshes the vocabulary, then films oldest-first, within the rate limit's floor or 20 s, never blocking the move; a failed refresh keeps the old snapshot (#32).
+- **Snapshots and vocabulary:** stored per film. Every phase move refreshes the vocabulary, then films oldest-first, within the rate limit's floor or 20 s, never blocking the move; a failed refresh keeps the old snapshot, and a record gone from DTDD skips only its film (#32, #104).
 - **The RUN purge:** entering RUN deletes every snapshot and the vocabulary, and leaving it fetches them again. Moved here from M8, since M5 owns the snapshots (#32, #62).
 - **Match correction:** the paste-a-link control, previewed before it is saved, tagged `auto` or `set by <name>`, windowed SUGGEST–VOTE for voters and never for the admin (#32, #34, #62, #78).
 - **My warnings:** the scrolling page in DTDD's grouping, privacy disclosure, *I don't care*, live search, chips, carrying films per topic. The nag bar. Topics travel in request bodies (#16, #20, #23).

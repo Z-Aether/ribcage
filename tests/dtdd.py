@@ -47,7 +47,12 @@ class Dtdd:
         if self.error is not None:
             raise self.error
         headers = {"x-ratelimit-remaining-minute": str(self.remaining.pop(0))} if self.remaining else {}
-        return self.answer(path, parameters), headers
+        try:
+            return self.answer(path, parameters), headers
+        except urllib.error.HTTPError as error:
+            # A 404 carries the count too, as DoesTheDogDie's does (#104).
+            error.headers = headers
+            raise
 
     def answer(self, path, parameters):
         if path in self.vocabulary:

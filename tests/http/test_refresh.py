@@ -195,6 +195,63 @@ def test_the_first_failure_ends_the_batch_and_keeps_the_old_snapshots(pool, fail
     assert status_of(pool["weapons"]).state is State.MATCHED
 
 
+def test_a_record_gone_from_dtdd_is_skipped_and_the_refresh_carries_on(pool):
+    # The Thing's record answers 404, as one deleted on DoesTheDogDie does; Cube and Pulse behind it still refresh (#104).
+    details = [detail(CUBE, (200, 2, 0)), detail(PULSE, (158, 1, 1)), detail(WEAPONS, (200, 4, 0))]
+    before = status_of(pool["thing"])
+    transport = Dtdd(by_tmdb={1078605: [WEAPONS]}, details=details)
+
+    refreshed(transport)
+
+    assert transport.paths[3:] == ["/items", "/items/14", "/items/11", "/items/12", "/items/13"]
+    assert (status_of(pool["thing"]).match, status_of(pool["thing"]).fetched) == (before.match, before.fetched)
+    assert status_of(pool["cube"]).fetched.snapshot.counts == (TopicCount(200, 2, 0),)
+    assert status_of(pool["pulse"]).fetched.snapshot.counts == (TopicCount(158, 1, 1),)
+
+
+def test_a_record_gone_near_the_floor_counts_against_it(pool):
+    # Weapons' lookup leaves 17 and 16; The Thing's 404 says 3 are left, so Cube is not asked (#104).
+    details = [detail(WEAPONS, (200, 4, 0))]
+    transport = Dtdd(by_tmdb={1078605: [WEAPONS]}, details=details, remaining=[20, 19, 18, 17, 16, 3])
+
+    refreshed(transport)
+
+    assert transport.paths[3:] == ["/items", "/items/14", "/items/11"]
+
+
+def test_a_record_gone_with_no_count_spends_one_off_the_last(pool):
+    details = [detail(WEAPONS, (200, 4, 0))]
+    transport = Dtdd(by_tmdb={1078605: [WEAPONS]}, details=details, remaining=[20, 19, 18, 17, 5])
+    original = transport.__call__
+
+    def without_the_count_on_a_404(path, parameters, headers):
+        try:
+            return original(path, parameters, headers)
+        except urllib.error.HTTPError as error:
+            error.headers = None
+            raise
+
+    refreshed(without_the_count_on_a_404)
+
+    # 5 after Weapons' lookup, then The Thing's 404 with no header makes 4, then Cube's 404 makes 3: Pulse is not asked.
+    assert transport.paths[3:] == ["/items", "/items/14", "/items/11", "/items/12"]
+
+
+def test_a_timeout_after_a_record_gone_still_ends_the_batch(pool):
+    def timing_out_on_cube(path):
+        if path == "/items/12":
+            raise TimeoutError
+
+    details = [detail(CUBE, (200, 2, 0)), detail(PULSE, (158, 1, 1)), detail(WEAPONS, (200, 4, 0))]
+    before = status_of(pool["pulse"]).fetched
+    transport = Dtdd(by_tmdb={1078605: [WEAPONS]}, details=details, on_call=timing_out_on_cube)
+
+    refreshed(transport)
+
+    assert transport.paths[3:] == ["/items", "/items/14", "/items/11", "/items/12"]
+    assert status_of(pool["pulse"]).fetched == before
+
+
 def test_a_failed_vocabulary_refreshes_no_film_and_keeps_the_old_vocabulary(pool):
     stored.replace_vocabulary(dtdd_client.Client("key", Dtdd()).vocabulary().value)
 
