@@ -10,6 +10,8 @@ from ribcage.suggestions import pool
 from ribcage.suggestions.models import Approval, Suggestion
 from ribcage.suggestions.runtime import Refused, correct
 from ribcage.suggestions.withdrawal import with_holds, withdrawable
+from ribcage.triggers import stored
+from ribcage.triggers.status import State, Status
 
 
 @dataclass(frozen=True)
@@ -58,6 +60,9 @@ class Row:
     card: FilmCard
     approval: Approval
     tmdb_runtime: int | None = None
+    dtdd: Status = Status(has_tmdb_id=False)
+    # The topics the vocabulary names, as the card lists them (#62).
+    named_topics: int = 0
 
     @property
     def note_count(self):
@@ -82,6 +87,13 @@ class Row:
         """TMDB's runtime while the box's differs from it, a cleared one included; the derived source reads the same two (#21, #97)."""
         differs = self.tmdb_runtime is not None and self.card.film.runtime != self.tmdb_runtime
         return self.tmdb_runtime if differs else None
+
+    @property
+    def dtdd_status(self):
+        """The DoesTheDogDie column: a matched film's topic count, or the gap named; M10 words it finally (#28, #32, #102)."""
+        if self.dtdd.state is State.MATCHED:
+            return f"{self.named_topics} topic{'' if self.named_topics == 1 else 's'}"
+        return str(self.dtdd.state)
 
 
 @dataclass(frozen=True)
@@ -113,11 +125,18 @@ def shown_by(show, rows):
 
 
 def ledger(show):
-    """The tab's ledger, in a query for the suggestions and one for their notes, however large the pool."""
-    suggestions = Suggestion.objects.prefetch_related(Prefetch("notes", queryset=pool.notes_in_order())).order_by("-pk")
-    # No viewer: the admin's card has no note box, withdraw or pencil, and shows nothing personal (#28, #95).
+    """The tab's ledger, in a query each for the suggestions, their notes, their trigger data and the vocabulary, however large the pool."""
+    suggestions = list(Suggestion.objects.prefetch_related(Prefetch("notes", queryset=pool.notes_in_order())).order_by("-pk"))
+    statuses, named = stored.statuses_of(suggestions), stored.named_topic_ids()
+    # No viewer: the admin's card has no note box, withdraw or pencil, and shows nothing personal (#28, #35 §2, #95).
     rows = [
-        Row(pool.film_card(suggestion, suggestion.notes.all()), Approval(suggestion.approval), suggestion.tmdb_runtime)
+        Row(
+            pool.film_card(suggestion, suggestion.notes.all()),
+            Approval(suggestion.approval),
+            suggestion.tmdb_runtime,
+            statuses[suggestion.pk],
+            statuses[suggestion.pk].topics_named_by(named),
+        )
         for suggestion in suggestions
     ]
     return Ledger.of(rows, show)

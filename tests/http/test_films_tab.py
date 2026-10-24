@@ -82,16 +82,16 @@ def test_the_rows_come_newest_first(admin, pool):
     assert titles(admin.get(TAB).text) == ["Suspiria", "Possession", "Pulse", "The Shining", "Cube", "The Thing"]
 
 
-def test_a_row_shows_the_film_its_suggester_its_notes_its_runtime_and_its_approval(admin, voters, pool):
+def test_a_row_shows_the_film_its_suggester_its_notes_its_runtime_its_dtdd_status_and_its_approval(admin, voters, pool):
     thing = pool[0]
     thing.notes.create(author=voters["Hanna"], text="Yes.")
     thing.notes.create(author=voters["Dani"], text="Please.")
 
     shown = rows(admin.get(TAB).text)
 
-    assert shown[-1] == ["The Thing 2000", "ada", "3", "109 TMDB", "approved"]
-    assert shown[-2] == ["Cube 2000", "Hanna", "1", "90 TMDB", "undecided"]
-    assert shown[2] == ["Pulse 2000", "Hanna", "1", "119 TMDB", "dropped"]
+    assert shown[-1] == ["The Thing 2000", "ada", "3", "109 TMDB", "not fetched", "approved"]
+    assert shown[-2] == ["Cube 2000", "Hanna", "1", "90 TMDB", "not fetched", "undecided"]
+    assert shown[2] == ["Pulse 2000", "Hanna", "1", "119 TMDB", "not fetched", "dropped"]
 
 
 def test_the_approval_column_is_named_approval_not_state(admin, pool):

@@ -1770,7 +1770,7 @@ body > footer.site-footer {
 /* Fixed columns, sized for what each can hold, so every filter lays out alike and only the film's column gives (the dev, 2026-10-24). */
 [data-skin] table.films-ledger {
   table-layout: fixed;
-  min-width: 54rem;
+  min-width: 60rem;
 }
 .films-ledger__col--poster {
   width: calc(var(--thumb-width) + 1.2rem);
@@ -1783,6 +1783,9 @@ body > footer.site-footer {
 }
 .films-ledger__col--runtime {
   width: 13.4rem;
+}
+.films-ledger__col--dtdd {
+  width: 6rem;
 }
 .films-ledger__col--approval {
   width: 5.6rem;
@@ -1854,6 +1857,21 @@ body > footer.site-footer {
   max-width: 18rem;
   white-space: normal;
   color: var(--score-rather-not);
+  font-size: 0.9em;
+}
+/* DoesTheDogDie's status: a matched film's topic count in ink, each gap named in muted ink, never read as clear (#32, #102). */
+[data-skin] .films-ledger .films-ledger__dtdd {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.films-ledger__dtdd--uncovered,
+.films-ledger__dtdd--not-fetched,
+.films-ledger__dtdd--no-match {
+  color: var(--ink-muted);
+  font-style: italic;
+}
+[data-skin] .films-credit {
+  margin: 0.5rem 0 0;
   font-size: 0.9em;
 }
 /* On a phone the directors give way, and what still overflows scrolls within the ledger rather than the page (#95). */

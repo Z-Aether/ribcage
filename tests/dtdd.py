@@ -1,0 +1,51 @@
+"""DoesTheDogDie as the tests meet it: payloads built inline on the recordings' shapes, which committed tests never read (#56, #102)."""
+
+VOCABULARY = {
+    "/topics": [
+        {"id": 153, "name": "a dog dies", "minimalName": "dog death", "keywords": "dog", "description": "A dog dies.", "topicCategoryId": 1},
+        {"id": 158, "name": "a cat dies", "minimalName": "cat death", "keywords": "cat", "description": "", "topicCategoryId": 1},
+        {"id": 200, "name": "there's a jump scare", "minimalName": "jump scares", "keywords": "", "description": "", "topicCategoryId": 2},
+    ],
+    "/topiccategories": [
+        {"id": 1, "name": "Animal death", "topicSuperCategoryId": 54},
+        {"id": 2, "name": "Startles", "topicSuperCategoryId": 50},
+    ],
+    "/topicsupercategories": [{"id": 54, "name": "Animals"}, {"id": 50, "name": "Scary stuff"}],
+}
+VOCABULARY_PATHS = list(VOCABULARY)
+
+
+def item(item_id, name, year, item_type="Movie"):
+    return {"id": item_id, "name": name, "releaseYear": year, "itemTypeId": 15, "itemTypeName": item_type, "tmdbId": None}
+
+
+def detail(listed, *counts):
+    stats = [{"itemId": listed["id"], "topicId": topic, "topicName": f"topic {topic}", "yesSum": yes, "noSum": no} for topic, yes, no in counts]
+    return {**listed, "topicItemStats": stats}
+
+
+class Dtdd:
+    """A fake transport: `/items` by TMDB id or by title, each record's detail, and the vocabulary, logging every path asked."""
+
+    def __init__(self, by_tmdb=None, by_title=None, details=(), vocabulary=VOCABULARY, error=None, on_call=None):
+        self.by_tmdb = by_tmdb or {}
+        self.by_title = by_title or {}
+        self.details = {each["id"]: each for each in details}
+        self.vocabulary = vocabulary
+        self.error = error
+        self.on_call = on_call
+        self.paths = []
+
+    def __call__(self, path, parameters, headers):
+        self.paths.append(path)
+        if self.on_call is not None:
+            self.on_call(path)
+        if self.error is not None:
+            raise self.error
+        if path in self.vocabulary:
+            return self.vocabulary[path], {}
+        if path == "/items" and "tmdb" in parameters:
+            return self.by_tmdb.get(parameters["tmdb"], []), {}
+        if path == "/items" and "q" in parameters:
+            return self.by_title.get(parameters["q"], []), {}
+        return self.details[int(path.removeprefix("/items/"))], {}

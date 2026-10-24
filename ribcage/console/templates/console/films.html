@@ -26,6 +26,7 @@
           <col class="films-ledger__col--suggester">
           <col class="films-ledger__col--notes">
           <col class="films-ledger__col--runtime">
+          <col class="films-ledger__col--dtdd">
           <col class="films-ledger__col--approval">
           <col class="films-ledger__col--decide">
         </colgroup>
@@ -36,6 +37,7 @@
             <th scope="col">Suggested by</th>
             <th scope="col" class="ledger__number">Notes</th>
             <th scope="col">Runtime</th>
+            <th scope="col"><abbr title="DoesTheDogDie">DTDD</abbr></th>
             <th scope="col">Approval</th>
             <th scope="col"><span class="visually-hidden">Decide</span></th>
           </tr>
@@ -49,6 +51,7 @@
                 <td class="films-ledger__suggester">{{ card.suggester }}{% if card.suggester_removed %} <span class="removed-tag">removed</span>{% endif %}</td>
                 <td class="ledger__number films-ledger__notes">{{ row.note_count }}</td>
                 <td class="films-ledger__runtime">{% include "console/runtime_box.html" %}</td>
+                <td class="films-ledger__dtdd films-ledger__dtdd--{{ row.dtdd.state|slugify }}">{{ row.dtdd_status }}</td>
                 <td class="films-ledger__approval"><span class="approval-tag approval-tag--{{ row.approval }}">{{ row.approval.label|lower }}</span></td>
                 <td class="films-ledger__decide">
                   {# Instant, as nothing is lost; the post names the approval it changes, so a stale one changes nothing (#26 §5, #96). #}
@@ -64,13 +67,15 @@
               </tr>
               {# Hidden until its title opens it; lazy, so a closed card's poster is never fetched. #}
               <tr class="ledger__detail" id="film-{{ card.suggestion_id }}" hidden>
-                <td colspan="7">{% include "components/film_card.html" with card=card expanded=True lazy=True %}</td>
+                <td colspan="8">{% include "components/film_card.html" with card=card expanded=True lazy=True %}</td>
               </tr>
             {% endwith %}
           {% endfor %}
         </tbody>
       </table>
     </div>
+    {# The DTDD column is DoesTheDogDie's data, so the ledger carries its credit (#5; the breakdown, 2026-10-24). #}
+    <p class="films-credit"><a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a></p>
   {% else %}
     <p>{{ ledger.show.nothing_shown }}</p>
   {% endif %}

@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from ribcage.films.film import Film, hand_entered
 from ribcage.suggestions import notes, runtime
 from ribcage.suggestions.models import Suggestion
+from ribcage.triggers import fetch
 
 
 @dataclass(frozen=True)
@@ -70,7 +71,10 @@ def add(voter, film, typed_pitch, typed_runtime):
     minutes, runtime_refusal = read_runtime(typed_runtime)
     if pitch_refusal or runtime_refusal:
         raise Refused(pitch_refusal, runtime_refusal)
-    return Suggestion.objects.suggest(voter, film, pitch, runtime=minutes)
+    suggestion = Suggestion.objects.suggest(voter, film, pitch, runtime=minutes)
+    # Its trigger data is looked up once the add commits; a film by hand looks nothing up (#32, #102).
+    fetch.after_the_add(suggestion)
+    return suggestion
 
 
 TITLE_EMPTY = "A film needs a title. Type what it's called."
