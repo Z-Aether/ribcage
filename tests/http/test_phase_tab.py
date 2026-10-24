@@ -3,6 +3,7 @@ import re
 from datetime import datetime
 
 import pytest
+from django.templatetags.static import static
 
 from ribcage.identity.models import Voter
 from ribcage.phase.history import current, move
@@ -74,7 +75,7 @@ def confirm(fragment):
         return None
     fields = dict(re.findall(r'<input type="hidden" name="(\w+)" value="([^"]+)">', form[2]))
     fields.pop("csrfmiddlewaretoken")
-    act = re.search(r'<p class="console-confirm"><button type="submit">([^<]+)</button></p>', form[2])[1]
+    act = re.search(r'<p class="console-confirm"><button type="submit"[^>]*>([^<]+)</button></p>', form[2])[1]
     return form[1], fields, html.unescape(act), cancel_link(fragment)[0]
 
 
@@ -197,6 +198,23 @@ def test_arming_a_move_prints_the_act_and_cancel_and_moves_nothing(admin, from_p
     assert history() == before
     assert confirm(shown[to_phase]) == (MOVE, {"from_phase": from_phase, "to_phase": to_phase}, ACTS[from_phase, to_phase], TAB)
     assert arm_link(shown[to_phase]) is None
+
+
+def pending(fragment):
+    """What the armed confirm reads once clicked, while the move and the refresh behind it run (#104)."""
+    found = re.search(r'<button type="submit" data-pending="([^"]+)">', fragment)
+    return found and html.unescape(found[1])
+
+
+@pytest.mark.parametrize(("from_phase", "to_phase"), EVERY_MOVE)
+def test_the_confirm_says_the_phase_is_moving_and_trigger_data_refreshing_once_clicked(admin, from_phase, to_phase):
+    walk_to(from_phase)
+
+    page = armed(admin, from_phase, to_phase)
+
+    assert pending(moves(page)[to_phase]) == f"Moving to {to_phase} and refreshing trigger data…"
+    # The script that disables it, so a second click posts nothing (#104).
+    assert f'<script src="{static("console/pending.js")}" defer></script>' in page
 
 
 @pytest.mark.parametrize(("from_phase", "to_phase"), EVERY_MOVE)

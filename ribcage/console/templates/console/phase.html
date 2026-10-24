@@ -1,6 +1,9 @@
 {% extends "console/tab.html" %}
+{% load static %}
 
 {% block title %}Phase · Admin · Ribcage{% endblock %}
+
+{% block head %}{{ block.super }}<script src="{% static 'console/pending.js' %}" defer></script>{% endblock %}
 
 {% block tab %}
   <h1>The marathon is in {{ phase }}</h1>
@@ -36,7 +39,7 @@
             {% csrf_token %}
             <input type="hidden" name="from_phase" value="{{ phase }}">
             <input type="hidden" name="to_phase" value="{{ move.to }}">
-            <p class="console-confirm"><button type="submit">{{ move.act }}</button></p>
+            <p class="console-confirm"><button type="submit" data-pending="{{ move.pending }}">{{ move.act }}</button></p>
           </form>
         {% endif %}
       </section>

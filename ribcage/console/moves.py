@@ -1,4 +1,4 @@
-"""What the Phase tab says about each move: the act its confirm button names, and the consequences printed under it (#28, #77)."""
+"""What the Phase tab says about each move: the act its confirm button names, what it reads while the move runs, and the consequences printed under it (#28, #77, #104)."""
 
 from typing import NamedTuple
 
@@ -37,6 +37,7 @@ class OfferedMove(NamedTuple):
     heading: str
     arm: str
     act: str
+    pending: str
     consequences: list
     armed: bool
 
@@ -66,9 +67,14 @@ def consequences(from_phase, to_phase):
     return sentences
 
 
+def pending(to_phase):
+    # What the clicked confirm reads while the move and its refresh run, up to about 20 s; never how the refresh went (#104).
+    return f"Moving to {to_phase} and refreshing trigger data…"
+
+
 def offered_move(phase, to, direction, armed_to):
     heading, arm = (wording.format(to) for wording in WORDINGS[direction])
-    return OfferedMove(to, direction, heading, arm, ACTS[phase, to], consequences(phase, to), to == armed_to)
+    return OfferedMove(to, direction, heading, arm, ACTS[phase, to], pending(to), consequences(phase, to), to == armed_to)
 
 
 def offered(phase, armed_to=None):
