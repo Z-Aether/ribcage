@@ -1,7 +1,8 @@
 from contextlib import suppress
+from dataclasses import replace
 
 from django.conf import settings
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -21,7 +22,7 @@ from ribcage.phase.history import current, last_entered, move
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
-from ribcage.triggers import refresh, stored
+from ribcage.triggers import correction, refresh, stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
 WORKING_TABS = {
@@ -96,6 +97,31 @@ def films_dtdd(request):
     if suggestion is None:
         return reload_the_tab(request, reverse("console_films"))
     return render(request, "components/dtdd_topics.html", {"dtdd": stored.section_of(suggestion)})
+
+
+@admin_required
+@require_http_methods(["GET", "HEAD", "POST"])
+def films_match(request):
+    """The admin's correction of a match under a row, never phase-gated: a GET previews or cancels, and the POST saves it (#78, #105)."""
+    try:
+        suggestion = Suggestion.objects.filter(pk=request.POST.get("suggestion") or request.GET.get("suggestion")).first()
+    except (TypeError, ValueError):
+        suggestion = None
+    # Withdrawn since: the tab reloads as it is now.
+    if suggestion is None:
+        return reload_the_tab(request, reverse("console_films"))
+    if request.method == "POST":
+        try:
+            correction.use(suggestion, request.POST.get("snapshot", ""), correction.BY_THE_ADMIN)
+        except correction.Tampered:
+            return HttpResponseBadRequest()
+    # Only htmx swaps the section in place; a plain request lands on the tab.
+    if request.headers.get("HX-Request") != "true":
+        return redirect("console_films")
+    card = films.the_card(suggestion)
+    if request.method != "POST" and "cancel" not in request.GET:
+        card = replace(card, dtdd=correction.previewed(card.dtdd, suggestion, request.GET.get("link", "")))
+    return render(request, "components/dtdd_section.html", {"card": card, "dtdd": card.dtdd, "answers_the_control": True})
 
 
 @admin_required

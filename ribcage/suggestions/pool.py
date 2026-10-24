@@ -9,7 +9,7 @@ from ribcage.films import card
 from ribcage.phase.order import Phase
 from ribcage.suggestions import withdrawal
 from ribcage.suggestions.models import Note, Suggestion
-from ribcage.triggers import stored
+from ribcage.triggers import correction, stored
 
 # Each pool phase's bar on the opened card: only SUGGEST's holds withdraw, so APPROVE's offers it nowhere (#27, #89).
 PHASE_BARS = {
@@ -38,9 +38,11 @@ def the_card(suggestion, viewer, phase):
     return film_card(suggestion, notes_in_order().filter(suggestion=suggestion), viewer, phase, section)
 
 
-def listed_from(section, suggestion, route="dtdd_topics"):
-    """The section with its topic list left to fetch from the route as it first opens, so no page carries every film's list (#103)."""
-    return replace(section, topics_at=f"{reverse(route)}?suggestion={suggestion.pk}")
+def listed_from(section, suggestion, route="dtdd_topics", corrects_at="dtdd_match"):
+    """The section with its topic list left to fetch from the route as it first opens, so no page carries every film's list (#103),
+    and its match line offering the paste-a-link control, which asks and saves at its own route (#105)."""
+    topics_at = f"{reverse(route)}?suggestion={suggestion.pk}"
+    return replace(section, topics_at=topics_at, correction=correction.offered(reverse(corrects_at)))
 
 
 def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None):

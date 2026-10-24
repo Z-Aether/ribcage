@@ -1,6 +1,7 @@
 {# The opened card's DoesTheDogDie section over a DtddSection, the same for every viewer; a collapsed card hides it whole (#20, #21, #103). #}
 <section class="film-card__dtdd dtdd dtdd--{{ dtdd.state }}" aria-label="DoesTheDogDie">
-  {% if dtdd.match %}<p class="dtdd__match"><span class="film-card__label">DTDD:</span> <a href="{{ dtdd.match.url }}" target="_blank" rel="noopener">{{ dtdd.match.name }}{% if dtdd.match.year %} ({{ dtdd.match.year }}){% endif %}&nbsp;↗</a> · <span class="dtdd__set-by">{% if dtdd.match.set_by %}set by {{ dtdd.match.set_by }}{% else %}auto{% endif %}</span></p>{% endif %}
+  {# The match line, and the control that corrects it, swap in place apart from the rest (#105). #}
+  {% if dtdd.match or dtdd.correction %}{% include "components/dtdd_match.html" %}{% endif %}
   {% if dtdd.gap %}<p class="dtdd__gap"><span class="dtdd__gap-name">{{ dtdd.gap_name }}</span> {{ dtdd.gap }}</p>{% endif %}
   {% if dtdd.groups %}
     {# Collapsed behind one control; counts are evidence, never a verdict (#20 §4). #}

@@ -63,6 +63,11 @@ class TopicGroup:
     rows: tuple[TopicRow, ...]
 
 
+def record_url(item_id):
+    # The item page a voter pastes, and the one a match links to (#103, #105).
+    return f"https://www.doesthedogdie.com/media/{item_id}"
+
+
 @dataclass(frozen=True)
 class DtddMatch:
     """The DoesTheDogDie record a film is matched to, and who set it: empty for `auto` (#32, #103)."""
@@ -74,7 +79,40 @@ class DtddMatch:
 
     @property
     def url(self):
-        return f"https://www.doesthedogdie.com/media/{self.item_id}"
+        return record_url(self.item_id)
+
+
+@dataclass(frozen=True)
+class MatchPreview:
+    """The record a pasted link names, as fetched, shown before Use this match saves it, signed for the film it was fetched for (#105)."""
+
+    item_id: int
+    name: str
+    year: int | None
+    item_type: str
+    topic_count: int
+    signed: str
+
+    @property
+    def url(self):
+        return record_url(self.item_id)
+
+
+@dataclass(frozen=True)
+class MatchCorrection:
+    """The paste-a-link control on the match line, one for every voter and the admin, each posting to their own route (#32 §5, #105)."""
+
+    # The route the box asks and Use this match posts to.
+    at: str
+    # A refused link stays as pasted beside a gentle refusal (#105).
+    typed: str = ""
+    refusal: str = ""
+    preview: MatchPreview | None = None
+
+    @property
+    def search(self):
+        # DoesTheDogDie's search box is the home page's first field; no address fills it in, as its search answers by script alone (#105).
+        return "https://www.doesthedogdie.com/"
 
 
 @dataclass(frozen=True)
@@ -89,6 +127,8 @@ class DtddSection:
     gap: str = ""
     # Where the list fetches its rows from when it first opens, so no page carries every film's; empty renders them in place (#103).
     topics_at: str = ""
+    # None offers no control, as the gallery's plain samples and RUN do (#105, #106).
+    correction: MatchCorrection | None = None
 
     @property
     def gap_name(self):
@@ -101,7 +141,7 @@ class DtddSection:
 
     @property
     def credited(self):
-        # The credit line whenever the section shows DoesTheDogDie's data: a match or topics (#21).
+        # The credit line whenever the section shows DoesTheDogDie's data: a match or topics (#21); a preview carries its own (#105).
         return self.match is not None or bool(self.groups)
 
 

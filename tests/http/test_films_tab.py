@@ -192,7 +192,9 @@ def test_the_title_opens_a_card_with_no_note_box_withdraw_or_pencil(admin, voter
     assert f'aria-controls="film-{cube.pk}">Cube</button>' in page
     assert 'class="film-card is-open"' in card
     assert "A pitch for Cube." in card and "Ada on Cube." in card
-    assert "note-box" not in card and "<textarea" not in card and "<form" not in card
+    assert "note-box" not in card and "<textarea" not in card
+    # Its one form is the match correction's, the admin's as much as a voter's (#105).
+    assert re.findall(r"<form[^>]*>", card) == [re.search(r'<form class="dtdd__correct"[^>]*>', card)[0]]
     assert "Withdraw" not in card
     assert "runtime__pencil" not in card
     assert '<div class="film-card__phase-bar" data-phase-bar></div>' in card

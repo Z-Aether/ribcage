@@ -82,6 +82,9 @@ def test_the_gallery_is_behind_the_login_wall(debug, db):
         ),
         pytest.param(lambda page: "<details class=\"dtdd__topics\">" in page, id="the dtdd topic list behind its control"),
         pytest.param('<span class="dtdd__set-by">set by Dani</span>', id="a match set by someone"),
+        pytest.param(lambda page: "Wrong film? <a href=\"https://www.doesthedogdie.com/\"" in page, id="the match line's control"),
+        pytest.param('<p class="dtdd__preview"><span class="film-card__label">Found:</span>', id="a correction's preview"),
+        pytest.param('<p class="dtdd__refusal" id="dtdd-refusal-" role="status">', id="a correction's refused link"),
     ],
 )
 def test_the_gallery_shows_each_real_case(client, debug, real_case):
@@ -134,3 +137,13 @@ def test_the_gallerys_pickers_hold_no_link_that_fires_a_request(client, debug):
 
     assert "add it by hand" in page
     assert "by_hand=1" not in page
+
+
+def test_the_gallerys_match_corrections_submit_nothing_and_take_no_focus(client, debug):
+    # The gallery has no film to correct, so its control, preview and refusal are inert: no form submits, by click or Enter (#105).
+    page = client.get(GALLERY).content.decode()
+    controls = re.findall(r'<div class="dtdd__matching.*?</div>', page, re.S)
+    forms = [form for control in controls for form in re.findall(r"<form[^>]*>", control)]
+
+    assert controls and not any(re.search(r"hx-(get|post|preserve)|autofocus|action=|href=\"/", control) for control in controls)
+    assert forms and all('onsubmit="return false"' in form for form in forms)

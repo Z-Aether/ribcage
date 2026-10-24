@@ -12,11 +12,24 @@ from dataclasses import dataclass, replace
 from functools import cache
 
 from ribcage.films import corpus
-from ribcage.films.card import DtddMatch, DtddSection, FilmCard, Note, NoteBox, RuntimePencil, TopicGroup, TopicRow, Withdraw
+from ribcage.films.card import (
+    DtddMatch,
+    DtddSection,
+    FilmCard,
+    MatchCorrection,
+    MatchPreview,
+    Note,
+    NoteBox,
+    RuntimePencil,
+    TopicGroup,
+    TopicRow,
+    Withdraw,
+)
 from ribcage.films.picker import Picker, PickerTile
 from ribcage.suggestions.notes import PITCH_REQUIRED
 from ribcage.suggestions.runtime import NOT_WHOLE_MINUTES
 from ribcage.suggestions.withdrawal import what_goes
+from ribcage.triggers import correction
 from ribcage.triggers.section import GAPS
 from ribcage.triggers.status import State
 
@@ -146,7 +159,7 @@ SECTIONS = {
 
 
 def dtdd_states():
-    """The section in each of its four states, each on an opened card (#103)."""
+    """The section in each of its four states, each on an opened card with the match line's control (#103, #105)."""
     by_key = {key_of(sample.film): sample for sample in cards()}
     return (
         ("Matched, its topics behind one control", by_key[MIDSOMMAR]),
@@ -156,8 +169,27 @@ def dtdd_states():
     )
 
 
+def corrections():
+    """A correction's preview, and a refused link kept in the box, on Exit 8's wrong match (#105)."""
+    exit_8 = next(sample for sample in cards() if key_of(sample.film) == EXIT_8)
+    control = exit_8.dtdd.correction
+    # Signed for no film, so Use this match here is refused, as the gallery's controls lead nowhere.
+    found = MatchPreview(1558416, "Exit 8", 2025, "Movie", 282, signed="")
+    refused = replace(control, typed="https://www.imdb.com/title/tt32252772/", refusal=correction.NOT_A_LINK)
+    return (
+        ("the preview of a pasted link, before Use this match", replace(exit_8, dtdd=replace(exit_8.dtdd, correction=replace(control, preview=found)))),
+        ("a refused link, kept in the box", replace(exit_8, dtdd=replace(exit_8.dtdd, correction=refused))),
+    )
+
+
+# Inert: with no route the control's box and buttons fire no request (#105).
+INERT = MatchCorrection(at="")
+
+
 def cards():
-    return tuple(replace(sample, dtdd=SECTIONS[key_of(sample.film)]) for sample in plain_cards())
+    return tuple(
+        replace(sample, dtdd=replace(SECTIONS[key_of(sample.film)], correction=INERT)) for sample in plain_cards()
+    )
 
 
 def plain_cards():
@@ -310,6 +342,7 @@ def gallery():
         "cards": cards(),
         "phase_bars": phase_bars(),
         "dtdd_states": dtdd_states(),
+        "corrections": corrections(),
         "score_scale": SCORE_SCALE,
         "tiles": tiles(),
         "picker": picker(),

@@ -17,7 +17,7 @@ from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions import notes, picker, pitch, pool, runtime, withdrawal
 from ribcage.suggestions.models import Suggestion
-from ribcage.triggers import stored
+from ribcage.triggers import correction, stored
 
 def named_suggestion(pk):
     """The suggestion a post names by id, or None for one withdrawn since, or no id at all (#88, #89)."""
@@ -62,6 +62,49 @@ def dtdd_topics(request):
     if (suggestion := named_suggestion(request.GET.get("suggestion"))) is None:
         return reload_the_tab(request, reverse("phase_page"))
     return render(request, "components/dtdd_topics.html", {"dtdd": stored.section_of(suggestion)})
+
+
+# Any voter, on any film; VOTE's card is M6's, and the admin's correction is never gated (#32 §5, #78, #105).
+CORRECTING = (Phase.SUGGEST, Phase.APPROVE, Phase.VOTE)
+
+
+@phase_window(*CORRECTING)
+def correct_match(request):
+    """Correct a match: a GET previews the record a pasted link names, or cancels, writing nothing, and Use this match's POST saves it (#105)."""
+    if request.method == "POST":
+        return use_match(request)
+    return preview_match(request)
+
+
+def preview_match(request):
+    # Only htmx swaps the section in place; a plain GET is a click from before htmx loaded (#89).
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    suggestion = named_suggestion(request.GET.get("suggestion"))
+    # A tab left open past VOTE, or a card withdrawn since, reloads onto the phase page as it is now (#78, #92).
+    if suggestion is None or (phase := current()) not in CORRECTING:
+        return reload_the_tab(request, reverse("phase_page"))
+    card = pool.the_card(suggestion, request.user, phase)
+    if "cancel" not in request.GET:
+        card = replace(card, dtdd=correction.previewed(card.dtdd, suggestion, request.GET.get("link", "")))
+    return dtdd_section(request, card)
+
+
+def use_match(request):
+    if (suggestion := named_suggestion(request.POST.get("suggestion"))) is None:
+        return reload_the_tab(request, reverse("phase_page"))
+    try:
+        correction.use(suggestion, request.POST.get("snapshot", ""), request.user.display_name)
+    except correction.Tampered:
+        return HttpResponseBadRequest()
+    # Only htmx swaps the section in place; a plain post is answered with the page (#88).
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    return dtdd_section(request, pool.the_card(suggestion, request.user, current()))
+
+
+def dtdd_section(request, card):
+    return render(request, "components/dtdd_section.html", {"card": card, "dtdd": card.dtdd, "answers_the_control": True})
 
 
 @phase_window(Phase.SUGGEST)

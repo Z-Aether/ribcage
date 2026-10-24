@@ -1,6 +1,7 @@
 """The DoesTheDogDie client, the app's second outbound call and its one trigger source, shaped as TMDB's is (#5, #19, #32, #101)."""
 
 import json
+import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
@@ -21,6 +22,10 @@ stand_in = None
 
 class NotAnswering(Exception):
     """DoesTheDogDie didn't answer: a timeout, a refused key, a 5xx, a 429 or a malformed answer alike (#32)."""
+
+
+class NoSuchRecord(NotAnswering):
+    """DoesTheDogDie answered 404: a pasted link names no record. Every other caller reads it as not answering (#105)."""
 
 
 @dataclass(frozen=True)
@@ -57,6 +62,10 @@ class Client:
             body, headers = self.transport(path, parameters, {"accept": "application/json", "X-API-KEY": self.key})
             self.remaining = remaining_of(headers)
             return read(body)
+        except urllib.error.HTTPError as error:
+            if error.code == 404:
+                raise NoSuchRecord(f"DoesTheDogDie has nothing at {path}.") from None
+            raise NotAnswering(f"DoesTheDogDie failed on {path}.") from None
         except Exception:
             raise NotAnswering(f"DoesTheDogDie failed on {path}.") from None
 

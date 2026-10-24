@@ -144,8 +144,8 @@ def shown_by(show, rows):
     return [row for row in rows if show.approval is None or row.approval == show.approval]
 
 
-# The card's topic list fetches its rows from the console's own route, behind the admin's wall (#103).
-LISTED_FROM = "console_films_dtdd"
+# The card's topic list fetches its rows from the console's own route, behind the admin's wall (#103), and its match is corrected at another (#105).
+LISTED_FROM, CORRECTED_AT = "console_films_dtdd", "console_films_dtdd_match"
 
 
 def ledger(show):
@@ -157,7 +157,7 @@ def ledger(show):
     # Its DoesTheDogDie section is the one every voter sees (#35 §2, #103).
     rows = [
         Row(
-            pool.film_card(suggestion, suggestion.notes.all(), dtdd=pool.listed_from(section(statuses[suggestion.pk], vocabulary), suggestion, LISTED_FROM)),
+            pool.film_card(suggestion, suggestion.notes.all(), dtdd=listed_section(section(statuses[suggestion.pk], vocabulary), suggestion)),
             Approval(suggestion.approval),
             suggestion.tmdb_runtime,
             statuses[suggestion.pk],
@@ -166,6 +166,15 @@ def ledger(show):
         for suggestion in suggestions
     ]
     return Ledger.of(rows, show, timezone.now())
+
+
+def listed_section(dtdd, suggestion):
+    return pool.listed_from(dtdd, suggestion, LISTED_FROM, CORRECTED_AT)
+
+
+def the_card(suggestion):
+    """One suggestion's card as it opens under its row, to swap its section in place after a correction (#105)."""
+    return pool.film_card(suggestion, pool.notes_in_order().filter(suggestion=suggestion), dtdd=listed_section(stored.section_of(suggestion), suggestion))
 
 
 def decide(suggestion, expected, to):

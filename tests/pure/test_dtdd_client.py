@@ -203,6 +203,18 @@ def test_any_failure_raises_not_answering_naming_the_path_and_never_the_key(erro
     assert raised.value.__cause__ is None and raised.value.__suppress_context__
 
 
+def test_a_404_raises_no_such_record_which_every_other_caller_reads_as_not_answering():
+    # A pasted link's refusal tells a record that isn't there from an outage; the refresh still reads it as a failure (#105).
+    missing = urllib.error.HTTPError(f"{client.DTDD_API}/items/8740", 404, "Not Found", None, None)
+
+    with pytest.raises(client.NoSuchRecord) as raised:
+        Client(KEY, Dtdd(error=missing)).record(8740)
+
+    assert isinstance(raised.value, NotAnswering)
+    assert KEY not in str(raised.value)
+    assert raised.value.__cause__ is None and raised.value.__suppress_context__
+
+
 @pytest.mark.parametrize(
     "malformed",
     [

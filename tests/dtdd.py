@@ -1,5 +1,7 @@
 """DoesTheDogDie as the tests meet it: payloads built inline on the recordings' shapes, which committed tests never read (#56, #102)."""
 
+import urllib.error
+
 VOCABULARY = {
     "/topics": [
         {"id": 153, "name": "a dog dies", "minimalName": "dog death", "keywords": "dog", "description": "A dog dies.", "topicCategoryId": 1},
@@ -25,7 +27,7 @@ def detail(listed, *counts):
 
 
 class Dtdd:
-    """A fake transport: `/items` by TMDB id or by title, each record's detail, and the vocabulary, logging every path asked."""
+    """A fake transport: `/items` by TMDB id or by title, each record's detail or a 404, and the vocabulary, logging every path asked."""
 
     def __init__(self, by_tmdb=None, by_title=None, details=(), vocabulary=VOCABULARY, error=None, on_call=None, remaining=()):
         self.by_tmdb = by_tmdb or {}
@@ -54,4 +56,8 @@ class Dtdd:
             return self.by_tmdb.get(parameters["tmdb"], [])
         if path == "/items" and "q" in parameters:
             return self.by_title.get(parameters["q"], [])
-        return self.details[int(path.removeprefix("/items/"))]
+        item_id = int(path.removeprefix("/items/"))
+        if item_id not in self.details:
+            # An id with no record answers 404, which the client reads as no such record (#105).
+            raise urllib.error.HTTPError(path, 404, "Not Found", None, None)
+        return self.details[item_id]

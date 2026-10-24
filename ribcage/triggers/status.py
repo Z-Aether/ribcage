@@ -61,21 +61,25 @@ class Status:
 
 def as_text(fetched):
     """The stored form: JSON text, since a JSONField's system check opens the database and backupcode must not (#68)."""
-    snapshot, record = fetched.snapshot, fetched.snapshot.record
-    return json.dumps(
-        {
-            "record": None
-            if record is None
-            else {"item_id": record.item_id, "name": record.name, "release_year": record.release_year, "item_type": record.item_type},
-            "counts": [[count.topic_id, count.yes, count.no] for count in snapshot.counts],
-            "fetched_at": fetched.fetched_at.isoformat(),
-        },
-        ensure_ascii=False,
-    )
+    return json.dumps({**as_data(fetched.snapshot), "fetched_at": fetched.fetched_at.isoformat()}, ensure_ascii=False)
 
 
 def from_text(text):
     stored = json.loads(text)
-    record = None if stored["record"] is None else Record(**stored["record"])
-    counts = tuple(TopicCount(topic_id, yes, no) for topic_id, yes, no in stored["counts"])
-    return Fetched(Snapshot(record, counts), datetime.fromisoformat(stored["fetched_at"]))
+    return Fetched(from_data(stored), datetime.fromisoformat(stored["fetched_at"]))
+
+
+def as_data(snapshot):
+    """A snapshot as plain lists and dicts, as it is stored and as a correction's preview carries it signed (#105)."""
+    record = snapshot.record
+    return {
+        "record": None
+        if record is None
+        else {"item_id": record.item_id, "name": record.name, "release_year": record.release_year, "item_type": record.item_type},
+        "counts": [[count.topic_id, count.yes, count.no] for count in snapshot.counts],
+    }
+
+
+def from_data(data):
+    record = None if data["record"] is None else Record(**data["record"])
+    return Snapshot(record, tuple(TopicCount(topic_id, yes, no) for topic_id, yes, no in data["counts"]))

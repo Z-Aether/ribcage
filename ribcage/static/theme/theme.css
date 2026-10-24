@@ -1218,6 +1218,58 @@ body > footer.site-footer {
 .dtdd__set-by {
   color: var(--ink-muted);
 }
+/* The paste-a-link control on the match line: a quiet ask, then a box and a quiet button on one line (#105). */
+.dtdd__correct {
+  margin: 0;
+}
+[data-skin] .dtdd .dtdd__matching > * + * {
+  margin-top: 0.45rem;
+}
+[data-skin] .dtdd .dtdd__ask {
+  color: var(--ink-muted);
+}
+[data-skin] .dtdd__paste {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.6rem;
+  margin-top: 0.4rem;
+}
+[data-skin] .dtdd__paste input {
+  flex: 1 1 14rem;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.95em;
+}
+[data-skin] :is(.dtdd__paste, .dtdd__use) :is(button, a.button) {
+  width: auto;
+  margin: 0;
+  padding-block: 0.3rem;
+  font-size: 0.9rem;
+}
+/* A refusal is said kindly on a line of its own, in the note box's rose, the link kept in the box (#88, #105). */
+[data-skin] .dtdd .dtdd__refusal {
+  margin-top: 0.45rem;
+  color: var(--score-rather-not);
+}
+/* The preview takes the match line's place: the record found, then Use this match in pumpkin and a quiet Cancel. */
+.dtdd__preview .film-card__label {
+  color: var(--ink-muted);
+  margin-right: 0.2em;
+}
+.dtdd__preview a {
+  overflow-wrap: anywhere;
+}
+.dtdd__use {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.6rem;
+  margin: 0.5rem 0 0;
+}
 /* A gap is named as the ledger names it, its word in a dashed pill, never as a count or anything that reads as clear (#20, #32). */
 .dtdd__gap {
   color: var(--ink-muted);
