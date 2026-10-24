@@ -320,3 +320,36 @@ def test_a_clear_between_approves_read_and_update_changes_nothing(admin, cube):
 
     assert acts_post.status_code == 302
     assert Suggestion.objects.get(pk=cube.pk).approval == UNDECIDED
+
+
+def test_an_approve_between_the_clears_read_and_update_keeps_the_runtime(admin, cube):
+    real = films.withdrawable
+
+    def approved_first(suggestion):
+        Suggestion.objects.filter(pk=cube.pk).update(approval=APPROVED)
+        return real(suggestion)
+
+    with mock.patch.object(films, "withdrawable", approved_first):
+        refused = edit(admin, cube, "")
+
+    assert refused.status_code == 200
+    assert ON_THE_BALLOT in box(refused.text, cube)[4]
+    assert Suggestion.objects.get(pk=cube.pk).approval == APPROVED
+    assert stored(cube)[0] is not None
+
+
+def test_clearing_is_refused_exactly_where_withdrawable_says_something_holds_the_film(admin, voters):
+    walk_to(Phase.APPROVE)
+    held = suggested(voters["Hanna"], "Cube", DROPPED, runtime=90)
+    free = suggested(voters["Hanna"], "Rope", DROPPED, runtime=80)
+
+    # A later milestone's hold on a dropped film; the clear follows `withdrawable` (#97, the dev, 2026-10-24).
+    with mock.patch.object(films, "withdrawable", lambda suggestion: suggestion.pk != held.pk):
+        refused = edit(admin, held, "")
+        cleared = edit(admin, free, "")
+
+    assert refused.status_code == 200
+    assert ON_THE_BALLOT in box(refused.text, held)[4]
+    assert stored(held) == (90, 90)
+    assert cleared.status_code == 302
+    assert stored(free) == (None, 80)

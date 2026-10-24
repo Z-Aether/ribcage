@@ -9,6 +9,7 @@ from ribcage.films.card import FilmCard
 from ribcage.suggestions import pool
 from ribcage.suggestions.models import Approval, Suggestion
 from ribcage.suggestions.runtime import Refused, correct
+from ribcage.suggestions.withdrawal import with_holds, withdrawable
 
 
 @dataclass(frozen=True)
@@ -156,20 +157,21 @@ class BoxRefused:
 
 
 def edit_runtime(suggestion, typed):
-    """The admin's runtime edit, in any phase: whole minutes, or blank on a film not on the ballot (#28, #97).
+    """The admin's runtime edit, in any phase: whole minutes, or blank on a film nothing holds (#28, #97).
 
     TMDB's runtime stays as fetched, so the source reads by hand. Returns BoxRefused for a refusal; a suggestion
     withdrawn since, or none named, changes nothing.
     """
     try:
-        found = Suggestion.objects.filter(pk=suggestion).first()
+        found = with_holds(Suggestion.objects.filter(pk=suggestion)).first()
     except (TypeError, ValueError):
         return None
     if found is None:
         return None
     if not typed.strip():
-        # The update names the approval too, so an approve landing first is refused, as `approved_has_a_runtime` would (#26 §8).
-        if Suggestion.objects.filter(pk=found.pk).exclude(approval=Approval.APPROVED).update(runtime=None):
+        # Whatever holds the film refuses the clear, as it does a withdraw, so later holds join it in `withdrawable` (#97, 2026-10-24).
+        # The update names the approval too, so an approve landing since the read is refused, as `approved_has_a_runtime` would (#26 §8).
+        if withdrawable(found) and Suggestion.objects.filter(pk=found.pk).exclude(approval=Approval.APPROVED).update(runtime=None):
             return None
         return BoxRefused(found.pk, typed, ON_THE_BALLOT)
     try:
