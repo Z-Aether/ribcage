@@ -27,13 +27,15 @@ def detail(listed, *counts):
 class Dtdd:
     """A fake transport: `/items` by TMDB id or by title, each record's detail, and the vocabulary, logging every path asked."""
 
-    def __init__(self, by_tmdb=None, by_title=None, details=(), vocabulary=VOCABULARY, error=None, on_call=None):
+    def __init__(self, by_tmdb=None, by_title=None, details=(), vocabulary=VOCABULARY, error=None, on_call=None, remaining=()):
         self.by_tmdb = by_tmdb or {}
         self.by_title = by_title or {}
         self.details = {each["id"]: each for each in details}
         self.vocabulary = vocabulary
         self.error = error
         self.on_call = on_call
+        # Each call's x-ratelimit-remaining-minute in turn; once they run out, no header at all (#104).
+        self.remaining = list(remaining)
         self.paths = []
 
     def __call__(self, path, parameters, headers):
@@ -42,10 +44,14 @@ class Dtdd:
             self.on_call(path)
         if self.error is not None:
             raise self.error
+        headers = {"x-ratelimit-remaining-minute": str(self.remaining.pop(0))} if self.remaining else {}
+        return self.answer(path, parameters), headers
+
+    def answer(self, path, parameters):
         if path in self.vocabulary:
-            return self.vocabulary[path], {}
+            return self.vocabulary[path]
         if path == "/items" and "tmdb" in parameters:
-            return self.by_tmdb.get(parameters["tmdb"], []), {}
+            return self.by_tmdb.get(parameters["tmdb"], [])
         if path == "/items" and "q" in parameters:
-            return self.by_title.get(parameters["q"], []), {}
-        return self.details[int(path.removeprefix("/items/"))], {}
+            return self.by_title.get(parameters["q"], [])
+        return self.details[int(path.removeprefix("/items/"))]

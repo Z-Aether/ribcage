@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from django.db.models import Count, Prefetch, Q
 from django.urls import reverse
+from django.utils import timezone
 
 from ribcage.films.card import FilmCard
 from ribcage.suggestions import pool
@@ -12,7 +13,7 @@ from ribcage.suggestions.runtime import Refused, correct
 from ribcage.suggestions.withdrawal import with_holds, withdrawable
 from ribcage.triggers import stored
 from ribcage.triggers.section import section
-from ribcage.triggers.status import State, Status
+from ribcage.triggers.status import STALE_AFTER, State, Status
 
 
 @dataclass(frozen=True)
@@ -111,14 +112,32 @@ class Ledger:
     filters: tuple[Tally, ...]
     ballot_size: int
     screen_time: int
+    # Empty while no film's trigger data is old or missing (#104).
+    stale_line: str = ""
 
     @classmethod
-    def of(cls, every_row, show):
-        """The ledger under a filter, its counts and the ballot's screen time, from every row newest first."""
+    def of(cls, every_row, show, now):
+        """The ledger under a filter, its counts, the ballot's screen time and the stale line, from every row newest first."""
         approved = [row for row in every_row if row.approval == Approval.APPROVED]
         tallies = tuple(Tally(each, len(shown_by(each, every_row)), each == show) for each in FILTERS)
         # Every approved film has a runtime, which the model's constraint holds (#26 §8).
-        return cls(tuple(shown_by(show, every_row)), show, tallies, len(approved), sum(row.card.film.runtime for row in approved))
+        screen_time = sum(row.card.film.runtime for row in approved)
+        return cls(tuple(shown_by(show, every_row)), show, tallies, len(approved), screen_time, stale_line(every_row, now))
+
+
+def stale_line(rows, now):
+    """The films whose trigger data is over 25 days old or not yet fetched, named whatever the filter; M10 words it finally (#28, #32 §1, #104)."""
+    stale = [row.card.film.title for row in rows if row.dtdd.is_stale(now)]
+    unfetched = [row.card.film.title for row in rows if row.dtdd.state is State.NOT_FETCHED]
+    if not stale and not unfetched:
+        return ""
+    parts = ([f"over {STALE_AFTER.days} days old for {listed(stale)}"] if stale else []) + ([f"not yet fetched for {listed(unfetched)}"] if unfetched else [])
+    they = "They refresh" if len(stale) + len(unfetched) > 1 else "It refreshes"
+    return f"Trigger data is {', and '.join(parts)}. {they} on the next phase move."
+
+
+def listed(titles):
+    return titles[0] if len(titles) == 1 else f"{', '.join(titles[:-1])} and {titles[-1]}"
 
 
 def shown_by(show, rows):
@@ -146,7 +165,7 @@ def ledger(show):
         )
         for suggestion in suggestions
     ]
-    return Ledger.of(rows, show)
+    return Ledger.of(rows, show, timezone.now())
 
 
 def decide(suggestion, expected, to):

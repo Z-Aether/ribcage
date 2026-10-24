@@ -1,6 +1,7 @@
 import json
 import shutil
 import socket
+from datetime import timedelta
 from io import BytesIO, StringIO, TextIOWrapper
 
 import pytest
@@ -16,7 +17,10 @@ from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import PHASES, Phase
 from ribcage.suggestions.models import Approval, Note, Suggestion
-from ribcage.triggers import stored
+from ribcage.phase import history
+from ribcage.seeding.recorded import RecordedDtdd
+from ribcage.triggers import client as dtdd_client
+from ribcage.triggers import refresh, stored
 from ribcage.triggers.models import Topic
 from ribcage.triggers.status import State
 from tests.dtdd import VOCABULARY, detail, item
@@ -234,8 +238,7 @@ def record(directory, tmdb_id, recording):
     (directory / corpus.DTDD_RECORDINGS / f"{entry.recording_name}.json").write_text(json.dumps(recording), encoding="utf-8")
 
 
-def test_seed_fills_the_vocabulary_and_each_recorded_films_snapshot_by_the_lookup_rule(transactional_db, debug_on, corpus_without_dtdd):
-    films, vocabulary = corpus_without_dtdd
+def record_three(films, vocabulary):
     for path, name in corpus.VOCABULARY_FILES.items():
         (vocabulary / name).write_text(json.dumps(VOCABULARY[path]), encoding="utf-8")
     thing, werewolf, weapons = item(12243, "The Thing", 1982), item(1210242, "Werewolf By Night", 2022), item(1, "Weapons", 2025)
@@ -245,6 +248,10 @@ def test_seed_fills_the_vocabulary_and_each_recorded_films_snapshot_by_the_looku
     werewolf_items = {"1210242": detail(werewolf), "834224": detail(werewolf_real, (153, 9, 0))}
     record(films, WEREWOLF_BY_NIGHT, {"lookup": [werewolf], "retry": [werewolf_real], "items": werewolf_items})
     record(films, WEAPONS, {"lookup": [weapons], "retry": None, "items": {"1": detail(weapons, (200, 4, 0))}})
+
+
+def test_seed_fills_the_vocabulary_and_each_recorded_films_snapshot_by_the_lookup_rule(transactional_db, debug_on, corpus_without_dtdd):
+    record_three(*corpus_without_dtdd)
     output = StringIO()
 
     call_command("seed", stdout=output)
@@ -259,3 +266,24 @@ def test_seed_fills_the_vocabulary_and_each_recorded_films_snapshot_by_the_looku
     assert Topic.objects.count() == len(VOCABULARY["/topics"])
     assert "DoesTheDogDie: 1 matched, 1 uncovered, 17 not fetched, 1 no match." in output.getvalue()
     assert "recordings are missing" not in output.getvalue()
+    # The Thing's snapshot is 27 days old, so the Films tab's stale line names it (#104).
+    statuses = stored.statuses_of(list(Suggestion.objects.all()))
+    ages = {each.tmdb_id: timezone.now() - statuses[each.pk].fetched.fetched_at for each in Suggestion.objects.all() if statuses[each.pk].fetched}
+    assert timedelta(days=27) <= ages.pop(THE_THING) < timedelta(days=27, minutes=5)
+    assert all(age < timedelta(minutes=5) for age in ages.values())
+
+
+def test_a_phase_move_on_the_seeded_instance_refreshes_from_the_recordings(transactional_db, debug_on, corpus_without_dtdd, monkeypatch):
+    record_three(*corpus_without_dtdd)
+    call_command("seed", stdout=StringIO())
+    monkeypatch.setattr(dtdd_client, "stand_in", None)
+    # As seededserver does before serving (#102).
+    dtdd_client.answer_from(RecordedDtdd())
+
+    history.move(Phase.SUGGEST, Phase.APPROVE)
+    refresh.after_the_move()
+
+    states = seeded_states()
+    assert (states[THE_THING], states[WEAPONS]) == (State.MATCHED, State.MATCHED)
+    thing = Suggestion.objects.get(tmdb_id=THE_THING)
+    assert timezone.now() - stored.statuses_of([thing])[thing.pk].fetched.fetched_at < timedelta(minutes=5)

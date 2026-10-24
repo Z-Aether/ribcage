@@ -1,6 +1,7 @@
 """The Films tab's ledger as plain data: the filter `?show=` names, its rows and counts, and the ballot's screen time (#28, #95)."""
 
 from dataclasses import replace
+from datetime import UTC, datetime
 
 import pytest
 
@@ -10,6 +11,7 @@ from ribcage.suggestions.models import Approval
 from tests.films import THE_SHINING
 
 UNDECIDED, APPROVED, DROPPED = Approval.UNDECIDED, Approval.APPROVED, Approval.DROPPED
+NOW = datetime(2026, 10, 24, 18, 30, tzinfo=UTC)
 
 
 def a_row(approval, runtime=100, pitch="A pitch.", notes=()):
@@ -46,7 +48,7 @@ def test_the_note_count_includes_the_pitch():
 def test_a_filter_keeps_its_rows_in_order_and_every_count_stays_whole():
     rows = [a_row(APPROVED, 90), a_row(UNDECIDED, 80), a_row(APPROVED, 130), a_row(DROPPED, 70)]
 
-    ledger = Ledger.of(rows, chosen("approved"))
+    ledger = Ledger.of(rows, chosen("approved"), NOW)
 
     assert ledger.rows == (rows[0], rows[2])
     assert [(tally.show.label, tally.count, tally.is_chosen) for tally in ledger.filters] == [

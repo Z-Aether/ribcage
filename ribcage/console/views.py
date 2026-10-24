@@ -21,7 +21,7 @@ from ribcage.phase.history import current, last_entered, move
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
-from ribcage.triggers import stored
+from ribcage.triggers import refresh, stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
 WORKING_TABS = {
@@ -65,6 +65,8 @@ def move_phase(request):
     # The post names the phase it expects to leave, so a stale tab moves nothing and reloads into the phase as it is (#74, #77).
     with suppress(MoveRefused):
         move(request.POST.get("from_phase"), request.POST.get("to_phase"))
+        # Only a move made refreshes, after it commits; the answer waits for it, at most about 20 s (#32 §1, #104).
+        refresh.after_the_move()
     return redirect("console_phase")
 
 

@@ -2,10 +2,14 @@
 
 import json
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import StrEnum
 
 from ribcage.triggers.dtdd import Record, Snapshot, TopicCount
+
+
+# Named on the Films tab ahead of DoesTheDogDie's 30-day cache limit, so a move or two can still refresh it (#5, #32 §1, #104).
+STALE_AFTER = timedelta(days=25)
 
 
 class State(StrEnum):
@@ -44,6 +48,9 @@ class Status:
             return State.NOT_FETCHED
         # Added by hand with no match: nothing is looked up until someone pastes a link (#105).
         return State.NO_MATCH
+
+    def is_stale(self, now):
+        return self.fetched is not None and now - self.fetched.fetched_at > STALE_AFTER
 
     def topics_named_by(self, topic_ids):
         """How many of the snapshot's topics the vocabulary names; the rest stay off every surface until it does (#62)."""

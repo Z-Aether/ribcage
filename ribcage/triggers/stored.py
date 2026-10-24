@@ -2,6 +2,7 @@
 
 from django.db import transaction
 
+from ribcage.suggestions.models import Suggestion
 from ribcage.triggers import section, status
 from ribcage.triggers.models import Topic, TriggerData
 from ribcage.triggers.vocabulary import OTHER, SuperCategory, Vocabulary
@@ -49,6 +50,22 @@ def store_lookup(suggestion, snapshot, fetched_at):
         suggestion=suggestion,
         defaults={"match": match, "match_set_by": "", "snapshot": status.as_text(status.Fetched(snapshot, fetched_at))},
     )
+
+
+def store_refresh(suggestion, asked, snapshot, fetched_at):
+    """A refresh's answer for the match it asked about, None for a whole lookup, kept only while that match still stands.
+
+    A correction or a withdraw landing while DoesTheDogDie answered wins, and a corrected match keeps its setter (#104, #105).
+    """
+    with transaction.atomic():
+        if not Suggestion.objects.filter(pk=suggestion.pk).exists():
+            return
+        if TriggerData.objects.filter(suggestion=suggestion).values_list("match", flat=True).first() != asked:
+            return
+        if asked is None:
+            store_lookup(suggestion, snapshot, fetched_at)
+        else:
+            TriggerData.objects.filter(suggestion=suggestion).update(snapshot=status.as_text(status.Fetched(snapshot, fetched_at)))
 
 
 def status_of(suggestion, stored):

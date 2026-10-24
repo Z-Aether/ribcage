@@ -6,7 +6,8 @@ Sam suggests nothing, so one seeded voter's Mine is empty.
 """
 
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from datetime import timedelta
 
 from django.conf import settings
 
@@ -15,13 +16,16 @@ from ribcage.identity.models import Voter
 from ribcage.phase.order import Phase
 from ribcage.seeding.recorded import RecordedDtdd
 from ribcage.suggestions.models import Approval, Suggestion
-from ribcage.triggers import fetch, stored
+from ribcage.triggers import fetch, status, stored
 from ribcage.triggers.client import Client
+from ribcage.triggers.models import TriggerData
 
 CABINET_OF_CURIOSITIES = "Del Toro's Cabinet of Curiosities"
 APPROVED, UNDECIDED, DROPPED = Approval.APPROVED, Approval.UNDECIDED, Approval.DROPPED
 # Weapons is left not fetched, so the Films tab shows the gap and the next phase move fills it from the recordings (#102, #104).
 NOT_FETCHED = 1078605
+# The Thing's snapshot is 27 days old, so the Films tab's stale line names it until a move refreshes it (#104).
+STALE, STALE_FOR = 1091, timedelta(days=27)
 
 
 @dataclass(frozen=True)
@@ -227,7 +231,15 @@ def seed_the_trigger_data():
     client = Client(settings.DTDD_API_KEY, recordings)
     for suggestion in Suggestion.objects.exclude(tmdb_id=NOT_FETCHED).order_by("pk"):
         fetch.look_up(suggestion, client)
+    age_the_snapshot(STALE, STALE_FOR)
     return recordings
+
+
+def age_the_snapshot(tmdb_id, by):
+    for row in TriggerData.objects.filter(suggestion__tmdb_id=tmdb_id, snapshot__isnull=False):
+        fetched = status.from_text(row.snapshot)
+        row.snapshot = status.as_text(replace(fetched, fetched_at=fetched.fetched_at - by))
+        row.save(update_fields=["snapshot"])
 
 
 def trigger_states():

@@ -2013,6 +2013,12 @@ body > footer.site-footer {
   color: var(--ink-muted);
   font-style: italic;
 }
+/* The quiet line naming old or missing trigger data, under the summary, shown only when it applies (#104). */
+[data-skin] .films-stale {
+  margin: -0.25rem 0 0.75rem;
+  color: var(--ink-muted);
+  font-size: 0.9em;
+}
 [data-skin] .films-credit {
   margin: 0.5rem 0 0;
   font-size: 0.9em;

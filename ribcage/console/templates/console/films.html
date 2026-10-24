@@ -6,6 +6,8 @@
   <h1>Films</h1>
 
   <p class="films-summary">On the ballot: <strong>{{ ledger.ballot_size }} film{{ ledger.ballot_size|pluralize }}</strong> · {{ screen_time }} screen time</p>
+  {# Every film's, whatever the filter, since every move refreshes them all (#32 §1, #104). #}
+  {% if ledger.stale_line %}<p class="films-stale">{{ ledger.stale_line }}</p>{% endif %}
 
   {# Plain links, so a filter needs no script; a post from the tab reloads onto its filter's address (the dev, 2026-10-23, on #61; #95). #}
   <nav class="films-filters" aria-label="Show">
