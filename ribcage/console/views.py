@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods, require_POST
 
+from ribcage.console import films
 from ribcage.console.forms import BackupCodeForm, BackupUploadForm
 from ribcage.console.moves import offered
 from ribcage.identity.admin_session import admin_required
@@ -49,6 +50,7 @@ def phase_tab(request):
         "phases": [(each, entered.get(each)) for each in PHASES],
         "moves": offered(phase, armed_to),
         "voters": Voter.objects.count(),
+        "films": films.status(),
     }
     return render_tab(request, "console/phase.html", context, phase)
 
@@ -64,7 +66,9 @@ def move_phase(request):
 
 @admin_required
 def films_tab(request):
-    return render_tab(request, "console/films.html")
+    # A filter is a plain link, so the tab needs no script to read it (the dev, 2026-10-23, on #61).
+    ledger = films.ledger(films.chosen(request.GET.get("show")))
+    return render_tab(request, "console/films.html", {"ledger": ledger, "screen_time": films.screen_time_words(ledger.screen_time)})
 
 
 @admin_required

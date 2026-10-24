@@ -44,6 +44,7 @@
   </div>
 
   <ul class="console-status">
+    <li><span class="console-status__label">Films</span> {{ films.suggestions }} suggestion{{ films.suggestions|pluralize }} · {{ films.on_the_ballot }} on the ballot <a href="{% url 'console_films' %}">Films tab</a></li>
     <li><span class="console-status__label">Voters</span> {{ voters }} registered <a href="{% url 'console_roster' %}">Roster tab</a></li>
   </ul>
 {% endblock %}

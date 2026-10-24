@@ -1,0 +1,63 @@
+"""The Films tab's ledger as plain data: the filter `?show=` names, its rows and counts, and the ballot's screen time (#28, #95)."""
+
+from dataclasses import replace
+
+import pytest
+
+from ribcage.console.films import ALL, FILTERS, Ledger, Row, chosen, screen_time_words
+from ribcage.films import card
+from ribcage.suggestions.models import Approval
+from tests.films import THE_SHINING
+
+UNDECIDED, APPROVED, DROPPED = Approval.UNDECIDED, Approval.APPROVED, Approval.DROPPED
+
+
+def a_row(approval, runtime=100, pitch="A pitch.", notes=()):
+    film_card = card.FilmCard(film=replace(THE_SHINING, runtime=runtime), suggester="Ada", suggester_removed=False, pitch=pitch, notes=notes)
+    return Row(film_card, approval)
+
+
+@pytest.mark.parametrize("show, label", [("undecided", "Undecided"), ("approved", "On the ballot"), ("dropped", "Dropped"), ("all", "All")])
+def test_show_names_its_filter(show, label):
+    assert chosen(show).label == label
+
+
+@pytest.mark.parametrize("show", [None, "", "Approved", "ballot", "removed"])
+def test_a_show_that_names_no_filter_is_all(show):
+    assert chosen(show) is ALL
+
+
+def test_each_filter_reloads_onto_its_own_address():
+    assert [each.address for each in FILTERS] == [
+        "/console/films/",
+        "/console/films/?show=undecided",
+        "/console/films/?show=approved",
+        "/console/films/?show=dropped",
+    ]
+
+
+def test_the_note_count_includes_the_pitch():
+    notes = (card.Note("Bo", "In."), card.Note("Cy", "Me too."))
+
+    assert a_row(UNDECIDED, notes=notes).note_count == 3
+    assert a_row(UNDECIDED, pitch=None, notes=notes).note_count == 2
+
+
+def test_a_filter_keeps_its_rows_in_order_and_every_count_stays_whole():
+    rows = [a_row(APPROVED, 90), a_row(UNDECIDED, 80), a_row(APPROVED, 130), a_row(DROPPED, 70)]
+
+    ledger = Ledger.of(rows, chosen("approved"))
+
+    assert ledger.rows == (rows[0], rows[2])
+    assert [(tally.show.label, tally.count, tally.is_chosen) for tally in ledger.filters] == [
+        ("All", 4, False),
+        ("Undecided", 1, False),
+        ("On the ballot", 2, True),
+        ("Dropped", 1, False),
+    ]
+    assert (ledger.ballot_size, ledger.screen_time) == (2, 220)
+
+
+@pytest.mark.parametrize("minutes, words", [(0, "0 min"), (47, "47 min"), (60, "1 h"), (352, "5 h 52 min"), (1505, "25 h 5 min")])
+def test_screen_time_in_hours_and_minutes(minutes, words):
+    assert screen_time_words(minutes) == words

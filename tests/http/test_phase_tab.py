@@ -7,6 +7,8 @@ import pytest
 from ribcage.identity.models import Voter
 from ribcage.phase.history import current, move
 from ribcage.phase.order import PHASES, Phase, neighbours
+from ribcage.suggestions.models import Suggestion
+from tests.films import a_tmdb_film
 from tests.http.test_phase import PAGE_HEADINGS, history, walk_to
 from tests.http.test_roster_tab import CANCEL
 
@@ -279,6 +281,24 @@ def test_the_status_line_counts_the_voters_registered_and_links_the_roster_tab(a
 
     page = admin.get(TAB).text
 
-    status = re.search(r'<ul class="console-status">(.*?)</ul>', page, re.S)[1]
+    status = status_line(page, "Voters")
     assert text(status) == f"Voters {registered} registered Roster tab"
     assert '<a href="/console/roster/">Roster tab</a>' in status
+
+
+def status_line(page, label):
+    lines = re.search(r'<ul class="console-status">(.*?)</ul>', page, re.S)[1]
+    return next(line for line in re.findall(r"<li>(.*?)</li>", lines, re.S) if text(line).startswith(label))
+
+
+@pytest.mark.parametrize("approvals, says", [([], "0 suggestions · 0 on the ballot"), (["approved"], "1 suggestion · 1 on the ballot"), (["approved", "undecided", "dropped", "approved"], "4 suggestions · 2 on the ballot")])
+def test_the_films_line_counts_the_suggestions_and_the_ballot_and_links_the_films_tab(admin, approvals, says):
+    voter = Voter.objects.create_voter("Ada")
+    for tmdb_id, approval in enumerate(approvals, start=1):
+        suggestion = Suggestion.objects.suggest(voter, a_tmdb_film(tmdb_id, f"Film {tmdb_id}"), "A pitch.")
+        Suggestion.objects.filter(pk=suggestion.pk).update(approval=approval)
+
+    status = status_line(admin.get(TAB).text, "Films")
+
+    assert text(status) == f"Films {says} Films tab"
+    assert '<a href="/console/films/">Films tab</a>' in status

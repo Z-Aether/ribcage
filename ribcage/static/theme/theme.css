@@ -335,7 +335,7 @@ body[data-skin="run"] {
   color: var(--pico-primary-inverse);
 }
 
-[data-skin] :is(button:not(.film-card__toggle, .tile), a.button) {
+[data-skin] :is(button:not(.film-card__toggle, .ledger__opens, .tile), a.button) {
   border-radius: var(--button-radius);
   padding-inline: var(--button-padding);
   font-weight: 700;
@@ -348,14 +348,14 @@ body[data-skin="run"] {
 [data-skin] :is(button, a.button).button--quiet:hover {
   border-color: var(--ink-muted);
 }
-[data-skin="voter"] :is(button:not(.film-card__toggle, .tile):not(:disabled), a.button):hover {
+[data-skin="voter"] :is(button:not(.film-card__toggle, .ledger__opens, .tile):not(:disabled), a.button):hover {
   animation: wobble 0.5s ease-in-out;
 }
-[data-skin="admin"] :is(button:not(.film-card__toggle, .tile), a.button) {
+[data-skin="admin"] :is(button:not(.film-card__toggle, .ledger__opens, .tile), a.button) {
   padding-block: 0.3rem;
   font-size: 0.875rem;
 }
-[data-skin="admin"] :is(button:not(.film-card__toggle, .tile):not(:disabled), a.button):hover {
+[data-skin="admin"] :is(button:not(.film-card__toggle, .ledger__opens, .tile):not(:disabled), a.button):hover {
   animation: none;
 }
 [data-skin] :is(button, [type="button"], [type="submit"], [type="reset"], a):focus-visible {
@@ -1683,6 +1683,95 @@ body > footer.site-footer {
   text-align: right;
   white-space: nowrap;
 }
+/* A title that opens its row's card below it, as the card's own title does (#28, #95). */
+.ledger__opens {
+  all: unset;
+  cursor: pointer;
+  font-weight: 700;
+  overflow-wrap: break-word;
+}
+.ledger__opens:hover {
+  color: var(--link-hover);
+}
+.ledger__opens:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- The Films tab: the ballot's summary, the four filters and the ledger (#28, #95) ---------- */
+
+[data-skin] .films-summary {
+  margin: 0 0 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+[data-skin] nav.films-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
+}
+[data-skin] nav.films-filters a {
+  margin: 0;
+  padding: 0.15rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  color: var(--ink-muted);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+}
+[data-skin] nav.films-filters a:hover {
+  color: var(--ink);
+}
+[data-skin] nav.films-filters a[aria-current="page"] {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.films-filters__count {
+  margin-left: 0.2em;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+.films-ledger__approval {
+  white-space: nowrap;
+}
+.approval-tag {
+  font-family: var(--font-label);
+  font-size: 0.74em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.approval-tag--undecided {
+  color: var(--accent);
+}
+.approval-tag--approved {
+  color: var(--score-top-pick);
+}
+.approval-tag--dropped {
+  color: var(--ink-muted);
+}
+/* On a phone the directors give way, and what still overflows scrolls within the ledger rather than the page (#95). */
+.films-ledger__frame {
+  overflow-x: auto;
+  container-type: inline-size;
+}
+@media (max-width: 40rem) {
+  [data-skin] .films-ledger .ledger__directors {
+    display: none;
+  }
+  /* An opened card keeps to the frame's visible width, holding still while the row scrolls under it. */
+  [data-skin] .films-ledger .ledger__detail td {
+    padding-left: 0.6rem;
+  }
+  .films-ledger .ledger__detail .film-card {
+    position: sticky;
+    left: 0.6rem;
+    max-width: calc(100cqi - 1.2rem);
+  }
+}
 
 /* ---------- Motion: slow, small, and off when asked ---------- */
 
@@ -1718,7 +1807,7 @@ body > footer.site-footer {
   body::before,
   .wordmark::after,
   [data-skin="voter"] .film-card.is-open .film-card__poster::after,
-  [data-skin="voter"] :is(button:not(.film-card__toggle, .tile):not(:disabled), a.button):hover,
+  [data-skin="voter"] :is(button:not(.film-card__toggle, .ledger__opens, .tile):not(:disabled), a.button):hover,
   [data-skin="voter"] .score:hover {
     animation: none;
   }

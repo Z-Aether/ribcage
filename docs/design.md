@@ -227,7 +227,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | Tab | Contents |
 |---|---|
 | **Phase** | The five phases with their dates, from the phase history. Both possible moves, each with its consequences printed. Click, then an inline confirm. |
-| **Films** (approve screen) | Ledger rows: runtime box, a flag when it differs from TMDB, DTDD status, *Approve* / *Drop*. The title opens the film card inline. One quiet line lists films with stale or unfetched DTDD data. |
+| **Films** (approve screen) | Ledger rows, newest first: suggester, note count, runtime box, a flag when it differs from TMDB, DTDD status, the approval, *Approve* / *Drop*. The title opens the film card inline, with no note box, withdraw or pencil. Filters *All · Undecided · On the ballot · Dropped*, each a plain link with its count, under a line giving the ballot's size and screen time (#95). One quiet line lists films with stale or unfetched DTDD data. |
 | **Pick** | Budget and anchor in a header above two sub-tabs. **Compare:** knobs, solve and "more", the ledger (timetable row, shortlist, batch), the floor set line, keep, swap, *Use this slate*. **Timetable:** the **track**, ripple mode, arrange utilities, readouts, the selected box, the candidate list for adding films by hand, and the shortlist rows (#22, #24). |
 | **Roster** | View, remove, reset password (shown once, forces a change at next login). A reload of the shown password resets nothing and shows no password, only a fresh confirm (#80). The floor set line is always shown. |
 | **Backup** | The backup page: download or upload for a one-time code made in the container's terminal, never for the admin password alone (#68, #81, #86). |

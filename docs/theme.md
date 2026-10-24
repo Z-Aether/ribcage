@@ -55,6 +55,10 @@ The **pitch step** takes the picker's place: the poster beside the title, a mute
 
 Where a voter may correct a film's runtime, the card's runtime line ends in a quiet ✎ in muted ink, which turns pumpkin and tips when reached for. A click turns the line into a small box of minutes with *Save* and a quiet *Cancel*, in place on an open or closed card alike. A refusal takes a line of its own beneath, in the note box's dusty rose, and the typed value stays in the box. Saved, the line shows the new runtime with its *by hand* tag, or *TMDB* again when it is corrected back to TMDB's value (#90).
 
+## The Films tab
+
+A line gives the ballot's size and screen time, then the four filters sit as small square-cornered links, the chosen one edged in pumpkin, each with its count in muted ink. The ledger's approval column is a small uppercase tag: *undecided* in pumpkin, *approved* in sea-glass, *dropped* in muted ink. A title is a bold plain button that opens the card in a row of its own beneath, one at a time; the card's own title closes it again. On a phone the directors give way, the ledger scrolls sideways within its own frame, and an opened card holds still at the frame's width (#95).
+
 ## Motion
 
 Motion is slow and small, and it is never on the text.
