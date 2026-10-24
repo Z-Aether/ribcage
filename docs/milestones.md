@@ -133,7 +133,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - **The RUN purge:** entering RUN deletes every snapshot and the vocabulary, and leaving it fetches them again. Moved here from M8, since M5 owns the snapshots (#32, #62).
 - **Match correction:** the paste-a-link control, previewed before it is saved, tagged `auto` or `set by <name>`, windowed SUGGEST–VOTE for voters and never for the admin (#32, #34, #62, #78).
 - **My warnings:** the scrolling page in DTDD's grouping, privacy disclosure, *I don't care*, live search, chips, carrying films per topic. The nag bar. Topics travel in request bodies (#16, #20, #23).
-- **On the card:** matched topics with raw counts, the trigger icon and its threshold, *uncovered* and *not fetched* named as gaps (#35).
+- **On the card:** matched topics with raw counts (the full list drops topics with no yes vote, #103), the trigger icon and its threshold, *uncovered* and *not fetched* named as gaps (#35).
 - **Films tab:** DTDD status per row and the quiet stale-or-unfetched line (#28).
 - The "Powered by DoesTheDogDie.com" invariant test and the watched-list privacy invariant test (#25).
 

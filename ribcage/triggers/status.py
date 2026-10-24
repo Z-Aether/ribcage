@@ -52,11 +52,16 @@ class Status:
     def is_stale(self, now):
         return self.fetched is not None and now - self.fetched.fetched_at > STALE_AFTER
 
-    def topics_named_by(self, topic_ids):
-        """How many of the snapshot's topics the vocabulary names; the rest stay off every surface until it does (#62)."""
+    def topics_shown_by(self, topic_ids):
+        """How many topics the card lists for the snapshot; the Films tab and a correction's preview count the same ones (#62, #103)."""
         if self.fetched is None:
             return 0
-        return sum(count.topic_id in topic_ids for count in self.fetched.snapshot.counts)
+        return len(shown_counts(self.fetched.snapshot.counts, topic_ids))
+
+
+def shown_counts(counts, topic_ids):
+    """The one rule for a topic shown: named by the vocabulary, with at least one yes vote; the rest stay out of the card's full list and every count of a film's topics (#62, #103)."""
+    return tuple(count for count in counts if count.topic_id in topic_ids and count.yes > 0)
 
 
 def as_text(fetched):

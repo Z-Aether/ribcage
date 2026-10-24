@@ -154,7 +154,7 @@ Every slate on screen (the timetable's own films, the shortlist, the batch) show
 
 Informational only. They never feed the objective and never veto on anyone's behalf. The link to the objective is a voter choosing to veto (#20).
 
-- **Source:** DoesTheDogDie, keyed by TMDB id. A guarded retry by title and year when the id finds nothing, and a movie-type filter. DTDD returns crowd yes/no counts per **topic**, which are evidence, not verdicts. DTDD's own labels and grouping are used site-wide (#19, #23).
+- **Source:** DoesTheDogDie, keyed by TMDB id. A guarded retry by title and year when the id finds nothing, and a movie-type filter. DTDD returns crowd yes/no counts per **topic**, which are evidence, not verdicts. DTDD's own labels and grouping are used site-wide (#19, #23). The card's full topic list holds only topics the vocabulary names and with at least one yes vote, and every count of a film's topics counts those (#103).
 - **Watched list:** the topics a voter wants to be told about. Private, admin included. Disclosed upfront. Opting out takes no surface: tick nothing, or press "I don't care", which means nothing is ticked: pressed over ticked topics, it confirms inline what it clears (#20, #62).
 - **What voters see:** **matched topics** with raw counts in the opened card and beside the veto control. On a tile or closed card, the **trigger icon** (a ring on the tile's frame, coloured by the theme, #58) is the only mark. The icon needs enough yes votes, more than the no votes, to make a claim. Matched films come first in the voter's Unsorted tray (#35, #38).
 - **Admin surfaces** show a film's DTDD data, match field and topic list, and nothing personal.

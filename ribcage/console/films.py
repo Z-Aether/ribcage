@@ -63,8 +63,8 @@ class Row:
     approval: Approval
     tmdb_runtime: int | None = None
     dtdd: Status = Status(has_tmdb_id=False)
-    # The topics the vocabulary names, as the card lists them (#62).
-    named_topics: int = 0
+    # The topics the card lists: named, with a yes vote (#62, #103).
+    shown_topics: int = 0
 
     @property
     def note_count(self):
@@ -94,7 +94,7 @@ class Row:
     def dtdd_status(self):
         """The DoesTheDogDie column: a matched film's topic count, or the gap named; M10 words it finally (#28, #32, #102)."""
         if self.dtdd.state is State.MATCHED:
-            return f"{self.named_topics} topic{'' if self.named_topics == 1 else 's'}"
+            return f"{self.shown_topics} topic{'' if self.shown_topics == 1 else 's'}"
         return str(self.dtdd.state)
 
 
@@ -161,7 +161,7 @@ def ledger(show):
             Approval(suggestion.approval),
             suggestion.tmdb_runtime,
             statuses[suggestion.pk],
-            statuses[suggestion.pk].topics_named_by(named),
+            statuses[suggestion.pk].topics_shown_by(named),
         )
         for suggestion in suggestions
     ]

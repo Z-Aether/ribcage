@@ -147,3 +147,10 @@ def test_the_gallerys_match_corrections_submit_nothing_and_take_no_focus(client,
 
     assert controls and not any(re.search(r"hx-(get|post|preserve)|autofocus|action=|href=\"/", control) for control in controls)
     assert forms and all('onsubmit="return false"' in form for form in forms)
+
+
+def test_the_gallery_lists_no_topic_without_a_yes_vote(client, debug):
+    # A real card lists none, so a sample row with 0 yes shows what no card can (#103).
+    page = client.get(GALLERY).content.decode()
+
+    assert re.findall(r'class="dtdd__counts">0 yes', page) == []

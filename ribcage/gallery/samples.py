@@ -133,7 +133,7 @@ MIDSOMMAR_DTDD = matched_section(
     "Midsommar",
     2019,
     (
-        ("Animals", (("animals (besides dog/cat/horse) dying", 14, 2), ("dogs dying", 0, 31))),
+        ("Animals", (("animals (besides dog/cat/horse) dying", 14, 2), ("dogs dying", 1, 31))),
         ("Bodily Harm", (("blood or gore", 38, 1), ("body horror", 22, 3), ("self harming", 6, 9))),
         ("Death, Grief & Loss", (("family dies", 30, 0), ("major character dies", 27, 1))),
         ("Phobias & Sensory", (("jump scares", 2, 25), ("flashing lights or images", 1, 7))),

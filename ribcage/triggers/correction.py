@@ -88,7 +88,7 @@ def fetched(item_id, client):
 
 def named_count(snapshot):
     named = {topic.topic_id for topic in stored.stored_vocabulary().topics}
-    return sum(count.topic_id in named for count in snapshot.counts)
+    return len(status.shown_counts(snapshot.counts, named))
 
 
 def signed(snapshot, suggestion_pk):

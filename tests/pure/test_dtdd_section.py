@@ -73,6 +73,21 @@ def test_a_topic_the_vocabulary_lacks_is_left_out():
     assert shown.topic_count == 1
 
 
+def test_a_topic_with_votes_but_no_yes_is_left_out_and_one_with_a_single_yes_stays():
+    shown = section(matched(TopicCount(153, 0, 110), TopicCount(158, 1, 40), TopicCount(300, 0, 0)), VOCABULARY)
+
+    assert [row.label for group in shown.groups for row in group.rows] == ["cats dying"]
+    assert shown.topic_count == 1
+
+
+def test_a_matched_film_whose_topics_all_have_no_yes_is_still_matched_with_an_empty_list():
+    shown = section(matched(TopicCount(153, 0, 110), TopicCount(158, 0, 3)), VOCABULARY)
+
+    assert shown.state == "matched"
+    assert shown.groups == ()
+    assert shown.topic_count == 0
+
+
 @pytest.mark.parametrize(
     "status, state, has_match",
     [
@@ -109,18 +124,18 @@ def render(shown, expanded=True):
 
 
 def test_the_section_follows_the_notes_and_carries_one_credit_line():
-    page = render(section(matched(TopicCount(153, 3, 1), TopicCount(158, 0, 4)), VOCABULARY))
+    page = render(section(matched(TopicCount(153, 3, 1), TopicCount(158, 2, 4)), VOCABULARY))
 
     assert page.index("film-card__notes") < page.index("film-card__dtdd") < page.index("film-card__phase-bar")
     assert page.count(CREDIT) == 1
     assert '<a href="https://www.doesthedogdie.com/media/5381" target="_blank" rel="noopener">' in page
     assert re.search(r"Willy&#x27;s Wonderland \(2021\)&nbsp;↗</a> · <span class=\"dtdd__set-by\">auto</span>", page)
     assert re.search(r'dogs dying</span> — <span class="dtdd__counts">3 yes / 1 no</span>', page)
-    assert re.search(r'cats dying</span> — <span class="dtdd__counts">0 yes / 4 no</span>', page)
+    assert re.search(r'cats dying</span> — <span class="dtdd__counts">2 yes / 4 no</span>', page)
 
 
 def test_the_topic_list_is_collapsed_behind_one_control():
-    page = render(section(matched(TopicCount(153, 3, 1), TopicCount(158, 0, 4)), VOCABULARY))
+    page = render(section(matched(TopicCount(153, 3, 1), TopicCount(158, 2, 4)), VOCABULARY))
 
     (control,) = re.findall(r"<details[^>]*>\s*<summary[^>]*>(.*?)</summary>", page, re.S)
     assert "2 topics" in control

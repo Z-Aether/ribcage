@@ -8,7 +8,7 @@ from ribcage.console.films import Row
 from ribcage.films import card
 from ribcage.suggestions.models import Approval
 from ribcage.triggers.dtdd import NO_MATCH, Record, Snapshot, TopicCount
-from ribcage.triggers.status import Fetched, State, Status, as_text, from_text
+from ribcage.triggers.status import Fetched, State, Status, as_text, from_text, shown_counts
 from tests.films import THE_SHINING
 
 AT = datetime(2026, 10, 24, 18, 30, tzinfo=UTC)
@@ -58,17 +58,25 @@ def test_the_text_is_plain_json_holding_the_record_the_counts_and_when_it_was_fe
     )
 
 
-def test_only_the_topics_the_vocabulary_names_are_counted():
+def test_only_the_named_topics_with_a_yes_vote_are_counted():
     status = Status(has_tmdb_id=True, match=SHINING.item_id, fetched=fetched(COUNTED))
 
-    assert status.topics_named_by({153, 158, 200}) == 2
-    assert status.topics_named_by({153}) == 1
-    assert Status(has_tmdb_id=True).topics_named_by({153}) == 0
+    assert status.topics_shown_by({153, 158, 200}) == 2
+    assert status.topics_shown_by({153}) == 1
+    assert Status(has_tmdb_id=True).topics_shown_by({153}) == 0
+
+
+def test_a_topic_with_no_yes_vote_is_not_counted_and_one_with_a_single_yes_is():
+    counted = Snapshot(SHINING, (TopicCount(153, 0, 110), TopicCount(158, 1, 0), TopicCount(200, 0, 0)))
+    status = Status(has_tmdb_id=True, match=SHINING.item_id, fetched=fetched(counted))
+
+    assert status.topics_shown_by({153, 158, 200}) == 1
+    assert shown_counts(counted.counts, {153, 158, 200}) == (TopicCount(158, 1, 0),)
 
 
 def a_row(status, named=0):
     film_card = card.FilmCard(film=THE_SHINING, suggester="Ada", suggester_removed=False, pitch="A pitch.", notes=())
-    return Row(film_card, Approval.UNDECIDED, dtdd=status, named_topics=named)
+    return Row(film_card, Approval.UNDECIDED, dtdd=status, shown_topics=named)
 
 
 @pytest.mark.parametrize(

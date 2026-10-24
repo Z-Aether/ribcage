@@ -30,7 +30,7 @@ ITS_EMPTY_DUPLICATE = item(1362774, "８番出口", 2025)
 WEREWOLF_EMPTY, WEREWOLF_REAL = item(1210242, "Werewolf By Night", 2022), item(834224, "Werewolf by Night", None)
 A_SERIES = item(777, "Cabinet of Curiosities", 2022, item_type="TV Show")
 DETAILS = [
-    detail(EXIT_8, (153, 3, 1), (200, 40, 2), (999, 5, 0)),
+    detail(EXIT_8, (153, 3, 1), (200, 40, 2), (999, 5, 0), (158, 0, 12)),
     detail(ITS_EMPTY_DUPLICATE),
     detail(WEREWOLF_EMPTY),
     detail(WEREWOLF_REAL, (158, 9, 0)),
@@ -146,7 +146,7 @@ def test_a_pasted_link_previews_its_record_by_one_fetch_and_writes_nothing(hanna
 
     preview = ask(hanna, films["exit 8"], link(EXIT_8)).text
 
-    # Topic 999 is one the vocabulary doesn't name, so it isn't counted, as the card won't list it (#62).
+    # Topic 999 isn't named by the vocabulary and 158 has no yes vote, so neither is counted, as the card won't list them (#62, #103).
     assert "Found: Exit 8 (2025) ↗ · Movie · 2 topics" in text(preview)
     assert '<button type="submit" autofocus>Use this match</button>' in preview
     assert ">Cancel</a>" in preview
@@ -175,6 +175,17 @@ def test_a_preview_on_a_film_credited_for_nothing_else_carries_the_credit_in_the
 
     assert preview.count("Powered by DoesTheDogDie.com") == 1
     assert "Powered by DoesTheDogDie.com" in control
+
+
+def test_the_preview_the_card_and_the_films_tab_count_the_same_topics(hanna, films, admin):
+    exit_8 = films["exit 8"]
+    preview = ask(hanna, exit_8, link(EXIT_8)).text
+    use(hanna, exit_8, signed_in(preview))
+
+    on_the_tab = re.search(rf'id="film-{exit_8.pk}".*?(\d+ topics?)', admin.get(TAB).text, re.S)[1]
+    assert "Movie · 2 topics" in text(preview)
+    assert "All 2 topics" in section_of(hanna.get("/").text, exit_8)
+    assert on_the_tab == "2 topics"
 
 
 # Across a note's swap of the card
