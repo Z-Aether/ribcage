@@ -54,6 +54,26 @@ At the start of each window. Teardown left the stack definition and its environm
          print("FAILED", type(e).__name__)
      EOF
      ```
+   - **DoesTheDogDie:** the app's content warnings call DoesTheDogDie from the host, so check the stack's key reaches it, in the same *Terminal*. It prints `200 application/json; charset=utf-8`, the item count and the requests left this minute, and never the key. `HTTP 401` or `403` means `DTDD_API_KEY` is wrong; `FAILED` means the host's network blocks the call, which is a question for Adam (#115).
+     ```
+     python - <<'EOF'
+     import os, json, urllib.request, urllib.error
+     key = os.environ.get("DTDD_API_KEY", "")
+     if not key:
+         raise SystemExit("DTDD_API_KEY is not set")
+     url = "https://www.doesthedogdie.com/api/v3/topicsupercategories"
+     headers = {"accept": "application/json", "X-API-KEY": key}
+     try:
+         r = urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=15)
+         body = json.load(r)
+         items = body if isinstance(body, list) else next((v for v in body.values() if isinstance(v, list)), [])
+         print(r.status, r.headers["Content-Type"], len(items), "items, remaining this minute:", r.headers["x-ratelimit-remaining-minute"])
+     except urllib.error.HTTPError as e:
+         print("HTTP", e.code)
+     except Exception as e:
+         print("FAILED", type(e).__name__)
+     EOF
+     ```
    - **A form POST** through `https://<subdomain>/login/` gets past CSRF: logging in with any name and password answers *The display name or the password is wrong.* A `403` means `CSRF_TRUSTED_ORIGINS` doesn't match the address in the browser. A silent return to the empty login form means the CSRF cookie never came back (#76).
    - **The `backup` log** says `Next backup at … 04:00 Europe/Budapest.`
 
