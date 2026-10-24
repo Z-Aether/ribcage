@@ -57,7 +57,7 @@ Where a voter may correct a film's runtime, the card's runtime line ends in a qu
 
 ## The Films tab
 
-A line gives the ballot's size and screen time, then the four filters sit as small square-cornered links, the chosen one edged in pumpkin, each with its count in muted ink. The ledger's approval column is a small uppercase tag: *undecided* in pumpkin, *approved* in sea-glass, *dropped* in muted ink. A title is a bold plain button that opens the card in a row of its own beneath, one at a time; the card's own title closes it again. On a phone the directors give way, the ledger scrolls sideways within its own frame, and an opened card holds still at the frame's width (#95).
+A line gives the ballot's size and screen time, then the four filters sit as small square-cornered links, the chosen one edged in pumpkin, each with its count in muted ink. The ledger's approval column is a small uppercase tag: *undecided* in pumpkin, *approved* in sea-glass, *dropped* in muted ink. A title is a bold plain button that opens the card in a row of its own beneath, one at a time; the card's own title closes it again. On a phone the directors give way, the ledger scrolls sideways within its own frame, and an opened card holds still at the frame's width (#95). Its columns keep fixed widths, so every filter lays out alike and only the film's column gives, and each row's poster is a thumbnail 1.5rem wide, small enough to keep the row dense and big enough to know the film (the dev, 2026-10-24).
 
 ## Motion
 

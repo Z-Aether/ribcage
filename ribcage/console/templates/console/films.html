@@ -19,6 +19,16 @@
     {# A decision reloads onto the filter's address with its row where it was on screen, scrolled sideways as it was (#85, #96). #}
     <div class="films-ledger__frame" data-keeps-scroll>
       <table class="ledger films-ledger" data-film-cards>
+        {# Fixed widths, so every filter lays its columns out alike whatever its rows hold (the dev, 2026-10-24). #}
+        <colgroup>
+          <col class="films-ledger__col--poster">
+          <col>
+          <col class="films-ledger__col--suggester">
+          <col class="films-ledger__col--notes">
+          <col class="films-ledger__col--runtime">
+          <col class="films-ledger__col--approval">
+          <col class="films-ledger__col--decide">
+        </colgroup>
         <thead>
           <tr>
             <th scope="col"><span class="visually-hidden">Poster</span></th>
