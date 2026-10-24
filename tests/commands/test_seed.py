@@ -197,7 +197,7 @@ def test_seeding_twice_gives_the_same_pool(transactional_db, debug_on):
 
 # Trigger data (#102)
 
-THE_THING, WEREWOLF_BY_NIGHT, WEAPONS = 1091, 894205, 1078605
+THE_THING, WEREWOLF_BY_NIGHT, WEAPONS, EXIT_8 = 1091, 894205, 1078605, 1408208
 
 
 @pytest.fixture
@@ -271,6 +271,29 @@ def test_seed_fills_the_vocabulary_and_each_recorded_films_snapshot_by_the_looku
     ages = {each.tmdb_id: timezone.now() - statuses[each.pk].fetched.fetched_at for each in Suggestion.objects.all() if statuses[each.pk].fetched}
     assert timedelta(days=27) <= ages.pop(THE_THING) < timedelta(days=27, minutes=5)
     assert all(age < timedelta(minutes=5) for age in ages.values())
+
+
+def test_seed_matches_exit_8_auto_to_its_empty_duplicate_for_correcting(transactional_db, debug_on, corpus_without_dtdd):
+    # Its id lookup returns both, and the rule rightly takes the voted one, so the seed sets the wrong one on purpose (#57, #105).
+    films, vocabulary = corpus_without_dtdd
+    record_three(films, vocabulary)
+    real, duplicate = item(1558416, "Exit 8", 2025), item(1362774, "８番出口", 2025)
+    record(films, EXIT_8, {"lookup": [real, duplicate], "retry": None, "items": {"1558416": detail(real, (153, 3, 1)), "1362774": detail(duplicate)}})
+
+    call_command("seed", stdout=StringIO())
+
+    exit_8 = Suggestion.objects.get(tmdb_id=EXIT_8)
+    status = stored.statuses_of([exit_8])[exit_8.pk]
+    assert (status.match, status.set_by, status.state) == (1362774, "", State.UNCOVERED)
+    assert status.fetched.snapshot.record.name == "８番出口"
+
+
+def test_without_its_recording_exit_8_stays_as_looked_up(transactional_db, debug_on, corpus_without_dtdd):
+    record_three(*corpus_without_dtdd)
+
+    call_command("seed", stdout=StringIO())
+
+    assert seeded_states()[EXIT_8] is State.NOT_FETCHED
 
 
 def test_a_phase_move_on_the_seeded_instance_refreshes_from_the_recordings(transactional_db, debug_on, corpus_without_dtdd, monkeypatch):

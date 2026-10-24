@@ -10,6 +10,7 @@ from dataclasses import dataclass, replace
 from datetime import timedelta
 
 from django.conf import settings
+from django.utils import timezone
 
 from ribcage.films import corpus
 from ribcage.identity.models import Voter
@@ -17,7 +18,7 @@ from ribcage.phase.order import Phase
 from ribcage.seeding.recorded import RecordedDtdd
 from ribcage.suggestions.models import Approval, Suggestion
 from ribcage.triggers import fetch, status, stored
-from ribcage.triggers.client import Client
+from ribcage.triggers.client import Client, NotAnswering
 from ribcage.triggers.models import TriggerData
 
 CABINET_OF_CURIOSITIES = "Del Toro's Cabinet of Curiosities"
@@ -26,6 +27,8 @@ APPROVED, UNDECIDED, DROPPED = Approval.APPROVED, Approval.UNDECIDED, Approval.D
 NOT_FETCHED = 1078605
 # The Thing's snapshot is 27 days old, so the Films tab's stale line names it until a move refreshes it (#104).
 STALE, STALE_FOR = 1091, timedelta(days=27)
+# Exit 8 is matched `auto` to its empty `８番出口` duplicate, which its id lookup also returned, for correcting a match (#57, #105).
+WRONGLY_MATCHED, ITS_EMPTY_DUPLICATE = 1408208, 1362774
 
 
 @dataclass(frozen=True)
@@ -231,8 +234,19 @@ def seed_the_trigger_data():
     client = Client(settings.DTDD_API_KEY, recordings)
     for suggestion in Suggestion.objects.exclude(tmdb_id=NOT_FETCHED).order_by("pk"):
         fetch.look_up(suggestion, client)
+    match_wrongly(WRONGLY_MATCHED, ITS_EMPTY_DUPLICATE, client)
     age_the_snapshot(STALE, STALE_FOR)
     return recordings
+
+
+def match_wrongly(tmdb_id, item_id, client):
+    """The film matched `auto` to the record given, as a confidently wrong lookup would leave it; unrecorded, it stays as looked up."""
+    try:
+        snapshot = client.record(item_id).value
+    except NotAnswering:
+        return
+    for suggestion in Suggestion.objects.filter(tmdb_id=tmdb_id):
+        stored.store_lookup(suggestion, snapshot, timezone.now())
 
 
 def age_the_snapshot(tmdb_id, by):
