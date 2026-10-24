@@ -7,7 +7,7 @@ import pytest
 from ribcage.identity.models import Voter
 from ribcage.phase.history import current, move
 from ribcage.phase.order import PHASES, Phase, neighbours
-from ribcage.suggestions.models import Suggestion
+from ribcage.suggestions.models import Approval, Suggestion
 from tests.films import a_tmdb_film
 from tests.http.test_phase import PAGE_HEADINGS, history, walk_to
 from tests.http.test_roster_tab import CANCEL
@@ -154,6 +154,37 @@ def test_each_moves_consequence_is_the_page_voters_see_after_it(admin, from_phas
     consequence = text(moves(admin.get(TAB).text)[to_phase])
 
     assert f"Everyone's page becomes “{PAGE_HEADINGS[to_phase]}”." in consequence
+
+
+def consequences_of(admin, to_phase):
+    return [text(sentence) for sentence in re.findall(r"<p>(.*?)</p>", moves(admin.get(TAB).text)[to_phase], re.S)]
+
+
+def test_opening_the_ballot_lists_the_undecided_films_it_leaves_off_newest_first(admin, voters):
+    for tmdb_id, title, approval in [(1, "The Thing", Approval.APPROVED), (2, "Cube", Approval.UNDECIDED), (3, "Pulse", Approval.DROPPED), (4, "<Possession>", Approval.UNDECIDED)]:
+        Suggestion.objects.suggest(voters["ada"], a_tmdb_film(tmdb_id, title), "Pitch.")
+        Suggestion.objects.filter(tmdb_id=tmdb_id).update(approval=approval)
+    walk_to(APPROVE)
+
+    page = moves(admin.get(TAB).text)[VOTE]
+
+    assert "<p>Still undecided, so left off the ballot: <cite>&lt;Possession&gt;</cite>, <cite>Cube</cite>.</p>" in page
+
+
+def test_opening_the_ballot_with_no_film_undecided_says_none_is(admin, voters):
+    Suggestion.objects.suggest(voters["ada"], a_tmdb_film(1, "The Thing"), "Pitch.")
+    Suggestion.objects.update(approval=Approval.DROPPED)
+    walk_to(APPROVE)
+
+    assert consequences_of(admin, VOTE)[1:] == ["No film is undecided."]
+
+
+@pytest.mark.parametrize(("from_phase", "to_phase"), [move for move in EVERY_MOVE if move != (APPROVE, VOTE)])
+def test_no_other_move_names_the_undecided_films(admin, voters, from_phase, to_phase):
+    Suggestion.objects.suggest(voters["ada"], a_tmdb_film(1, "Cube"), "Pitch.")
+    walk_to(from_phase)
+
+    assert consequences_of(admin, to_phase) == [f"Everyone's page becomes “{PAGE_HEADINGS[to_phase]}”."]
 
 
 @pytest.mark.parametrize(("from_phase", "to_phase"), EVERY_MOVE)

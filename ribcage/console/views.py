@@ -72,6 +72,15 @@ def films_tab(request):
 
 
 @admin_required
+@require_POST
+def decide_approval(request):
+    # Instant in every phase, and reloads with no message onto the filter it was sent from, whatever it changed (#28, #77, #96).
+    post = request.POST
+    films.decide(post.get("suggestion"), post.get("from_approval"), post.get("to_approval"))
+    return redirect(films.chosen(post.get("show")).address)
+
+
+@admin_required
 def pick_tab(request):
     return render_tab(request, "console/pick.html")
 

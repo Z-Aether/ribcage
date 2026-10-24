@@ -75,7 +75,7 @@ All the suggestions, whatever their approval. Open to additions in SUGGEST, froz
 _Avoid_: queue, backlog, candidate pool
 
 **Approval**:
-The admin's standing decision on a suggestion: undecided, approved or dropped. Every suggestion starts undecided, only approved ones are on the ballot, and any of the three can become another at any time. (#15, #28)
+The admin's standing decision on a suggestion: undecided, approved or dropped. Every suggestion starts undecided, only approved ones are on the ballot, and approved and dropped can become each other at any time, but neither returns to undecided. (#15, #28, #96)
 _Avoid_: pending, review, status, accept
 
 **Drop**:

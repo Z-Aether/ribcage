@@ -43,9 +43,9 @@ def pool(voters):
 
 
 def rows(page):
-    """Each row's cells as text: the film, the suggester, the notes, the runtime and the approval."""
-    found = re.findall(r"<tr data-suggestion=\"\d+\" data-ledger-row>(.*?)</tr>", page, re.S)
-    return [[text(cell) for cell in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)[1:]] for row in found]
+    """Each row's cells as text, short of its acts: the film, the suggester, the notes, the runtime and the approval."""
+    found = re.findall(r"<tr data-suggestion=\"\d+\" data-ledger-row data-keeps-place=\"\d+\">(.*?)</tr>", page, re.S)
+    return [[text(cell) for cell in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)[1:-1]] for row in found]
 
 
 def titles(page):

@@ -1753,8 +1753,25 @@ body > footer.site-footer {
 .approval-tag--dropped {
   color: var(--ink-muted);
 }
+/* Approve and Drop, side by side at the row's end; the act that would change nothing is greyed out (#96). */
+[data-skin] .films-ledger .films-ledger__decide {
+  width: 1%;
+  white-space: nowrap;
+}
+[data-skin] .films-ledger__decide form {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0;
+}
+[data-skin] .films-ledger__decide button {
+  width: auto;
+  margin: 0;
+  padding-block: 0.1rem;
+}
 /* On a phone the directors give way, and what still overflows scrolls within the ledger rather than the page (#95). */
 .films-ledger__frame {
+  /* Positioned, so a visually hidden header past the frame's edge scrolls with it rather than widening the page (#96). */
+  position: relative;
   overflow-x: auto;
   container-type: inline-size;
 }

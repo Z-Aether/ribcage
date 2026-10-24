@@ -113,7 +113,7 @@ Pages that poll and find the phase moved reload the same way.
 
 ### 4.3 What can change, and when
 
-- **Approval** can be undecided, approved or dropped, and can change at any time. Growing the ballot during VOTE clears every done marker, and the confirm step prints the cost ("6 of 9 → 0 of 9"). Shrinking it clears nothing (#15, #28).
+- **Approval** can be undecided, approved or dropped, and can change at any time, though never back to undecided (#96). Growing the ballot during VOTE clears every done marker, and the confirm step prints the cost ("6 of 9 → 0 of 9"). Shrinking it clears nothing (#15, #28).
 - **Drop** destroys nothing and only affects future use. A dropped film leaves the ballot and SOLVE, but the timetable or a kept proposal that already holds it keeps it and keeps counting its scores. Only the admin sees it marked as dropped (#26).
 - **Removal** deletes a voter's scores, vetoes, done marker and notes on other films. Their suggestions and pitches stay, marked removed. It is not a ban (#28).
 - **Runtime** can be edited by anyone during SUGGEST on a film its suggester could still withdraw, and by the admin alone otherwise. Editing it on the Films tab changes the **box** length without rippling; any overlap is just flagged (#34, #36).

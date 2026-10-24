@@ -21,7 +21,7 @@ class Filter:
 
     @property
     def address(self):
-        # #96 and #97's posts are to reload onto this, so working through a filter stays in it (#95, #96, #97).
+        # Approve, drop and the runtime box reload onto this, so working through a filter stays in it (#95, #96, #97).
         tab = reverse("console_films")
         return tab if self.approval is None else f"{tab}?show={self.show}"
 
@@ -40,6 +40,15 @@ def chosen(show):
     return next((each for each in FILTERS if each.show == show), ALL)
 
 
+def may_approve(runtime):
+    """Whether a film with this runtime may go on the ballot, which SOLVE needs every film's length for (#26 §8, #96)."""
+    return runtime is not None
+
+
+# What a row's two acts make a suggestion; neither returns it to undecided (#61, 2026-10-22).
+DECISIONS = (Approval.APPROVED, Approval.DROPPED)
+
+
 @dataclass(frozen=True)
 class Row:
     """One suggestion's row: its card, which opens under the row, and its approval (#28)."""
@@ -51,6 +60,14 @@ class Row:
     def note_count(self):
         # The pitch counts as a note, as it is the suggester's (#21, #26).
         return len(self.card.notes) + (self.card.pitch is not None)
+
+    @property
+    def may_approve(self):
+        return self.approval != Approval.APPROVED and may_approve(self.card.film.runtime)
+
+    @property
+    def may_drop(self):
+        return self.approval != Approval.DROPPED
 
 
 @dataclass(frozen=True)
@@ -87,6 +104,23 @@ def ledger(show):
     # No viewer: the admin's card has no note box, withdraw or pencil, and shows nothing personal (#28, #95).
     rows = [Row(pool.film_card(suggestion, suggestion.notes.all()), Approval(suggestion.approval)) for suggestion in suggestions]
     return Ledger.of(rows, show)
+
+
+def decide(suggestion, expected, to):
+    """Approve or drop a suggestion still at the approval the post expected; anything else changes nothing (#28, #96).
+
+    The update names the expected approval too, so a double click, a stale tab or a film withdrawn since find nothing to change.
+    """
+    if to not in DECISIONS or expected not in Approval.values or expected == to:
+        return False
+    try:
+        matching = Suggestion.objects.filter(pk=suggestion, approval=expected)
+        found = matching.first()
+    except (TypeError, ValueError):
+        return False
+    if found is None or (to == Approval.APPROVED and not may_approve(found.runtime)):
+        return False
+    return matching.update(approval=to) == 1
 
 
 def screen_time_words(minutes):

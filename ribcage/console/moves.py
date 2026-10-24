@@ -2,9 +2,10 @@
 
 from typing import NamedTuple
 
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 
 from ribcage.phase.order import Phase, neighbours
+from ribcage.suggestions.models import Approval, Suggestion
 
 SUGGEST, APPROVE, VOTE, PICK, RUN = Phase
 
@@ -47,9 +48,22 @@ WORDINGS = {
 }
 
 
+def left_off_the_ballot():
+    # Newest first, as the Films tab lists them (#95, #96).
+    undecided = Suggestion.objects.filter(approval=Approval.UNDECIDED).order_by("-pk").values_list("title", flat=True)
+    if not undecided:
+        return "No film is undecided."
+    titles = format_html_join(", ", "<cite>{}</cite>", ((title,) for title in undecided))
+    return format_html("Still undecided, so left off the ballot: {}.", titles)
+
+
 def consequences(from_phase, to_phase):
     # Later milestones add their sentences here: the reveal, reopened VOTE, publishing and the RUN purge (#77).
-    return [format_html("Everyone's page becomes “{}”.", VOTER_PAGES[to_phase])]
+    sentences = [format_html("Everyone's page becomes “{}”.", VOTER_PAGES[to_phase])]
+    if (from_phase, to_phase) == (APPROVE, VOTE):
+        # Only approved films are on the ballot, so the move names the films no decision has reached (#28, #96).
+        sentences.append(left_off_the_ballot())
+    return sentences
 
 
 def offered_move(phase, to, direction, armed_to):

@@ -3,6 +3,7 @@ from django.urls import path
 from ribcage.console.views import (
     backup_page,
     console,
+    decide_approval,
     films_tab,
     move_phase,
     phase_tab,
@@ -47,6 +48,7 @@ urlpatterns = [
     path("console/phase/", phase_tab, name="console_phase"),
     path("console/phase/move/", move_phase, name="console_phase_move"),
     path("console/films/", films_tab, name="console_films"),
+    path("console/films/approval/", decide_approval, name="console_films_approval"),
     path("console/pick/", pick_tab, name="console_pick"),
     path("console/roster/", roster_tab, name="console_roster"),
     path("console/roster/remove/", remove_voter, name="console_roster_remove"),

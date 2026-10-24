@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 
-from ribcage.console.films import ALL, FILTERS, Ledger, Row, chosen, screen_time_words
+from ribcage.console.films import ALL, FILTERS, Ledger, Row, chosen, may_approve, screen_time_words
 from ribcage.films import card
 from ribcage.suggestions.models import Approval
 from tests.films import THE_SHINING
@@ -61,3 +61,21 @@ def test_a_filter_keeps_its_rows_in_order_and_every_count_stays_whole():
 @pytest.mark.parametrize("minutes, words", [(0, "0 min"), (47, "47 min"), (60, "1 h"), (352, "5 h 52 min"), (1505, "25 h 5 min")])
 def test_screen_time_in_hours_and_minutes(minutes, words):
     assert screen_time_words(minutes) == words
+
+
+@pytest.mark.parametrize("runtime, approvable", [(None, False), (1, True), (144, True)])
+def test_only_a_film_with_a_runtime_may_be_approved(runtime, approvable):
+    assert may_approve(runtime) is approvable
+
+
+@pytest.mark.parametrize("approval, runtime, acts", [
+    (UNDECIDED, 100, (True, True)),
+    (APPROVED, 100, (False, True)),
+    (DROPPED, 100, (True, False)),
+    (UNDECIDED, None, (False, True)),
+    (DROPPED, None, (False, False)),
+])
+def test_a_row_offers_the_acts_that_would_change_its_approval(approval, runtime, acts):
+    row = a_row(approval, runtime)
+
+    assert (row.may_approve, row.may_drop) == acts
