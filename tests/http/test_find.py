@@ -264,7 +264,8 @@ def test_the_picker_offers_adding_it_by_hand_under_its_tiles(hanna, recorded):
     assert page.index("picker__tiles") < page.index("None of these?")
     link = re.search(r'<a class="picker__by-hand"[^>]*>', page)[0]
     assert f'hx-get="{HAND}"' in link and 'hx-target="#picker"' in link
-    assert "None of these? Add it by hand." in plain(page)
+    assert "None of these? Add the year or add it by hand." in plain(page)
+    assert re.search(r"<em>Add the year</em> or <a", page)
 
 
 def test_the_outage_message_ends_in_a_link_to_adding_it_by_hand(hanna, failing):

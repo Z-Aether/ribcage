@@ -16,7 +16,7 @@
       </li>
     {% endfor %}
   </ul>
-  {# For anything TMDB can't find: it swaps the hand-entry step in for the picker, as a tile swaps the pitch step, taking the find box's text along to start its boxes from (#21, #94). #}
-  <p class="picker__hand">None of these? {% if picker.choosable %}<a class="picker__by-hand" href="{{ suggest_address }}?by_hand=1" hx-get="{{ suggest_address }}?by_hand=1" hx-include="[name=q]" hx-target="#picker" hx-swap="innerHTML">Add it by hand.</a>{% else %}Add it by hand.{% endif %}</p>
+  {# The year nudges a trailing year in the find box; for anything TMDB can't find, the link swaps the hand-entry step in for the picker, as a tile swaps the pitch step, taking the find box's text along to start its boxes from (#21, #92, #94). #}
+  <p class="picker__hand">None of these? <em>Add the year</em> or {% if picker.choosable %}<a class="picker__by-hand" href="{{ suggest_address }}?by_hand=1" hx-get="{{ suggest_address }}?by_hand=1" hx-include="[name=q]" hx-target="#picker" hx-swap="innerHTML">add it by hand</a>{% else %}add it by hand{% endif %}.</p>
 {% endif %}
 {% endspaceless %}
