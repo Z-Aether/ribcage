@@ -11,6 +11,7 @@ from ribcage.suggestions.models import Approval, Suggestion
 from ribcage.suggestions.runtime import Refused, correct
 from ribcage.suggestions.withdrawal import with_holds, withdrawable
 from ribcage.triggers import stored
+from ribcage.triggers.section import section
 from ribcage.triggers.status import State, Status
 
 
@@ -124,14 +125,20 @@ def shown_by(show, rows):
     return [row for row in rows if show.approval is None or row.approval == show.approval]
 
 
+# The card's topic list fetches its rows from the console's own route, behind the admin's wall (#103).
+LISTED_FROM = "console_films_dtdd"
+
+
 def ledger(show):
     """The tab's ledger, in a query each for the suggestions, their notes, their trigger data and the vocabulary, however large the pool."""
     suggestions = list(Suggestion.objects.prefetch_related(Prefetch("notes", queryset=pool.notes_in_order())).order_by("-pk"))
-    statuses, named = stored.statuses_of(suggestions), stored.named_topic_ids()
+    statuses, vocabulary = stored.statuses_of(suggestions), stored.stored_vocabulary()
+    named = {topic.topic_id for topic in vocabulary.topics}
     # No viewer: the admin's card has no note box, withdraw or pencil, and shows nothing personal (#28, #35 §2, #95).
+    # Its DoesTheDogDie section is the one every voter sees (#35 §2, #103).
     rows = [
         Row(
-            pool.film_card(suggestion, suggestion.notes.all()),
+            pool.film_card(suggestion, suggestion.notes.all(), dtdd=pool.listed_from(section(statuses[suggestion.pk], vocabulary), suggestion, LISTED_FROM)),
             Approval(suggestion.approval),
             suggestion.tmdb_runtime,
             statuses[suggestion.pk],

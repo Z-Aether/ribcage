@@ -2,7 +2,7 @@
 
 from django.db import transaction
 
-from ribcage.triggers import status
+from ribcage.triggers import section, status
 from ribcage.triggers.models import Topic, TriggerData
 from ribcage.triggers.vocabulary import OTHER, SuperCategory, Vocabulary
 from ribcage.triggers.vocabulary import Topic as VocabularyTopic
@@ -42,10 +42,6 @@ def stored_vocabulary():
     return Vocabulary(tuple(topics), tuple(groups[position] for position in sorted(groups)))
 
 
-def named_topic_ids():
-    return set(Topic.objects.values_list("topic_id", flat=True))
-
-
 def store_lookup(suggestion, snapshot, fetched_at):
     """An automatic lookup's answer: its record is the match, tagged `auto`, and the snapshot is replaced whole (#32)."""
     match = None if snapshot.record is None else snapshot.record.item_id
@@ -67,3 +63,14 @@ def statuses_of(suggestions):
     ids = [suggestion.pk for suggestion in suggestions]
     stored = TriggerData.objects.in_bulk(ids)
     return {suggestion.pk: status_of(suggestion, stored.get(suggestion.pk)) for suggestion in suggestions}
+
+
+def sections_of(suggestions):
+    """Each suggestion's card section by its id, in a query for the trigger data and one for the vocabulary (#103)."""
+    vocabulary = stored_vocabulary()
+    return {pk: section.section(each, vocabulary) for pk, each in statuses_of(suggestions).items()}
+
+
+def section_of(suggestion):
+    (only,) = sections_of([suggestion]).values()
+    return only

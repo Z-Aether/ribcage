@@ -14,6 +14,8 @@
       {% for note in card.notes %}{% include "components/note.html" with text=note.text author=note.author pitch=False yours=note.yours %}{% endfor %}
     </ul>
   </div>
+  {# After the notes, in a row of its own, so on a phone it can take the card's whole width (#103). #}
+  {% if card.dtdd %}{% include "components/dtdd_section.html" with dtdd=card.dtdd %}{% endif %}
   {# A row of its own under the body, so on a phone it can take the card's whole width (#88). #}
   <div class="film-card__phase-bar" data-phase-bar>{% if phase_bar %}{% include phase_bar %}{% endif %}</div>
 </article>

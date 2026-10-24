@@ -47,6 +47,65 @@ class RuntimePencil:
 
 
 @dataclass(frozen=True)
+class TopicRow:
+    """One topic on a film, its label and DoesTheDogDie's raw counts: evidence, never a verdict (#20 §4)."""
+
+    label: str
+    yes: int
+    no: int
+
+
+@dataclass(frozen=True)
+class TopicGroup:
+    """A super-category's topics on a film, the most yes votes first (#23, #103)."""
+
+    name: str
+    rows: tuple[TopicRow, ...]
+
+
+@dataclass(frozen=True)
+class DtddMatch:
+    """The DoesTheDogDie record a film is matched to, and who set it: empty for `auto` (#32, #103)."""
+
+    item_id: int
+    name: str
+    year: int | None
+    set_by: str = ""
+
+    @property
+    def url(self):
+        return f"https://www.doesthedogdie.com/media/{self.item_id}"
+
+
+@dataclass(frozen=True)
+class DtddSection:
+    """The opened card's DoesTheDogDie section, the same for every viewer: the match, the topic list, or the gap named (#20, #21, #103)."""
+
+    # The state's slug, for the section's look: matched, uncovered, not-fetched or no-match.
+    state: str
+    match: DtddMatch | None = None
+    groups: tuple[TopicGroup, ...] = ()
+    # The gap in words, empty on a matched film; never an all-clear (#20, #32).
+    gap: str = ""
+    # Where the list fetches its rows from when it first opens, so no page carries every film's; empty renders them in place (#103).
+    topics_at: str = ""
+
+    @property
+    def gap_name(self):
+        # The glossary's word for the gap, as the Films tab's column names it (#102).
+        return self.state.replace("-", " ")
+
+    @property
+    def topic_count(self):
+        return sum(len(group.rows) for group in self.groups)
+
+    @property
+    def credited(self):
+        # The credit line whenever the section shows DoesTheDogDie's data: a match or topics (#21).
+        return self.match is not None or bool(self.groups)
+
+
+@dataclass(frozen=True)
 class FilmCard:
     """Everything the film card shows, as plain data, so a model binds to it without touching the template (#21, #58)."""
 
@@ -64,6 +123,8 @@ class FilmCard:
     note_box: NoteBox | None = None
     withdraw: Withdraw | None = None
     runtime_pencil: RuntimePencil | None = None
+    # None leaves the section out, as the gallery's plain samples and RUN do (#103, #106).
+    dtdd: DtddSection | None = None
 
 
 def trimmed(text, length):

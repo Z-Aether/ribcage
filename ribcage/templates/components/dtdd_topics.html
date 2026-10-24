@@ -1,0 +1,7 @@
+{# A DtddSection's full topic list, grouped as DoesTheDogDie groups it: in the section, or fetched into it as it first opens (#23, #103). #}
+{% for group in dtdd.groups %}
+  <h4 class="dtdd__group">{{ group.name }}</h4>
+  <ul class="dtdd__list">
+    {% for row in group.rows %}<li class="dtdd__topic"><span class="dtdd__label">{{ row.label }}</span> — <span class="dtdd__counts">{{ row.yes }} yes / {{ row.no }} no</span></li>{% endfor %}
+  </ul>
+{% endfor %}

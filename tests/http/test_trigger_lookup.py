@@ -237,7 +237,9 @@ def test_the_ledger_carries_one_credit_line_to_doesthedogdie(admin, every_state)
 
     credit = re.search(r'<p class="films-credit">(.*?)</p>', tab, re.S)[1]
     assert credit == '<a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a>'
-    assert tab.count("Powered by DoesTheDogDie.com") == 1
+    # Each opened card under a row carries its own, so the ledger's is the one outside them (#103).
+    outside_the_cards = re.sub(r'<tr class="ledger__detail".*?</tr>', "", tab, flags=re.S)
+    assert outside_the_cards.count("Powered by DoesTheDogDie.com") == 1
 
 
 def test_an_empty_ledger_shows_no_dtdd_data_and_no_credit_line(admin):

@@ -4,17 +4,21 @@ None of the names or notes here came from the group. They exist to put each real
 a posterless film, a long title, a differing original title, a hand-entered runtime, many notes
 against only a pitch, and a removed suggester. Every card but Cass's carries the runtime pencil, as SUGGEST
 shows it on a film nothing holds; hers also stands for APPROVE's bar and the admin's ledger, which show none (#90).
+Each card's DoesTheDogDie section is written for the gallery too, its topics and counts made up in DoesTheDogDie's
+own words and grouping, since its recordings stay out of the repo (#40, #103).
 """
 
 from dataclasses import dataclass, replace
 from functools import cache
 
 from ribcage.films import corpus
-from ribcage.films.card import FilmCard, Note, NoteBox, RuntimePencil, Withdraw
+from ribcage.films.card import DtddMatch, DtddSection, FilmCard, Note, NoteBox, RuntimePencil, TopicGroup, TopicRow, Withdraw
 from ribcage.films.picker import Picker, PickerTile
 from ribcage.suggestions.notes import PITCH_REQUIRED
 from ribcage.suggestions.runtime import NOT_WHOLE_MINUTES
 from ribcage.suggestions.withdrawal import what_goes
+from ribcage.triggers.section import GAPS
+from ribcage.triggers.status import State
 
 MIDSOMMAR = 530385
 POOH_2 = 1079485
@@ -87,7 +91,7 @@ def films():
     by_key = {}
     for recorded in corpus.read_corpus():
         film = recorded.film
-        by_key[film.tmdb_id if film.tmdb_id is not None else film.title] = film
+        by_key[key_of(film)] = film
     return by_key
 
 
@@ -95,7 +99,68 @@ def film(key):
     return films()[key]
 
 
+def key_of(film):
+    return film.tmdb_id if film.tmdb_id is not None else film.title
+
+
+def topics(*groups):
+    return tuple(TopicGroup(name, tuple(TopicRow(label, yes, no) for label, yes, no in rows)) for name, rows in groups)
+
+
+def matched_section(item_id, name, year, groups, set_by=""):
+    return DtddSection("matched", DtddMatch(item_id, name, year, set_by), topics(*groups))
+
+
+def gap(state, match=None):
+    return DtddSection(state.replace(" ", "-"), match, gap=GAPS[state])
+
+
+MIDSOMMAR_DTDD = matched_section(
+    20449,
+    "Midsommar",
+    2019,
+    (
+        ("Animals", (("animals (besides dog/cat/horse) dying", 14, 2), ("dogs dying", 0, 31))),
+        ("Bodily Harm", (("blood or gore", 38, 1), ("body horror", 22, 3), ("self harming", 6, 9))),
+        ("Death, Grief & Loss", (("family dies", 30, 0), ("major character dies", 27, 1))),
+        ("Phobias & Sensory", (("jump scares", 2, 25), ("flashing lights or images", 1, 7))),
+        ("Sexual Content/Assault", (("sexual content", 26, 2), ("druggings", 24, 0))),
+        ("Violence", (("people dying by suicide", 29, 1), ("torture", 9, 4))),
+    ),
+)
+SECTIONS = {
+    MIDSOMMAR: MIDSOMMAR_DTDD,
+    POOH_2: gap(State.NOT_FETCHED),
+    WOLF_HOUSE: matched_section(
+        126608,
+        "The Wolf House",
+        2018,
+        (("Children & Babies", (("kids dying", 8, 1),)), ("Phobias & Sensory", (("claustrophobic scenes", 6, 0),))),
+        set_by="Dani",
+    ),
+    CABINET_OF_CURIOSITIES: gap(State.NO_MATCH),
+    VHS_99: matched_section(918990, "V/H/S/99", 2022, (("Bodily Harm", (("blood or gore", 19, 0), ("vomiting", 4, 2))),)),
+    # Matched to an empty record, so uncovered with its match shown, as the seed's Exit 8 is (#57).
+    EXIT_8: gap(State.UNCOVERED, DtddMatch(1362774, "８番出口", 2025)),
+}
+
+
+def dtdd_states():
+    """The section in each of its four states, each on an opened card (#103)."""
+    by_key = {key_of(sample.film): sample for sample in cards()}
+    return (
+        ("Matched, its topics behind one control", by_key[MIDSOMMAR]),
+        ("Uncovered, on the empty record it was matched to", by_key[EXIT_8]),
+        ("Not fetched", by_key[POOH_2]),
+        ("No match, added by hand", by_key[CABINET_OF_CURIOSITIES]),
+    )
+
+
 def cards():
+    return tuple(replace(sample, dtdd=SECTIONS[key_of(sample.film)]) for sample in plain_cards())
+
+
+def plain_cards():
     return (
         FilmCard(
             film=film(MIDSOMMAR),
@@ -244,6 +309,7 @@ def gallery():
     return {
         "cards": cards(),
         "phase_bars": phase_bars(),
+        "dtdd_states": dtdd_states(),
         "score_scale": SCORE_SCALE,
         "tiles": tiles(),
         "picker": picker(),

@@ -3,9 +3,10 @@ from contextlib import suppress
 from django.conf import settings
 from django.http import FileResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_http_methods, require_POST
+from django.views.decorators.http import require_http_methods, require_POST, require_safe
 
 from ribcage.console import films
 from ribcage.console.forms import BackupCodeForm, BackupUploadForm
@@ -18,6 +19,9 @@ from ribcage.operations import offer
 from ribcage.operations.backup import describe
 from ribcage.phase.history import current, last_entered, move
 from ribcage.phase.order import PHASES, MoveRefused, Phase
+from ribcage.reload import reload_the_tab
+from ribcage.suggestions.models import Suggestion
+from ribcage.triggers import stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
 WORKING_TABS = {
@@ -74,6 +78,22 @@ def render_films(request, show, refused=None):
 def films_tab(request):
     # A filter is a plain link, so the tab needs no script to read it (the dev, 2026-10-23, on #61).
     return render_films(request, films.chosen(request.GET.get("show")))
+
+
+@admin_required
+@require_safe
+def films_dtdd(request):
+    """An opened card's full DoesTheDogDie topic list, fetched as it first opens under its row; the one every voter sees (#35 §2, #103)."""
+    if request.headers.get("HX-Request") != "true":
+        return redirect("console_films")
+    try:
+        suggestion = Suggestion.objects.filter(pk=request.GET.get("suggestion")).first()
+    except (TypeError, ValueError):
+        suggestion = None
+    # Withdrawn since: the tab reloads as it is now.
+    if suggestion is None:
+        return reload_the_tab(request, reverse("console_films"))
+    return render(request, "components/dtdd_topics.html", {"dtdd": stored.section_of(suggestion)})
 
 
 @admin_required

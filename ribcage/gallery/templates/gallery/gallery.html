@@ -74,6 +74,11 @@
       {% for card in cards %}{% include "components/film_card.html" with card=card expanded=forloop.first %}{% endfor %}
     </div>
 
+    {% for label, card in dtdd_states %}
+      <p class="gallery-label">The DoesTheDogDie section: {{ label|lower }}</p>
+      <div class="film-cards" data-film-cards>{% include "components/film_card.html" with card=card expanded=True %}</div>
+    {% endfor %}
+
     {% for label, card, bar in phase_bars %}
       <p class="gallery-label">{{ label }}</p>
       <div class="film-cards" data-film-cards>{% include "components/film_card.html" with card=card expanded=True phase_bar=bar %}</div>

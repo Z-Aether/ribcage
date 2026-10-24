@@ -17,6 +17,7 @@ from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions import notes, picker, pitch, pool, runtime, withdrawal
 from ribcage.suggestions.models import Suggestion
+from ribcage.triggers import stored
 
 def named_suggestion(pk):
     """The suggestion a post names by id, or None for one withdrawn since, or no id at all (#88, #89)."""
@@ -49,6 +50,18 @@ def write_note(request):
         return redirect("phase_page")
     context = {"card": replace(card, note_box=box), "expanded": True, "phase_bar": pool.PHASE_BARS[phase]}
     return render(request, "components/film_card.html", context)
+
+
+@require_safe
+def dtdd_topics(request):
+    """A card's full DoesTheDogDie topic list, a read in any phase, fetched as the list first opens; the same for every viewer (#103)."""
+    # Only htmx fetches the list in; a plain GET is a click from before htmx loaded (#89).
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    # A card withdrawn since reloads the tab onto the pool as it is now (#89).
+    if (suggestion := named_suggestion(request.GET.get("suggestion"))) is None:
+        return reload_the_tab(request, reverse("phase_page"))
+    return render(request, "components/dtdd_topics.html", {"dtdd": stored.section_of(suggestion)})
 
 
 @phase_window(Phase.SUGGEST)

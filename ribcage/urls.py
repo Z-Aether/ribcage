@@ -5,6 +5,7 @@ from ribcage.console.views import (
     console,
     decide_approval,
     edit_runtime,
+    films_dtdd,
     films_tab,
     move_phase,
     phase_tab,
@@ -27,7 +28,7 @@ from ribcage.identity.views import (
 )
 from ribcage.phase.views import phase_page, welcome
 from ribcage.privacy import privacy_policy
-from ribcage.suggestions.views import correct_runtime, find, suggest, withdraw, write_note
+from ribcage.suggestions.views import correct_runtime, dtdd_topics, find, suggest, withdraw, write_note
 
 urlpatterns = [
     path("", phase_page, name="phase_page"),
@@ -37,6 +38,7 @@ urlpatterns = [
     path("runtime/", correct_runtime, name="runtime"),
     path("find/", find, name="find"),
     path("suggest/", suggest, name="suggest"),
+    path("dtdd/", dtdd_topics, name="dtdd_topics"),
     path("login/", login, name="login"),
     path("join/", join, name="join"),
     path("join/details/", join_details, name="join_details"),
@@ -51,6 +53,7 @@ urlpatterns = [
     path("console/films/", films_tab, name="console_films"),
     path("console/films/approval/", decide_approval, name="console_films_approval"),
     path("console/films/runtime/", edit_runtime, name="console_films_runtime"),
+    path("console/films/dtdd/", films_dtdd, name="console_films_dtdd"),
     path("console/pick/", pick_tab, name="console_pick"),
     path("console/roster/", roster_tab, name="console_roster"),
     path("console/roster/remove/", remove_voter, name="console_roster_remove"),

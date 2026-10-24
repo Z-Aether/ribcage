@@ -29,6 +29,11 @@ def picker_tiles(page):
     return re.findall(r'<button type="button" class="tile tile--choice.*?</button>', page, re.S)
 
 
+def dtdd_sections(page):
+    """The state of each opened card's DoesTheDogDie section, in the voter skin's own block of the four (#103)."""
+    return re.findall(r'<p class="gallery-label">The DoesTheDogDie section: [^<]*</p>\s*<div class="film-cards" data-film-cards>.*?class="film-card__dtdd dtdd dtdd--([a-z-]+)"', page, re.S)
+
+
 def query_table(sql):
     return re.search(r'FROM "(\w+)"', sql)[1]
 
@@ -72,6 +77,11 @@ def test_the_gallery_is_behind_the_login_wall(debug, db):
         pytest.param(lambda page: "already suggested by Ash" in picker_tiles(page)[0], id="the picker's already suggested tile"),
         pytest.param(lambda page: 'title-card"><span class="title-card__title">Insidious' in picker_tiles(page)[-1], id="the picker's title-card tile"),
         pytest.param("answering right now. Try again in a bit", id="the picker's outage message"),
+        pytest.param(
+            lambda page: dtdd_sections(page) == ["matched", "uncovered", "not-fetched", "no-match"], id="the dtdd section in its four states"
+        ),
+        pytest.param(lambda page: "<details class=\"dtdd__topics\">" in page, id="the dtdd topic list behind its control"),
+        pytest.param('<span class="dtdd__set-by">set by Dani</span>', id="a match set by someone"),
     ],
 )
 def test_the_gallery_shows_each_real_case(client, debug, real_case):

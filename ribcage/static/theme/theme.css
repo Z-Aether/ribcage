@@ -1175,6 +1175,149 @@ body > footer.site-footer {
   display: none;
 }
 
+/* ---------- The card's DoesTheDogDie section: after the notes, the same for everyone (#103) ---------- */
+
+/* Hidden whole on a collapsed card, its credit with it (#21). */
+.film-card:not(.is-open) .film-card__dtdd {
+  display: none;
+}
+/* The poster and its spider take every row the open card has, so the section and the bar follow the notes. */
+.film-card.is-open:has(> .film-card__dtdd) > .film-card__poster {
+  grid-row: span 2;
+}
+.film-card.is-open:has(> .film-card__dtdd):has(> .film-card__phase-bar:not(:empty)) > .film-card__poster {
+  grid-row: span 3;
+}
+.film-card__dtdd {
+  grid-column: 2;
+  min-width: 0;
+}
+[data-skin] .dtdd p {
+  margin: 0;
+}
+[data-skin="voter"] .film-card__dtdd {
+  padding: 0.85rem 1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+}
+[data-skin="admin"] .film-card__dtdd {
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
+}
+.dtdd > * + * {
+  margin-top: 0.55rem;
+}
+.dtdd__match .film-card__label {
+  color: var(--ink-muted);
+  margin-right: 0.2em;
+}
+.dtdd__match a {
+  overflow-wrap: anywhere;
+}
+.dtdd__set-by {
+  color: var(--ink-muted);
+}
+/* A gap is named as the ledger names it, its word in a dashed pill, never as a count or anything that reads as clear (#20, #32). */
+.dtdd__gap {
+  color: var(--ink-muted);
+}
+.dtdd__gap-name {
+  display: inline-block;
+  margin-right: 0.35em;
+  padding: 0.05em 0.6em;
+  border: 1px dashed var(--ink-muted);
+  border-radius: var(--radius-pill);
+  font-style: italic;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+/* The full list waits behind one quiet control: a chevron that turns as it opens. */
+[data-skin] .dtdd__topics {
+  margin: 0;
+}
+[data-skin] .dtdd__topics > .dtdd__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  color: var(--link);
+  cursor: pointer;
+  list-style: none;
+}
+.dtdd__toggle::-webkit-details-marker {
+  display: none;
+}
+/* Pico's own chevron gives way to the one before the words. */
+[data-skin] .dtdd__topics > .dtdd__toggle::after {
+  content: none;
+}
+.dtdd__toggle::before {
+  content: "▸";
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.dtdd__topics[open] > .dtdd__toggle::before {
+  transform: rotate(90deg);
+}
+[data-skin] .dtdd__topics > .dtdd__toggle:hover {
+  color: var(--link-hover);
+}
+.dtdd__toggle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+[data-skin] .dtdd__group {
+  margin: 0.8rem 0 0.25rem;
+  color: var(--ink-muted);
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+[data-skin] .dtdd__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* As many columns as the card has room for, so a film with two hundred topics stays a list you can scan. */
+  columns: 14rem;
+  column-gap: 1.5rem;
+  font-size: 0.95em;
+  line-height: 1.35;
+}
+[data-skin] .dtdd__topic {
+  margin: 0;
+  padding: 0.15rem 0;
+  list-style: none;
+  break-inside: avoid;
+  color: var(--ink-muted);
+}
+.dtdd__label {
+  color: var(--ink);
+}
+.dtdd__counts {
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+}
+/* Until the list's rows arrive, as it first opens (#103). */
+[data-skin] .dtdd .dtdd__fetching {
+  margin-top: 0.8rem;
+  color: var(--ink-muted);
+}
+[data-skin] .dtdd__credit {
+  font-size: 0.88em;
+}
+@media (max-width: 600px) {
+  .film-card.is-open:has(> .film-card__dtdd) > .film-card__poster,
+  .film-card.is-open:has(> .film-card__dtdd):has(> .film-card__phase-bar:not(:empty)) > .film-card__poster {
+    grid-row: auto;
+  }
+  .film-card__dtdd {
+    grid-column: 1 / -1;
+  }
+}
+
 /* ---------- Phase bars: the opened card's foot, where a voter writes on it (#88) ---------- */
 
 .film-card:not(.is-open) .film-card__phase-bar {
@@ -1953,6 +2096,7 @@ body > footer.site-footer {
   .film-card,
   .film-card.htmx-swapping,
   [data-skin] .runtime__pencil,
+  .dtdd__toggle::before,
   .tile--choice .poster {
     transition: none;
   }
