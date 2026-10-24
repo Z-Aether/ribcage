@@ -5,7 +5,7 @@ services:
   ribcage:
     # A pinned tag, never latest: rolling back is editing this line, which the backup sidecar shares through the anchor.
     # Komodo's auto-update stays off (#40).
-    image: &pinned registry.brabulla.xyz:5050/z-aether/ribcage_deploy/ribcage:20261022-1506-3324181
+    image: &pinned registry.brabulla.xyz:5050/z-aether/ribcage_deploy/ribcage:20261024-1430-b377973
     restart: unless-stopped
     # Real values go in the Komodo stack's environment; an empty required one stops startup, naming it (#18, #45).
     environment:
