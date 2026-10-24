@@ -191,3 +191,64 @@ def test_a_server_error_is_tried_again_before_the_fetch_gives_up(monkeypatch):
         "results": [],
         "total_results": 0,
     }
+
+
+VOCABULARY = {
+    "/topics": [
+        {"id": 153, "name": "a dog dies", "minimalName": "dog death", "keywords": "dog", "description": "", "topicCategoryId": 1},
+        {"id": 470, "name": "a new one", "minimalName": "new ones", "keywords": "", "description": "", "topicCategoryId": 99},
+    ],
+    "/topiccategories": [{"id": 1, "name": "Animal death", "topicSuperCategoryId": 54}],
+    "/topicsupercategories": [{"id": 54, "name": "Animals", "shortName": "Animals"}, {"id": 50, "name": "Violence"}],
+}
+
+
+@pytest.fixture
+def vocabulary_directory(films_directory, tmp_path_factory, monkeypatch):
+    directory = tmp_path_factory.mktemp("dtdd")
+    for name in fetchcorpus.VOCABULARY_FILES.values():
+        (directory / name).write_text("[]", encoding="utf-8")
+    monkeypatch.setattr(fetchcorpus, "VOCABULARY_DIRECTORY", directory)
+    return directory
+
+
+def test_vocabulary_refetches_the_three_lists_alone_and_leaves_every_film_recording_as_it_is(
+    films_directory, vocabulary_directory, monkeypatch, debug_on
+):
+    for name, text in {"tmdb/willy-s-wonderland-2021.json": "{\"search\": 1}", "dtdd/willy-s-wonderland-2021.json": "{}"}.items():
+        (films_directory / name).parent.mkdir(exist_ok=True)
+        (films_directory / name).write_text(text, encoding="utf-8")
+    films_before = recorded_files(films_directory)
+    requests = []
+
+    def network(service, base, path, parameters, headers):
+        requests.append((service, path, dict(parameters), dict(headers)))
+        return VOCABULARY[path]
+
+    monkeypatch.setattr(fetchcorpus, "get_json", network)
+    output = StringIO()
+
+    call_command("fetchcorpus", "--vocabulary", stdout=output)
+
+    assert recorded_files(films_directory) == films_before
+    assert sorted(path for _, path, *_ in requests) == ["/topiccategories", "/topics", "/topicsupercategories"]
+    assert {(service, headers["X-API-KEY"]) for service, _, _, headers in requests} == {("DoesTheDogDie", DTDD_KEY)}
+    recorded = {path: json.loads((vocabulary_directory / name).read_text(encoding="utf-8")) for path, name in fetchcorpus.VOCABULARY_FILES.items()}
+    assert recorded == VOCABULARY
+    assert "2 topics, 2 super-categories" in output.getvalue()
+    assert "Under Other: new ones (470)" in output.getvalue()
+    assert DTDD_KEY not in output.getvalue() + "".join(recorded_files(vocabulary_directory).values())
+
+
+def test_a_failed_vocabulary_fetch_writes_nothing(films_directory, vocabulary_directory, debug_on, monkeypatch):
+    def network(service, base, path, parameters, headers):
+        if path == "/topicsupercategories":
+            raise CommandError("DoesTheDogDie failed on /topicsupercategories: 503. Nothing was written.")
+        return VOCABULARY[path]
+
+    monkeypatch.setattr(fetchcorpus, "get_json", network)
+
+    with pytest.raises(CommandError):
+        call_command("fetchcorpus", "--vocabulary", stdout=StringIO())
+
+    assert set(recorded_files(vocabulary_directory).values()) == {"[]"}

@@ -1,5 +1,4 @@
 import json
-import re
 import shutil
 import time
 import urllib.error
@@ -10,17 +9,34 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 from ribcage.films import client, corpus, tmdb
+from ribcage.triggers import vocabulary
+from ribcage.triggers.client import DTDD_API
+from ribcage.triggers.dtdd import normalised
 
-DTDD_API = "https://www.doesthedogdie.com/api/v3"
+
 # DoesTheDogDie's free tier allows 30 requests a minute; #19 measured this pace as safe.
 DTDD_SECONDS_BETWEEN_CALLS = 2.15
 # A server error or a dropped connection is retried, so one blip doesn't cost a four-minute run.
 ATTEMPTS = 3
 SECONDS_BEFORE_ANOTHER_ATTEMPT = 10
+# DoesTheDogDie's vocabulary, gitignored under its terms like the film recordings (#40, #101).
+VOCABULARY_DIRECTORY = corpus.CORPUS_DIRECTORY.parent / "dtdd"
+VOCABULARY_FILES = {
+    "/topics": "dtdd_topics.json",
+    "/topiccategories": "dtdd_topiccategories.json",
+    "/topicsupercategories": "dtdd_topicsupercategories.json",
+}
 
 
 class Command(BaseCommand):
     help = "Fetch the seed corpus's TMDB and DoesTheDogDie payloads into fixtures/films/, replacing the last fetch."
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--vocabulary",
+            action="store_true",
+            help="Refetch only DoesTheDogDie's vocabulary into fixtures/dtdd/, leaving every film recording as it is.",
+        )
 
     def handle(self, *args, **options):
         if not settings.DEBUG:
@@ -28,9 +44,30 @@ class Command(BaseCommand):
         # Redirected on Windows, stdout would be cp1252 and mangle Mārama in a log read as UTF-8 (#50).
         if hasattr(self.stdout, "reconfigure"):
             self.stdout.reconfigure(encoding="utf-8")
-        directory = corpus.CORPUS_DIRECTORY
         # The keys come only from the environment, as every setting does, and no recording carries them (#45).
         client = Client(settings.TMDB_API_KEY, settings.DTDD_API_KEY)
+        if options["vocabulary"]:
+            # Alone, since the whole fetch would replace the TMDB searches M4's tests pin (#101).
+            self.fetch_vocabulary(client)
+        else:
+            self.fetch_corpus(client)
+
+    def fetch_vocabulary(self, client):
+        lists = {path: client.dtdd(path) for path in VOCABULARY_FILES}
+        read = vocabulary.assembled(
+            vocabulary.topics_from(lists["/topics"]),
+            vocabulary.categories_from(lists["/topiccategories"]),
+            vocabulary.super_categories_from(lists["/topicsupercategories"]),
+        )
+        VOCABULARY_DIRECTORY.mkdir(parents=True, exist_ok=True)
+        for path, name in VOCABULARY_FILES.items():
+            write_json(VOCABULARY_DIRECTORY / name, lists[path])
+        self.stdout.write(f"Recorded {len(read.topics)} topics, {len(read.super_categories)} super-categories into {VOCABULARY_DIRECTORY}.")
+        under_other = [f"{topic.label} ({topic.topic_id})" for topic in read.topics if topic.super_category == vocabulary.OTHER]
+        self.stdout.write(f"Under Other: {', '.join(under_other) or 'none'}")
+
+    def fetch_corpus(self, client):
+        directory = corpus.CORPUS_DIRECTORY
         tmdb_recordings, dtdd_recordings, posterless = {}, {}, []
         # Everything is fetched before anything is written, so a failed run leaves the last fetch whole.
         for entry in corpus.read_entries(directory):
@@ -67,17 +104,17 @@ def record_dtdd(client, detail):
     return recording
 
 
-def normalised(title):
-    return re.sub(r"[^0-9a-z]", "", title.casefold())
-
-
 def replace_recordings(directory, recordings):
     # A re-run replaces the last fetch outright, so an entry dropped from the corpus leaves no file behind.
     shutil.rmtree(directory, ignore_errors=True)
     directory.mkdir(parents=True)
     for name, recording in recordings.items():
-        text = json.dumps(recording, ensure_ascii=False, indent=1, sort_keys=True) + "\n"
-        (directory / f"{name}.json").write_text(text, encoding="utf-8", newline="\n")
+        write_json(directory / f"{name}.json", recording)
+
+
+def write_json(path, payload):
+    text = json.dumps(payload, ensure_ascii=False, indent=1, sort_keys=True) + "\n"
+    path.write_text(text, encoding="utf-8", newline="\n")
 
 
 class Client:
