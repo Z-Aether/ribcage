@@ -1,1 +1,3 @@
-<a class="wordmark voter-header__wordmark" href="{% url 'phase_page' %}">Ribcage</a>
+{% load static %}<a class="wordmark voter-header__wordmark" href="{% url 'phase_page' %}">Ribcage</a>
+{# Only the voter header's wordmark carries the bat's script; the console's and the admin login's roost still (#99). #}
+<script src="{% static 'components/bat.js' %}" defer></script>

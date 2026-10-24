@@ -64,13 +64,12 @@ A line gives the ballot's size and screen time, then the four filters sit as sma
 Motion is slow and small, and it is never on the text.
 
 - **Mist:** a lilac and ember mist drifts behind every voter and RUN page over 90 s.
-- **Bat:** it roosts by the wordmark and takes off every 9 s, the theme's one jump scare.
-- **Spider:** it bobs below the open **film card**'s poster.
+- **Bat:** it roosts by the wordmark, wings spread and still, and takes off at random, 12 to 30 s apart, as `components/bat.js` picks; on admin pages it only roosts. Each flight is the theme's one jump scare: a jolt off the roost that swells as if at you, then a wide loop out to the right and home over 2.6 s, its wings flapping all the way (#99).
+- **Spider:** it hangs on its silk from the bottom edge of the open **film card**'s poster, poster or title card, and bounces: a drop, a spring back up the silk, a few smaller bounces, then a while hanging still. Only the silk's length moves, so its top never leaves the poster's edge (#99).
 - **Hover:** collapsed cards tilt, and buttons and score pills wobble.
 - **RUN:** the now-playing box breathes like a candle over 4.3 s.
-- **Tuning:** the bat and spider get their final tuning in M4.
 - **Reduced motion:** under `prefers-reduced-motion` everything stands still.
-- **Admin:** nothing moves on admin.
+- **Admin:** nothing moves on admin. The console's wordmark keeps its bat, roosting, and no admin card has a spider.
 
 ## Adding a colour
 
