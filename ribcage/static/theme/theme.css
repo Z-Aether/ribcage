@@ -1790,6 +1790,13 @@ body > footer.site-footer {
 .films-ledger__col--decide {
   width: 9.8rem;
 }
+/* A muted lift on the row under the pointer or the keyboard, its opened card with it, so Approve and Drop are plainly on the right film (the dev, 2026-10-24). */
+[data-skin] .films-ledger tr[data-ledger-row]:is(:hover, :has(:focus-visible)) td,
+[data-skin] .films-ledger tr[data-ledger-row]:is(:hover, :has(:focus-visible)) + .ledger__detail td,
+[data-skin] .films-ledger tr[data-ledger-row]:has(+ .ledger__detail:not([hidden]):hover, + .ledger__detail:not([hidden]) :focus-visible) td,
+[data-skin] .films-ledger .ledger__detail:not([hidden]):is(:hover, :has(:focus-visible)) td {
+  background-color: var(--surface-raised);
+}
 /* Approve and Drop, side by side at the row's end; the act that would change nothing is greyed out (#96). */
 [data-skin] .films-ledger .films-ledger__decide {
   white-space: nowrap;
