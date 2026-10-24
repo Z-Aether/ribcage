@@ -130,7 +130,8 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 **Scope**
 - **DTDD client:** lookup by TMDB id, the guarded retry by title and year, the movie-type filter (#19, #23).
 - **Snapshots and vocabulary:** stored per film. Every phase move refreshes the vocabulary, then films oldest-first, within the rate limit's floor or 20 s, never blocking the move; a failed refresh keeps the old snapshot (#32).
-- **Match correction:** the paste-a-link control, tagged `auto` or `set by <name>`, windowed SUGGEST–VOTE for voters and never for the admin (#32, #34, #78).
+- **The RUN purge:** entering RUN deletes every snapshot and the vocabulary, and leaving it fetches them again. Moved here from M8, since M5 owns the snapshots (#32, #62).
+- **Match correction:** the paste-a-link control, previewed before it is saved, tagged `auto` or `set by <name>`, windowed SUGGEST–VOTE for voters and never for the admin (#32, #34, #62, #78).
 - **My warnings:** the scrolling page in DTDD's grouping, privacy disclosure, *I don't care*, live search, chips, carrying films per topic. The nag bar. Topics travel in request bodies (#16, #20, #23).
 - **On the card:** matched topics with raw counts, the trigger icon and its threshold, *uncovered* and *not fetched* named as gaps (#35).
 - **Films tab:** DTDD status per row and the quiet stale-or-unfetched line (#28).
@@ -138,7 +139,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 
 **Deployable state:** the pool carries trigger data and voters can set their watched list.
 
-**Dev's review:** tick topics and see the matching films ringed. Correct a wrong match. Move phases and watch the refresh fill in. Confirm the admin sees no personal data.
+**Dev's review:** tick topics and see the matching films ringed. Correct a wrong match. Move phases and watch the refresh fill in, and RUN's purge and refetch. Confirm the admin sees no personal data. The DoesTheDogDie check from the host blocks nothing (#62).
 
 ---
 
@@ -181,7 +182,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 
 **Scope**
 - **The reveal:** the matrix, sort by points or by a voter's ballot, *didn't vote*, ☒ and the seen-it badge, the read-only card opening under its row (#29).
-- **PICK → RUN:** publishes the timetable and purges the DTDD cache. **RUN → PICK** takes the evening down at once (#13, #32).
+- **PICK → RUN:** publishes the timetable. **RUN → PICK** takes the evening down at once. The same moves' DTDD purge and refetch are M5's (#13, #32, #62).
 - **The RUN page:** the vertical evening fitted to one phone screen, past boxes dimmed, now playing inside the playing box, next box in a gap or before the start, the 30–60 s poll, the reveal one header link away (#13, #22, #36).
 - **Actualising:** the M7 editor used in RUN.
 - Every voter page's RUN-specific behaviour: *My warnings* gone from the header, the watched-list window closing (#34).
