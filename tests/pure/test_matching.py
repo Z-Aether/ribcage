@@ -11,7 +11,7 @@ DOGS, CATS, JUMPS = 153, 158, 200
 
 
 def test_a_thin_match_is_listed_with_its_counts_and_no_ring():
-    assert matched((TopicCount(DOGS, 1, 0),), VOCABULARY, {DOGS}) == Matched((TopicRow("dogs dying", 1, 0, DOGS),), ring=False)
+    assert matched((TopicCount(DOGS, 1, 0),), VOCABULARY, {DOGS}) == Matched((TopicRow("dogs dying", 1, 0, DOGS),), strong=0)
 
 
 def test_five_yes_and_no_no_rings(settings):
@@ -49,7 +49,13 @@ def test_a_ticked_topic_with_no_yes_vote_or_outside_the_vocabulary_is_not_a_matc
 
 
 def test_the_matched_block_is_a_part_of_its_own_listing_every_row_with_raw_counts():
-    shown = render_to_string("components/dtdd_matched.html", {"matched": Matched((TopicRow("dogs dying", 3, 1), TopicRow("jump scares", 1, 0)), ring=False)})
+    shown = render_to_string("components/dtdd_matched.html", {"matched": Matched((TopicRow("dogs dying", 3, 1), TopicRow("jump scares", 1, 0)), strong=0)})
 
     assert "dogs dying</span> — <span class=\"dtdd__counts\">3 yes / 1 no" in shown
     assert "jump scares</span> — <span class=\"dtdd__counts\">1 yes / 0 no" in shown
+
+
+def test_strong_counts_only_the_rows_the_carrying_rule_passes(settings):
+    found = matched((TopicCount(DOGS, 9, 1), TopicCount(CATS, 1, 35), TopicCount(JUMPS, 5, 5)), VOCABULARY, {DOGS, CATS, JUMPS})
+
+    assert len(found.rows) == 3 and found.strong == 1 and found.ring

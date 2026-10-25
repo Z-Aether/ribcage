@@ -166,8 +166,13 @@ class Matched:
     """The viewer's matched topics on a film, evaluated when the page is drawn, and whether the film rings for them (#20 §3–§4, #111)."""
 
     rows: tuple[TopicRow, ...]
-    # The trigger icon: some matched topic is carried by the one carrying rule (#109).
-    ring: bool
+    # How many matched rows the one carrying rule counts as carried (#109); the ring's count pill shows it (#117).
+    strong: int
+
+    @property
+    def ring(self):
+        # The trigger icon: some matched topic is carried.
+        return self.strong > 0
 
 
 @dataclass(frozen=True)

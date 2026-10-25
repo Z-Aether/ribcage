@@ -17,4 +17,4 @@ def matched(counts, vocabulary, ticked):
     found = sorted((count for count in shown_counts(counts, set(labels)) if count.topic_id in ticked), key=lambda count: -count.yes)
     if not found:
         return None
-    return Matched(rows=tuple(TopicRow(labels[count.topic_id], count.yes, count.no, count.topic_id) for count in found), ring=any(carries(count) for count in found))
+    return Matched(rows=tuple(TopicRow(labels[count.topic_id], count.yes, count.no, count.topic_id) for count in found), strong=sum(carries(count) for count in found))

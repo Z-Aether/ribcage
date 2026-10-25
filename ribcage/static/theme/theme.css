@@ -2142,7 +2142,7 @@ body > aside.nag-bar a {
 .film-card__poster.has-trigger-icon > .poster {
   box-shadow: 0 0 0 4px var(--trigger-icon-ring);
 }
-/* The count pill sits on the poster's bottom corner: a tile's slot is its own box, a card's wrapper also holds the open card's spider, so the pill is placed by the poster's 2:3 height (#117). */
+/* The count pill sits on the poster's bottom-left corner, offset like the veto ribbon's opposite corner: a tile's slot is its own box, a card's wrapper also holds the open card's spider, so the pill is placed by the poster's 2:3 height (#117). */
 .trigger-count {
   position: absolute;
   min-width: 1.5rem;
@@ -2159,21 +2159,21 @@ body > aside.nag-bar a {
   font-variant-numeric: lining-nums;
 }
 .tile__poster > .trigger-count {
-  right: -0.4rem;
-  bottom: -0.4rem;
+  bottom: 0.5rem;
+  left: -0.35rem;
 }
 .film-card__poster.has-trigger-icon {
   position: relative;
   container-type: inline-size;
 }
 .film-card__poster > .trigger-count {
-  top: calc(150cqw - 0.9rem);
-  right: -0.4rem;
+  top: calc(150cqw - 0.5rem - 1.36rem);
+  left: -0.35rem;
 }
 /* Lime is the trigger warnings' colour wherever words refer to them, and no other text takes it (#117). */
 .trigger-words,
 [data-skin] .voter-menu__items a.trigger-words,
-[data-skin] .dtdd a:not(.button) {
+[data-skin] .dtdd__matched .dtdd__group {
   color: var(--trigger-icon-ring);
 }
 .is-seen-it .poster {

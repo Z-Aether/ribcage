@@ -208,7 +208,7 @@ WATCHING = Watch(at="", suggestion_id=None, ticked=frozenset(topic_id(label) for
 def matched_of(section):
     """The viewer's matched block on a section, by the app's own rule: the watched rows, most yes votes first, and a ring when one is carried (#111)."""
     rows = sorted((row for group in section.groups for row in group.rows if row.topic_id in WATCHING.ticked), key=lambda row: -row.yes)
-    return Matched(tuple(rows), ring=any(carries(row) for row in rows)) if rows else None
+    return Matched(tuple(rows), strong=sum(carries(row) for row in rows)) if rows else None
 
 
 def cards():
