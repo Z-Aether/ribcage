@@ -194,6 +194,7 @@ def test_the_gallery_matched_blocks_and_rings_agree_with_the_watched_rows(debug,
 def test_the_gallery_shows_the_ballots_tray_and_bands_and_posts_nowhere(client, debug):
     page = client.get(GALLERY).text
 
-    assert re.findall(r'data-place="(-?\w+)"', page) == ["unsorted", "3", "2", "1", "0", "-1"]
+    assert re.findall(r'data-place="(-?\w+)"', page) == ["unsorted", "3", "2", "1", "0", "-1", "veto"]
     assert "data-places-at" not in page
-    assert "tray" in page and page.count('class="band band--') == 5
+    assert "tray" in page and page.count('class="band band--') == 6
+

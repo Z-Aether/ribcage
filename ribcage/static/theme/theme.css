@@ -2292,6 +2292,57 @@ body > aside.nag-bar a {
 [data-skin] .board .tile.sortable-chosen {
   cursor: grabbing;
 }
+/* The Veto band is set apart at the bottom, edged in the veto's dashed red, and its rows widen to carry the cost, the matched topics and the reason box (#9, #120). */
+[data-skin] .band--veto {
+  display: block;
+  margin-top: 1.75rem;
+}
+[data-skin] .band--veto .band__name {
+  margin: 0 0 0.5rem;
+}
+[data-skin] .band--veto .band__tiles {
+  border-color: var(--veto);
+}
+/* The veto's label is long, so it wraps inside the band rather than run past it at 390 px (#120). */
+[data-skin] .band--veto .score {
+  white-space: normal;
+}
+[data-skin] .veto-row {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 44rem;
+  padding: 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background-color: var(--surface);
+  cursor: grab;
+}
+[data-skin] .veto-row__detail {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  min-width: 0;
+  cursor: auto;
+}
+[data-skin] .veto-row__cost {
+  margin: 0;
+  color: var(--veto-ink);
+  font-weight: 600;
+}
+[data-skin] .veto-row__matched .dtdd__credit {
+  margin: 0.4rem 0 0;
+}
+[data-skin] .veto-row__reason {
+  margin: 0;
+}
+[data-skin] .veto-row__reason textarea {
+  margin: 0;
+}
+[data-skin] .veto-row.is-dragged {
+  opacity: 0.35;
+}
 @media (max-width: 600px) {
   [data-skin] .tray {
     padding: 0.5rem 0.6rem 0.6rem;
@@ -2305,6 +2356,9 @@ body > aside.nag-bar a {
   }
   [data-skin] .band__tiles {
     padding: 0.5rem;
+  }
+  [data-skin] .veto-row {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

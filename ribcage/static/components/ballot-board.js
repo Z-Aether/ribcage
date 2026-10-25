@@ -15,6 +15,9 @@
         delay: 150,
         delayOnTouchOnly: true,
         ghostClass: "is-dragged",
+        // A Veto row's reason box and its topics are for typing in and reading, not for dragging by (#120).
+        filter: ".veto-row__detail",
+        preventOnFilter: false,
         onEnd: function (event) {
           // The gallery's board has no route to post to, and a tile placed where it began changes nothing.
           if (!url || event.from === event.to) return;

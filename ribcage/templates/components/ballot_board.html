@@ -1,4 +1,4 @@
-{# The Unsorted tray and the five bands over a Board; a tile is dragged between them, one placement one post (#9, #38, #119). #}{% load static %}
+{# The Unsorted tray and the five bands and the Veto band over a Board; a tile is dragged between them, one placement one post (#9, #38, #119, #120). #}{% load static %}
 <div class="board" data-board{% if board.places_at %} data-places-at="{{ board.places_at }}"{% endif %}>
   <section class="tray" aria-labelledby="tray-name">
     <h2 class="tray__name" id="tray-name">Unsorted</h2>
@@ -13,5 +13,9 @@
       </section>
     {% endfor %}
   </div>
+  <section class="band band--veto" aria-labelledby="band-veto">
+    <h2 class="band__name" id="band-veto"><span class="score score--veto">I won't be in the room — a different kind of drop</span></h2>
+    <ul class="tiles band__tiles" data-place="veto" aria-labelledby="band-veto">{% for tile in board.vetoes %}{% include "components/ballot_veto_row.html" with inert=board.inert %}{% endfor %}</ul>
+  </section>
 </div>
 <script src="{% static 'components/ballot-board.js' %}" defer></script>

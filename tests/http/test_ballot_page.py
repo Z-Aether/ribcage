@@ -73,7 +73,7 @@ def test_the_header_says_the_standing_line_and_the_bands_run_from_top_pick_to_ra
     page = ballot["client"].get("/").text
 
     assert "Your scores aren't shown to the group while VOTE is open. Everyone's scores are shown, by name, once it closes." in page
-    assert re.findall(r'data-place="(-?\w+)"', page) == ["unsorted", "3", "2", "1", "0", "-1"]
+    assert re.findall(r'data-place="(-?\w+)"', page) == ["unsorted", "3", "2", "1", "0", "-1", "veto"]
 
 
 @pytest.mark.parametrize("score", [3, 2, 1, 0, -1])
@@ -190,7 +190,7 @@ def test_a_placement_on_a_film_dropped_since_the_page_loaded_changes_nothing_and
         {"suggestion": "999999", "to": "3"},
         {"to": "3"},
         {"suggestion": "{one}", "to": "4"},
-        {"suggestion": "{one}", "to": "veto"},
+        {"suggestion": "{one}", "to": "Veto"},
         {"suggestion": "{one}", "to": "2.5"},
         {"suggestion": "{one}"},
     ],
@@ -234,7 +234,7 @@ def test_an_empty_ballot_says_so_in_one_line_and_the_bands_still_show(voters):
     page = signed_in(voters["ada"]).get("/").text
 
     assert "Nothing is on the ballot yet." in page and "0 of 0 scored" in page
-    assert page.count('class="band band--') == 5
+    assert page.count('class="band band--') == 6
 
 
 def test_the_tray_lists_matched_films_first_and_each_group_in_the_voters_fixed_order(voters, vocabulary):  # noqa: F811

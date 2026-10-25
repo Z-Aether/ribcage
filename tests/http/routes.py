@@ -14,7 +14,7 @@ ADMIN = "admin"
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
 # Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110, #119).
-ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place"}
+ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_veto_reason"}
 
 class Fragment(NamedTuple):
     """One htmx answer that swaps a card, its section or a part of one in, which test_dtdd_credit.py sweeps for DoesTheDogDie's data (#112).
@@ -35,6 +35,10 @@ class Fragment(NamedTuple):
 FRAGMENTS = [
     Fragment("note", VOTER, "POST", {"suggestion": "{film}", "text": "A note."}),
     Fragment("withdraw", VOTER, "POST", {"suggestion": "{film}"}),
+    # Before the watch toggles below, which untick the list the row's matched topics come from.
+    # A placement answers the film's tile, a Veto row among them; the reason follows it, since it needs a veto to write on (#120).
+    Fragment("ballot_place", VOTER, "POST", {"suggestion": "{film}", "to": "veto"}),
+    Fragment("ballot_veto_reason", VOTER, "POST", {"suggestion": "{film}", "text": "A reason."}),
     Fragment("dtdd_topics", VOTER, "GET", {"suggestion": "{film}"}, part=True),
     Fragment("dtdd_match", VOTER, "GET", {"suggestion": "{film}", "cancel": ""}),
     Fragment("dtdd_match", VOTER, "GET", {"suggestion": "{film}", "link": "https://www.doesthedogdie.com/media/9001"}),
@@ -58,7 +62,6 @@ FRAGMENTS = [
 # Voter and admin routes that are no swept page and whose answers hold none of DoesTheDogDie's data, whatever is stored (#112).
 NO_DTDD_DATA = {
     "runtime", "find", "suggest",  # the voter's runtime box, the picker and the suggest act
-    "ballot_place",  # answers the ballot's two counts, or reloads the tab (#119)
     "welcome",  # redirects a plain GET
     "gallery",  # dev-only, answering 404 outside DEBUG
     "console", "console_phase_move", "console_films_approval",  # redirects, whatever they act on
