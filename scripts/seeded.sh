@@ -35,8 +35,14 @@ case ${1:-} in
     stop
     mkdir -p tmp
     PYTHONUNBUFFERED=1 nohup "$PYTHON" manage.py seededserver "$@" > "$LOG" 2>&1 < /dev/null &
+    server=$!
     disown
-    for _ in $(seq 1 120); do answers && break; sleep 0.5; done
+    for _ in $(seq 1 120); do
+      answers && break
+      # A refused option or a failed seed exits at once, so stop waiting and show why.
+      kill -0 "$server" 2>/dev/null || { cat "$LOG" >&2; die "seededserver exited before serving; its log is above"; }
+      sleep 0.5
+    done
     answers || { tail -20 "$LOG" >&2; die "not answering after 60 s; the log is above"; }
     grep -v '"GET ' "$LOG"
     echo "Serving http://127.0.0.1:8000/; the server's log is $LOG."
