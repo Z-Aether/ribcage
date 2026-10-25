@@ -11,6 +11,7 @@ from ribcage.identity.models import Voter
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import FRESH_PHASE, PHASES, Phase
 from ribcage.films.corpus import FETCH_COMMAND
+from ribcage.seeding.ballots import seed_the_ballots
 from ribcage.seeding.watched import seed_the_watched_lists
 from ribcage.seeding.pool import SEEDED_POOL, seed_the_pool, seed_the_trigger_data, trigger_states
 from ribcage.triggers import stored
@@ -49,6 +50,9 @@ class Command(BaseCommand):
             seed_the_pool(phase)
             recordings = seed_the_trigger_data()
             seed_the_watched_lists(recordings)
+            # From VOTE on, as PICK and RUN keep the scores for M8's reveal (#119).
+            if phase in (Phase.VOTE, Phase.PICK, Phase.RUN):
+                seed_the_ballots()
             if phase is Phase.RUN:
                 # As entering RUN leaves it: the matches and setters, no snapshot, no vocabulary (#106).
                 stored.purge()

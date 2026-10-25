@@ -7,6 +7,7 @@ from django.db.models import F
 from django.test import override_settings
 from django.utils import timezone
 
+from ribcage.ballot.models import BallotRecord
 from ribcage.films.corpus import read_entries
 from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
@@ -73,3 +74,23 @@ def test_each_phase_is_seeded_with_the_corpus_hand_entered_film(db, seeded):
 @pytest.mark.parametrize("seeded", PHASES[1:], indirect=True)
 def test_from_approve_on_the_pool_is_a_mix_of_undecided_approved_and_dropped(db, seeded):
     assert set(Suggestion.objects.values_list("approval", flat=True)) == set(Approval)
+
+
+@pytest.mark.parametrize("seeded", PHASES[: PHASES.index(Phase.VOTE)], indirect=True)
+def test_before_vote_nobody_has_a_ballot(db, seeded):
+    assert not BallotRecord.objects.exists()
+
+
+@pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
+def test_from_vote_on_ada_has_scored_most_of_the_ballot_zoe_part_and_bartholomew_none(db, seeded):
+    ballot = Suggestion.objects.filter(approval=Approval.APPROVED).count()
+
+    def scored(name):
+        return BallotRecord.objects.filter(voter__display_name=name, suggestion__approval=Approval.APPROVED).count()
+
+    assert ballot > 8
+    assert ballot / 2 < scored("Ada") < ballot
+    assert 0 < scored("Zoë") < scored("Ada")
+    assert scored("Bartholomew Winthrop") == 0
+    assert not BallotRecord.objects.exclude(suggestion__approval=Approval.APPROVED).exists()
+    assert set(BallotRecord.objects.values_list("score", flat=True)) == {-1, 0, 1, 2, 3}
