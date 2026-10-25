@@ -8,9 +8,7 @@ the page already credits is a part: its landing is held to sit in such a region 
 
 import re
 import urllib.parse
-from datetime import UTC, datetime
 from html.parser import HTMLParser
-from typing import NamedTuple
 
 import pytest
 from django.db import transaction
@@ -19,20 +17,18 @@ from django.urls import reverse
 
 from ribcage.console import moves
 from ribcage.phase.order import Phase
-from ribcage.suggestions.models import Approval, Suggestion
+from ribcage.suggestions.models import Approval
 from ribcage.triggers import client as dtdd_client
 from ribcage.triggers import correction, stored, watched
-from ribcage.triggers.dtdd import Record, Snapshot, TopicCount
-from tests.dtdd import VOCABULARY, Dtdd, detail, item
+from tests.dtdd import Dtdd, detail, item
 from tests.http.routes import ADMIN, FRAGMENTS, Fragment, NO_DTDD_DATA, VOTER, address, kind, pages_of, route_templates
 from tests.http.signing_in import sign_in_as_the_admin
+from tests.http.sweeping import CAT, DESCRIPTION, DOG, GROUP, KEYWORDS, NO, RECORD, TOPIC, YES, Answer, add, sentinel_vocabulary, sweep
 from tests.http.test_phase import walk_to
 
 CREDIT_ADDRESS = "https://www.doesthedogdie.com/"
 CREDIT_WORDS = "Powered by DoesTheDogDie.com"
 # The counts are bare numbers, so they are caught in any format a surface writes them in: "7771 yes", "7771/7772", "7,771" or a title (#112).
-RECORD, TOPIC, GROUP, DESCRIPTION, KEYWORDS = "RECORDSENTINEL", "TOPICSENTINEL", "GROUPSENTINEL", "DESCRIPTIONSENTINEL", "KEYWORDSSENTINEL"
-YES, NO = 7771, 7772
 SENTINELS = (RECORD, TOPIC, GROUP, DESCRIPTION, KEYWORDS, str(YES), str(NO), f"{YES:,}", f"{NO:,}")
 CASEFOLDED = tuple(sentinel.casefold() for sentinel in SENTINELS)
 
@@ -45,9 +41,6 @@ def carries(text):
 
 # Hidden inputs that carry opaque tokens, whose random characters could spell a count.
 OPAQUE = {"csrfmiddlewaretoken", "snapshot"}
-DOG, CAT, JUMP = 153, 158, 200
-HTMX = {"HX-Request": "true"}
-AT = datetime(2026, 10, 24, tzinfo=UTC)
 LEDGER_STATUS = re.compile(r"\d+ topics?")
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 
@@ -150,22 +143,6 @@ def test_the_ledgers_count_of_topics_is_data_that_needs_its_region():
 
 
 # The built surfaces.
-def sentinel_vocabulary():
-    topics = [
-        {**topic, "minimalName": f"{TOPIC}{topic['id']}", "description": f"{DESCRIPTION}{topic['id']}", "keywords": f"{KEYWORDS}{topic['id']}"} for topic in VOCABULARY["/topics"]
-    ]
-    groups = [{**group, "name": f"{GROUP}{group['id']}"} for group in VOCABULARY["/topicsupercategories"]]
-    return {**VOCABULARY, "/topics": topics, "/topicsupercategories": groups}
-
-
-def add(voter, title, approval, counted=True):
-    suggestion = Suggestion.objects.create(title=title, suggester=voter, suggester_name=voter.display_name, approval=approval, runtime=100)
-    if counted:
-        counts = tuple(TopicCount(topic, YES, NO) for topic in (DOG, CAT, JUMP))
-        stored.store_lookup(suggestion, Snapshot(Record(suggestion.pk, f"{RECORD}{suggestion.pk}", 2000, "Movie"), counts), AT)
-    return suggestion
-
-
 @pytest.fixture
 def films(voters, monkeypatch):
     """Four films, one in each approval and one added by hand, holding sentinels for every record and topic, and the vocabulary; Hanna ticks the dog."""
@@ -186,39 +163,6 @@ def viewers(voters):
     admin = Client()
     sign_in_as_the_admin(admin)
     return {VOTER: voter, ADMIN: admin}
-
-
-class Answer(NamedTuple):
-    where: str
-    # The fragment that gave it, or None for a page.
-    fragment: object
-    text: str
-
-    @property
-    def part(self):
-        return self.fragment is not None and self.fragment.part
-
-
-def pages():
-    return [(path, VOTER) for path, _ in pages_of(VOTER)] + [(path, ADMIN) for path, _ in pages_of(ADMIN)]
-
-
-def sweep(viewers, films):
-    """Every page, and every card's fragments, each as an Answer."""
-    for path, viewer in pages():
-        yield Answer(f"{viewer} {path}", None, viewers[viewer].get(path).text)
-    saved = correction.signed(Snapshot(Record(films[0].pk, f"{RECORD}used", 2001, "Movie"), (TopicCount(DOG, YES, NO),)), films[0].pk)
-    for fragment in FRAGMENTS:
-        for film in films:
-            snapshot = saved if film is films[0] else correction.signed(Snapshot(Record(film.pk, f"{RECORD}used", 2001, "Movie"), ()), film.pk)
-            parameters = {key: value.format(film=film.pk, snapshot=snapshot, topic=DOG) for key, value in fragment.parameters.items()}
-            url = reverse(fragment.route)
-            client = viewers[fragment.viewer]
-            if fragment.method == "GET":
-                response = client.get(url, parameters, headers=HTMX)
-            else:
-                response = client.post(url, parameters, headers=HTMX)
-            yield Answer(f"{fragment.route} {fragment.method} {fragment.parameters} (part={fragment.part})", fragment, response.text)
 
 
 def held(sweeping):
