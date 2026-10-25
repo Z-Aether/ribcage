@@ -35,7 +35,7 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
 
    Done when every criterion has a test that failed against broken code and `git status` is clean again. A criterion with no test, or a test that passed against broken code, is a finding.
 4. **Check the rules** against the diff:
-   - `CLAUDE.md` stays true for everything the change touched, in its Layout lines above all.
+   - `CLAUDE.md` stays true for everything the change touched, and its Layout grows only as that section's own rule allows.
    - Commits are one short line ending in the ticket number.
    - Comments are one short line, citing a ticket where there is one.
    - Identifiers, CSS classes and copy use `GLOSSARY.md`'s terms. Grep it for each new name.

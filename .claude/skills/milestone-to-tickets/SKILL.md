@@ -18,7 +18,7 @@ Break milestone M<n> into implementation tickets, each **self-contained**: an im
    - the `docs/design.md` sections the milestone touches;
    - every ticket they cite, with its comments, where the last dated amendment wins;
    - the notes left for this milestone on its parent;
-   - the code the milestone extends, through the names in `CLAUDE.md`'s Layout.
+   - the code the milestone extends, starting from the apps `CLAUDE.md`'s Layout names.
 4. **Draft and quiz** as to-tickets' steps 3 and 4 say.
 5. **Write each ticket** from the template below. Done when:
    - every decision you gathered that bears on a ticket is in its "What to build", cited;
@@ -56,7 +56,7 @@ amendment (#26, 2026-10-12), a live doc (design.md §8), a sibling's build note 
 ## Context
 
 - **Read:** the `docs/design.md` sections by number and heading; `docs/theme.md` when it builds or styles a page.
-- **Builds on:** the modules, components and helpers it extends, by the names `CLAUDE.md`'s Layout gives them.
+- **Builds on:** the modules, components and helpers it extends, by their module paths and names in the code.
 - **Leaves room for:** what a later sibling needs from this one's markup or interface, naming the sibling.
 
 ## Acceptance criteria
@@ -64,4 +64,4 @@ amendment (#26, 2026-10-12), a live doc (design.md §8), a sibling's build note 
 - [ ] An observable outcome; a page criterion names the state to browse, such as "a refused runtime, at both widths".
 ```
 
-**Builds on** names code, against to-tickets' advice on file paths. Tickets here are built within days of being written, and `CLAUDE.md` keeps those names true.
+**Builds on** names code, against to-tickets' advice on file paths. Tickets here are built within days of being written, so those names still hold when they are.
