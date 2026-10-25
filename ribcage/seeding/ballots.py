@@ -25,6 +25,9 @@ SEEDED_VETOES = {
     "Sam": {WOLF_HOUSE: "Too close to a nightmare I had."},
 }
 
+# Seen it, by film: Ada's Midsommar is seen and scored, Zoë's Terrifier seen and vetoed, Ada's Cube seen and left in her tray, Zoë's The Shining seen with no other say (#121).
+SEEDED_SEEN = {"Ada": (MIDSOMMAR, CUBE), "Zoë": (TERRIFIER, THE_SHINING)}
+
 
 def seed_the_ballots():
     voters = {voter.display_name: voter for voter in Voter.objects.all()}
@@ -35,3 +38,8 @@ def seed_the_ballots():
     BallotRecord.objects.bulk_create(
         BallotRecord(voter=voters[name], suggestion=suggestions[tmdb_id], vetoed=True, veto_reason=reason) for name, vetoes in SEEDED_VETOES.items() for tmdb_id, reason in vetoes.items()
     )
+    for name, films in SEEDED_SEEN.items():
+        for tmdb_id in films:
+            record, _ = BallotRecord.objects.get_or_create(voter=voters[name], suggestion=suggestions[tmdb_id])
+            record.seen_it = True
+            record.save(update_fields=["seen_it"])

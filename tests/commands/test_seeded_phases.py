@@ -93,7 +93,7 @@ def test_from_vote_on_ada_has_scored_most_of_the_ballot_zoe_part_and_bartholomew
     assert 0 < scored("Zoë") < scored("Ada")
     assert scored("Bartholomew Winthrop") == 0
     assert not BallotRecord.objects.exclude(suggestion__approval=Approval.APPROVED).exists()
-    assert set(BallotRecord.objects.filter(vetoed=False).values_list("score", flat=True)) == {-1, 0, 1, 2, 3}
+    assert set(BallotRecord.objects.filter(vetoed=False, score__isnull=False).values_list("score", flat=True)) == {-1, 0, 1, 2, 3}
 
 
 @pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
@@ -104,3 +104,11 @@ def test_from_vote_on_some_vetoes_have_reasons_one_has_none_and_one_film_is_veto
     assert vetoes.filter(veto_reason__isnull=True).count() == 1
     assert vetoes.filter(score__isnull=False).count() == 0
     assert max(vetoes.filter(suggestion=suggestion).count() for suggestion in Suggestion.objects.filter(ballot_records__vetoed=True)) == 2
+
+
+@pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
+def test_from_vote_on_some_films_are_seen_one_seen_and_scored_and_one_seen_and_vetoed(db, seeded):
+    seen = BallotRecord.objects.filter(seen_it=True)
+
+    assert seen.count() >= 3
+    assert seen.filter(score__isnull=False).exists() and seen.filter(vetoed=True).exists()
