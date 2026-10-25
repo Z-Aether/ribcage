@@ -5,7 +5,8 @@ from django.db import transaction
 from ribcage.phase import history
 from ribcage.phase.order import Phase
 from ribcage.suggestions.models import Suggestion
-from ribcage.triggers import section, status
+from ribcage.suggestions.models import Approval
+from ribcage.triggers import carrying, section, status
 from ribcage.triggers.models import Topic, TriggerData
 from ribcage.triggers.vocabulary import UNCATEGORIZED, SuperCategory, Vocabulary
 from ribcage.triggers.vocabulary import Topic as VocabularyTopic
@@ -106,3 +107,17 @@ def sections_of(suggestions):
 def section_of(suggestion):
     (only,) = sections_of([suggestion]).values()
     return only
+
+
+def shows_pool(phase):
+    """Whether a phase page lists the whole pool, as against the ballot: the one boundary the carriers and the empty line both read (#109)."""
+    return phase in (Phase.SUGGEST, Phase.APPROVE)
+
+
+def carriers_in(phase, topic_ids):
+    """The titles carrying each topic among the films a voter finds on their phase page: the pool through APPROVE, the ballot from VOTE; two queries however large the pool (#109)."""
+    suggestions = Suggestion.objects.all() if shows_pool(phase) else Suggestion.objects.filter(approval=Approval.APPROVED)
+    suggestions = list(suggestions)
+    statuses = statuses_of(suggestions)
+    films = ((each.title, statuses[each.pk].fetched.snapshot.counts) for each in suggestions if statuses[each.pk].fetched is not None)
+    return carrying.carriers_by_topic(films, topic_ids)

@@ -958,6 +958,16 @@ body > header.voter-header:has(.voter-header__warnings) {
 [data-skin] .warnings__topic form {
   margin: 0;
 }
+[data-skin] .warnings__films {
+  margin: 0;
+  padding: 0 0.5rem 0.5rem 2.35rem;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+[data-skin] .warnings__films.is-none {
+  color: var(--ink-muted);
+}
 [data-skin] .warnings .warnings__topic button.warnings__topic-button {
   display: flex;
   align-items: center;

@@ -10,6 +10,8 @@ class Row:
     description: str
     ticked: bool
     keywords: str = ""
+    # The titles of the films carrying the topic, in the order shown; never in `search_text` (#109).
+    films: tuple[str, ...] = ()
 
     @property
     def search_text(self):
@@ -29,9 +31,15 @@ class Section:
         return sum(row.ticked for row in self.rows)
 
 
+NOBODY_IN_POOL = "no films in the pool"
+NOBODY_ON_BALLOT = "no films on the ballot"
+
+
 @dataclass(frozen=True)
 class Page:
     sections: tuple[Section, ...]
+    # What a topic no film carries says, by the films the phase page shows (#109).
+    nobody: str = NOBODY_IN_POOL
 
     @property
     def chips(self):
@@ -50,15 +58,17 @@ def anchor_of(group):
     return f"group-{'uncategorized' if group.super_category_id is None else group.super_category_id}"
 
 
-def page(vocabulary, ticked_ids):
+def page(vocabulary, ticked_ids, carriers=None, nobody=NOBODY_IN_POOL):
     """Every super-category in DoesTheDogDie's order as a section, its topics flat and alphabetical by label (#23)."""
+    carriers = carriers or {}
     return Page(
         tuple(
             Section(
                 anchor_of(group),
                 group.name,
-                tuple(sorted((Row(topic.topic_id, topic.label, topic.description, topic.topic_id in ticked_ids, topic.keywords) for topic in topics), key=sort_key)),
+                tuple(sorted((Row(topic.topic_id, topic.label, topic.description, topic.topic_id in ticked_ids, topic.keywords, carriers.get(topic.topic_id, ())) for topic in topics), key=sort_key)),
             )
             for group, topics in vocabulary.groups
-        )
+        ),
+        nobody,
     )

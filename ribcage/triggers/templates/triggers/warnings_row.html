@@ -8,4 +8,5 @@
       <span class="warnings__box" aria-hidden="true"></span>{{ row.label }}
     </button>
   </form>
+  <p class="warnings__films{% if not row.films %} is-none{% endif %}">{% if row.films %}{{ row.films|join:" · " }}{% else %}{{ page.nobody }}{% endif %}</p>
 </li>
