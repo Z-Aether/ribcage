@@ -79,6 +79,11 @@
       <div class="film-cards" data-film-cards>{% include "components/film_card.html" with card=card expanded=True %}</div>
     {% endfor %}
 
+    {% for label, card in watching %}
+      <p class="gallery-label">The watch toggles: {{ label }}</p>
+      <div class="film-cards" data-film-cards>{% include "components/film_card.html" with card=card expanded=True %}</div>
+    {% endfor %}
+
     {% for label, card in corrections %}
       <p class="gallery-label">Correcting a match: {{ label }}</p>
       <div class="film-cards" data-film-cards>{% include "components/film_card.html" with card=card expanded=True %}</div>

@@ -14,7 +14,7 @@ ADMIN = "admin"
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
 # Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110).
-ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care"}
+ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch"}
 
 class Fragment(NamedTuple):
     """One htmx answer that swaps a card, its section or a part of one in, which test_dtdd_credit.py sweeps for DoesTheDogDie's data (#112).
@@ -46,6 +46,9 @@ FRAGMENTS = [
     # A refusal renders the whole Films tab, ledger and cards among it (#97).
     Fragment("console_films_runtime", ADMIN, "POST", {"suggestion": "{film}", "runtime": "abc"}),
     Fragment("warnings_tick", VOTER, "POST", {"topic": "{topic}", "ticked": "1"}, part=True),
+    # The card's toggle answers the whole section, open, with its own credit (#114).
+    Fragment("dtdd_watch", VOTER, "POST", {"suggestion": "{film}", "topic": "{topic}", "ticked": "1"}),
+    Fragment("dtdd_watch", VOTER, "POST", {"suggestion": "{film}", "topic": "{topic}", "ticked": "0"}),
     Fragment("warnings_dont_care", VOTER, "GET", {}, part=True),
     # Last, since each saves a match.
     Fragment("dtdd_match", VOTER, "POST", {"suggestion": "{film}", "snapshot": "{snapshot}"}),

@@ -2,6 +2,6 @@
 {% for group in dtdd.groups %}
   <h4 class="dtdd__group">{{ group.name }}</h4>
   <ul class="dtdd__list">
-    {% for row in group.rows %}<li class="dtdd__topic"><span class="dtdd__label">{{ row.label }}</span> — <span class="dtdd__counts">{{ row.yes }} yes / {{ row.no }} no</span></li>{% endfor %}
+    {% for row in group.rows %}<li class="dtdd__topic{% if row.topic_id in dtdd.watch.ticked %} is-watched{% endif %}"><span class="dtdd__label">{{ row.label }}</span> — <span class="dtdd__counts">{{ row.yes }} yes / {{ row.no }} no</span>{% if dtdd.watch %}{% include "components/dtdd_watch.html" %}{% endif %}</li>{% endfor %}
   </ul>
 {% endfor %}

@@ -24,6 +24,7 @@ from ribcage.films.card import (
     RuntimePencil,
     TopicGroup,
     TopicRow,
+    Watch,
     Withdraw,
 )
 from ribcage.films.picker import Picker, PickerTile
@@ -31,6 +32,7 @@ from ribcage.suggestions.notes import PITCH_REQUIRED
 from ribcage.suggestions.runtime import NOT_WHOLE_MINUTES
 from ribcage.suggestions.withdrawal import what_goes
 from ribcage.triggers import correction
+from ribcage.triggers.carrying import carries
 from ribcage.triggers.section import GAPS
 from ribcage.triggers.status import State
 
@@ -117,8 +119,16 @@ def key_of(film):
     return film.tmdb_id if film.tmdb_id is not None else film.title
 
 
+TOPIC_IDS = {}
+
+
+def topic_id(label):
+    """A sample topic's stand-in id, the same wherever its label shows, so a row and the matched block agree on what is watched (#114)."""
+    return TOPIC_IDS.setdefault(label, len(TOPIC_IDS) + 1)
+
+
 def topics(*groups):
-    return tuple(TopicGroup(name, tuple(TopicRow(label, yes, no) for label, yes, no in rows)) for name, rows in groups)
+    return tuple(TopicGroup(name, tuple(TopicRow(label, yes, no, topic_id(label)) for label, yes, no in rows)) for name, rows in groups)
 
 
 def matched_section(item_id, name, year, groups, set_by=""):
@@ -153,7 +163,7 @@ SECTIONS = {
         set_by="Dani",
     ),
     CABINET_OF_CURIOSITIES: gap(State.NO_MATCH),
-    VHS_99: matched_section(918990, "V/H/S/99", 2022, (("Bodily Harm", (("blood or gore", 19, 0), ("vomiting", 4, 2))),)),
+    VHS_99: matched_section(918990, "V/H/S/99", 2022, (("Bodily Harm", (("blood or gore", 3, 1), ("vomiting", 4, 2))),)),
     # Matched to an empty record, so uncovered with its match shown, as the seed's Exit 8 is (#57).
     EXIT_8: gap(State.UNCOVERED, DtddMatch(1362774, "８番出口", 2025)),
 }
@@ -170,6 +180,12 @@ def dtdd_states():
     )
 
 
+def watching():
+    """Midsommar's topic list opened, as a watch toggle's answer draws it: watched rows read so, the rest offer to watch (#114)."""
+    midsommar = next(sample for sample in cards() if key_of(sample.film) == MIDSOMMAR)
+    return (("the full topic list open, blood or gore and jump scares watched", replace(midsommar, dtdd=replace(midsommar.dtdd, opened=True))),)
+
+
 def corrections():
     """A correction's preview, and a refused link kept in the box, on Exit 8's wrong match (#105)."""
     exit_8 = next(sample for sample in cards() if key_of(sample.film) == EXIT_8)
@@ -183,20 +199,22 @@ def corrections():
     )
 
 
-# A viewer's matched topics on some films: Midsommar and The Wolf House ring, V/H/S/99's one thin match is listed without a ring (#111).
-MATCHED = {
-    MIDSOMMAR: Matched((TopicRow("blood or gore", 38, 1), TopicRow("jump scares", 2, 25)), ring=True),
-    WOLF_HOUSE: Matched((TopicRow("kids dying", 8, 1),), ring=True),
-    VHS_99: Matched((TopicRow("vomiting", 4, 2),), ring=False),
-}
-
 # Inert: with no route the control's box and buttons fire no request (#105).
 INERT = MatchCorrection(at="")
+# The sample viewer's list, which the matched blocks above are built from, and whose toggles fire no request either (#114).
+WATCHING = Watch(at="", suggestion_id=None, ticked=frozenset(topic_id(label) for label in ("blood or gore", "jump scares", "kids dying", "vomiting")))
+
+
+def matched_of(section):
+    """The viewer's matched block on a section, by the app's own rule: the watched rows, most yes votes first, and a ring when one is carried (#111)."""
+    rows = sorted((row for group in section.groups for row in group.rows if row.topic_id in WATCHING.ticked), key=lambda row: -row.yes)
+    return Matched(tuple(rows), ring=any(carries(row) for row in rows)) if rows else None
 
 
 def cards():
+    # Midsommar and The Wolf House ring, V/H/S/99's thin matches are listed without a ring (#111).
     return tuple(
-        replace(sample, dtdd=replace(SECTIONS[key_of(sample.film)], correction=INERT), matched=MATCHED.get(key_of(sample.film)))
+        replace(sample, dtdd=replace(SECTIONS[key_of(sample.film)], correction=INERT, watch=WATCHING), matched=matched_of(SECTIONS[key_of(sample.film)]))
         for sample in plain_cards()
     )
 
@@ -351,6 +369,7 @@ def gallery():
         "cards": cards(),
         "phase_bars": phase_bars(),
         "dtdd_states": dtdd_states(),
+        "watching": watching(),
         "corrections": corrections(),
         "score_scale": SCORE_SCALE,
         "tiles": tiles(),

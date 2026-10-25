@@ -45,16 +45,23 @@ def care_context(voter, page):
     return {"on": watched.does_not_care(voter) if page is None else page.greyed, "armed": False, "count": len(watched.ticked_ids(voter))}
 
 
+def posted_tick(request):
+    """The topic id and whether to tick it, as a tick's body carries them, or None when malformed; the card's toggle posts the same (#114)."""
+    topic_id, ticked = request.POST.get("topic", ""), request.POST.get("ticked")
+    if not (topic_id.isascii() and topic_id.isdecimal() and watched.is_a_topic_id(int(topic_id))) or ticked not in {"1", "0"}:
+        return None
+    return int(topic_id), ticked == "1"
+
+
 @phase_window(*WRITING)
 @require_POST
 def tick(request):
     """Tick or untick one topic: its id in the body, never in an address, so no proxy log holds it (#16, #107)."""
-    topic_id, ticked = request.POST.get("topic", ""), request.POST.get("ticked")
-    if not (topic_id.isascii() and topic_id.isdecimal() and watched.is_a_topic_id(int(topic_id))) or ticked not in {"1", "0"}:
+    if (posted := posted_tick(request)) is None:
         return HttpResponseBadRequest()
-    topic_id = int(topic_id)
+    topic_id, ticked = posted
     # A tick while *I don't care* is on, from a tab left open, changes nothing and shows the greyed list (#110).
-    if not watched.set_ticked(request.user, topic_id, ticked == "1"):
+    if not watched.set_ticked(request.user, topic_id, ticked):
         return reload_the_tab(request, reverse("warnings"))
     page = built_page(request.user)
     section = page.section_of(topic_id)

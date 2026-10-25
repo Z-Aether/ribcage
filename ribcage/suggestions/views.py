@@ -17,7 +17,9 @@ from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions import notes, picker, pitch, pool, runtime, withdrawal
 from ribcage.suggestions.models import Suggestion
-from ribcage.triggers import correction, stored
+from ribcage.films.card import Watch
+from ribcage.triggers import correction, stored, watched
+from ribcage.triggers.views import WRITING, posted_tick
 
 def named_suggestion(pk):
     """The suggestion a post names by id, or None for one withdrawn since, or no id at all (#88, #89)."""
@@ -61,7 +63,31 @@ def dtdd_topics(request):
     # A card withdrawn since reloads the tab onto the pool as it is now (#89); RUN shows no trigger data anywhere (#106).
     if (suggestion := named_suggestion(request.GET.get("suggestion"))) is None or current() == Phase.RUN:
         return reload_the_tab(request, reverse("phase_page"))
-    return render(request, "components/dtdd_topics.html", {"dtdd": stored.section_of(suggestion)})
+    return render(request, "components/dtdd_topics.html", {"dtdd": replace(stored.section_of(suggestion), watch=offered_watch(request.user, suggestion))})
+
+
+def offered_watch(voter, suggestion):
+    """The watch toggles for a voter's card, or None while *I don't care* is on; the admin's card never asks, as it has no list (#35 §2, #110, #114)."""
+    if watched.does_not_care(voter):
+        return None
+    return Watch(at=reverse("dtdd_watch"), suggestion_id=suggestion.pk, ticked=frozenset(watched.ticked_ids(voter)))
+
+
+@phase_window(*WRITING)
+@require_POST
+def watch_from_card(request):
+    """Watch or unwatch one topic from a card's list: the page's own write, answered with the card's section, open, and the ring (#107, #114)."""
+    if (posted := posted_tick(request)) is None:
+        return HttpResponseBadRequest()
+    # A card withdrawn since, or *I don't care* turned on elsewhere, changes nothing and reloads the tab onto the phase page as it is now (#89, #110).
+    if (suggestion := named_suggestion(request.POST.get("suggestion"))) is None or not watched.set_ticked(request.user, *posted):
+        return reload_the_tab(request, reverse("phase_page"))
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    card = pool.the_card(suggestion, request.user, current())
+    opened = replace(card.dtdd, topics_at="", opened=True, watch=offered_watch(request.user, suggestion))
+    # The match line's control keeps whatever it holds; the poster's ring follows the list out of band (#111).
+    return dtdd_section(request, replace(card, dtdd=opened), ring_too=True, answers_the_control=False)
 
 
 # Any voter, on any film; VOTE's card is M6's, and the admin's correction is never gated (#32 §5, #78, #105).
@@ -104,8 +130,8 @@ def use_match(request):
     return dtdd_section(request, pool.the_card(suggestion, request.user, current()), ring_too=True)
 
 
-def dtdd_section(request, card, ring_too=False):
-    context = {"card": card, "dtdd": card.dtdd, "answers_the_control": True, "oob": True}
+def dtdd_section(request, card, ring_too=False, answers_the_control=True):
+    context = {"card": card, "dtdd": card.dtdd, "answers_the_control": answers_the_control, "oob": True}
     answer = render(request, "components/dtdd_section.html", context)
     if ring_too:
         answer.content += render(request, "components/film_card_poster.html", context).content

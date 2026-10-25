@@ -9,9 +9,10 @@
     {# Collapsed behind one control; counts are evidence, never a verdict (#20 §4). #}
     {# A pool or Films tab list fetches its rows as it first opens, and keeps them, open, across the note's swap of its card (#103). #}
     {# Its id names the match too, so a match changed since brings the new record's list in. #}
-    <details class="dtdd__topics"{% if dtdd.topics_at %} id="dtdd-topics-{{ card.suggestion_id }}-{{ dtdd.match.item_id|default:'' }}" hx-preserve hx-get="{{ dtdd.topics_at }}" hx-trigger="toggle once" hx-target="find .dtdd__fetching" hx-swap="outerHTML"{% endif %}>
+    {# A watch toggle's answer draws it open with its rows in place and no hx-preserve, so the rows read the new list; the id still lets a later swap of the card keep it (#114). #}
+    <details class="dtdd__topics"{% if dtdd.opened %} open id="dtdd-topics-{{ card.suggestion_id }}-{{ dtdd.match.item_id|default:'' }}"{% elif dtdd.topics_at %} id="dtdd-topics-{{ card.suggestion_id }}-{{ dtdd.match.item_id|default:'' }}" hx-preserve hx-get="{{ dtdd.topics_at }}" hx-trigger="toggle once" hx-target="find .dtdd__fetching" hx-swap="outerHTML"{% endif %}>
       <summary class="dtdd__toggle">{% if dtdd.topic_count == 1 %}The 1 topic{% else %}All {{ dtdd.topic_count }} topics{% endif %} on DoesTheDogDie</summary>
-      {% if dtdd.topics_at %}<p class="dtdd__fetching">Fetching the topics…</p>{% else %}{% include "components/dtdd_topics.html" %}{% endif %}
+      {% if dtdd.topics_at and not dtdd.opened %}<p class="dtdd__fetching">Fetching the topics…</p>{% else %}{% include "components/dtdd_topics.html" %}{% endif %}
     </details>
   {% endif %}
   {% if dtdd.credited %}<p class="dtdd__credit"><a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a></p>{% endif %}

@@ -122,7 +122,10 @@ def test_the_admin_fetches_the_list_a_voter_does_from_the_consoles_own_route(adm
 
     assert f'hx-get="/console/films/dtdd/?suggestion={films["matched"].pk}"' in tab
     fetched = admin.get(f"/console/films/dtdd/?suggestion={films['matched'].pk}", headers=HTMX).text
-    assert fetched == hanna.get(f"/dtdd/?suggestion={films['matched'].pk}", headers=HTMX).text
+    voters_copy = hanna.get(f"/dtdd/?suggestion={films['matched'].pk}", headers=HTMX).text
+    # The voter's copy adds the watch toggles (#114); the admin has no list, so the copy he fetches carries none.
+    assert "dtdd__watch" not in fetched
+    assert fetched == re.sub(r'\s*<form class="dtdd__watch".*?</form>\s*', "", voters_copy, flags=re.S)
 
 
 @pytest.mark.parametrize("path, lands_on", [("/dtdd/", "/"), ("/console/films/dtdd/", TAB)])

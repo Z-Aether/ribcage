@@ -42,7 +42,7 @@ def test_a_matched_film_shows_its_record_tagged_auto_and_its_topics():
     assert shown.state == "matched"
     assert shown.match == DtddMatch(5381, "Willy's Wonderland", 2021, set_by="")
     assert shown.match.url == "https://www.doesthedogdie.com/media/5381"
-    assert shown.groups == (TopicGroup("Animals", (TopicRow("dogs dying", 3, 1),)),)
+    assert shown.groups == (TopicGroup("Animals", (TopicRow("dogs dying", 3, 1, 153),)),)
     assert shown.gap == ""
     assert shown.credited
 

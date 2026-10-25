@@ -1,0 +1,14 @@
+{# One topic row's quiet watch toggle over a Watch: it adds the topic to the viewer's watched list, or takes it off when it is there; the answer swaps the card's whole section (#23, #114). #}
+{# The button's id is the same before and after, so htmx puts keyboard focus back on it after the swap (#114). #}
+<form class="dtdd__watch" method="post"{% if dtdd.watch.at %} action="{{ dtdd.watch.at }}" hx-post="{{ dtdd.watch.at }}" hx-target="closest .film-card__dtdd" hx-swap="outerHTML"{% else %} onsubmit="return false"{% endif %}>
+  {% csrf_token %}
+  <input type="hidden" name="suggestion" value="{{ dtdd.watch.suggestion_id|default_if_none:'' }}">
+  <input type="hidden" name="topic" value="{{ row.topic_id }}">
+  {% if row.topic_id in dtdd.watch.ticked %}
+    <input type="hidden" name="ticked" value="0">
+    <button type="submit" id="dtdd-watch-{{ dtdd.watch.suggestion_id|default_if_none:'' }}-{{ row.topic_id }}" aria-pressed="true" aria-label="Stop watching {{ row.label }}">Watching</button>
+  {% else %}
+    <input type="hidden" name="ticked" value="1">
+    <button type="submit" id="dtdd-watch-{{ dtdd.watch.suggestion_id|default_if_none:'' }}-{{ row.topic_id }}" aria-pressed="false" aria-label="Watch for {{ row.label }}">Watch</button>
+  {% endif %}
+</form>

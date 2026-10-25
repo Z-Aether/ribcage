@@ -53,6 +53,8 @@ class TopicRow:
     label: str
     yes: int
     no: int
+    # The vocabulary's id, which a watch toggle posts in its body; 0 for a sample's row (#114).
+    topic_id: int = 0
 
 
 @dataclass(frozen=True)
@@ -116,6 +118,16 @@ class MatchCorrection:
 
 
 @dataclass(frozen=True)
+class Watch:
+    """The viewer's *watch* toggles on a topic list: where one posts, the card it swaps, and the topics already on their list (#114)."""
+
+    # Empty leaves the toggles inert, as the gallery's are.
+    at: str
+    suggestion_id: int | None
+    ticked: frozenset[int]
+
+
+@dataclass(frozen=True)
 class DtddSection:
     """The opened card's DoesTheDogDie section, the same for every viewer: the match, the topic list, or the gap named (#20, #21, #103)."""
 
@@ -129,6 +141,10 @@ class DtddSection:
     topics_at: str = ""
     # None offers no control, as the gallery's plain samples and RUN do (#105, #106).
     correction: MatchCorrection | None = None
+    # None offers no toggles: the admin's card, and a voter with *I don't care* on (#110, #114).
+    watch: Watch | None = None
+    # The topic list drawn open with its rows in place, as a watch toggle's answer is, rather than left to fetch (#114).
+    opened: bool = False
 
     @property
     def gap_name(self):

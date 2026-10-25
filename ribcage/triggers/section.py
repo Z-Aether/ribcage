@@ -30,7 +30,7 @@ def topic_groups(counts, vocabulary):
     for group, topics in vocabulary.groups:
         # Sorted is stable, so equal yes votes keep DoesTheDogDie's own order.
         named = sorted((topic for topic in topics if topic.topic_id in by_topic), key=lambda topic: -by_topic[topic.topic_id].yes)
-        rows = tuple(TopicRow(topic.label, by_topic[topic.topic_id].yes, by_topic[topic.topic_id].no) for topic in named)
+        rows = tuple(TopicRow(topic.label, by_topic[topic.topic_id].yes, by_topic[topic.topic_id].no, topic.topic_id) for topic in named)
         if rows:
             groups.append(TopicGroup(group.name, rows))
     return tuple(groups)

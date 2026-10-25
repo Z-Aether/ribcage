@@ -1654,6 +1654,36 @@ body > aside.nag-bar a {
   font-variant-numeric: tabular-nums lining-nums;
   white-space: nowrap;
 }
+/* The quiet watch toggle ends a row: lilac text like the list's own control, and sea-glass once the topic is on the voter's list, as the page's ticked box is (#114). */
+.dtdd__watch {
+  display: inline;
+  margin: 0 0 0 0.5rem;
+}
+[data-skin] .dtdd__watch button {
+  display: inline;
+  width: auto;
+  margin: 0;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid transparent;
+  border-radius: 6px 4px 7px 5px;
+  background: transparent;
+  color: var(--link);
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.3;
+}
+[data-skin] .dtdd__watch button:hover {
+  color: var(--link-hover);
+  border-color: var(--line-strong);
+}
+[data-skin] .dtdd__topic.is-watched .dtdd__watch button {
+  border-color: var(--score-keen);
+  color: var(--score-top-pick);
+}
+.dtdd__watch button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
 /* Until the list's rows arrive, as it first opens (#103). */
 [data-skin] .dtdd .dtdd__fetching {
   margin-top: 0.8rem;

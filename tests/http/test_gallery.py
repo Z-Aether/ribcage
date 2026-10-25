@@ -169,3 +169,23 @@ def test_the_gallery_rings_a_collapsed_and_an_opened_card_and_shows_the_matched_
     assert ringed["The Wolf House"] == (True, False)
     assert ringed["V/H/S/99"][0] is False
     assert page.count('<div class="dtdd__matched">') >= 3
+
+
+def test_the_gallery_shows_the_watch_toggles_on_an_opened_list_with_the_watched_rows_pressed(debug, client):
+    page = client.get(GALLERY).text
+    opened = re.search(r'The watch toggles: .*?(<details class="dtdd__topics" open.*?</details>)', page, re.S)[1]
+
+    assert re.findall(r'aria-pressed="(\w+)" aria-label="[^"]*(?:blood or gore|jump scares|body horror)"', opened) == ["true", "false", "true"]
+    # Inert, as the other samples' controls are: no route to post to (#114).
+    assert 'hx-post="' not in opened and 'onsubmit="return false"' in opened
+
+
+def test_the_gallery_matched_blocks_and_rings_agree_with_the_watched_rows(debug, client):
+    from ribcage.gallery import samples
+    from ribcage.triggers.carrying import carries
+
+    for sample in samples.cards():
+        rows = [row for group in sample.dtdd.groups for row in group.rows if row.topic_id in samples.WATCHING.ticked and row.yes]
+        listed = sample.matched.rows if sample.matched else ()
+        assert {row.label for row in listed} == {row.label for row in rows}
+        assert (sample.matched.ring if sample.matched else False) == any(carries(row) for row in rows)

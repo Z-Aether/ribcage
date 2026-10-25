@@ -11,7 +11,7 @@ DOGS, CATS, JUMPS = 153, 158, 200
 
 
 def test_a_thin_match_is_listed_with_its_counts_and_no_ring():
-    assert matched((TopicCount(DOGS, 1, 0),), VOCABULARY, {DOGS}) == Matched((TopicRow("dogs dying", 1, 0),), ring=False)
+    assert matched((TopicCount(DOGS, 1, 0),), VOCABULARY, {DOGS}) == Matched((TopicRow("dogs dying", 1, 0, DOGS),), ring=False)
 
 
 def test_five_yes_and_no_no_rings(settings):
@@ -21,7 +21,7 @@ def test_five_yes_and_no_no_rings(settings):
 def test_five_yes_and_five_no_is_listed_without_a_ring(settings):
     found = matched((TopicCount(DOGS, 5, 5),), VOCABULARY, {DOGS})
 
-    assert found.rows == (TopicRow("dogs dying", 5, 5),)
+    assert found.rows == (TopicRow("dogs dying", 5, 5, DOGS),)
     assert not found.ring
 
 
