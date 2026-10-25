@@ -11,6 +11,7 @@ own words and grouping, since its recordings stay out of the repo (#40, #103).
 from dataclasses import dataclass, replace
 from functools import cache
 
+from ribcage.ballot import board
 from ribcage.films import corpus
 from ribcage.films.card import (
     DtddMatch,
@@ -351,6 +352,21 @@ def tiles():
     )
 
 
+def ballot_board():
+    """The ballot's tray and bands over sample films: ringed tiles first in the tray, bands of different fullness, one empty. Dragging posts nowhere here (#119)."""
+    tile = board.Tile
+    tray = (tile(1, film(THE_SHINING), trigger_count=2), tile(2, film(MIDSOMMAR), trigger_count=1), tile(3, film(CUBE)), tile(4, film(CABINET_OF_CURIOSITIES)))
+    placed = {
+        3: (tile(5, film(THE_THING), trigger_count=1), tile(6, film(EXIT_8))),
+        2: (tile(7, film(WOLF_HOUSE)), tile(8, film(VHS_99), trigger_count=1)),
+        1: (tile(9, film(EVENT_HORIZON)),),
+        0: (tile(10, film(INFESTED)), tile(11, film(TERRIFIER)), tile(12, film(CARRIE_2013))),
+        -1: (),
+    }
+    bands = tuple(board.Band(score, key, sign, name, placed[score]) for score, key, sign, name in board.SCALE)
+    return board.Board(tray, bands, board.Counts(scored=8, size=12))
+
+
 def poster_row():
     return [film(key) for key in (THE_THING, EVENT_HORIZON, CABINET_OF_CURIOSITIES, INFESTED, CUBE, POOH_2, EXIT_8)]
 
@@ -373,6 +389,7 @@ def gallery():
         "corrections": corrections(),
         "score_scale": SCORE_SCALE,
         "tiles": tiles(),
+        "ballot_board": ballot_board(),
         "picker": picker(),
         "picker_outage": Picker(searched=True, outage=True, choosable=False),
         "poster_row": poster_row(),
