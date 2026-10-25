@@ -1,0 +1,9 @@
+{# The viewer's seen it on the opened card, a checkbox that posts the state it sets and is drawn again from what the server holds (#10, #121, #122). #}
+{% with vote=card.vote %}<form class="vote-seen" method="post" action="{% url 'ballot_seen' %}"{% if vote.inert %} onsubmit="return false"{% else %} hx-post="{% url 'ballot_seen' %}" hx-trigger="change" hx-target="this" hx-swap="outerHTML"{% endif %}>
+  {% csrf_token %}
+  <input type="hidden" name="suggestion" value="{{ card.suggestion_id|default_if_none:'' }}">
+  <input type="hidden" name="card" value="1">
+  {# The state when the box is clear; a ticked box's value follows it and wins (#121). #}
+  <input type="hidden" name="seen" value="0">
+  <label class="vote-seen__label"><input type="checkbox" id="vote-seen-{{ card.suggestion_id|default_if_none:'' }}" name="seen" value="1"{% if vote.seen_it %} checked{% endif %}> Seen it</label>
+</form>{% endwith %}

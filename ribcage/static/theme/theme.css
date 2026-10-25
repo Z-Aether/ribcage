@@ -2411,6 +2411,121 @@ body > aside.nag-bar a {
   }
 }
 
+/* ---------- VOTE's phase bar, and a tile opened as its card on the board (#9, #10, #122) ---------- */
+
+/* An opened card takes its list's whole width, and is not dragged. */
+[data-skin] .tiles > .card-item {
+  flex: 1 1 100%;
+  min-width: 0;
+  scroll-margin-top: 3rem;
+  cursor: auto;
+}
+[data-skin] .tiles > li[data-suggestion]:not(.card-item) {
+  cursor: pointer;
+}
+[data-skin] .tiles > li:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+  border-radius: var(--radius-poster);
+}
+.card-item .film-card {
+  cursor: auto;
+}
+/* While a card is open anywhere the tray stops sticking, so it can't cover the card, and one open in the tray grows to its own length rather than scrolling in a window (#122). */
+[data-skin] .board:has(.card-item) .tray {
+  position: static;
+}
+[data-skin] .tray:has(.card-item) {
+  max-height: none;
+}
+[data-skin] .tray:has(.card-item) .tray__tiles {
+  overflow-y: visible;
+}
+.phase-bar--vote {
+  display: grid;
+  gap: 0.9rem;
+}
+.phase-bar--vote > * {
+  margin: 0;
+}
+.vote-bar__scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+/* The score's colour fill is the score's own; the current one is ringed, and the rest sit back. */
+[data-skin] .vote-bar__score {
+  flex: 0 0 auto;
+  align-items: center;
+  width: auto;
+  min-height: 2.75rem;
+  margin: 0;
+  padding-block: 0.4rem;
+  border: 2px solid transparent;
+  border-radius: 18px 12px 20px 12px / 12px 20px 12px 18px;
+  background-color: var(--score-fill);
+  color: var(--score-ink);
+  font-size: 0.95rem;
+  opacity: 0.72;
+  cursor: pointer;
+}
+[data-skin] .vote-bar__score:is(:hover, :focus-visible) {
+  opacity: 1;
+}
+[data-skin] .vote-bar__score.is-current {
+  opacity: 1;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 2px var(--ground), 0 0 0 4px var(--score-fill);
+}
+[data-skin] .vote-bar__score.score--veto {
+  background-color: transparent;
+  color: var(--veto-ink);
+  border: 2px dashed var(--veto);
+}
+[data-skin] .vote-bar__score.score--veto.is-current {
+  background-color: var(--veto);
+  color: var(--ground);
+  border-style: solid;
+  box-shadow: none;
+}
+/* A veto stands in for the score: the five sit back further, and none is marked. */
+.is-vetoed .vote-bar__score:not(.vote-bar__veto) {
+  opacity: 0.4;
+}
+.vote-seen {
+  margin: 0;
+}
+[data-skin] .vote-seen__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  margin: 0;
+  cursor: pointer;
+}
+[data-skin] .vote-seen__label input {
+  margin: 0;
+}
+[data-skin] .vote-reason .note-box textarea {
+  margin: 0;
+}
+.vote-bar__line {
+  margin: 0;
+  color: var(--ink-muted);
+}
+.vote-bar__reason {
+  font-family: var(--font-notes);
+  font-style: italic;
+}
+@media (max-width: 600px) {
+  /* A thumb's targets: the scores share the bar's width two or three to a line. */
+  [data-skin] .vote-bar__score {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-height: 3rem;
+    justify-content: center;
+  }
+}
+
 /* ---------- Dense ledger (admin) ---------- */
 
 [data-skin] .ledger {

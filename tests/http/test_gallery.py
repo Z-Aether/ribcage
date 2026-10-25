@@ -110,6 +110,16 @@ def test_the_gallery_shows_both_phase_bars_on_opened_cards(client, debug):
     assert "Your pitch" in page and "Your note" in page
 
 
+def test_the_gallery_shows_votes_bar_on_opened_cards_with_a_veto_and_both_read_only_lines(client, debug):
+    page = client.get(GALLERY).content.decode()
+
+    bars = re.findall(r'<div class="film-card__phase-bar" data-phase-bar>(.*?)</div>\s*<section', page, re.S)
+    bars = [bar for bar in bars if "data-vote-bar" in bar]
+    assert len(bars) == 2 and "hx-post" not in "".join(bars)
+    assert "score--keen is-current" in bars[0] and "Vetoed by" in bars[0] and "Seen by" in bars[0]
+    assert "is-vetoed" in bars[1] and "−2" in bars[1] and "data-vote-reason" in bars[1] and "checked" in bars[1]
+
+
 def test_the_gallery_shows_withdraw_on_an_opened_card_and_armed_on_another(client, debug):
     page = client.get(GALLERY).content.decode()
 

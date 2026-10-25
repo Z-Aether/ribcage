@@ -176,6 +176,33 @@ class Matched:
 
 
 @dataclass(frozen=True)
+class Vetoer:
+    """One other voter's veto on a film, with the reason they gave, empty when they gave none (#10, #35 §4, #122)."""
+
+    name: str
+    reason: str = ""
+
+
+@dataclass(frozen=True)
+class VoteBar:
+    """What VOTE's phase bar shows for the viewer on one film: their own say, which is theirs alone, and the other voters' vetoes and seen it (#10, #35 §4, #122)."""
+
+    # The scale's buttons as (score, key, sign, name), top pick first.
+    scale: tuple[tuple[int, str, str, str], ...]
+    score: int | None = None
+    vetoed: bool = False
+    reason: str = ""
+    seen_it: bool = False
+    vetoed_by: tuple[Vetoer, ...] = ()
+    seen_by: tuple[str, ...] = ()
+    # What saving the reason said, kept as the note box keeps its refusal (#120).
+    said: str = ""
+    refused: bool = False
+    # The gallery's bar posts nowhere, so its buttons only look.
+    inert: bool = False
+
+
+@dataclass(frozen=True)
 class FilmCard:
     """Everything the film card shows, as plain data, so a model binds to it without touching the template (#21, #58)."""
 
@@ -197,6 +224,13 @@ class FilmCard:
     dtdd: DtddSection | None = None
     # The viewing voter's matched topics; None for the admin, a voter with nothing ticked and a film matching nothing (#35 §2, #111).
     matched: Matched | None = None
+    # VOTE's bar data; None in every other phase (#122).
+    vote: VoteBar | None = None
+
+    @property
+    def pitch_yours(self):
+        # The viewer's own pitch is left out of an opened card only where their note box holds it (#88, #122).
+        return self.mine and self.note_box is not None
 
 
 def trimmed(text, length):

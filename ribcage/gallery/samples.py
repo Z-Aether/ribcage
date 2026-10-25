@@ -25,6 +25,8 @@ from ribcage.films.card import (
     RuntimePencil,
     TopicGroup,
     TopicRow,
+    Vetoer,
+    VoteBar,
     Watch,
     Withdraw,
 )
@@ -308,7 +310,7 @@ def yours(sample, index):
 
 
 def phase_bars():
-    """Each pool phase's bar on an opened card, with no suggestion, so a save here only reloads onto the phase page (#88).
+    """Each phase's bar on an opened card, with no suggestion, so a save here only reloads onto the phase page (#88).
 
     A withdraw confirmed here names no suggestion, so it takes nothing, and the sample card only leaves until a reload (#89).
     The runtime pencil names none either, so opening or saving it here reloads onto the phase page (#90).
@@ -338,6 +340,30 @@ def phase_bars():
             "APPROVE's phase bar, on Cass's suggestion, as Dani just saved her note",
             replace(yours(wolf_house, 0), note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, saved=True)),
             "components/approve_bar.html",
+        ),
+        (
+            "VOTE's phase bar, on Hanna's suggestion, scored +2 by the viewer, with others' vetoes and seen it read-only",
+            replace(
+                midsommar,
+                note_box=None,
+                vote=VoteBar(
+                    scale=board.SCALE,
+                    score=2,
+                    vetoed_by=(Vetoer("Anne-Marie", "Too much daylight for me."), Vetoer("Zoë")),
+                    seen_by=("Bex", "Dani"),
+                    inert=True,
+                ),
+            ),
+            "components/vote_bar.html",
+        ),
+        (
+            "VOTE's phase bar after a veto: −2 replaces the score, the reason box is open, and the viewer has seen it",
+            replace(
+                wolf_house,
+                note_box=None,
+                vote=VoteBar(scale=board.SCALE, vetoed=True, reason="Spiders, and I can't unsee them.", seen_it=True, said="Saved.", inert=True),
+            ),
+            "components/vote_bar.html",
         ),
     )
 
