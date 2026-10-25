@@ -53,13 +53,15 @@
       </ul>
       <ul class="tiles">
         {% for tile in tiles %}
-          <li class="tile{% if tile.trigger_count %} has-trigger-icon{% endif %}{% if tile.seen_it %} is-seen-it{% endif %}">{% include "components/tile.html" with film=tile.film caption=tile.caption vetoed_by=tile.vetoed_by trigger_count=tile.trigger_count %}</li>
+          <li class="tile{% if tile.trigger_count %} has-trigger-icon{% endif %}{% if tile.seen_it %} is-seen-it{% endif %}">{% include "components/tile.html" with film=tile.film caption=tile.caption vetoed_by=tile.vetoed_by trigger_count=tile.trigger_count toggle=True inert=True seen=tile.seen_it %}</li>
         {% endfor %}
       </ul>
     </div>
 
     <p class="gallery-label">The ballot: the Unsorted tray, ringed tiles first, over the five bands, one of them empty, and the Veto band with a row holding matched topics and one with none. The tiles drag between them and post nowhere here</p>
+    {% include "components/ballot_legend.html" %}
     {% include "components/ballot_board.html" with board=ballot_board %}
+    <script src="{% static 'components/seen-toggle.js' %}" defer></script>
 
     <p class="gallery-label">The picker, for "evil dead", with a film already in the pool and a title card</p>
     <div class="picker">{% include "components/picker.html" with picker=picker %}</div>

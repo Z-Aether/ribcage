@@ -353,20 +353,20 @@ def tiles():
 
 
 def ballot_board():
-    """The ballot's tray and bands over sample films: ringed tiles first in the tray, bands of different fullness, one empty, and the Veto band. Dragging posts nowhere here (#119, #120)."""
+    """The ballot's tray and bands over sample films: ringed tiles first in the tray, bands of different fullness, one empty, and the Veto band, some tiles seen. Dragging and the seen-it toggle post nowhere here (#119, #120, #121)."""
     tile = board.Tile
-    tray = (tile(1, film(THE_SHINING), trigger_count=2), tile(2, film(MIDSOMMAR), trigger_count=1), tile(3, film(CUBE)), tile(4, film(CABINET_OF_CURIOSITIES)))
+    tray = (tile(1, film(THE_SHINING), trigger_count=2), tile(2, film(MIDSOMMAR), trigger_count=1), tile(3, film(CUBE), seen_it=True), tile(4, film(CABINET_OF_CURIOSITIES)))
     placed = {
         3: (tile(5, film(THE_THING), trigger_count=1), tile(6, film(EXIT_8))),
-        2: (tile(7, film(WOLF_HOUSE)), tile(8, film(VHS_99), trigger_count=1)),
+        2: (tile(7, film(WOLF_HOUSE), seen_it=True), tile(8, film(VHS_99), trigger_count=1)),
         1: (tile(9, film(EVENT_HORIZON)),),
-        0: (tile(10, film(INFESTED)), tile(11, film(TERRIFIER)), tile(12, film(CARRIE_2013))),
+        0: (tile(10, film(INFESTED)), tile(11, film(TERRIFIER), vetoed_by="BH", vetoers="Vetoed by Bartholomew"), tile(12, film(CARRIE_2013))),
         -1: (),
     }
     bands = tuple(board.Band(score, key, sign, name, placed[score]) for score, key, sign, name in board.SCALE)
     # Two widened rows: Midsommar with the viewer's matched topics and a reason, The Exorcist with none; one also wears others' ribbon (#120).
     vetoes = (
-        tile(13, film(MIDSOMMAR), trigger_count=2, matched=matched_of(MIDSOMMAR_DTDD), reason="Too much daylight for me.", vetoed_by="AZ", vetoers="Vetoed by Ada, Zoë"),
+        tile(13, film(MIDSOMMAR), trigger_count=2, matched=matched_of(MIDSOMMAR_DTDD), reason="Too much daylight for me.", seen_it=True, vetoed_by="AZ", vetoers="Vetoed by Ada, Zoë"),
         tile(14, film(THE_EXORCIST)),
     )
     return board.Board(tray, bands, board.Counts(scored=10, size=14), vetoes)

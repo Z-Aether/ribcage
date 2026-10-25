@@ -208,3 +208,13 @@ def test_the_gallerys_veto_band_has_a_row_with_matched_topics_and_credit_and_one
     assert "On your list" in rows[0] and "Powered by DoesTheDogDie.com" in rows[0] and "veto-ribbon" in rows[0]
     assert "On your list" not in rows[1] and "Powered by" not in rows[1]
     assert all(" disabled>Save" in row for row in rows)
+
+
+def test_the_gallerys_seen_it_toggles_show_off_and_on_and_fire_no_request(client, debug):
+    # The gallery posts nothing, so its toggles only flip the tile's look (#121).
+    page = client.get(GALLERY).content.decode()
+    toggles = re.findall(r'<button type="button" class="seen-toggle.*?</button>', page, re.S)
+
+    assert any('aria-pressed="true"' in toggle for toggle in toggles) and any('aria-pressed="false"' in toggle for toggle in toggles)
+    assert not any("hx-post" in toggle for toggle in toggles)
+    assert 'class="ballot-legend"' in page
