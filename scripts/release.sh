@@ -42,7 +42,7 @@ docker build --pull --platform linux/amd64 -t "ribcage:$TAG" .
 
 if [ -z "$SKIP_TESTS" ]; then
   echo "== Running the tests"
-  "$PYTHON" -m pytest
+  "$PYTHON" -m pytest -n 4
   "$PYTHON" -m pytest tests/image -m slow
 fi
 

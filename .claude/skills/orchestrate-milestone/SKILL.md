@@ -28,7 +28,7 @@ Take the tickets one at a time, even where they could run in parallel. Implement
 
    Done when a re-review comes back clean.
 4. **Squash.** Run `before=$(git rev-parse HEAD^{tree}); GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash <the ticket's base>`, then compare `git rev-parse HEAD^{tree}` with `$before`. Done when the trees match and `git log` shows no `fixup!` commit.
-5. **Run the full suite**, the ticket's only full run after the implementer's: `.venv/Scripts/python -m pytest -q 2>&1 | tail -15` with `run_in_background`. A failure goes through the fix loop, its failing tests as the findings. Done when it passes.
+5. **Run the full suite**, the ticket's only full run after the implementer's: `.venv/Scripts/python -m pytest -n 4 -q 2>&1 | tail -15` with `run_in_background`. A failure goes through the fix loop, its failing tests as the findings. Done when it passes.
 6. **Hand off.** Anything this build decided that a later ticket needs goes into `handoff.md`, under that ticket's number. Copy those lines into that ticket's implement brief.
 
 **A usage limit** cuts an agent off mid-run. After the reset, resume it with SendMessage: it checks `git status` and `git log <base>..HEAD`, then finishes its brief.
