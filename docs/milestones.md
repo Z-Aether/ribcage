@@ -31,7 +31,7 @@ The big-picture build schedule: ten milestones, each a vertical slice that is re
 | M3 | Identity, phases and the two shells | Register, log in, roster, phase moves, empty phase pages | 15 | #60 |
 | M4 | SUGGEST and APPROVE | The pool, suggested by voters and curated by the admin | ~20 | #61 |
 | M5 | Trigger warnings | DTDD data, watched lists, matched topics | ~18 | #62 |
-| M6 | VOTE | The ballot, done markers, approval during VOTE | ~18 | #63 |
+| M6 | VOTE | The ballot, done markers, approval during VOTE | 8 | #63 |
 | M7 | The timetable, without SOLVE | PICK's Timetable tab, hand-built slates, readouts | ~20 | #64 |
 | M8 | The reveal and the evening | Reveal, RUN, publishing | ~15 | #65 |
 | M9 | SOLVE and Compare | The solver, knobs, batch, shortlist, Compare tab | ~20 | #66 |
@@ -149,7 +149,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - **Ballot:** one record per voter and film. Score, veto with reason, seen it, done, each windowed to VOTE (#9, #26, #34).
 - **The ballot page:** the header (`n of N scored`, done roster, *I'm done*), the sticky Unsorted tray in its per-voter order, the five bands, the dashed-red Veto band widening to show matched topics and a reason box (#9, #35, #38).
 - **Tiles:** frame states, opening the card in place with others' veto reasons and seen-it flags (#35).
-- **The admin's side of VOTE:** approval staying open, growing the ballot clearing every done marker with its cost in the confirm ("6 of 9 → 0 of 9"), shrinking clearing nothing (#15, #28).
+- **The admin's side of VOTE:** approval staying open, growing the ballot clearing every done marker with its cost in the confirm ("6 of 9 → 0 of 9"), shrinking clearing nothing. The done count on the Films and Phase tabs, and the Roster's *Scored*, *Vetoes* and *Done* columns (#15, #28, #63).
 - **Moves:** the VOTE → PICK confirm naming who isn't done and saying it can't be undone. PICK → VOTE keeps done markers and adds the reopened-VOTE line to the ballot (#15, #34).
 - Removal now deletes the voter's scores, vetoes and done marker.
 
