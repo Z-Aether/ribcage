@@ -267,3 +267,29 @@ def test_seed_in_run_leaves_the_matches_and_no_snapshot_or_vocabulary_as_the_pur
     assert not Topic.objects.exists()
     assert set(seeded_states().values()) <= {State.NOT_FETCHED, State.NO_MATCH}
     assert "no snapshots or vocabulary" in output.getvalue()
+
+
+def test_seed_ticks_the_watched_lists_by_label_and_leaves_sam_with_none(transactional_db, debug_on, corpus_without_dtdd, monkeypatch):
+    from ribcage.seeding import watched as seeded_watched
+    from ribcage.triggers.models import WatchedTopic
+
+    record_three(*corpus_without_dtdd)
+    monkeypatch.setattr(seeded_watched, "SEEDED_WATCHED_LISTS", {"Ada": ["dog death", "jump scares", "unheard of"], "Zoë": ["cat death"]})
+
+    call_command("seed", stdout=StringIO())
+
+    lists = {voter.display_name: sorted(voter.watched_topics.values_list("topic_id", flat=True)) for voter in Voter.objects.all()}
+    assert lists["Ada"] == [153, 200] and lists["Zoë"] == [158] and lists["Sam"] == []
+    assert WatchedTopic.objects.count() == 3
+
+
+def test_seed_in_run_keeps_the_watched_lists_the_purge_leaves(transactional_db, debug_on, corpus_without_dtdd, monkeypatch):
+    from ribcage.seeding import watched as seeded_watched
+
+    record_three(*corpus_without_dtdd)
+    monkeypatch.setattr(seeded_watched, "SEEDED_WATCHED_LISTS", {"Ada": ["dog death"]})
+
+    call_command("seed", "--phase", "RUN", stdout=StringIO())
+
+    assert list(Voter.objects.get(display_name="Ada").watched_topics.values_list("topic_id", flat=True)) == [153]
+    assert not Topic.objects.exists()
