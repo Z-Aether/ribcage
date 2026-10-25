@@ -1,4 +1,4 @@
-"""The seeded ballots, from VOTE on: Ada has scored most of the ballot, Zoë part of it, and Bartholomew Winthrop none, as the voter who never votes (#50, #119).
+"""The seeded ballots, from VOTE on: Ada has scored most of the ballot, Zoë part of it with a veto, and Bartholomew Winthrop none, as the voter who never votes (#50, #119, #120).
 
 Each score is by the film's TMDB id. A film a voter leaves out is left in their Unsorted tray, and PICK and RUN keep the same scores (#63).
 """
@@ -18,10 +18,20 @@ SEEDED_SCORES = {
     "Sam": {COTTON_CANDY: 3},
 }
 
+# Each veto is (film, reason or None): Terrifier is vetoed by two voters, for the ribbon's two initials, one of them without a reason (#120).
+SEEDED_VETOES = {
+    "Zoë": {TERRIFIER: "I won't sit through that one, and I'd rather say so now."},
+    "Anne-Marie": {TERRIFIER: None},
+    "Sam": {WOLF_HOUSE: "Too close to a nightmare I had."},
+}
+
 
 def seed_the_ballots():
     voters = {voter.display_name: voter for voter in Voter.objects.all()}
     suggestions = {suggestion.tmdb_id: suggestion for suggestion in Suggestion.objects.exclude(tmdb_id=None)}
     BallotRecord.objects.bulk_create(
         BallotRecord(voter=voters[name], suggestion=suggestions[tmdb_id], score=score) for name, scores in SEEDED_SCORES.items() for tmdb_id, score in scores.items()
+    )
+    BallotRecord.objects.bulk_create(
+        BallotRecord(voter=voters[name], suggestion=suggestions[tmdb_id], vetoed=True, veto_reason=reason) for name, vetoes in SEEDED_VETOES.items() for tmdb_id, reason in vetoes.items()
     )

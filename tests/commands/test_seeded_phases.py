@@ -93,4 +93,14 @@ def test_from_vote_on_ada_has_scored_most_of_the_ballot_zoe_part_and_bartholomew
     assert 0 < scored("Zoë") < scored("Ada")
     assert scored("Bartholomew Winthrop") == 0
     assert not BallotRecord.objects.exclude(suggestion__approval=Approval.APPROVED).exists()
-    assert set(BallotRecord.objects.values_list("score", flat=True)) == {-1, 0, 1, 2, 3}
+    assert set(BallotRecord.objects.filter(vetoed=False).values_list("score", flat=True)) == {-1, 0, 1, 2, 3}
+
+
+@pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
+def test_from_vote_on_some_vetoes_have_reasons_one_has_none_and_one_film_is_vetoed_by_two(db, seeded):
+    vetoes = BallotRecord.objects.filter(vetoed=True)
+
+    assert vetoes.filter(veto_reason__isnull=False).count() >= 2
+    assert vetoes.filter(veto_reason__isnull=True).count() == 1
+    assert vetoes.filter(score__isnull=False).count() == 0
+    assert max(vetoes.filter(suggestion=suggestion).count() for suggestion in Suggestion.objects.filter(ballot_records__vetoed=True)) == 2
