@@ -803,6 +803,178 @@ body > footer.site-footer {
   list-style: none;
 }
 
+/* ---------- My warnings: the watched list's page (#23, #107) ---------- */
+
+[data-skin] .voter-header__warnings {
+  margin-left: auto;
+  padding: 0.4rem 0.2rem;
+  color: var(--link);
+  font-weight: 700;
+  white-space: nowrap;
+}
+body > header.voter-header:has(.voter-header__warnings) {
+  gap: 1.25rem;
+}
+
+/* On a phone the link, the wordmark and the name share one line, so a short name doesn't wrap (#107). */
+@media (max-width: 480px) {
+  body > header.voter-header:has(.voter-header__warnings) {
+    gap: 0.6rem;
+  }
+  [data-skin] .voter-header:has(.voter-header__warnings) .voter-header__wordmark {
+    font-size: 1.7rem;
+  }
+  [data-skin] .voter-header__warnings {
+    font-size: 0.9rem;
+  }
+  [data-skin] .voter-header:has(.voter-header__warnings) .voter-menu > summary.voter-menu__name {
+    padding-inline: 0.7rem;
+  }
+}
+
+[data-skin] .warnings {
+  max-width: 46rem;
+}
+[data-skin] .warnings__purpose {
+  font-size: 1.15rem;
+}
+[data-skin] .warnings__privacy {
+  max-width: 40rem;
+  color: var(--ink-muted);
+}
+[data-skin] .warnings__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.5rem 0 2rem;
+  padding: 1rem 1.2rem;
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+[data-skin] .warnings__chip {
+  margin: 0;
+}
+[data-skin] .warnings .warnings__chip button.warnings__chip-button {
+  margin: 0;
+  padding: 0.2rem 0.85rem;
+  background-color: var(--score-happy);
+  border: 1px solid var(--score-keen);
+  color: var(--score-happy-ink);
+  font-size: 0.95rem;
+  animation: none;
+}
+[data-skin] .warnings .warnings__chip button.warnings__chip-button:hover {
+  background-color: var(--score-keen);
+  color: var(--score-top-pick-ink);
+}
+[data-skin] .warnings__nothing {
+  margin: 0;
+  color: var(--ink-muted);
+}
+[data-skin] .warnings__unavailable {
+  margin: 2rem 0;
+  padding: 1rem 1.2rem;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-card);
+  color: var(--ink-muted);
+}
+
+[data-skin] .warnings__section {
+  margin: 0 0 0.75rem;
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+[data-skin] .warnings__summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding: 0.85rem 1.3rem;
+  list-style: none;
+  cursor: pointer;
+}
+.warnings__summary::-webkit-details-marker {
+  display: none;
+}
+/* Pico's chevron gives way to the one before the name, as the DoesTheDogDie section's does. */
+[data-skin] .warnings__summary::after {
+  content: none;
+}
+.warnings__name::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 0.6em;
+  color: var(--ink-muted);
+  transition: transform 0.2s ease;
+}
+.warnings__section[open] .warnings__name::before {
+  transform: rotate(90deg);
+}
+[data-skin] .warnings__name {
+  font-weight: 700;
+}
+[data-skin] .warnings__count {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+[data-skin] .warnings__summary:hover .warnings__name {
+  color: var(--accent-hover);
+}
+[data-skin] .warnings__topics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.1rem 1rem;
+  margin: 0;
+  padding: 0.2rem 1rem 1rem 1.3rem;
+  list-style: none;
+  border-top: 1px dashed var(--line);
+}
+[data-skin] .warnings__topic {
+  margin: 0;
+  list-style: none;
+}
+[data-skin] .warnings__topic form {
+  margin: 0;
+}
+[data-skin] .warnings .warnings__topic button.warnings__topic-button {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.4rem 0.5rem;
+  background: none;
+  border: 0;
+  border-radius: 10px;
+  color: var(--ink);
+  font-weight: 400;
+  text-align: left;
+  animation: none;
+}
+[data-skin] .warnings .warnings__topic button.warnings__topic-button:hover {
+  background-color: var(--surface-raised);
+}
+.warnings__box {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid var(--line-strong);
+  border-radius: 6px 4px 7px 5px;
+}
+.warnings__topic.is-ticked .warnings__box {
+  background-color: var(--score-keen);
+  border-color: var(--score-top-pick);
+  box-shadow: inset 0 0 0 3px var(--surface);
+}
+[data-skin] .warnings__credit {
+  margin: 2rem 0 0;
+  font-size: 0.85rem;
+}
+
 /* ---------- Poster and title card (#38) ---------- */
 
 .poster {
@@ -2155,6 +2327,7 @@ body > footer.site-footer {
   .film-card.htmx-swapping,
   [data-skin] .runtime__pencil,
   .dtdd__toggle::before,
+  .warnings__name::before,
   .tile--choice .poster {
     transition: none;
   }

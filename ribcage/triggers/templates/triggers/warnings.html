@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My warnings · Ribcage{% endblock %}
+
+{% block head %}<script src="{% static 'warnings/holds-the-row.js' %}" defer></script>{% endblock %}
+
+{# The page is nothing but DoesTheDogDie data: the vocabulary in its grouping, ticked in place (#23, #107). #}
+{% block content %}
+  <div class="warnings" hx-ext="morph">
+    <h1>My warnings</h1>
+    <p class="warnings__purpose">Tick the topics you want to be warned about, and films that carry them are marked for you.</p>
+    <p class="warnings__privacy">Only you see this list in the app. The admin and the host of the server can technically read it, as they can read everything stored here. It is deleted when the marathon is torn down.</p>
+
+    {% if page %}
+      {% include "triggers/warnings_chips.html" %}
+      <div class="warnings__sections">
+        {% for section in page.sections %}{% include "triggers/warnings_section.html" %}{% endfor %}
+      </div>
+    {% else %}
+      <p class="warnings__unavailable">The topics can't be shown yet. Try again in a bit; your list is as you left it.</p>
+    {% endif %}
+
+    <p class="warnings__credit"><a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a></p>
+  </div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{# One super-category, collapsed by default; its header counts its topics and the ticked among them (#23, #107). #}
+<details class="warnings__section" id="{{ section.anchor }}"{% if section.anchor == opened %} open{% endif %}>
+  <summary class="warnings__summary"><span class="warnings__name">{{ section.name }}</span> {% include "triggers/warnings_count.html" %}</summary>
+  <ul class="warnings__topics">
+    {% for row in section.rows %}{% include "triggers/warnings_row.html" %}{% endfor %}
+  </ul>
+</details>

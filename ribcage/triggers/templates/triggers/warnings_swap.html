@@ -1,0 +1,3 @@
+{# A tick's answer: nothing swaps into the form itself; the row, its section's count and the chips swap by id (#107). #}
+{% if row %}{% include "triggers/warnings_row.html" with oob=True %}{% include "triggers/warnings_count.html" with oob=True %}{% endif %}
+{% include "triggers/warnings_chips.html" with oob=True %}

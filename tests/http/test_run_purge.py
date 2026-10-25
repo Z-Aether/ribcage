@@ -9,8 +9,8 @@ from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import Phase
 from ribcage.suggestions.models import Suggestion
 from ribcage.triggers import client as dtdd_client
-from ribcage.triggers import correction, stored
-from ribcage.triggers.models import Topic, TriggerData
+from ribcage.triggers import correction, stored, watched
+from ribcage.triggers.models import Topic, TriggerData, WatchedTopic
 from tests.http.test_match_correction import (
     ADMIN_MATCH,
     EXIT_8,
@@ -46,7 +46,9 @@ def into_run(admin):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_entering_run_deletes_every_snapshot_and_the_vocabulary_keeps_the_matches_and_calls_nothing(admin, films, dtdd):
+def test_entering_run_deletes_every_snapshot_and_the_vocabulary_keeps_the_matches_and_watched_lists_and_calls_nothing(admin, films, dtdd, voters):
+    watched.set_ticked(voters["Hanna"], 153, True)
+    watched.set_ticked(voters["Hanna"], 999999, True)
     TriggerData.objects.filter(suggestion=films["exit 8"]).update(match_set_by="Hanna")
     before = matches()
     assert snapshots() and Topic.objects.exists()
@@ -57,6 +59,7 @@ def test_entering_run_deletes_every_snapshot_and_the_vocabulary_keeps_the_matche
     assert current() == RUN
     assert snapshots() == [] and not Topic.objects.exists()
     assert matches() == before
+    assert set(WatchedTopic.objects.filter(voter=voters["Hanna"]).values_list("topic_id", flat=True)) == {153, 999999}
     assert dtdd.paths == []
 
 

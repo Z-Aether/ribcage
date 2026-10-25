@@ -44,14 +44,15 @@ def test_the_gallery_does_not_exist_with_debug_off(client, settings):
     assert client.get(GALLERY).status_code == 404
 
 
-def test_the_gallery_renders_with_debug_on_and_no_queries_beyond_the_session_and_voter_lookup(
+def test_the_gallery_renders_with_debug_on_and_no_queries_beyond_the_session_voter_and_phase_lookups(
     client, debug, django_assert_num_queries
 ):
-    with django_assert_num_queries(2) as captured:
+    with django_assert_num_queries(3) as captured:
         response = client.get(GALLERY)
 
     assert response.status_code == 200
-    assert [query_table(query["sql"]) for query in captured.captured_queries] == ["django_session", "identity_voter"]
+    assert [query_table(query["sql"]) for query in captured.captured_queries] == ["django_session", "identity_voter", "phase_phasemove"]
+    # The phase is the header link's: My warnings shows in every phase but RUN (#107).
 
 
 def test_the_gallery_is_behind_the_login_wall(debug, db):

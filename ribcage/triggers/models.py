@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from ribcage.identity import display_names
@@ -30,3 +31,14 @@ class Topic(models.Model):
     super_category = models.IntegerField(null=True)
     super_category_name = models.TextField(null=True)
     super_category_position = models.PositiveIntegerField(null=True)
+
+
+class WatchedTopic(models.Model):
+    """One topic on a voter's watched list, deleted with the voter (#20 §5, #107)."""
+
+    voter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="watched_topics")
+    # A plain DoesTheDogDie topic id, not a link to `Topic`: the RUN purge neither deletes it nor is blocked by it, and a retired topic never matches (#107).
+    topic_id = models.PositiveIntegerField()
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["voter", "topic_id"], name="one_row_per_watched_topic")]

@@ -12,6 +12,12 @@ def after_the_add(suggestion):
     transaction.on_commit(lambda: look_up(suggestion))
 
 
+def ensure_vocabulary(client=None):
+    """Fetch the vocabulary if none is stored, raising `NotAnswering` when DoesTheDogDie doesn't answer; in RUN nothing is stored (#62, #106, #107)."""
+    if not stored.has_vocabulary():
+        stored.replace_vocabulary((client or dtdd_client()).vocabulary().value)
+
+
 def look_up(suggestion, client=None):
     """Store the film's match and snapshot; a failure leaves it not fetched, and the suggestion stands (#32 §2).
 
@@ -21,8 +27,7 @@ def look_up(suggestion, client=None):
         return
     client = client or dtdd_client()
     try:
-        if not stored.has_vocabulary():
-            stored.replace_vocabulary(client.vocabulary().value)
+        ensure_vocabulary(client)
         snapshot = client.lookup(suggestion.tmdb_id, suggestion.title, suggestion.year).value
     except NotAnswering:
         return

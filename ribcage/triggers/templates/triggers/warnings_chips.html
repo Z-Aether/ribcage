@@ -1,0 +1,13 @@
+{# The ticked topics as removable chips; an unticking from one swaps in place like a row's (#107). #}
+<section id="warnings-chips" class="warnings__chips" aria-label="Your ticked topics"{% if oob %} hx-swap-oob="morph"{% endif %}>
+  {% for row in page.chips %}
+    <form class="warnings__chip" method="post" action="{% url 'warnings_tick' %}" hx-post="{% url 'warnings_tick' %}" hx-swap="none">
+      {% csrf_token %}
+      <input type="hidden" name="topic" value="{{ row.topic_id }}">
+      <input type="hidden" name="ticked" value="0">
+      <button type="submit" class="warnings__chip-button" title="Remove {{ row.label }}">{{ row.label }} <span aria-hidden="true">×</span><span class="visually-hidden"> (remove)</span></button>
+    </form>
+  {% empty %}
+    <p class="warnings__nothing">Nothing ticked yet.</p>
+  {% endfor %}
+</section>

@@ -12,8 +12,8 @@ ADMIN = "admin"
 # Public routes that answer POST alone: each log out, outside the walls so a stale tab's lands on a login (#70, #76).
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
-# Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105).
-ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match"}
+# Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107).
+ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick"}
 
 # A value each built-in converter accepts, so a route with one is requested at an address it answers (#76).
 SAMPLES = {"int": "1", "str": "x", "slug": "x", "path": "x", "uuid": "00000000-0000-0000-0000-000000000000"}

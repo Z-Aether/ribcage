@@ -1,6 +1,8 @@
-{# The thin voter header: the wordmark home to the phase page, and the voter's name opening their menu (#27, #37). #}
-<header class="voter-header">
+{# The thin voter header: the wordmark home to the phase page, and the voter's name opening their menu (#27, #37, #107). #}
+{% load phase_links %}<header class="voter-header">
   {% include "components/wordmark.html" %}
+  {% warnings_link_shown as warnings_link %}
+  {% if warnings_link %}<a class="voter-header__warnings" href="{% url 'warnings' %}">My warnings</a>{% endif %}
   <details class="voter-menu" data-voter-menu>
     <summary class="voter-menu__name">{{ user.display_name }}</summary>
     <ul class="voter-menu__items">

@@ -1,0 +1,11 @@
+{# A topic row: the label ticks it, its description a hover title and nothing more (#23, #107). #}
+<li id="topic-{{ row.topic_id }}" class="warnings__topic{% if row.ticked %} is-ticked{% endif %}"{% if oob %} hx-swap-oob="morph"{% endif %}>
+  <form method="post" action="{% url 'warnings_tick' %}" hx-post="{% url 'warnings_tick' %}" hx-swap="none">
+    {% csrf_token %}
+    <input type="hidden" name="topic" value="{{ row.topic_id }}">
+    <input type="hidden" name="ticked" value="{% if row.ticked %}0{% else %}1{% endif %}">
+    <button type="submit" class="warnings__topic-button" aria-pressed="{% if row.ticked %}true{% else %}false{% endif %}"{% if row.description %} title="{{ row.description }}"{% endif %}>
+      <span class="warnings__box" aria-hidden="true"></span>{{ row.label }}
+    </button>
+  </form>
+</li>

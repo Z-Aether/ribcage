@@ -1,0 +1,1 @@
+<span id="{{ section.anchor }}-count" class="warnings__count"{% if oob %} hx-swap-oob="morph"{% endif %}>{{ section.rows|length }} topic{{ section.rows|length|pluralize }}{% if section.ticked %} · {{ section.ticked }} ticked{% endif %}</span>
