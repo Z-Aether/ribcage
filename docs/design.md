@@ -208,8 +208,8 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 **VOTE** (#9, #35):
 - **Header:** `n of N scored`, the done roster by name, and the *I'm done* toggle.
-- **Ballot:** a sticky Unsorted tray, then five colour bands (+3 … −1) and a separate dashed-red Veto band. Dropping a tile into a band is the score.
-- **Veto band:** a tile dropped there widens to show matched topics and a reason box.
+- **Ballot:** a sticky Unsorted tray, then five colour bands (+3 … −1) and a separate dashed-red Veto band. Placing a tile in a band is the score.
+- **Veto band:** a tile placed there widens to show matched topics and a reason box.
 - **Tiles:** poster, title and year only. Their state is on the frame: the ring for a match with its count pill, in the lime the theme gives trigger warnings (#58, #117), greyed for seen it, a red ribbon with initials for vetoes by others.
 - **Opening a tile:** the film card expands in place inside its band, with others' veto reasons and seen-it flags shown one line each.
 

@@ -1,0 +1,7 @@
+{# A voter's ballot in VOTE: the header, then the board (#9, #119). #}
+<header class="ballot-head">
+  <h1>Vote</h1>
+  {% include "ballot/scored.html" with counts=board.counts %}
+  <p class="ballot-head__standing">Your scores aren't shown to the group while VOTE is open. Everyone's scores are shown, by name, once it closes.</p>
+</header>
+{% include "components/ballot_board.html" with board=board %}

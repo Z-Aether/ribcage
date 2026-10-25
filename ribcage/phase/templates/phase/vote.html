@@ -3,7 +3,5 @@
 {% block title %}Vote · Ribcage{% endblock %}
 
 {% block content %}
-  <h1>Vote</h1>
-  <p>This is where you'll sort every film on the ballot from top pick to rather not, and veto any you won't be in the room for. Nobody sees your scores until voting closes.</p>
-  <p>When you're ready, you'll press I'm done, and the whole group will see it.</p>
+  {% include "ballot/ballot.html" %}
 {% endblock %}

@@ -1,6 +1,8 @@
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_safe
 
+from ribcage.ballot import board
 from ribcage.identity.views import WELCOME_PENDING
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
@@ -20,10 +22,15 @@ def the_pool(request, phase):
     return {"pool": cards, "phase_bar": pool.PHASE_BARS[phase], "opened": opened}
 
 
-# Voters read the pool in SUGGEST and APPROVE only; from VOTE on, the ballot takes its place (#27).
+def the_ballot(request, phase):
+    return {"board": board.of(request.user, places_at=reverse("ballot_place"))}
+
+
+# Voters read the pool in SUGGEST and APPROVE only; in VOTE the ballot takes its place (#27, #119).
 PHASE_CONTEXTS = {
     Phase.SUGGEST: the_pool,
     Phase.APPROVE: the_pool,
+    Phase.VOTE: the_ballot,
 }
 
 

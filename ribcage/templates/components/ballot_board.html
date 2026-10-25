@@ -1,0 +1,17 @@
+{# The Unsorted tray and the five bands over a Board; a tile is dragged between them, one placement one post (#9, #38, #119). #}{% load static %}
+<div class="board" data-board{% if board.places_at %} data-places-at="{{ board.places_at }}"{% endif %}>
+  <section class="tray" aria-labelledby="tray-name">
+    <h2 class="tray__name" id="tray-name">Unsorted</h2>
+    {% include "components/ballot_left.html" with counts=board.counts %}
+    <ul class="tiles tray__tiles" data-place="unsorted" aria-labelledby="tray-name">{% for tile in board.tray %}{% include "components/ballot_tile.html" %}{% endfor %}</ul>
+  </section>
+  <div class="bands">
+    {% for band in board.bands %}
+      <section class="band band--{{ band.key }}" aria-labelledby="band-{{ band.key }}">
+        <h2 class="band__name" id="band-{{ band.key }}"><span class="score score--{{ band.key }}"><b>{{ band.sign }}</b> {{ band.name }}</span></h2>
+        <ul class="tiles band__tiles" data-place="{{ band.score }}" aria-labelledby="band-{{ band.key }}">{% for tile in band.tiles %}{% include "components/ballot_tile.html" %}{% endfor %}</ul>
+      </section>
+    {% endfor %}
+  </div>
+</div>
+<script src="{% static 'components/ballot-board.js' %}" defer></script>

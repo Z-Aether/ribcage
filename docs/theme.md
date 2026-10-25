@@ -46,6 +46,12 @@ A **phase bar** is the foot of an opened film card, where a voter acts on it, an
 
 A **tile** is a poster or its title card with the title and a muted year beneath, in `components/tile.html`; the caller frames it and sets its state classes. The picker's tiles add the original title where it differs, and are buttons that keep the tile's look: reached for, the poster lifts and takes a pumpkin edge. A film already in the pool says *already suggested by …* in pumpkin under its tile, naming its suggester, or *already suggested by you* on the searching voter's own (#92; the dev, 2026-10-23). M6's ballot tiles extend the same tile with the state colours below (#61, #92).
 
+## The ballot
+
+In VOTE the voter's page is the board, full width under the thin header with no side rail. Its header reads *Vote*, then `n of N scored` in the top-pick teal and the standing line in the muted ink (#119).
+
+The **Unsorted tray** is a raised panel with the carved card corners that sticks to the top of the window, holds at most 44% of its height and scrolls inside. Its line is *n left*, in bold, then *counts as "don't mind" until you move it*. The **five bands** sit below in the score order, from +3 down to −1. Each is a row of its score pill, the same `score` component the scale uses, and a dashed area edged in that score's colour, which keeps a minimum height so an empty band is still somewhere to place a tile. On a phone the pill sits above its area. A **ballot tile** is the poster tile with a grab cursor; dragging dims the one in hand. A touch drags only after a short hold, so a swipe still scrolls (#119).
+
 ## The Suggest a film panel
 
 The panel sits above the pool's filter on a surface of its own: the heading, one *Title* box, and the picker under it, five tiles in a row on a desktop and three to a row on a phone. TMDB finding nothing is one line in muted ink where the tiles would be, and TMDB not answering is the same, with *add it by hand* as a link at its end. Under the tiles one more muted line reads *None of these? Add the year or add it by hand.*, *Add the year* emphasised and not a link, and under the no-results line the by-hand offer stands alone as *Add it by hand.*; either way *add it by hand* is a link that swaps the hand step in, its *Title* box holding what was searched and its *Year* box any trailing year (#92, #94; the dev, 2026-10-23 and 2026-10-24).

@@ -13,8 +13,8 @@ ADMIN = "admin"
 # Public routes that answer POST alone: each log out, outside the walls so a stale tab's lands on a login (#70, #76).
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
-# Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110).
-ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch"}
+# Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110, #119).
+ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place"}
 
 class Fragment(NamedTuple):
     """One htmx answer that swaps a card, its section or a part of one in, which test_dtdd_credit.py sweeps for DoesTheDogDie's data (#112).
@@ -58,6 +58,7 @@ FRAGMENTS = [
 # Voter and admin routes that are no swept page and whose answers hold none of DoesTheDogDie's data, whatever is stored (#112).
 NO_DTDD_DATA = {
     "runtime", "find", "suggest",  # the voter's runtime box, the picker and the suggest act
+    "ballot_place",  # answers the ballot's two counts, or reloads the tab (#119)
     "welcome",  # redirects a plain GET
     "gallery",  # dev-only, answering 404 outside DEBUG
     "console", "console_phase_move", "console_films_approval",  # redirects, whatever they act on

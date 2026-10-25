@@ -1,0 +1,1 @@
+{# The tray's line: how many are left, and what leaving them means (#10, #119). #}<p class="tray__left" id="tray-left"{% if oob %} hx-swap-oob="true"{% endif %}>{% if counts.size == 0 %}Nothing is on the ballot yet.{% else %}<b>{{ counts.left }} left</b> · counts as “don't mind” until you move it{% endif %}</p>
