@@ -14,7 +14,7 @@
   {# data-dtdd marks a region of DoesTheDogDie's data, which must carry its own credit (#112). #}
   <div class="warnings{% if page.greyed %} is-greyed{% endif %}" hx-ext="morph" data-dtdd>
     <h1>My warnings</h1>
-    <p class="warnings__purpose">Tick the topics you want to be warned about, and films that carry them are marked for you.</p>
+    <p class="warnings__purpose">Tick the topics you want to be warned about, and films that carry them <span class="trigger-words">will be marked for you</span>.</p>
     <div class="warnings__lead">
     <p class="warnings__privacy">Only you see this list in the app. The admin and the host of the server can technically read it, as they can read everything stored here. It is deleted when the marathon is torn down.</p>
     {% include "triggers/warnings_care.html" %}

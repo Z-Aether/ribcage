@@ -5,7 +5,7 @@
   <details class="voter-menu" data-voter-menu>
     <summary class="voter-menu__name">{{ user.display_name }}</summary>
     <ul class="voter-menu__items">
-      {% if links.warnings_link %}<li><a href="{% url 'warnings' %}">My warnings</a></li>{% endif %}
+      {% if links.warnings_link %}<li><a class="trigger-words" href="{% url 'warnings' %}">My warnings</a></li>{% endif %}
       <li><a href="{% url 'change_password' %}">Change password</a></li>
       <li>
         <form method="post" action="{% url 'logout' %}">
@@ -18,5 +18,5 @@
 </header>
 {# Slim and non-blocking, and gone once the voter ticks a topic or presses *I don't care* (#27, #110). #}
 {% if links.nag_bar %}<aside class="nag-bar" aria-label="Warnings not set up">
-  <p>You haven't set up your warnings yet. <a href="{% url 'warnings' %}">Set up my warnings</a></p>
+  <p>You haven't set up your warnings yet. <a class="trigger-words" href="{% url 'warnings' %}">Set up my warnings</a></p>
 </aside>{% endif %}

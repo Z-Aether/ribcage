@@ -53,7 +53,7 @@
       </ul>
       <ul class="tiles">
         {% for tile in tiles %}
-          <li class="tile{% if tile.trigger_icon %} has-trigger-icon{% endif %}{% if tile.seen_it %} is-seen-it{% endif %}">{% include "components/tile.html" with film=tile.film caption=tile.caption vetoed_by=tile.vetoed_by %}</li>
+          <li class="tile{% if tile.trigger_count %} has-trigger-icon{% endif %}{% if tile.seen_it %} is-seen-it{% endif %}">{% include "components/tile.html" with film=tile.film caption=tile.caption vetoed_by=tile.vetoed_by trigger_count=tile.trigger_count %}</li>
         {% endfor %}
       </ul>
     </div>

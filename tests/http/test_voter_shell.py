@@ -96,7 +96,7 @@ def test_the_name_menu_holds_my_warnings_change_password_and_a_log_out_post_and_
     shown = header(client.get("/").text)
     menu = re.search(r"<details\b.*?</details>", shown, re.S)[0]
 
-    assert re.findall(r'<a href="([^"]+)"', menu) == ["/warnings/", "/password/"]
+    assert re.findall(r'<a (?:class="[^"]+" )?href="([^"]+)"', menu) == ["/warnings/", "/password/"]
     assert re.search(r'<form method="post" action="/logout/">.*?<button[^>]*>Log out</button>', menu, re.S)
     assert len(re.findall(r"<li\b", menu)) == 3
 

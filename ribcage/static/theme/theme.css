@@ -76,6 +76,7 @@
   --veto: #ff6363;
   --veto-ink: #ff9a8f;
   --trigger-icon-ring: #b9e46e;
+  --trigger-icon-ink: #1b2a08;
   --seen-it-filter: grayscale(1) brightness(0.5) contrast(0.9);
 
   --title-card-fill: #3b2647;
@@ -985,7 +986,7 @@ body > footer.site-footer {
 
 /* ---------- The nag bar and the I don't care toggle (#27, #110) ---------- */
 
-/* A slim band under the voter header, centred and wrapping on a phone; muted and kind, never a warning colour. */
+/* A slim band under the voter header, centred and wrapping on a phone; muted and kind, no alarm red; its link is a trigger-warning word, lime through `.trigger-words` (#117). */
 body > aside.nag-bar {
   padding: 0.5rem 1rem;
   background-color: var(--surface);
@@ -2140,6 +2141,40 @@ body > aside.nag-bar a {
 /* The card's ring is on its poster or title card, collapsed or opened (#111). */
 .film-card__poster.has-trigger-icon > .poster {
   box-shadow: 0 0 0 4px var(--trigger-icon-ring);
+}
+/* The count pill sits on the poster's bottom corner: a tile's slot is its own box, a card's wrapper also holds the open card's spider, so the pill is placed by the poster's 2:3 height (#117). */
+.trigger-count {
+  position: absolute;
+  min-width: 1.5rem;
+  padding: 0 0.4rem;
+  border: 2px solid var(--ground);
+  border-radius: var(--radius-pill);
+  background-color: var(--trigger-icon-ring);
+  color: var(--trigger-icon-ink);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  text-align: center;
+  font-variant-numeric: lining-nums;
+}
+.tile__poster > .trigger-count {
+  right: -0.4rem;
+  bottom: -0.4rem;
+}
+.film-card__poster.has-trigger-icon {
+  position: relative;
+  container-type: inline-size;
+}
+.film-card__poster > .trigger-count {
+  top: calc(150cqw - 0.9rem);
+  right: -0.4rem;
+}
+/* Lime is the trigger warnings' colour wherever words refer to them, and no other text takes it (#117). */
+.trigger-words,
+[data-skin] .voter-menu__items a.trigger-words,
+[data-skin] .dtdd a:not(.button) {
+  color: var(--trigger-icon-ring);
 }
 .is-seen-it .poster {
   filter: var(--seen-it-filter);

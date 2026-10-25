@@ -186,7 +186,7 @@ def test_the_menu_link_shows_in_every_phase_but_run_first_in_the_name_menu_and_n
     assert ('href="/warnings/"' in menu) is (phase is not Phase.RUN)
     assert header.count('href="/warnings/"') == menu.count('href="/warnings/"')
     if phase is not Phase.RUN:
-        assert re.findall(r'<a href="([^"]+)"', menu)[:2] == ["/warnings/", "/password/"]
+        assert re.findall(r'<a (?:class="[^"]+" )?href="([^"]+)"', menu)[:2] == ["/warnings/", "/password/"]
 
 
 def test_the_page_in_run_redirects_to_the_phase_page(browser):

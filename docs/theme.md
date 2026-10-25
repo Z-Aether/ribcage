@@ -22,10 +22,10 @@ A page wears the voter skin unless it names admin or run in base.html's `skin` b
 - **State colours**, shared by every later surface:
   - the score scale: sea-glass for wanting it, +3 Top pick `#7dd3c0`, +2 Keen `#4aa292`, +1 Happy `#2e6a62`; grey for 0 Don't mind `#43384b`; dusty rose for −1 Rather not `#dca0b6`;
   - the **veto**: a dashed red border, `#ff6363`, unlike any score;
-  - the **trigger icon**: a lime ring, `#b9e46e`, on a tile's frame;
+  - the **trigger icon**: a lime ring, `#b9e46e`, on a tile's frame, with a small lime pill on its bottom corner holding the count of the viewer's matched topics the film carries, in near-black ink `#1b2a08` (about 12:1 on the pill; the lime itself is about 12:1 on the ground). Lime is the trigger warnings' colour and no other thing's: the text that refers to them wears it as well. The class `.trigger-words` marks *My warnings* in the name menu, the nag bar's link, and *will be marked for you* on *My warnings* and Welcome; the DoesTheDogDie links on the card are lime through the `[data-skin] .dtdd a:not(.button)` rule instead. A link stays underlined on hover and keeps the lilac focus ring (#117);
   - **seen it**: the poster greyed and dimmed. It is the only filter a poster ever gets: every other poster keeps its own colours.
   - The password confirmation's live line borrows two of them, sea-glass when the passwords match and rose when they differ, since no score shows beside it (#72).
-- The trigger icon rings a film card's poster or title card too, on a collapsed and an opened card alike (#111).
+- The trigger icon rings a film card's poster or title card too, on a collapsed and an opened card alike, and its count pill follows the ring through every swap that redraws it (#111, #117).
 - **Title card fill:** the one muted fill is `#3b2647`, with the title in `#f6d9b8`.
 - **Type:**
   - Mystery Quest for display: headings, card titles, the wordmark and title cards. It is bouncy and spooky but legible.
@@ -74,7 +74,7 @@ A voter page on a roomy single column. At the top sit the page's one line of pur
 
 **I don't care** sits beside the privacy disclosure, to its right and under it on a phone, as one quiet outlined pill, the same as *Withdraw…*, reversible and unremarkable. Pressed, it reads *Warn me again*, so it plainly reverses, and fills sea-glass as a ticked box does, and a muted line under it says nothing is ticked and the list can't be until it is turned off. Over ticked topics a click arms it as withdraw is armed: *Cancel* takes the pill's place at its size, and below it a bold line reads *This clears your 4 topics.* over a button naming the act, *Clear my 4 topics*. Confirmed or turned on, the list greys out: the chips and the sections drop to under half their ink, the rows' boxes can't be pressed and show a not-allowed cursor, and the search still finds them (#110, #116).
 
-**The nag bar** is a slim band under the voter header on every voter page but *My warnings* and the forced password change, on the plain surface with a line below it, one line of small muted type centred, *You haven't set up your warnings yet.* and a bold lilac *Set up my warnings* link. It takes no warning colour and has no close, since ticking a topic or pressing *I don't care* removes it. On a phone the sentence wraps, and the link never breaks across lines (#110).
+**The nag bar** is a slim band under the voter header on every voter page but *My warnings* and the forced password change, on the plain surface with a line below it, one line of small muted type centred, *You haven't set up your warnings yet.* and a bold lime *Set up my warnings* link, a trigger-warning word like the others (#117). It has no alarm red and no close, since ticking a topic or pressing *I don't care* removes it. On a phone the sentence wraps, and the link never breaks across lines (#110).
 
 ## The Films tab
 

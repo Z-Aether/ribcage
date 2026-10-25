@@ -66,7 +66,7 @@ class Tile:
 
     film: object
     caption: str
-    trigger_icon: bool = False
+    trigger_count: int = 0
     seen_it: bool = False
     vetoed_by: str = ""
 
@@ -343,11 +343,11 @@ def phase_bars():
 
 def tiles():
     return (
-        Tile(film(THE_SHINING), "A topic you watch for", trigger_icon=True),
+        Tile(film(THE_SHINING), "A topic you watch for", trigger_count=1),
         Tile(film(CARRIE_2013), "Seen it", seen_it=True),
         Tile(film(TERRIFIER), "Vetoed by others", vetoed_by="BH"),
         Tile(film(THE_EXORCIST), "Nothing to say"),
-        Tile(film(CABINET_OF_CURIOSITIES), "All three, on a title card", trigger_icon=True, seen_it=True, vetoed_by="G"),
+        Tile(film(CABINET_OF_CURIOSITIES), "All three, on a title card", trigger_count=3, seen_it=True, vetoed_by="G"),
     )
 
 
