@@ -3,7 +3,7 @@
 Each score is by the film's TMDB id. A film a voter leaves out is left in their Unsorted tray, and PICK and RUN keep the same scores (#63).
 """
 
-from ribcage.ballot.models import BallotRecord
+from ribcage.ballot.models import BallotRecord, DoneMarker
 from ribcage.identity.models import Voter
 from ribcage.suggestions.models import Suggestion
 
@@ -29,6 +29,10 @@ SEEDED_VETOES = {
 SEEDED_SEEN = {"Ada": (MIDSOMMAR, CUBE), "Zoë": (TERRIFIER, THE_SHINING)}
 
 
+# Anne-Marie and O'Brien are done; Bartholomew Winthrop never votes and is not (#123).
+SEEDED_DONE = ("Anne-Marie", "O'Brien")
+
+
 def seed_the_ballots():
     voters = {voter.display_name: voter for voter in Voter.objects.all()}
     suggestions = {suggestion.tmdb_id: suggestion for suggestion in Suggestion.objects.exclude(tmdb_id=None)}
@@ -43,3 +47,4 @@ def seed_the_ballots():
             record, _ = BallotRecord.objects.get_or_create(voter=voters[name], suggestion=suggestions[tmdb_id])
             record.seen_it = True
             record.save(update_fields=["seen_it"])
+    DoneMarker.objects.bulk_create(DoneMarker(voter=voters[name]) for name in SEEDED_DONE)

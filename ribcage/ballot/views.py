@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST, require_safe
 
-from ribcage.ballot import board, cardbar, placing
+from ribcage.ballot import board, cardbar, done, placing
 from ribcage.phase.check import phase_window
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
@@ -115,3 +115,19 @@ def card(request):
     if other is not None and other.pk != suggestion.pk:
         context["closed"] = board.one_tile(request.user, other)
     return render(request, "ballot/opened.html", context)
+
+
+DONE_STATES = {"1": True, "0": False}
+
+
+@phase_window(Phase.VOTE)
+@require_POST
+def im_done(request):
+    """The voter's done marker set to the state the post names, and the header's roster drawn again; a post naming none reloads the ballot (#15, #34, #78, #123)."""
+    state = DONE_STATES.get(request.POST.get("done"))
+    if state is None:
+        return reload_the_tab(request, reverse("phase_page"))
+    done.set_done(request.user, state)
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    return render(request, "ballot/done.html", {"roster": done.roster(request.user)})

@@ -7,7 +7,7 @@ from django.db.models import F
 from django.test import override_settings
 from django.utils import timezone
 
-from ribcage.ballot.models import BallotRecord
+from ribcage.ballot.models import BallotRecord, DoneMarker
 from ribcage.films.corpus import read_entries
 from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
@@ -78,7 +78,12 @@ def test_from_approve_on_the_pool_is_a_mix_of_undecided_approved_and_dropped(db,
 
 @pytest.mark.parametrize("seeded", PHASES[: PHASES.index(Phase.VOTE)], indirect=True)
 def test_before_vote_nobody_has_a_ballot(db, seeded):
-    assert not BallotRecord.objects.exists()
+    assert not BallotRecord.objects.exists() and not DoneMarker.objects.exists()
+
+
+@pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
+def test_from_vote_on_anne_marie_and_obrien_are_done_and_bartholomew_is_not(db, seeded):
+    assert set(DoneMarker.objects.values_list("voter__display_name", flat=True)) == {"Anne-Marie", "O'Brien"}
 
 
 @pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)

@@ -2268,6 +2268,65 @@ body > aside.nag-bar a {
   color: var(--score-top-pick);
   font-variant-numeric: lining-nums tabular-nums;
 }
+[data-skin] .ballot-done {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 1rem;
+  row-gap: 0.25rem;
+  flex-basis: 100%;
+  margin-top: 0.6rem;
+}
+[data-skin] .ballot-done__toggle {
+  margin: 0;
+}
+[data-skin] .ballot-done__button {
+  width: auto;
+  min-height: 2.75rem;
+  margin: 0;
+  padding: 0.3rem 1.1rem;
+  font-family: var(--font-label);
+  font-weight: 700;
+  color: var(--ink-muted);
+  background-color: transparent;
+  border: 1px solid var(--line-strong);
+}
+[data-skin] .ballot-done__button.is-on {
+  color: var(--score-top-pick-ink);
+  background-color: var(--score-top-pick);
+  border-color: var(--score-top-pick);
+}
+[data-skin] .ballot-done__count {
+  margin: 0;
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+[data-skin] .ballot-done__roster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-muted);
+}
+[data-skin] .ballot-done__voter {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+[data-skin] .ballot-done__voter.is-done {
+  color: var(--ink);
+}
+[data-skin] .ballot-done__tick {
+  color: var(--score-top-pick);
+  font-weight: 700;
+}
+/* A name not done keeps the tick's room, hidden, so a press never reflows the roster (#123). */
+[data-skin] .ballot-done__voter:not(.is-done) .ballot-done__tick {
+  visibility: hidden;
+}
 [data-skin] .ballot-head__standing {
   flex-basis: 100%;
   margin: 0.4rem 0 0;

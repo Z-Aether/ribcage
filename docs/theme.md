@@ -48,7 +48,7 @@ A **tile** is a poster or its title card with the title and a muted year beneath
 
 ## The ballot
 
-In VOTE the voter's page is the board, full width under the thin header with no side rail. Its header reads *Vote*, then `n of N scored` in the top-pick teal and the standing line in the muted ink (#119).
+In VOTE the voter's page is the board, full width under the thin header with no side rail. Its header reads *Vote*, then `n of N scored` in the top-pick teal and the standing line in the muted ink (#119). Between them sits the **done block**, in `components/ballot_done.html`: a row holding *I'm done*, `n of N done` in the same bold label type, and the roster, every voter by name in the muted ink, a done voter's name in ink with a top-pick teal ✓ after it. *I'm done* is a 44 px-tall outline button in the muted ink; pressed it fills top-pick teal, with `aria-pressed` set, and it posts the state it sets. The roster is the same for every voter and shows done and nothing finer. The gallery shows the block off and on, its toggles flipping their look and posting nothing (#123).
 
 A **legend** is one line in the muted ink between the header and the board, naming the three states a tile's frame shows: *the lime ring and its number* (in the trigger words' lime) for a topic on your list, a *greyed poster* for a film you've seen, and a *red ribbon* (in the veto's ink) for a film others vetoed. Its wording waits for M10's copy pass (#121).
 

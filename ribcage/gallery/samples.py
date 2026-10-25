@@ -11,7 +11,7 @@ own words and grouping, since its recordings stay out of the repo (#40, #103).
 from dataclasses import dataclass, replace
 from functools import cache
 
-from ribcage.ballot import board
+from ribcage.ballot import board, done
 from ribcage.films import corpus
 from ribcage.films.card import (
     DtddMatch,
@@ -398,6 +398,12 @@ def ballot_board():
     return board.Board(tray, bands, board.Counts(scored=10, size=14), vetoes)
 
 
+def done_roster(mine):
+    """The ballot header's done block over sample voters, with the viewer done or not (#123)."""
+    names = (("Ada", mine), ("Anne-Marie", True), ("Bartholomew Winthrop", False), ("O'Brien", True), ("Sam", False), ("Zoë", False))
+    return done.Roster(names, mine)
+
+
 def poster_row():
     return [film(key) for key in (THE_THING, EVENT_HORIZON, CABINET_OF_CURIOSITIES, INFESTED, CUBE, POOH_2, EXIT_8)]
 
@@ -421,6 +427,8 @@ def gallery():
         "score_scale": SCORE_SCALE,
         "tiles": tiles(),
         "ballot_board": ballot_board(),
+        "done_off": done_roster(False),
+        "done_on": done_roster(True),
         "picker": picker(),
         "picker_outage": Picker(searched=True, outage=True, choosable=False),
         "poster_row": poster_row(),

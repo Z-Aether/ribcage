@@ -228,3 +228,13 @@ def test_the_gallerys_seen_it_toggles_show_off_and_on_and_fire_no_request(client
     assert any('aria-pressed="true"' in toggle for toggle in toggles) and any('aria-pressed="false"' in toggle for toggle in toggles)
     assert not any("hx-post" in toggle for toggle in toggles)
     assert 'class="ballot-legend"' in page
+
+
+def test_the_gallerys_done_block_shows_im_done_off_and_on_over_the_roster_and_posts_nowhere(client, debug):
+    page = client.get(GALLERY).content.decode()
+    blocks = re.findall(r'<div class="ballot-done".*?</ul></div>', page, re.S)
+
+    assert len(blocks) == 2
+    assert 'aria-pressed="false"' in blocks[0] and 'aria-pressed="true"' in blocks[1]
+    assert all("hx-post" not in block and "<form class=\"ballot-done__toggle\">" in block for block in blocks)
+    assert all("2 of 6 done" in block or "3 of 6 done" in block for block in blocks)
