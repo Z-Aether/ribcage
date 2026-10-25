@@ -11,10 +11,11 @@ You are implementing ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{pa
 - **Test** every acceptance criterion, in the suite `CLAUDE.md`'s Layout gives it.
 - **Keep `CLAUDE.md` true**, editing with the `writing-for-agents` skill.
 - **Record decisions.** A decision that changes `docs/design.md`, `docs/milestones.md` or `docs/theme.md` updates their lines in the same commit, citing #{n}.
-- **Run the full default suite** with `.venv/Scripts/python -m pytest`. Done when it passes.
+- **Run targeted tests while you work:** the test files of what you change, and of the modules that use it.
+- **Run the full default suite once, last,** after the docs edits: `.venv/Scripts/python -m pytest -q 2>&1 | tail -15`, with the Bash `timeout` at 600000, since the run outlasts the 120 s default. Fix what fails and rerun just those files; the orchestrator runs the full suite again after the review. Done when every test passes.
 - **Browse it** by following `docs/agents/browser-verification.md`, at both widths. Save screenshots as `tmp/m{m}/{n}-…png`.
   - States to check: {the states the acceptance criteria name}.
-  - Stop the seeded server when you're done.
+  - Stop the seeded server with `scripts/seeded.sh stop` when you're done.
 - **Commit** in one or more commits, each a standalone feature or module.
   - Each message is one short line ending in `(#{n})`, then a blank line and `{trailer}`.
   - Leave everything before `{base}` as it is, and push nothing.

@@ -30,7 +30,7 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
 2. **Read the diff whole.** Use `git diff <range>`, file by file for a long one.
 3. **Prove each acceptance criterion.** For every criterion, name the test that covers it. Then make the test bite:
    - Break the code it covers by reverting a line or flipping a condition.
-   - Run that test and see it fail.
+   - Run that test, or its file alone, and see it fail.
    - Restore with `git checkout -- <file>`.
 
    Done when every criterion has a test that failed against broken code and `git status` is clean again. A criterion with no test, or a test that passed against broken code, is a finding.
@@ -47,7 +47,7 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
    - Read the implementer's screenshots first. An image already taken can show the bug.
    - Then follow `docs/agents/browser-verification.md` over every state the change touches, at both widths.
    - Favour the states the implementer's run left out: refusals, empty states, the card after a swap, a second action after the first.
-6. **Run the full default suite** with `.venv/Scripts/python -m pytest`. A failure is a finding.
+6. **Run the test files the diff touches** in one run. A failure is a finding. The full suite is left to whoever lands the change, unless your brief asks for it.
 7. **Report.** Write the report to the path your brief names, else return it:
    - **Verdict:** clean, or the number of findings.
    - **Findings**, highest grade first. Give each one its grade, `file:line`, the problem it causes and the direction of the fix.
@@ -62,4 +62,4 @@ A re-review gets the fixup commits as its range and the findings they answer.
 - For each finding, check that it is fixed. A behaviour fix needs a test that bites, proved as step 3 does.
 - Check the fixups for new problems with steps 2 and 4.
 - Browse, as in step 5, only the states a fixup touched.
-- Run the full suite, then report as in step 7, leaving out the criteria list.
+- Run the test files the fixups touch, then report as in step 7, leaving out the criteria list.
