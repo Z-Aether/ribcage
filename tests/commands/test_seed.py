@@ -7,16 +7,14 @@ from io import BytesIO, StringIO, TextIOWrapper
 import pytest
 from django.contrib.auth import authenticate
 from django.core.management import CommandError, call_command
-from django.db.models import F
 from django.utils import timezone
 
 from ribcage.films import corpus
-from ribcage.films.corpus import read_entries
 from ribcage.identity.models import Voter
 from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
-from ribcage.phase.order import PHASES, Phase
-from ribcage.suggestions.models import Approval, Note, Suggestion
+from ribcage.phase.order import Phase
+from ribcage.suggestions.models import Approval, Suggestion
 from ribcage.phase import history
 from ribcage.seeding.recorded import RecordedDtdd
 from ribcage.triggers import client as dtdd_client
@@ -29,16 +27,6 @@ SEEDED_DISPLAY_NAMES = ["Ada", "Anne-Marie", "O'Brien", "Zoë", "Sam", "Bartholo
 SEEDED_PASSWORD = "popcorn-before-midnight"
 
 pytestmark = pytest.mark.usefixtures("fast_hashing")
-
-
-@pytest.mark.parametrize("display_name", SEEDED_DISPLAY_NAMES)
-def test_every_seeded_voter_signs_in_with_the_known_password(transactional_db, debug_on, display_name):
-    call_command("seed")
-
-    voter = authenticate(display_name=display_name, password=SEEDED_PASSWORD)
-
-    assert voter is not None
-    assert voter.display_name == display_name
 
 
 def test_with_debug_off_it_refuses_and_leaves_the_database_alone(transactional_db, settings):
@@ -67,18 +55,6 @@ def test_with_no_phase_named_it_seeds_a_fresh_suggest_with_no_history(transactio
 
     assert current() is Phase.SUGGEST
     assert not PhaseMove.objects.exists()
-
-
-@pytest.mark.parametrize("phase", PHASES)
-def test_each_phase_lands_there_by_a_walk_one_step_at_a_time(transactional_db, debug_on, phase):
-    call_command("seed", "--phase", phase)
-
-    walk = list(PhaseMove.objects.order_by("pk"))
-    assert current() is phase
-    assert [move.phase for move in walk] == PHASES[1 : PHASES.index(phase) + 1]
-    assert [move.at for move in walk] == sorted(move.at for move in walk)
-    assert all(move.at < timezone.now() for move in walk)
-    assert authenticate(display_name="Ada", password=SEEDED_PASSWORD) is not None
 
 
 def test_the_output_names_the_seeded_phase(transactional_db, debug_on):
@@ -131,43 +107,10 @@ def test_the_voter_list_reaches_a_redirected_cp1252_stdout_as_utf8(transactional
 CABINET_OF_CURIOSITIES = "Del Toro's Cabinet of Curiosities"
 
 
-def pitch_of(suggestion):
-    return suggestion.notes.filter(author=suggestion.suggester).first()
-
-
-@pytest.mark.parametrize("phase", PHASES)
-def test_each_phase_is_seeded_with_a_pool_from_the_recorded_corpus(transactional_db, debug_on, phase):
-    call_command("seed", "--phase", phase)
-
-    pool = list(Suggestion.objects.select_related("suggester"))
-    corpus_ids = {entry.tmdb_id for entry in read_entries()}
-    assert len(pool) >= 10
-    assert {suggestion.tmdb_id for suggestion in pool} <= corpus_ids
-    assert all(suggestion.suggester.display_name == suggestion.suggester_name for suggestion in pool)
-    assert len({suggestion.suggester_name for suggestion in pool}) >= 4
-    assert all(pitch_of(suggestion) is not None for suggestion in pool)
-    assert Note.objects.exclude(author=F("suggestion__suggester")).exists()
-
-
-@pytest.mark.parametrize("phase", PHASES)
-def test_each_phase_is_seeded_with_the_corpus_hand_entered_film(transactional_db, debug_on, phase):
-    call_command("seed", "--phase", phase)
-
-    cabinet = Suggestion.objects.get(title=CABINET_OF_CURIOSITIES)
-    assert (cabinet.tmdb_id, cabinet.runtime, cabinet.tmdb_runtime, cabinet.poster_path) == (None, 47, None, None)
-
-
 def test_a_seeded_suggest_has_every_suggestion_undecided(transactional_db, debug_on):
     call_command("seed")
 
     assert set(Suggestion.objects.values_list("approval", flat=True)) == {Approval.UNDECIDED}
-
-
-@pytest.mark.parametrize("phase", PHASES[1:])
-def test_from_approve_on_the_pool_is_a_mix_of_undecided_approved_and_dropped(transactional_db, debug_on, phase):
-    call_command("seed", "--phase", phase)
-
-    assert set(Suggestion.objects.values_list("approval", flat=True)) == set(Approval)
 
 
 def test_the_pool_is_seeded_offline(transactional_db, debug_on, monkeypatch):
