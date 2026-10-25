@@ -22,3 +22,8 @@ def move(from_phase, to_phase):
     with transaction.atomic():
         check_move(current(), from_phase, to_phase)
         return PhaseMove.objects.create(phase=to_phase, at=timezone.now())
+
+
+def vote_has_opened():
+    """Whether the history holds a move into VOTE, so it stays true after a move back to APPROVE (#26 §6, #124)."""
+    return PhaseMove.objects.filter(phase=Phase.VOTE).exists()

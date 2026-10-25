@@ -8,7 +8,10 @@
   // the filter, the row after it takes its place (#96).
   const places = (element) => {
     const all = [...document.querySelectorAll("[data-keeps-place]")];
-    const at = all.indexOf(element.closest("[data-keeps-place]"));
+    // An Approve confirm sits in a row of its own, which names the row it belongs to (#124).
+    const owner = element.closest("[data-place-of]");
+    const row = owner ? document.querySelector(`[data-keeps-place="${CSS.escape(owner.dataset.placeOf)}"]`) : element.closest("[data-keeps-place]");
+    const at = all.indexOf(row);
     return at < 0 ? [] : all.slice(at, at + 2).map((place) => ({ name: place.dataset.keepsPlace, top: place.getBoundingClientRect().top }));
   };
   const keep = (address, element) => {

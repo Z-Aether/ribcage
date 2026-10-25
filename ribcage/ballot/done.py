@@ -35,3 +35,12 @@ def roster(viewer):
     done_ids = set(DoneMarker.objects.values_list("voter_id", flat=True))
     voters = Voter.objects.order_by("display_name_key", "pk").values_list("pk", "display_name")
     return Roster(tuple((name, pk in done_ids) for pk, name in voters), viewer.pk in done_ids)
+
+
+def clear_all():
+    """Clear every voter's marker, as growing the ballot does: anyone done before the film existed would be wrong (#15, #28, #124)."""
+    DoneMarker.objects.all().delete()
+
+
+def count():
+    return DoneMarker.objects.count()

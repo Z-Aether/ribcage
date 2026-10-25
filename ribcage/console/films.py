@@ -2,12 +2,15 @@
 
 from dataclasses import dataclass
 
+from django.db import transaction
 from django.db.models import Count, Prefetch, Q
 from django.urls import reverse
 from django.utils import timezone
 
+from ribcage.ballot import done
 from ribcage.films.card import FilmCard
-from ribcage.phase.history import current
+from ribcage.identity.models import Voter
+from ribcage.phase.history import current, vote_has_opened
 from ribcage.phase.order import Phase
 from ribcage.suggestions import pool
 from ribcage.suggestions.models import Approval, Suggestion
@@ -26,6 +29,11 @@ class Filter:
     label: str
     approval: Approval | None
     nothing_shown: str
+
+    @property
+    def arm_address(self):
+        # Approve's arm is a plain GET at the filter's address plus the row; a film id follows (#124).
+        return f"{self.address}{'&' if self.approval else '?'}arm="
 
     @property
     def address(self):
@@ -206,7 +214,48 @@ def decide(suggestion, expected, to):
     # Approving also needs a runtime still there, so a clear landing since the read changes nothing (#97).
     if to == Approval.APPROVED:
         matching = matching.filter(runtime__isnull=False)
-    return matching.update(approval=to) == 1
+    # Growing the ballot once VOTE has opened clears every done marker, in the same write (#124).
+    with transaction.atomic():
+        if matching.update(approval=to) != 1:
+            return False
+        if to == Approval.APPROVED and vote_has_opened():
+            done.clear_all()
+    return True
+
+
+@dataclass(frozen=True)
+class Cost:
+    """What approving a film costs once VOTE has opened, read before the confirm (#28, #124)."""
+
+    done: int
+    voters: int
+    vote_closed: bool
+
+    @property
+    def says(self):
+        return f"Adds it to every voter's ballot and clears every done marker: {self.done} of {self.voters} → 0 of {self.voters}."
+
+    @property
+    def closed_line(self):
+        return "VOTE is closed, so nobody can score the film unless VOTE is reopened." if self.vote_closed else ""
+
+
+@dataclass(frozen=True)
+class Done:
+    done: int
+    voters: int
+
+
+def done_so_far():
+    """Who has pressed done, for the console's lines; None before VOTE has ever opened, as the Roster's columns are (#28, #124)."""
+    return Done(done.count(), Voter.objects.count()) if vote_has_opened() else None
+
+
+def cost_of_approving():
+    """The cost an approval asks about first, or None before VOTE has ever opened, when it is instant (#96, #124)."""
+    if not vote_has_opened():
+        return None
+    return Cost(done.count(), Voter.objects.count(), current() in (Phase.PICK, Phase.RUN))
 
 
 # Worded as `runtime.minutes` lines are, naming no act and no hold, so every hold fits it (#93, #97, #118).

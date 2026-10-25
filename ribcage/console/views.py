@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods, require_POST, require_safe
 
+from ribcage.ballot import progress
 from ribcage.console import films
 from ribcage.console.forms import BackupCodeForm, BackupUploadForm
 from ribcage.console.moves import make, offered
@@ -18,7 +19,8 @@ from ribcage.identity.removal import remove, what_goes
 from ribcage.identity.reset import password_digest, reset
 from ribcage.operations import offer
 from ribcage.operations.backup import describe
-from ribcage.phase.history import current, last_entered
+from ribcage.ballot.board import candidates
+from ribcage.phase.history import current, last_entered, vote_has_opened
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
@@ -56,6 +58,7 @@ def phase_tab(request):
         "moves": offered(phase, armed_to),
         "voters": Voter.objects.count(),
         "films": films.status(),
+        "done": films.done_so_far(),
     }
     return render_tab(request, "console/phase.html", context, phase)
 
@@ -69,9 +72,27 @@ def move_phase(request):
     return redirect("console_phase")
 
 
+def armed_approval(request, ledger):
+    """The row whose Approve is armed and what it costs, when VOTE has opened and the row still offers Approve; else nothing (#124)."""
+    cost = films.cost_of_approving()
+    wanted = request.GET.get("arm", "")
+    row = next((each for each in ledger.rows if str(each.card.suggestion_id) == wanted and each.may_approve), None)
+    return (row.card.suggestion_id, cost) if row and cost else (None, cost)
+
+
 def render_films(request, show, refused=None):
     ledger = films.ledger(show)
-    context = {"ledger": ledger, "screen_time": films.screen_time_words(ledger.screen_time), "refused": refused, "tab": "console_films"}
+    armed, cost = armed_approval(request, ledger)
+    context = {
+        "ledger": ledger,
+        "screen_time": films.screen_time_words(ledger.screen_time),
+        "refused": refused,
+        "tab": "console_films",
+        "done": films.done_so_far(),
+        "asks_first": cost is not None,
+        "armed": armed,
+        "cost": cost,
+    }
     return render_tab(request, "console/films.html", context)
 
 
@@ -128,7 +149,7 @@ def films_match(request):
 @admin_required
 @require_POST
 def decide_approval(request):
-    # Instant in every phase, and reloads with no message onto the filter it was sent from, whatever it changed (#28, #77, #96).
+    # The post is the confirm, whatever the phase, and reloads with no message onto the filter it was sent from, whatever it changed (#28, #77, #96, #124).
     post = request.POST
     films.decide(post.get("suggestion"), post.get("from_approval"), post.get("to_approval"))
     return redirect(films.chosen(post.get("show")).address)
@@ -163,8 +184,14 @@ def named_voter(pk):
 def render_roster(request, context):
     # The one row open under its voter: an armed act's confirm, or the password a reset just made (#79, #80).
     open_row = context.get("armed") or context.get("was_reset")
-    voters = Voter.objects.order_by("display_name_key")
-    return render_tab(request, "console/roster.html", {"voters": voters, "tab": "console_roster", "open_row": open_row, **context})
+    voters = list(Voter.objects.order_by("display_name_key", "pk"))
+    # Progress reads *—* until VOTE has opened (#28, #124).
+    opened = vote_has_opened()
+    shown = {each.voter_id: each for each in progress.of_every_voter()} if opened else {}
+    for voter in voters:
+        voter.progress = shown.get(voter.pk)
+    ballot_size = candidates().count() if opened else 0
+    return render_tab(request, "console/roster.html", {"voters": voters, "ballot_size": ballot_size, "tab": "console_roster", "open_row": open_row, **context})
 
 
 def armed_reset(voter, used=False):

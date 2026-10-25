@@ -743,6 +743,9 @@ html:has(> body[data-skin="admin"]) {
   text-align: right;
   white-space: nowrap;
 }
+[data-skin] .roster .roster__done {
+  white-space: nowrap;
+}
 [data-skin] .roster .roster__actions a.button {
   margin: 0;
   padding-block: 0.1rem;
@@ -752,6 +755,12 @@ html:has(> body[data-skin="admin"]) {
 }
 [data-skin] :is(.roster-confirm, .roster-reset) :where(p, ul) {
   margin: 0 0 0.5rem;
+}
+[data-skin] .films-confirm p {
+  margin: 0 0 0.5rem;
+}
+[data-skin] .films-confirm p.console-confirm {
+  margin-top: 0.75rem;
 }
 [data-skin] .roster-confirm li {
   margin: 0;
@@ -2819,7 +2828,8 @@ body > aside.nag-bar a {
   font-size: 0.9em;
 }
 /* On a phone the directors give way, and what still overflows scrolls within the ledger rather than the page (#95). */
-.films-ledger__frame {
+.films-ledger__frame,
+.roster__frame {
   /* Positioned, so a visually hidden header past the frame's edge scrolls with it rather than widening the page (#96). */
   position: relative;
   overflow-x: auto;
@@ -2834,6 +2844,12 @@ body > aside.nag-bar a {
     padding-left: 0.6rem;
   }
   .films-ledger .ledger__detail .film-card {
+    position: sticky;
+    left: 0.6rem;
+    max-width: calc(100cqi - 1.2rem);
+  }
+  /* A confirm too, or its button lands off-screen in a ledger scrolled sideways (#124). */
+  .ledger .ledger__detail :is(.films-confirm, .roster-confirm, .roster-reset) {
     position: sticky;
     left: 0.6rem;
     max-width: calc(100cqi - 1.2rem);

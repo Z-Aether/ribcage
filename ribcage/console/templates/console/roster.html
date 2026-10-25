@@ -8,14 +8,32 @@
   {% if voters %}
     {% url 'console_roster' as tab_address %}
     {# One row per voter; later milestones add their columns, and the floor set line above (#28, #79). #}
-    <table class="ledger roster" data-keeps-scroll>
+    {# Scrolls sideways within its frame on a phone, as the Films ledger does (#124). #}
+    <div class="roster__frame" data-keeps-scroll>
+    <table class="ledger roster">
       <thead>
-        <tr><th scope="col">Voter</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
+        <tr>
+          <th scope="col">Voter</th>
+          <th scope="col" class="ledger__number">Scored</th>
+          <th scope="col" class="ledger__number">Vetoes</th>
+          <th scope="col">Done</th>
+          <th scope="col"><span class="visually-hidden">Actions</span></th>
+        </tr>
       </thead>
       <tbody>
         {% for voter in voters %}
           <tr data-voter="{{ voter.pk }}"{% if voter == open_row %} class="is-armed"{% endif %}>
             <td class="roster__name">{{ voter.display_name }}</td>
+            {# Each reads — until VOTE has opened; the admin sees everyone's progress, which the voters' own roster limits to done (#28, #35 §5, #124). #}
+            {% if voter.progress %}
+              <td class="ledger__number roster__scored">{{ voter.progress.scored }} / {{ ballot_size }}</td>
+              <td class="ledger__number roster__vetoes">{{ voter.progress.vetoes }}</td>
+              <td class="roster__done">{% if voter.progress.done %}done{% else %}<span class="ledger__muted">not yet</span>{% endif %}</td>
+            {% else %}
+              <td class="ledger__number roster__scored">—</td>
+              <td class="ledger__number roster__vetoes">—</td>
+              <td class="roster__done">—</td>
+            {% endif %}
             <td class="roster__actions">
               {# The open row loses its arms; Cancel takes the clicked one's place, and the other's stays empty (#79, #85). #}
               {% if voter == armed and arming == "reset" %}
@@ -32,7 +50,7 @@
           </tr>
           {% if voter == armed and arming == "remove" %}
             <tr class="ledger__detail">
-              <td colspan="2">
+              <td colspan="5">
                 <form method="post" action="{% url 'console_roster_remove' %}" class="roster-confirm">
                   {% csrf_token %}
                   <input type="hidden" name="voter" value="{{ voter.pk }}">
@@ -49,7 +67,7 @@
             </tr>
           {% elif voter == armed and arming == "reset" %}
             <tr class="ledger__detail">
-              <td colspan="2">
+              <td colspan="5">
                 <form method="post" action="{% url 'console_roster_reset' %}" class="roster-confirm">
                   {% csrf_token %}
                   <input type="hidden" name="voter" value="{{ voter.pk }}">
@@ -65,7 +83,7 @@
             </tr>
           {% elif voter == was_reset %}
             <tr class="ledger__detail">
-              <td colspan="2">
+              <td colspan="5">
                 <div class="roster-reset">
                   <p>{{ voter.display_name }}'s new password:</p>
                   <p class="roster-reset__password"><code>{{ password }}</code></p>
@@ -80,6 +98,7 @@
         {% endfor %}
       </tbody>
     </table>
+    </div>
   {% else %}
     <p>Nobody has registered yet.</p>
   {% endif %}

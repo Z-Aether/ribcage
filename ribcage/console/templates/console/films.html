@@ -5,7 +5,7 @@
 {% block tab %}
   <h1>Films</h1>
 
-  <p class="films-summary">On the ballot: <strong>{{ ledger.ballot_size }} film{{ ledger.ballot_size|pluralize }}</strong> · {{ screen_time }} screen time</p>
+  <p class="films-summary">On the ballot: <strong>{{ ledger.ballot_size }} film{{ ledger.ballot_size|pluralize }}</strong> · {{ screen_time }} screen time{% if done %} · {{ done.done }} of {{ done.voters }} done{% endif %}</p>
   {# Every film's, whatever the filter, since every move refreshes them all (#32 §1, #104). #}
   {% if ledger.stale_line %}<p class="films-stale">{{ ledger.stale_line }}</p>{% endif %}
 
@@ -64,8 +64,17 @@
                     <input type="hidden" name="suggestion" value="{{ card.suggestion_id }}">
                     <input type="hidden" name="from_approval" value="{{ row.approval }}">
                     <input type="hidden" name="show" value="{{ ledger.show.show }}">
-                    <button type="submit" class="button--quiet" name="to_approval" value="approved"{% if not row.may_approve %} disabled{% endif %}>Approve</button>
-                    <button type="submit" class="button--quiet" name="to_approval" value="dropped"{% if not row.may_drop %} disabled{% endif %}>Drop</button>
+                    {# Once VOTE has opened, Approve is a plain GET that arms its confirm, and Cancel takes its place; Drop stays instant (#28, #124). #}
+                    {% if asks_first and row.may_approve and card.suggestion_id == armed %}
+                      {% include "console/cancel.html" with href=ledger.show.address arm="Approve" %}
+                      <a class="button button--quiet console-kept" aria-hidden="true">Drop</a>
+                    {% elif asks_first and row.may_approve %}
+                      <a class="button button--quiet" href="{{ ledger.show.arm_address }}{{ card.suggestion_id }}">Approve</a>
+                      <button type="submit" class="button--quiet" name="to_approval" value="dropped"{% if not row.may_drop %} disabled{% endif %}>Drop</button>
+                    {% else %}
+                      <button type="submit" class="button--quiet" name="to_approval" value="approved"{% if not row.may_approve %} disabled{% endif %}>Approve</button>
+                      <button type="submit" class="button--quiet" name="to_approval" value="dropped"{% if not row.may_drop %} disabled{% endif %}>Drop</button>
+                    {% endif %}
                   </form>
                 </td>
               </tr>
@@ -73,6 +82,23 @@
               <tr class="ledger__detail" id="film-{{ card.suggestion_id }}" hidden>
                 <td colspan="{% if ledger.shows_dtdd %}8{% else %}7{% endif %}">{% include "components/film_card.html" with card=card expanded=True lazy=True %}</td>
               </tr>
+              {% if asks_first and card.suggestion_id == armed %}
+                {# After the card's own row, which the hover rules read as the row's neighbour; its place is the row's (#96, #124). #}
+                <tr class="ledger__detail" data-place-of="{{ card.suggestion_id }}">
+                  <td colspan="{% if ledger.shows_dtdd %}8{% else %}7{% endif %}">
+                    <form method="post" action="{% url 'console_films_approval' %}" class="films-confirm" data-lands-on="{{ ledger.show.address }}">
+                      {% csrf_token %}
+                      <input type="hidden" name="suggestion" value="{{ card.suggestion_id }}">
+                      <input type="hidden" name="from_approval" value="{{ row.approval }}">
+                      <input type="hidden" name="show" value="{{ ledger.show.show }}">
+                      <input type="hidden" name="to_approval" value="approved">
+                      <p>{{ cost.says }}</p>
+                      {% if cost.closed_line %}<p>{{ cost.closed_line }}</p>{% endif %}
+                      <p class="console-confirm"><button type="submit">Approve {{ card.film.title }}</button></p>
+                    </form>
+                  </td>
+                </tr>
+              {% endif %}
             {% endwith %}
           {% endfor %}
         </tbody>
