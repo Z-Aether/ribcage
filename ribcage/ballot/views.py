@@ -123,11 +123,13 @@ DONE_STATES = {"1": True, "0": False}
 @phase_window(Phase.VOTE)
 @require_POST
 def im_done(request):
-    """The voter's done marker set to the state the post names, and the header's roster drawn again; a post naming none reloads the ballot (#15, #34, #78, #123)."""
+    """The voter's done marker set to the state the post names, and the header's roster drawn again. A post naming no state, or pressing *I'm done* on a ballot of another size than now, reloads the ballot and writes nothing; unpressing is always safe and needs no size (#15, #34, #78, #119, #123, #124)."""
     state = DONE_STATES.get(request.POST.get("done"))
-    if state is None:
+    size = request.POST.get("size", "")
+    if state is None or (state and size != str(board.candidates().count())):
         return reload_the_tab(request, reverse("phase_page"))
     done.set_done(request.user, state)
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
-    return render(request, "ballot/done.html", {"roster": done.roster(request.user)})
+    # The size posted is echoed, not the current one, so a stale page stays stale after unpressing (#124).
+    return render(request, "ballot/done.html", {"roster": done.roster(request.user), "size": size})

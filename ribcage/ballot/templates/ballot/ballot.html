@@ -2,7 +2,7 @@
 <header class="ballot-head">
   <h1>Vote</h1>
   {% include "ballot/scored.html" with counts=board.counts %}
-  {% include "components/ballot_done.html" %}
+  {% include "components/ballot_done.html" with size=board.counts.size %}
   <p class="ballot-head__standing">Your scores aren't shown to the group while VOTE is open. Everyone's scores are shown, by name, once it closes.</p>
 </header>
 {% if reopened %}<p class="ballot-reopened">{{ reopened }}</p>{% endif %}

@@ -4,6 +4,7 @@ import re
 
 import pytest
 
+from ribcage.ballot.board import candidates
 from ribcage.ballot.models import BallotRecord, DoneMarker
 from ribcage.phase.history import move
 from ribcage.phase.order import Phase
@@ -13,8 +14,10 @@ from tests.http.test_phase import walk_to
 DONE = "/ballot/done/"
 
 
-def post(client, state, **extra):
-    return client.post(DONE, {"done": state}, **extra)
+def post(client, state, size=None, **extra):
+    """A press as the page posts it: the state and the ballot's size it was drawn with, the current one unless named (#124)."""
+    named = {"done": state, "size": candidates().count() if size is None else size}
+    return client.post(DONE, {name: value for name, value in named.items() if value != ""}, **extra)
 
 
 def roster_of(page):
@@ -148,3 +151,58 @@ def test_every_name_holds_the_ticks_room_so_a_press_never_reflows_the_roster(bal
     post(client, "1")
 
     assert before == ticks(client.get("/").text) == [1] * len(ballot)
+
+
+def test_a_press_naming_a_smaller_ballot_reloads_it_and_sets_nothing(ballot):
+    client = signed_in(ballot["ada"])
+    stale = candidates().count() - 1
+
+    answer = post(client, "1", size=stale, headers=HTMX)
+
+    assert answer["HX-Redirect"] == "/" and not DoneMarker.objects.exists()
+    assert post(client, "1", size=stale)["Location"] == "/" and not DoneMarker.objects.exists()
+
+
+def test_a_press_naming_a_larger_ballot_reloads_it_too(ballot):
+    answer = post(signed_in(ballot["ada"]), "1", size=candidates().count() + 1, headers=HTMX)
+
+    assert "HX-Redirect" in answer.headers and not DoneMarker.objects.exists()
+
+
+@pytest.mark.parametrize("size", ["x", "-1", "1.5", "-"])
+def test_a_press_naming_no_size_or_a_garbled_one_is_stale(ballot, size):
+    client = signed_in(ballot["ada"])
+
+    assert "HX-Redirect" in client.post(DONE, {"done": "1"}, headers=HTMX).headers
+    assert "HX-Redirect" in client.post(DONE, {"done": "1", "size": size}, headers=HTMX).headers
+    assert not DoneMarker.objects.exists()
+
+
+def test_a_film_approved_since_the_page_loaded_makes_its_press_stale_and_the_reloaded_page_sets(ballot):
+    client = signed_in(ballot["ada"])
+    drawn = re.search(r'name="size" value="(\d+)"', client.get("/").text)[1]
+    film(ballot["Hanna"], "Two")
+
+    assert "HX-Redirect" in post(client, "1", size=drawn, headers=HTMX).headers
+    assert not marked(ballot["ada"])
+    fresh = re.search(r'name="size" value="(\d+)"', client.get("/").text)[1]
+    post(client, "1", size=fresh)
+    assert marked(ballot["ada"]) and fresh == str(int(drawn) + 1)
+
+
+def test_unpressing_needs_no_size_and_is_never_stale(ballot):
+    DoneMarker.objects.create(voter=ballot["ada"])
+    client = signed_in(ballot["ada"])
+
+    client.post(DONE, {"done": "0"})
+
+    assert not marked(ballot["ada"])
+
+
+def test_the_answer_keeps_the_size_the_press_named_so_a_stale_page_stays_stale(ballot):
+    DoneMarker.objects.create(voter=ballot["ada"])
+    film(ballot["Hanna"], "Two")
+
+    answer = post(signed_in(ballot["ada"]), "0", size=1, headers=HTMX).text
+
+    assert 'name="size" value="1"' in answer and 'name="done" value="1"' in answer
