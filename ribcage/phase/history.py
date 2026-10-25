@@ -27,3 +27,8 @@ def move(from_phase, to_phase):
 def vote_has_opened():
     """Whether the history holds a move into VOTE, so it stays true after a move back to APPROVE (#26 §6, #124)."""
     return PhaseMove.objects.filter(phase=Phase.VOTE).exists()
+
+
+def reveal_has_happened():
+    """Whether the history holds a move into PICK, which opened the scores, so it stays true after a move back to VOTE (#26 §6, #29, #125)."""
+    return PhaseMove.objects.filter(phase=Phase.PICK).exists()

@@ -21,7 +21,7 @@
   {% url 'console_phase' as tab_address %}
   <div class="phase-moves" data-keeps-scroll>
     {% for move in moves %}
-      <section class="phase-move phase-move--{{ move.direction }}{% if move.armed %} is-armed{% endif %}" data-to="{{ move.to }}">
+      <section class="phase-move phase-move--{{ move.direction }}{% if move.irreversible %} phase-move--irreversible{% endif %}{% if move.armed %} is-armed{% endif %}" data-to="{{ move.to }}">
         <div class="phase-move__head">
           <h2>{{ move.heading }}</h2>
           {% if move.armed %}

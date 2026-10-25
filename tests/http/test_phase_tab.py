@@ -41,7 +41,7 @@ def phases(page):
 
 
 def moves(page):
-    return dict(re.findall(r'<section class="phase-move phase-move--\w+(?: is-armed)?" data-to="(\w+)">(.*?)</section>', page, re.S))
+    return dict(re.findall(r'<section class="phase-move phase-move--\w+(?: phase-move--irreversible)?(?: is-armed)?" data-to="(\w+)">(.*?)</section>', page, re.S))
 
 
 def text(fragment):
@@ -180,7 +180,7 @@ def test_opening_the_ballot_with_no_film_undecided_says_none_is(admin, voters):
     assert consequences_of(admin, VOTE)[1:] == ["No film is undecided."]
 
 
-@pytest.mark.parametrize(("from_phase", "to_phase"), [move for move in EVERY_MOVE if move not in [(APPROVE, VOTE), (PICK, RUN), (RUN, PICK)]])
+@pytest.mark.parametrize(("from_phase", "to_phase"), [move for move in EVERY_MOVE if move not in [(APPROVE, VOTE), (VOTE, APPROVE), (VOTE, PICK), (PICK, VOTE), (PICK, RUN), (RUN, PICK)]])
 def test_no_other_move_prints_more_than_the_page_voters_see_after_it(admin, voters, from_phase, to_phase):
     Suggestion.objects.suggest(voters["ada"], a_tmdb_film(1, "Cube"), "Pitch.")
     walk_to(from_phase)
@@ -253,7 +253,7 @@ def test_arming_one_move_leaves_the_other_unarmed(admin):
 
     assert confirm(shown[APPROVE]) is None
     assert arm_link(shown[APPROVE]) == (f"{TAB}?from=VOTE&arm=APPROVE", "◀ Move back to APPROVE…")
-    assert 'class="phase-move phase-move--forward is-armed"' in armed(admin, VOTE, PICK)
+    assert 'class="phase-move phase-move--forward phase-move--irreversible is-armed"' in armed(admin, VOTE, PICK)
 
 
 @pytest.mark.parametrize(

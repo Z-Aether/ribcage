@@ -2,9 +2,9 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_safe
 
-from ribcage.ballot import board, done
+from ribcage.ballot import board, done, reopened
 from ribcage.identity.views import WELCOME_PENDING
-from ribcage.phase.history import current
+from ribcage.phase.history import current, reveal_has_happened
 from ribcage.phase.order import Phase
 from ribcage.suggestions import pool
 
@@ -23,7 +23,7 @@ def the_pool(request, phase):
 
 
 def the_ballot(request, phase):
-    return {"board": board.of(request.user, places_at=reverse("ballot_place")), "roster": done.roster(request.user), "done_at": reverse("ballot_done")}
+    return {"board": board.of(request.user, places_at=reverse("ballot_place")), "roster": done.roster(request.user), "done_at": reverse("ballot_done"), "reopened": reopened.LINE if reveal_has_happened() else None}
 
 
 # Voters read the pool in SUGGEST and APPROVE only; in VOTE the ballot takes its place (#27, #119).

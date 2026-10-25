@@ -687,6 +687,11 @@ html:has(> body[data-skin="admin"]) {
 [data-skin] .phase-move.is-armed {
   border-color: var(--ink-muted);
 }
+/* The reveal can't be taken back, so armed it wears the veto's red (#28, #125). */
+[data-skin] .phase-move--irreversible.is-armed {
+  border-color: var(--veto);
+  background-color: color-mix(in srgb, var(--veto) 10%, var(--surface));
+}
 /* The heading and its arm share the top line; the arm keeps the far end even when the line wraps. */
 [data-skin] .phase-move__head {
   display: flex;
@@ -2339,6 +2344,11 @@ body > aside.nag-bar a {
 [data-skin] .ballot-head__standing {
   flex-basis: 100%;
   margin: 0.4rem 0 0;
+  color: var(--ink-muted);
+}
+/* The reopened-VOTE line stands above the board with the legend's weight (#125). */
+.ballot-reopened {
+  margin: 0 0 0.75rem;
   color: var(--ink-muted);
 }
 /* The tray sticks to the top of the window and scrolls inside, so a tile can be dragged to a band from any depth (#9). */

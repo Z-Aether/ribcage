@@ -5,7 +5,7 @@ import pytest
 from django.utils import timezone
 
 from ribcage.identity.models import Voter
-from ribcage.phase.history import current, last_entered, move
+from ribcage.phase.history import current, last_entered, move, reveal_has_happened
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import PHASES, MoveRefused, Phase, neighbours
 
@@ -166,3 +166,20 @@ def test_every_phase_page_sits_in_the_voter_shell(voter_client, phase):
 
     assert '<header class="voter-header">' in page
     assert "<footer" in page
+
+
+@pytest.mark.parametrize(
+    ("steps", "happened"),
+    [
+        ([], False),
+        ([(SUGGEST, APPROVE), (APPROVE, VOTE)], False),
+        ([(SUGGEST, APPROVE), (APPROVE, VOTE), (VOTE, PICK)], True),
+        ([(SUGGEST, APPROVE), (APPROVE, VOTE), (VOTE, PICK), (PICK, VOTE)], True),
+        ([(SUGGEST, APPROVE), (APPROVE, VOTE), (VOTE, APPROVE), (APPROVE, VOTE)], False),
+    ],
+)
+def test_the_reveal_has_happened_once_the_history_holds_a_move_into_pick(db, steps, happened):
+    for before, after in steps:
+        move(before, after)
+
+    assert reveal_has_happened() is happened
