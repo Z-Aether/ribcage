@@ -198,3 +198,13 @@ def test_the_gallery_shows_the_ballots_tray_and_bands_and_posts_nowhere(client, 
     assert "data-places-at" not in page
     assert "tray" in page and page.count('class="band band--') == 6
 
+
+
+def test_the_gallerys_veto_band_has_a_row_with_matched_topics_and_credit_and_one_without_and_saves_nowhere(client, debug):
+    band = re.search(r'<section class="band band--veto".*?</section>', client.get(GALLERY).text, re.S)[0]
+    rows = re.findall(r'<li class="veto-row".*?</div>\s*</li>', band, re.S)
+
+    assert len(rows) == 2
+    assert "On your list" in rows[0] and "Powered by DoesTheDogDie.com" in rows[0] and "veto-ribbon" in rows[0]
+    assert "On your list" not in rows[1] and "Powered by" not in rows[1]
+    assert all(" disabled>Save" in row for row in rows)

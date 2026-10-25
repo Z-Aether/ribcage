@@ -353,7 +353,7 @@ def tiles():
 
 
 def ballot_board():
-    """The ballot's tray and bands over sample films: ringed tiles first in the tray, bands of different fullness, one empty. Dragging posts nowhere here (#119)."""
+    """The ballot's tray and bands over sample films: ringed tiles first in the tray, bands of different fullness, one empty, and the Veto band. Dragging posts nowhere here (#119, #120)."""
     tile = board.Tile
     tray = (tile(1, film(THE_SHINING), trigger_count=2), tile(2, film(MIDSOMMAR), trigger_count=1), tile(3, film(CUBE)), tile(4, film(CABINET_OF_CURIOSITIES)))
     placed = {
@@ -364,7 +364,12 @@ def ballot_board():
         -1: (),
     }
     bands = tuple(board.Band(score, key, sign, name, placed[score]) for score, key, sign, name in board.SCALE)
-    return board.Board(tray, bands, board.Counts(scored=8, size=12))
+    # Two widened rows: Midsommar with the viewer's matched topics and a reason, The Exorcist with none; one also wears others' ribbon (#120).
+    vetoes = (
+        tile(13, film(MIDSOMMAR), trigger_count=2, matched=matched_of(MIDSOMMAR_DTDD), reason="Too much daylight for me.", vetoed_by="AZ", vetoers="Vetoed by Ada, Zoë"),
+        tile(14, film(THE_EXORCIST)),
+    )
+    return board.Board(tray, bands, board.Counts(scored=10, size=14), vetoes)
 
 
 def poster_row():
