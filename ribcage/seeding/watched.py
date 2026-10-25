@@ -6,15 +6,18 @@ from ribcage.identity.models import Voter
 from ribcage.triggers import watched
 from ribcage.triggers.client import Client, NotAnswering
 
-# Ada's ring on most seeded films; Zoë's rings on one film once; Sam ticks nothing, so the nag shows for him (#107, #110).
+# Ada's ring on most seeded films; Zoë's rings on one film once; Sam ticks nothing, so the nag shows for him, and O'Brien has pressed *I don't care* (#107, #110).
 SEEDED_WATCHED_LISTS = {
     "Ada": ["blood or gore", "jump scares", "animal abuse"],
     "Zoë": ["aliens"],
 }
+SEEDED_NOT_CARING = ["O'Brien"]
 
 
 def seed_the_watched_lists(recordings):
     """Each list ticked from the recorded vocabulary, not the stored one, which RUN's seed leaves empty; a fresh clone has no recording, so its lists are empty."""
+    for display_name in SEEDED_NOT_CARING:
+        watched.stop_caring(Voter.objects.get(display_name=display_name))
     try:
         topics = Client(settings.DTDD_API_KEY, recordings).vocabulary().value.topics
     except NotAnswering:

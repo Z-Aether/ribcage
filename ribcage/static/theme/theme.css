@@ -1003,6 +1003,108 @@ body > header.voter-header:has(.voter-header__warnings) {
   font-size: 0.85rem;
 }
 
+/* Welcome's exits side by side, wrapping on a phone (#110). */
+[data-skin] .welcome__exits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ---------- The nag bar and the I don't care toggle (#27, #110) ---------- */
+
+/* A slim band under the voter header, centred and wrapping on a phone; muted and kind, never a warning colour. */
+body > aside.nag-bar {
+  padding: 0.5rem 1rem;
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+body > aside.nag-bar p {
+  margin: 0;
+}
+body > aside.nag-bar a {
+  margin-left: 0.35rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* The privacy disclosure and the toggle share a row; on a phone the toggle drops under it. */
+[data-skin] .warnings__lead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 1rem;
+}
+[data-skin] .warnings__lead .warnings__privacy {
+  flex: 1 1 24rem;
+  margin: 0;
+}
+/* A fixed width with the pill at its start, so arming and turning on never move the control (#85, #110). */
+[data-skin] .care {
+  flex: 0 0 16rem;
+  max-width: 100%;
+  margin: 0;
+}
+[data-skin] .care form {
+  margin: 0;
+}
+[data-skin] :is(button, a.button).care__toggle {
+  width: auto;
+  margin: 0;
+}
+/* Pressed reads as on: the pill fills like a ticked box does. */
+[data-skin] :is(button, a.button).care__toggle[aria-pressed="true"] {
+  background-color: var(--score-keen);
+  border-color: var(--score-top-pick);
+  color: var(--score-top-pick-ink);
+}
+/* Cancel takes the arm's place at its size, as withdraw's does (#85). */
+[data-skin] a.button.care__cancel {
+  display: inline-grid;
+  justify-items: center;
+}
+.care__cancel > span {
+  grid-area: 1 / 1;
+}
+.care__keep {
+  visibility: hidden;
+}
+[data-skin] .care__said {
+  margin: 0.5rem 0 0;
+  max-width: 16rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+[data-skin] .care__confirm {
+  margin: 0.75rem 0 0;
+}
+[data-skin] .care__confirm p {
+  margin: 0;
+}
+[data-skin] .care__goes {
+  font-weight: 700;
+}
+[data-skin] p.care__go {
+  margin-top: 0.5rem;
+}
+[data-skin] .care__go button {
+  width: auto;
+  margin: 0;
+}
+/* The greyed list: every topic dimmed and unclickable until the toggle is turned off; the search still finds them. */
+[data-skin] .warnings.is-greyed :is(.warnings__chips, .warnings__sections) {
+  opacity: 0.45;
+}
+[data-skin] .warnings.is-greyed .warnings__topic button.warnings__topic-button {
+  cursor: not-allowed;
+}
+[data-skin] .warnings.is-greyed .warnings__topic button.warnings__topic-button:hover {
+  background: none;
+}
+
 /* ---------- Poster and title card (#38) ---------- */
 
 .poster {

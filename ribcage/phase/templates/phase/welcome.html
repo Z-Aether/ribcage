@@ -20,7 +20,7 @@
   <p>You can name topics you want to be warned about, and films that carry them are marked for you alone. That list is private to you in the app.</p>
   <p>The admin and the host of the server can technically read it, as they can read everything stored here. It is deleted when the marathon is torn down.</p>
 
-  <p>
+  <p class="welcome__exits">
     {% for label, page in exits %}
       <a href="{% url page %}" class="button">{{ label }}</a>
     {% endfor %}

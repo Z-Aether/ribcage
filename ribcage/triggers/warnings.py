@@ -40,6 +40,8 @@ class Page:
     sections: tuple[Section, ...]
     # What a topic no film carries says, by the films the phase page shows (#109).
     nobody: str = NOBODY_IN_POOL
+    # *I don't care* is on: the list is greyed out and can't be ticked (#110).
+    greyed: bool = False
 
     @property
     def chips(self):
@@ -58,7 +60,7 @@ def anchor_of(group):
     return f"group-{'uncategorized' if group.super_category_id is None else group.super_category_id}"
 
 
-def page(vocabulary, ticked_ids, carriers=None, nobody=NOBODY_IN_POOL):
+def page(vocabulary, ticked_ids, carriers=None, nobody=NOBODY_IN_POOL, greyed=False):
     """Every super-category in DoesTheDogDie's order as a section, its topics flat and alphabetical by label (#23)."""
     carriers = carriers or {}
     return Page(
@@ -71,4 +73,5 @@ def page(vocabulary, ticked_ids, carriers=None, nobody=NOBODY_IN_POOL):
             for group, topics in vocabulary.groups
         ),
         nobody,
+        greyed,
     )

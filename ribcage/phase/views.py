@@ -50,4 +50,9 @@ def welcome(request):
     # Anyone who arrives without having just registered goes to the phase page (#75).
     if not request.session.pop(WELCOME_PENDING, False):
         return redirect("phase_page")
-    return render(request, "phase/welcome.html", {"exits": [(WELCOME_EXITS[current()], "phase_page")]})
+    phase = current()
+    exits = [(WELCOME_EXITS[phase], "phase_page")]
+    # My warnings is unreachable in RUN, where only the phase exit stands (#110).
+    if phase is not Phase.RUN:
+        exits.insert(0, ("Set up my warnings", "warnings"))
+    return render(request, "phase/welcome.html", {"exits": exits})

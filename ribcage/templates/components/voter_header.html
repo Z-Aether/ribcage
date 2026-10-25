@@ -1,8 +1,8 @@
 {# The thin voter header: the wordmark home to the phase page, and the voter's name opening their menu (#27, #37, #107). #}
 {% load phase_links %}<header class="voter-header">
   {% include "components/wordmark.html" %}
-  {% warnings_link_shown as warnings_link %}
-  {% if warnings_link %}<a class="voter-header__warnings" href="{% url 'warnings' %}">My warnings</a>{% endif %}
+  {% header_links as links %}
+  {% if links.warnings_link %}<a class="voter-header__warnings" href="{% url 'warnings' %}">My warnings</a>{% endif %}
   <details class="voter-menu" data-voter-menu>
     <summary class="voter-menu__name">{{ user.display_name }}</summary>
     <ul class="voter-menu__items">
@@ -16,3 +16,7 @@
     </ul>
   </details>
 </header>
+{# Slim and non-blocking, and gone once the voter ticks a topic or presses *I don't care* (#27, #110). #}
+{% if links.nag_bar %}<aside class="nag-bar" aria-label="Warnings not set up">
+  <p>You haven't set up your warnings yet. <a href="{% url 'warnings' %}">Set up my warnings</a></p>
+</aside>{% endif %}

@@ -3,15 +3,21 @@
 
 {% block title %}My warnings · Ribcage{% endblock %}
 
+{# The nag bar nudges toward this page, so it has no place on it (#110). #}
+{% block header %}{% include "components/voter_header.html" with no_nag=True %}{% endblock %}
+
 {% block head %}<script src="{% static 'warnings/search.js' %}" defer></script>
 <script src="{% static 'warnings/holds-the-row.js' %}" defer></script>{% endblock %}
 
 {# The page is nothing but DoesTheDogDie data: the vocabulary in its grouping, ticked in place (#23, #107). #}
 {% block content %}
-  <div class="warnings" hx-ext="morph">
+  <div class="warnings{% if page.greyed %} is-greyed{% endif %}" hx-ext="morph">
     <h1>My warnings</h1>
     <p class="warnings__purpose">Tick the topics you want to be warned about, and films that carry them are marked for you.</p>
+    <div class="warnings__lead">
     <p class="warnings__privacy">Only you see this list in the app. The admin and the host of the server can technically read it, as they can read everything stored here. It is deleted when the marathon is torn down.</p>
+    {% include "triggers/warnings_care.html" %}
+    </div>
 
     {% if page %}
       {% include "triggers/warnings_chips.html" %}

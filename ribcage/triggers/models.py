@@ -42,3 +42,9 @@ class WatchedTopic(models.Model):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=["voter", "topic_id"], name="one_row_per_watched_topic")]
+
+
+class DoesNotCare(models.Model):
+    """A voter's *I don't care*: the row is the flag, and it means nothing is ticked, so nothing else reads it (#110)."""
+
+    voter = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True, related_name="does_not_care")

@@ -29,7 +29,7 @@ from ribcage.identity.views import (
 )
 from ribcage.phase.views import phase_page, welcome
 from ribcage.privacy import privacy_policy
-from ribcage.triggers.views import tick, warnings_page
+from ribcage.triggers.views import dont_care, tick, warnings_page
 from ribcage.suggestions.views import correct_match, correct_runtime, dtdd_topics, find, suggest, withdraw, write_note
 
 urlpatterns = [
@@ -44,6 +44,7 @@ urlpatterns = [
     path("dtdd/match/", correct_match, name="dtdd_match"),
     path("warnings/", warnings_page, name="warnings"),
     path("warnings/tick/", tick, name="warnings_tick"),
+    path("warnings/dont-care/", dont_care, name="warnings_dont_care"),
     path("login/", login, name="login"),
     path("join/", join, name="join"),
     path("join/details/", join_details, name="join_details"),

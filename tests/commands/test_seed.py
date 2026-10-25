@@ -281,6 +281,9 @@ def test_seed_ticks_the_watched_lists_by_label_and_leaves_sam_with_none(transact
     lists = {voter.display_name: sorted(voter.watched_topics.values_list("topic_id", flat=True)) for voter in Voter.objects.all()}
     assert lists["Ada"] == [153, 200] and lists["Zoë"] == [158] and lists["Sam"] == []
     assert WatchedTopic.objects.count() == 3
+    # O'Brien has pressed *I don't care* and the others have not (#110).
+    cares_not = set(Voter.objects.filter(does_not_care__isnull=False).values_list("display_name", flat=True))
+    assert cares_not == {"O'Brien"}
 
 
 def test_seed_in_run_keeps_the_watched_lists_the_purge_leaves(transactional_db, debug_on, corpus_without_dtdd, monkeypatch):
