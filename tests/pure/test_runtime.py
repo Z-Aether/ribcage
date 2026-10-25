@@ -8,7 +8,7 @@ from ribcage.phase.order import Phase
 from ribcage.suggestions import runtime
 from ribcage.suggestions.models import Approval, Suggestion, as_suggested
 from ribcage.suggestions.pool import film_card
-from tests.films import THE_SHINING
+from tests.films import THE_SHINING, as_loaded
 
 ADA = Voter(pk=1, display_name="Ada")
 BO = Voter(pk=2, display_name="Bo")
@@ -57,7 +57,7 @@ def test_no_refusal_names_an_act_so_every_caller_can_say_it(said):
 
 
 def a_suggestion(approval=Approval.UNDECIDED):
-    return Suggestion(pk=10, suggester=ADA, suggester_name="Ada", approval=approval, **as_suggested(THE_SHINING))
+    return as_loaded(Suggestion(pk=10, suggester=ADA, suggester_name="Ada", approval=approval, **as_suggested(THE_SHINING)))
 
 
 @pytest.mark.parametrize("viewer", [ADA, BO], ids=["the suggester", "another voter"])

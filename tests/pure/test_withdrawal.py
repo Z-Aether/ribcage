@@ -7,14 +7,15 @@ from ribcage.identity.models import Voter
 from ribcage.suggestions.models import Approval, Note, Suggestion, as_suggested
 from ribcage.suggestions.pool import film_card
 from ribcage.suggestions.withdrawal import may_withdraw, what_goes, withdrawable
-from tests.films import THE_SHINING
+from tests.films import THE_SHINING, as_loaded
 
 ADA = Voter(pk=1, display_name="Ada")
 BO = Voter(pk=2, display_name="Bo")
 
 
-def a_suggestion(approval=Approval.UNDECIDED, suggester=ADA):
-    return Suggestion(pk=10, suggester=suggester, suggester_name="Ada", approval=approval, **as_suggested(THE_SHINING))
+def a_suggestion(approval=Approval.UNDECIDED, suggester=ADA, held_by_ballot=False):
+    suggestion = Suggestion(pk=10, suggester=suggester, suggester_name="Ada", approval=approval, **as_suggested(THE_SHINING))
+    return as_loaded(suggestion, held_by_ballot)
 
 
 @pytest.mark.parametrize(
@@ -24,6 +25,21 @@ def a_suggestion(approval=Approval.UNDECIDED, suggester=ADA):
 def test_a_suggestion_is_withdrawable_unless_approved(approval, expected):
     # A dropped film qualifies too, while nothing downstream holds it (#34).
     assert withdrawable(a_suggestion(approval)) is expected
+
+
+def test_a_suggestion_with_a_ballot_record_is_not_withdrawable_whatever_its_approval():
+    assert not withdrawable(a_suggestion(held_by_ballot=True))
+    assert not withdrawable(a_suggestion(Approval.DROPPED, held_by_ballot=True))
+    assert not may_withdraw(ADA, a_suggestion(held_by_ballot=True))
+
+
+@pytest.mark.parametrize("approval", list(Approval))
+def test_a_suggestion_not_loaded_through_with_holds_raises_rather_than_read_as_unheld(approval):
+    # Approved too: approval must not short-circuit past the unloaded read (#118).
+    unloaded = Suggestion(pk=10, suggester=ADA, suggester_name="Ada", approval=approval, **as_suggested(THE_SHINING))
+
+    with pytest.raises(AttributeError):
+        withdrawable(unloaded)
 
 
 def test_the_suggester_may_withdraw_their_own():

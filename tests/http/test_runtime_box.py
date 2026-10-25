@@ -20,7 +20,7 @@ from tests.http.test_roster_tab import text
 
 EDIT = "/console/films/runtime/"
 UNDECIDED, APPROVED, DROPPED = Approval.UNDECIDED, Approval.APPROVED, Approval.DROPPED
-ON_THE_BALLOT = "A film on the ballot needs a runtime. Type its length in minutes, like 144."
+HELD = "A film in use needs a runtime. Type its length in minutes, like 144."
 
 
 def edit(admin, suggestion, typed, show=None):
@@ -177,7 +177,7 @@ def test_clearing_an_approved_films_runtime_is_refused(admin, voters, cleared):
     assert stored(suggestion) == (94, 94)
     _, _, _, value, words = box(response.text, suggestion)
     assert value == cleared
-    assert ON_THE_BALLOT in words
+    assert HELD in words
     assert Suggestion.objects.get(pk=suggestion.pk).approval == APPROVED
 
 
@@ -333,7 +333,7 @@ def test_an_approve_between_the_clears_read_and_update_keeps_the_runtime(admin, 
         refused = edit(admin, cube, "")
 
     assert refused.status_code == 200
-    assert ON_THE_BALLOT in box(refused.text, cube)[4]
+    assert HELD in box(refused.text, cube)[4]
     assert Suggestion.objects.get(pk=cube.pk).approval == APPROVED
     assert stored(cube)[0] is not None
 
@@ -349,7 +349,7 @@ def test_clearing_is_refused_exactly_where_withdrawable_says_something_holds_the
         cleared = edit(admin, free, "")
 
     assert refused.status_code == 200
-    assert ON_THE_BALLOT in box(refused.text, held)[4]
+    assert HELD in box(refused.text, held)[4]
     assert stored(held) == (90, 90)
     assert cleared.status_code == 302
     assert stored(free) == (None, 80)

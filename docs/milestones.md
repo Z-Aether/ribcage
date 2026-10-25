@@ -151,7 +151,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - **Tiles:** frame states, opening the card in place with others' veto reasons and seen-it flags (#35).
 - **The admin's side of VOTE:** approval staying open, growing the ballot clearing every done marker with its cost in the confirm ("6 of 9 → 0 of 9"), shrinking clearing nothing. The done count on the Films and Phase tabs, and the Roster's *Scored*, *Vetoes* and *Done* columns (#15, #28, #63).
 - **Moves:** the VOTE → PICK confirm naming who isn't done and saying it can't be undone. PICK → VOTE keeps done markers and adds the reopened-VOTE line to the ballot (#15, #34).
-- Removal now deletes the voter's scores, vetoes and done marker.
+- Removal now deletes the voter's scores, vetoes, seen-it flags and done marker.
 
 **Deployable state:** a group could vote. The PICK page is still a placeholder.
 

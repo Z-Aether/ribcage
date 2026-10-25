@@ -7,7 +7,7 @@ from ribcage.films.film import RuntimeSource
 from ribcage.identity.models import Voter
 from ribcage.suggestions.models import Note, Suggestion, as_suggested
 from ribcage.suggestions.pool import film_card
-from tests.films import CABINET_OF_CURIOSITIES, THE_SHINING
+from tests.films import CABINET_OF_CURIOSITIES, THE_SHINING, as_loaded
 
 ADA = Voter(pk=1, display_name="Ada")
 BO = Voter(pk=2, display_name="Bo")
@@ -15,7 +15,7 @@ CY = Voter(pk=3, display_name="Cy")
 
 
 def a_suggestion(film=THE_SHINING, suggester=ADA, suggester_name="Ada", **fields):
-    return Suggestion(pk=10, suggester=suggester, suggester_name=suggester_name, **{**as_suggested(film), **fields})
+    return as_loaded(Suggestion(pk=10, suggester=suggester, suggester_name=suggester_name, **{**as_suggested(film), **fields}))
 
 
 def a_note(author, text):

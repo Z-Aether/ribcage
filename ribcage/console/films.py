@@ -209,8 +209,8 @@ def decide(suggestion, expected, to):
     return matching.update(approval=to) == 1
 
 
-# Worded as `runtime.minutes`' lines are, naming no act (#93, #97).
-ON_THE_BALLOT = "A film on the ballot needs a runtime. Type its length in minutes, like 144."
+# Worded as `runtime.minutes` lines are, naming no act and no hold, so every hold fits it (#93, #97, #118).
+HELD = "A film in use needs a runtime. Type its length in minutes, like 144."
 
 
 @dataclass(frozen=True)
@@ -239,7 +239,7 @@ def edit_runtime(suggestion, typed):
         # The update names the approval too, so an approve landing since the read is refused, as `approved_has_a_runtime` would (#26 §8).
         if withdrawable(found) and Suggestion.objects.filter(pk=found.pk).exclude(approval=Approval.APPROVED).update(runtime=None):
             return None
-        return BoxRefused(found.pk, typed, ON_THE_BALLOT)
+        return BoxRefused(found.pk, typed, HELD)
     try:
         correct(found, typed)
     except Refused as refusal:

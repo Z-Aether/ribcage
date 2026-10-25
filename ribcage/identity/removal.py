@@ -2,9 +2,27 @@
 
 from django.db import transaction
 
+from ribcage.ballot.models import BallotRecord, DoneMarker
 from ribcage.suggestions import departure
 
-# M6 extends both: scores, vetoes, done (#28). Everything that `on_delete` can express stays there (#98).
+# Everything that `on_delete` can express stays there, the ballot's records and done marker included (#98, #118).
+
+
+def ballot_goes(voter):
+    """What of the voter's ballot the confirm lists: each count only when present, then the done marker."""
+    records = BallotRecord.objects.filter(voter=voter)
+    counts = [
+        (records.filter(score__isnull=False).count(), "score", "scores"),
+        (records.filter(vetoed=True).count(), "veto", "vetoes"),
+        (records.filter(seen_it=True).count(), "seen-it flag", "seen-it flags"),
+    ]
+    goes = []
+    parts = [f"{count} {one if count == 1 else many}" for count, one, many in counts if count]
+    if parts:
+        goes.append("their " + (parts[0] if len(parts) == 1 else f"{', '.join(parts[:-1])} and {parts[-1]}"))
+    if DoneMarker.objects.filter(voter=voter).exists():
+        goes.append("their done marker")
+    return goes
 
 
 def what_goes(voter):
@@ -14,6 +32,7 @@ def what_goes(voter):
         "their display name and password",
         "their sessions, so they are signed out everywhere",
     ]
+    goes += ballot_goes(voter)
     if notes:
         goes.append("their one note on another film" if notes == 1 else f"their {notes} notes on other films")
     if suggestions:

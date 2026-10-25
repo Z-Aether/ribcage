@@ -53,7 +53,7 @@ The list of everyone registered for the marathon. The control over who is in: lo
 _Avoid_: user list, membership, directory
 
 **Removal**:
-The admin taking a voter off the roster. Their scores, vetoes, done marker and notes on other films go with them; their suggestions stay, pitch and place on the ballot included, still attributed to them and marked removed. Not a ban: the join code still admits them. (#8, #28)
+The admin taking a voter off the roster. Their scores, vetoes, seen-it flags, done marker and notes on other films go with them; their suggestions stay, pitch and place on the ballot included, still attributed to them and marked removed. Not a ban: the join code still admits them. (#8, #28)
 _Avoid_: delete, ban, kick, prune
 
 **Attribution**:
@@ -67,7 +67,7 @@ _Avoid_: publish (that is what advancing to RUN does to the timetable), results
 ### Suggesting
 
 **Suggestion**:
-A film a voter puts forward in SUGGEST, attributed to them and carrying the admin's approval. Made and withdrawn in SUGGEST only, and withdrawable only while it is not approved and nothing downstream holds it — no scores, no timetable box, no kept proposal — so the phase moving back to SUGGEST reopens nothing. A withdrawn suggestion is simply gone, while one whose suggester is removed stays. (#8, #15, #27, #28, #34)
+A film a voter puts forward in SUGGEST, attributed to them and carrying the admin's approval. Made and withdrawn in SUGGEST only, and withdrawable only while it is not approved and nothing downstream holds it — no ballot record (a score, a veto or seen it), no timetable box, no kept proposal — so the phase moving back to SUGGEST reopens nothing. A withdrawn suggestion is simply gone, while one whose suggester is removed stays. (#8, #15, #27, #28, #34, #118)
 _Avoid_: nomination, entry, submission
 
 **Pool**:
