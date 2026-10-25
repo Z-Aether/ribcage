@@ -2,10 +2,13 @@
 
 from typing import NamedTuple
 
+from django.db import transaction
 from django.utils.html import format_html, format_html_join
 
+from ribcage.phase.history import move
 from ribcage.phase.order import Phase, neighbours
 from ribcage.suggestions.models import Approval, Suggestion
+from ribcage.triggers import refresh, stored
 
 SUGGEST, APPROVE, VOTE, PICK, RUN = Phase
 
@@ -59,16 +62,40 @@ def left_off_the_ballot():
 
 
 def consequences(from_phase, to_phase):
-    # Later milestones add their sentences here: the reveal, reopened VOTE, publishing and the RUN purge (#77).
+    # Later milestones add their sentences here: the reveal, reopened VOTE and publishing (#77).
     sentences = [format_html("Everyone's page becomes “{}”.", VOTER_PAGES[to_phase])]
+    if (from_phase, to_phase) == (PICK, RUN):
+        sentences.append("Every film's trigger data is cleared, as DoesTheDogDie's terms ask, and fetched again if the evening is unpublished.")
+    if (from_phase, to_phase) == (RUN, PICK):
+        sentences.append("Trigger data is fetched again, oldest first.")
     if (from_phase, to_phase) == (APPROVE, VOTE):
         # Only approved films are on the ballot, so the move names the films no decision has reached (#28, #96).
         sentences.append(left_off_the_ballot())
     return sentences
 
 
+def refreshes(to_phase):
+    # Entering RUN purges instead, and fetches nothing (#106).
+    return to_phase != RUN
+
+
+def make(from_phase, to_phase):
+    """Make the move, which entering RUN pairs with the purge in its own transaction; a refused move raises MoveRefused.
+
+    Every other move refreshes once it commits, and the answer waits for it, at most about 20 s (#32 §1, #104, #106).
+    """
+    with transaction.atomic():
+        move(from_phase, to_phase)
+        if to_phase == RUN:
+            stored.purge()
+    if refreshes(to_phase):
+        refresh.after_the_move()
+
+
 def pending(to_phase):
-    # What the clicked confirm reads while the move and its refresh run, up to about 20 s; never how the refresh went (#104).
+    # What the clicked confirm reads while the move runs; for a refreshing one, up to about 20 s, and never how the refresh went (#104).
+    if not refreshes(to_phase):
+        return f"Moving to {to_phase} and clearing trigger data…"
     return f"Moving to {to_phase} and refreshing trigger data…"
 
 

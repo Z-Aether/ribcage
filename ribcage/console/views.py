@@ -11,18 +11,18 @@ from django.views.decorators.http import require_http_methods, require_POST, req
 
 from ribcage.console import films
 from ribcage.console.forms import BackupCodeForm, BackupUploadForm
-from ribcage.console.moves import offered
+from ribcage.console.moves import make, offered
 from ribcage.identity.admin_session import admin_required
 from ribcage.identity.models import Voter
 from ribcage.identity.removal import remove, what_goes
 from ribcage.identity.reset import password_digest, reset
 from ribcage.operations import offer
 from ribcage.operations.backup import describe
-from ribcage.phase.history import current, last_entered, move
+from ribcage.phase.history import current, last_entered
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
-from ribcage.triggers import correction, refresh, stored
+from ribcage.triggers import correction, stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
 WORKING_TABS = {
@@ -65,9 +65,7 @@ def phase_tab(request):
 def move_phase(request):
     # The post names the phase it expects to leave, so a stale tab moves nothing and reloads into the phase as it is (#74, #77).
     with suppress(MoveRefused):
-        move(request.POST.get("from_phase"), request.POST.get("to_phase"))
-        # Only a move made refreshes, after it commits; the answer waits for it, at most about 20 s (#32 §1, #104).
-        refresh.after_the_move()
+        make(request.POST.get("from_phase"), request.POST.get("to_phase"))
     return redirect("console_phase")
 
 
@@ -93,8 +91,8 @@ def films_dtdd(request):
         suggestion = Suggestion.objects.filter(pk=request.GET.get("suggestion")).first()
     except (TypeError, ValueError):
         suggestion = None
-    # Withdrawn since: the tab reloads as it is now.
-    if suggestion is None:
+    # Withdrawn since, or the marathon in RUN, which shows no trigger data: the tab reloads as it is now (#106).
+    if suggestion is None or current() == Phase.RUN:
         return reload_the_tab(request, reverse("console_films"))
     return render(request, "components/dtdd_topics.html", {"dtdd": stored.section_of(suggestion)})
 
@@ -115,6 +113,9 @@ def films_match(request):
             correction.use(suggestion, request.POST.get("snapshot", ""), correction.BY_THE_ADMIN)
         except correction.Tampered:
             return HttpResponseBadRequest()
+    # RUN offers no control and shows no section, so a stale tab reloads as it is now (#106).
+    if current() == Phase.RUN:
+        return reload_the_tab(request, reverse("console_films"))
     # Only htmx swaps the section in place; a plain request lands on the tab.
     if request.headers.get("HX-Request") != "true":
         return redirect("console_films")

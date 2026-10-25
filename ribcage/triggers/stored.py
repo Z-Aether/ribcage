@@ -2,6 +2,8 @@
 
 from django.db import transaction
 
+from ribcage.phase import history
+from ribcage.phase.order import Phase
 from ribcage.suggestions.models import Suggestion
 from ribcage.triggers import section, status
 from ribcage.triggers.models import Topic, TriggerData
@@ -14,8 +16,11 @@ def has_vocabulary():
 
 
 def replace_vocabulary(vocabulary):
+    """The vocabulary replaced whole, unless the phase is RUN, where none is kept: a refresh outlasting the move into RUN writes nothing (#106)."""
     positions = {group: position for position, group in enumerate(vocabulary.super_categories)}
     with transaction.atomic():
+        if history.current() is Phase.RUN:
+            return
         Topic.objects.all().delete()
         Topic.objects.bulk_create(
             Topic(
@@ -30,6 +35,13 @@ def replace_vocabulary(vocabulary):
             )
             for position, topic in enumerate(vocabulary.topics)
         )
+
+
+def purge():
+    """Every snapshot and the vocabulary deleted, as DoesTheDogDie's terms ask on entering RUN; matches, setters and watched lists stay (#26 §7, #106)."""
+    with transaction.atomic():
+        Topic.objects.all().delete()
+        TriggerData.objects.update(snapshot=None)
 
 
 def stored_vocabulary():
@@ -56,8 +68,11 @@ def store_refresh(suggestion, asked, snapshot, fetched_at):
     """A refresh's answer for the match it asked about, None for a whole lookup, kept only while that match still stands.
 
     A correction or a withdraw landing while DoesTheDogDie answered wins, and a corrected match keeps its setter (#104, #105).
+    The move into RUN landing meanwhile wins too: no snapshot is stored in RUN (#106).
     """
     with transaction.atomic():
+        if history.current() is Phase.RUN:
+            return
         if not Suggestion.objects.filter(pk=suggestion.pk).exists():
             return
         if TriggerData.objects.filter(suggestion=suggestion).values_list("match", flat=True).first() != asked:

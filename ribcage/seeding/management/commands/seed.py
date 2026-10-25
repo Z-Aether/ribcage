@@ -12,6 +12,7 @@ from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import FRESH_PHASE, PHASES, Phase
 from ribcage.films.corpus import FETCH_COMMAND
 from ribcage.seeding.pool import SEEDED_POOL, seed_the_pool, seed_the_trigger_data, trigger_states
+from ribcage.triggers import stored
 from ribcage.triggers.status import State
 
 SEEDED_DISPLAY_NAMES = ["Ada", "Anne-Marie", "O'Brien", "Zoë", "Sam", "Bartholomew Winthrop"]
@@ -46,6 +47,9 @@ class Command(BaseCommand):
             walk_the_phase_to(phase)
             seed_the_pool(phase)
             recordings = seed_the_trigger_data()
+            if phase is Phase.RUN:
+                # As entering RUN leaves it: the matches and setters, no snapshot, no vocabulary (#106).
+                stored.purge()
         # Redirected on Windows, stdout would be cp1252 and mangle Zoë in a log read as UTF-8 (#50).
         # This reconfigures the whole process's stdout, not just this command's.
         if hasattr(self.stdout, "reconfigure"):
@@ -54,6 +58,9 @@ class Command(BaseCommand):
         self.stdout.write(f"  {', '.join(SEEDED_DISPLAY_NAMES)}")
         self.stdout.write(f"  each signing in with the password {SEEDED_PASSWORD}")
         self.stdout.write(f"and {len(SEEDED_POOL)} films in the pool.")
+        if phase is Phase.RUN:
+            self.stdout.write("DoesTheDogDie: no snapshots or vocabulary, as entering RUN leaves them.")
+            return
         states = trigger_states()
         self.stdout.write("DoesTheDogDie: " + ", ".join(f"{states[state]} {state}" for state in State) + ".")
         if not recordings.is_recorded:

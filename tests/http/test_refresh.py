@@ -8,6 +8,7 @@ import pytest
 from django.db import connection
 from django.utils import timezone
 
+from ribcage.console.moves import make
 from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import Phase
@@ -20,6 +21,7 @@ from ribcage.triggers.status import State
 from tests.dtdd import VOCABULARY, VOCABULARY_PATHS, Dtdd, detail, item
 from tests.films import CABINET_OF_CURIOSITIES, a_tmdb_film
 from tests.http.signing_in import sign_in_as_the_admin
+from tests.http.test_phase import walk_to
 
 TAB = "/console/films/"
 MOVE = "/console/phase/move/"
@@ -294,6 +296,33 @@ def test_a_match_corrected_while_dtdd_answers_keeps_the_correction(pool):
 
     status = status_of(pool["thing"])
     assert (status.match, status.set_by, status.fetched.snapshot.counts) == (99, "Iván", (TopicCount(153, 1, 0),))
+
+
+def test_a_refresh_outlasting_the_move_into_run_stores_nothing(pool):
+    walk_to(Phase.PICK)
+
+    def entering_run(path):
+        if path == "/items/12":
+            make(Phase.PICK, Phase.RUN)
+
+    refreshed(answering(on_call=entering_run))
+
+    assert current() == Phase.RUN
+    assert not TriggerData.objects.filter(snapshot__isnull=False).exists()
+    assert not Topic.objects.exists()
+
+
+def test_a_refresh_whose_vocabulary_call_outlasts_the_move_into_run_stores_no_topics(pool):
+    walk_to(Phase.PICK)
+
+    def entering_run(path):
+        if path == VOCABULARY_PATHS[-1]:
+            make(Phase.PICK, Phase.RUN)
+
+    refreshed(answering(on_call=entering_run))
+
+    assert current() == Phase.RUN
+    assert not Topic.objects.exists()
 
 
 # After the move commits

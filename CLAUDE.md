@@ -23,7 +23,7 @@ Top-level directories sort by what a thing is, not by which ticket made it.
 - `ribcage/` is the Django project: settings, URLs and a few top-level modules, plus an app per module of `docs/design.md` §9, with three apps outside it and Operations as a plain package.
   - `identity`: voters, login, registration, passwords and the admin's sign-in, with `admin_required`, the admin wall (#76). Removing a voter goes through `removal.remove`, and the confirm lists `removal.what_goes`; later milestones extend the two together (#79, #98).
   - `phase`: the phase history and the phase pages. `history.move()` is the one way the phase moves (#77). Every voter write declares its phases with `check.phase_window(...)`, or carries `account_action` to work in every phase, and `tests/http/test_phase_check.py` fails a route that carries neither (#78).
-  - `console`: the admin console, a view per tab behind `admin_required` (#76).
+  - `console`: the admin console, a view per tab behind `admin_required` (#76). A phase move goes through `moves.make`, which pairs entering RUN with the trigger-data purge (#106).
   - `films`: `Film`, the film card's plain data, and the TMDB client (#57, #92).
   - `suggestions`: the pool, its notes and the *Suggest a film* flow. `Suggestion.objects.suggest` is the one way a film enters it. `withdrawal.withdrawable` is the one rule for whether anything downstream holds a film, and `with_holds` the one loader for it; M6, M7 and M9 extend the two together (#90, #97).
   - `triggers`: DoesTheDogDie's client, each film's trigger data and the refresh after a phase move (#101, #104). `status.shown_counts` is the one rule for which topics a film lists and counts, on every surface (#103).

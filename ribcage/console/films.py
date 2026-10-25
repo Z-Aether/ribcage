@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.utils import timezone
 
 from ribcage.films.card import FilmCard
+from ribcage.phase.history import current
+from ribcage.phase.order import Phase
 from ribcage.suggestions import pool
 from ribcage.suggestions.models import Approval, Suggestion
 from ribcage.suggestions.runtime import Refused, correct
@@ -114,15 +116,17 @@ class Ledger:
     screen_time: int
     # Empty while no film's trigger data is old or missing (#104).
     stale_line: str = ""
+    # False in RUN, which shows no trigger data: no column, no stale line, no section and no credit (#106).
+    shows_dtdd: bool = True
 
     @classmethod
-    def of(cls, every_row, show, now):
+    def of(cls, every_row, show, now, shows_dtdd=True):
         """The ledger under a filter, its counts, the ballot's screen time and the stale line, from every row newest first."""
         approved = [row for row in every_row if row.approval == Approval.APPROVED]
         tallies = tuple(Tally(each, len(shown_by(each, every_row)), each == show) for each in FILTERS)
         # Every approved film has a runtime, which the model's constraint holds (#26 §8).
         screen_time = sum(row.card.film.runtime for row in approved)
-        return cls(tuple(shown_by(show, every_row)), show, tallies, len(approved), screen_time, stale_line(every_row, now))
+        return cls(tuple(shown_by(show, every_row)), show, tallies, len(approved), screen_time, stale_line(every_row, now) if shows_dtdd else "", shows_dtdd)
 
 
 def stale_line(rows, now):
@@ -151,6 +155,8 @@ LISTED_FROM, CORRECTED_AT = "console_films_dtdd", "console_films_dtdd_match"
 def ledger(show):
     """The tab's ledger, in a query each for the suggestions, their notes, their trigger data and the vocabulary, however large the pool."""
     suggestions = list(Suggestion.objects.prefetch_related(Prefetch("notes", queryset=pool.notes_in_order())).order_by("-pk"))
+    if current() == Phase.RUN:
+        return run_ledger(suggestions, show)
     statuses, vocabulary = stored.statuses_of(suggestions), stored.stored_vocabulary()
     named = {topic.topic_id for topic in vocabulary.topics}
     # No viewer: the admin's card has no note box, withdraw or pencil, and shows nothing personal (#28, #35 §2, #95).
@@ -166,6 +172,12 @@ def ledger(show):
         for suggestion in suggestions
     ]
     return Ledger.of(rows, show, timezone.now())
+
+
+def run_ledger(suggestions, show):
+    """RUN's ledger: the purge left no trigger data to show, so a card has no section and the rows no status (#106)."""
+    rows = [Row(pool.film_card(suggestion, suggestion.notes.all()), Approval(suggestion.approval), suggestion.tmdb_runtime) for suggestion in suggestions]
+    return Ledger.of(rows, show, timezone.now(), shows_dtdd=False)
 
 
 def listed_section(dtdd, suggestion):

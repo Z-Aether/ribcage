@@ -109,8 +109,8 @@ def test_no_page_carries_any_films_topic_rows_however_many_it_has(hanna, admin, 
     assert page.count('<p class="dtdd__fetching">') == 1
 
 
-@pytest.mark.parametrize("phase", PHASES)
-def test_a_voter_fetches_a_cards_list_in_any_phase(hanna, films, phase):
+@pytest.mark.parametrize("phase", [phase for phase in PHASES if phase != Phase.RUN])
+def test_a_voter_fetches_a_cards_list_in_any_phase_but_run(hanna, films, phase):
     walk_to(phase)
 
     assert len(topic_rows(hanna.get(f"/dtdd/?suggestion={films['matched'].pk}", headers=HTMX).text)) == 2

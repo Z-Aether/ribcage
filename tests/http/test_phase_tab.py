@@ -180,12 +180,26 @@ def test_opening_the_ballot_with_no_film_undecided_says_none_is(admin, voters):
     assert consequences_of(admin, VOTE)[1:] == ["No film is undecided."]
 
 
-@pytest.mark.parametrize(("from_phase", "to_phase"), [move for move in EVERY_MOVE if move != (APPROVE, VOTE)])
-def test_no_other_move_names_the_undecided_films(admin, voters, from_phase, to_phase):
+@pytest.mark.parametrize(("from_phase", "to_phase"), [move for move in EVERY_MOVE if move not in [(APPROVE, VOTE), (PICK, RUN), (RUN, PICK)]])
+def test_no_other_move_prints_more_than_the_page_voters_see_after_it(admin, voters, from_phase, to_phase):
     Suggestion.objects.suggest(voters["ada"], a_tmdb_film(1, "Cube"), "Pitch.")
     walk_to(from_phase)
 
     assert consequences_of(admin, to_phase) == [f"Everyone's page becomes “{PAGE_HEADINGS[to_phase]}”."]
+
+
+@pytest.mark.parametrize(
+    ("from_phase", "to_phase", "added"),
+    [
+        (PICK, RUN, "Every film's trigger data is cleared, as DoesTheDogDie's terms ask, and fetched again if the evening is unpublished."),
+        (RUN, PICK, "Trigger data is fetched again, oldest first."),
+    ],
+)
+def test_the_moves_into_and_out_of_run_add_exactly_the_trigger_data_sentence(admin, voters, from_phase, to_phase, added):
+    Suggestion.objects.suggest(voters["ada"], a_tmdb_film(1, "Cube"), "Pitch.")
+    walk_to(from_phase)
+
+    assert consequences_of(admin, to_phase) == [f"Everyone's page becomes “{PAGE_HEADINGS[to_phase]}”.", added]
 
 
 @pytest.mark.parametrize(("from_phase", "to_phase"), EVERY_MOVE)
@@ -207,12 +221,14 @@ def pending(fragment):
 
 
 @pytest.mark.parametrize(("from_phase", "to_phase"), EVERY_MOVE)
-def test_the_confirm_says_the_phase_is_moving_and_trigger_data_refreshing_once_clicked(admin, from_phase, to_phase):
+def test_the_confirm_says_the_phase_is_moving_and_trigger_data_refreshing_or_clearing_once_clicked(admin, from_phase, to_phase):
     walk_to(from_phase)
 
     page = armed(admin, from_phase, to_phase)
 
-    assert pending(moves(page)[to_phase]) == f"Moving to {to_phase} and refreshing trigger data…"
+    # Entering RUN fetches nothing, so it says what it does instead (#106).
+    doing = "clearing" if to_phase == RUN else "refreshing"
+    assert pending(moves(page)[to_phase]) == f"Moving to {to_phase} and {doing} trigger data…"
     # The script that disables it, so a second click posts nothing (#104).
     assert f'<script src="{static("console/pending.js")}" defer></script>' in page
 

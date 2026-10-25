@@ -19,7 +19,7 @@ from ribcage.phase import history
 from ribcage.seeding.recorded import RecordedDtdd
 from ribcage.triggers import client as dtdd_client
 from ribcage.triggers import refresh, stored
-from ribcage.triggers.models import Topic
+from ribcage.triggers.models import Topic, TriggerData
 from ribcage.triggers.status import State
 from tests.dtdd import VOCABULARY, detail, item
 
@@ -253,3 +253,17 @@ def test_a_phase_move_on_the_seeded_instance_refreshes_from_the_recordings(trans
     assert (states[THE_THING], states[WEAPONS]) == (State.MATCHED, State.MATCHED)
     thing = Suggestion.objects.get(tmdb_id=THE_THING)
     assert timezone.now() - stored.statuses_of([thing])[thing.pk].fetched.fetched_at < timedelta(minutes=5)
+
+
+def test_seed_in_run_leaves_the_matches_and_no_snapshot_or_vocabulary_as_the_purge_does(transactional_db, debug_on, corpus_without_dtdd):
+    record_three(*corpus_without_dtdd)
+    output = StringIO()
+
+    call_command("seed", "--phase", "RUN", stdout=output)
+
+    thing = Suggestion.objects.get(tmdb_id=THE_THING)
+    assert TriggerData.objects.get(suggestion=thing).match == 12243
+    assert not TriggerData.objects.filter(snapshot__isnull=False).exists()
+    assert not Topic.objects.exists()
+    assert set(seeded_states().values()) <= {State.NOT_FETCHED, State.NO_MATCH}
+    assert "no snapshots or vocabulary" in output.getvalue()

@@ -13,6 +13,8 @@ from django.db import transaction
 from django.utils import timezone
 
 from ribcage.films.card import MatchCorrection, MatchPreview
+from ribcage.phase import history
+from ribcage.phase.order import Phase
 from ribcage.suggestions.models import Suggestion
 from ribcage.triggers import status, stored
 from ribcage.triggers.client import NoSuchRecord, NotAnswering, dtdd_client
@@ -110,13 +112,16 @@ def unsigned(value, suggestion_pk):
 def use(suggestion, value, set_by):
     """Use this match: the signed snapshot's record is the match, tagged with its setter, fetched_at now; nothing is fetched.
 
-    A suggestion withdrawn since changes nothing. There is no way back to no match (#105).
+    A suggestion withdrawn since changes nothing. There is no way back to no match (#105). In RUN, where no snapshot
+    is kept, a stale post saves the match and its setter alone and discards the snapshot (#106).
     """
     snapshot = unsigned(value, suggestion.pk)
     fetched_now = status.as_text(status.Fetched(snapshot, timezone.now()))
     with transaction.atomic():
         if not Suggestion.objects.filter(pk=suggestion.pk).exists():
             return
+        if history.current() is Phase.RUN:
+            fetched_now = None
         TriggerData.objects.update_or_create(
             suggestion=suggestion, defaults={"match": snapshot.record.item_id, "match_set_by": set_by, "snapshot": fetched_now}
         )
