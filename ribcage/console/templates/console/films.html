@@ -19,6 +19,8 @@
   {% if ledger.rows %}
     {# One row per suggestion; the title opens the shared card in a row of its own below, and the controls stay on the row (#28, #95). #}
     {# A decision reloads onto the filter's address with its row where it was on screen, scrolled sideways as it was (#85, #96). #}
+    {# data-dtdd marks the ledger and its credit as one region of DoesTheDogDie's data (#112). #}
+    <div data-dtdd>
     <div class="films-ledger__frame" data-keeps-scroll>
       <table class="ledger films-ledger" data-film-cards>
         {# Fixed widths, so every filter lays its columns out alike whatever its rows hold (the dev, 2026-10-24). #}
@@ -78,6 +80,7 @@
     </div>
     {# The DTDD column is DoesTheDogDie's data, so the ledger carries its credit; RUN has neither (#5, #106). #}
     {% if ledger.shows_dtdd %}<p class="films-credit"><a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a></p>{% endif %}
+    </div>
   {% else %}
     <p>{{ ledger.show.nothing_shown }}</p>
   {% endif %}

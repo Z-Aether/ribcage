@@ -11,7 +11,8 @@
 
 {# The page is nothing but DoesTheDogDie data: the vocabulary in its grouping, ticked in place (#23, #107). #}
 {% block content %}
-  <div class="warnings{% if page.greyed %} is-greyed{% endif %}" hx-ext="morph">
+  {# data-dtdd marks a region of DoesTheDogDie's data, which must carry its own credit (#112). #}
+  <div class="warnings{% if page.greyed %} is-greyed{% endif %}" hx-ext="morph" data-dtdd>
     <h1>My warnings</h1>
     <p class="warnings__purpose">Tick the topics you want to be warned about, and films that carry them are marked for you.</p>
     <div class="warnings__lead">
