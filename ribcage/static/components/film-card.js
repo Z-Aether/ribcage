@@ -5,7 +5,8 @@ document.addEventListener("click", (event) => {
   const opens = event.target.closest(".ledger__opens");
   if (opens) return setRowOpen(opens, opens.getAttribute("aria-expanded") !== "true");
   const card = event.target.closest("[data-film-card]");
-  if (!card || event.target.closest("a, form")) return;
+  // A card on the ballot opens from its tile and closes by its title, both answered by the server (#122).
+  if (!card || event.target.closest("a, form") || card.closest("[data-board]")) return;
   const onTitle = event.target.closest(".film-card__toggle");
   const detail = card.closest(".ledger__detail");
   if (detail) {

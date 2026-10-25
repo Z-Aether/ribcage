@@ -2,13 +2,15 @@ from dataclasses import replace
 
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_safe
 
-from ribcage.ballot import board, placing
+from ribcage.ballot import board, cardbar, placing
 from ribcage.phase.check import phase_window
+from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
-from ribcage.suggestions import notes
+from ribcage.suggestions import notes, pool, withdrawal
+from ribcage.suggestions.models import Suggestion
 
 
 def candidate(posted):
@@ -29,9 +31,24 @@ def place(request):
     placing.place(request.user, suggestion, target)
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
+    if request.POST.get("card"):
+        return render(request, "ballot/moved.html", {"counts": board.counts_of(request.user), "card": opened_card(request, suggestion), **board_place(request.user, suggestion)})
     # The tile is drawn again where it landed, since the Veto band's row is not a band's tile (#120).
     context = {"counts": board.counts_of(request.user), "oob": True, "tile": board.one_tile(request.user, suggestion), "row": target == placing.VETO}
     return render(request, "ballot/counts.html", context)
+
+
+def opened_card(request, suggestion):
+    """The film's card as VOTE opens it for the viewer: the pool's card, with the ballot's bar (#9, #122)."""
+    # Loaded with its holds, as every load that feeds `withdrawable` is (#89, #118).
+    held = withdrawal.with_holds(Suggestion.objects.filter(pk=suggestion.pk)).get()
+    return pool.the_card(held, request.user, Phase.VOTE)
+
+
+def board_place(viewer, suggestion):
+    """Where the film's tile stands now, for the answer that moves an opened card there (#122)."""
+    place, before = board.standing(viewer, suggestion)
+    return {"place": place, "before": before}
 
 
 SEEN_STATES = {"1": True, "0": False}
@@ -48,6 +65,8 @@ def seen(request):
     vetoed = placing.mark_seen(request.user, suggestion, state)
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
+    if request.POST.get("card"):
+        return render(request, "components/vote_seen.html", {"card": opened_card(request, suggestion), "oob": False})
     return render(request, "ballot/seen.html", {"tile": board.one_tile(request.user, suggestion), "row": vetoed, "oob": True})
 
 
@@ -68,9 +87,31 @@ def veto_reason(request):
         return reload_the_tab(request, reverse("phase_page"))
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
+    if request.POST.get("card"):
+        vote = cardbar.of(request.user, suggestion)
+        vote = replace(vote, reason=typed, said=notes.too_long(refusal, False), refused=True) if refusal else replace(vote, said="Saved." if vote.reason else "Cleared.")
+        return render(request, "components/vote_reason.html", {"card": replace(opened_card(request, suggestion), vote=vote)})
     tile = board.one_tile(request.user, suggestion)
     if refusal:
         tile = replace(tile, reason=typed, said=notes.too_long(refusal, False), refused=True)
     else:
         tile = replace(tile, said="Saved." if tile.reason else "Cleared.")
     return render(request, "ballot/tile.html", {"tile": tile, "row": True})
+
+
+@require_safe
+def card(request):
+    """A tile opens as its card where it stands, or an opened card closes to its tile; a card named in `closes` is closed in the same answer (#9, #21, #122)."""
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    suggestion = candidate(request.GET.get("suggestion"))
+    if suggestion is None or current() != Phase.VOTE:
+        return reload_the_tab(request, reverse("phase_page"))
+    if "close" in request.GET:
+        tile = board.one_tile(request.user, suggestion)
+        return render(request, "ballot/tile.html", {"tile": tile, "row": tile.vetoed})
+    context = {"card": opened_card(request, suggestion), "scroll": True}
+    other = candidate(request.GET.get("closes"))
+    if other is not None and other.pk != suggestion.pk:
+        context["closed"] = board.one_tile(request.user, other)
+    return render(request, "ballot/opened.html", context)

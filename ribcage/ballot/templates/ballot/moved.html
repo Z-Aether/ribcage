@@ -1,0 +1,3 @@
+{# A score or veto made from an open card: the counts, then the card taken from where it was and put in the list it now belongs in, after the tile before it, so it stands where a reload would put it (#119, #122). #}{% include "ballot/scored.html" with counts=counts oob=True %}{% include "components/ballot_left.html" with counts=counts oob=True %}
+<div hx-swap-oob="delete:li[data-suggestion='{{ card.suggestion_id }}']"></div>
+<div hx-swap-oob="{% if before %}afterend:li[data-suggestion='{{ before }}']{% else %}afterbegin:ul[data-place='{{ place }}']{% endif %}">{% include "ballot/card.html" with scroll=True %}</div>

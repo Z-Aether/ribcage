@@ -19,6 +19,11 @@ SCALE = (
 )
 
 
+# The data-place of the tray and of the Veto band; a band's is its score (#119, #120).
+TRAY = "unsorted"
+VETOES = "veto"
+
+
 @dataclass(frozen=True)
 class Tile:
     suggestion_id: int
@@ -36,6 +41,8 @@ class Tile:
     reason: str = ""
     said: str = ""
     refused: bool = False
+    # Whether the viewer vetoes the film, so the tile is a Veto row wherever it is drawn again (#122).
+    vetoed: bool = False
 
 
 @dataclass(frozen=True)
@@ -113,7 +120,34 @@ def tile_of(suggestion, matched, marks, reasons, seen_it=False):
     """One tile: the ring's count where the film rings, the others' ribbon, and the viewer's own veto row's data (#117, #120)."""
     initials, names = marks.get(suggestion.pk, ("", ""))
     count = matched.strong if matched is not None and matched.ring else 0
-    return Tile(suggestion.pk, suggestion.film, trigger_count=count, vetoed_by=initials, vetoers=names, matched=matched, reason=reasons.get(suggestion.pk, ""), seen_it=seen_it)
+    return Tile(suggestion.pk, suggestion.film, trigger_count=count, vetoed_by=initials, vetoers=names, matched=matched, reason=reasons.get(suggestion.pk, ""), seen_it=seen_it, vetoed=suggestion.pk in reasons)
+
+
+def matched_ids(loaded):
+    """The ids of the films the viewer matches, out of `sections_and_matches_of`'s answer: the one rule the tray's order reads (#38, #111, #122)."""
+    return {pk for pk, (_, matched) in loaded.items() if matched is not None}
+
+
+def arranged(viewer, ids, records, matched_ids):
+    """The ids of every list the board has, in the order it draws them: the tray, each band by score and the Veto band (#38, #119, #120)."""
+    unplaced = [pk for pk in ids if not is_placed(records.get(pk))]
+    lists = {TRAY: order.tray_order(viewer.pk, unplaced, matched_ids)}
+    for score, *_ in SCALE:
+        lists[score] = order.shuffled(viewer.pk, [pk for pk in ids if records.get(pk, (None,))[0] == score])
+    lists[VETOES] = order.shuffled(viewer.pk, [pk for pk in ids if records.get(pk, (None, False))[1]])
+    return lists
+
+
+def standing(viewer, suggestion):
+    """Where the film's tile stands on the viewer's board now: its list's data-place and the id of the tile before it, or None at the head (#122)."""
+    ids = list(candidates().values_list("pk", flat=True))
+    records = records_of(viewer)
+    record = records.get(suggestion.pk)
+    place = VETOES if record and record[1] else record[0] if is_placed(record) else TRAY
+    loaded = stored.sections_and_matches_of(list(candidates()), watched.ticked_ids(viewer))
+    listed = arranged(viewer, ids, records, matched_ids(loaded))[place]
+    at = listed.index(suggestion.pk)
+    return place, listed[at - 1] if at else None
 
 
 def of(viewer, places_at=""):
@@ -129,17 +163,10 @@ def of(viewer, places_at=""):
     def tile(suggestion_id):
         return tile_of(by_id[suggestion_id], loaded[suggestion_id][1], marks, reasons, records.get(suggestion_id, (None, False, False))[2])
 
-    def score_of(suggestion_id):
-        return records.get(suggestion_id, (None, False))[0]
-
-    unplaced = [pk for pk in by_id if not is_placed(records.get(pk))]
-    matched_ids = {pk for pk in unplaced if loaded[pk][1] is not None}
-    tray = tuple(tile(pk) for pk in order.tray_order(viewer.pk, unplaced, matched_ids))
-    bands = tuple(
-        Band(score, key, sign, name, tuple(tile(pk) for pk in order.shuffled(viewer.pk, [pk for pk in by_id if score_of(pk) == score])))
-        for score, key, sign, name in SCALE
-    )
-    vetoes = tuple(tile(pk) for pk in order.shuffled(viewer.pk, list(reasons)))
+    lists = arranged(viewer, list(by_id), records, matched_ids(loaded))
+    tray = tuple(tile(pk) for pk in lists[TRAY])
+    bands = tuple(Band(score, key, sign, name, tuple(tile(pk) for pk in lists[score])) for score, key, sign, name in SCALE)
+    vetoes = tuple(tile(pk) for pk in lists[VETOES])
     return Board(tray, bands, Counts(sum(is_placed(record) for record in records.values()), len(by_id)), vetoes, places_at=places_at)
 
 

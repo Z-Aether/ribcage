@@ -1,11 +1,11 @@
 """Placing a film: the one way a score or a veto is set, and the one way either is cleared (#9, #118, #119, #120)."""
 
-from ribcage.ballot.board import SCALE
+from ribcage.ballot.board import SCALE, TRAY, VETOES
 from ribcage.ballot.models import BallotRecord
 from ribcage.suggestions.notes import note_text
 
-UNSORTED = "unsorted"
-VETO = "veto"
+UNSORTED = TRAY
+VETO = VETOES
 SCORES = {str(score): score for score, *_ in SCALE}
 
 
