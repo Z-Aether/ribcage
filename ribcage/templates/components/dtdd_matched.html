@@ -1,0 +1,7 @@
+{# The viewer's matched topics over a Matched, every one with its raw counts and no threshold; a part of its own, so M6's veto band can place it beside the veto control (#20 §4, #111). #}
+<div class="dtdd__matched">
+  <h4 class="dtdd__group">On your list</h4>
+  <ul class="dtdd__list">
+    {% for row in matched.rows %}<li class="dtdd__topic"><span class="dtdd__label">{{ row.label }}</span> — <span class="dtdd__counts">{{ row.yes }} yes / {{ row.no }} no</span></li>{% endfor %}
+  </ul>
+</div>

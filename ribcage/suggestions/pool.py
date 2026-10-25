@@ -9,7 +9,7 @@ from ribcage.films import card
 from ribcage.phase.order import Phase
 from ribcage.suggestions import withdrawal
 from ribcage.suggestions.models import Note, Suggestion
-from ribcage.triggers import correction, stored
+from ribcage.triggers import correction, stored, watched
 
 # Each pool phase's bar on the opened card: only SUGGEST's holds withdraw, so APPROVE's offers it nowhere (#27, #89).
 PHASE_BARS = {
@@ -28,14 +28,17 @@ def notes_in_order():
 
 def film_cards(viewer, phase):
     pool = list(withdrawal.with_holds(Suggestion.objects.prefetch_related(Prefetch("notes", queryset=notes_in_order()))).order_by("-pk"))
-    sections = stored.sections_of(pool)
-    return [film_card(suggestion, suggestion.notes.all(), viewer, phase, listed_from(sections[suggestion.pk], suggestion)) for suggestion in pool]
+    loaded = stored.sections_and_matches_of(pool, watched.ticked_ids(viewer))
+    return [
+        film_card(suggestion, suggestion.notes.all(), viewer, phase, listed_from(loaded[suggestion.pk][0], suggestion), loaded[suggestion.pk][1])
+        for suggestion in pool
+    ]
 
 
 def the_card(suggestion, viewer, phase):
     """One suggestion's card as the pool shows it to the viewer in the phase, to swap in where it was acted on (#88, #89)."""
-    section = listed_from(stored.section_of(suggestion), suggestion)
-    return film_card(suggestion, notes_in_order().filter(suggestion=suggestion), viewer, phase, section)
+    ((section, matched),) = stored.sections_and_matches_of([suggestion], watched.ticked_ids(viewer)).values()
+    return film_card(suggestion, notes_in_order().filter(suggestion=suggestion), viewer, phase, listed_from(section, suggestion), matched)
 
 
 def listed_from(section, suggestion, route="dtdd_topics", corrects_at="dtdd_match"):
@@ -45,10 +48,10 @@ def listed_from(section, suggestion, route="dtdd_topics", corrects_at="dtdd_matc
     return replace(section, topics_at=topics_at, correction=correction.offered(reverse(corrects_at)))
 
 
-def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None):
+def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None, matched=None):
     """The card for a suggestion and its notes, oldest first. The pitch is the note by the suggester, blank or not.
 
-    Its DoesTheDogDie section is the same whoever views it, so the caller loads every card's at once (#103).
+    Its DoesTheDogDie section is the same whoever views it, so the caller loads every card's at once (#103); the viewer's matched topics are theirs alone (#111).
     """
     pitch = next((note for note in notes if note.author_id == suggestion.suggester_id), None)
     # Removal deletes a voter's notes on other films, so every note but the pitch has an author (#98).
@@ -70,6 +73,7 @@ def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None):
         withdraw=offered_withdraw(suggestion, others, viewer),
         runtime_pencil=offered_pencil(suggestion, viewer, phase),
         dtdd=dtdd,
+        matched=matched,
     )
 
 

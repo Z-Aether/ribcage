@@ -69,7 +69,7 @@
       {% for film in poster_row %}<li>{% include "components/poster.html" with film=film size="tile" %}<span class="tile__title">{{ film.title }}</span></li>{% endfor %}
     </ul>
 
-    <p class="gallery-label">Film cards</p>
+    <p class="gallery-label">Film cards, the sample viewer watching for blood or gore, jump scares, kids dying and vomiting: the ring on Midsommar, opened with its matched block, and on The Wolf House, collapsed; V/H/S/99 lists a thin match without one</p>
     <div class="film-cards" data-film-cards>
       {% for card in cards %}{% include "components/film_card.html" with card=card expanded=forloop.first %}{% endfor %}
     </div>

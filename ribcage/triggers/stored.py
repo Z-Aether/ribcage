@@ -6,7 +6,7 @@ from ribcage.phase import history
 from ribcage.phase.order import Phase
 from ribcage.suggestions.models import Suggestion
 from ribcage.suggestions.models import Approval
-from ribcage.triggers import carrying, section, status
+from ribcage.triggers import carrying, matching, section, status
 from ribcage.triggers.models import Topic, TriggerData
 from ribcage.triggers.vocabulary import UNCATEGORIZED, SuperCategory, Vocabulary
 from ribcage.triggers.vocabulary import Topic as VocabularyTopic
@@ -102,6 +102,16 @@ def sections_of(suggestions):
     """Each suggestion's card section by its id, in a query for the trigger data and one for the vocabulary (#103)."""
     vocabulary = stored_vocabulary()
     return {pk: section.section(each, vocabulary) for pk, each in statuses_of(suggestions).items()}
+
+
+def sections_and_matches_of(suggestions, ticked):
+    """Each suggestion's section and the viewer's matched topics on it, by its id, in the same two queries as `sections_of` (#111)."""
+    vocabulary = stored_vocabulary()
+    loaded = {}
+    for pk, each in statuses_of(suggestions).items():
+        counts = () if each.fetched is None else each.fetched.snapshot.counts
+        loaded[pk] = (section.section(each, vocabulary), matching.matched(counts, vocabulary, ticked))
+    return loaded
 
 
 def section_of(suggestion):

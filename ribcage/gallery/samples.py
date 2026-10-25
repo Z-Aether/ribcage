@@ -16,6 +16,7 @@ from ribcage.films.card import (
     DtddMatch,
     DtddSection,
     FilmCard,
+    Matched,
     MatchCorrection,
     MatchPreview,
     Note,
@@ -182,13 +183,21 @@ def corrections():
     )
 
 
+# A viewer's matched topics on some films: Midsommar and The Wolf House ring, V/H/S/99's one thin match is listed without a ring (#111).
+MATCHED = {
+    MIDSOMMAR: Matched((TopicRow("blood or gore", 38, 1), TopicRow("jump scares", 2, 25)), ring=True),
+    WOLF_HOUSE: Matched((TopicRow("kids dying", 8, 1),), ring=True),
+    VHS_99: Matched((TopicRow("vomiting", 4, 2),), ring=False),
+}
+
 # Inert: with no route the control's box and buttons fire no request (#105).
 INERT = MatchCorrection(at="")
 
 
 def cards():
     return tuple(
-        replace(sample, dtdd=replace(SECTIONS[key_of(sample.film)], correction=INERT)) for sample in plain_cards()
+        replace(sample, dtdd=replace(SECTIONS[key_of(sample.film)], correction=INERT), matched=MATCHED.get(key_of(sample.film)))
+        for sample in plain_cards()
     )
 
 

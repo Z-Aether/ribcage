@@ -100,11 +100,16 @@ def use_match(request):
     # Only htmx swaps the section in place; a plain post is answered with the page (#88).
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
-    return dtdd_section(request, pool.the_card(suggestion, request.user, current()))
+    # The poster's ring follows the new record, so it travels out of band with the section (#111).
+    return dtdd_section(request, pool.the_card(suggestion, request.user, current()), ring_too=True)
 
 
-def dtdd_section(request, card):
-    return render(request, "components/dtdd_section.html", {"card": card, "dtdd": card.dtdd, "answers_the_control": True})
+def dtdd_section(request, card, ring_too=False):
+    context = {"card": card, "dtdd": card.dtdd, "answers_the_control": True, "oob": True}
+    answer = render(request, "components/dtdd_section.html", context)
+    if ring_too:
+        answer.content += render(request, "components/film_card_poster.html", context).content
+    return answer
 
 
 @phase_window(Phase.SUGGEST)

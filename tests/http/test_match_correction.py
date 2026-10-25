@@ -287,7 +287,9 @@ def test_the_section_swaps_in_place_with_the_new_match_and_its_topics(hanna, fil
     assert "All 2 topics on DoesTheDogDie" in swapped
     # A new id, so htmx brings the new record's list in rather than preserving the old one (#103).
     assert f'id="dtdd-topics-{exit_8.pk}-1558416" hx-preserve' in swapped
-    assert as_answered(section_of(hanna.get("/").text, exit_8)).strip() == swapped.strip()
+    # The poster rides along out of band, for its ring (#111).
+    assert as_answered(section_of(hanna.get("/").text, exit_8)).strip() == swapped.split('<div class="film-card__poster')[0].strip()
+    assert f'id="film-card-poster-{exit_8.pk}" hx-swap-oob="outerHTML"' in swapped
 
 
 def test_a_plain_post_saves_and_lands_on_the_pool(hanna, films):

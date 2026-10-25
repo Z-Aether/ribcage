@@ -146,6 +146,15 @@ class DtddSection:
 
 
 @dataclass(frozen=True)
+class Matched:
+    """The viewer's matched topics on a film, evaluated when the page is drawn, and whether the film rings for them (#20 §3–§4, #111)."""
+
+    rows: tuple[TopicRow, ...]
+    # The trigger icon: some matched topic is carried by the one carrying rule (#109).
+    ring: bool
+
+
+@dataclass(frozen=True)
 class FilmCard:
     """Everything the film card shows, as plain data, so a model binds to it without touching the template (#21, #58)."""
 
@@ -165,6 +174,8 @@ class FilmCard:
     runtime_pencil: RuntimePencil | None = None
     # None leaves the section out, as the gallery's plain samples and RUN do (#103, #106).
     dtdd: DtddSection | None = None
+    # The viewing voter's matched topics; None for the admin, a voter with nothing ticked and a film matching nothing (#35 §2, #111).
+    matched: Matched | None = None
 
 
 def trimmed(text, length):

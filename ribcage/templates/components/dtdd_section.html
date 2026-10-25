@@ -2,6 +2,8 @@
 <section class="film-card__dtdd dtdd dtdd--{{ dtdd.state }}" aria-label="DoesTheDogDie">
   {# The match line, and the control that corrects it, swap in place apart from the rest (#105). #}
   {% if dtdd.match or dtdd.correction %}{% include "components/dtdd_match.html" %}{% endif %}
+  {# The viewer's own matched topics come first, on the card itself: the full list below loads only when opened (#111). #}
+  {% if card.matched %}{% include "components/dtdd_matched.html" with matched=card.matched %}{% endif %}
   {% if dtdd.gap %}<p class="dtdd__gap"><span class="dtdd__gap-name">{{ dtdd.gap_name }}</span> {{ dtdd.gap }}</p>{% endif %}
   {% if dtdd.groups %}
     {# Collapsed behind one control; counts are evidence, never a verdict (#20 §4). #}

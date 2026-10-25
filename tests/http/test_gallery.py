@@ -155,3 +155,17 @@ def test_the_gallery_lists_no_topic_without_a_yes_vote(client, debug):
     page = client.get(GALLERY).content.decode()
 
     assert re.findall(r'class="dtdd__counts">0 yes', page) == []
+
+
+def test_the_gallery_rings_a_collapsed_and_an_opened_card_and_shows_the_matched_block_and_a_thin_match_without_a_ring(debug, client):
+    page = client.get(GALLERY).text
+    found = re.findall(r'(<article class="film-card( is-open)?".*?</article>)', page, re.S)
+    ringed = {}
+    for each, opened in found:
+        # The first of each film is the card list's own; later ones are the sections that follow.
+        ringed.setdefault(re.search(r'film-card__toggle"[^>]*>([^<]+)<', each)[1], ("has-trigger-icon" in each, bool(opened)))
+
+    assert ringed["Midsommar"] == (True, True)
+    assert ringed["The Wolf House"] == (True, False)
+    assert ringed["V/H/S/99"][0] is False
+    assert page.count('<div class="dtdd__matched">') >= 3

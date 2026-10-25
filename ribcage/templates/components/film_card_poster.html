@@ -1,0 +1,2 @@
+{# The card's poster and its ring; a correction of the match sends it out of band, so the ring follows the new record (#105, #111). #}
+<div class="film-card__poster{% if card.matched.ring %} has-trigger-icon{% endif %}"{% if card.suggestion_id %} id="film-card-poster-{{ card.suggestion_id }}"{% endif %}{% if oob %} hx-swap-oob="outerHTML"{% endif %}>{% include "components/poster.html" with film=card.film size="card" %}</div>

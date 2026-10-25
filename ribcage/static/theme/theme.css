@@ -2125,6 +2125,10 @@ body > aside.nag-bar a {
   border-radius: var(--radius-poster);
   box-shadow: 0 0 0 4px var(--trigger-icon-ring);
 }
+/* The card's ring is on its poster or title card, collapsed or opened (#111). */
+.film-card__poster.has-trigger-icon > .poster {
+  box-shadow: 0 0 0 4px var(--trigger-icon-ring);
+}
 .is-seen-it .poster {
   filter: var(--seen-it-filter);
 }
