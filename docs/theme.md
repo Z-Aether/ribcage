@@ -71,7 +71,7 @@ A voter page on a roomy single column. At the top sit the page's one line of pur
 
 **I don't care** sits beside the privacy disclosure, to its right and under it on a phone, as one quiet outlined pill, the same as *Withdraw…*, reversible and unremarkable. Pressed, it fills sea-glass as a ticked box does, and a muted line under it says nothing is ticked and the list can't be until it is turned off. Over ticked topics a click arms it as withdraw is armed: *Cancel* takes the pill's place at its size, and below it a bold line reads *This clears your 4 topics.* over a button naming the act, *Clear my 4 topics*. Confirmed or turned on, the list greys out: the chips and the sections drop to under half their ink, the rows' boxes can't be pressed and show a not-allowed cursor, and the search still finds them (#110).
 
-**The nag bar** is a slim band under the voter header on every voter page but *My warnings*, on the plain surface with a line below it, one line of small muted type centred, *You haven't set up your warnings yet.* and a bold lilac *Set up my warnings* link. It takes no warning colour and has no close, since ticking a topic or pressing *I don't care* removes it. On a phone the sentence wraps, and the link never breaks across lines (#110).
+**The nag bar** is a slim band under the voter header on every voter page but *My warnings* and the forced password change, on the plain surface with a line below it, one line of small muted type centred, *You haven't set up your warnings yet.* and a bold lilac *Set up my warnings* link. It takes no warning colour and has no close, since ticking a topic or pressing *I don't care* removes it. On a phone the sentence wraps, and the link never breaks across lines (#110).
 
 ## The Films tab
 

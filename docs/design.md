@@ -188,7 +188,7 @@ Nothing about trigger warnings appears in PICK or RUN: by then they have already
 
 **Shell** (#27, #37):
 - **Header:** the phase page, *My warnings* (every phase but RUN), and the voter's name opening *Change password* and *Log out*.
-- **Nag bar:** a slim, non-blocking bar under the header on every voter page but *My warnings*, derived from the phase: it shows in SUGGEST, APPROVE and VOTE, so reopening VOTE brings it back, and only until the voter ticks a topic or presses "I don't care". It wraps on a phone (#27, #110).
+- **Nag bar:** a slim, non-blocking bar under the header on every voter page but *My warnings* and the forced password change, derived from the phase: it shows in SUGGEST, APPROVE and VOTE, so reopening VOTE brings it back, and only until the voter ticks a topic or presses "I don't care". It wraps on a phone (#27, #110).
 - **Public pages:** login, join and privacy wear the wordmark alone in the header, linking home, with no name menu, since naming the voter reads the session and public pages never query (#73, #83).
 - **Footer:** TMDB attribution, DTDD link, abuse `mailto:`, privacy policy. The public pages (login, join, privacy) carry all but the abuse `mailto:`, which stays behind the login wall (#73).
 - **Back and Forward:** a page reached by Back or Forward is the page as it is now, never the browser's copy: after a phase move it is the current phase's page, and after log out it is login. A voter who leaves a page with unsent typing loses it on coming back, and Back onto a page a form answered may ask to send the form again, which is harmless. The public pages are left to the browser (#84).

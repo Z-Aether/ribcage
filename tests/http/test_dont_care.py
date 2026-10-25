@@ -196,6 +196,24 @@ def test_the_bar_is_absent_from_my_warnings(browser):
     assert BAR not in page and "My warnings" in page
 
 
+def test_the_bar_is_absent_from_the_forced_password_change(browser, ada):
+    walk_to(Phase.SUGGEST)
+    ada.must_change_password = True
+    ada.save()
+
+    page = browser.get("/password/").text
+
+    assert "Choose your own password" in page and BAR not in page
+
+
+def test_the_bar_shows_on_the_voluntary_password_change(browser):
+    walk_to(Phase.SUGGEST)
+
+    page = browser.get("/password/").text
+
+    assert "Change password" in page and BAR in page
+
+
 def test_the_bar_blocks_nothing_voting_works_under_it(browser):
     walk_to(Phase.VOTE)
 
