@@ -1,7 +1,6 @@
 {# The opened card's DoesTheDogDie section over a DtddSection, the same for every viewer; a collapsed card hides it whole; data-dtdd marks it a region of DoesTheDogDie's data, which must carry its own credit (#20, #21, #103, #112). #}
 <section class="film-card__dtdd dtdd dtdd--{{ dtdd.state }}" aria-label="DoesTheDogDie" data-dtdd>
-  {# The match line, and the control that corrects it, swap in place apart from the rest (#105). #}
-  {% if dtdd.match or dtdd.correction %}{% include "components/dtdd_match.html" %}{% endif %}
+  {% if dtdd.match %}{% include "components/dtdd_match.html" %}{% endif %}
   {# The viewer's own matched topics come first, on the card itself: the full list below loads only when opened (#111). #}
   {% if card.matched %}{% include "components/dtdd_matched.html" with matched=card.matched %}{% endif %}
   {% if dtdd.gap %}<p class="dtdd__gap"><span class="dtdd__gap-name">{{ dtdd.gap_name }}</span> {{ dtdd.gap }}</p>{% endif %}
@@ -16,4 +15,6 @@
     </details>
   {% endif %}
   {% if dtdd.credited %}<p class="dtdd__credit"><a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a></p>{% endif %}
+  {# The control that corrects the match is the section's last row, shut until asked for (#105, #116). #}
+  {% if dtdd.correction %}{% include "components/dtdd_correction.html" %}{% endif %}
 </section>

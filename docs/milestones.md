@@ -185,7 +185,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - **PICK → RUN:** publishes the timetable. **RUN → PICK** takes the evening down at once. The same moves' DTDD purge and refetch are M5's (#13, #32, #62).
 - **The RUN page:** the vertical evening fitted to one phone screen, past boxes dimmed, now playing inside the playing box, next box in a gap or before the start, the 30–60 s poll, the reveal one header link away (#13, #22, #36).
 - **Actualising:** the M7 editor used in RUN.
-- Every voter page's RUN-specific behaviour: *My warnings* gone from the header, the watched-list window closing (#34).
+- Every voter page's RUN-specific behaviour: *My warnings* gone from the name menu, the watched-list window closing (#34).
 - The RUN page tested on real phones, since a broken RUN is unfixable at any price (#25).
 
 **Deployable state: a complete marathon, start to finish, without the solver.** This is the earliest point the app could serve a real marathon.

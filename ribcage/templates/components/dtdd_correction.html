@@ -1,0 +1,34 @@
+{# The section's paste-a-link control, over a DtddSection, shut behind one quiet summary until asked for; a refusal, a preview or a pasted link keeps it open. Asked, it shows a preview of the record found (#32 §5, #105, #116). #}
+{# Each answer swaps the whole section, and an open topic list stays open across it (#103). #}
+{# With no route, as in the gallery, nothing submits, fires a request or takes the focus. #}
+{# A note's swap of the card keeps the control as it was, a pasted link or a preview, under an id naming the film and its match; the control's own answers carry no mark, so they replace it (#105). #}
+{# A preserved control keeps its open state with the rest of its elements, so a note's swap does not shut what the voter opened (#116). #}
+{% with correction=dtdd.correction suggestion=card.suggestion_id|default_if_none:'' %}<div class="dtdd__matching{% if correction.preview %} is-previewing{% endif %}"{% if correction.at %} id="dtdd-matching-{{ suggestion }}-{{ dtdd.match.item_id|default:'' }}"{% if not answers_the_control %} hx-preserve{% endif %}{% endif %}>
+  <details class="dtdd__correction"{% if correction.preview or correction.refusal or correction.typed %} open{% endif %}>
+  <summary class="dtdd__wrong">{% if dtdd.match %}Wrong film?{% else %}Match it by hand{% endif %}</summary>
+  {% if correction.preview %}{% with found=correction.preview %}
+    <p class="dtdd__preview"><span class="film-card__label">Found:</span> <a href="{{ found.url }}" target="_blank" rel="noopener">{{ found.name }}{% if found.year %} ({{ found.year }}){% endif %}&nbsp;↗</a> · {{ found.item_type }} · {{ found.topic_count }} topic{{ found.topic_count|pluralize }}</p>
+    {# The snapshot travels signed, bound to this film, so the save fetches nothing and no one can alter it (#93, #105). #}
+    <form class="dtdd__use" method="post"{% if correction.at %} action="{{ correction.at }}" hx-post="{{ correction.at }}" hx-target="closest .film-card__dtdd" hx-swap="outerHTML"{% else %} onsubmit="return false"{% endif %}>
+      {% csrf_token %}
+      <input type="hidden" name="suggestion" value="{{ suggestion }}">
+      <input type="hidden" name="snapshot" value="{{ found.signed }}">
+      <button type="submit"{% if correction.at %} autofocus{% endif %}>Use this match</button>
+      <a class="button button--quiet"{% if correction.at %} href="{{ correction.at }}?suggestion={{ suggestion }}&amp;cancel" hx-get="{{ correction.at }}?suggestion={{ suggestion }}&amp;cancel" hx-target="closest .film-card__dtdd" hx-swap="outerHTML"{% endif %}>Cancel</a>
+    </form>
+    {# A film the section credits for nothing else carries the preview's credit here, so it stays with the preview across a note's swap (#21, #105). #}
+    {% if not dtdd.credited %}<p class="dtdd__credit"><a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a></p>{% endif %}
+  {% endwith %}{% else %}
+    {% if correction %}
+      {# A GET, so asking writes nothing and fetches outside the write lock; there is no in-app search (#78, #105). #}
+      <form class="dtdd__correct" method="get"{% if correction.at %} action="{{ correction.at }}" hx-get="{{ correction.at }}" hx-target="closest .film-card__dtdd" hx-swap="outerHTML"{% else %} onsubmit="return false"{% endif %}>
+        <input type="hidden" name="suggestion" value="{{ suggestion }}">
+        <p class="dtdd__ask"><a href="{{ correction.search }}" target="_blank" rel="noopener">Find it on DoesTheDogDie&nbsp;↗</a>, then paste its link here.</p>
+        {# Text, not a url field, so every refusal is the server's own gentle one (#90). #}
+        <span class="dtdd__paste"><input type="text" name="link" value="{{ correction.typed }}" inputmode="url" autocomplete="off" spellcheck="false" aria-label="DoesTheDogDie link for {{ card.film.title }}"{% if correction.refusal %} aria-describedby="dtdd-refusal-{{ suggestion }}"{% if correction.at %} autofocus{% endif %}{% endif %}><button type="submit" class="button--quiet">Use this link</button></span>
+      </form>
+      {% if correction.refusal %}<p class="dtdd__refusal" id="dtdd-refusal-{{ suggestion }}" role="status">{{ correction.refusal }}</p>{% endif %}
+    {% endif %}
+  {% endif %}
+  </details>
+</div>{% endwith %}

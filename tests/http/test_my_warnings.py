@@ -176,12 +176,17 @@ def test_the_write_answers_405_to_any_other_method_and_the_page_to_a_post(browse
 
 
 @pytest.mark.parametrize("phase", PHASES)
-def test_the_header_link_shows_in_every_phase_but_run(browser, phase):
+def test_the_menu_link_shows_in_every_phase_but_run_first_in_the_name_menu_and_not_beside_it(browser, phase):
     walk_to(phase)
 
-    page = browser.get("/password/").text
+    page = browser.get("/").text
+    header = re.search(r"<header class=\"voter-header\".*?</header>", page, re.S)[0]
+    menu = re.search(r"<details.*?</details>", header, re.S)[0]
 
-    assert ('href="/warnings/"' in page) is (phase is not Phase.RUN)
+    assert ('href="/warnings/"' in menu) is (phase is not Phase.RUN)
+    assert header.count('href="/warnings/"') == menu.count('href="/warnings/"')
+    if phase is not Phase.RUN:
+        assert re.findall(r'<a href="([^"]+)"', menu)[:2] == ["/warnings/", "/password/"]
 
 
 def test_the_page_in_run_redirects_to_the_phase_page(browser):

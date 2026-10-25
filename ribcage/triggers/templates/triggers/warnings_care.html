@@ -1,10 +1,10 @@
-{# *I don't care*, a toggle beside the privacy disclosure: over ticks a click arms it, Cancel takes the arm's place, and the confirm names what it clears (#89, #110). #}
+{# *I don't care*, which reads *Warn me again* while on, a toggle beside the privacy disclosure: over ticks a click arms it, Cancel takes the arm's place, and the confirm names what it clears (#89, #110, #116). #}
 {% url 'warnings_dont_care' as address %}<div id="warnings-care" class="care{% if care.on %} is-on{% endif %}{% if care.armed %} is-armed{% endif %}" data-care>
   {% if care.on %}
     <form method="post" action="{{ address }}">
       {% csrf_token %}
       <input type="hidden" name="on" value="0">
-      <button type="submit" class="button--quiet care__toggle" aria-pressed="true">I don't care</button>
+      <button type="submit" class="button--quiet care__toggle">Warn me again</button>
     </form>
     <p class="care__said">Nothing is ticked, and the list can't be ticked until you turn this off.</p>
   {% elif care.armed %}
@@ -17,12 +17,12 @@
       <p class="care__go"><button type="submit">Clear my {{ care.count }} topic{{ care.count|pluralize }}</button></p>
     </form>
   {% elif care.count %}
-    <a class="button button--quiet care__toggle" id="care-toggle" href="{{ address }}" hx-get="{{ address }}" hx-target="closest [data-care]" hx-swap="outerHTML" role="button" aria-pressed="false">I don't care</a>
+    <a class="button button--quiet care__toggle" id="care-toggle" href="{{ address }}" hx-get="{{ address }}" hx-target="closest [data-care]" hx-swap="outerHTML" role="button">I don't care</a>
   {% else %}
     <form method="post" action="{{ address }}">
       {% csrf_token %}
       <input type="hidden" name="on" value="1">
-      <button type="submit" class="button--quiet care__toggle" aria-pressed="false">I don't care</button>
+      <button type="submit" class="button--quiet care__toggle">I don't care</button>
     </form>
   {% endif %}
 </div>

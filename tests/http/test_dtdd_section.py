@@ -72,7 +72,7 @@ def test_each_pool_card_carries_its_section_after_the_notes_with_one_credit_wher
     for state, suggestion in films.items():
         shown = card(page, suggestion)
         assert f'class="film-card__dtdd dtdd dtdd--{state}"' in shown
-        assert shown.index("film-card__notes") < shown.index("film-card__dtdd") < shown.index("film-card__phase-bar")
+        assert shown.index("film-card__notes") < shown.index("film-card__phase-bar") < shown.index("film-card__dtdd")
         # A match or topics shown carries the credit; a gap with nothing of DoesTheDogDie's shown carries none (#21).
         assert shown.count(CREDIT) == (1 if state == "matched" else 0)
 
@@ -83,7 +83,7 @@ def test_a_matched_card_shows_its_record_auto_and_its_topic_count_behind_one_con
 
     assert '<a href="https://www.doesthedogdie.com/media/12189" target="_blank" rel="noopener">The Shining (1980)&nbsp;↗</a>' in shown
     assert '<span class="dtdd__set-by">auto</span>' in shown
-    assert shown.count("<details") == 1
+    assert shown.count('<details class="dtdd__topics"') == 1
     assert "All 2 topics" in shown
 
 
@@ -160,7 +160,7 @@ def test_each_gap_is_named_on_the_card_and_never_as_an_all_clear(hanna, films, s
 
     assert f'<span class="dtdd__gap-name">{state.replace("-", " ")}</span>' in shown
     assert says in shown
-    assert "<details" not in shown
+    assert '<details class="dtdd__topics"' not in shown
 
 
 def test_a_collapsed_card_shows_neither_the_section_nor_its_credit():

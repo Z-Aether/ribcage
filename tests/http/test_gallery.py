@@ -52,7 +52,7 @@ def test_the_gallery_renders_with_debug_on_and_no_queries_beyond_the_session_vot
 
     assert response.status_code == 200
     assert [query_table(query["sql"]) for query in captured.captured_queries] == ["django_session", "identity_voter", "phase_phasemove", "triggers_watchedtopic", "triggers_doesnotcare"]
-    # The phase is the header's, read once: the My warnings link, and the nag bar, which asks the two lists a voter can decide by (#107, #110).
+    # The phase is the header's, read once: the My warnings menu item, and the nag bar, which asks the two lists a voter can decide by (#107, #110).
 
 
 def test_the_gallery_is_behind_the_login_wall(debug, db):
@@ -83,7 +83,7 @@ def test_the_gallery_is_behind_the_login_wall(debug, db):
         ),
         pytest.param(lambda page: "<details class=\"dtdd__topics\">" in page, id="the dtdd topic list behind its control"),
         pytest.param('<span class="dtdd__set-by">set by Dani</span>', id="a match set by someone"),
-        pytest.param(lambda page: "Wrong film? <a href=\"https://www.doesthedogdie.com/\"" in page, id="the match line's control"),
+        pytest.param('<summary class="dtdd__wrong">Wrong film?</summary>', id="the match correction's collapsed control"),
         pytest.param('<p class="dtdd__preview"><span class="film-card__label">Found:</span>', id="a correction's preview"),
         pytest.param('<p class="dtdd__refusal" id="dtdd-refusal-" role="status">', id="a correction's refused link"),
     ],

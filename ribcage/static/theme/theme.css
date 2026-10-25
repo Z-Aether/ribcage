@@ -805,33 +805,6 @@ body > footer.site-footer {
 
 /* ---------- My warnings: the watched list's page (#23, #107) ---------- */
 
-[data-skin] .voter-header__warnings {
-  margin-left: auto;
-  padding: 0.4rem 0.2rem;
-  color: var(--link);
-  font-weight: 700;
-  white-space: nowrap;
-}
-body > header.voter-header:has(.voter-header__warnings) {
-  gap: 1.25rem;
-}
-
-/* On a phone the link, the wordmark and the name share one line, so a short name doesn't wrap (#107). */
-@media (max-width: 480px) {
-  body > header.voter-header:has(.voter-header__warnings) {
-    gap: 0.6rem;
-  }
-  [data-skin] .voter-header:has(.voter-header__warnings) .voter-header__wordmark {
-    font-size: 1.7rem;
-  }
-  [data-skin] .voter-header__warnings {
-    font-size: 0.9rem;
-  }
-  [data-skin] .voter-header:has(.voter-header__warnings) .voter-menu > summary.voter-menu__name {
-    padding-inline: 0.7rem;
-  }
-}
-
 [data-skin] .warnings {
   max-width: 46rem;
 }
@@ -1055,8 +1028,8 @@ body > aside.nag-bar a {
   width: auto;
   margin: 0;
 }
-/* Pressed reads as on: the pill fills like a ticked box does. */
-[data-skin] :is(button, a.button).care__toggle[aria-pressed="true"] {
+/* On reads as filled, like a ticked box; the label stays the action, so no aria-pressed (#116). */
+[data-skin] .care.is-on :is(button, a.button).care__toggle {
   background-color: var(--score-keen);
   border-color: var(--score-top-pick);
   color: var(--score-top-pick-ink);
@@ -1520,7 +1493,16 @@ body > aside.nag-bar a {
 .dtdd__set-by {
   color: var(--ink-muted);
 }
-/* The paste-a-link control on the match line: a quiet ask, then a box and a quiet button on one line (#105). */
+/* The paste-a-link control, the section's last row, shut behind a quiet summary: a quiet ask, then a box and a quiet button on one line (#105, #116). */
+[data-skin] .dtdd__wrong {
+  display: inline-block;
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+[data-skin] .dtdd__correction[open] > .dtdd__wrong {
+  margin-bottom: 0.45rem;
+}
 .dtdd__correct {
   margin: 0;
 }

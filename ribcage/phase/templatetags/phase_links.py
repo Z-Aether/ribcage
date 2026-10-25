@@ -20,7 +20,7 @@ class HeaderLinks:
 
 @register.simple_tag(takes_context=True)
 def header_links(context):
-    """What the voter header offers by the phase, read once: the *My warnings* link in every phase but RUN (#27, #107), and the nag bar under it (#110)."""
+    """What the voter header offers by the phase, read once: the *My warnings* menu item in every phase but RUN (#27, #107), and the nag bar under it (#110)."""
     # No voter, no link and no query: base.html renders its default header without the database (#49).
     user = context.get("user")
     if user is None or not user.is_authenticated:

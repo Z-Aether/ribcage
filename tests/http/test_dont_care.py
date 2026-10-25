@@ -51,12 +51,15 @@ def say(browser, on, **extra):
 def test_i_dont_care_with_nothing_ticked_turns_on_and_off_again(browser, ada):
     assert say(browser, "1").status_code == 302
     assert cares_not(ada)
-    assert 'aria-pressed="true"' in browser.get(PAGE).text
+    on = browser.get(PAGE).text
+    assert 'care__toggle">Warn me again</button>' in on and "aria-pressed" not in on.split('data-care')[1].split('care__said')[0] and "I don&#x27;t care</button>" not in on
 
     say(browser, "0")
 
-    assert not cares_not(ada)
-    assert 'aria-pressed="false"' in browser.get(PAGE).text
+    off = browser.get(PAGE).text
+    assert re.search(r'care__toggle"[^>]*>I don(&#x27;|.)t care<', off)
+    assert "Warn me again" not in off
+    assert "Warn me again" not in off
 
 
 def test_over_ticks_it_arms_naming_their_count_and_writes_nothing(browser, ada):

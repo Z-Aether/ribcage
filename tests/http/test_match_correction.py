@@ -123,12 +123,44 @@ def test_a_matched_film_asks_if_it_is_the_wrong_film_and_links_to_dtdds_search(h
     assert '<a href="https://www.doesthedogdie.com/" target="_blank" rel="noopener">Find it on DoesTheDogDie&nbsp;↗</a>' in shown
 
 
-@pytest.mark.parametrize("film", ["exit 8", "werewolf", "cabinet"], ids=["uncovered on an empty record", "uncovered", "no match"])
-def test_any_other_film_offers_the_same_control_without_asking(hanna, films, film):
+def test_the_control_is_the_sections_last_row_and_shut_until_asked_for(hanna, films, dtdd):
+    corrected = films["exit 8"]
+    use(hanna, corrected, signed_in(ask(hanna, corrected, link(EXIT_8)).text))
+
+    shown = section_of(hanna.get("/").text, corrected)
+
+    assert shown.index("dtdd__match") < shown.index("dtdd__topics") < shown.index("dtdd__matching")
+    assert shown.index("dtdd__credit") < shown.index("dtdd__matching")
+    assert '<details class="dtdd__correction">' in shown
+    assert '<summary class="dtdd__wrong">Wrong film?</summary>' in shown
+    assert "Use this link</button>" in shown and "Look it up" not in shown
+
+
+def test_a_film_with_no_match_has_a_fitting_collapsed_control(hanna, films):
+    shown = section_of(hanna.get("/").text, films["cabinet"])
+
+    assert '<details class="dtdd__correction">' in shown
+    assert '<summary class="dtdd__wrong">Match it by hand</summary>' in shown
+
+
+def test_a_refusal_and_a_preview_open_the_control(hanna, films):
+    refused = ask(hanna, films["cabinet"], "https://example.org/nope").text
+    previewed = ask(hanna, films["cabinet"], "https://www.doesthedogdie.com/media/777").text
+    empty = ask(hanna, films["cabinet"], "").text
+
+    assert '<details class="dtdd__correction" open>' in refused and "dtdd__refusal" in refused
+    assert '<details class="dtdd__correction" open>' in previewed and "dtdd__preview" in previewed
+    # An empty paste refuses with nothing typed, so only the refusal opens the control (#116).
+    assert '<details class="dtdd__correction" open>' in empty and "dtdd__refusal" in empty
+
+
+@pytest.mark.parametrize("film, words", [("exit 8", "Wrong film?"), ("werewolf", "Wrong film?"), ("cabinet", "Match it by hand")], ids=["uncovered on an empty record", "uncovered", "no match"])
+def test_any_other_film_offers_the_same_control_without_asking(hanna, films, film, words):
     shown = section_of(hanna.get("/").text, films[film])
 
     assert "Find it on DoesTheDogDie ↗, then paste its link here." in text(shown)
-    assert "Wrong film?" not in shown
+    # The words follow the match line, not the state (#116).
+    assert f'<summary class="dtdd__wrong">{words}</summary>' in shown
     assert re.search(rf'<form class="dtdd__correct" method="get" action="{MATCH}" hx-get="{MATCH}"', shown)
 
 

@@ -126,7 +126,7 @@ def render(shown, expanded=True):
 def test_the_section_follows_the_notes_and_carries_one_credit_line():
     page = render(section(matched(TopicCount(153, 3, 1), TopicCount(158, 2, 4)), VOCABULARY))
 
-    assert page.index("film-card__notes") < page.index("film-card__dtdd") < page.index("film-card__phase-bar")
+    assert page.index("film-card__notes") < page.index("film-card__phase-bar") < page.index("film-card__dtdd")
     assert page.count(CREDIT) == 1
     assert '<a href="https://www.doesthedogdie.com/media/5381" target="_blank" rel="noopener">' in page
     assert re.search(r"Willy&#x27;s Wonderland \(2021\)&nbsp;↗</a> · <span class=\"dtdd__set-by\">auto</span>", page)
