@@ -14,7 +14,7 @@ ADMIN = "admin"
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
 # Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110, #119).
-ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_veto_reason"}
+ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_veto_reason", "ballot_seen"}
 
 class Fragment(NamedTuple):
     """One htmx answer that swaps a card, its section or a part of one in, which test_dtdd_credit.py sweeps for DoesTheDogDie's data (#112).
@@ -65,6 +65,7 @@ NO_DTDD_DATA = {
     "welcome",  # redirects a plain GET
     "gallery",  # dev-only, answering 404 outside DEBUG
     "console", "console_phase_move", "console_films_approval",  # redirects, whatever they act on
+    "ballot_seen",  # a tile or a veto row's frame, never its matched topics (#121)
     "console_roster_remove", "console_roster_reset", "console_backup_upload",  # the roster's and backup page's acts
 }
 

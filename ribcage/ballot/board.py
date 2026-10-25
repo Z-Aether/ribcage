@@ -25,6 +25,7 @@ class Tile:
     film: Film
     # The ring's own count, `Matched.strong`; zero where the ring is absent (#117).
     trigger_count: int = 0
+    # The viewer's own seen it, which greys the poster; no one else's ever reaches a tile (#10, #35, #121).
     seen_it: bool = False
     # One initial per other voter who vetoed it, and their names for the hover (#120).
     vetoed_by: str = ""
@@ -78,10 +79,12 @@ def candidates():
 
 
 def records_of(viewer):
-    """The viewer's records on the candidates, as (score, vetoed) by suggestion (#119)."""
+    """The viewer's records on the candidates, as (score, vetoed, seen it) by suggestion (#119, #121)."""
     return {
-        suggestion_id: (score, vetoed)
-        for suggestion_id, score, vetoed in BallotRecord.objects.filter(voter=viewer, suggestion__approval=Approval.APPROVED).values_list("suggestion_id", "score", "vetoed")
+        suggestion_id: (score, vetoed, seen_it)
+        for suggestion_id, score, vetoed, seen_it in BallotRecord.objects.filter(voter=viewer, suggestion__approval=Approval.APPROVED).values_list(
+            "suggestion_id", "score", "vetoed", "seen_it"
+        )
     }
 
 
@@ -106,11 +109,11 @@ def veto_marks(rows, viewer):
     }
 
 
-def tile_of(suggestion, matched, marks, reasons):
+def tile_of(suggestion, matched, marks, reasons, seen_it=False):
     """One tile: the ring's count where the film rings, the others' ribbon, and the viewer's own veto row's data (#117, #120)."""
     initials, names = marks.get(suggestion.pk, ("", ""))
     count = matched.strong if matched is not None and matched.ring else 0
-    return Tile(suggestion.pk, suggestion.film, trigger_count=count, vetoed_by=initials, vetoers=names, matched=matched, reason=reasons.get(suggestion.pk, ""))
+    return Tile(suggestion.pk, suggestion.film, trigger_count=count, vetoed_by=initials, vetoers=names, matched=matched, reason=reasons.get(suggestion.pk, ""), seen_it=seen_it)
 
 
 def of(viewer, places_at=""):
@@ -124,7 +127,7 @@ def of(viewer, places_at=""):
     reasons = {suggestion_id: reason or "" for suggestion_id, voter_id, _, reason in rows if voter_id == viewer.pk}
 
     def tile(suggestion_id):
-        return tile_of(by_id[suggestion_id], loaded[suggestion_id][1], marks, reasons)
+        return tile_of(by_id[suggestion_id], loaded[suggestion_id][1], marks, reasons, records.get(suggestion_id, (None, False, False))[2])
 
     def score_of(suggestion_id):
         return records.get(suggestion_id, (None, False))[0]
@@ -145,7 +148,8 @@ def one_tile(viewer, suggestion):
     ((_, matched),) = stored.sections_and_matches_of([suggestion], watched.ticked_ids(viewer)).values()
     rows = list(vetoes_on([suggestion.pk]))
     reasons = {suggestion.pk: reason or "" for _, voter_id, _, reason in rows if voter_id == viewer.pk}
-    return tile_of(suggestion, matched, veto_marks(rows, viewer), reasons)
+    seen_it = BallotRecord.objects.filter(voter=viewer, suggestion=suggestion, seen_it=True).exists()
+    return tile_of(suggestion, matched, veto_marks(rows, viewer), reasons, seen_it)
 
 
 def counts_of(viewer):

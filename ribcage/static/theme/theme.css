@@ -339,7 +339,7 @@ body[data-skin="run"] {
   color: var(--pico-primary-inverse);
 }
 
-[data-skin] :is(button:not(.film-card__toggle, .ledger__opens, .tile), a.button) {
+[data-skin] :is(button:not(.film-card__toggle, .ledger__opens, .tile, .seen-toggle), a.button) {
   border-radius: var(--button-radius);
   padding-inline: var(--button-padding);
   font-weight: 700;
@@ -352,14 +352,14 @@ body[data-skin="run"] {
 [data-skin] :is(button, a.button).button--quiet:hover {
   border-color: var(--ink-muted);
 }
-[data-skin="voter"] :is(button:not(.film-card__toggle, .ledger__opens, .tile):not(:disabled), a.button):hover {
+[data-skin="voter"] :is(button:not(.film-card__toggle, .ledger__opens, .tile, .seen-toggle):not(:disabled), a.button):hover {
   animation: wobble 0.5s ease-in-out;
 }
-[data-skin="admin"] :is(button:not(.film-card__toggle, .ledger__opens, .tile), a.button) {
+[data-skin="admin"] :is(button:not(.film-card__toggle, .ledger__opens, .tile, .seen-toggle), a.button) {
   padding-block: 0.3rem;
   font-size: 0.875rem;
 }
-[data-skin="admin"] :is(button:not(.film-card__toggle, .ledger__opens, .tile):not(:disabled), a.button):hover {
+[data-skin="admin"] :is(button:not(.film-card__toggle, .ledger__opens, .tile, .seen-toggle):not(:disabled), a.button):hover {
   animation: none;
 }
 [data-skin] :is(button, [type="button"], [type="submit"], [type="reset"], a):focus-visible {
@@ -2179,6 +2179,42 @@ body > aside.nag-bar a {
 .is-seen-it .poster {
   filter: var(--seen-it-filter);
 }
+/* The seen-it toggle sits on the poster's bottom-right corner, the third corner the frame uses: the ribbon is top-right, the count bottom-left (#121). */
+.seen-toggle {
+  position: absolute;
+  right: -0.35rem;
+  bottom: 0.5rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  margin: 0;
+  padding: 0;
+  border: 2px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background-color: var(--ground);
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.tile:hover .seen-toggle,
+.tile:focus-within .seen-toggle,
+.seen-toggle:focus-visible,
+.seen-toggle.is-on {
+  opacity: 1;
+}
+.seen-toggle.is-on {
+  border-color: var(--ink);
+}
+/* A touch has no hover to reveal it, so it stays in view there. */
+@media (hover: none) {
+  .seen-toggle {
+    opacity: 1;
+  }
+}
 .veto-ribbon {
   position: absolute;
   top: 0.5rem;
@@ -2196,6 +2232,19 @@ body > aside.nag-bar a {
 }
 
 /* ---------- The ballot: the Unsorted tray and the five bands (#9, #38, #119) ---------- */
+
+/* The legend is one muted line above the board, each state named in its own colour (#121). */
+.ballot-legend {
+  margin: 0 0 0.75rem;
+  color: var(--ink-muted);
+}
+.ballot-legend__seen {
+  color: var(--ink);
+  filter: grayscale(1);
+}
+.ballot-legend__veto {
+  color: var(--veto-ink);
+}
 
 /* The ballot takes the full width under the thin header, with no side rail (#27). */
 [data-skin] main:has(> .ballot-head) {
@@ -2667,7 +2716,7 @@ body > aside.nag-bar a {
   body::before,
   [data-skin]:not([data-skin="admin"]) .wordmark.is-flying::after,
   [data-skin="voter"] .film-card.is-open .film-card__poster::after,
-  [data-skin="voter"] :is(button:not(.film-card__toggle, .ledger__opens, .tile):not(:disabled), a.button):hover,
+  [data-skin="voter"] :is(button:not(.film-card__toggle, .ledger__opens, .tile, .seen-toggle):not(:disabled), a.button):hover,
   [data-skin="voter"] .score:hover {
     animation: none;
   }

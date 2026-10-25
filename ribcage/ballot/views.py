@@ -34,6 +34,23 @@ def place(request):
     return render(request, "ballot/counts.html", context)
 
 
+SEEN_STATES = {"1": True, "0": False}
+
+
+@phase_window(Phase.VOTE)
+@require_POST
+def seen(request):
+    """Seen it set to the state the post names, and the film's tile or veto frame drawn again; a stale post reloads the ballot as it is (#10, #34, #78, #121)."""
+    state = SEEN_STATES.get(request.POST.get("seen"))
+    suggestion = candidate(request.POST.get("suggestion"))
+    if suggestion is None or state is None:
+        return reload_the_tab(request, reverse("phase_page"))
+    vetoed = placing.mark_seen(request.user, suggestion, state)
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    return render(request, "ballot/seen.html", {"tile": board.one_tile(request.user, suggestion), "row": vetoed, "oob": True})
+
+
 @phase_window(Phase.VOTE)
 @require_POST
 def veto_reason(request):

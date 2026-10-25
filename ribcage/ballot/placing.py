@@ -38,6 +38,24 @@ def place(voter, suggestion, target):
         record.save(update_fields=["score", "vetoed", "veto_reason"])
 
 
+def mark_seen(voter, suggestion, seen):
+    """Set the voter's seen it on the suggestion to `seen`, leaving score and veto alone; a repeat changes nothing.
+
+    A record left with nothing is deleted, as `place` does. Returns whether the voter vetoes the film, for the answer that redraws it (#10, #118, #121).
+    """
+    record = BallotRecord.objects.filter(voter=voter, suggestion=suggestion).first()
+    if record is None:
+        if seen:
+            BallotRecord.objects.create(voter=voter, suggestion=suggestion, seen_it=True)
+        return False
+    record.seen_it = seen
+    if not seen and record.score is None and not record.vetoed:
+        record.delete()
+    else:
+        record.save(update_fields=["seen_it"])
+    return record.vetoed
+
+
 def give_reason(voter, suggestion, typed):
     """Keep the voter's reason on their veto as a note is kept, saving it empty clearing it; raises `TooLong` and writes nothing over the cap (#88, #120).
 

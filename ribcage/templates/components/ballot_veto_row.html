@@ -1,6 +1,6 @@
 {# A film the voter vetoes, widened in the Veto band: the tile, what the veto costs, their matched topics with DoesTheDogDie's credit, and an optional reason saved by its own post (#9, #10, #20, #112, #120). #}
 <li class="veto-row" data-suggestion="{{ tile.suggestion_id }}"{% if oob %} hx-swap-oob="outerHTML:li[data-suggestion='{{ tile.suggestion_id }}']"{% endif %}>
-  <div class="tile{% if tile.trigger_count %} has-trigger-icon{% endif %}">{% include "components/tile.html" with film=tile.film vetoed_by=tile.vetoed_by vetoers=tile.vetoers trigger_count=tile.trigger_count caption=tile.caption %}</div>
+  {% include "components/ballot_veto_frame.html" with oob=False %}
   <div class="veto-row__detail">
     <p class="veto-row__cost">counts as −2 for you, everyone can see it</p>
     {% if tile.matched %}<div class="veto-row__matched" data-dtdd>{% include "components/dtdd_matched.html" with matched=tile.matched %}<p class="dtdd__credit"><a href="https://www.doesthedogdie.com/">Powered by DoesTheDogDie.com</a></p></div>{% endif %}

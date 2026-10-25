@@ -284,7 +284,8 @@ def test_a_tile_holds_the_poster_the_title_and_the_year_and_nothing_else(ballot)
     tile = re.search(r'<li class="tile[^"]*" data-suggestion="\d+">(.*?)</li>', ballot["client"].get("/").text, re.S)[1]
 
     assert re.findall(r'class="(tile__[a-z]+|poster[^"]*)"', tile)[-1] == "tile__title"
-    assert "<button" not in tile and "<a " not in tile and "<form" not in tile
+    # The seen-it toggle is the tile's one control (#121).
+    assert re.findall(r"<button[^>]*>", tile) == [re.search(r'<button type="button" class="seen-toggle[^>]*>', tile)[0]] and "<a " not in tile and "<form" not in tile
 
 
 def test_the_pages_query_count_does_not_grow_with_the_ballot(voters, vocabulary):  # noqa: F811

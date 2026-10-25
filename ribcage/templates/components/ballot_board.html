@@ -3,13 +3,13 @@
   <section class="tray" aria-labelledby="tray-name">
     <h2 class="tray__name" id="tray-name">Unsorted</h2>
     {% include "components/ballot_left.html" with counts=board.counts %}
-    <ul class="tiles tray__tiles" data-place="unsorted" aria-labelledby="tray-name">{% for tile in board.tray %}{% include "components/ballot_tile.html" %}{% endfor %}</ul>
+    <ul class="tiles tray__tiles" data-place="unsorted" aria-labelledby="tray-name">{% for tile in board.tray %}{% include "components/ballot_tile.html" with inert=board.inert %}{% endfor %}</ul>
   </section>
   <div class="bands">
     {% for band in board.bands %}
       <section class="band band--{{ band.key }}" aria-labelledby="band-{{ band.key }}">
         <h2 class="band__name" id="band-{{ band.key }}"><span class="score score--{{ band.key }}"><b>{{ band.sign }}</b> {{ band.name }}</span></h2>
-        <ul class="tiles band__tiles" data-place="{{ band.score }}" aria-labelledby="band-{{ band.key }}">{% for tile in band.tiles %}{% include "components/ballot_tile.html" %}{% endfor %}</ul>
+        <ul class="tiles band__tiles" data-place="{{ band.score }}" aria-labelledby="band-{{ band.key }}">{% for tile in band.tiles %}{% include "components/ballot_tile.html" with inert=board.inert %}{% endfor %}</ul>
       </section>
     {% endfor %}
   </div>

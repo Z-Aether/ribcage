@@ -4,4 +4,5 @@
   {% include "ballot/scored.html" with counts=board.counts %}
   <p class="ballot-head__standing">Your scores aren't shown to the group while VOTE is open. Everyone's scores are shown, by name, once it closes.</p>
 </header>
+{% include "components/ballot_legend.html" %}
 {% include "components/ballot_board.html" with board=board %}
