@@ -1,5 +1,5 @@
 {# A topic row: the label ticks it, its description a hover title and nothing more (#23, #107). #}
-<li id="topic-{{ row.topic_id }}" class="warnings__topic{% if row.ticked %} is-ticked{% endif %}"{% if oob %} hx-swap-oob="morph"{% endif %}>
+<li id="topic-{{ row.topic_id }}" class="warnings__topic{% if row.ticked %} is-ticked{% endif %}"{% if oob %} hx-swap-oob="morph"{% endif %} data-search="{{ row.search_text }}">
   <form method="post" action="{% url 'warnings_tick' %}" hx-post="{% url 'warnings_tick' %}" hx-swap="none">
     {% csrf_token %}
     <input type="hidden" name="topic" value="{{ row.topic_id }}">

@@ -880,6 +880,24 @@ body > header.voter-header:has(.voter-header__warnings) {
   color: var(--ink-muted);
 }
 
+/* The search box above the sections; hidden until its script runs, and a hidden row or section must stay gone against the display rules below (#108). */
+.warnings__search[hidden],
+.warnings__no-match[hidden],
+.warnings__section[hidden],
+.warnings__topic[hidden] {
+  display: none;
+}
+[data-skin] .warnings__search {
+  margin: 0 0 1rem;
+}
+[data-skin] .warnings .warnings__search-box {
+  margin: 0;
+}
+[data-skin] .warnings__no-match {
+  margin: 1rem 0;
+  color: var(--ink-muted);
+}
+
 [data-skin] .warnings__section {
   margin: 0 0 0.75rem;
   background-color: var(--surface);

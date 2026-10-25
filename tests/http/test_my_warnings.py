@@ -4,6 +4,7 @@ import html
 import re
 
 import pytest
+from django.conf import settings
 from django.test import Client
 
 from ribcage.identity.removal import remove
@@ -119,7 +120,7 @@ def test_an_htmx_tick_swaps_in_the_row_the_count_and_the_chips_by_id(browser):
 
     body = response.text
     assert response.status_code == 200
-    assert re.search(r'<li id="topic-153" class="warnings__topic is-ticked" hx-swap-oob="morph">', body)
+    assert re.search(r'<li id="topic-153" class="warnings__topic is-ticked" hx-swap-oob="morph"[^>]*>', body)
     assert 'id="group-54-count"' in body and "2 topics · 1 ticked" in html.unescape(body)
     assert 'id="warnings-chips"' in body and chips(body) == ["dog death"]
     assert 'name="ticked" value="0"' in body
@@ -281,3 +282,33 @@ def test_a_retired_topic_stays_stored_and_never_shows(browser, ada):
 def test_the_page_loads_the_script_that_holds_the_clicked_row_still(browser):
     # A tick resizes the chips box above the rows; the script keeps the clicked row where it was (#107).
     assert "/static/warnings/holds-the-row." in browser.get(PAGE).text
+
+
+SEARCH_SCRIPT = (settings.BASE_DIR / "ribcage" / "static" / "warnings" / "search.js").read_text()
+
+
+def test_the_search_box_is_hidden_until_its_script_runs_and_sits_in_no_form(browser):
+    page = browser.get(PAGE).text
+
+    box = re.search(r'<div class="warnings__search" data-warnings-search hidden>.*?</div>', page, re.S)[0]
+    assert "<input" in box and "<form" not in box
+    forms = re.findall(r"<form.*?</form>", page, re.S)
+    assert forms and all("warnings__search-box" not in form for form in forms)
+    assert "data-warnings-no-match hidden" in page
+    assert "/static/warnings/search." in page
+
+
+def test_searching_can_not_make_a_request_its_script_fetches_nothing_and_the_box_has_no_name(browser):
+    page = browser.get(PAGE).text
+
+    assert "name=" not in re.search(r'<input type="search"[^>]*>', page)[0]
+    for call in ("fetch", "XMLHttpRequest", "sendBeacon", "htmx.", "location", "history", "submit", "WebSocket", "Image("):
+        assert call not in SEARCH_SCRIPT
+
+
+def test_every_row_carries_its_label_and_keywords_for_the_search_to_match(browser):
+    page = browser.get(PAGE).text
+
+    assert re.search(r'<li id="topic-153"[^>]*data-search="dog death dog"', page)
+    assert re.search(r'<li id="topic-200"[^>]*data-search="jump scares "', page)
+    assert 'data-search="dog death dog"' in tick(browser, DOG, headers=HTMX).text

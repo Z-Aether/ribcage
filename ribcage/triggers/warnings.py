@@ -9,6 +9,12 @@ class Row:
     label: str
     description: str
     ticked: bool
+    keywords: str = ""
+
+    @property
+    def search_text(self):
+        """What the page's search matches against: the label and the keywords, case-blind (#108)."""
+        return f"{self.label} {self.keywords}".casefold()
 
 
 @dataclass(frozen=True)
@@ -51,7 +57,7 @@ def page(vocabulary, ticked_ids):
             Section(
                 anchor_of(group),
                 group.name,
-                tuple(sorted((Row(topic.topic_id, topic.label, topic.description, topic.topic_id in ticked_ids) for topic in topics), key=sort_key)),
+                tuple(sorted((Row(topic.topic_id, topic.label, topic.description, topic.topic_id in ticked_ids, topic.keywords) for topic in topics), key=sort_key)),
             )
             for group, topics in vocabulary.groups
         )

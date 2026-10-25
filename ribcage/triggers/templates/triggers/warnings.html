@@ -3,7 +3,8 @@
 
 {% block title %}My warnings · Ribcage{% endblock %}
 
-{% block head %}<script src="{% static 'warnings/holds-the-row.js' %}" defer></script>{% endblock %}
+{% block head %}<script src="{% static 'warnings/search.js' %}" defer></script>
+<script src="{% static 'warnings/holds-the-row.js' %}" defer></script>{% endblock %}
 
 {# The page is nothing but DoesTheDogDie data: the vocabulary in its grouping, ticked in place (#23, #107). #}
 {% block content %}
@@ -14,9 +15,14 @@
 
     {% if page %}
       {% include "triggers/warnings_chips.html" %}
+      {# Never in a form and never sent: the script filters the rows on the page, and without it the box stays hidden (#108). #}
+      <div class="warnings__search" data-warnings-search hidden>
+        <input type="search" class="warnings__search-box" aria-label="Search the topics" placeholder="Search the topics, such as spiders" autocomplete="off">
+      </div>
       <div class="warnings__sections">
         {% for section in page.sections %}{% include "triggers/warnings_section.html" %}{% endfor %}
       </div>
+      <p class="warnings__no-match" data-warnings-no-match hidden>No topic matches that.</p>
     {% else %}
       <p class="warnings__unavailable">The topics can't be shown yet. Try again in a bit; your list is as you left it.</p>
     {% endif %}
