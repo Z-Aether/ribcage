@@ -146,9 +146,9 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 ## M6 — VOTE
 
 **Scope**
-- **Ballot:** one record per voter and film. Score, veto with reason, seen it, done, each windowed to VOTE (#9, #26, #34).
-- **The ballot page:** the header (`n of N scored`, done roster, *I'm done*), the sticky Unsorted tray in its per-voter order, the five bands, the dashed-red Veto band widening to show matched topics and a reason box (#9, #35, #38).
-- **Tiles:** frame states, opening the card in place with others' veto reasons and seen-it flags (#35).
+- **Ballot:** one record per voter and film. Score, veto, seen it, done, each windowed to VOTE; a veto's reason is the voter's note (#9, #26, #34, #128).
+- **The ballot page:** the header (`n of N scored`, done roster, *I'm done*), the sticky Unsorted tray in its per-voter order, the five bands, the dashed-red Veto band widening to show matched topics and a reason box holding the voter's note (#9, #35, #38, #128).
+- **Tiles:** frame states, opening the card in place with vetoers' notes marked, a bare line for a vetoer with none, and seen-it flags (#35, #128).
 - **The admin's side of VOTE:** approval staying open, growing the ballot clearing every done marker with its cost in the confirm ("6 of 9 → 0 of 9"), shrinking clearing nothing. The done count on the Films and Phase tabs, and the Roster's *Scored*, *Vetoes* and *Done* columns (#15, #28, #63).
 - **Moves:** the VOTE → PICK confirm naming who isn't done and saying it can't be undone. PICK → VOTE keeps done markers and adds the reopened-VOTE line to the ballot (#15, #34).
 - Removal now deletes the voter's scores, vetoes, seen-it flags and done marker.

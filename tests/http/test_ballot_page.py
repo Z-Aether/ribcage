@@ -9,7 +9,7 @@ from django.test.utils import CaptureQueriesContext
 from ribcage.ballot.models import BallotRecord
 from ribcage.phase.history import move
 from ribcage.phase.order import Phase
-from ribcage.suggestions.models import Approval, Suggestion
+from ribcage.suggestions.models import Approval, Note, Suggestion
 from ribcage.triggers import watched
 from tests.http.test_matched_topics import DOG, add, dtdd, signed_in, vocabulary  # noqa: F401
 from tests.http.test_phase import walk_to
@@ -141,13 +141,15 @@ def test_a_placement_to_unsorted_keeps_a_record_that_holds_seen_it_and_deletes_t
     assert (record.suggestion_id, record.score, record.seen_it) == (ballot["one"].pk, None, True)
 
 
-def test_a_placement_onto_a_score_replaces_a_veto_and_its_reason(ballot):
-    BallotRecord.objects.create(voter=ballot["ada"], suggestion=ballot["one"], vetoed=True, veto_reason="No.")
+def test_a_placement_onto_a_score_replaces_a_veto_and_keeps_the_note_that_was_its_reason(ballot):
+    BallotRecord.objects.create(voter=ballot["ada"], suggestion=ballot["one"], vetoed=True)
+    Note.objects.create(suggestion=ballot["one"], author=ballot["ada"], text="No.")
 
     place(ballot["client"], ballot["one"], 1)
 
     record = BallotRecord.objects.get()
-    assert (record.score, record.vetoed, record.veto_reason) == (1, False, None)
+    assert (record.score, record.vetoed) == (1, False)
+    assert Note.objects.get().text == "No."
 
 
 def test_a_vetoed_record_counts_as_placed_and_is_not_in_the_tray(ballot):

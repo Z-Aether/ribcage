@@ -35,17 +35,16 @@ def test_a_vetoed_record_with_a_score_is_refused(voters, thing):
     refused(voter=voters["ada"], suggestion=thing, vetoed=True, score=0)
 
 
-def test_a_reason_on_a_record_that_is_not_vetoed_is_refused(voters, thing):
-    refused(voter=voters["ada"], suggestion=thing, score=1, veto_reason="Too loud.")
-    refused(voter=voters["Dani"], suggestion=thing, seen_it=True, veto_reason="")
-
-
-def test_a_veto_keeps_its_reason_or_none_and_may_sit_beside_seen_it(voters, thing):
-    BallotRecord.objects.create(voter=voters["ada"], suggestion=thing, vetoed=True, veto_reason="Too loud.", seen_it=True)
+def test_a_veto_may_sit_beside_seen_it(voters, thing):
+    BallotRecord.objects.create(voter=voters["ada"], suggestion=thing, vetoed=True, seen_it=True)
     BallotRecord.objects.create(voter=voters["Dani"], suggestion=thing, vetoed=True)
 
     assert BallotRecord.objects.filter(vetoed=True, seen_it=True).count() == 1
-    assert BallotRecord.objects.filter(vetoed=True, veto_reason__isnull=True).count() == 1
+    assert BallotRecord.objects.filter(vetoed=True).count() == 2
+
+
+def test_a_record_holds_no_reason_of_its_own_since_the_reason_is_the_note(db):
+    assert "veto_reason" not in {field.name for field in BallotRecord._meta.get_fields()}
 
 
 def test_a_second_record_for_one_voter_and_suggestion_is_refused(voters, thing):

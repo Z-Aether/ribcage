@@ -6,6 +6,7 @@ import pytest
 
 from ribcage.ballot.models import BallotRecord
 from ribcage.phase.order import Phase
+from ribcage.suggestions.models import Note
 from tests.http.test_ballot_page import HTMX, film, place, region, signed_in, walk_on_to
 from tests.http.test_phase import walk_to
 
@@ -41,7 +42,7 @@ def test_seen_it_sets_and_clears_without_touching_the_score(ballot):
     assert (record(ballot).score, record(ballot).seen_it) == (2, False)
 
 
-def test_seen_it_sets_and_clears_without_touching_a_veto_and_its_reason(ballot):
+def test_seen_it_sets_and_clears_without_touching_a_veto_and_its_note(ballot):
     place(ballot["client"], ballot["one"], "veto")
     ballot["client"].post("/ballot/veto-reason/", {"suggestion": str(ballot["one"].pk), "text": "No."})
 
@@ -49,7 +50,8 @@ def test_seen_it_sets_and_clears_without_touching_a_veto_and_its_reason(ballot):
     seen(ballot["client"], ballot["one"], "0")
 
     saved = record(ballot)
-    assert (saved.vetoed, saved.veto_reason, saved.seen_it) == (True, "No.", False)
+    assert (saved.vetoed, saved.seen_it) == (True, False)
+    assert Note.objects.get(author=ballot["ada"]).text == "No."
 
 
 def test_a_repeat_changes_nothing(ballot):

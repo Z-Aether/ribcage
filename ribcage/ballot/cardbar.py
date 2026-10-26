@@ -1,21 +1,28 @@
-"""What VOTE's phase bar shows on a film's opened card (#10, #35 §4, #122)."""
+"""What VOTE's phase bar shows on a film's opened card, and who vetoes the film for its notes (#10, #35 §4, #122, #128)."""
 
 from ribcage.ballot.board import SCALE
 from ribcage.ballot.models import BallotRecord
-from ribcage.films.card import Vetoer, VoteBar
+from ribcage.films.card import VoteBar
+from ribcage.suggestions.models import Note
 
 
 def of(viewer, suggestion):
-    """The viewer's own score, veto, reason and seen it, and the names of the other voters who vetoed the film or have seen it, sorted by name (#122)."""
+    """The viewer's own score, veto, note and seen it, and the names of the other voters who have seen the film, sorted by name (#122, #128)."""
     records = list(BallotRecord.objects.filter(suggestion=suggestion).select_related("voter"))
     own = next((record for record in records if record.voter_id == viewer.pk), None)
     others = sorted((record for record in records if record.voter_id != viewer.pk), key=lambda record: record.voter.display_name)
+    note = Note.objects.filter(suggestion=suggestion, author=viewer).values_list("text", flat=True).first()
     return VoteBar(
         scale=SCALE,
         score=own.score if own else None,
         vetoed=bool(own and own.vetoed),
-        reason=(own.veto_reason or "") if own else "",
+        note=note or "",
+        is_pitch=suggestion.suggester_id == viewer.pk,
         seen_it=bool(own and own.seen_it),
-        vetoed_by=tuple(Vetoer(record.voter.display_name, record.veto_reason or "") for record in others if record.vetoed),
         seen_by=tuple(record.voter.display_name for record in others if record.seen_it),
     )
+
+
+def vetoers_on(suggestion):
+    """Every voter who vetoes the film, the viewer included, as {voter id: name}, for the card's notes to mark (#10, #128)."""
+    return dict(BallotRecord.objects.filter(suggestion=suggestion, vetoed=True).values_list("voter_id", "voter__display_name"))

@@ -1,4 +1,4 @@
-{# VOTE's phase bar on the opened card: the five scores, the veto in place of any of them, seen it, and the other voters' vetoes and seen it, read-only. Each control is the ballot's own write (#9, #10, #35 §4, #122). #}
+{# VOTE's phase bar on the opened card: the five scores, the veto in place of any of them, seen it, and the other voters' seen it, read-only; the vetoes are in the card's notes (#128). Each control is the ballot's own write (#9, #10, #35 §4, #122). #}
 {% with vote=card.vote %}<div class="phase-bar phase-bar--vote{% if vote.vetoed %} is-vetoed{% endif %}" data-vote-bar>
   <div class="vote-bar__scores">
     {# Only the six pills are the "Your score" group: Pico rings a group whose input has focus, so seen it stays outside (#127). #}
@@ -11,6 +11,5 @@
     {% include "components/vote_seen.html" %}
   </div>
   {% if vote.vetoed %}{% include "components/vote_reason.html" %}{% endif %}
-  {% if vote.vetoed_by %}<p class="vote-bar__line"><span class="film-card__label">Vetoed by</span> {% for who in vote.vetoed_by %}{{ who.name }}{% if who.reason %} <span class="vote-bar__reason">({{ who.reason }})</span>{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %}</p>{% endif %}
   {% if vote.seen_by %}<p class="vote-bar__line"><span class="film-card__label">Seen by</span> {{ vote.seen_by|join:", " }}</p>{% endif %}
 </div>{% endwith %}

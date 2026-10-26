@@ -87,7 +87,7 @@ A fresh database starts in SUGGEST. The admin moves the phase one step at a time
 |---|---|---|
 | **SUGGEST** | Suggest films (picker → pitch), add notes, withdraw their own **suggestions**, correct runtime, set the watched list. | Approves, drops and edits runtime early if they like. |
 | **APPROVE** | See the **pool** frozen. Notes stay writable. No admin decisions are shown. | Curates on the approve screen. Runtime is required to approve. |
-| **VOTE** | See the **ballot**: score, veto, mark seen it, mark done. No notes. | Watches the done roster. **Approval** stays open, and growing the ballot clears every done marker. |
+| **VOTE** | See the **ballot**: score, veto, mark seen it, mark done. No notes, except that vetoing a film shows the voter's note on it as their veto reason, to edit (#128, #63). | Watches the done roster. **Approval** stays open, and growing the ballot clears every done marker. |
 | **PICK** | See the **reveal**. | Sets the budget and anchor, runs **SOLVE** with **knobs**, compares and keeps proposals, lays a slate onto the timetable and arranges it. |
 | **RUN** | See the published evening, with the reveal one link away. | Edits the timetable to keep it true as the evening runs. |
 
@@ -125,7 +125,7 @@ Pages that poll and find the phase moved reload the same way.
 ### Signals (VOTE)
 
 - **Score:** five coarse steps: +3 top pick, +2 keen, +1 happy, 0 don't mind, −1 rather not. Taken at face value, never normalised. A film left **unsorted** counts as 0. Hidden from other voters until the reveal.
-- **Veto:** "I wouldn't be in the room". Bars the film from representing that voter and scores it −2, a reserved step that prices the group losing them. Unlimited and attributed. Others see it during VOTE.
+- **Veto:** "I wouldn't be in the room". Bars the film from representing that voter and scores it −2, a reserved step that prices the group losing them. Unlimited and attributed. Others see it during VOTE. Its reason is the voter's note on the film, not a field of its own (#128, #63).
 - **Seen it:** bars the film from representing that voter. Does nothing else. Others see it during VOTE.
 - **Done:** a public, reversible signal. Never a lock.
 
@@ -209,9 +209,9 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 **VOTE** (#9, #35):
 - **Header:** one line: `n of N scored`, the *I'm done* toggle and the done roster by name. Under it one compact line gives the tile marks' legend and says scores stay hidden until VOTE closes (#126).
 - **Ballot:** a sticky Unsorted tray that is one row of tiles scrolling sideways, then five colour bands (+3 … −1) and a separate dashed-red Veto band. Placing a tile in a band is the score. The board is scaled so the seeded ballot is a short scroll at 1920×1080, a row of small tiles per band (#126; the dev, 2026-10-26, on #63).
-- **Veto band:** a tile placed there widens to show matched topics and a reason box.
+- **Veto band:** a tile placed there widens to show matched topics and the reason box, which holds the voter's note on the film (their pitch on their own suggestion), with a quiet line saying it shows as their veto reason and stays their note if the veto is taken back. Saving it saves the note under the notes rule: over the cap is refused whole, empty deletes the note, and a pitch can't be emptied (#128, #63).
 - **Tiles:** poster, title and year only, the title and year on one line cut short, in full on hover (#126). Their state is on the frame: the ring for a match with its count pill, in the lime the theme gives trigger warnings (#58, #117), greyed for seen it, a red ribbon with initials for vetoes by others.
-- **Opening a tile:** the film card expands in place inside its band, with others' veto reasons and seen-it flags shown one line each. Its phase bar holds the five score buttons with the current one marked, a veto toggle that shows the reason box and puts −2 where the score was, and a *Seen it* checkbox after the veto on the same row (#127, #63), each the ballot's own write; the notes are read-only, with no note box or pencil. A score or veto from the bar moves the tile to its new band and the card stays open there, scrolled into view. One card is open at a time, and an open card is never dragged (#122).
+- **Opening a tile:** the film card expands in place inside its band. A vetoer's note in its list is marked with the veto's red bar and ends in *vetoed by <name>*, and a vetoer with no note is a line of its own, *Vetoed by <name>*; the voter's own note is left out of the list while the reason box holds it, as in SUGGEST (#128). Others' seen-it flags are one line in the bar. Its phase bar holds the five score buttons with the current one marked, a veto toggle that shows the reason box and puts −2 where the score was, and a *Seen it* checkbox after the veto on the same row (#127, #63), each the ballot's own write; the notes are read-only, with no note box or pencil, the veto's reason box being the one way a note changes in VOTE (#128). A score or veto from the bar moves the tile to its new band and the card stays open there, scrolled into view. One card is open at a time, and an open card is never dragged (#122).
 
 **Reveal** (#29):
 - A matrix: one row per film, one column per voter, scores in the cells, a points column on the right.
@@ -249,7 +249,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **Phase** | Phase derived from the phase history. One step at a time, both directions. The phase check. What each move triggers: DTDD refresh, RUN purge, reveal state. |
 | **Films and metadata** | TMDB search (debounced) and one detail fetch per film, never refreshed. Manual entry. One suggestion per TMDB id. Runtime with its source. Title card. |
 | **Suggestions, notes, approval** | Suggest and withdraw. One note per voter per film, the suggester's being the pitch. Saving a note empty deletes it, but a pitch is required, so emptying one is refused gently; a note over the length cap is refused whole, never cut (#88). One rule decides whether a film is withdrawable, read by withdraw and the runtime pencil alike (#89, #90). Approval states and the done-marker rule. |
-| **Ballot** | Score, veto with reason, seen it, done. Per-voter Unsorted order: matched films first, then the rest, in a stable per-voter shuffle. |
+| **Ballot** | Score, veto, seen it, done; a veto's reason is the voter's note, written through the notes rule (#128). Per-voter Unsorted order: matched films first, then the rest, in a stable per-voter shuffle. |
 | **Trigger warnings** | DTDD matching and correction, snapshots and vocabulary, refresh scheduling against the live rate limit, watched lists, matched topics, icon threshold, purge. |
 | **Solver** | Floor set, objective, knobs, batch with diversity cut, the solver's own reasons for a short batch. Pure function over plain data. |
 | **Readouts** | Standing, tier, swap, film points, slate sum, slate order, set readouts. Shared by Compare and Timetable. |

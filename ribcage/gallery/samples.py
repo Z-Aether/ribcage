@@ -25,7 +25,6 @@ from ribcage.films.card import (
     RuntimePencil,
     TopicGroup,
     TopicRow,
-    Vetoer,
     VoteBar,
     Watch,
     Withdraw,
@@ -342,26 +341,31 @@ def phase_bars():
             "components/approve_bar.html",
         ),
         (
-            "VOTE's phase bar, on Hanna's suggestion, scored +2 by the viewer, with others' vetoes and seen it read-only",
+            "VOTE's phase bar, on Hanna's suggestion, scored +2 by the viewer, with others' seen it read-only; the notes carry the vetoes, Ash's marked and Zoë's a bare line",
             replace(
                 midsommar,
                 note_box=None,
-                vote=VoteBar(
-                    scale=board.SCALE,
-                    score=2,
-                    vetoed_by=(Vetoer("Anne-Marie", "Too much daylight for me."), Vetoer("Zoë")),
-                    seen_by=("Bex", "Dani"),
-                    inert=True,
-                ),
+                notes=(replace(midsommar.notes[0], vetoed=True), *midsommar.notes[1:], Note("Zoë", "", vetoed=True)),
+                vote=VoteBar(scale=board.SCALE, score=2, seen_by=("Bex", "Dani"), inert=True),
             ),
             "components/vote_bar.html",
         ),
         (
-            "VOTE's phase bar after a veto: −2 replaces the score, the reason box is open, and the viewer has seen it",
+            "VOTE's phase bar after a veto on a film the viewer has a note on: −2 replaces the score, the reason box holds the note, and the viewer has seen it. Cass's pitch is marked as her veto",
             replace(
-                wolf_house,
+                yours(wolf_house, 0),
                 note_box=None,
-                vote=VoteBar(scale=board.SCALE, vetoed=True, reason="Spiders, and I can't unsee them.", seen_it=True, said="Saved.", inert=True),
+                pitch_vetoed=True,
+                vote=VoteBar(scale=board.SCALE, vetoed=True, note=wolf_house.notes[0].text, seen_it=True, said="Saved.", inert=True),
+            ),
+            "components/vote_bar.html",
+        ),
+        (
+            "VOTE's phase bar on Bex's own suggestion, vetoed: the box holds her pitch, and emptying it is refused as in SUGGEST",
+            replace(
+                own(exit_8),
+                note_box=None,
+                vote=VoteBar(scale=board.SCALE, vetoed=True, note=exit_8.pitch, is_pitch=True, said=PITCH_REQUIRED, refused=True, inert=True),
             ),
             "components/vote_bar.html",
         ),
@@ -390,9 +394,9 @@ def ballot_board():
         -1: (),
     }
     bands = tuple(board.Band(score, key, sign, name, placed[score]) for score, key, sign, name in board.SCALE)
-    # Two widened rows: Midsommar with the viewer's matched topics and a reason, The Exorcist with none; one also wears others' ribbon (#120).
+    # Two widened rows: Midsommar with the viewer's matched topics and their note as the reason, The Exorcist with none; one also wears others' ribbon (#120).
     vetoes = (
-        tile(13, film(MIDSOMMAR), trigger_count=2, matched=matched_of(MIDSOMMAR_DTDD), reason="Too much daylight for me.", seen_it=True, vetoed_by="AZ", vetoers="Vetoed by Ada, Zoë"),
+        tile(13, film(MIDSOMMAR), trigger_count=2, matched=matched_of(MIDSOMMAR_DTDD), note="Too much daylight for me.", seen_it=True, vetoed_by="AZ", vetoers="Vetoed by Ada, Zoë"),
         tile(14, film(THE_EXORCIST)),
     )
     return board.Board(tray, bands, board.Counts(scored=10, size=14), vetoes)

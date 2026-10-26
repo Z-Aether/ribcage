@@ -6,7 +6,7 @@ from ribcage.ballot import order
 from ribcage.ballot.models import BallotRecord
 from ribcage.films.card import Matched
 from ribcage.films.film import Film
-from ribcage.suggestions.models import Approval, Suggestion
+from ribcage.suggestions.models import Approval, Note, Suggestion
 from ribcage.triggers import stored, watched
 
 # Each band: the score it sets, its key for the style, its sign and its name; the wording waits for M10's copy pass (#39, #119).
@@ -36,9 +36,10 @@ class Tile:
     vetoed_by: str = ""
     vetoers: str = ""
     caption: str = ""
-    # What the viewer's Veto row shows: their matched topics, their reason, and what saving it said (#120).
+    # What the viewer's Veto row shows: their matched topics, their note, which is their veto's reason or, on their own suggestion, their pitch, and what saving it said (#120, #128).
     matched: Matched | None = None
-    reason: str = ""
+    note: str = ""
+    is_pitch: bool = False
     said: str = ""
     refused: bool = False
     # Whether the viewer vetoes the film, so the tile is a Veto row wherever it is drawn again (#122).
@@ -101,14 +102,14 @@ def is_placed(record):
 
 
 def vetoes_on(candidate_ids):
-    """Every voter's vetoes on the candidates, in one query: (suggestion, voter, name, reason) rows (#9, #120)."""
-    return BallotRecord.objects.filter(vetoed=True, suggestion__in=candidate_ids).values_list("suggestion_id", "voter_id", "voter__display_name", "veto_reason")
+    """Every voter's vetoes on the candidates, in one query: (suggestion, voter, name) rows (#9, #120)."""
+    return BallotRecord.objects.filter(vetoed=True, suggestion__in=candidate_ids).values_list("suggestion_id", "voter_id", "voter__display_name")
 
 
 def veto_marks(rows, viewer):
     """What the other voters' vetoes put on a tile: their initials and their names, by suggestion, sorted by name (#120)."""
     names = {}
-    for suggestion_id, voter_id, name, _ in rows:
+    for suggestion_id, voter_id, name in rows:
         if voter_id != viewer.pk:
             names.setdefault(suggestion_id, []).append(name)
     return {
@@ -116,11 +117,18 @@ def veto_marks(rows, viewer):
     }
 
 
-def tile_of(suggestion, matched, marks, reasons, seen_it=False):
-    """One tile: the ring's count where the film rings, the others' ribbon, and the viewer's own veto row's data (#117, #120)."""
+def own_notes(viewer, rows):
+    """The viewer's note on each film they veto, by suggestion, empty where they have none: the text of their veto row's box, in one query (#120, #128)."""
+    vetoed = [suggestion_id for suggestion_id, voter_id, _ in rows if voter_id == viewer.pk]
+    written = dict(Note.objects.filter(author=viewer, suggestion__in=vetoed).values_list("suggestion_id", "text"))
+    return {suggestion_id: written.get(suggestion_id, "") for suggestion_id in vetoed}
+
+
+def tile_of(viewer, suggestion, matched, marks, notes, seen_it=False):
+    """One tile: the ring's count where the film rings, the others' ribbon, and the viewer's own veto row's data (#117, #120, #128)."""
     initials, names = marks.get(suggestion.pk, ("", ""))
     count = matched.strong if matched is not None and matched.ring else 0
-    return Tile(suggestion.pk, suggestion.film, trigger_count=count, vetoed_by=initials, vetoers=names, matched=matched, reason=reasons.get(suggestion.pk, ""), seen_it=seen_it, vetoed=suggestion.pk in reasons)
+    return Tile(suggestion.pk, suggestion.film, trigger_count=count, vetoed_by=initials, vetoers=names, matched=matched, note=notes.get(suggestion.pk, ""), is_pitch=suggestion.suggester_id == viewer.pk, seen_it=seen_it, vetoed=suggestion.pk in notes)
 
 
 def matched_ids(loaded):
@@ -158,10 +166,10 @@ def of(viewer, places_at=""):
     by_id = {suggestion.pk: suggestion for suggestion in suggestions}
     rows = list(vetoes_on(list(by_id)))
     marks = veto_marks(rows, viewer)
-    reasons = {suggestion_id: reason or "" for suggestion_id, voter_id, _, reason in rows if voter_id == viewer.pk}
+    notes = own_notes(viewer, rows)
 
     def tile(suggestion_id):
-        return tile_of(by_id[suggestion_id], loaded[suggestion_id][1], marks, reasons, records.get(suggestion_id, (None, False, False))[2])
+        return tile_of(viewer, by_id[suggestion_id], loaded[suggestion_id][1], marks, notes, records.get(suggestion_id, (None, False, False))[2])
 
     lists = arranged(viewer, list(by_id), records, matched_ids(loaded))
     tray = tuple(tile(pk) for pk in lists[TRAY])
@@ -174,9 +182,8 @@ def one_tile(viewer, suggestion):
     """A single tile as `of` draws it, for an answer that puts it somewhere new or redraws its row (#120)."""
     ((_, matched),) = stored.sections_and_matches_of([suggestion], watched.ticked_ids(viewer)).values()
     rows = list(vetoes_on([suggestion.pk]))
-    reasons = {suggestion.pk: reason or "" for _, voter_id, _, reason in rows if voter_id == viewer.pk}
     seen_it = BallotRecord.objects.filter(voter=viewer, suggestion=suggestion, seen_it=True).exists()
-    return tile_of(suggestion, matched, veto_marks(rows, viewer), reasons, seen_it)
+    return tile_of(viewer, suggestion, matched, veto_marks(rows, viewer), own_notes(viewer, rows), seen_it)
 
 
 def counts_of(viewer):

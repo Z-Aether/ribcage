@@ -119,12 +119,34 @@ def test_the_veto_pill_turns_the_veto_off_when_it_is_on_and_on_when_it_is_off(ba
     assert veto_to() == "unsorted"
 
 
-def test_the_reason_is_saved_from_the_card_and_answered_in_its_box_alone(ballot):
+def test_the_reason_is_saved_from_the_card_as_the_note_and_answered_in_its_box_alone(ballot):
     place(ballot["client"], ballot["one"], "veto")
     answer = ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": "Spiders.", "card": "1"}, headers=HTMX).text
 
-    assert BallotRecord.objects.get().veto_reason == "Spiders."
+    assert Note.objects.get(suggestion=ballot["one"], author=ballot["ada"]).text == "Spiders."
     assert answer.lstrip().startswith('<div class="vote-reason"') and "Saved." in answer and "film-card" not in answer
+
+
+def test_the_cards_box_refuses_a_pitch_emptied_and_a_note_too_long_with_the_text_the_card_keeps(ballot):
+    own = film(ballot["ada"], "Ada's own")
+    Note.objects.create(suggestion=own, author=ballot["ada"], text="Ada pitched this.")
+    place(ballot["client"], own, "veto")
+
+    emptied = ballot["client"].post(REASON, {"suggestion": str(own.pk), "text": " ", "card": "1"}, headers=HTMX).text
+    too_long = ballot["client"].post(REASON, {"suggestion": str(own.pk), "text": "x" * (settings.NOTE_MAX_LENGTH + 1), "card": "1"}, headers=HTMX).text
+
+    assert re.search(r"<textarea[^>]*>Ada pitched this\.</textarea>", emptied) and "A suggestion needs its pitch" in emptied and "is-refusal" in emptied
+    assert "a pitch holds" in too_long and "x" * 50 in too_long
+    assert Note.objects.get().text == "Ada pitched this."
+
+
+def test_the_card_answers_a_reason_saved_empty_by_deleting_the_note(ballot):
+    Note.objects.create(suggestion=ballot["one"], author=ballot["ada"], text="Ada wrote this.")
+    place(ballot["client"], ballot["one"], "veto")
+
+    answer = ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": "", "card": "1"}, headers=HTMX).text
+
+    assert not Note.objects.exists() and "Cleared." in answer
 
 
 def test_seen_it_is_set_from_the_card_and_the_checkbox_is_answered(ballot):
@@ -136,31 +158,109 @@ def test_seen_it_is_set_from_the_card_and_the_checkbox_is_answered(ballot):
     assert BallotRecord.objects.count() == 0 and "checked" not in answer
 
 
-def test_the_vetoed_by_line_lists_the_other_vetoers_with_reasons_and_never_the_viewers_own(ballot):
+def notes_of(page):
+    """The card's note list as (classes, text, author line) per note, bare lines having no text."""
+    found = []
+    for classes, body in re.findall(r'<li class="(note[^"]*)">(.*?)</li>', page, re.S):
+        full = re.search(r'<span class="note__full">(.*?)</span>', body, re.S) or re.search(r'<p class="note__text">(.*?)</p>', body, re.S)
+        found.append((classes.split(), full[1] if full else "", re.search(r'<span class="note__author">(.*?)</span>', body)[1]))
+    return found
+
+
+def test_the_card_marks_a_vetoers_note_and_gives_a_vetoer_with_no_note_a_bare_line_and_names_none_in_the_bar(ballot):
     voters = ballot["voters"]
-    for name, reason in (("Hanna", "spiders"), ("Dani", None)):
-        other = signed_in(voters[name])
-        place(other, ballot["one"], "veto")
-        if reason:
-            other.post(REASON, {"suggestion": str(ballot["one"].pk), "text": reason})
+    Note.objects.create(suggestion=ballot["one"], author=voters["Hanna"], text="Spiders.")
+    Note.objects.create(suggestion=ballot["one"], author=voters["ada"], text="Fine by me.")
+    for name in ("Hanna", "Dani"):
+        place(signed_in(voters[name]), ballot["one"], "veto")
+
+    page = opened(ballot["client"], ballot["one"]).text
+
+    assert notes_of(page) == [
+        (["note", "note--pitch", "note--vetoed"], "Spiders.", "vetoed by Hanna"),
+        (["note"], "Fine by me.", "ada"),
+        (["note", "note--vetoed", "note--bare"], "", "Vetoed by Dani"),
+    ]
+    assert "film-card__label\">Vetoed by" not in page
+
+
+def test_another_voters_ordinary_note_is_marked_when_its_writer_vetoes_as_the_viewer_sees_it(ballot):
+    voters = ballot["voters"]
+    Note.objects.create(suggestion=ballot["one"], author=voters["Dani"], text="Too scary for me.")
+    place(signed_in(voters["Dani"]), ballot["one"], "veto")
+
+    page = opened(ballot["client"], ballot["one"]).text
+
+    assert notes_of(page) == [(["note", "note--vetoed"], "Too scary for me.", "vetoed by Dani")]
+
+
+def test_a_film_nobody_vetoes_marks_nothing(ballot):
+    Note.objects.create(suggestion=ballot["one"], author=ballot["voters"]["Hanna"], text="Spiders.")
+
+    assert "note--vetoed" not in opened(ballot["client"], ballot["one"]).text
+
+
+def test_the_viewer_who_vetoes_has_their_note_in_the_box_and_left_out_of_the_open_cards_list(ballot):
+    Note.objects.create(suggestion=ballot["one"], author=ballot["ada"], text="Ada wrote this.")
     place(ballot["client"], ballot["one"], "veto")
 
     page = opened(ballot["client"], ballot["one"]).text
-    line = re.search(r'<span class="film-card__label">Vetoed by</span>(.*?)</p>', page, re.S)[1]
 
-    assert re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", line)).strip() == "Dani, Hanna (spiders)"
+    assert re.search(r"<textarea[^>]*>Ada wrote this\.</textarea>", page)
+    assert notes_of(page) == [(["note", "note--yours", "note--vetoed"], "Ada wrote this.", "vetoed by ada")]
+    assert "Your note on this film shows as your veto reason, and stays your note if you take the veto back." in page
 
 
-def test_a_voter_who_only_scored_is_in_neither_line(ballot):
-    scorer = signed_in(ballot["voters"]["Dani"])
-    place(scorer, ballot["one"], 2)
+def test_the_viewer_who_vetoes_with_no_note_has_an_empty_box_and_a_bare_line_the_open_card_hides(ballot):
+    place(ballot["client"], ballot["one"], "veto")
+
     page = opened(ballot["client"], ballot["one"]).text
 
-    assert "Vetoed by" not in page and "Seen by" not in page
-    signed_in(ballot["voters"]["Hanna"]).post(SEEN, {"suggestion": str(ballot["one"].pk), "seen": "1"})
-    place(signed_in(ballot["voters"]["Hanna"]), ballot["one"], "veto")
+    assert re.search(r"<textarea[^>]*></textarea>", page)
+    assert notes_of(page) == [(["note", "note--yours", "note--vetoed", "note--bare"], "", "Vetoed by ada")]
+
+
+def test_a_suggester_who_vetoes_their_own_film_has_their_pitch_in_a_box_named_so(ballot):
+    own = film(ballot["ada"], "Ada's own")
+    Note.objects.create(suggestion=own, author=ballot["ada"], text="Ada pitched this.")
+    place(ballot["client"], own, "veto")
+
+    page = opened(ballot["client"], own).text
+
+    assert re.search(r"<textarea[^>]*>Ada pitched this\.</textarea>", page) and "Your pitch" in page and "note-box--pitch" in page
+    assert notes_of(page) == [(["note", "note--pitch", "note--yours", "note--vetoed"], "Ada pitched this.", "vetoed by ada")]
+
+
+def test_a_veto_taken_back_leaves_the_note_as_a_plain_read_only_note_on_the_card(ballot):
+    place(ballot["client"], ballot["one"], "veto")
+    ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": "Changed my mind."})
+
+    place(ballot["client"], ballot["one"], 2)
     page = opened(ballot["client"], ballot["one"]).text
-    assert re.search(r"Vetoed by</span>\s*Hanna\s*</p>", page) and re.search(r"Seen by</span>\s*Hanna\s*</p>", page) and "Dani" not in page
+
+    assert notes_of(page) == [(["note"], "Changed my mind.", "ada")]
+    assert "data-vote-reason" not in page and "<textarea" not in page
+
+
+def test_the_answer_to_a_veto_from_the_card_draws_the_card_with_the_box_holding_the_note(ballot):
+    Note.objects.create(suggestion=ballot["one"], author=ballot["ada"], text="Ada wrote this.")
+
+    answer = ballot["client"].post(PLACE, {"suggestion": str(ballot["one"].pk), "to": "veto", "card": "1"}, headers=HTMX).text
+
+    assert re.search(r"<textarea[^>]*>Ada wrote this\.</textarea>", answer)
+
+
+@pytest.mark.parametrize("phase", [Phase.APPROVE, Phase.SUGGEST])
+def test_the_pools_cards_mark_no_veto_even_after_a_move_back(ballot, phase):
+    voters = ballot["voters"]
+    Note.objects.create(suggestion=ballot["one"], author=voters["Hanna"], text="Spiders.")
+    place(signed_in(voters["Hanna"]), ballot["one"], "veto")
+    place(signed_in(voters["Dani"]), ballot["one"], "veto")
+    walk_on_to(phase)
+
+    page = ballot["client"].get("/").text
+
+    assert "Spiders." in page and "note--vetoed" not in page and "Vetoed by" not in page and "vetoed by" not in page
 
 
 def test_the_seen_by_line_lists_other_voters_who_have_seen_it(ballot):

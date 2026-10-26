@@ -102,11 +102,13 @@ def test_from_vote_on_ada_has_scored_most_of_the_ballot_zoe_part_and_bartholomew
 
 
 @pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
-def test_from_vote_on_some_vetoes_have_reasons_one_has_none_and_one_film_is_vetoed_by_two(db, seeded):
+def test_from_vote_on_vetoes_have_a_note_written_for_it_or_in_suggest_or_none_and_one_film_is_vetoed_by_two(db, seeded):
     vetoes = BallotRecord.objects.filter(vetoed=True)
+    with_note = [veto for veto in vetoes if Note.objects.filter(suggestion=veto.suggestion, author=veto.voter).exists()]
 
-    assert vetoes.filter(veto_reason__isnull=False).count() >= 2
-    assert vetoes.filter(veto_reason__isnull=True).count() == 1
+    # Zoë wrote hers as the reason, Anne-Marie's is her SUGGEST note, and Sam has none (#128).
+    assert sorted(veto.voter.display_name for veto in with_note) == ["Anne-Marie", "Zoë"]
+    assert len(with_note) == vetoes.count() - 1
     assert vetoes.filter(score__isnull=False).count() == 0
     assert max(vetoes.filter(suggestion=suggestion).count() for suggestion in Suggestion.objects.filter(ballot_records__vetoed=True)) == 2
 

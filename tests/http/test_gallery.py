@@ -110,17 +110,32 @@ def test_the_gallery_shows_both_phase_bars_on_opened_cards(client, debug):
     assert "Your pitch" in page and "Your note" in page
 
 
-def test_the_gallery_shows_votes_bar_on_opened_cards_with_a_veto_and_both_read_only_lines(client, debug):
-    page = client.get(GALLERY).content.decode()
+def vote_cards(page):
+    return [card for card in re.findall(r"<article.*?</article>", page, re.S) if "data-vote-bar" in card]
 
-    bars = re.findall(r'<div class="film-card__phase-bar" data-phase-bar>(.*?)</div>\s*<section', page, re.S)
-    bars = [bar for bar in bars if "data-vote-bar" in bar]
-    assert len(bars) == 2 and "hx-post" not in "".join(bars)
-    assert "score--keen is-current" in bars[0] and "Vetoed by" in bars[0] and "Seen by" in bars[0]
+
+def test_the_gallery_shows_votes_bar_on_opened_cards_with_a_veto_and_the_seen_it_line(client, debug):
+    cards = vote_cards(client.get(GALLERY).content.decode())
+
+    bars = [re.search(r'<div class="film-card__phase-bar" data-phase-bar>(.*)</div>\s*(?:<section|$)', card, re.S)[1] for card in cards]
+    assert len(bars) == 3 and "hx-post" not in "".join(bars)
+    assert "score--keen is-current" in bars[0] and "Seen by" in bars[0]
+    # The bar no longer names the vetoers: the card's notes do (#128).
+    assert not any("Vetoed by" in bar for bar in bars)
     for bar in bars:
         row = re.search(r'class="vote-bar__scores".*?\n  </div>', bar, re.S)[0]
         assert row.index("vote-bar__veto") < row.index('class="vote-seen"')
     assert "is-vetoed" in bars[1] and "−2" in bars[1] and "data-vote-reason" in bars[1] and "checked" in bars[1]
+
+
+def test_the_gallery_shows_a_marked_note_a_bare_veto_line_and_the_boxes_quiet_line(client, debug):
+    cards = vote_cards(client.get(GALLERY).content.decode())
+
+    assert re.search(r'<li class="note note--vetoed">.*?<span class="note__author">vetoed by Ash</span>', cards[0], re.S)
+    assert re.search(r'<li class="note note--vetoed note--bare"><span class="note__author">Vetoed by Zoë</span></li>', cards[0])
+    assert "Your note on this film shows as your veto reason, and stays your note if you take the veto back." in cards[1]
+    assert "Subtitled, so not the last film of the night.</textarea>" in cards[1]
+    assert "Your pitch shows as your veto reason" in cards[2] and "is-refusal" in cards[2]
 
 
 def test_the_gallery_shows_withdraw_on_an_opened_card_and_armed_on_another(client, debug):

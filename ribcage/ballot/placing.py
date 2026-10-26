@@ -2,7 +2,7 @@
 
 from ribcage.ballot.board import SCALE, TRAY, VETOES
 from ribcage.ballot.models import BallotRecord
-from ribcage.suggestions.notes import note_text
+from ribcage.suggestions import notes
 
 UNSORTED = TRAY
 VETO = VETOES
@@ -19,7 +19,7 @@ def target_of(posted):
 def place(voter, suggestion, target):
     """Put the voter's say on the suggestion at `target`: a score, UNSORTED or VETO. It names where the film is to be, so a repeat changes nothing.
 
-    A score replaces a veto and Unsorted clears it, with its reason; a veto replaces a score and keeps a reason it already has.
+    A score replaces a veto, and Unsorted clears it; a veto replaces a score. None of them touches a note, which a veto's reason is (#128).
     A record left with no score, no veto and no seen it is deleted, so no record means untouched (#10, #63, #118, #120).
     """
     record = BallotRecord.objects.filter(voter=voter, suggestion=suggestion).first()
@@ -30,12 +30,10 @@ def place(voter, suggestion, target):
             BallotRecord.objects.create(voter=voter, suggestion=suggestion, score=score, vetoed=veto)
         return
     record.score, record.vetoed = score, veto
-    if not veto:
-        record.veto_reason = None
     if score is None and not veto and not record.seen_it:
         record.delete()
     else:
-        record.save(update_fields=["score", "vetoed", "veto_reason"])
+        record.save(update_fields=["score", "vetoed"])
 
 
 def mark_seen(voter, suggestion, seen):
@@ -57,13 +55,11 @@ def mark_seen(voter, suggestion, seen):
 
 
 def give_reason(voter, suggestion, typed):
-    """Keep the voter's reason on their veto as a note is kept, saving it empty clearing it; raises `TooLong` and writes nothing over the cap (#88, #120).
+    """Save the voter's reason on their veto, which is their note on the film, through the notes rule: refused whole over the cap, cleared by saving it empty, and for a suggester's pitch refused empty (#88, #120, #128).
 
-    Returns False where the voter has no veto on the film, as when a stale tab posts after the veto was dragged out.
+    Raises `notes.TooLong` and `notes.PitchRequired` and writes nothing then. Returns False where the voter has no veto on the film, as when a stale tab posts after the veto was dragged out.
     """
-    vetoes = BallotRecord.objects.filter(voter=voter, suggestion=suggestion, vetoed=True)
-    if not vetoes.exists():
+    if not BallotRecord.objects.filter(voter=voter, suggestion=suggestion, vetoed=True).exists():
         return False
-    text = note_text(typed)
-    vetoes.update(veto_reason=text or None)
+    notes.write(suggestion, voter, typed)
     return True

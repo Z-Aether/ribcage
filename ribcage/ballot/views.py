@@ -73,29 +73,29 @@ def seen(request):
 @phase_window(Phase.VOTE)
 @require_POST
 def veto_reason(request):
-    """The reason on the voter's own veto, kept as a note is; a film they no longer veto reloads the ballot as it is (#10, #88, #120)."""
+    """The reason on the voter's own veto, which is their note on the film, saved through the notes rule: refused whole over the cap, and for a pitch refused empty. A film they no longer veto reloads the ballot as it is (#10, #88, #120, #128)."""
     suggestion = candidate(request.POST.get("suggestion"))
     if suggestion is None:
         return reload_the_tab(request, reverse("phase_page"))
     typed = request.POST.get("text", "")
-    refusal = None
+    # A refusal says so, and puts back in the box the words typed for a long note, or the pitch as it was (#88).
+    refusal, shown = "", None
     try:
         kept = placing.give_reason(request.user, suggestion, typed)
     except notes.TooLong as too_long:
-        kept, refusal = True, too_long
+        kept, refusal, shown = True, notes.too_long(too_long, request.user.pk == suggestion.suggester_id), typed
+    except notes.PitchRequired:
+        kept, refusal = True, notes.PITCH_REQUIRED
     if not kept:
         return reload_the_tab(request, reverse("phase_page"))
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
     if request.POST.get("card"):
         vote = cardbar.of(request.user, suggestion)
-        vote = replace(vote, reason=typed, said=notes.too_long(refusal, False), refused=True) if refusal else replace(vote, said="Saved." if vote.reason else "Cleared.")
+        vote = replace(vote, note=vote.note if shown is None else shown, said=refusal or ("Saved." if vote.note else "Cleared."), refused=bool(refusal))
         return render(request, "components/vote_reason.html", {"card": replace(opened_card(request, suggestion), vote=vote)})
     tile = board.one_tile(request.user, suggestion)
-    if refusal:
-        tile = replace(tile, reason=typed, said=notes.too_long(refusal, False), refused=True)
-    else:
-        tile = replace(tile, said="Saved." if tile.reason else "Cleared.")
+    tile = replace(tile, note=tile.note if shown is None else shown, said=refusal or ("Saved." if tile.note else "Cleared."), refused=bool(refusal))
     return render(request, "ballot/tile.html", {"tile": tile, "row": True})
 
 

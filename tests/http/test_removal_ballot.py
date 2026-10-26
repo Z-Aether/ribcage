@@ -5,7 +5,7 @@ import re
 import pytest
 
 from ribcage.ballot.models import BallotRecord, DoneMarker
-from ribcage.suggestions.models import Suggestion
+from ribcage.suggestions.models import Note, Suggestion
 from tests.films import a_tmdb_film
 from tests.http.test_roster_tab import TAB, text
 
@@ -35,7 +35,8 @@ def voted(voters, films):
     ada, dani = voters["ada"], voters["Dani"]
     BallotRecord.objects.create(voter=ada, suggestion=thing, score=3, seen_it=True)
     BallotRecord.objects.create(voter=ada, suggestion=cube, score=-1)
-    BallotRecord.objects.create(voter=ada, suggestion=rope, vetoed=True, veto_reason="No.", seen_it=True)
+    BallotRecord.objects.create(voter=ada, suggestion=rope, vetoed=True, seen_it=True)
+    Note.objects.create(suggestion=rope, author=ada, text="No.")
     BallotRecord.objects.create(voter=dani, suggestion=cube, score=2)
     DoneMarker.objects.create(voter=ada)
     DoneMarker.objects.create(voter=dani)

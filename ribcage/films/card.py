@@ -13,6 +13,8 @@ class Note:
     text: str
     # The viewing voter's own, which an opened card leaves out because their note box holds it (#88).
     yours: bool = False
+    # The author vetoes the film, on a surface that shows vetoes; with no text it is a bare line naming them (#128).
+    vetoed: bool = False
 
 
 @dataclass(frozen=True)
@@ -176,26 +178,21 @@ class Matched:
 
 
 @dataclass(frozen=True)
-class Vetoer:
-    """One other voter's veto on a film, with the reason they gave, empty when they gave none (#10, #35 §4, #122)."""
-
-    name: str
-    reason: str = ""
-
-
-@dataclass(frozen=True)
 class VoteBar:
-    """What VOTE's phase bar shows for the viewer on one film: their own say, which is theirs alone, and the other voters' vetoes and seen it (#10, #35 §4, #122)."""
+    """What VOTE's phase bar shows for the viewer on one film: their own say, which is theirs alone, and the other voters' seen it (#10, #35 §4, #122).
+
+    The vetoes are in the card's notes, not the bar (#128)."""
 
     # The scale's buttons as (score, key, sign, name), top pick first.
     scale: tuple[tuple[int, str, str, str], ...]
     score: int | None = None
     vetoed: bool = False
-    reason: str = ""
+    # The voter's note on the film, which is their veto's reason, or their pitch on their own suggestion (#128).
+    note: str = ""
+    is_pitch: bool = False
     seen_it: bool = False
-    vetoed_by: tuple[Vetoer, ...] = ()
     seen_by: tuple[str, ...] = ()
-    # What saving the reason said, kept as the note box keeps its refusal (#120).
+    # What saving the box said, kept as the note box keeps its refusal (#120).
     said: str = ""
     refused: bool = False
     # The gallery's bar posts nowhere, so its buttons only look.
@@ -226,11 +223,13 @@ class FilmCard:
     matched: Matched | None = None
     # VOTE's bar data; None in every other phase (#122).
     vote: VoteBar | None = None
+    # The suggester vetoes the film, on a surface that shows vetoes (#128).
+    pitch_vetoed: bool = False
 
     @property
     def pitch_yours(self):
-        # The viewer's own pitch is left out of an opened card only where their note box holds it (#88, #122).
-        return self.mine and self.note_box is not None
+        # The viewer's own pitch is left out of an opened card only where a box holds it: the note box, or VOTE's reason box while they veto (#88, #122, #128).
+        return self.mine and (self.note_box is not None or (self.vote is not None and self.vote.vetoed))
 
 
 def trimmed(text, length):

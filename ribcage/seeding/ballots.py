@@ -5,7 +5,7 @@ Each score is by the film's TMDB id. A film a voter leaves out is left in their 
 
 from ribcage.ballot.models import BallotRecord, DoneMarker
 from ribcage.identity.models import Voter
-from ribcage.suggestions.models import Suggestion
+from ribcage.suggestions.models import Note, Suggestion
 
 THE_THING, MIDSOMMAR, EXIT_8, MARIA, EVENT_HORIZON, TERRIFIER, THE_SHINING, COTTON_CANDY = 1091, 530385, 1408208, 499537, 8413, 420634, 694, 16296
 GOODNIGHT_MOMMY, INFESTED, SHORT_MONSTER, WOLF_HOUSE, CUBE, VHS_99 = 284303, 1063879, 894205, 744857, 431, 1005776
@@ -18,11 +18,12 @@ SEEDED_SCORES = {
     "Sam": {COTTON_CANDY: 3},
 }
 
-# Each veto is (film, reason or None): Terrifier is vetoed by two voters, for the ribbon's two initials, one of them without a reason (#120).
+# Each veto is (film, the note it is written as or None): Terrifier is vetoed by two voters, for the ribbon's two initials.
+# Zoë wrote hers as the reason, Anne-Marie's reason is the note she wrote in SUGGEST, and Sam has no note, so his is a bare line (#120, #128).
 SEEDED_VETOES = {
     "Zoë": {TERRIFIER: "I won't sit through that one, and I'd rather say so now."},
     "Anne-Marie": {TERRIFIER: None},
-    "Sam": {WOLF_HOUSE: "Too close to a nightmare I had."},
+    "Sam": {WOLF_HOUSE: None},
 }
 
 # Seen it, by film: Ada's Midsommar is seen and scored, Zoë's Terrifier seen and vetoed, Ada's Cube seen and left in her tray, Zoë's The Shining seen with no other say (#121).
@@ -40,7 +41,10 @@ def seed_the_ballots():
         BallotRecord(voter=voters[name], suggestion=suggestions[tmdb_id], score=score) for name, scores in SEEDED_SCORES.items() for tmdb_id, score in scores.items()
     )
     BallotRecord.objects.bulk_create(
-        BallotRecord(voter=voters[name], suggestion=suggestions[tmdb_id], vetoed=True, veto_reason=reason) for name, vetoes in SEEDED_VETOES.items() for tmdb_id, reason in vetoes.items()
+        BallotRecord(voter=voters[name], suggestion=suggestions[tmdb_id], vetoed=True) for name, vetoes in SEEDED_VETOES.items() for tmdb_id in vetoes
+    )
+    Note.objects.bulk_create(
+        Note(suggestion=suggestions[tmdb_id], author=voters[name], text=text) for name, vetoes in SEEDED_VETOES.items() for tmdb_id, text in vetoes.items() if text
     )
     for name, films in SEEDED_SEEN.items():
         for tmdb_id in films:

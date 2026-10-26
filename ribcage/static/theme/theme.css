@@ -1392,6 +1392,7 @@ body > aside.nag-bar a {
 
 [data-skin] .film-card__notes {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.6em;
   margin: 0.5rem 0 0;
   padding: 0;
@@ -1422,10 +1423,11 @@ body > aside.nag-bar a {
   margin-left: 0.5em;
   color: var(--ink-muted);
   font-size: 0.88em;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
+/* The dash stays with the name's first word and the line may break after it, so a long author line wraps inside a narrow card (#128). */
 .note__author::before {
-  content: "— ";
+  content: "—\00a0";
 }
 .note__full,
 .film-card.is-open .note__trimmed {
@@ -1459,6 +1461,26 @@ body > aside.nag-bar a {
   width: 4px;
   clip-path: none;
   filter: none;
+}
+
+/* Where vetoes are shown, a vetoer's note takes the veto's red bar and ends in their name in the veto's ink; a vetoer with no note is a line of their own (#128). */
+[data-skin] .note--vetoed:not(.note--pitch) {
+  border-left-color: var(--veto);
+}
+[data-skin] .note--pitch.note--vetoed::before {
+  background-color: var(--veto);
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--veto) 55%, transparent));
+}
+.note--vetoed .note__author {
+  color: var(--veto-ink);
+}
+.note--bare .note__author {
+  margin-left: 0;
+  font-size: 1em;
+  font-weight: 600;
+}
+.note--bare .note__author::before {
+  content: none;
 }
 
 .film-card__phase-bar:empty {
@@ -1748,6 +1770,12 @@ body > aside.nag-bar a {
 }
 [data-skin] .note-box--pitch textarea {
   border-left: 3px solid var(--accent);
+}
+/* The quiet line under a veto's reason box, saying it is the voter's note (#128). */
+[data-skin] .note-box__hint {
+  margin: 0.5rem 0 0;
+  color: var(--ink-muted);
+  font-size: 0.85em;
 }
 .note-box__foot {
   display: flex;
@@ -2742,10 +2770,6 @@ body:has(> main > .ballot-head) > footer.site-footer {
 .vote-bar__line {
   margin: 0;
   color: var(--ink-muted);
-}
-.vote-bar__reason {
-  font-family: var(--font-notes);
-  font-style: italic;
 }
 @media (max-width: 600px) {
   /* A thumb's targets: the scores share the bar's width two or three to a line. */
