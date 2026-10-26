@@ -262,6 +262,19 @@ def test_an_empty_ballot_says_so_in_one_line_and_the_bands_still_show(voters):
     assert page.count('class="band band--') == 6
 
 
+def test_the_tray_holds_no_tile_when_every_film_is_placed_and_a_tile_when_one_is_left(ballot):
+    # The theme collapses a tray with no list item to a strip, so the empty list must hold no markup at all (#126).
+    for key in ("one", "two"):
+        place(ballot["client"], ballot[key], 3)
+    assert re.search(r'data-place="unsorted"[^>]*>\s*<li', ballot["client"].get("/").text)
+
+    place(ballot["client"], ballot["three"], 3)
+    page = ballot["client"].get("/").text
+
+    assert re.search(r'data-place="unsorted"[^>]*></ul>', page)
+    assert "0 left" in page
+
+
 def test_the_tray_lists_matched_films_first_and_each_group_in_the_voters_fixed_order(voters, vocabulary):  # noqa: F811
     walk_to(Phase.VOTE)
     ada = voters["ada"]

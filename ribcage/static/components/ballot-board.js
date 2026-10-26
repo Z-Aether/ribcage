@@ -24,7 +24,15 @@
         // The seen-it toggle is pressed, not dragged by (#121).
         filter: ".seen-toggle",
         preventOnFilter: false,
+        // A drag begun in the tray holds it open until the drop, so its last tile leaving doesn't pull the bands up under the pointer (#126).
+        onStart: function (event) {
+          var tray = event.from.closest(".tray");
+          if (tray) tray.setAttribute("data-holding", "");
+        },
         onEnd: function (event) {
+          board.querySelectorAll("[data-holding]").forEach(function (held) {
+            held.removeAttribute("data-holding");
+          });
           // The gallery's board has no route to post to, and a tile placed where it began changes nothing.
           if (!url || event.from === event.to) return;
           var values = { suggestion: event.item.dataset.suggestion, to: event.to.dataset.place };

@@ -2412,7 +2412,7 @@ body:has(> main > .ballot-head) > footer.site-footer {
 }
 /* The board's tile is a poster about the voting prototype's 76 px wide, its state marks scaled with it; the picker's tile keeps its own size (#126). */
 [data-skin] .board {
-  --board-tile: max(3rem, 60px);
+  --board-tile: max(3.15rem, 60px);
   --board-title-line: 0.8rem;
   --board-tile-height: calc(var(--board-tile) * 1.5 + 0.15rem + var(--board-title-line));
 }
@@ -2604,6 +2604,49 @@ body:has(> main > .ballot-head) > footer.site-footer {
   }
   [data-skin] .band__tiles {
     padding: 0.35rem 0.5rem 0.3rem;
+  }
+}
+
+/* A tray holding no tile collapses to a slim strip that still takes a drop, and grows back when a tile lands in it; a drag begun in the tray holds it open until the drop, so the bands stay still under the pointer (#126). */
+[data-skin] .tray:not([data-holding]):not(:has(.tray__tiles > li)) {
+  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-rows: auto;
+  column-gap: 0.75rem;
+  align-items: center;
+  padding: 0.2rem 0.8rem;
+}
+[data-skin] .tray:not([data-holding]):not(:has(.tray__tiles > li)) :is(.tray__name, .tray__left) {
+  grid-row: 1;
+  margin: 0;
+}
+[data-skin] .tray:not([data-holding]):not(:has(.tray__tiles > li)) .tray__name {
+  grid-column: 1;
+}
+[data-skin] .tray:not([data-holding]):not(:has(.tray__tiles > li)) .tray__left {
+  grid-column: 2;
+}
+[data-skin] .tray:not([data-holding]):not(:has(.tray__tiles > li)) .tray__tiles {
+  grid-column: 3;
+  grid-row: 1;
+  min-height: 1.8rem;
+  padding-block: 0;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius-card);
+}
+@media (max-width: 600px) {
+  [data-skin] .tray:not([data-holding]):not(:has(.tray__tiles > li)) {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: baseline;
+    padding: 0.3rem 0.6rem;
+  }
+  [data-skin] .tray:not([data-holding]):not(:has(.tray__tiles > li)) .tray__left {
+    grid-column: 2;
+  }
+  [data-skin] .tray:not([data-holding]):not(:has(.tray__tiles > li)) .tray__tiles {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    min-height: 2.6rem;
   }
 }
 
