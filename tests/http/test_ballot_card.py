@@ -121,7 +121,7 @@ def test_the_veto_pill_turns_the_veto_off_when_it_is_on_and_on_when_it_is_off(ba
 
 def test_the_reason_is_saved_from_the_card_as_the_note_and_answered_in_its_box_alone(ballot):
     place(ballot["client"], ballot["one"], "veto")
-    answer = ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": "Spiders.", "card": "1"}, headers=HTMX).text
+    answer = ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": "Spiders."}, headers=HTMX).text
 
     assert Note.objects.get(suggestion=ballot["one"], author=ballot["ada"]).text == "Spiders."
     assert answer.lstrip().startswith('<div class="vote-reason"') and "Saved." in answer and "film-card" not in answer
@@ -132,8 +132,8 @@ def test_the_cards_box_refuses_a_pitch_emptied_and_a_note_too_long_with_the_text
     Note.objects.create(suggestion=own, author=ballot["ada"], text="Ada pitched this.")
     place(ballot["client"], own, "veto")
 
-    emptied = ballot["client"].post(REASON, {"suggestion": str(own.pk), "text": " ", "card": "1"}, headers=HTMX).text
-    too_long = ballot["client"].post(REASON, {"suggestion": str(own.pk), "text": "x" * (settings.NOTE_MAX_LENGTH + 1), "card": "1"}, headers=HTMX).text
+    emptied = ballot["client"].post(REASON, {"suggestion": str(own.pk), "text": " "}, headers=HTMX).text
+    too_long = ballot["client"].post(REASON, {"suggestion": str(own.pk), "text": "x" * (settings.NOTE_MAX_LENGTH + 1)}, headers=HTMX).text
 
     assert re.search(r"<textarea[^>]*>Ada pitched this\.</textarea>", emptied) and "A suggestion needs its pitch" in emptied and "is-refusal" in emptied
     assert "a pitch holds" in too_long and "x" * 50 in too_long
@@ -144,7 +144,7 @@ def test_the_card_answers_a_reason_saved_empty_by_deleting_the_note(ballot):
     Note.objects.create(suggestion=ballot["one"], author=ballot["ada"], text="Ada wrote this.")
     place(ballot["client"], ballot["one"], "veto")
 
-    answer = ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": "", "card": "1"}, headers=HTMX).text
+    answer = ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": ""}, headers=HTMX).text
 
     assert not Note.objects.exists() and "Cleared." in answer
 
@@ -285,10 +285,11 @@ def test_opening_one_card_closes_the_other_in_the_same_answer(ballot):
     assert f"hx-swap-oob=\"outerHTML:li[data-suggestion='{ballot['two'].pk}']\"" in answer and 'class="tile' in answer
 
 
-def test_the_title_closes_a_card_to_its_tile_or_veto_row(ballot):
-    assert 'class="tile' in opened(ballot["client"], ballot["one"], close="1").text
+def test_the_title_closes_a_card_to_its_tile_vetoed_or_not(ballot):
+    tile = opened(ballot["client"], ballot["one"], close="1").text
+    assert 'class="tile' in tile
     place(ballot["client"], ballot["one"], "veto")
-    assert 'class="veto-row"' in opened(ballot["client"], ballot["one"], close="1").text
+    assert opened(ballot["client"], ballot["one"], close="1").text == tile
     assert f'hx-get="{CARD}?suggestion={ballot["one"].pk}&amp;close=1"' in opened(ballot["client"], ballot["one"]).text
 
 

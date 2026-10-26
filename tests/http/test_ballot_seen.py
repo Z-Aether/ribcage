@@ -82,7 +82,7 @@ def test_a_seen_film_never_moves_and_still_counts_as_unsorted(ballot):
     assert "0 of 2 scored" in page and "2 left" in page
 
 
-def test_seen_it_greys_the_voters_own_tile_in_the_tray_a_band_and_the_veto_row_and_nobody_elses(ballot):
+def test_seen_it_greys_the_voters_own_tile_in_the_tray_a_band_and_the_veto_band_and_nobody_elses(ballot):
     place(ballot["client"], ballot["two"], 3)
     third = film(ballot["voters"]["Hanna"], "Three")
     place(ballot["client"], third, "veto")
@@ -95,7 +95,7 @@ def test_seen_it_greys_the_voters_own_tile_in_the_tray_a_band_and_the_veto_row_a
     assert page.count("is-seen-it") == 3
     assert re.search(rf'<li class="tile is-seen-it" data-suggestion="{ballot["one"].pk}"', page)
     assert re.search(rf'<li class="tile is-seen-it" data-suggestion="{ballot["two"].pk}"', page)
-    assert re.search(rf'<li class="veto-row" data-suggestion="{third.pk}".*?<div class="tile is-seen-it"', page, re.S)
+    assert re.search(rf'<li class="tile is-seen-it" data-suggestion="{third.pk}"', page) and region(page, "veto") == [third.pk]
     assert "is-seen-it" not in other
 
 
@@ -117,13 +117,13 @@ def test_every_tile_carries_a_toggle_that_posts_the_state_it_would_set(ballot):
     assert 'aria-pressed="false"' in tile_li(page, ballot["two"]) and '"seen": "1"' in tile_li(page, ballot["two"])
 
 
-def test_the_answer_redraws_the_tile_out_of_band_and_a_veto_row_answers_its_frame_alone(ballot):
+def test_the_answer_redraws_the_tile_out_of_band_vetoed_or_not(ballot):
     plain = seen(ballot["client"], ballot["one"], "1", headers=HTMX).text
     place(ballot["client"], ballot["two"], "veto")
     vetoed = seen(ballot["client"], ballot["two"], "1", headers=HTMX).text
 
     assert f"hx-swap-oob=\"outerHTML:li[data-suggestion='{ballot['one'].pk}']\"" in plain and "is-seen-it" in plain
-    assert f"li[data-suggestion='{ballot['two'].pk}'] > .tile" in vetoed and "veto-row__reason" not in vetoed
+    assert f"hx-swap-oob=\"outerHTML:li[data-suggestion='{ballot['two'].pk}']\"" in vetoed and "is-seen-it" in vetoed and "<textarea" not in vetoed
 
 
 @pytest.mark.parametrize("phase", [Phase.SUGGEST, Phase.APPROVE, Phase.PICK, Phase.RUN])

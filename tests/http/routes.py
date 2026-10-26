@@ -36,9 +36,8 @@ FRAGMENTS = [
     Fragment("note", VOTER, "POST", {"suggestion": "{film}", "text": "A note."}),
     Fragment("withdraw", VOTER, "POST", {"suggestion": "{film}"}),
     # Before the watch toggles below, which untick the list the row's matched topics come from.
-    # A placement answers the film's tile, a Veto row among them; the reason follows it, since it needs a veto to write on (#120).
+    # A drop into the Veto band answers the film's card where it has no note yet, so it carries the section (#120).
     Fragment("ballot_place", VOTER, "POST", {"suggestion": "{film}", "to": "veto"}),
-    Fragment("ballot_veto_reason", VOTER, "POST", {"suggestion": "{film}", "text": "A reason."}),
     # The opened card carries the section; its own writes answer the card moved, the reason's box or the checkbox (#122).
     Fragment("ballot_card", VOTER, "GET", {"suggestion": "{film}"}),
     Fragment("ballot_place", VOTER, "POST", {"suggestion": "{film}", "to": "2", "card": "1"}),
@@ -69,7 +68,8 @@ NO_DTDD_DATA = {
     "gallery",  # dev-only, answering 404 outside DEBUG
     "console", "console_phase_move", "console_films_approval",  # redirects, whatever they act on
     "ballot_done",  # the header's done block: names and ticks, no film (#123)
-    "ballot_seen",  # a tile or a veto row's frame, or the card's checkbox, never matched topics (#121, #122)
+    "ballot_seen",  # a tile, or the card's checkbox, never matched topics (#121, #122)
+    "ballot_veto_reason",  # the open card's reason box alone, never matched topics (#120, #128)
     "console_roster_remove", "console_roster_reset", "console_backup_upload",  # the roster's and backup page's acts
 }
 

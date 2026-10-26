@@ -1,8 +1,0 @@
-{# The reason box of a veto, which holds the voter's note on the film, or their pitch on their own suggestion, with the quiet line saying so, and Save. The caller gives the form and `text`, `is_pitch`, `refused`, `said`, `inert`, `suggestion_id` and `where` (#10, #88, #120, #128). #}
-{# No maxlength: the server refuses a long note whole, as it does in SUGGEST (#88, #120). #}
-<label class="note-box__label"><span class="note-box__name">{% if is_pitch %}Your pitch{% else %}Your reason (optional){% endif %}</span><textarea name="text" rows="2" aria-describedby="veto-hint-{{ where }}-{{ suggestion_id|default_if_none:'' }}"{% if refused %} autofocus{% endif %}>{{ text }}</textarea></label>
-<p class="note-box__hint" id="veto-hint-{{ where }}-{{ suggestion_id|default_if_none:'' }}">{% if is_pitch %}Your pitch shows as your veto reason, and stays your pitch if you take the veto back.{% else %}Your note on this film shows as your veto reason, and stays your note if you take the veto back.{% endif %}</p>
-<div class="note-box__foot">
-  <button type="submit"{% if inert %} disabled{% endif %}>Save</button>
-  <p class="note-box__said{% if refused %} is-refusal{% endif %}" role="status">{{ said }}</p>
-</div>

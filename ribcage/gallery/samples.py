@@ -394,12 +394,9 @@ def ballot_board():
         -1: (),
     }
     bands = tuple(board.Band(score, key, sign, name, placed[score]) for score, key, sign, name in board.SCALE)
-    # Two widened rows: Midsommar with the viewer's matched topics and their note as the reason, The Exorcist with none; one also wears others' ribbon (#120).
-    vetoes = (
-        tile(13, film(MIDSOMMAR), trigger_count=2, matched=matched_of(MIDSOMMAR_DTDD), note="Too much daylight for me.", seen_it=True, vetoed_by="AZ", vetoers="Vetoed by Ada, Zoë"),
-        tile(14, film(THE_EXORCIST)),
-    )
-    return board.Board(tray, bands, board.Counts(scored=10, size=14), vetoes)
+    # The Veto band holds the same tiles as any band: one seen and also vetoed by others, and one plain (#120).
+    vetoes = (tile(13, film(MIDSOMMAR), trigger_count=2, seen_it=True, vetoed_by="AZ", vetoers="Vetoed by Ada, Zoë"), tile(14, film(THE_EXORCIST)), tile(15, film(POOH_2)))
+    return board.Board(tray, bands, board.Counts(scored=11, size=15), vetoes)
 
 
 def done_roster(mine):

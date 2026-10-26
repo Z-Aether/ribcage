@@ -1,1 +1,1 @@
-{# A tile's answer when opened: its card where the tile stood, and the card that was open before drawn as its tile again, out of band (#21, #122). #}{% include "ballot/card.html" %}{% if closed %}{% include "ballot/tile.html" with tile=closed row=closed.vetoed oob=True %}{% endif %}
+{# A tile's answer when opened: its card where the tile stood, and the card that was open before drawn as its tile again, out of band (#21, #122). #}{% include "ballot/card.html" %}{% if closed %}{% include "components/ballot_tile.html" with tile=closed oob=True %}{% endif %}

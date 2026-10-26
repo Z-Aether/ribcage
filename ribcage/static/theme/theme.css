@@ -2561,59 +2561,16 @@ body:has(> main > .ballot-head) > footer.site-footer {
     inset: -0.75rem;
   }
 }
-/* The Veto band is set apart at the bottom, edged in the veto's dashed red, and its rows widen to carry the cost, the matched topics and the reason box (#9, #120). */
+/* The Veto band is set apart at the bottom and edged in the veto's dashed red; its tiles are a band's own (#9, #120). */
 [data-skin] .band--veto {
   margin: 0.6rem 0 0;
 }
 [data-skin] .band--veto .band__tiles {
   border-color: var(--veto);
 }
-/* The veto's label is long, so it wraps inside the band rather than run past it at 390 px (#120). */
+/* The veto's label is longer than the column, so it wraps inside its pill rather than run past it (#120). */
 [data-skin] .band--veto .score {
   white-space: normal;
-}
-[data-skin] .veto-row {
-  display: grid;
-  grid-template-columns: var(--board-tile) minmax(0, 1fr);
-  gap: 0.8rem;
-  width: 100%;
-  max-width: 60rem;
-  padding: 0.5rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  background-color: var(--surface);
-  cursor: grab;
-}
-/* The cost line takes the row's top, and the matched topics and the reason box sit side by side under it where the width allows (#126). */
-[data-skin] .veto-row__detail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.5rem;
-  align-content: start;
-  min-width: 0;
-  cursor: auto;
-}
-[data-skin] .veto-row__detail > * {
-  flex: 1 1 18rem;
-  min-width: 0;
-}
-[data-skin] .veto-row__cost {
-  flex-basis: 100%;
-  margin: 0;
-  color: var(--veto-ink);
-  font-weight: 600;
-}
-[data-skin] .veto-row__matched .dtdd__credit {
-  margin: 0.4rem 0 0;
-}
-[data-skin] .veto-row__reason {
-  margin: 0;
-}
-[data-skin] .veto-row__reason textarea {
-  margin: 0;
-}
-[data-skin] .veto-row.is-dragged {
-  opacity: 0.35;
 }
 @media (max-width: 600px) {
   [data-skin] .tray {
@@ -2647,12 +2604,6 @@ body:has(> main > .ballot-head) > footer.site-footer {
   }
   [data-skin] .band__tiles {
     padding: 0.35rem 0.5rem 0.3rem;
-  }
-  [data-skin] .veto-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  [data-skin] .veto-row > .tile {
-    justify-self: start;
   }
 }
 

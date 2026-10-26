@@ -21,18 +21,17 @@
         scroll: true,
         scrollSensitivity: 60,
         scrollSpeed: 14,
-        // A Veto row's reason box and its topics are for typing in and reading, not for dragging by (#120).
         // The seen-it toggle is pressed, not dragged by (#121).
-        filter: ".veto-row__detail, .seen-toggle",
+        filter: ".seen-toggle",
         preventOnFilter: false,
         onEnd: function (event) {
           // The gallery's board has no route to post to, and a tile placed where it began changes nothing.
           if (!url || event.from === event.to) return;
-          htmx.ajax("POST", url, {
-            source: event.item,
-            swap: "none",
-            values: { suggestion: event.item.dataset.suggestion, to: event.to.dataset.place },
-          });
+          var values = { suggestion: event.item.dataset.suggestion, to: event.to.dataset.place };
+          // A drop into the Veto band may open the film's card, which closes the card open now (#120).
+          var other = board.querySelector(".card-item");
+          if (other) values.closes = other.dataset.suggestion;
+          htmx.ajax("POST", url, { source: event.item, swap: "none", values: values });
         },
       });
     });
@@ -70,7 +69,7 @@
       htmx.ajax("GET", cardAt, { source: item, target: item, swap: "outerHTML", values: values });
     }
     board.addEventListener("click", function (event) {
-      if (event.target.closest(".seen-toggle, a, button, input, textarea, .veto-row__detail")) return;
+      if (event.target.closest(".seen-toggle, a, button, input, textarea")) return;
       var tile = event.target.closest(".tile");
       if (tile) open(tile.closest("li"));
     });
@@ -81,12 +80,15 @@
         open(event.target);
       }
     });
-    // An opened card, or one moved to its new band, is brought into view; the tile or the title that closes it keeps the focus (#122).
+    // An opened card, or one moved to its new band, is brought into view; the tile or the title that closes it keeps the focus, and a card a veto drop opened has the cursor in its reason box (#120, #122).
     function bringIntoView() {
       var card = board.querySelector("[data-scroll-here]");
       if (!card) return;
       card.removeAttribute("data-scroll-here");
       card.scrollIntoView({ block: "start", behavior: "smooth" });
+      var reason = card.hasAttribute("data-focus-reason") && card.querySelector("[data-vote-reason] textarea");
+      card.removeAttribute("data-focus-reason");
+      if (reason) return reason.focus({ preventScroll: true });
       var title = card.querySelector(".film-card__toggle");
       if (title && !card.contains(document.activeElement)) title.focus({ preventScroll: true });
     }

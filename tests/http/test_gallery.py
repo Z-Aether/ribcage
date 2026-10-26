@@ -228,14 +228,15 @@ def test_the_gallery_shows_the_ballots_tray_and_bands_and_posts_nowhere(client, 
 
 
 
-def test_the_gallerys_veto_band_has_a_row_with_matched_topics_and_credit_and_one_without_and_saves_nowhere(client, debug):
-    band = re.search(r'<section class="band band--veto".*?</section>', client.get(GALLERY).text, re.S)[0]
-    rows = re.findall(r'<li class="veto-row".*?</div>\s*</li>', band, re.S)
+def test_the_gallerys_veto_band_is_labelled_and_holds_the_same_collapsed_tiles_as_a_band_with_nothing_to_save(client, debug):
+    page = client.get(GALLERY).text
+    band = re.search(r'<section class="band band--veto".*?</section>', page, re.S)[0]
 
-    assert len(rows) == 2
-    assert "On your list" in rows[0] and "Powered by DoesTheDogDie.com" in rows[0] and "veto-ribbon" in rows[0]
-    assert "On your list" not in rows[1] and "Powered by" not in rows[1]
-    assert all(" disabled>Save" in row for row in rows)
+    assert "Veto — I won't be in the room" in band
+    tiles = re.findall(r'<li class="tile[^"]*" data-suggestion="\d+"', band)
+    assert len(tiles) == 3 and "veto-ribbon" in band and "is-seen-it" in band
+    for gone in ("veto-row", "counts as", "<textarea", "Powered by", "Save"):
+        assert gone not in band
 
 
 def test_the_gallerys_seen_it_toggles_show_off_and_on_and_fire_no_request(client, debug):

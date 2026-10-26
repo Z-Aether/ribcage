@@ -3,6 +3,7 @@
 from ribcage.ballot.board import SCALE, TRAY, VETOES
 from ribcage.ballot.models import BallotRecord
 from ribcage.suggestions import notes
+from ribcage.suggestions.models import Note
 
 UNSORTED = TRAY
 VETO = VETOES
@@ -39,19 +40,23 @@ def place(voter, suggestion, target):
 def mark_seen(voter, suggestion, seen):
     """Set the voter's seen it on the suggestion to `seen`, leaving score and veto alone; a repeat changes nothing.
 
-    A record left with nothing is deleted, as `place` does. Returns whether the voter vetoes the film, for the answer that redraws it (#10, #118, #121).
+    A record left with nothing is deleted, as `place` does (#10, #118, #121).
     """
     record = BallotRecord.objects.filter(voter=voter, suggestion=suggestion).first()
     if record is None:
         if seen:
             BallotRecord.objects.create(voter=voter, suggestion=suggestion, seen_it=True)
-        return False
+        return
     record.seen_it = seen
     if not seen and record.score is None and not record.vetoed:
         record.delete()
     else:
         record.save(update_fields=["seen_it"])
-    return record.vetoed
+
+
+def needs_a_reason(voter, suggestion):
+    """Whether a veto just made has no note of the voter's to be its reason yet, so its card opens for one: on their own suggestion the pitch is the note (#120, #128)."""
+    return not Note.objects.filter(author=voter, suggestion=suggestion).exists()
 
 
 def give_reason(voter, suggestion, typed):

@@ -14,8 +14,8 @@
     {% endfor %}
   </div>
   <section class="band band--veto" aria-labelledby="band-veto">
-    <h2 class="band__name" id="band-veto"><span class="score score--veto">I won't be in the room — a different kind of drop</span></h2>
-    <ul class="tiles band__tiles" data-place="veto" aria-labelledby="band-veto">{% for tile in board.vetoes %}{% include "components/ballot_veto_row.html" with inert=board.inert %}{% endfor %}</ul>
+    <h2 class="band__name" id="band-veto"><span class="score score--veto">Veto — I won't be in the room</span></h2>
+    <ul class="tiles band__tiles" data-place="veto" aria-labelledby="band-veto">{% for tile in board.vetoes %}{% include "components/ballot_tile.html" with inert=board.inert %}{% endfor %}</ul>
   </section>
 </div>
 <script src="{% static 'components/ballot-board.js' %}" defer></script>

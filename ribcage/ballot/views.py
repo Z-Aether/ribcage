@@ -33,8 +33,13 @@ def place(request):
         return redirect("phase_page")
     if request.POST.get("card"):
         return render(request, "ballot/moved.html", {"counts": board.counts_of(request.user), "card": opened_card(request, suggestion), **board_place(request.user, suggestion)})
-    # The tile is drawn again where it landed, since the Veto band's row is not a band's tile (#120).
-    context = {"counts": board.counts_of(request.user), "oob": True, "tile": board.one_tile(request.user, suggestion), "row": target == placing.VETO}
+    context = {"counts": board.counts_of(request.user), "oob": True, "tile": board.one_tile(request.user, suggestion)}
+    # A film dragged into the Veto band with no note yet opens as its card, as a tile click opens it, and closes the card open before it (#120).
+    if target == placing.VETO and placing.needs_a_reason(request.user, suggestion):
+        context["card"] = opened_card(request, suggestion)
+        other = candidate(request.POST.get("closes"))
+        if other is not None and other.pk != suggestion.pk:
+            context["closed"] = board.one_tile(request.user, other)
     return render(request, "ballot/counts.html", context)
 
 
@@ -57,23 +62,23 @@ SEEN_STATES = {"1": True, "0": False}
 @phase_window(Phase.VOTE)
 @require_POST
 def seen(request):
-    """Seen it set to the state the post names, and the film's tile or veto frame drawn again; a stale post reloads the ballot as it is (#10, #34, #78, #121)."""
+    """Seen it set to the state the post names, and the film's tile drawn again; a stale post reloads the ballot as it is (#10, #34, #78, #121)."""
     state = SEEN_STATES.get(request.POST.get("seen"))
     suggestion = candidate(request.POST.get("suggestion"))
     if suggestion is None or state is None:
         return reload_the_tab(request, reverse("phase_page"))
-    vetoed = placing.mark_seen(request.user, suggestion, state)
+    placing.mark_seen(request.user, suggestion, state)
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
     if request.POST.get("card"):
         return render(request, "components/vote_seen.html", {"card": opened_card(request, suggestion), "oob": False})
-    return render(request, "ballot/seen.html", {"tile": board.one_tile(request.user, suggestion), "row": vetoed, "oob": True})
+    return render(request, "components/ballot_tile.html", {"tile": board.one_tile(request.user, suggestion), "oob": True})
 
 
 @phase_window(Phase.VOTE)
 @require_POST
 def veto_reason(request):
-    """The reason on the voter's own veto, which is their note on the film, saved through the notes rule: refused whole over the cap, and for a pitch refused empty. A film they no longer veto reloads the ballot as it is (#10, #88, #120, #128)."""
+    """The reason on the voter's own veto, which is their note on the film, saved from the open card's box through the notes rule: refused whole over the cap, and for a pitch refused empty. A film they no longer veto reloads the ballot as it is (#10, #88, #120, #128)."""
     suggestion = candidate(request.POST.get("suggestion"))
     if suggestion is None:
         return reload_the_tab(request, reverse("phase_page"))
@@ -90,13 +95,9 @@ def veto_reason(request):
         return reload_the_tab(request, reverse("phase_page"))
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
-    if request.POST.get("card"):
-        vote = cardbar.of(request.user, suggestion)
-        vote = replace(vote, note=vote.note if shown is None else shown, said=refusal or ("Saved." if vote.note else "Cleared."), refused=bool(refusal))
-        return render(request, "components/vote_reason.html", {"card": replace(opened_card(request, suggestion), vote=vote)})
-    tile = board.one_tile(request.user, suggestion)
-    tile = replace(tile, note=tile.note if shown is None else shown, said=refusal or ("Saved." if tile.note else "Cleared."), refused=bool(refusal))
-    return render(request, "ballot/tile.html", {"tile": tile, "row": True})
+    vote = cardbar.of(request.user, suggestion)
+    vote = replace(vote, note=vote.note if shown is None else shown, said=refusal or ("Saved." if vote.note else "Cleared."), refused=bool(refusal))
+    return render(request, "components/vote_reason.html", {"card": replace(opened_card(request, suggestion), vote=vote)})
 
 
 @require_safe
@@ -108,8 +109,7 @@ def card(request):
     if suggestion is None or current() != Phase.VOTE:
         return reload_the_tab(request, reverse("phase_page"))
     if "close" in request.GET:
-        tile = board.one_tile(request.user, suggestion)
-        return render(request, "ballot/tile.html", {"tile": tile, "row": tile.vetoed})
+        return render(request, "components/ballot_tile.html", {"tile": board.one_tile(request.user, suggestion)})
     context = {"card": opened_card(request, suggestion), "scroll": True}
     other = candidate(request.GET.get("closes"))
     if other is not None and other.pk != suggestion.pk:

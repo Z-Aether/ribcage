@@ -4,9 +4,8 @@ from dataclasses import dataclass
 
 from ribcage.ballot import order
 from ribcage.ballot.models import BallotRecord
-from ribcage.films.card import Matched
 from ribcage.films.film import Film
-from ribcage.suggestions.models import Approval, Note, Suggestion
+from ribcage.suggestions.models import Approval, Suggestion
 from ribcage.triggers import stored, watched
 
 # Each band: the score it sets, its key for the style, its sign and its name; the wording waits for M10's copy pass (#39, #119).
@@ -36,14 +35,6 @@ class Tile:
     vetoed_by: str = ""
     vetoers: str = ""
     caption: str = ""
-    # What the viewer's Veto row shows: their matched topics, their note, which is their veto's reason or, on their own suggestion, their pitch, and what saving it said (#120, #128).
-    matched: Matched | None = None
-    note: str = ""
-    is_pitch: bool = False
-    said: str = ""
-    refused: bool = False
-    # Whether the viewer vetoes the film, so the tile is a Veto row wherever it is drawn again (#122).
-    vetoed: bool = False
 
 
 @dataclass(frozen=True)
@@ -71,7 +62,7 @@ class Board:
     tray: tuple[Tile, ...]
     bands: tuple[Band, ...]
     counts: Counts
-    # The viewer's own vetoes, each a widened row (#120).
+    # The viewer's own vetoes, each the same tile as in any band (#120).
     vetoes: tuple[Tile, ...] = ()
     # Where a placement posts; the gallery's board has none, so dragging there writes nothing.
     places_at: str = ""
@@ -117,18 +108,11 @@ def veto_marks(rows, viewer):
     }
 
 
-def own_notes(viewer, rows):
-    """The viewer's note on each film they veto, by suggestion, empty where they have none: the text of their veto row's box, in one query (#120, #128)."""
-    vetoed = [suggestion_id for suggestion_id, voter_id, _ in rows if voter_id == viewer.pk]
-    written = dict(Note.objects.filter(author=viewer, suggestion__in=vetoed).values_list("suggestion_id", "text"))
-    return {suggestion_id: written.get(suggestion_id, "") for suggestion_id in vetoed}
-
-
-def tile_of(viewer, suggestion, matched, marks, notes, seen_it=False):
-    """One tile: the ring's count where the film rings, the others' ribbon, and the viewer's own veto row's data (#117, #120, #128)."""
+def tile_of(suggestion, matched, marks, seen_it=False):
+    """One tile: the ring's count where the film rings, and the others' ribbon (#117, #120)."""
     initials, names = marks.get(suggestion.pk, ("", ""))
     count = matched.strong if matched is not None and matched.ring else 0
-    return Tile(suggestion.pk, suggestion.film, trigger_count=count, vetoed_by=initials, vetoers=names, matched=matched, note=notes.get(suggestion.pk, ""), is_pitch=suggestion.suggester_id == viewer.pk, seen_it=seen_it, vetoed=suggestion.pk in notes)
+    return Tile(suggestion.pk, suggestion.film, trigger_count=count, vetoed_by=initials, vetoers=names, seen_it=seen_it)
 
 
 def matched_ids(loaded):
@@ -166,10 +150,9 @@ def of(viewer, places_at=""):
     by_id = {suggestion.pk: suggestion for suggestion in suggestions}
     rows = list(vetoes_on(list(by_id)))
     marks = veto_marks(rows, viewer)
-    notes = own_notes(viewer, rows)
 
     def tile(suggestion_id):
-        return tile_of(viewer, by_id[suggestion_id], loaded[suggestion_id][1], marks, notes, records.get(suggestion_id, (None, False, False))[2])
+        return tile_of(by_id[suggestion_id], loaded[suggestion_id][1], marks, records.get(suggestion_id, (None, False, False))[2])
 
     lists = arranged(viewer, list(by_id), records, matched_ids(loaded))
     tray = tuple(tile(pk) for pk in lists[TRAY])
@@ -179,11 +162,11 @@ def of(viewer, places_at=""):
 
 
 def one_tile(viewer, suggestion):
-    """A single tile as `of` draws it, for an answer that puts it somewhere new or redraws its row (#120)."""
+    """A single tile as `of` draws it, for an answer that puts it somewhere new or draws it again (#120)."""
     ((_, matched),) = stored.sections_and_matches_of([suggestion], watched.ticked_ids(viewer)).values()
     rows = list(vetoes_on([suggestion.pk]))
     seen_it = BallotRecord.objects.filter(voter=viewer, suggestion=suggestion, seen_it=True).exists()
-    return tile_of(viewer, suggestion, matched, veto_marks(rows, viewer), own_notes(viewer, rows), seen_it)
+    return tile_of(suggestion, matched, veto_marks(rows, viewer), seen_it)
 
 
 def counts_of(viewer):

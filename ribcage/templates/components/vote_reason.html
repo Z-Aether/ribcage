@@ -1,9 +1,14 @@
-{# The reason on the viewer's veto, which is their note on the film, saved by its own post and answered here so the rest of the card is left as it is (#10, #120, #122, #128). #}
+{# The reason on the viewer's veto, which is their note on the film, or their pitch on their own suggestion, saved by its own post and answered here so the rest of the card is left as it is; a card opened by a drop focuses its box (#10, #88, #120, #122, #128). #}
+{# No maxlength: the server refuses a long note whole, as it does in SUGGEST (#88). #}
 {% with vote=card.vote %}<div class="vote-reason" data-vote-reason>
   <form class="note-box{% if vote.is_pitch %} note-box--pitch{% endif %}" method="post" action="{% url 'ballot_veto_reason' %}"{% if vote.inert %} onsubmit="return false"{% else %} hx-post="{% url 'ballot_veto_reason' %}" hx-target="closest [data-vote-reason]" hx-swap="outerHTML"{% endif %}>
     {% csrf_token %}
     <input type="hidden" name="suggestion" value="{{ card.suggestion_id|default_if_none:'' }}">
-    <input type="hidden" name="card" value="1">
-    {% include "components/veto_reason_field.html" with text=vote.note is_pitch=vote.is_pitch refused=vote.refused said=vote.said suggestion_id=card.suggestion_id where="card" %}
+    <label class="note-box__label"><span class="note-box__name">{% if vote.is_pitch %}Your pitch{% else %}Your reason (optional){% endif %}</span><textarea name="text" rows="2" aria-describedby="veto-hint-{{ card.suggestion_id|default_if_none:'' }}"{% if vote.refused %} autofocus{% endif %}>{{ vote.note }}</textarea></label>
+    <p class="note-box__hint" id="veto-hint-{{ card.suggestion_id|default_if_none:'' }}">{% if vote.is_pitch %}Your pitch shows as your veto reason, and stays your pitch if you take the veto back.{% else %}Your note on this film shows as your veto reason, and stays your note if you take the veto back.{% endif %}</p>
+    <div class="note-box__foot">
+      <button type="submit"{% if vote.inert %} disabled{% endif %}>Save</button>
+      <p class="note-box__said{% if vote.refused %} is-refusal{% endif %}" role="status">{{ vote.said }}</p>
+    </div>
   </form>
 </div>{% endwith %}
