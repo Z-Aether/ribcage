@@ -10,6 +10,7 @@ from ribcage.phase.order import Phase
 from ribcage.suggestions.models import Note
 from ribcage.triggers import watched
 from tests.http.test_ballot_page import HTMX, film, place, region, signed_in, walk_on_to
+from tests.http.test_dtdd_credit import Tree
 from tests.http.test_matched_topics import DOG, add, dtdd, vocabulary  # noqa: F401
 from tests.http.test_phase import walk_to
 
@@ -232,3 +233,22 @@ def test_a_card_un_vetoed_to_the_tray_stands_where_a_reload_puts_it(voters, voca
         assert expected in answer
         place(client, each, "veto")
         client.post(PLACE, {"suggestion": str(each.pk), "to": "unsorted"}, headers=HTMX)
+
+
+def test_seen_it_sits_on_the_score_row_after_the_veto_pill(ballot):
+    bar = bar_of(opened(ballot["client"], ballot["one"]).text)
+    row = re.search(r'class="vote-bar__scores".*?\n  </div>', bar, re.S)[0]
+
+    assert row.index("vote-bar__veto") < row.index('class="vote-seen"') and "Seen it" in row
+    assert "Seen it" not in bar.replace(row, "")
+
+
+def test_the_your_score_group_holds_the_six_pills_and_seen_it_stays_outside_it(ballot):
+    tree = Tree(bar_of(opened(ballot["client"], ballot["one"]).text))
+    groups = [node for node in tree.root.within() if node.attrs.get("role") == "group"]
+    assert len(groups) == 1 and groups[0].attrs.get("aria-label") == "Your score"
+    inside = [node.tag for node in groups[0].within()]
+
+    assert inside.count("button") == 6 and "input" not in inside and "form" not in inside
+    seen = tree.find(".vote-seen")
+    assert len(seen) == 1 and groups[0] not in seen[0].up()

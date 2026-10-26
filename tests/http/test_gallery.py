@@ -117,6 +117,9 @@ def test_the_gallery_shows_votes_bar_on_opened_cards_with_a_veto_and_both_read_o
     bars = [bar for bar in bars if "data-vote-bar" in bar]
     assert len(bars) == 2 and "hx-post" not in "".join(bars)
     assert "score--keen is-current" in bars[0] and "Vetoed by" in bars[0] and "Seen by" in bars[0]
+    for bar in bars:
+        row = re.search(r'class="vote-bar__scores".*?\n  </div>', bar, re.S)[0]
+        assert row.index("vote-bar__veto") < row.index('class="vote-seen"')
     assert "is-vetoed" in bars[1] and "−2" in bars[1] and "data-vote-reason" in bars[1] and "checked" in bars[1]
 
 
