@@ -2247,33 +2247,71 @@ body > aside.nag-bar a {
 
 /* ---------- The ballot: the Unsorted tray and the five bands (#9, #38, #119) ---------- */
 
-/* The legend is one muted line above the board, each state named in its own colour (#121). */
+/* The legend is one compact line above the board: the three states a tile's frame shows as small marks, then the sentence on hidden scores, in smaller muted type (#121, #126). */
 .ballot-legend {
-  margin: 0 0 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 1.1rem;
+  margin: 0 0 0.4rem;
   color: var(--ink-muted);
+  font-size: 0.8rem;
+  line-height: 1.3;
 }
-.ballot-legend__seen {
-  color: var(--ink);
+.ballot-legend__state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+.ballot-legend__mark {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  box-sizing: border-box;
+  font-family: var(--font-label);
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.ballot-legend__mark--ring {
+  border-radius: var(--radius-pill);
+  background-color: var(--trigger-icon-ring);
+  color: var(--trigger-icon-ink);
+}
+.ballot-legend__mark--seen {
+  border-radius: 2px;
+  background-color: var(--surface-raised);
   filter: grayscale(1);
 }
-.ballot-legend__veto {
+.ballot-legend__mark--veto {
+  padding: 0 0.3rem;
+  border: 1.5px dashed var(--veto);
+  border-radius: var(--radius-pill);
   color: var(--veto-ink);
 }
 
 /* The ballot takes the full width under the thin header, with no side rail (#27). */
 [data-skin] main:has(> .ballot-head) {
   max-width: none;
-  padding-inline: 1.5rem;
+  padding: 0.6rem 1.5rem 0.5rem;
+}
+/* The shell around the board gives up its roomy gaps, so the board has the screen (#126). */
+body:has(> main > .ballot-head) > footer.site-footer {
+  margin-top: 0.75rem;
+  padding-block: 0.75rem 1rem;
 }
 [data-skin] .ballot-head {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   column-gap: 1.5rem;
-  margin-bottom: 0.75rem;
+  row-gap: 0.25rem;
+  margin-bottom: 0.4rem;
 }
 [data-skin] .ballot-head h1 {
   margin: 0;
+  font-size: 1.7rem;
 }
 [data-skin] .ballot-head__scored {
   margin: 0;
@@ -2285,11 +2323,9 @@ body > aside.nag-bar a {
 [data-skin] .ballot-done {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   column-gap: 1rem;
   row-gap: 0.25rem;
-  flex-basis: 100%;
-  margin-top: 0.6rem;
 }
 [data-skin] .ballot-done__toggle {
   margin: 0;
@@ -2341,65 +2377,92 @@ body > aside.nag-bar a {
 [data-skin] .ballot-done__voter:not(.is-done) .ballot-done__tick {
   visibility: hidden;
 }
-[data-skin] .ballot-head__standing {
-  flex-basis: 100%;
-  margin: 0.4rem 0 0;
-  color: var(--ink-muted);
-}
 /* The reopened-VOTE line stands above the board with the legend's weight (#125). */
 .ballot-reopened {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.5rem;
   color: var(--ink-muted);
 }
-/* The tray sticks to the top of the window and scrolls inside, so a tile can be dragged to a band from any depth (#9). */
+/* The board's tile is a poster about the voting prototype's 76 px wide, its state marks scaled with it; the picker's tile keeps its own size (#126). */
+[data-skin] .board {
+  --board-tile: max(3rem, 60px);
+  --board-title-line: 0.8rem;
+  --board-tile-height: calc(var(--board-tile) * 1.5 + 0.15rem + var(--board-title-line));
+}
+/* The tray is a one-row strip that sticks to the top of the window, so a tile can be dragged to a band from any depth; its label sits in a cell at its start and the tiles scroll sideways beside it (#9, #126). */
 [data-skin] .tray {
   position: sticky;
   top: 0;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  max-height: 44vh;
-  margin-bottom: 1.25rem;
-  padding: 0.7rem 1rem 0.9rem;
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  column-gap: 0.75rem;
+  align-items: start;
+  margin-bottom: 0.3rem;
+  padding: 0.25rem 0.8rem;
   background-color: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-card);
   box-shadow: 0 0.5rem 0.75rem -0.4rem rgb(0 0 0 / 0.55);
 }
 [data-skin] .tray__name {
-  display: inline;
+  grid-column: 1;
+  grid-row: 1;
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1rem;
 }
 [data-skin] .tray__left {
-  margin: 0 0 0.6rem;
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0.1rem 0 0;
   color: var(--ink-muted);
+  font-size: 0.7rem;
+  line-height: 1.3;
 }
 [data-skin] .tray__left b {
   color: var(--ink);
 }
+/* The wheel over the strip scrolls the page: a scroller that only goes sideways hands the wheel on, so nothing intercepts it (#126). */
 [data-skin] .tray__tiles {
-  overflow-y: auto;
-  min-height: 3rem;
-  padding: 0.35rem 0.5rem 0.5rem 0.4rem;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-height: calc(var(--board-tile-height) + 0.4rem);
+  padding: 0.2rem 0.5rem 0.2rem 0.4rem;
+  scrollbar-width: thin;
+}
+[data-skin] .tray__tiles > li {
+  flex: 0 0 auto;
 }
 [data-skin] .bands {
   display: grid;
-  gap: 1rem;
+  gap: 0.3rem;
 }
 [data-skin] .band {
   display: grid;
-  grid-template-columns: 11rem minmax(0, 1fr);
-  gap: 1rem;
+  margin: 0;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.6rem;
   align-items: start;
 }
-[data-skin] .band__name {
-  margin: 0.5rem 0 0;
-  font-size: 1rem;
+[data-skin] .board .band__name {
+  margin: 0.3rem 0 0;
+  font-size: 0.8rem;
+}
+[data-skin] .board .band__name .score {
+  padding: 0.25em 0.7em;
+}
+[data-skin] .board .band--veto .band__name .score {
+  padding: calc(0.25em - 2px) calc(0.7em - 2px);
+}
+[data-skin] .board .tiles {
+  gap: 0.5rem;
 }
 [data-skin] .band__tiles {
-  min-height: 6rem;
-  padding: 0.6rem 0.8rem 0.8rem;
+  min-height: calc(var(--board-tile-height) + 0.4rem + 4px);
+  padding: 0.2rem 0.6rem;
   border: 2px dashed var(--line);
   border-radius: var(--radius-card);
 }
@@ -2410,8 +2473,17 @@ body > aside.nag-bar a {
 [data-skin] .band--dont-mind .band__tiles { border-color: var(--score-dont-mind); }
 [data-skin] .band--rather-not .band__tiles { border-color: var(--score-rather-not); }
 [data-skin] .board .tile {
+  width: var(--board-tile);
+  gap: 0.15rem;
   cursor: grab;
   touch-action: manipulation;
+}
+[data-skin] .board .tile .tile__title {
+  overflow: hidden;
+  font-size: 0.7rem;
+  line-height: var(--board-title-line);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 [data-skin] .board .tile.is-dragged {
   opacity: 0.35;
@@ -2419,13 +2491,51 @@ body > aside.nag-bar a {
 [data-skin] .board .tile.sortable-chosen {
   cursor: grabbing;
 }
+/* A title card's words shrink with the poster slot, so a long title still fits it. */
+[data-skin] .board .tile .title-card__title {
+  font-size: 0.5rem;
+}
+[data-skin] .board .tile .title-card__year {
+  font-size: 0.45rem;
+}
+/* The ring, its count pill, the seen-it toggle and the ribbon shrink with the tile and keep their corners (#117, #121, #126). */
+[data-skin] .board .has-trigger-icon .tile__poster {
+  box-shadow: 0 0 0 3px var(--trigger-icon-ring);
+}
+[data-skin] .board .tile .tile__poster > .trigger-count {
+  bottom: 0.3rem;
+  left: -0.25rem;
+  min-width: 1.05rem;
+  padding: 0 0.25rem;
+  border-width: 1.5px;
+  font-size: 0.65rem;
+}
+[data-skin] .board .tile .veto-ribbon {
+  top: 0.3rem;
+  right: -0.25rem;
+  padding: 0 0.25rem;
+  border-width: 1.5px;
+  font-size: 0.6rem;
+}
+[data-skin] .board .tile .seen-toggle {
+  right: -0.25rem;
+  bottom: 0.3rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-width: 1.5px;
+  font-size: 0.7rem;
+}
+/* A touch has no hover and a thumb is wide, so the toggle's press area reaches past its edge to at least 44 px at a 16 px root (#126). */
+@media (hover: none) {
+  [data-skin] .board .tile .seen-toggle::after {
+    content: "";
+    position: absolute;
+    inset: -0.75rem;
+  }
+}
 /* The Veto band is set apart at the bottom, edged in the veto's dashed red, and its rows widen to carry the cost, the matched topics and the reason box (#9, #120). */
 [data-skin] .band--veto {
-  display: block;
-  margin-top: 1.75rem;
-}
-[data-skin] .band--veto .band__name {
-  margin: 0 0 0.5rem;
+  margin: 0.6rem 0 0;
 }
 [data-skin] .band--veto .band__tiles {
   border-color: var(--veto);
@@ -2436,24 +2546,31 @@ body > aside.nag-bar a {
 }
 [data-skin] .veto-row {
   display: grid;
-  grid-template-columns: 7.5rem minmax(0, 1fr);
-  gap: 1rem;
+  grid-template-columns: var(--board-tile) minmax(0, 1fr);
+  gap: 0.8rem;
   width: 100%;
-  max-width: 44rem;
-  padding: 0.6rem;
+  max-width: 60rem;
+  padding: 0.5rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
   background-color: var(--surface);
   cursor: grab;
 }
+/* The cost line takes the row's top, and the matched topics and the reason box sit side by side under it where the width allows (#126). */
 [data-skin] .veto-row__detail {
-  display: grid;
-  gap: 0.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
   align-content: start;
   min-width: 0;
   cursor: auto;
 }
+[data-skin] .veto-row__detail > * {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
 [data-skin] .veto-row__cost {
+  flex-basis: 100%;
   margin: 0;
   color: var(--veto-ink);
   font-weight: 600;
@@ -2472,20 +2589,42 @@ body > aside.nag-bar a {
 }
 @media (max-width: 600px) {
   [data-skin] .tray {
-    padding: 0.5rem 0.6rem 0.6rem;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 0.4rem;
+    align-items: baseline;
+    padding: 0.4rem 0.6rem;
+  }
+  /* On a phone the label, Unsorted and its line, runs in one line above the strip: two grid cells side by side, since a grid item can't be made inline (#126). */
+  [data-skin] .tray__name {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  [data-skin] .tray__left {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+  }
+  [data-skin] .tray__tiles {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    margin-top: 0.2rem;
   }
   [data-skin] .band {
     grid-template-columns: minmax(0, 1fr);
-    gap: 0.4rem;
+    gap: 0.3rem;
   }
-  [data-skin] .band__name {
+  [data-skin] .board .band__name {
     margin-top: 0;
   }
   [data-skin] .band__tiles {
-    padding: 0.5rem;
+    padding: 0.35rem 0.5rem 0.3rem;
   }
   [data-skin] .veto-row {
     grid-template-columns: minmax(0, 1fr);
+  }
+  [data-skin] .veto-row > .tile {
+    justify-self: start;
   }
 }
 
@@ -2509,15 +2648,21 @@ body > aside.nag-bar a {
 .card-item .film-card {
   cursor: auto;
 }
-/* While a card is open anywhere the tray stops sticking, so it can't cover the card, and one open in the tray grows to its own length rather than scrolling in a window (#122). */
+/* While a card is open anywhere the tray stops sticking, so it can't cover the card; one open in the tray lets the strip wrap and sets its label above, so the card takes a full-width row under the tiles (#122, #126). */
 [data-skin] .board:has(.card-item) .tray {
   position: static;
 }
 [data-skin] .tray:has(.card-item) {
-  max-height: none;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto;
+}
+[data-skin] .tray:has(.card-item) :is(.tray__name, .tray__left, .tray__tiles) {
+  grid-column: 1;
+  grid-row: auto;
 }
 [data-skin] .tray:has(.card-item) .tray__tiles {
-  overflow-y: visible;
+  flex-wrap: wrap;
+  overflow: visible;
 }
 .phase-bar--vote {
   display: grid;

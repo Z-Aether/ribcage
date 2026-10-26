@@ -69,6 +69,7 @@ def test_the_vetoed_film_is_in_the_veto_band_as_a_row_and_in_no_other_place_and_
     assert all(region(page, str(score)) == [] for score in (3, 2, 1, 0, -1))
     assert "1 of 2 scored" in page and "1 left" in page
     assert "counts as −2 for you, everyone can see it" in row(page, ballot["one"])[0]
+    assert '<div class="tile" title="One">' in row(page, ballot["one"])[0]
 
 
 def test_dragging_a_veto_out_to_a_band_takes_that_score_and_clears_the_reason(ballot):
@@ -99,7 +100,7 @@ def test_a_placement_answer_draws_the_tile_where_it_landed_as_a_row_for_a_veto_a
 
     assert f"""<li class="veto-row" data-suggestion="{pk}" hx-swap-oob="outerHTML:li[data-suggestion='{pk}']">""" in veto
     assert '<li class="veto-row"' not in scored
-    assert f"""<li class="tile" data-suggestion="{pk}" hx-swap-oob="outerHTML:li[data-suggestion='{pk}']">""" in scored
+    assert f"""<li class="tile" data-suggestion="{pk}" hx-swap-oob="outerHTML:li[data-suggestion='{pk}']" title="One">""" in scored
 
 
 def test_a_reason_is_kept_trimmed_with_its_line_breaks_and_shown_again_on_reload(ballot):

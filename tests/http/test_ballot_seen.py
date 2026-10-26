@@ -141,10 +141,11 @@ def test_a_stale_or_unnamed_post_reloads_and_writes_nothing(ballot):
     assert BallotRecord.objects.count() == 0
 
 
-def test_the_legend_reads_above_the_board_naming_the_three_states(ballot):
+def test_the_legend_reads_above_the_board_as_one_line_of_three_marks_then_the_hidden_scores(ballot):
     page = ballot["client"].get("/").text
 
     legend = page.index('class="ballot-legend"')
     assert legend < page.index("data-board")
     line = page[legend : page.index("</p>", legend)]
     assert "lime ring" in line and "greyed" in line and "red ribbon" in line
+    assert line.count("ballot-legend__mark ") == 3 and "Scores stay hidden" in line

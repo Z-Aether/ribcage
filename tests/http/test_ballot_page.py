@@ -69,11 +69,34 @@ def test_the_ballot_is_the_approved_films_and_every_one_starts_in_the_tray(ballo
     assert re.search(r"<h1>Vote</h1>", page)
 
 
-def test_the_header_says_the_standing_line_and_the_bands_run_from_top_pick_to_rather_not(ballot):
+def test_the_bands_run_from_top_pick_to_rather_not_below_the_tray(ballot):
     page = ballot["client"].get("/").text
 
-    assert "Your scores aren't shown to the group while VOTE is open. Everyone's scores are shown, by name, once it closes." in page
     assert re.findall(r'data-place="(-?\w+)"', page) == ["unsorted", "3", "2", "1", "0", "-1", "veto"]
+
+
+def test_the_header_is_one_row_of_the_title_the_progress_and_the_done_block_with_no_line_of_its_own_for_the_standing(ballot):
+    page = ballot["client"].get("/").text
+    start = page.index('<header class="ballot-head">')
+    head = page[start : page.index("</header>", start)]
+
+    assert re.findall(r'<h1>|id="ballot-scored"|id="ballot-done"', head) == ["<h1>", 'id="ballot-scored"', 'id="ballot-done"']
+    assert "<p" not in head.replace('<p class="ballot-head__scored"', "").replace('<p class="ballot-done__count"', "")
+
+
+def test_the_scores_stay_hidden_line_is_the_legends_last_words_and_nothing_else_says_it(ballot):
+    page = ballot["client"].get("/").text
+
+    assert page.count("Scores stay hidden until VOTE closes") == 1
+    legend = page[page.index('class="ballot-legend"') :]
+    assert legend[: legend.index("</p>")].endswith("Scores stay hidden until VOTE closes, then everyone's are shown by name.</span>")
+
+
+def test_a_board_tile_names_its_film_and_year_on_hover(ballot):
+    page = ballot["client"].get("/").text
+
+    assert f' title="{ballot["one"].title}"' in page
+    assert len(re.findall(r'<li class="tile[^"]*" data-suggestion="\d+" title="', page)) == 3
 
 
 @pytest.mark.parametrize("score", [3, 2, 1, 0, -1])
@@ -281,7 +304,7 @@ def test_a_ringed_tile_carries_the_ring_and_the_count_and_only_for_a_voter_who_w
 
 
 def test_a_tile_holds_the_poster_the_title_and_the_year_and_nothing_else(ballot):
-    tile = re.search(r'<li class="tile[^"]*" data-suggestion="\d+">(.*?)</li>', ballot["client"].get("/").text, re.S)[1]
+    tile = re.search(r'<li class="tile[^"]*" data-suggestion="\d+" title="[^"]*">(.*?)</li>', ballot["client"].get("/").text, re.S)[1]
 
     assert re.findall(r'class="(tile__[a-z]+|poster[^"]*)"', tile)[-1] == "tile__title"
     # The seen-it toggle is the tile's one control (#121).

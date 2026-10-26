@@ -207,10 +207,10 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **RUN** | The evening (§7), with the reveal one header link away. |
 
 **VOTE** (#9, #35):
-- **Header:** `n of N scored`, the done roster by name, and the *I'm done* toggle.
-- **Ballot:** a sticky Unsorted tray, then five colour bands (+3 … −1) and a separate dashed-red Veto band. Placing a tile in a band is the score.
+- **Header:** one line: `n of N scored`, the *I'm done* toggle and the done roster by name. Under it one compact line gives the tile marks' legend and says scores stay hidden until VOTE closes (#126).
+- **Ballot:** a sticky Unsorted tray that is one row of tiles scrolling sideways, then five colour bands (+3 … −1) and a separate dashed-red Veto band. Placing a tile in a band is the score. The board is scaled so the seeded ballot is a short scroll at 1920×1080, a row of small tiles per band (#126; the dev, 2026-10-26, on #63).
 - **Veto band:** a tile placed there widens to show matched topics and a reason box.
-- **Tiles:** poster, title and year only. Their state is on the frame: the ring for a match with its count pill, in the lime the theme gives trigger warnings (#58, #117), greyed for seen it, a red ribbon with initials for vetoes by others.
+- **Tiles:** poster, title and year only, the title and year on one line cut short, in full on hover (#126). Their state is on the frame: the ring for a match with its count pill, in the lime the theme gives trigger warnings (#58, #117), greyed for seen it, a red ribbon with initials for vetoes by others.
 - **Opening a tile:** the film card expands in place inside its band, with others' veto reasons and seen-it flags shown one line each. Its phase bar holds the five score buttons with the current one marked, a veto toggle that shows the reason box and puts −2 where the score was, and a *Seen it* checkbox, each the ballot's own write; the notes are read-only, with no note box or pencil. A score or veto from the bar moves the tile to its new band and the card stays open there, scrolled into view. One card is open at a time, and an open card is never dragged (#122).
 
 **Reveal** (#29):

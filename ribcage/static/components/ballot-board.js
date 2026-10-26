@@ -17,6 +17,10 @@
         delay: 150,
         delayOnTouchOnly: true,
         ghostClass: "is-dragged",
+        // The tray scrolls sideways, so a drag near its ends scrolls it, and the small tiles ask for a wider edge than the default (#126).
+        scroll: true,
+        scrollSensitivity: 60,
+        scrollSpeed: 14,
         // A Veto row's reason box and its topics are for typing in and reading, not for dragging by (#120).
         // The seen-it toggle is pressed, not dragged by (#121).
         filter: ".veto-row__detail, .seen-toggle",
