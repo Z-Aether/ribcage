@@ -2015,7 +2015,15 @@ body > aside.nag-bar a {
   margin: 0 0 2rem;
   padding: var(--card-padding);
   border-radius: var(--radius-card);
-  background-color: var(--surface);
+  /* The open card's plum frame, so the panel reads as where things happen (#130). */
+  background-color: var(--surface-raised);
+  border: 1px solid color-mix(in srgb, var(--plum) 50%, transparent);
+}
+/* A plain rule between the panel and the pool's filter (#130). */
+[data-skin] hr.suggest-rule {
+  margin: 0 0 1.5rem;
+  border: 0;
+  border-top: 1px solid var(--line);
 }
 [data-skin] .suggest-panel h2 {
   margin: 0 0 0.75rem;

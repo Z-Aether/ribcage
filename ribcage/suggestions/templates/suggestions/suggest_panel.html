@@ -1,8 +1,8 @@
-{# The Suggest a film panel, above the pool in SUGGEST alone: find, then the picker (#21, #27, #92). #}
+{# The Suggest a film panel, headed Search for films (#130), above the pool in SUGGEST alone: find, then the picker (#21, #27, #92). #}
 {% url 'find' as find_address %}
 <section class="suggest-panel" aria-labelledby="suggest-a-film">
-  <h2 id="suggest-a-film">Suggest a film</h2>
+  <h2 id="suggest-a-film">Search for films</h2>
   {# Search fires after a 350 ms pause in typing, and a newer search replaces one still on its way (#16, #21). #}
-  <label class="suggest-panel__find">Title <input type="search" name="q" autocomplete="off" spellcheck="false" hx-get="{{ find_address }}" hx-trigger="input changed delay:350ms, search" hx-target="#picker" hx-swap="innerHTML" hx-sync="this:replace"></label>
+  <label class="suggest-panel__find"><span class="visually-hidden">Search for a film by title</span><input type="search" name="q" placeholder="Start typing…" autocomplete="off" spellcheck="false" hx-get="{{ find_address }}" hx-trigger="input changed delay:350ms, search" hx-target="#picker" hx-swap="innerHTML" hx-sync="this:replace"></label>
   <div class="picker" id="picker" data-picker aria-live="polite"></div>
 </section>

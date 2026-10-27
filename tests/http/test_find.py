@@ -187,6 +187,24 @@ def test_a_removed_suggesters_film_keeps_their_name_on_its_tile(hanna, voters, r
     assert text(tile(search(hanna, "evil dead").text, EVIL_DEAD_BURN)).endswith("already suggested by ada")
 
 
+def test_the_panel_is_headed_search_for_films_with_a_placeholder_and_a_hidden_label(hanna):
+    page = hanna.get("/").text
+
+    assert 'placeholder="Start typing…"' in page
+    assert '<span class="visually-hidden">Search for a film by title</span>' in page
+    assert "Suggest a film" not in page
+    assert "Title <input" not in page
+
+
+def test_suggests_and_approves_intros_say_a_film_opens(hanna):
+    suggest = hanna.get("/").text
+    walk_to(Phase.APPROVE)
+    approve = hanna.get("/").text
+
+    assert "Click a film to open it" in suggest and "correct its runtime" in suggest
+    assert "Click a film to open it" in approve
+
+
 @pytest.mark.parametrize("phase", [Phase.APPROVE, Phase.VOTE, Phase.PICK, Phase.RUN])
 def test_a_find_from_approve_or_later_reloads_the_tab(hanna, failing, phase):
     walk_to(phase)
@@ -210,7 +228,7 @@ def test_find_answers_every_write_with_405(hanna, failing, method):
 def test_the_panel_shows_in_suggest_above_the_pools_filter(hanna):
     page = hanna.get("/").text
 
-    assert page.index('<h2 id="suggest-a-film">Suggest a film</h2>') < page.index('<section class="pool"') < page.index("data-pool-filter")
+    assert page.index('<h2 id="suggest-a-film">Search for films</h2>') < page.index('class="suggest-rule"') < page.index('<section class="pool"') < page.index("data-pool-filter")
     assert 'hx-get="/find/"' in page
     assert 'hx-trigger="input changed delay:350ms, search"' in page
 
