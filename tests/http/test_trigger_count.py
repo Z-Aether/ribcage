@@ -6,7 +6,6 @@ from django.conf import settings
 from django.template.loader import render_to_string
 
 from ribcage.films.card import Matched, TopicRow
-from ribcage.identity.views import WELCOME_PENDING
 from ribcage.phase.order import Phase
 from ribcage.triggers import watched
 from tests.http.test_card_watch import WATCH, watch
@@ -101,14 +100,11 @@ def test_no_count_for_a_voter_with_nothing_ticked_or_who_does_not_care_or_on_the
     assert WATCH
 
 
-def test_the_lime_words_mark_the_warnings_page_welcome_and_the_menu(voters, vocabulary):  # noqa: F811
+def test_the_lime_words_mark_the_warnings_page_how_it_works_and_the_menu(voters, vocabulary):  # noqa: F811
     ada = signed_in(voters["ada"])
 
     assert '<span class="trigger-words">will be marked for you</span>' in ada.get("/warnings/").text
-    session = ada.session
-    session[WELCOME_PENDING] = True
-    session.save()
-    assert '<span class="trigger-words">marked for you alone</span>' in ada.get("/welcome/").text
+    assert '<span class="trigger-words">marked for you alone</span>' in ada.get("/how-it-works/").text
     assert '<a class="trigger-words" href="/warnings/">My warnings</a>' in ada.get("/").text
 
 

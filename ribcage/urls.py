@@ -28,14 +28,14 @@ from ribcage.identity.views import (
     logout,
     password_changed,
 )
-from ribcage.phase.views import phase_page, welcome
+from ribcage.phase.views import how_it_works, phase_page
 from ribcage.privacy import privacy_policy
 from ribcage.triggers.views import dont_care, tick, warnings_page
 from ribcage.suggestions.views import correct_match, open_runtime, dtdd_topics, watch_from_card, find, suggest, withdraw, write_note
 
 urlpatterns = [
     path("", phase_page, name="phase_page"),
-    path("welcome/", welcome, name="welcome"),
+    path("how-it-works/", how_it_works, name="how_it_works"),
     path("note/", write_note, name="note"),
     path("withdraw/", withdraw, name="withdraw"),
     path("runtime/", open_runtime, name="runtime"),

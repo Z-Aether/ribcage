@@ -1,9 +1,8 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.http import require_safe
 
 from ribcage.ballot import board, done, reopened
-from ribcage.identity.views import WELCOME_PENDING
 from ribcage.phase.history import current, reveal_has_happened
 from ribcage.phase.order import Phase
 from ribcage.suggestions import pool
@@ -42,24 +41,18 @@ def phase_page(request):
     return render(request, PHASE_PAGES[phase], context)
 
 
-# Each phase's exit from Welcome, naming what the voter does there (#75).
-WELCOME_EXITS = {
-    Phase.SUGGEST: "Suggest films",
-    Phase.APPROVE: "See the suggestions",
-    Phase.VOTE: "Vote",
-    Phase.PICK: "See the scores",
-    Phase.RUN: "Follow the evening",
+# The stretch of the marathon each phase belongs to, and the button under its entry, naming what the voter does there (#75, #134).
+HOW_IT_WORKS_NOW = {
+    Phase.SUGGEST: ("suggest", "Suggest films"),
+    Phase.APPROVE: ("suggest", "See the suggestions"),
+    Phase.VOTE: ("vote", "Vote"),
+    Phase.PICK: ("evening", "See the scores"),
+    Phase.RUN: ("evening", "Follow the evening"),
 }
 
 
 @require_safe
-def welcome(request):
-    # Anyone who arrives without having just registered goes to the phase page (#75).
-    if not request.session.pop(WELCOME_PENDING, False):
-        return redirect("phase_page")
+def how_it_works(request):
     phase = current()
-    exits = [(WELCOME_EXITS[phase], "phase_page")]
-    # My warnings is unreachable in RUN, where only the phase exit stands (#110).
-    if phase is not Phase.RUN:
-        exits.insert(0, ("Set up my warnings", "warnings"))
-    return render(request, "phase/welcome.html", {"exits": exits})
+    now, button = HOW_IT_WORKS_NOW[phase]
+    return render(request, "phase/how_it_works.html", {"now": now, "button": button, "warnings_button": phase is not Phase.RUN})

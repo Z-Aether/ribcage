@@ -59,7 +59,7 @@ def must_change(voter):
     return voter.must_change_password
 
 
-@pytest.mark.parametrize("next_page", ["", "?next=/", "?next=/welcome/", "?next=/password/changed/"])
+@pytest.mark.parametrize("next_page", ["", "?next=/", "?next=/how-it-works/", "?next=/password/changed/"])
 def test_signing_in_with_the_shown_password_lands_on_the_change_form(shown, next_page):
     browser = Client()
 

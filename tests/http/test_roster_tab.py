@@ -156,7 +156,7 @@ def test_confirming_removes_the_voter_and_reloads_the_tab_without_them(admin, vo
     assert not Voter.objects.filter(pk=voters["Dani"].pk).exists()
 
 
-@pytest.mark.parametrize("path", ["/", "/welcome/", "/password/", "/gallery/"])
+@pytest.mark.parametrize("path", ["/", "/how-it-works/", "/password/", "/gallery/"])
 def test_a_removed_voters_session_then_reaches_only_login(admin, voters, path):
     dani_browser = signed_in(voters["Dani"])
 
@@ -193,7 +193,7 @@ def test_a_removed_voters_display_name_can_register_again_with_the_join_code(adm
 
     response = register(newcomer, typed)
 
-    assert response.headers["Location"] == "/welcome/"
+    assert response.headers["Location"] == "/how-it-works/"
     assert Voter.objects.get(display_name=typed).pk != voters["Dani"].pk
     assert get_user(newcomer).display_name == typed
 

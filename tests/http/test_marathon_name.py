@@ -6,7 +6,6 @@ import pytest
 from django.db import transaction
 from django.test import Client
 
-from ribcage.identity.views import WELCOME_PENDING
 from ribcage.phase.order import Phase
 from tests.http.routes import ADMIN, public_pages
 from tests.http.sweeping import sweep
@@ -68,14 +67,12 @@ def test_the_privacy_policy_escapes_the_name(client, db, settings):
     assert "<p>&lt;b&gt;Night&lt;/b&gt; is a web app" in client.get("/privacy/").text
 
 
-def test_the_welcome_page_names_the_marathon(client, voters):
+def test_how_it_works_names_the_marathon(client, voters):
     client.force_login(voters["ada"])
-    session = client.session
-    session[WELCOME_PENDING] = True
-    session.save()
 
-    page = client.get("/welcome/").text
+    page = client.get("/how-it-works/").text
 
+    assert f"<h1>Welcome to {NAME}</h1>" in page
     assert f"<p>{NAME} is where" in page
     assert "Ribcage" not in page
 

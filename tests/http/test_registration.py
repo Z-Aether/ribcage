@@ -53,7 +53,7 @@ def test_success_creates_the_voter_signs_them_in_and_redirects(client, db):
     response = register(client, " Sam  Q ")
 
     assert response.status_code == 302
-    assert response.headers["Location"] == "/welcome/"
+    assert response.headers["Location"] == "/how-it-works/"
     voter = Voter.objects.get()
     assert voter.display_name == "Sam Q"
     assert voter.check_password(PASSWORD)
@@ -197,34 +197,26 @@ EXIT_LABELS = {
 
 
 @pytest.mark.parametrize("phase", PHASES)
-def test_registration_lands_on_welcome_whose_exit_names_and_links_the_current_phase_page(client, db, phase):
+def test_registration_lands_on_how_it_works_whose_button_names_and_links_the_current_phase_page(client, db, phase):
     walk_to(phase)
 
     response = register(client, follow=True)
 
-    assert response.redirect_chain == [("/welcome/", 302)]
-    assert "<h1>Welcome</h1>" in response.text
+    assert response.redirect_chain == [("/how-it-works/", 302)]
+    assert "<h1>Welcome to Test Night</h1>" in response.text
     assert f'<a href="/" class="button">{EXIT_LABELS[phase]}</a>' in response.text
     assert f"<h1>{PAGE_HEADINGS[phase]}</h1>" in client.get("/").text
 
 
-def test_a_later_visit_to_welcome_shows_the_phase_page(client, db):
+def test_a_later_visit_shows_the_same_page_and_welcome_is_gone(client, db):
     register(client)
-    client.get("/welcome/")
+    first = client.get("/how-it-works/").text
 
-    response = client.get("/welcome/", follow=True)
-
-    assert response.redirect_chain == [("/", 302)]
-    assert "<h1>Suggest films</h1>" in response.text
+    assert client.get("/how-it-works/").status_code == 200 and "<h1>Welcome to Test Night</h1>" in first
+    assert client.get("/welcome/").status_code == 404
 
 
-def test_welcome_is_not_shown_to_a_voter_who_did_not_just_register(client, db):
-    client.force_login(Voter.objects.create_voter("Ada"))
-
-    assert client.get("/welcome/", follow=True).redirect_chain == [("/", 302)]
-
-
-def test_welcome_says_the_admin_and_host_can_read_a_watched_list(client, db):
+def test_how_it_works_says_the_admin_and_host_can_read_a_watched_list(client, db):
     text = register(client, follow=True).text
 
     assert "admin and the host" in text and "technically read" in text

@@ -31,10 +31,8 @@ change_password = reachable_before_the_change(
 )
 password_changed = PasswordChangeDoneView.as_view(template_name="identity/password_changed.html")
 
-# Where a new voter lands (#75).
-AFTER_REGISTRATION = "welcome"
-# Set by registration, consumed by Welcome: the whole of "shown once" (#75).
-WELCOME_PENDING = "welcome_pending"
+# Where a new voter lands (#75, #134).
+AFTER_REGISTRATION = "how_it_works"
 
 
 def render_code_step(request, form):
@@ -74,7 +72,6 @@ def join_details(request):
             form.add_error("display_name", error)
         else:
             sign_in(request, voter)
-            request.session[WELCOME_PENDING] = True
             return redirect(AFTER_REGISTRATION)
     return render_details_step(request, code, form)
 

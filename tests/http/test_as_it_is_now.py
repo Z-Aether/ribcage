@@ -4,7 +4,6 @@ import pytest
 from django.templatetags.static import static
 
 from ribcage.identity.models import Voter
-from ribcage.identity.views import WELCOME_PENDING
 from tests.http.routes import ADMIN, VOTER, as_a_page, public_pages, routes_of
 from tests.http.signing_in import sign_in_as_the_admin
 
@@ -26,10 +25,6 @@ def voter(client, db, settings):
     # The gallery is a voter page only with DEBUG on (#58).
     settings.DEBUG = True
     client.force_login(Voter.objects.create_voter("Ada"))
-    # Welcome answers only a voter who has just registered (#75).
-    session = client.session
-    session[WELCOME_PENDING] = True
-    session.save()
     return client
 
 

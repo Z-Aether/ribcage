@@ -66,7 +66,6 @@ FRAGMENTS = [
 # Voter and admin routes that are no swept page and whose answers hold none of DoesTheDogDie's data, whatever is stored (#112).
 NO_DTDD_DATA = {
     "runtime", "find", "suggest",  # the runtime pencil's read, the picker and the suggest act; the runtime is saved by the note's post (#133)
-    "welcome",  # redirects a plain GET
     "gallery",  # dev-only, answering 404 outside DEBUG
     "console", "console_phase_move", "console_films_approval",  # redirects, whatever they act on
     "ballot_done",  # the header's done block: names and ticks, no film (#123)

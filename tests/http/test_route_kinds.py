@@ -78,7 +78,7 @@ def test_a_route_with_a_converter_is_requested_at_a_sample_address():
     ("name", "route_kind"),
     [
         *[(name, PUBLIC) for name in ["privacy", "login", "join", "join_details", "logout", "admin_login", "admin_logout"]],
-        *[(name, VOTER) for name in ["phase_page", "welcome", "change_password", "password_changed", "gallery"]],
+        *[(name, VOTER) for name in ["phase_page", "how_it_works", "change_password", "password_changed", "gallery"]],
         *[(name, ADMIN) for name in ["console", "console_phase", "console_phase_move", "console_films", "console_films_approval", "console_films_runtime", "console_pick", "console_roster", "console_roster_remove", "console_roster_reset", "console_backup", "console_backup_upload"]],
     ],
 )

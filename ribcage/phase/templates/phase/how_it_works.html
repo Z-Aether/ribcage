@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}How it works · {{ marathon_name }}{% endblock %}
+
+{% block header %}{% include "components/voter_header.html" with no_nag=True %}{% endblock %}
+
+{# The wording waits for M10's copy pass; the Suggest and Vote entries repeat the pages' own intro and the ballot's legend, so a change to either changes this page too (#39, #130, #134). #}
+{% block content %}
+  <h1>Welcome to {{ marathon_name }}</h1>
+  <p>{{ marathon_name }} is where the group plans and runs one film marathon: suggest films, vote on them, and follow the evening.</p>
+
+  <ol class="how-entries">
+    <li class="how-entry{% if now == 'suggest' %} is-now{% endif %}">
+      <h2>Suggest{% if now == 'suggest' %} <span class="how-entry__now">now</span>{% endif %}</h2>
+      <p>Put forward the films you want to watch, each with a line on why, and read what everyone else has suggested. Click a film to open it: read every note in full, write your own, see its trigger warnings and correct its runtime. A click outside it, Escape or <em>Save</em> closes it again, and you can withdraw your own suggestion while nothing holds it.</p>
+      <p>Then suggestions close while the admin chooses which films go to the vote, and notes stay writable.</p>
+    </li>
+    {% if now == 'suggest' %}{% include "phase/how_it_works_button.html" %}{% endif %}
+
+    <li class="how-entry{% if now == 'vote' %} is-now{% endif %}">
+      <h2>Vote{% if now == 'vote' %} <span class="how-entry__now">now</span>{% endif %}</h2>
+      <p>Drag each film into a band, from +3 down to −1; a film left in Unsorted counts as <em>don't mind</em>. The Veto band is <em>I won't be in the room</em>, and your note on the film is your veto's reason. Mark the films you've seen with 👁. A tile opens as its card on a click. A tile's frame shows:</p>
+      {% include "components/ballot_legend.html" with marks_only=True %}
+      <p>Press <em>I'm done</em> when you've finished. Scores stay hidden until VOTE closes, then everyone's are shown by name.</p>
+    </li>
+    {% if now == 'vote' %}{% include "phase/how_it_works_button.html" %}{% endif %}
+
+    <li class="how-entry{% if now == 'evening' %} is-now{% endif %}">
+      <h2>The evening{% if now == 'evening' %} <span class="how-entry__now">now</span>{% endif %}</h2>
+      <p>Voting closes and everyone's scores open, by name, while the admin builds the evening. Then comes the night itself, with what's on now and what's next.</p>
+    </li>
+    {% if now == 'evening' %}{% include "phase/how_it_works_button.html" %}{% endif %}
+  </ol>
+
+  <h2>Content warnings</h2>
+  <p>You can name topics you want to be warned about, and films that carry them are <span class="trigger-words">marked for you alone</span>. That list is private to you in the app.</p>
+  <p>The admin and the host of the server can technically read it, as they can read everything stored here. It is deleted when the marathon is torn down.</p>
+  {% if warnings_button %}<p class="how-go"><a href="{% url 'warnings' %}" class="button">Set up my warnings</a></p>{% endif %}
+{% endblock %}

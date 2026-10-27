@@ -5,7 +5,6 @@ from django.templatetags.static import static
 from django.test import Client
 
 from ribcage.identity.models import Voter
-from ribcage.identity.views import WELCOME_PENDING
 from tests.http.routes import VOTER, as_a_page, pages_of, public_pages
 
 TMDB_NOTICE = "This product uses the TMDB API but is not endorsed or certified by TMDB."
@@ -29,10 +28,6 @@ def client(client, voter, settings):
 
 
 def get_as_just_registered(client, path):
-    # Welcome answers only a voter who has just registered (#75).
-    session = client.session
-    session[WELCOME_PENDING] = True
-    session.save()
     return as_a_page(client.get(path))
 
 
@@ -92,13 +87,13 @@ def test_the_header_names_whichever_voter_is_signed_in(client, db):
     assert "Ada" not in shown
 
 
-def test_the_name_menu_holds_my_warnings_change_password_and_a_log_out_post_and_nothing_else(client):
+def test_the_name_menu_holds_how_it_works_my_warnings_change_password_and_a_log_out_post_and_nothing_else(client):
     shown = header(client.get("/").text)
     menu = re.search(r"<details\b.*?</details>", shown, re.S)[0]
 
-    assert re.findall(r'<a (?:class="[^"]+" )?href="([^"]+)"', menu) == ["/warnings/", "/password/"]
+    assert re.findall(r'<a (?:class="[^"]+" )?href="([^"]+)"', menu) == ["/how-it-works/", "/warnings/", "/password/"]
     assert re.search(r'<form method="post" action="/logout/">.*?<button[^>]*>Log out</button>', menu, re.S)
-    assert len(re.findall(r"<li\b", menu)) == 3
+    assert len(re.findall(r"<li\b", menu)) == 4
 
 
 def test_the_abuse_address_comes_from_its_setting(client, settings):

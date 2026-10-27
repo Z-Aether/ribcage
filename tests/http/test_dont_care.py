@@ -1,4 +1,4 @@
-"""I don't care, the nag bar and Welcome's exit (#110)."""
+"""I don't care, the nag bar and How it works' button (#110, #134)."""
 
 import re
 
@@ -199,6 +199,14 @@ def test_the_bar_is_absent_from_my_warnings(browser):
     assert BAR not in page and "My warnings" in page
 
 
+@pytest.mark.parametrize("phase", NAGGING)
+def test_the_bar_is_absent_from_how_it_works_for_a_voter_who_would_see_it_elsewhere(browser, phase):
+    walk_to(phase)
+    assert BAR in browser.get("/").text
+
+    assert BAR not in browser.get("/how-it-works/").text
+
+
 def test_the_bar_is_absent_from_the_forced_password_change(browser, ada):
     walk_to(Phase.SUGGEST)
     ada.must_change_password = True
@@ -226,7 +234,7 @@ def test_the_bar_blocks_nothing_voting_works_under_it(browser):
 
 
 @pytest.mark.parametrize("phase", PHASES)
-def test_welcome_offers_set_up_my_warnings_in_every_phase_but_run(client, db, phase):
+def test_how_it_works_offers_set_up_my_warnings_in_every_phase_but_run(client, db, phase):
     walk_to(phase)
 
     page = register(client, follow=True).text

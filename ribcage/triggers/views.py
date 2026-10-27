@@ -26,7 +26,7 @@ def built_page(voter):
 
 @require_safe
 def warnings_page(request):
-    # The page is unreachable in RUN, as Welcome sends a stray visitor on (#75, #107).
+    # The page is unreachable in RUN, as How it works hides its button (#107, #134).
     if current() is Phase.RUN:
         return redirect("phase_page")
     available = True
