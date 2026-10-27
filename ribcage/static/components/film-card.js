@@ -1,7 +1,21 @@
 // The film card opens in place, one card at a time within its list, and its title collapses it (#21).
 // A link or a form on it acts rather than toggles, so the runtime pencil edits a closed card's line in place (#90).
+// An open card also closes on a click outside it and on Escape, nothing posted, and its boxes stay in the page, so typing in them survives (#131).
 // Under a ledger row the card is always open, and its row's title or its own opens and closes the row (#28, #95).
+// A press that began inside a card and was released outside it, as a text selection dragged past the edge is, fires its click on a common ancestor, so where the press began is kept (#131).
+let pressPath = [];
+document.addEventListener("pointerdown", (event) => {
+  pressPath = event.composedPath();
+}, true);
+
 document.addEventListener("click", (event) => {
+  // The path is read as dispatched, so a click that removed its own target still counts as inside.
+  const path = event.composedPath();
+  const began = pressPath;
+  pressPath = [];
+  poolCards().forEach((open) => {
+    if (!path.includes(open) && !began.includes(open)) setOpen(open, false);
+  });
   const opens = event.target.closest(".ledger__opens");
   if (opens) return setRowOpen(opens, opens.getAttribute("aria-expanded") !== "true");
   const card = event.target.closest("[data-film-card]");
@@ -25,6 +39,19 @@ document.addEventListener("click", (event) => {
   }
   setOpen(card, !open);
 });
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || event.defaultPrevented) return;
+  poolCards().forEach((open) => {
+    setOpen(open, false);
+    open.querySelector(".film-card__toggle").focus();
+  });
+});
+
+// The open cards that close by themselves: a ledger row's and the ballot's have their own ways (#95, #122).
+function poolCards() {
+  return [...document.querySelectorAll("[data-film-card].is-open")].filter((card) => !card.closest(".ledger__detail, [data-board]"));
+}
 
 function setOpen(card, open) {
   card.classList.toggle("is-open", open);

@@ -4,7 +4,31 @@
     window.location.reload();
   }
 
+  // A close swaps the card for its tile, so the reason typed and not saved is kept here by film until that card opens again; a reload drops it (#131).
+  var typed = {};
+
+  function stash(card) {
+    var box = card && card.querySelector("[data-vote-reason] textarea");
+    if (!box) return;
+    if (box.value !== box.defaultValue) typed[card.dataset.suggestion] = box.value;
+    else delete typed[card.dataset.suggestion];
+  }
+
+  function restore(board) {
+    board.querySelectorAll(".card-item").forEach(function (card) {
+      var text = typed[card.dataset.suggestion];
+      var box = card.querySelector("[data-vote-reason] textarea");
+      if (text === undefined || !box) return;
+      delete typed[card.dataset.suggestion];
+      box.value = text;
+      // The box now differs from what is saved, which anything watching it for a change reads (#132).
+      box.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+  }
+
   function start(board) {
+    // A drag is not a click: while one runs, and just after, nothing closes or opens (#131).
+    var dragging = false;
     var url = board.dataset.placesAt;
     board.querySelectorAll("[data-place]").forEach(function (list) {
       Sortable.create(list, {
@@ -26,10 +50,14 @@
         preventOnFilter: false,
         // A drag begun in the tray holds it open until the drop, so its last tile leaving doesn't pull the bands up under the pointer (#126).
         onStart: function (event) {
+          dragging = true;
           var tray = event.from.closest(".tray");
           if (tray) tray.setAttribute("data-holding", "");
         },
         onEnd: function (event) {
+          setTimeout(function () {
+            dragging = false;
+          }, 50);
           board.querySelectorAll("[data-holding]").forEach(function (held) {
             held.removeAttribute("data-holding");
           });
@@ -38,7 +66,10 @@
           var values = { suggestion: event.item.dataset.suggestion, to: event.to.dataset.place };
           // A drop into the Veto band may open the film's card, which closes the card open now (#120).
           var other = board.querySelector(".card-item");
-          if (other) values.closes = other.dataset.suggestion;
+          if (other) {
+            stash(other);
+            values.closes = other.dataset.suggestion;
+          }
           htmx.ajax("POST", url, { source: event.item, swap: "none", values: values });
         },
       });
@@ -73,13 +104,61 @@
       if (!cardAt || !item || item.matches(".card-item")) return;
       var other = board.querySelector(".card-item");
       var values = { suggestion: item.dataset.suggestion };
-      if (other) values.closes = other.dataset.suggestion;
+      if (other) {
+        stash(other);
+        values.closes = other.dataset.suggestion;
+      }
       htmx.ajax("GET", cardAt, { source: item, target: item, swap: "outerHTML", values: values });
     }
-    board.addEventListener("click", function (event) {
-      if (event.target.closest(".seen-toggle, a, button, input, textarea")) return;
+    // The tile a click opens, if it opens one.
+    function opensOn(event) {
+      if (event.target.closest(".seen-toggle, a, button, input, textarea")) return null;
       var tile = event.target.closest(".tile");
-      if (tile) open(tile.closest("li"));
+      return tile ? tile.closest("li") : null;
+    }
+    board.addEventListener("click", function (event) {
+      if (dragging) return;
+      var item = opensOn(event);
+      if (item) open(item);
+    });
+    // The open card closes to its tile through the server, as its title does, with its typing kept (#122, #131).
+    function close() {
+      var card = board.querySelector(".card-item");
+      if (!cardAt || !card) return null;
+      stash(card);
+      return htmx.ajax("GET", cardAt, { source: card, target: card, swap: "outerHTML", values: { suggestion: card.dataset.suggestion, close: "1" } });
+    }
+    // The title closes by its own request; its typing is kept as it goes.
+    board.addEventListener("click", function (event) {
+      var title = event.target.closest(".film-card__toggle");
+      if (title) stash(title.closest(".card-item"));
+    });
+    // A click anywhere outside the open card closes it, unless the click opens a tile, which closes it in the same answer.
+    // A press that began in the card and was released outside it, a text selection dragged past the edge, is no outside click.
+    var pressPath = [];
+    document.addEventListener("pointerdown", function (event) {
+      pressPath = event.composedPath();
+    }, true);
+    document.addEventListener("click", function (event) {
+      var card = board.querySelector(".card-item");
+      var began = pressPath;
+      pressPath = [];
+      if (dragging || !card || event.composedPath().includes(card) || began.includes(card)) return;
+      if (board.contains(event.target) && opensOn(event)) return;
+      close();
+    });
+    document.addEventListener("keydown", function (event) {
+      var card = board.querySelector(".card-item");
+      if (event.key !== "Escape" || event.defaultPrevented || !card) return;
+      var request = close();
+      if (!request) return;
+      // The tile that replaces the card is where the focus goes, as when the title closes it.
+      request.then(function () {
+        var tile = board.querySelector('li[data-suggestion="' + card.dataset.suggestion + '"]');
+        if (!tile) return;
+        tile.tabIndex = 0;
+        tile.focus({ preventScroll: true });
+      });
     });
     // Without a pointer, Enter or Space on a focused tile opens it.
     board.addEventListener("keydown", function (event) {
@@ -100,9 +179,15 @@
       var title = card.querySelector(".film-card__toggle");
       if (title && !card.contains(document.activeElement)) title.focus({ preventScroll: true });
     }
-    document.body.addEventListener("htmx:afterSettle", bringIntoView);
+    document.body.addEventListener("htmx:afterSettle", function () {
+      restore(board);
+      bringIntoView();
+    });
     document.body.addEventListener("htmx:oobAfterSwap", function () {
-      setTimeout(bringIntoView, 30);
+      setTimeout(function () {
+        restore(board);
+        bringIntoView();
+      }, 30);
     });
     // A placement the server didn't take leaves the tile where it doesn't belong, so the board is loaded again.
     board.addEventListener("htmx:responseError", reload);
