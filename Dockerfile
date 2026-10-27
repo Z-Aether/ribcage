@@ -19,7 +19,7 @@ COPY ribcage ribcage
 RUN SECRET_KEY=collectstatic-only DEBUG=false ALLOWED_HOSTS=collectstatic.invalid \
     CSRF_TRUSTED_ORIGINS=https://collectstatic.invalid DATABASE_PATH=/data/collectstatic-only.sqlite3 \
     TIME_ZONE=UTC JOIN_CODE=collectstatic-only ADMIN_PASSWORD=collectstatic-only \
-    TMDB_API_KEY=collectstatic-only DTDD_API_KEY=collectstatic-only ABUSE_EMAIL=collectstatic-only \
+    TMDB_API_KEY=collectstatic-only DTDD_API_KEY=collectstatic-only ABUSE_EMAIL=collectstatic-only MARATHON_NAME=collectstatic-only \
     python manage.py collectstatic --noinput --verbosity 0
 
 USER ribcage

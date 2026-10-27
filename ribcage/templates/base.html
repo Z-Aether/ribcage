@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>{% block title %}Ribcage{% endblock %}</title>
+  <title>{% block title %}{{ marathon_name }}{% endblock %}</title>
   {# The theme's pumpkin also stops the browser's /favicon.ico request and its 404 (#46, #58). #}
   <link rel="icon" href="{% static 'theme/pumpkin.svg' %}" type="image/svg+xml">
   <link rel="stylesheet" href="{% static 'vendor/pico/pico.classless.min.css' %}">

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Gallery · Ribcage{% endblock %}
+{% block title %}Gallery · {{ marathon_name }}{% endblock %}
 
 {% block head %}<link rel="stylesheet" href="{% static 'gallery/gallery.css' %}">{% endblock %}
 
@@ -17,7 +17,7 @@
 
     <div class="specimen">
       <div class="specimen__type">
-        <p class="wordmark">Ribcage</p>
+        <p class="wordmark">{{ marathon_name }}</p>
         <h1>Suggest a film</h1>
         <h2>The pool</h2>
         <h3>Midsommar</h3>

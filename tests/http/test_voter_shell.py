@@ -79,7 +79,7 @@ def test_every_walled_voter_page_has_the_footer(client, settings, path):
 def test_every_walled_voter_page_has_the_header_naming_the_signed_in_voter(client, path):
     shown = header(get_as_just_registered(client, path).text)
 
-    assert '<a class="wordmark voter-header__wordmark" href="/">Ribcage</a>' in shown
+    assert '<a class="wordmark voter-header__wordmark" href="/">Test Night</a>' in shown
     assert re.search(r"<summary[^>]*>\s*Ada\s*</summary>", shown)
 
 
@@ -124,7 +124,7 @@ def test_every_public_page_has_the_footers_links_but_no_abuse_mailto_or_name_men
 def test_every_voter_facing_public_page_has_the_wordmark_home_and_no_name_menu(client, path):
     page = client.get(path).text
 
-    assert header(page).count('<a class="wordmark voter-header__wordmark" href="/">Ribcage</a>') == 1
+    assert header(page).count('<a class="wordmark voter-header__wordmark" href="/">Test Night</a>') == 1
     assert "<details" not in header(page)
     assert page.count("wordmark") == 2  # the link's class and its modifier, with no second wordmark in the content
 
@@ -133,7 +133,7 @@ def test_the_join_details_step_has_the_wordmark_home(client, db):
     page = client.post("/join/", {"code": "local-join-code"}).text
 
     assert 'name="display_name"' in page
-    assert '<a class="wordmark voter-header__wordmark" href="/">Ribcage</a>' in header(page)
+    assert '<a class="wordmark voter-header__wordmark" href="/">Test Night</a>' in header(page)
 
 
 def test_the_wordmark_on_privacy_leads_a_signed_in_voter_to_the_phase_page(client):

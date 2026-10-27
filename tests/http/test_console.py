@@ -99,7 +99,7 @@ def test_the_header_ends_with_a_log_out_that_posts_to_the_admin_log_out(admin):
 
 
 def test_the_wordmark_leads_back_to_the_console(admin):
-    assert '<a class="wordmark console-header__wordmark" href="/console/">Ribcage</a>' in header(admin.get("/console/films/").text)
+    assert '<a class="wordmark console-header__wordmark" href="/console/">Test Night</a>' in header(admin.get("/console/films/").text)
 
 
 @pytest.mark.parametrize("tab", TABS)

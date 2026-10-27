@@ -22,8 +22,9 @@ At the start of each window. Teardown left the stack definition and its environm
    - **re-pins** the `image: &pinned` line, which the `backup` sidecar follows through the anchor, and commits it as `Pin the stack to <what changed> (#n)`. Push that commit before the next release, which needs it on `origin/main`.
    - **removes** every other local `ribcage` image and the build cache: older images stay in the registry.
 2. **Set the stack's environment in Komodo,** with your copy in `private/komodo-stack.env`.
-   - **Values are URL-safe text,** with no `$`, `#`, quotes or spaces. Komodo's `.env` handling cuts a value at `$` and treats ` #` as a comment. Generate each secret with `.venv/Scripts/python -c "import secrets; print(secrets.token_urlsafe(50))"`.
-   - **New for each window:** `SECRET_KEY`, `JOIN_CODE` and `ADMIN_PASSWORD`. The last window's join code went round the group chat.
+   - **Values are URL-safe text,** with no `$`, `#`, quotes or spaces, `MARATHON_NAME` aside. Komodo's `.env` handling cuts a value at `$` and treats ` #` as a comment. Generate each secret with `.venv/Scripts/python -c "import secrets; print(secrets.token_urlsafe(50))"`.
+   - **Spaces are allowed in `MARATHON_NAME` alone:** it may hold spaces and letters such as *á*, but no `$`, `#` or quotes (#129).
+   - **New for each window:** `SECRET_KEY`, `JOIN_CODE`, `ADMIN_PASSWORD` and `MARATHON_NAME`, the name every page shows in place of the codename. The last window's join code went round the group chat.
    - **Carried over:** `TMDB_API_KEY` and `DTDD_API_KEY` from `private/credentials/`, `TIME_ZONE` (`Europe/Budapest`), and `ABUSE_EMAIL`, the address the footer's abuse link mails (#73).
    - **The address:** `ALLOWED_HOSTS` is `<subdomain>`, and `CSRF_TRUSTED_ORIGINS` is `https://<subdomain>`.
    - **Tuning constants** stay empty, which keeps each one's default. Changing one later is an environment edit and a redeploy, with no rebuild (#25).

@@ -1,7 +1,7 @@
 {% extends "console/tab.html" %}
 {% load static %}
 
-{% block title %}Phase · Admin · Ribcage{% endblock %}
+{% block title %}Phase · Admin · {{ marathon_name }}{% endblock %}
 
 {% block head %}{{ block.super }}<script src="{% static 'console/pending.js' %}" defer></script>{% endblock %}
 

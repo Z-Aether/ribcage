@@ -5,7 +5,7 @@
 
 {% block header %}
 <header class="console-header">
-  <a class="wordmark console-header__wordmark" href="{% url 'console' %}">Ribcage</a>
+  <a class="wordmark console-header__wordmark" href="{% url 'console' %}">{{ marathon_name }}</a>
   <div class="console-header__end">
     {# Read from the voter session, which the admin's leaves alone (#8, #28). #}
     <p class="console-header__voter-side"><a href="{% url 'phase_page' %}" target="_blank">Voter side ↗</a> · {% if user.is_authenticated %}signed in there as {{ user.display_name }}{% else %}not signed in there{% endif %}</p>

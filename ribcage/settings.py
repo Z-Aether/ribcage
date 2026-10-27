@@ -15,6 +15,8 @@ TMDB_API_KEY = environment.required("TMDB_API_KEY")
 DTDD_API_KEY = environment.required("DTDD_API_KEY")
 # The footer's abuse mailto:, kept out of the public repo (#5, #73).
 ABUSE_EMAIL = environment.required("ABUSE_EMAIL")
+# Every page's wordmark, titles and the privacy policy show it; "Ribcage" is only the codename (#129).
+MARATHON_NAME = environment.required("MARATHON_NAME")
 
 # Nothing forwarded by the proxy is read: outside DEBUG, EveryRequestIsHttps sets the scheme (#31, #54).
 SECURE_PROXY_SSL_HEADER = None
@@ -84,6 +86,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
+                "ribcage.context_processors.marathon_name",
                 "ribcage.context_processors.footer",
                 "ribcage.context_processors.as_it_is_now",
             ],

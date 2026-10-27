@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}My warnings · Ribcage{% endblock %}
+{% block title %}My warnings · {{ marathon_name }}{% endblock %}
 
 {# The nag bar nudges toward this page, so it has no place on it (#110). #}
 {% block header %}{% include "components/voter_header.html" with no_nag=True %}{% endblock %}

@@ -7,7 +7,7 @@ A web app for a fixed group of friends to agree on a slate of films for a marath
 ### Lifecycle
 
 **Marathon**:
-The single event one running copy of the app exists to plan and run. Nothing carries from one to the next, and the app never names, numbers or selects one. (#8, #15)
+The single event one running copy of the app exists to plan and run. Nothing carries from one to the next, and the app never numbers or selects one. It shows the name its environment gives it, `MARATHON_NAME`, in place of the codename Ribcage. (#8, #15, #129)
 _Avoid_: event, session, edition, instance
 
 **Window**:

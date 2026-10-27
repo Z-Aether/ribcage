@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Admin log in · Ribcage{% endblock %}
+{% block title %}Admin log in · {{ marathon_name }}{% endblock %}
 {% block skin %}admin{% endblock %}
 
 {% block header %}{% endblock %}
 {% block footer %}{% include "components/footer.html" %}{% endblock %}
 
 {% block content %}
-  <p class="wordmark">Ribcage</p>
+  <p class="wordmark">{{ marathon_name }}</p>
   <h1>Admin log in</h1>
   <form class="form--short" method="post" action="{% url 'admin_login' %}">
     {% csrf_token %}

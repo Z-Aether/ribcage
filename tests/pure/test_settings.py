@@ -20,6 +20,7 @@ REQUIRED = [
     "TMDB_API_KEY",
     "DTDD_API_KEY",
     "ABUSE_EMAIL",
+    "MARATHON_NAME",
 ]
 
 
@@ -139,3 +140,9 @@ def test_the_session_cookie_is_secure_http_only_and_same_site_lax_with_debug_on_
     assert settings["SESSION_COOKIE_SECURE"] is True
     assert settings["SESSION_COOKIE_HTTPONLY"] is True
     assert settings["SESSION_COOKIE_SAMESITE"] == "Lax"
+
+
+def test_the_marathons_name_keeps_its_spaces_and_letters(monkeypatch):
+    monkeypatch.setenv("MARATHON_NAME", " Halloweeni Horror Maraton á ")
+
+    assert load_settings()["MARATHON_NAME"] == "Halloweeni Horror Maraton á"

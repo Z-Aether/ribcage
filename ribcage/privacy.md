@@ -1,6 +1,6 @@
 # Privacy policy
 
-Ribcage is a web app a group of friends uses to plan and run one film marathon. It is rebuilt for each marathon, runs for a few weeks, and is torn down when the marathon ends. This page says what it keeps about you, who can see it, and when it is deleted.
+[Marathon name] is a web app a group of friends uses to plan and run one film marathon. It is rebuilt for each marathon, runs for a few weeks, and is torn down when the marathon ends. This page says what it keeps about you, who can see it, and when it is deleted.
 
 ## What the app holds about you
 
