@@ -25,9 +25,19 @@ class NoteBox:
     is_pitch: bool
     # A refusal, gently worded, leaves the text as typed so nothing is lost (#88).
     refusal: str = ""
-    saved: bool = False
     # Words typed at the pitch step for a film already in the pool, unsaved, with the focus on them (#93).
     kept: bool = False
+    # What is saved when the box holds other words, typed and refused or kept from the pitch step; None where the box holds what is saved (#132).
+    was: str | None = None
+
+    @property
+    def saved_text(self):
+        return self.text if self.was is None else self.was
+
+    @property
+    def unsaved(self):
+        """Whether the box is drawn holding words not yet saved, so *Save* starts enabled (#132)."""
+        return self.kept or bool(self.refusal)
 
 
 @dataclass(frozen=True)
@@ -192,9 +202,15 @@ class VoteBar:
     is_pitch: bool = False
     seen_it: bool = False
     seen_by: tuple[str, ...] = ()
-    # What saving the box said, kept as the note box keeps its refusal (#120).
+    # A refusal of the box's save, kept as the note box keeps its refusal; a saved reason answers the tile, so says nothing (#120, #132).
     said: str = ""
     refused: bool = False
+    # What is saved when the box holds other words, typed and refused; None where the box holds what is saved (#132).
+    was: str | None = None
+
+    @property
+    def saved_text(self):
+        return self.note if self.was is None else self.was
     # The gallery's bar posts nowhere, so its buttons only look.
     inert: bool = False
 

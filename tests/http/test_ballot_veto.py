@@ -252,7 +252,7 @@ def test_a_reason_is_kept_as_the_note_trimmed_with_its_line_breaks_and_shown_aga
     answer = reason(ballot["client"], ballot["one"], "  Too\r\nbleak.  ", headers=HTMX)
 
     assert note(ballot) == "Too\nbleak."
-    assert "Saved." in answer.text
+    assert answer.text.lstrip().startswith("<li") and "Saved." not in answer.text
     assert box(card(ballot["client"], ballot["one"])) == "Too\nbleak."
 
 
@@ -284,7 +284,7 @@ def test_saving_the_box_changes_the_note_and_saving_it_empty_deletes_it(ballot):
     answer = reason(ballot["client"], ballot["one"], "  \r\n ", headers=HTMX)
 
     assert note(ballot) is None and record(ballot).vetoed
-    assert "Cleared." in answer.text
+    assert "Cleared." not in answer.text
 
 
 def test_a_note_written_as_a_reason_is_the_note_in_the_phases_that_write_notes(ballot):

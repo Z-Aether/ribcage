@@ -95,8 +95,14 @@ def veto_reason(request):
         return reload_the_tab(request, reverse("phase_page"))
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
+    if not refusal:
+        # A saved reason closes the card to its tile where it stands, as its title does, so the answer lands on the card, not its box (#132).
+        answer = render(request, "components/ballot_tile.html", {"tile": board.one_tile(request.user, suggestion)})
+        answer.headers["HX-Retarget"] = f'li.card-item[data-suggestion="{suggestion.pk}"]'
+        answer.headers["HX-Reswap"] = "outerHTML"
+        return answer
     vote = cardbar.of(request.user, suggestion)
-    vote = replace(vote, note=vote.note if shown is None else shown, said=refusal or ("Saved." if vote.note else "Cleared."), refused=bool(refusal))
+    vote = replace(vote, was=vote.note, note=vote.note if shown is None else shown, said=refusal, refused=True)
     return render(request, "components/vote_reason.html", {"card": replace(opened_card(request, suggestion), vote=vote)})
 
 

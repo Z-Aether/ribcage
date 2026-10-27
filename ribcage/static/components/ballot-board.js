@@ -10,7 +10,9 @@
   function stash(card) {
     var box = card && card.querySelector("[data-vote-reason] textarea");
     if (!box) return;
-    if (box.value !== box.defaultValue) typed[card.dataset.suggestion] = box.value;
+    // The baseline is the saved text, not defaultValue, which holds the typing once a refusal draws the box again (#132).
+    var saved = (box.dataset.saved || "").replace(/\r\n/g, "\n");
+    if (box.value.replace(/\r\n/g, "\n") !== saved) typed[card.dataset.suggestion] = box.value;
     else delete typed[card.dataset.suggestion];
   }
 
@@ -25,6 +27,13 @@
       box.dispatchEvent(new Event("input", { bubbles: true }));
     });
   }
+
+  // A saved reason closes its card, so words stashed for the film before are stale and would overwrite it when the card next opens (#132).
+  document.body.addEventListener("htmx:beforeSwap", function (event) {
+    var form = event.detail.requestConfig && event.detail.requestConfig.elt;
+    if (!form || !form.matches || !form.matches("[data-vote-reason] form")) return;
+    if (event.detail.xhr.getResponseHeader("HX-Retarget")) delete typed[form.elements.suggestion.value];
+  });
 
   function start(board) {
     // A drag is not a click: while one runs, and just after, nothing closes or opens (#131).

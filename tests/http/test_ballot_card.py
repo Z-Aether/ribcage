@@ -119,12 +119,14 @@ def test_the_veto_pill_turns_the_veto_off_when_it_is_on_and_on_when_it_is_off(ba
     assert veto_to() == "unsorted"
 
 
-def test_the_reason_is_saved_from_the_card_as_the_note_and_answered_in_its_box_alone(ballot):
+def test_the_reason_is_saved_from_the_card_as_the_note_and_answered_with_the_tile_retargeted_onto_the_card(ballot):
     place(ballot["client"], ballot["one"], "veto")
-    answer = ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": "Spiders."}, headers=HTMX).text
+    answer = ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": "Spiders."}, headers=HTMX)
 
     assert Note.objects.get(suggestion=ballot["one"], author=ballot["ada"]).text == "Spiders."
-    assert answer.lstrip().startswith('<div class="vote-reason"') and "Saved." in answer and "film-card" not in answer
+    assert answer.text.lstrip().startswith('<li class="tile') and f'data-suggestion="{ballot["one"].pk}"' in answer.text
+    assert "vote-reason" not in answer.text and "film-card" not in answer.text and "Saved." not in answer.text
+    assert answer.headers["HX-Retarget"] == f'li.card-item[data-suggestion="{ballot["one"].pk}"]' and answer.headers["HX-Reswap"] == "outerHTML"
 
 
 def test_the_cards_box_refuses_a_pitch_emptied_and_a_note_too_long_with_the_text_the_card_keeps(ballot):
@@ -137,16 +139,27 @@ def test_the_cards_box_refuses_a_pitch_emptied_and_a_note_too_long_with_the_text
 
     assert re.search(r"<textarea[^>]*>Ada pitched this\.</textarea>", emptied) and "A suggestion needs its pitch" in emptied and "is-refusal" in emptied
     assert "a pitch holds" in too_long and "x" * 50 in too_long
+    # A refusal answers the reason region, held open for another try, and Save waits on what the box was saved with (#132).
+    assert emptied.lstrip().startswith('<div class="vote-reason"') and "data-unsaved" in emptied and 'data-saved="Ada pitched this."' in too_long
     assert Note.objects.get().text == "Ada pitched this."
 
 
-def test_the_card_answers_a_reason_saved_empty_by_deleting_the_note(ballot):
+def test_the_card_answers_a_reason_saved_empty_by_deleting_the_note_and_closing_to_the_tile(ballot):
     Note.objects.create(suggestion=ballot["one"], author=ballot["ada"], text="Ada wrote this.")
     place(ballot["client"], ballot["one"], "veto")
 
     answer = ballot["client"].post(REASON, {"suggestion": str(ballot["one"].pk), "text": ""}, headers=HTMX).text
 
-    assert not Note.objects.exists() and "Cleared." in answer
+    assert not Note.objects.exists() and answer.lstrip().startswith("<li") and "Cleared." not in answer
+
+
+def test_the_reason_box_names_what_it_was_saved_with_for_save_to_wait_on(ballot):
+    Note.objects.create(suggestion=ballot["one"], author=ballot["ada"], text="Ada wrote this.")
+    place(ballot["client"], ballot["one"], "veto")
+
+    shown = opened(ballot["client"], ballot["one"]).text
+
+    assert "data-save-waits" in shown and 'data-saved="Ada wrote this."' in shown and "data-unsaved" not in shown
 
 
 def test_seen_it_is_set_from_the_card_and_the_checkbox_is_answered(ballot):

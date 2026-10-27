@@ -89,16 +89,16 @@ def test_a_plain_save_outside_the_window_writes_nothing_and_is_sent_to_the_phase
     assert notes_on(the_thing) == {"Hanna": PITCH}
 
 
-def test_the_save_answers_with_the_one_card_open_its_note_list_updated_not_the_pool(dani, voters, the_thing):
+def test_the_save_answers_with_the_one_card_closed_its_note_list_updated_not_the_pool(dani, voters, the_thing):
     Suggestion.objects.suggest(voters["ada"], a_tmdb_film(431, "Cube"), "Six strangers in a box.")
 
     page = save(dani, the_thing, "I'm in.").text
 
     assert page.count("<article") == 1
-    assert '<article class="film-card is-open"' in page
+    assert '<article class="film-card"' in page and "is-open" not in page
     assert "Cube" not in page and "<main>" not in page
     assert re.search(r'<li class="note note--yours">.*I&#x27;m in\..*Dani</span></li>', page)
-    assert (box_text(page), said(page)) == ("I'm in.", "Saved.")
+    assert (box_text(page), said(page)) == ("I'm in.", "") and "Saved." not in page
 
 
 def test_a_saved_note_is_in_the_list_once_flagged_as_the_viewers_for_the_open_card_to_leave_out(dani, voters, the_thing):
@@ -116,7 +116,7 @@ def test_a_cleared_note_leaves_the_list_and_the_box(dani, voters, the_thing):
     page = save(dani, the_thing, "").text
 
     assert "note--yours" not in page and "I&#x27;m in." not in page
-    assert (box_text(page), said(page)) == ("", "Cleared.")
+    assert (box_text(page), said(page)) == ("", "") and "is-open" not in page and "Cleared." not in page
 
 
 def test_the_pitch_on_the_viewers_own_card_is_flagged_as_theirs(hanna, the_thing):
@@ -163,7 +163,7 @@ def test_clearing_a_note_deletes_it(dani, voters, the_thing, cleared):
 
     assert notes_on(the_thing) == {"Hanna": PITCH}
     assert "Dani</span>" not in page
-    assert (box_text(page), said(page)) == ("", "Cleared.")
+    assert (box_text(page), said(page)) == ("", "") and "is-open" not in page
 
 
 def test_clearing_a_note_that_was_never_written_writes_nothing(dani, the_thing):
@@ -200,6 +200,26 @@ def test_a_note_over_the_cap_is_refused_whole_with_a_message_and_the_text_kept_i
     assert notes_on(the_thing) == {"Hanna": PITCH}
     assert box_text(page) == long_note
     assert said(page) == "That's 33 characters, and a note holds 20. Trim it a little."
+
+
+def test_a_refused_note_answers_the_card_open_with_save_enabled_and_the_saved_words_named(dani, voters, the_thing, settings):
+    settings.NOTE_MAX_LENGTH = 20
+    the_thing.notes.create(author=voters["Dani"], text="I'm in.")
+
+    page = save(dani, the_thing, "This one is far too long to keep.").text
+
+    assert '<article class="film-card is-open"' in page
+    assert "data-save-waits data-unsaved" in page and 'data-saved="I&#x27;m in."' in page and "disabled" not in page
+
+
+def test_a_freshly_opened_card_waits_for_a_change_by_script_and_its_save_is_enabled_without_it(dani, voters, the_thing):
+    the_thing.notes.create(author=voters["Dani"], text="I'm in.")
+
+    page = note_box(dani.get("/").text)
+
+    # Script disables Save until the box differs from `data-saved`; the markup is enabled, so a post without script works (#132).
+    assert "data-save-waits" in page and "data-unsaved" not in page and 'data-saved="I&#x27;m in."' in page
+    assert re.search(r'<button type="submit">Save</button>', page)
 
 
 def test_a_pitch_over_the_cap_is_refused_and_the_old_pitch_kept(hanna, the_thing, settings):

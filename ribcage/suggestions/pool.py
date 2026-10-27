@@ -133,6 +133,6 @@ def with_kept_words(card, typed):
     if not words:
         return replace(box, refusal=f"{said}.", kept=True)
     if not box.text:
-        return replace(box, text=words, refusal=f"{said}, so your words are here, not yet saved.", kept=True)
+        return replace(box, text=words, was=box.text, refusal=f"{said}, so your words are here, not yet saved.", kept=True)
     under = "your pitch" if box.is_pitch else "your note"
-    return replace(box, text=f"{box.text}\n\n{words}", refusal=f"{said}, so your words are under {under}, not yet saved.", kept=True)
+    return replace(box, text=f"{box.text}\n\n{words}", was=box.text, refusal=f"{said}, so your words are under {under}, not yet saved.", kept=True)

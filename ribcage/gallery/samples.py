@@ -337,7 +337,7 @@ def phase_bars():
         ),
         (
             "APPROVE's phase bar, on Cass's suggestion, as Dani just saved her note",
-            replace(yours(wolf_house, 0), note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, saved=True)),
+            replace(yours(wolf_house, 0), note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False)),
             "components/approve_bar.html",
         ),
         (
@@ -356,7 +356,7 @@ def phase_bars():
                 yours(wolf_house, 0),
                 note_box=None,
                 pitch_vetoed=True,
-                vote=VoteBar(scale=board.SCALE, vetoed=True, note=wolf_house.notes[0].text, seen_it=True, said="Saved.", inert=True),
+                vote=VoteBar(scale=board.SCALE, vetoed=True, note=wolf_house.notes[0].text, seen_it=True, inert=True),
             ),
             "components/vote_bar.html",
         ),

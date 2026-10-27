@@ -69,7 +69,7 @@ NO_DTDD_DATA = {
     "console", "console_phase_move", "console_films_approval",  # redirects, whatever they act on
     "ballot_done",  # the header's done block: names and ticks, no film (#123)
     "ballot_seen",  # a tile, or the card's checkbox, never matched topics (#121, #122)
-    "ballot_veto_reason",  # the open card's reason box alone, never matched topics (#120, #128)
+    "ballot_veto_reason",  # the card's reason box alone, or the tile it closes to, never matched topics (#120, #128, #132)
     "console_roster_remove", "console_roster_reset", "console_backup_upload",  # the roster's and backup page's acts
 }
 

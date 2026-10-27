@@ -41,15 +41,18 @@ def write_note(request):
     try:
         notes.write(suggestion, request.user, typed)
     except notes.TooLong as refusal:
-        box = replace(card.note_box, text=typed, refusal=notes.too_long(refusal, card.note_box.is_pitch))
+        box = replace(card.note_box, text=typed, was=card.note_box.text, refusal=notes.too_long(refusal, card.note_box.is_pitch))
     except notes.PitchRequired:
         box = replace(card.note_box, refusal=notes.PITCH_REQUIRED)
     else:
-        card = pool.the_card(suggestion, request.user, phase)
-        box = replace(card.note_box, saved=True)
+        box = None
     # Only htmx swaps the card in place; a plain post is answered with the page (#88).
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
+    # A save closes the card, which lists the note now; a refusal keeps it open with what was typed (#132).
+    if box is None:
+        card = pool.the_card(suggestion, request.user, phase)
+        return render(request, "components/film_card.html", {"card": card, "expanded": False, "phase_bar": pool.PHASE_BARS[phase]})
     context = {"card": replace(card, note_box=box), "expanded": True, "phase_bar": pool.PHASE_BARS[phase]}
     return render(request, "components/film_card.html", context)
 
