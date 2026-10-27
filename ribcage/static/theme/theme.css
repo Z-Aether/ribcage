@@ -399,10 +399,12 @@ body > header.voter-header {
   padding-block: 0.9rem;
   border-bottom: 1px solid var(--line);
 }
+/* The marathon's name has no length rule, so it wraps between words down to its longest word, and only then does the menu give way (#129). */
 [data-skin] .voter-header__wordmark {
-  flex-shrink: 0;
+  flex: 0 100 auto;
   font-size: 2.1rem;
-  white-space: nowrap;
+  line-height: 1.1;
+  overflow-wrap: break-word;
   text-decoration: none;
 }
 [data-skin] .voter-header__wordmark:hover {
@@ -412,15 +414,20 @@ body > header.voter-header {
 
 [data-skin] details.voter-menu {
   position: relative;
+  flex: 0 1 auto;
+  /* A short floor, not min-content, which ignores break-word and pushes a long name past the edge; the caret sits in the padding so it cannot wrap (#129). */
+  min-width: 5.5rem;
+  max-width: 55%;
   margin: 0;
   border: 0;
   padding: 0;
 }
 [data-skin] .voter-menu > summary.voter-menu__name {
+  position: relative;
   margin: 0;
-  padding: 0.4rem 1rem;
+  padding: 0.4rem 2.2rem 0.4rem 1rem;
   /* A name up to 20 characters wide wraps rather than pushing past a phone's edge (#37). */
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   text-align: right;
   border: 1px solid var(--line-strong);
   border-radius: var(--button-radius);
@@ -431,11 +438,13 @@ body > header.voter-header {
 /* Pico's chevron is too crisp beside the hand-drawn theme, so a caret drawn from two borders replaces it (#73). */
 [data-skin] .voter-menu > summary.voter-menu__name::after {
   content: "";
-  display: inline-block;
+  position: absolute;
+  top: 50%;
+  right: 1rem;
   float: none;
   width: 0.42em;
   height: 0.42em;
-  margin: 0 0 0.2em 0.6em;
+  margin: -0.35em 0 0;
   background: none;
   border-right: 2px solid var(--ink-muted);
   border-bottom: 2px solid var(--ink-muted);
@@ -509,8 +518,10 @@ body > header.console-header {
 }
 [data-skin] .console-header__wordmark {
   margin-right: auto;
+  min-width: 0;
   font-size: 1.6rem;
-  white-space: nowrap;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
   text-decoration: none;
 }
 [data-skin] .console-header__end {

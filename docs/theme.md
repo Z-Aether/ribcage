@@ -95,6 +95,7 @@ A line gives the ballot's size and screen time, then the four filters sit as sma
 Motion is slow and small, and it is never on the text.
 
 - **Mist:** a lilac and ember mist drifts behind every voter and RUN page over 90 s.
+- **Wordmark:** the marathon's name, never capped, so it wraps onto more lines where the width runs out, in the voter and console headers; the name menu keeps the header's end and the bat follows the last line (#129).
 - **Bat:** it roosts by the wordmark, wings spread and still, and takes off at random, 12 to 30 s apart, as `components/bat.js` picks; on admin pages it only roosts. Each flight is the theme's one jump scare: a jolt off the roost that swells as if at you, then a wide loop out to the right and home over 2.6 s, its wings flapping all the way (#99).
 - **Spider:** it hangs on its silk from the bottom edge of the open **film card**'s poster, poster or title card, and bounces: a drop, a spring back up the silk, a few smaller bounces, then a while hanging still. Only the silk's length moves, so its top never leaves the poster's edge (#99).
 - **Hover:** collapsed cards tilt, and buttons and score pills wobble.
