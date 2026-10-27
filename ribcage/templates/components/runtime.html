@@ -1,17 +1,13 @@
-{# The card's runtime line, over a FilmCard. Its pencil, a RuntimePencil, opens the line in place to correct it; refused, the runtime stays as typed (#21, #90). #}
+{# The card's runtime line, over a FilmCard. Its pencil, a RuntimePencil, opens a box of minutes in place; the box has no Save of its own, since it joins the note box's form and the one Save takes both (#21, #90, #133). #}
 {% url 'runtime' as runtime_address %}{% with film=card.film pencil=card.runtime_pencil suggestion=card.suggestion_id|default_if_none:'' %}<div class="film-card__runtime{% if pencil.open %} is-editing{% endif %}" data-runtime>
+  {# Kept, pencil and all, while the box is open: a card closed over its box shows the runtime it holds and the pencil that opens the card to it. The pencil takes no id then, the box having it (#89, #131, #133). #}
+  <span class="runtime__read">{% if film.runtime %}<span class="runtime__value">{{ film.runtime }}</span>&nbsp;min{% else %}No runtime{% endif %} <span class="runtime__source">{% if film.runtime_source == "tmdb" %}TMDB{% else %}by hand{% endif %}</span>{% if pencil %} <a class="runtime__pencil"{% if suggestion and not pencil.open %} id="runtime-{{ suggestion }}"{% endif %} href="{{ runtime_address }}?suggestion={{ suggestion }}" hx-get="{{ runtime_address }}?suggestion={{ suggestion }}" hx-target="closest [data-runtime]" hx-swap="outerHTML" aria-label="Correct the runtime">✎</a>{% endif %}</span>
   {% if pencil.open %}
-    <form class="runtime__edit" method="post" action="{{ runtime_address }}" hx-post="{{ runtime_address }}" hx-target="closest [data-runtime]" hx-swap="outerHTML">
-      {% csrf_token %}
-      <input type="hidden" name="suggestion" value="{{ suggestion }}">
-      {# Text, not a number field, so every refusal is the server's own gentle one in the voter skin, and a phone still offers digits (#90). One id with the pencil, so htmx moves the focus between them (#89). #}
-      <label class="runtime__field"><span class="visually-hidden">Runtime of {{ film.title }}, in minutes</span><input type="text"{% if suggestion %} id="runtime-{{ suggestion }}"{% endif %} name="runtime" value="{% if pencil.typed is None %}{{ film.runtime|default_if_none:'' }}{% else %}{{ pencil.typed }}{% endif %}" inputmode="numeric" autocomplete="off" autofocus>&nbsp;min</label>
-      <button type="submit">Save</button>
-      <a class="button button--quiet runtime__cancel" href="{{ runtime_address }}?suggestion={{ suggestion }}&amp;cancel" hx-get="{{ runtime_address }}?suggestion={{ suggestion }}&amp;cancel" hx-target="closest [data-runtime]" hx-swap="outerHTML">Cancel</a>
-    </form>
-    {# Beneath the form, not in it, so the refusal never widens the row the box sits in (#90). #}
-    {% if pencil.refusal %}<p class="runtime__refusal" role="status">{{ pencil.refusal }}</p>{% endif %}
-  {% else %}
-    {% if film.runtime %}<span class="runtime__value">{{ film.runtime }}</span>&nbsp;min{% else %}No runtime{% endif %} <span class="runtime__source">{% if film.runtime_source == "tmdb" %}TMDB{% else %}by hand{% endif %}</span>{% if pencil %} <a class="runtime__pencil"{% if suggestion %} id="runtime-{{ suggestion }}"{% endif %} href="{{ runtime_address }}?suggestion={{ suggestion }}" hx-get="{{ runtime_address }}?suggestion={{ suggestion }}" hx-target="closest [data-runtime]" hx-swap="outerHTML" aria-label="Correct the runtime">✎</a>{% endif %}
+    <div class="runtime__edit">
+      {# Text, not a number field, so every refusal is the server's own gentle one in the voter skin, and a phone still offers digits (#90). One id with the pencil, so htmx moves the focus between them (#89). It belongs to the note box's form, which sits in the phase bar; an open box counts as a change, so Save is enabled, and a card closed over a box still holding its stored runtime shuts it (#133). #}
+      <label class="runtime__field"><span class="visually-hidden">Runtime of {{ film.title }}, in minutes</span><input type="text"{% if suggestion %} id="runtime-{{ suggestion }}"{% endif %} name="runtime" data-stored="{{ film.runtime|default_if_none:'' }}" value="{% if pencil.typed is None %}{{ film.runtime|default_if_none:'' }}{% else %}{{ pencil.typed }}{% endif %}"{% if card.note_box and suggestion %} form="note-{{ suggestion }}"{% endif %} inputmode="numeric" autocomplete="off" data-counts-as-change autofocus>&nbsp;min</label>
+      {# Beneath the box, so the refusal never widens the row it sits in (#90). #}
+      {% if pencil.refusal %}<p class="runtime__refusal" role="status">{{ pencil.refusal }}</p>{% endif %}
+    </div>
   {% endif %}
 </div>{% endwith %}

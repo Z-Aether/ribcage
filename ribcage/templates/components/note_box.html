@@ -1,5 +1,5 @@
-{# The viewing voter's own note, a NoteBox, saved in place: htmx morphs the one card, so nothing else on the page is lost, and a save closes it; *Save* waits for a change, where script runs (#21, #88, #132). #}
-{% with box=card.note_box %}<form class="note-box{% if box.is_pitch %} note-box--pitch{% endif %}" method="post" action="{% url 'note' %}" hx-post="{% url 'note' %}" hx-target="closest [data-film-card]" hx-swap="morph" hx-ext="morph" data-save-waits{% if box.unsaved %} data-unsaved{% endif %}>
+{# The viewing voter's own note, a NoteBox, saved in place: htmx morphs the one card, so nothing else on the page is lost, and a save closes it; *Save* waits for a change, where script runs (#21, #88, #132). The card's open runtime box joins this form by its `form` attribute, so one *Save* takes both (#133). #}
+{% with box=card.note_box %}<form class="note-box{% if box.is_pitch %} note-box--pitch{% endif %}"{% if card.suggestion_id %} id="note-{{ card.suggestion_id }}"{% endif %} method="post" action="{% url 'note' %}" hx-post="{% url 'note' %}" hx-target="closest [data-film-card]" hx-swap="morph" hx-ext="morph" data-save-waits{% if box.unsaved %} data-unsaved{% endif %}>
   {% csrf_token %}
   <input type="hidden" name="suggestion" value="{{ card.suggestion_id|default_if_none:'' }}">
   {# No maxlength: a browser cuts a long paste silently, and the server refuses it whole instead (#88). #}

@@ -13,7 +13,7 @@ ADMIN = "admin"
 # Public routes that answer POST alone: each log out, outside the walls so a stale tab's lands on a login (#70, #76).
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
-# Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110, #119).
+# Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110, #119, #133).
 ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_veto_reason", "ballot_seen", "ballot_card", "ballot_done"}
 
 class Fragment(NamedTuple):
@@ -34,6 +34,8 @@ class Fragment(NamedTuple):
 # The links name records the test's fake DoesTheDogDie answers (9001) or has none of (9002).
 FRAGMENTS = [
     Fragment("note", VOTER, "POST", {"suggestion": "{film}", "text": "A note."}),
+    # A refused runtime answers the open card, with the runtime's refusal beside its box (#133).
+    Fragment("note", VOTER, "POST", {"suggestion": "{film}", "text": "A note.", "runtime": "abc"}),
     Fragment("withdraw", VOTER, "POST", {"suggestion": "{film}"}),
     # Before the watch toggles below, which untick the list the row's matched topics come from.
     # A drop into the Veto band answers the film's card where it has no note yet, so it carries the section (#120).
@@ -63,7 +65,7 @@ FRAGMENTS = [
 
 # Voter and admin routes that are no swept page and whose answers hold none of DoesTheDogDie's data, whatever is stored (#112).
 NO_DTDD_DATA = {
-    "runtime", "find", "suggest",  # the voter's runtime box, the picker and the suggest act
+    "runtime", "find", "suggest",  # the runtime pencil's read, the picker and the suggest act; the runtime is saved by the note's post (#133)
     "welcome",  # redirects a plain GET
     "gallery",  # dev-only, answering 404 outside DEBUG
     "console", "console_phase_move", "console_films_approval",  # redirects, whatever they act on

@@ -312,12 +312,12 @@ def phase_bars():
     """Each phase's bar on an opened card, with no suggestion, so a save here only reloads onto the phase page (#88).
 
     A withdraw confirmed here names no suggestion, so it takes nothing, and the sample card only leaves until a reload (#89).
-    The runtime pencil names none either, so opening or saving it here reloads onto the phase page (#90).
+    The runtime pencil names none either, so opening it here reloads onto the phase page, and its box, with no Save of its own, joins no form here (#90, #133).
     """
     midsommar, wolf_house, vhs_99, exit_8 = cards()[0], cards()[2], cards()[4], cards()[5]
     return (
         (
-            "SUGGEST's runtime pencil, open on Hanna's suggestion, as Dani typed the director's cut in hours",
+            "SUGGEST's runtime box, open on Hanna's suggestion, as Dani typed the director's cut in hours; the note box's Save takes both",
             replace(
                 yours(midsommar, 2),
                 note_box=NoteBox(text=midsommar.notes[2].text, is_pitch=False),

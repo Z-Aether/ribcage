@@ -15,7 +15,7 @@ from ribcage.phase.check import phase_window
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
-from ribcage.suggestions import notes, picker, pitch, pool, runtime, withdrawal
+from ribcage.suggestions import notes, picker, pitch, pool, saving, withdrawal
 from ribcage.suggestions.models import Suggestion
 from ribcage.films.card import Watch
 from ribcage.triggers import correction, stored, watched
@@ -32,28 +32,35 @@ def named_suggestion(pk):
 @phase_window(Phase.SUGGEST, Phase.APPROVE)
 @require_POST
 def write_note(request):
+    """The card's one Save: the note, and the runtime where its box was open, written together or not at all (#88, #133)."""
     # The card the post came from is gone, so the tab reloads onto the pool as it is now (#89).
     if (suggestion := named_suggestion(request.POST.get("suggestion"))) is None:
         return reload_the_tab(request, reverse("phase_page"))
     typed = request.POST.get("text", "")
+    # None where the box was shut, so the note is saved alone (#133).
+    typed_runtime = request.POST.get("runtime")
     phase = current()
     card = pool.the_card(suggestion, request.user, phase)
-    try:
-        notes.write(suggestion, request.user, typed)
-    except notes.TooLong as refusal:
-        box = replace(card.note_box, text=typed, was=card.note_box.text, refusal=notes.too_long(refusal, card.note_box.is_pitch))
-    except notes.PitchRequired:
-        box = replace(card.note_box, refusal=notes.PITCH_REQUIRED)
-    else:
-        box = None
+    refusals = saving.save(suggestion, request.user, typed, typed_runtime, phase)
     # Only htmx swaps the card in place; a plain post is answered with the page (#88).
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
-    # A save closes the card, which lists the note now; a refusal keeps it open with what was typed (#132).
-    if box is None:
+    # A save closes the card, which lists the note now and shows the runtime; a refusal keeps it open with both boxes as typed (#132, #133).
+    if not refusals:
         card = pool.the_card(suggestion, request.user, phase)
         return render(request, "components/film_card.html", {"card": card, "expanded": False, "phase_bar": pool.PHASE_BARS[phase]})
-    context = {"card": replace(card, note_box=box), "expanded": True, "phase_bar": pool.PHASE_BARS[phase]}
+    box = card.note_box
+    if isinstance(refusals.note, notes.TooLong):
+        box = replace(box, text=typed, was=box.text, refusal=notes.too_long(refusals.note, box.is_pitch))
+    elif refusals.note is not None:
+        box = replace(box, refusal=notes.PITCH_REQUIRED)
+    else:
+        box = replace(box, text=typed, was=box.text)
+    pencil = card.runtime_pencil
+    # The box stays open as typed only where the runtime part acts; a film approved since has lost its pencil (#133).
+    if pencil is not None and saving.runtime_acts(suggestion, typed_runtime, phase):
+        pencil = replace(pencil, open=True, typed=typed_runtime, refusal=refusals.runtime)
+    context = {"card": replace(card, note_box=box, runtime_pencil=pencil), "expanded": True, "phase_bar": pool.PHASE_BARS[phase]}
     return render(request, "components/film_card.html", context)
 
 
@@ -182,20 +189,9 @@ def confirm_withdraw(request):
     return render(request, "components/film_card.html", context)
 
 
-@phase_window(Phase.SUGGEST)
-def correct_runtime(request):
-    """The runtime pencil, any voter's: a GET opens the runtime line or closes it, writing nothing, and its POST saves (#89, #90)."""
-    if request.method == "POST":
-        return save_runtime(request)
-    return open_runtime(request)
-
-
-def runtime_line(request, card):
-    # Only the line is swapped, so a note being typed on the same card is left alone (#90).
-    return render(request, "components/runtime.html", {"card": card})
-
-
+@require_safe
 def open_runtime(request):
+    """The runtime pencil, any voter's: a GET answers the card's runtime line with its box open, writing nothing; Save saves the box with the note (#89, #90, #133)."""
     # Only htmx opens the line in place; a plain GET is a click from before htmx loaded (#89).
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
@@ -204,30 +200,11 @@ def open_runtime(request):
     if suggestion is None or current() is not Phase.SUGGEST:
         return reload_the_tab(request, reverse("phase_page"))
     card = pool.the_card(suggestion, request.user, Phase.SUGGEST)
+    # Only the line is swapped, so a note being typed on the same card is left alone (#90).
     # Approved since: the line comes back without its pencil, with no explanation (#27).
     if card.runtime_pencil is not None:
-        card = replace(card, runtime_pencil=replace(card.runtime_pencil, open="cancel" not in request.GET))
-    return runtime_line(request, card)
-
-
-def save_runtime(request):
-    if (suggestion := named_suggestion(request.POST.get("suggestion"))) is None:
-        return reload_the_tab(request, reverse("phase_page"))
-    typed = request.POST.get("runtime", "")
-    refusal = ""
-    # Approved since: nothing is written, and the line comes back as it is now, without its pencil (#34).
-    if withdrawal.withdrawable(suggestion):
-        try:
-            runtime.correct(suggestion, typed)
-        except runtime.Refused as refused:
-            refusal = str(refused)
-    # Only htmx swaps the line in place; a plain post is answered with the page (#88).
-    if request.headers.get("HX-Request") != "true":
-        return redirect("phase_page")
-    card = pool.the_card(suggestion, request.user, Phase.SUGGEST)
-    if refusal:
-        card = replace(card, runtime_pencil=replace(card.runtime_pencil, open=True, typed=typed, refusal=refusal))
-    return runtime_line(request, card)
+        card = replace(card, runtime_pencil=replace(card.runtime_pencil, open=True))
+    return render(request, "components/runtime.html", {"card": card})
 
 
 @require_safe

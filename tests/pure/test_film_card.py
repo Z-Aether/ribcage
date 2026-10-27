@@ -4,7 +4,7 @@ import re
 import pytest
 from django.template.loader import render_to_string
 
-from ribcage.films.card import ELLIPSIS, FilmCard, Note, RuntimePencil, trimmed
+from ribcage.films.card import ELLIPSIS, FilmCard, Note, NoteBox, RuntimePencil, trimmed
 from ribcage.films.film import Film, RuntimeSource, hand_entered
 from ribcage.films.poster import poster_url
 
@@ -156,10 +156,28 @@ def test_the_pencil_ends_the_runtime_line_and_opens_it_in_place():
 def test_the_open_pencil_edits_the_current_runtime():
     line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=RuntimePencil(open=True))))
 
-    assert 'hx-post="/runtime/"' in line
-    assert '<input type="hidden" name="suggestion" value="7">' in line
     assert re.search(r'<input [^>]*name="runtime"[^>]*value="144"', line)
     assert "runtime__refusal" not in line
+
+
+def test_the_runtime_line_renders_no_save_and_no_cancel():
+    line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=RuntimePencil(open=True, typed="2h 31", refusal="No."))))
+
+    assert not re.search(r"<button|<form|Save|Cancel|cancel", line)
+
+
+def test_the_open_box_joins_the_note_boxs_form_and_counts_as_a_change():
+    card = a_card(suggestion_id=7, note_box=NoteBox(text="", is_pitch=False), runtime_pencil=RuntimePencil(open=True))
+    page = render_to_string("components/film_card.html", {"card": card, "expanded": True, "phase_bar": "components/suggest_bar.html"})
+
+    assert re.search(r'<input [^>]*name="runtime"[^>]*form="note-7"[^>]*data-counts-as-change', runtime_line(page))
+    assert '<form class="note-box" id="note-7"' in page
+
+
+def test_a_card_with_no_note_box_leaves_the_runtime_box_joined_to_no_form():
+    line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=RuntimePencil(open=True))))
+
+    assert " form=" not in line
 
 
 def test_a_refused_runtime_stays_as_typed_beside_the_refusal():
@@ -171,9 +189,31 @@ def test_a_refused_runtime_stays_as_typed_beside_the_refusal():
     assert '<p class="runtime__refusal" role="status">A runtime is whole minutes, like 144.</p>' in line
 
 
-def test_the_refusal_sits_beneath_the_form_so_the_box_stays_put():
-    pencil = RuntimePencil(open=True, typed="0", refusal="A runtime is at least a minute long.")
+def test_the_open_line_still_reads_the_runtime_it_holds_for_a_card_closed_over_the_box():
+    line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=RuntimePencil(open=True))))
 
-    line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=pencil)))
+    assert line.index("runtime__read") < line.index("runtime__edit")
+    assert '<span class="runtime__value">144</span>' in line
 
-    assert line.index("</form>") < line.index("runtime__refusal")
+
+def test_a_card_closed_over_an_open_box_keeps_its_pencil_and_the_box_alone_has_the_id():
+    page = render(a_card(suggestion_id=7, runtime_pencil=RuntimePencil(open=True, typed="150")), expanded=False)
+    line = runtime_line(page)
+
+    pencil = re.search(r'<a class="runtime__pencil"[^>]*>', line)[0]
+    assert 'hx-get="/runtime/?suggestion=7"' in pencil
+    assert "id=" not in pencil and line.count('id="runtime-7"') == 1
+    assert re.search(r'<input [^>]*id="runtime-7"[^>]*name="runtime"', line)
+    assert line.index("runtime__pencil") < line.index("runtime__edit")
+
+
+def test_the_open_box_names_the_stored_runtime_whatever_is_typed_in_it():
+    line = runtime_line(render(a_card(suggestion_id=7, runtime_pencil=RuntimePencil(open=True, typed="150"))))
+
+    assert re.search(r'<input [^>]*name="runtime"[^>]*data-stored="144"[^>]*value="150"', line)
+
+
+def test_the_open_box_of_a_film_with_no_runtime_names_none_stored():
+    line = runtime_line(render(a_card(film=dataclasses.replace(THE_SHINING, runtime=None), suggestion_id=7, runtime_pencil=RuntimePencil(open=True))))
+
+    assert 'data-stored=""' in line

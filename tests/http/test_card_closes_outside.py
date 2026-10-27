@@ -103,8 +103,8 @@ def test_a_keyboard_save_puts_the_focus_on_the_tile_or_the_title_it_closed_to():
     beforehand = source.split('"htmx:beforeRequest"')[1].split("\n  });")[0]
     after = source.split("const id = keyboardSave.id;")[1].split("\n  });")[0]
 
-    assert "form.contains(document.activeElement)" in beforehand
-    assert "document.activeElement !== document.body" in after
+    assert "document.activeElement.form === form" in beforehand
+    assert "document.activeElement" in after
     assert '[data-board] li[data-suggestion="${id}"]:not(.card-item)' in after and "tile.tabIndex = 0" in after
     assert ".film-card__toggle" in after and "preventScroll: true" in after
 
@@ -115,3 +115,55 @@ def test_a_keyboard_save_is_let_go_when_it_fails_and_waits_for_its_own_settle():
 
     assert 'addEventListener("htmx:responseError", letGo)' in source and 'addEventListener("htmx:sendError", letGo)' in source
     assert "requestConfig.elt !== keyboardSave.form" in after
+
+
+def test_an_open_runtime_box_counts_as_a_change_even_where_it_sits_outside_the_form():
+    source = script("save-waits.js")
+    checking = source.split("function changed(form)")[1].split("// A form is fresh")[0]
+
+    # The form's own elements include a box that joins it by its form attribute (#133).
+    assert "form.elements" in checking and 'hasAttribute("data-counts-as-change")' in checking
+    assert "form.querySelectorAll" not in checking
+    assert re.search(r"const form = event\.target\.form;", source)
+
+
+def test_the_pencil_on_a_closed_pool_card_opens_it_after_the_outside_click_closed_the_rest():
+    source = script("film-card.js")
+    click = source.split('document.addEventListener("click"')[1].split('document.addEventListener("keydown"')[0]
+    opening = re.search(r'if \(card && event\.target\.closest\("\.runtime__pencil"\).*?setOpen\(card, true\);', click, re.S)[0]
+
+    assert click.index("setOpen(open, false)") < click.index(opening)
+    assert click.index(opening) < click.index('event.target.closest("a, form")')
+    assert '!card.classList.contains("is-open")' in opening and "[data-board]" in opening
+
+
+def test_a_keyboard_save_sends_the_focus_to_the_title_even_where_htmx_restored_it_inside_the_card():
+    source = script("save-waits.js")
+    after = source.split("const id = keyboardSave.id;")[1].split("\n  });")[0]
+
+    # The runtime box and the pencil share an id, so htmx moves the focus onto the pencil: that is inside the card, and the title takes it (#89, #132, #133).
+    assert "document.activeElement !== document.body" not in after
+    assert "(tile || card || document.body).contains(held)" in after
+    assert "if (kept) return;" in after
+
+
+def test_closing_a_card_shuts_a_runtime_box_still_holding_the_stored_runtime_and_keeps_another():
+    source = script("film-card.js")
+    setting = source.split("function setOpen(card, open)")[1].split("function shutUntouchedBox")[0]
+    shutting = source.split("function shutUntouchedBox(card)")[1].split("function setRowOpen")[0]
+
+    assert "if (!open) shutUntouchedBox(card);" in setting
+    assert "box.value.trim() !== box.dataset.stored" in shutting.split("\n")[2]
+    assert '.runtime__edit").remove()' in shutting and 'classList.remove("is-editing")' in shutting
+    # The pencil takes the box's id as the server draws a closed line, and Save is read again without the box (#89, #133).
+    assert "pencil.id = id" in shutting and 'new Event("boxes-changed")' in shutting
+    assert 'addEventListener("boxes-changed", () => syncAll(document))' in script("save-waits.js")
+
+
+def test_the_pencil_beside_a_box_left_open_opens_the_card_and_fetches_nothing():
+    source = script("film-card.js")
+    click = source.split('document.addEventListener("click"')[1].split('document.addEventListener("keydown"')[0]
+    fetching = source.split('"htmx:beforeRequest"')[1].split("\n});")[0]
+
+    assert 'card.querySelector(".runtime__edit input")' in click and "left.focus()" in click and "event.preventDefault()" in click
+    assert 'matches(".runtime__pencil")' in fetching and 'closest(".is-editing")' in fetching and "event.preventDefault()" in fetching
