@@ -31,7 +31,7 @@ def evening(admin, voters):
 
 
 def boxes_on(page):
-    return re.findall(r'<div class="box [^"]*"[^>]*>.*?</div>(?=\s*</div>)', page, re.S)
+    return re.findall(r'<div class="box [^"]*"[^>]*>.*?</div>(?=\s*</a>)', page, re.S)
 
 
 def text_of(fragment):

@@ -1,0 +1,47 @@
+"""The writes that put a box on the timetable and take one off: the one rule for where a new box lands (#12, #137).
+
+A new box lands flush after the last one, on the 5-minute grid, and never clashes, so no ripple mode applies. Taking a box off
+leaves its minutes empty and moves nothing else.
+"""
+
+from django.db import IntegrityError, transaction
+
+from ribcage.suggestions.models import Approval, Suggestion
+from ribcage.timetable import setting
+from ribcage.timetable.models import Box
+
+GRID = 5
+
+
+def next_start():
+    """Where the next box starts: the last end rounded up to the grid, or the anchor (minute 0) on an empty timetable."""
+    ends = [box.start + (box.length if box.suggestion_id is None else box.suggestion.runtime) for box in Box.objects.select_related("suggestion")]
+    if not ends:
+        return 0
+    return -(-max(ends) // GRID) * GRID
+
+
+def lay_film(suggestion_id):
+    """Place an approved film's box after the last one, returning the box, or None where nothing changes.
+
+    Nothing changes with no anchor, for a film already on the timetable, one no longer approved, or one gone (#137).
+    """
+    if setting.read().anchor is None:
+        return None
+    try:
+        with transaction.atomic():
+            film = Suggestion.objects.filter(pk=suggestion_id, approval=Approval.APPROVED, box__isnull=True).first()
+            if film is None:
+                return None
+            return Box.objects.create(suggestion=film, start=next_start())
+    # A second placement of the same film lost the race to the unique key.
+    except (IntegrityError, TypeError, ValueError):
+        return None
+
+
+def take_off(box_id):
+    """Remove a box, whatever it holds, and move nothing else; False where it was already gone."""
+    try:
+        return Box.objects.filter(pk=box_id).delete()[0] > 0
+    except (TypeError, ValueError):
+        return False

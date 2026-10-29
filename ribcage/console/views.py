@@ -24,7 +24,7 @@ from ribcage.phase.history import current, last_entered, vote_has_opened
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
-from ribcage.timetable import setting, track
+from ribcage.timetable import laying, offering, setting, track
 from ribcage.triggers import correction, stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
@@ -169,10 +169,17 @@ def edit_runtime(request):
     return redirect(show.address)
 
 
+def selected_box(request):
+    """The box the tab's address selects, as an id, or None for none or nonsense (#137)."""
+    chosen = request.GET.get("box", "")
+    return int(chosen) if chosen.isascii() and chosen.isdigit() and len(chosen) < 10 else None
+
+
 def render_pick(request, sub, refused=None):
     """The Pick tab on one of its two sub-tabs; the header is the same on both (#135)."""
     timetable = setting.read()
     budget = timetable.budget
+    the_track = track.load(timetable.anchor, budget) if sub == "timetable" and timetable.anchor else None
     context = {
         "tab": "console_pick",
         "sub": sub,
@@ -182,7 +189,9 @@ def render_pick(request, sub, refused=None):
         "budget_minutes": None if budget is None else budget % 60,
         "budget_words": None if budget is None else films.screen_time_words(budget),
         "refused": refused,
-        "track": track.load(timetable.anchor, budget) if sub == "timetable" and timetable.anchor else None,
+        "track": the_track,
+        "selected": the_track.box(selected_box(request)) if the_track else None,
+        "candidates": offering.not_in_the_plan() if sub == "timetable" else (),
     }
     return render_tab(request, "console/pick.html", context)
 
@@ -221,6 +230,21 @@ def pick_budget(request):
     if refused := setting.set_budget(request.POST.get("hours", ""), request.POST.get("minutes", "")):
         return render_pick(request, chosen_sub(request), refused)
     return redirect("console_pick_compare" if chosen_sub(request) == "compare" else "console_pick")
+
+
+@admin_required
+@require_POST
+def pick_add(request):
+    # A stale or repeated post changes nothing and reloads the tab as it is now; never phase-gated (#28, #137).
+    box = laying.lay_film(request.POST.get("suggestion"))
+    return reload_the_tab(request, reverse("console_pick") + (f"?box={box.pk}" if box else ""))
+
+
+@admin_required
+@require_POST
+def pick_remove(request):
+    laying.take_off(request.POST.get("box"))
+    return reload_the_tab(request, reverse("console_pick"))
 
 
 def named_voter(pk):

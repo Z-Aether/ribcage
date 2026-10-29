@@ -3506,3 +3506,131 @@ body:has(> main > .ballot-head) > footer.site-footer {
     display: none;
   }
 }
+
+/* ---------- The Timetable's selection, box panel and candidate list (#137) ---------- */
+/* The box is a link on the track, so a click selects it and a drag can take its place later (#139). */
+[data-skin] .track__select {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 4px;
+}
+[data-skin] .track__select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+[data-skin] .track__slot.is-selected {
+  z-index: 1;
+}
+[data-skin] .track__slot.is-selected .box {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+[data-skin] .pick-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 800px) {
+  [data-skin] .pick-split {
+    grid-template-columns: 1fr;
+  }
+}
+[data-skin] .box-panel {
+  display: flex;
+  gap: 0.9rem;
+  margin-bottom: 1.25rem;
+  padding: 0.8rem;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--surface-raised);
+}
+[data-skin] .box-panel__poster {
+  flex: none;
+}
+[data-skin] .box-panel__body p {
+  margin: 0 0 0.2rem;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+[data-skin] .box-panel__body strong {
+  color: var(--ink);
+}
+[data-skin] .box-panel__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+}
+[data-skin] .box-panel__year {
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+[data-skin] .box-panel__vetoes {
+  color: var(--veto-ink);
+}
+[data-skin] .box-panel__body p.box-panel__dropped {
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+[data-skin] .box-panel form {
+  margin: 0.5rem 0 0;
+}
+[data-skin] .candidates h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+[data-skin] .candidates__count {
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+[data-skin] .candidates__none {
+  color: var(--ink-muted);
+}
+[data-skin] .candidates__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+[data-skin] .candidate {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--line);
+}
+[data-skin] .candidate__poster {
+  line-height: 0;
+}
+[data-skin] .candidate__runtime {
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+[data-skin] .candidate__vetoes {
+  padding: 0 0.3rem;
+  border: 1px dashed var(--veto);
+  border-radius: 2px;
+  color: var(--veto-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+[data-skin] .candidate__add {
+  margin: 0;
+}
+[data-skin] .candidate__add button {
+  width: 2.2rem;
+  margin: 0;
+  padding: 0.15rem 0;
+  line-height: 1.2;
+}
+[data-skin] .box-panel__poster .poster {
+  width: 5.5rem;
+  max-width: none;
+}

@@ -69,6 +69,8 @@ class BoxView:
     vetoers: str = ""
     dropped: bool = False
     overlapping: bool = False
+    # The panel's line: day and clock for the start and the end, like Sat 18:00 → 19:49 (#137).
+    span: str = ""
 
     @property
     def labelled(self):
@@ -126,6 +128,10 @@ class Track:
     marker: Marker | None
     lanes: int
 
+    def box(self, key):
+        """The box with this key, or None: a selection naming a box gone since is no selection (#137)."""
+        return next((each.box for each in self.placements if each.box.key == key), None)
+
 
 @dataclass(frozen=True)
 class Scale:
@@ -154,6 +160,11 @@ class Clock:
 
     def day_hm(self, minute):
         return self.at(minute).strftime("%a %H:%M")
+
+    def span(self, start, end):
+        """`Sat 18:00 → 19:49`, the end's day only where it is another day than the start's: `Sat 23:41 → Sun 01:16`."""
+        first, last = self.at(start), self.at(end)
+        return f"{self.day_hm(start)} → {self.day_hm(end) if last.date() != first.date() else self.hm(end)}"
 
 
 def build(boxes, anchor, budget):
@@ -198,6 +209,7 @@ def view_of(box, clock, overlapping):
         vetoers=box.vetoers,
         dropped=box.dropped,
         overlapping=overlapping,
+        span=clock.span(box.start, box.start + box.length),
     )
 
 

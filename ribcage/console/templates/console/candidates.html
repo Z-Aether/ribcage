@@ -1,0 +1,23 @@
+{# The candidates not on the timetable, in slate order, each with a + that lays it after the last box (#36, #137). #}
+<section class="candidates" aria-labelledby="candidates-heading">
+  <h2 id="candidates-heading">Approved, not in the plan <span class="candidates__count">{{ candidates|length }}</span></h2>
+  {% if not candidates %}
+    <p class="candidates__none">No approved film is left to place.</p>
+  {% else %}
+    <ul class="candidates__list">
+      {% for each in candidates %}
+        <li class="candidate">
+          <span class="candidate__poster">{% include "components/poster.html" with film=each.film size="thumb" %}</span>
+          <span class="candidate__title">{{ each.film.title }}</span>
+          <span class="candidate__runtime">{{ each.runtime }} min</span>
+          {% if each.vetoed_by %}<span class="candidate__vetoes" title="{{ each.vetoers }}">{{ each.vetoed_by }}</span>{% endif %}
+          <form method="post" action="{% url 'console_pick_add' %}" class="candidate__add" data-lands-on="{% url 'console_pick' %}">
+            {% csrf_token %}
+            <input type="hidden" name="suggestion" value="{{ each.suggestion }}">
+            <button type="submit" aria-label="Add {{ each.film.title }} to the plan" {% if not timetable.anchor %}disabled title="Set the start time first"{% endif %}>+</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</section>

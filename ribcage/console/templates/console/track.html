@@ -15,7 +15,7 @@
   <div class="track-tools__acts"></div>
 </div>
 
-<div class="track-frame">
+<div class="track-frame" data-keeps-scroll>
   <div class="track" style="--lanes: {{ track.lanes }}">
     <ol class="track__axis" aria-label="Clock times">
       {% for tick in track.ticks %}
@@ -24,7 +24,10 @@
     </ol>
     <div class="track__lanes">
       {% for placement in track.placements %}
-        <div class="track__slot" style="--at: {{ placement.left }}; --span: {{ placement.width }}; --lane: {{ placement.lane }}">{% include "components/box.html" with box=placement.box %}</div>
+        <div class="track__slot{% if placement.box.key == selected.key %} is-selected{% endif %}" style="--at: {{ placement.left }}; --span: {{ placement.width }}; --lane: {{ placement.lane }}">
+          {# A click selects: the selection is in the tab's address, so Back, Forward and a reload keep it (#137). #}
+          <a class="track__select" href="{% url 'console_pick' %}?box={{ placement.box.key }}"{% if placement.box.key == selected.key %} aria-current="true"{% endif %}>{% include "components/box.html" with box=placement.box %}</a>
+        </div>
       {% endfor %}
       {% for band in track.bands %}
         <div class="track__overlap" style="--at: {{ band.left }}; --span: {{ band.width }}" aria-hidden="true"></div>

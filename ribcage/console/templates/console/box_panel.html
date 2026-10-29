@@ -1,0 +1,18 @@
+{# The selected box's panel, above the candidate list; #138's labelled box takes the same place (#22, #137). #}
+<section class="box-panel" aria-label="Selected box">
+  {% if selected.film %}
+    <div class="box-panel__poster">{% include "components/poster.html" with film=selected.film size="tile" %}</div>
+    <div class="box-panel__body">
+      <h2 class="box-panel__title">{{ selected.title }}{% if selected.film.year %} <span class="box-panel__year">({{ selected.film.year }})</span>{% endif %}</h2>
+      <p>Starts <strong>{{ selected.span }}</strong></p>
+      <p>Runtime <strong>{{ selected.film.runtime }} min</strong></p>
+      {% if selected.vetoers %}<p class="box-panel__vetoes">{{ selected.vetoers }}</p>{% endif %}
+      {% if selected.dropped %}<p class="box-panel__dropped">Dropped</p>{% endif %}
+      <form method="post" action="{% url 'console_pick_remove' %}" data-lands-on="{% url 'console_pick' %}">
+        {% csrf_token %}
+        <input type="hidden" name="box" value="{{ selected.key }}">
+        <button type="submit" class="button--quiet">Remove from the plan</button>
+      </form>
+    </div>
+  {% endif %}
+</section>
