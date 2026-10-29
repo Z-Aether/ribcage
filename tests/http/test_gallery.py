@@ -257,3 +257,15 @@ def test_the_gallerys_done_block_shows_im_done_off_and_on_over_the_roster_and_po
     assert 'aria-pressed="false"' in blocks[0] and 'aria-pressed="true"' in blocks[1]
     assert all("hx-post" not in block and "<form class=\"ballot-done__toggle\">" in block for block in blocks)
     assert all("2 of 6 done" in block or "3 of 6 done" in block for block in blocks)
+
+
+def test_the_gallery_shows_the_box_samples_alone_and_on_the_track(client, debug):
+    page = client.get(GALLERY).content.decode()
+    alone = page[page.index('class="gallery-boxes"') : page.index('id="track-tools"')]
+
+    boxes = re.findall(r'<div class="box [^"]*"', alone)
+    assert len(boxes) == 7
+    assert sum("box--labelled" in box for box in boxes) == 1 and sum("box--dropped" in box for box in boxes) == 1
+    assert sum("box--overlapping" in box for box in boxes) == 2
+    assert "title-card" in alone and 'class="box__vetoes"' in alone
+    assert 'class="track"' in page and 'class="track__budget' in page and 'class="track__overlap"' in page

@@ -14,6 +14,8 @@ from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import PHASES, Phase
 from ribcage.suggestions.models import Approval, Note, Suggestion
+from ribcage.timetable import engine
+from ribcage.timetable.engine import Placed
 from ribcage.timetable.models import Box, Timetable
 from tests.commands.test_seed import CABINET_OF_CURIOSITIES, SEEDED_DISPLAY_NAMES, SEEDED_PASSWORD
 
@@ -136,4 +138,28 @@ def test_in_pick_and_run_the_anchor_is_a_saturday_at_18_in_the_time_zone_at_leas
     assert (anchor.weekday(), anchor.hour, anchor.minute) == (5, 18, 0)
     assert anchor - timezone.now() >= timedelta(days=1, hours=18)
     assert timetable.budget == 540
-    assert not Box.objects.exists()
+
+
+@pytest.mark.parametrize("seeded", [Phase.PICK, Phase.RUN], indirect=True)
+def test_in_pick_and_run_the_evening_is_hand_built_within_the_budget_with_no_overlap(db, seeded):
+    boxes = list(Box.objects.select_related("suggestion").order_by("start"))
+    films = [box for box in boxes if box.suggestion]
+    reading = engine.read([Placed(box.pk, box.start, box.suggestion.runtime if box.suggestion else box.length, bool(box.suggestion)) for box in boxes], 540)
+
+    assert 5 <= len(films) <= 6
+    assert [box.length for box in boxes if not box.suggestion] == [45] and boxes[0].suggestion and boxes[-1].suggestion
+    assert reading.overlaps == () and reading.over < 0
+    gaps = [after.start - (before.start + (before.suggestion.runtime if before.suggestion else before.length)) for before, after in zip(boxes, boxes[1:])]
+    assert all(10 <= gap <= 20 for gap in gaps)
+    assert Box.objects.filter(label="Dinner").get().start > boxes[0].start
+    assert Suggestion.objects.filter(approval=Approval.APPROVED, box__isnull=True).count() >= 4
+
+
+@pytest.mark.parametrize("seeded", [Phase.PICK, Phase.RUN], indirect=True)
+def test_in_pick_and_run_terrifier_is_last_vetoed_by_zoe_and_anne_marie_and_sam_vetoes_a_mid_evening_film(db, seeded):
+    boxes = list(Box.objects.select_related("suggestion").order_by("start"))
+    vetoers = lambda box: sorted(BallotRecord.objects.filter(suggestion=box.suggestion, vetoed=True).values_list("voter__display_name", flat=True))
+
+    assert boxes[-1].suggestion.title == "Terrifier" and vetoers(boxes[-1]) == ["Anne-Marie", "Zoë"]
+    middle = boxes[len(boxes) // 2 - 1 : len(boxes) // 2 + 2]
+    assert any(box.suggestion and vetoers(box) == ["Sam"] for box in middle)

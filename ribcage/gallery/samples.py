@@ -9,6 +9,7 @@ own words and grouping, since its recordings stay out of the repo (#40, #103).
 """
 
 from dataclasses import dataclass, replace
+from datetime import datetime, timezone as utc
 from functools import cache
 
 from ribcage.ballot import board, done
@@ -33,6 +34,7 @@ from ribcage.films.picker import Picker, PickerTile
 from ribcage.suggestions.notes import PITCH_REQUIRED
 from ribcage.suggestions.runtime import NOT_WHOLE_MINUTES
 from ribcage.suggestions.withdrawal import what_goes
+from ribcage.timetable import track
 from ribcage.triggers import correction
 from ribcage.triggers.carrying import carries
 from ribcage.triggers.section import GAPS
@@ -418,6 +420,20 @@ def evening():
     )
 
 
+def timetable_track():
+    """The admin's track on a made-up evening: a film with vetoers, a labelled box, a film with no poster, a dropped film and two overlapping, under a budget that runs out inside a film (#136)."""
+    boxes = [
+        track.Loaded(1, 0, 109, film=film(THE_THING), vetoed_by="SZ", vetoers="Vetoed by Sam, Zoë"),
+        track.Loaded(2, 120, 45, label="Dinner"),
+        track.Loaded(3, 170, 147, film=film(MIDSOMMAR)),
+        track.Loaded(4, 330, 47, film=film(CABINET_OF_CURIOSITIES)),
+        track.Loaded(5, 390, 93, film=film(POOH_2), dropped=True),
+        track.Loaded(6, 500, 95, film=film(EXIT_8)),
+        track.Loaded(7, 560, 90, film=film(CUBE)),
+    ]
+    return track.build(boxes, datetime(2026, 11, 7, 18, 0, tzinfo=utc.utc), 8 * 60)
+
+
 def gallery():
     return {
         "cards": cards(),
@@ -433,6 +449,7 @@ def gallery():
         "picker": picker(),
         "picker_outage": Picker(searched=True, outage=True, choosable=False),
         "poster_row": poster_row(),
+        "track": timetable_track(),
         "evening": evening(),
         "evening_minutes": 425,
         "evening_now": 245,

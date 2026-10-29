@@ -9,7 +9,7 @@
   <header class="gallery-head">
     <h1>Gallery</h1>
     <p class="gallery-head__about">The theme and its shared components, each in the skin of the surface that uses it, on films from the recorded corpus. It exists only with <code>DEBUG</code> on. The voters and their notes are written for the gallery. The page wears the voter shell itself: the header above and the footer below.</p>
-    <nav class="gallery-nav" aria-label="Skins"><a href="#voter">Voter</a><a href="#admin">Admin</a><a href="#run">RUN</a></nav>
+    <nav class="gallery-nav" aria-label="Skins"><a href="#voter">Voter</a><a href="#admin">Admin</a><a href="#track">Track</a><a href="#run">RUN</a></nav>
   </header>
 
   <section class="gallery-skin" data-skin="voter" id="voter" aria-labelledby="voter-name">
@@ -144,6 +144,18 @@
         {% endfor %}
       </tbody>
     </table>
+  </section>
+
+  <section class="gallery-skin" data-skin="admin" id="track" aria-labelledby="track-name">
+    <p class="gallery-skin__name" id="track-name">Admin: the track and the box</p>
+    <p class="gallery-label">The boxes alone, as M8's evening will lay them out: a film with its vetoers' initials, a labelled box, a film with no poster, a dropped film, and two overlapping</p>
+    <div class="gallery-boxes">
+      {% for placement in track.placements %}
+        <div class="gallery-boxes__cell">{% include "components/box.html" with box=placement.box %}</div>
+      {% endfor %}
+    </div>
+    <p class="gallery-label">The same evening on the track, under an 8 hour budget that runs out inside a film</p>
+    {% include "console/track.html" %}
   </section>
 
   <section class="gallery-skin" data-skin="run" id="run" aria-labelledby="run-name">

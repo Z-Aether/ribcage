@@ -255,3 +255,15 @@ body > main:has(.gallery-skin) {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ---------- The box samples (#136) ---------- */
+.gallery-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.gallery-boxes__cell {
+  width: 15rem;
+  height: 5.9rem;
+}
