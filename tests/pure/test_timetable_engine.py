@@ -82,3 +82,34 @@ def test_over_is_screen_time_less_the_budget_and_negative_when_there_is_spare():
     assert engine.read(EVENING, 240).over == -20
     assert engine.read(EVENING, 200).over == 20
     assert engine.read(EVENING, None).over is None
+
+
+def test_a_move_under_none_changes_only_that_box_and_leaves_the_input_alone():
+    before = list(EVENING)
+
+    after = engine.edit(EVENING, "dinner", engine.Move(300), engine.NONE)
+
+    assert after == [EVENING[0], labelled("dinner", 300, 45), EVENING[2]]
+    assert EVENING == before
+
+
+def test_a_move_before_the_anchor_gets_a_negative_start():
+    after = engine.edit(EVENING, "a", engine.Move(-35), engine.NONE)
+
+    assert after[0] == film("a", -35, 100)
+
+
+def test_a_move_onto_a_neighbour_is_flagged_not_pushed_away():
+    after = engine.edit(EVENING, "b", engine.Move(90), engine.NONE)
+
+    assert [(each.first, each.second) for each in engine.overlaps(after)] == [("a", "b"), ("b", "dinner")]
+    assert after[1] == EVENING[1]
+
+
+def test_an_unknown_mode_or_change_is_refused():
+    import pytest
+
+    with pytest.raises(ValueError):
+        engine.edit(EVENING, "a", engine.Move(5), "gaps")
+    with pytest.raises(TypeError):
+        engine.edit(EVENING, "a", 5, engine.NONE)

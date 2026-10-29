@@ -5,7 +5,7 @@ it is a film's; the edge that loads the database turns each stored box into one.
 and stay separately named: only screen time is compared with the budget (#12).
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True)
@@ -100,3 +100,36 @@ def read(boxes, budget):
         marker=budget_marker(boxes, budget),
         over=None if budget is None else screen - budget,
     )
+
+
+# The ripple modes (#13). Only None exists so far; #140 and #141 add the push modes as further names `edit` understands.
+NONE = "none"
+MODES = (NONE,)
+
+
+@dataclass(frozen=True)
+class Move:
+    """A box's new start, in elapsed minutes from the anchor; negative is before it (#139)."""
+
+    start: int
+
+
+# Further changes join here as their own classes, and `apply` learns each: a labelled box's new length (#140), a film's new
+# runtime (#142) and an inserted box (#144). Every one goes through `edit`, so a preview and a save are the same call (#22).
+
+
+def apply(boxes, key, change):
+    """The edited box alone, changed as the change says, before any ripple mode acts."""
+    if isinstance(change, Move):
+        return [replace(box, start=change.start) if box.key == key else box for box in boxes]
+    raise TypeError(f"not a change: {change!r}")
+
+
+def edit(boxes, key, change, mode):
+    """The boxes after one change to the box `key` under a ripple mode; nothing is mutated, so a preview and a save can share it.
+
+    Under None the edited box changes and nothing else does; any overlap it makes is left for `overlaps` to flag (#12, #139).
+    """
+    if mode not in MODES:
+        raise ValueError(f"not a mode: {mode!r}")
+    return apply(list(boxes), key, change)
