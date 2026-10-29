@@ -1,3 +1,4 @@
+from datetime import timedelta
 from io import StringIO
 
 import pytest
@@ -13,6 +14,7 @@ from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import PHASES, Phase
 from ribcage.suggestions.models import Approval, Note, Suggestion
+from ribcage.timetable.models import Box, Timetable
 from tests.commands.test_seed import CABINET_OF_CURIOSITIES, SEEDED_DISPLAY_NAMES, SEEDED_PASSWORD
 
 # Tests here only read a seeded database, so each phase is seeded once for the module and each test rolls back.
@@ -119,3 +121,19 @@ def test_from_vote_on_some_films_are_seen_one_seen_and_scored_and_one_seen_and_v
 
     assert seen.count() >= 3
     assert seen.filter(score__isnull=False).exists() and seen.filter(vetoed=True).exists()
+
+
+@pytest.mark.parametrize("seeded", PHASES[: PHASES.index(Phase.PICK)], indirect=True)
+def test_before_pick_the_anchor_and_the_budget_are_empty(db, seeded):
+    assert not Timetable.objects.exists()
+
+
+@pytest.mark.parametrize("seeded", [Phase.PICK, Phase.RUN], indirect=True)
+def test_in_pick_and_run_the_anchor_is_a_saturday_at_18_in_the_time_zone_at_least_two_days_out_and_the_budget_is_9_h(db, seeded):
+    timetable = Timetable.objects.get()
+    anchor = timezone.localtime(timetable.anchor)
+
+    assert (anchor.weekday(), anchor.hour, anchor.minute) == (5, 18, 0)
+    assert anchor - timezone.now() >= timedelta(days=1, hours=18)
+    assert timetable.budget == 540
+    assert not Box.objects.exists()

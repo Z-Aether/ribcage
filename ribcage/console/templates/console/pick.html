@@ -2,7 +2,66 @@
 
 {% block title %}Pick · Admin · {{ marathon_name }}{% endblock %}
 
+{# PICK's header, the same on both sub-tabs; each box saves with a plain post and reloads the tab (#24, #135). #}
 {% block tab %}
   <h1>Pick</h1>
-  <p>Comparing slates and laying out the evening's timetable will be here.</p>
+
+  <section class="pick-header" aria-label="The evening">
+    <div class="pick-header__part">
+      <form method="post" action="{% url 'console_pick_anchor' %}" class="pick-field">
+        {% csrf_token %}
+        <input type="hidden" name="sub" value="{{ sub }}">
+        <label for="pick-anchor">Starts</label>
+        {% if refused and refused.field == "anchor" %}
+          <input type="datetime-local" id="pick-anchor" name="anchor" value="{{ refused.typed.0 }}" aria-describedby="pick-anchor-refusal" autofocus>
+        {% else %}
+          <input type="datetime-local" id="pick-anchor" name="anchor" value="{{ anchor|date:'Y-m-d\TH:i' }}">
+        {% endif %}
+        <button type="submit" class="button--quiet">Save</button>
+      </form>
+      {% if refused and refused.field == "anchor" %}
+        <p class="pick-field__refusal" id="pick-anchor-refusal">{{ refused.says }}</p>
+      {% elif anchor %}
+        <p class="pick-field__reads">{{ anchor|date:"l j F, H:i" }} ({{ anchor|date:"T" }})</p>
+      {% else %}
+        <p class="pick-field__reads">No start time yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="pick-header__part">
+      <form method="post" action="{% url 'console_pick_budget' %}" class="pick-field">
+        {% csrf_token %}
+        <input type="hidden" name="sub" value="{{ sub }}">
+        <label for="pick-budget-hours">Budget</label>
+        {% if refused and refused.field == "budget" %}
+          <input type="text" id="pick-budget-hours" name="hours" value="{{ refused.typed.0 }}" inputmode="numeric" autocomplete="off" size="3" aria-describedby="pick-budget-refusal" autofocus> h
+          <input type="text" name="minutes" value="{{ refused.typed.1 }}" inputmode="numeric" autocomplete="off" size="3" aria-label="Budget minutes"> min
+        {% else %}
+          <input type="text" id="pick-budget-hours" name="hours" value="{{ budget_hours|default_if_none:'' }}" inputmode="numeric" autocomplete="off" size="3"> h
+          <input type="text" name="minutes" value="{{ budget_minutes|default_if_none:'' }}" inputmode="numeric" autocomplete="off" size="3" aria-label="Budget minutes"> min
+        {% endif %}
+        <button type="submit" class="button--quiet">Save</button>
+      </form>
+      {% if refused and refused.field == "budget" %}
+        <p class="pick-field__refusal" id="pick-budget-refusal">{{ refused.says }}</p>
+      {% elif timetable.budget is not None %}
+        <p class="pick-field__reads">{{ budget_words }} of screen time</p>
+      {% else %}
+        <p class="pick-field__reads">No budget.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <nav class="pick-subtabs" aria-label="Pick sections">
+    <a href="{% url 'console_pick' %}"{% if sub == "timetable" %} aria-current="page"{% endif %}>Timetable</a>
+    <a href="{% url 'console_pick_compare' %}"{% if sub == "compare" %} aria-current="page"{% endif %}>Compare</a>
+  </nav>
+
+  {% if sub == "compare" %}
+    <p>The plan's readouts will be here.</p>
+  {% elif not timetable.anchor %}
+    <p>Set the start time above first.</p>
+  {% else %}
+    <p>Nothing on the timetable yet.</p>
+  {% endif %}
 {% endblock %}

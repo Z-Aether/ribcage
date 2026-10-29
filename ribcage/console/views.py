@@ -24,6 +24,7 @@ from ribcage.phase.history import current, last_entered, vote_has_opened
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
+from ribcage.timetable import setting
 from ribcage.triggers import correction, stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
@@ -168,9 +169,57 @@ def edit_runtime(request):
     return redirect(show.address)
 
 
+def render_pick(request, sub, refused=None):
+    """The Pick tab on one of its two sub-tabs; the header is the same on both (#135)."""
+    timetable = setting.read()
+    budget = timetable.budget
+    context = {
+        "tab": "console_pick",
+        "sub": sub,
+        "timetable": timetable,
+        "anchor": setting.local_anchor(timetable.anchor),
+        "budget_hours": None if budget is None else budget // 60,
+        "budget_minutes": None if budget is None else budget % 60,
+        "budget_words": None if budget is None else films.screen_time_words(budget),
+        "refused": refused,
+    }
+    return render_tab(request, "console/pick.html", context)
+
+
 @admin_required
 def pick_tab(request):
-    return render_tab(request, "console/pick.html")
+    # The Pick tab opens on Timetable (#135).
+    return render_pick(request, "timetable")
+
+
+@admin_required
+def pick_compare(request):
+    return render_pick(request, "compare")
+
+
+def chosen_sub(request):
+    return "compare" if request.POST.get("sub") == "compare" else "timetable"
+
+
+@admin_required
+@require_http_methods(["GET", "HEAD", "POST"])
+def pick_anchor(request):
+    # A GET is a reload onto the page a refusal was shown at, so it lands on the tab; never phase-gated (#15, #28, #135).
+    if request.method != "POST":
+        return redirect("console_pick")
+    if refused := setting.set_anchor(request.POST.get("anchor", "")):
+        return render_pick(request, chosen_sub(request), refused)
+    return redirect("console_pick_compare" if chosen_sub(request) == "compare" else "console_pick")
+
+
+@admin_required
+@require_http_methods(["GET", "HEAD", "POST"])
+def pick_budget(request):
+    if request.method != "POST":
+        return redirect("console_pick")
+    if refused := setting.set_budget(request.POST.get("hours", ""), request.POST.get("minutes", "")):
+        return render_pick(request, chosen_sub(request), refused)
+    return redirect("console_pick_compare" if chosen_sub(request) == "compare" else "console_pick")
 
 
 def named_voter(pk):

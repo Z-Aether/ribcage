@@ -3164,3 +3164,72 @@ body:has(> main > .ballot-head) > footer.site-footer {
     transform: none;
   }
 }
+
+/* ---------- The Pick tab: its header and sub-tabs (#135) ---------- */
+[data-skin] .pick-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin-bottom: 1rem;
+}
+[data-skin] .pick-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+}
+[data-skin] .pick-field label {
+  margin: 0;
+  font-weight: 700;
+}
+[data-skin] .pick-field input {
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0.2rem 0.5rem;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+[data-skin] .pick-field input[inputmode="numeric"] {
+  width: 3.6em;
+  text-align: right;
+}
+[data-skin] .pick-field button {
+  width: auto;
+  margin: 0;
+  padding-block: 0.1rem;
+}
+[data-skin] .pick-field__reads,
+[data-skin] .pick-field__refusal {
+  margin: 0.3rem 0 0;
+  font-size: 0.9em;
+}
+[data-skin] .pick-field__reads {
+  color: var(--ink-muted);
+}
+/* A refusal is said kindly beside its box, in the note box's rose, never the veto's red (#88, #97). */
+[data-skin] .pick-field__refusal {
+  max-width: 22rem;
+  color: var(--score-rather-not);
+}
+[data-skin] nav.pick-subtabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+[data-skin] nav.pick-subtabs a {
+  margin: 0 0 -1px;
+  padding: 0.35rem 0.8rem;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-muted);
+  font-weight: 700;
+  text-decoration: none;
+}
+[data-skin] nav.pick-subtabs a:hover {
+  color: var(--ink);
+}
+[data-skin] nav.pick-subtabs a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
