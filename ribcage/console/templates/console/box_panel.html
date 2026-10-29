@@ -1,4 +1,4 @@
-{# The selected box's panel, above the candidate list; #138's labelled box takes the same place (#22, #137). #}
+{# The selected box's panel, above the candidate list: a film's, or a labelled box's (#22, #137, #138). #}
 <section class="box-panel" aria-label="Selected box">
   {% if selected.film %}
     <div class="box-panel__poster">{% include "components/poster.html" with film=selected.film size="tile" %}</div>
@@ -12,6 +12,32 @@
         {% csrf_token %}
         <input type="hidden" name="box" value="{{ selected.key }}">
         <button type="submit" class="button--quiet">Remove from the plan</button>
+      </form>
+    </div>
+  {% else %}
+    <div class="box-panel__body">
+      <form method="post" action="{% url 'console_pick_box' %}" class="box-panel__form" data-lands-on="{% url 'console_pick' %}">
+        {% csrf_token %}
+        <input type="hidden" name="box" value="{{ selected.key }}">
+        <p class="box-panel__field">
+          <label for="box-label">Label</label>
+          <input type="text" id="box-label" name="label" value="{% if box_refused %}{{ box_refused.label }}{% else %}{{ selected.title }}{% endif %}" autocomplete="off"{% if box_refused.says_label %} aria-describedby="box-label-refusal" autofocus{% endif %}>
+        </p>
+        {% if box_refused.says_label %}<p class="pick-field__refusal" id="box-label-refusal">{{ box_refused.says_label }}</p>{% endif %}
+        <p class="box-panel__field">
+          <label for="box-length">Length</label>
+          <input type="text" inputmode="numeric" id="box-length" name="length" value="{% if box_refused %}{{ box_refused.length }}{% else %}{{ selected.minutes }}{% endif %}" autocomplete="off"{% if box_refused.says_length %} aria-describedby="box-length-refusal"{% if not box_refused.says_label %} autofocus{% endif %}{% endif %}>
+          <span>min</span>
+        </p>
+        {% if box_refused.says_length %}<p class="pick-field__refusal" id="box-length-refusal">{{ box_refused.says_length }}</p>{% endif %}
+        <p>Starts <strong>{{ selected.span }}</strong></p>
+        {# Room for #141's Flexible checkbox. #}
+        <button type="submit" class="button--quiet">Save</button>
+      </form>
+      <form method="post" action="{% url 'console_pick_remove' %}" data-lands-on="{% url 'console_pick' %}">
+        {% csrf_token %}
+        <input type="hidden" name="box" value="{{ selected.key }}">
+        <button type="submit" class="button--quiet">Remove</button>
       </form>
     </div>
   {% endif %}

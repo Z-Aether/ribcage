@@ -62,17 +62,18 @@
   {% else %}
     {% if not timetable.anchor %}
       <p>Set the start time above first.</p>
+      <div class="track-tools__acts" data-keeps-scroll>{% include "console/break_button.html" %}</div>
     {% elif track %}
       {% include "console/track.html" %}
     {% else %}
       <p>Nothing on the timetable yet.</p>
+      <div class="track-tools__acts" data-keeps-scroll>{% include "console/break_button.html" %}</div>
     {% endif %}
 
     {# The split below the track: the selected box's panel above the candidates on the left; M9's shortlist takes the right (#137). #}
     <div class="pick-split" data-keeps-scroll>
       <div class="pick-split__left">
-        {# A labelled box has no panel until #138 fills it: widen this test then. #}
-        {% if selected.film %}{% include "console/box_panel.html" %}{% endif %}
+        {% if selected %}{% include "console/box_panel.html" %}{% endif %}
         {% include "console/candidates.html" %}
       </div>
       <div class="pick-split__right"></div>

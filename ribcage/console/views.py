@@ -24,7 +24,7 @@ from ribcage.phase.history import current, last_entered, vote_has_opened
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
-from ribcage.timetable import laying, offering, setting, track
+from ribcage.timetable import labelling, laying, offering, setting, track
 from ribcage.triggers import correction, stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
@@ -169,13 +169,13 @@ def edit_runtime(request):
     return redirect(show.address)
 
 
-def selected_box(request):
-    """The box the tab's address selects, as an id, or None for none or nonsense (#137)."""
-    chosen = request.GET.get("box", "")
+def selected_box(request, chosen=None):
+    """The box the tab's address selects, as an id, or None for none or nonsense (#137); a refused save names its own (#138)."""
+    chosen = request.GET.get("box", "") if chosen is None else chosen
     return int(chosen) if chosen.isascii() and chosen.isdigit() and len(chosen) < 10 else None
 
 
-def render_pick(request, sub, refused=None):
+def render_pick(request, sub, refused=None, box_refused=None, box=None):
     """The Pick tab on one of its two sub-tabs; the header is the same on both (#135)."""
     timetable = setting.read()
     budget = timetable.budget
@@ -190,7 +190,8 @@ def render_pick(request, sub, refused=None):
         "budget_words": None if budget is None else films.screen_time_words(budget),
         "refused": refused,
         "track": the_track,
-        "selected": the_track.box(selected_box(request)) if the_track else None,
+        "selected": the_track.box(selected_box(request, box)) if the_track else None,
+        "box_refused": box_refused,
         "candidates": offering.not_in_the_plan() if sub == "timetable" else (),
     }
     return render_tab(request, "console/pick.html", context)
@@ -245,6 +246,26 @@ def pick_add(request):
 def pick_remove(request):
     laying.take_off(request.POST.get("box"))
     return reload_the_tab(request, reverse("console_pick"))
+
+
+@admin_required
+@require_POST
+def pick_break(request):
+    box = laying.lay_break()
+    return reload_the_tab(request, reverse("console_pick") + (f"?box={box.pk}" if box else ""))
+
+
+@admin_required
+@require_http_methods(["GET", "HEAD", "POST"])
+def pick_box(request):
+    # A GET is a reload onto the page a refusal was shown at, so it lands on the tab (#135, #138).
+    if request.method != "POST":
+        return redirect("console_pick")
+    # A refusal renders the tab with the box still selected and the typing kept; a box gone since reloads as it is (#138).
+    box = request.POST.get("box", "")
+    if refused := labelling.save(box, request.POST.get("label", ""), request.POST.get("length", "")):
+        return render_pick(request, "timetable", box_refused=refused, box=box)
+    return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if selected_box(request, box) else ""))
 
 
 def named_voter(pk):

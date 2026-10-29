@@ -162,15 +162,6 @@ def test_the_hand_edits_need_the_admin(hand):
     assert Box.objects.count() == 0
 
 
-def test_a_labelled_box_selects_with_no_panel_until_it_has_one(hand):
-    hand["admin"].post(ADD, {"suggestion": hand["Cube"].pk})
-    dinner = Box.objects.create(label="Dinner", length=45, start=100)
-
-    page = hand["admin"].get(f"{PICK}?box={dinner.pk}").text
-
-    assert "track__slot is-selected" in page and 'class="box-panel"' not in page
-
-
 def test_the_panel_names_the_end_day_only_when_it_is_another_day(hand):
     hand["admin"].post(ANCHOR, {"anchor": "2026-11-07T23:00"})
     hand["admin"].post(ADD, {"suggestion": hand["Cube"].pk})

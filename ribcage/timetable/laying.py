@@ -11,6 +11,8 @@ from ribcage.timetable import setting
 from ribcage.timetable.models import Box
 
 GRID = 5
+BREAK = "Break"
+BREAK_LENGTH = 30
 
 
 def next_start():
@@ -37,6 +39,13 @@ def lay_film(suggestion_id):
     # A second placement of the same film lost the race to the unique key.
     except (IntegrityError, TypeError, ValueError):
         return None
+
+
+def lay_break():
+    """Place a 30-minute *Break* after the last box, returning it, or None with no anchor (#138)."""
+    if setting.read().anchor is None:
+        return None
+    return Box.objects.create(label=BREAK, length=BREAK_LENGTH, start=next_start())
 
 
 def take_off(box_id):

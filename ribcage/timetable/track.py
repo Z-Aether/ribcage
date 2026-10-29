@@ -71,6 +71,8 @@ class BoxView:
     overlapping: bool = False
     # The panel's line: day and clock for the start and the end, like Sat 18:00 → 19:49 (#137).
     span: str = ""
+    # The length in whole minutes, for a labelled box's length field (#138).
+    minutes: int = 0
 
     @property
     def labelled(self):
@@ -210,6 +212,7 @@ def view_of(box, clock, overlapping):
         dropped=box.dropped,
         overlapping=overlapping,
         span=clock.span(box.start, box.start + box.length),
+        minutes=box.length,
     )
 
 

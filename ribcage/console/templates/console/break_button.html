@@ -1,0 +1,5 @@
+{# + Break lays a 30-minute labelled box after the last one; unavailable until the start time is set (#36, #138). #}
+<form method="post" action="{% url 'console_pick_break' %}" class="track-tools__break" data-lands-on="{% url 'console_pick' %}">
+  {% csrf_token %}
+  <button type="submit" class="button--quiet"{% if not timetable.anchor %} disabled title="Set the start time first"{% endif %}>+ Break</button>
+</form>

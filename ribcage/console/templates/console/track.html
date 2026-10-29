@@ -11,8 +11,8 @@
     <p class="track-tools__evening">Evening <strong>{{ track.tools.evening }}</strong> · {{ track.tools.elapsed }} elapsed</p>
     {% if track.tools.overlaps %}<p class="track-tools__overlaps">{{ track.tools.overlaps }} overlap{{ track.tools.overlaps|pluralize }}</p>{% endif %}
   </div>
-  {# Room for the ripple mode (#140), + Break (#138), the arrange utilities (#145) and Shared (#149). #}
-  <div class="track-tools__acts"></div>
+  {# Room for the ripple mode (#140), the arrange utilities (#145) and Shared (#149). #}
+  <div class="track-tools__acts" data-keeps-scroll>{% include "console/break_button.html" %}</div>
 </div>
 
 <div class="track-frame" data-keeps-scroll>

@@ -137,7 +137,7 @@ def test_an_unreadable_budget_is_refused_keeping_what_was_typed(admin, typed):
     assert Timetable.objects.get().budget == 540
 
 
-@pytest.mark.parametrize("path", [ANCHOR, BUDGET])
+@pytest.mark.parametrize("path", [ANCHOR, BUDGET, "/console/pick/box/"])
 def test_a_get_to_a_save_lands_on_the_tab(admin, path):
     assert admin.get(path).headers["Location"] == PICK
 
