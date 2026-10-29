@@ -3606,8 +3606,10 @@ body:has(> main > .ballot-head) > footer.site-footer {
   width: 5em;
   text-align: right;
 }
-[data-skin] .box-panel__form button {
+[data-skin] .box-panel button {
   width: auto;
+}
+[data-skin] .box-panel__form button {
   margin-top: 0.3rem;
 }
 [data-skin] .candidates h2 {
