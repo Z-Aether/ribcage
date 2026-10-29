@@ -62,7 +62,7 @@
   </nav>
 
   {% if sub == "compare" %}
-    <p>The plan's readouts will be here.</p>
+    {% include "console/the_plan.html" %}
   {% else %}
     {% if not timetable.anchor %}
       <p>Set the start time above first.</p>

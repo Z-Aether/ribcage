@@ -27,6 +27,7 @@ from ribcage.reload import reload_the_tab
 from ribcage.suggestions import runtime
 from ribcage.suggestions.models import Suggestion
 from ribcage.timetable import editing, engine, labelling, laying, offering, retiming, setting, track
+from ribcage.timetable import plan
 from ribcage.timetable.models import Box
 from ribcage.triggers import correction, stored
 
@@ -246,6 +247,7 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
         **track_context(request, mode),
         **armed_context(armed),
         "candidates": offering.not_in_the_plan() if sub == "timetable" else (),
+        "plan": plan.load() if sub == "compare" else None,
     }
     return render_tab(request, "console/pick.html", context)
 

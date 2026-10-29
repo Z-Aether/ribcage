@@ -3803,3 +3803,19 @@ body:has(> main > .ballot-head) > footer.site-footer {
 [data-skin] .roster .roster__out {
   color: var(--accent);
 }
+
+/* ---------- The plan on Compare: plain ledger markup; M9's slate row replaces it (#147) ---------- */
+
+.the-plan__frame {
+  position: relative;
+  overflow-x: auto;
+}
+[data-skin] .the-plan__over {
+  color: var(--veto-ink);
+}
+[data-skin] .the-plan__vetoed {
+  margin-top: 0.75rem;
+}
+[data-skin] .the-plan__pin {
+  color: var(--accent);
+}

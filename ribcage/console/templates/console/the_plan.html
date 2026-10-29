@@ -1,0 +1,37 @@
+{# The plan's set readouts, minimal and plain so M9's slate ledger row can replace it; #148's film points and sums join it (#12, #147). #}
+<section class="the-plan" aria-label="The plan" data-keeps-scroll>
+  <h2>The plan</h2>
+  {% if plan.empty %}
+    <p>Nothing on the timetable yet.</p>
+  {% else %}
+    {% include "components/floor_line.html" with line=plan.floor_line %}
+    <p class="the-plan__line">
+      {{ plan.films }} film{{ plan.films|pluralize }} · {{ plan.screen_time }}{% if plan.budget %} of {{ plan.budget }} budget{% else %}, no budget{% endif %}{% if plan.over %} <strong class="the-plan__over">over</strong>{% endif %}
+      · {% if plan.floor is None %}no floor{% else %}floor {{ plan.floor }}{% endif %} · Σrep {{ plan.sigma_rep }}
+    </p>
+    <div class="the-plan__frame" data-keeps-scroll>
+      <table class="ledger the-plan__table">
+        <thead>
+          <tr><th scope="col">Voter</th><th scope="col">Representative</th><th scope="col" class="ledger__number">Score</th></tr>
+        </thead>
+        <tbody>
+          {% for row in plan.rows %}
+            <tr>
+              <td class="the-plan__voter">{{ row.name }}{% if row.pins %} <span class="the-plan__pin" title="Pins the floor">★</span>{% endif %}</td>
+              {% if row.out %}
+                <td colspan="2" class="ledger__muted the-plan__out">{{ row.out }}</td>
+              {% else %}
+                <td class="the-plan__film">{% if row.film %}{{ row.film }}{% else %}<span class="ledger__muted">none on the plan</span>{% endif %}</td>
+                <td class="ledger__number the-plan__score">{{ row.score }}</td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="the-plan__vetoed">
+      <strong>Vetoed:</strong>
+      {% for each in plan.vetoed %}{% if not forloop.first %}; {% endif %}{{ each.film }} ({{ each.by|join:", " }}){% empty %}none{% endfor %}
+    </p>
+  {% endif %}
+</section>

@@ -18,6 +18,7 @@ from ribcage.suggestions.models import Approval, Note, Suggestion
 from ribcage.timetable import engine
 from ribcage.timetable.engine import Placed
 from ribcage.timetable.models import Box, Timetable
+from ribcage.timetable.plan import load as plan_load
 from tests.commands.test_seed import CABINET_OF_CURIOSITIES, SEEDED_DISPLAY_NAMES, SEEDED_PASSWORD
 
 # Tests here only read a seeded database, so each phase is seeded once for the module and each test rolls back.
@@ -171,3 +172,14 @@ def test_from_vote_on_the_floor_set_shows_obrien_nothing_representable_and_barth
     line, out_for = of_the_roster()
 
     assert sorted(line["out"]) == [("Bartholomew Winthrop", "no ballot"), ("O'Brien", "nothing representable")]
+
+
+@pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.PICK) :], indirect=True)
+def test_in_pick_and_run_the_seeded_plan_has_a_floor_above_zero_that_removing_a_pinner_s_film_drops(db, seeded):
+    read = plan_load()
+    assert read["floor"] > 0 and read["sigma_rep"] > 0
+
+    pinned = {each["film"] for each in read["rows"] if each["pins"]}
+    Box.objects.filter(suggestion__title__in=pinned).delete()
+
+    assert plan_load()["floor"] < read["floor"]

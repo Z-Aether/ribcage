@@ -47,9 +47,6 @@ def test_the_pick_tab_opens_on_timetable_and_each_sub_tab_has_its_own_address(ad
     assert 'href="/console/pick/" aria-current="page">Pick' in admin.get(COMPARE).text
 
 
-def test_compare_holds_one_line_for_the_plans_readouts(admin):
-    assert "The plan's readouts will be here." in html.unescape(admin.get(COMPARE).text)
-
 
 def test_an_empty_anchor_says_to_set_it_first_and_a_set_one_says_the_timetable_is_empty(admin):
     assert NEEDS_AN_ANCHOR in admin.get(PICK).text

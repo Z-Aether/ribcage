@@ -14,7 +14,8 @@ GOODNIGHT_MOMMY, INFESTED, SHORT_MONSTER, WOLF_HOUSE, CUBE, VHS_99 = 284303, 106
 SEEDED_SCORES = {
     "Ada": {MIDSOMMAR: 3, EXIT_8: 2, MARIA: 1, TERRIFIER: -1, THE_SHINING: 3, COTTON_CANDY: 0, GOODNIGHT_MOMMY: 2, WOLF_HOUSE: -1, VHS_99: 2},
     "Zoë": {THE_THING: 3, CUBE: 2, EXIT_8: 1, INFESTED: -1, COTTON_CANDY: 0, MARIA: 2},
-    "Anne-Marie": {THE_THING: 1, THE_SHINING: 2},
+    # Exit 8 is on the seeded evening, so the floor is above 0 and removing a box can drop it (#147).
+    "Anne-Marie": {THE_THING: 1, THE_SHINING: 2, EXIT_8: 2},
     "Sam": {COTTON_CANDY: 3},
     # Only 0 and -1: no film to stand for them, so the floor set shows *nothing representable* beside Bartholomew Winthrop's *no ballot* (#146).
     "O'Brien": {COTTON_CANDY: 0, TERRIFIER: -1},

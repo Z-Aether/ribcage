@@ -19,8 +19,12 @@ def of_the_roster():
     """The floor set over the roster and each voter's reason by id, in four queries (#33)."""
     ids, names, runtimes, records, budget = load()
     found = floor.floor_set(ids, runtimes, records, budget)
-    line = {"size": found.size, "of": found.of, "out": [(names[pk], reason) for pk, reason in found.out]}
-    return line, dict(found.out)
+    return line_of(found, names), dict(found.out)
+
+
+def line_of(found, names):
+    """The floor set line's data for `components/floor_line.html` (#146, #147)."""
+    return {"size": found.size, "of": found.of, "out": [(names[pk], reason) for pk, reason in found.out]}
 
 
 def change_on_removing(voter):
