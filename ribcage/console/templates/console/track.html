@@ -1,4 +1,5 @@
 {# The Timetable sub-tab's tool row and track over a `track.Track`: one template, so the live preview of a drag can answer with it (#22, #136, #139). #}
+<div id="track-region">
 <div class="track-tools" id="track-tools">
   <div class="track-tools__readouts">
     <p class="track-tools__screen">
@@ -16,7 +17,14 @@
 </div>
 
 <div class="track-frame" data-keeps-scroll>
-  <div class="track" style="--lanes: {{ track.lanes }}">
+  {# A drag fills this in: each new snapped value posts it to the preview, and the release submits it to save (#139). #}
+  <form method="post" action="{% url 'console_pick_move' %}" class="track-move" data-preview="{% url 'console_pick_preview' %}" data-lands-on="/console/pick/" hidden>
+    {% csrf_token %}
+    <input type="hidden" name="box"><input type="hidden" name="start"><input type="hidden" name="mode" value="none">
+    {# The page's own selection, so a preview marks it and not the box being dragged (#139). #}
+    <input type="hidden" name="selected" value="{{ selected.key|default_if_none:'' }}">
+  </form>
+  <div class="track" style="--lanes: {{ track.lanes }}" data-scale-start="{{ track.scale.start }}" data-scale-length="{{ track.scale.length }}">
     <ol class="track__axis" aria-label="Clock times">
       {% for tick in track.ticks %}
         <li class="track__tick" style="--at: {{ tick.left }}"><span class="track__tick-label">{% if tick.day %}<span class="track__day">{{ tick.day }}</span> {% endif %}{{ tick.label }}</span></li>
@@ -24,7 +32,7 @@
     </ol>
     <div class="track__lanes">
       {% for placement in track.placements %}
-        <div class="track__slot{% if placement.box.key == selected.key %} is-selected{% endif %}" style="--at: {{ placement.left }}; --span: {{ placement.width }}; --lane: {{ placement.lane }}">
+        <div id="box-{{ placement.box.key }}" class="track__slot{% if placement.box.key == selected.key %} is-selected{% endif %}" style="--at: {{ placement.left }}; --span: {{ placement.width }}; --lane: {{ placement.lane }}" data-box="{{ placement.box.key }}" data-start="{{ placement.box.start }}" data-length="{{ placement.box.minutes }}">
           {# A click selects: the selection is in the tab's address, so Back, Forward and a reload keep it (#137). #}
           <a class="track__select" href="{% url 'console_pick' %}?box={{ placement.box.key }}"{% if placement.box.key == selected.key %} aria-current="true"{% endif %}>{% include "components/box.html" with box=placement.box %}</a>
         </div>
@@ -37,4 +45,5 @@
       <div class="track__budget{% if track.marker.late %} is-late{% endif %}" style="--at: {{ track.marker.left }}"><span class="track__budget-label">{{ track.marker.label }}</span></div>
     {% endif %}
   </div>
+</div>
 </div>

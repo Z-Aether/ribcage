@@ -73,6 +73,8 @@ class BoxView:
     span: str = ""
     # The length in whole minutes, for a labelled box's length field (#138).
     minutes: int = 0
+    # The start in elapsed minutes, which a drag snaps against the neighbours' (#139).
+    start: int = 0
 
     @property
     def labelled(self):
@@ -129,6 +131,8 @@ class Track:
     bands: tuple[Band, ...]
     marker: Marker | None
     lanes: int
+    # The scale in minutes from the anchor, which a drag reads its pointer against and sends back to keep (#139).
+    scale: "Scale"
 
     def box(self, key):
         """The box with this key, or None: a selection naming a box gone since is no selection (#137)."""
@@ -169,15 +173,18 @@ class Clock:
         return f"{self.day_hm(start)} → {self.day_hm(end) if last.date() != first.date() else self.hm(end)}"
 
 
-def build(boxes, anchor, budget):
-    """The track for the loaded boxes against the anchor (an aware datetime) and the budget in minutes; None for no boxes."""
+def build(boxes, anchor, budget, scale=None):
+    """The track for the loaded boxes against the anchor (an aware datetime) and the budget in minutes; None for no boxes.
+
+    A `scale` is kept as given, which is how a drag holds the track still while the evening changes under it (#139).
+    """
     if not boxes:
         return None
     placed = [Placed(box.key, box.start, box.length, box.film is not None) for box in boxes]
     reading = engine.read(placed, budget)
     span = reading.last_end - reading.first_start
     padding = max(PADDING_FLOOR, round(span * PADDING_SHARE))
-    scale = Scale(reading.first_start - padding, span + 2 * padding)
+    scale = scale or Scale(reading.first_start - padding, span + 2 * padding)
     clock = Clock(anchor)
     crowded = {key for overlap in reading.overlaps for key in (overlap.first, overlap.second)}
     lane_of = in_lanes(placed)
@@ -196,6 +203,7 @@ def build(boxes, anchor, budget):
         bands=tuple(Band(percent(scale.at(each.start)), percent(scale.size(each.end - each.start))) for each in reading.overlaps),
         marker=marker,
         lanes=max(lane_of.values()) + 1,
+        scale=scale,
     )
 
 
@@ -213,6 +221,7 @@ def view_of(box, clock, overlapping):
         overlapping=overlapping,
         span=clock.span(box.start, box.start + box.length),
         minutes=box.length,
+        start=box.start,
     )
 
 
@@ -261,6 +270,11 @@ def tools_of(reading, budget, clock):
 
 def load(anchor, budget):
     """Read the timetable's boxes and build its track: two queries however many boxes there are (one with no film box)."""
+    return build(stored_boxes(), anchor, budget)
+
+
+def stored_boxes():
+    """The timetable's boxes as the track shows them, in start order."""
     stored = list(Box.objects.select_related("suggestion").order_by("start", "pk"))
     marks = board.veto_marks(board.vetoes_on([box.suggestion_id for box in stored if box.suggestion_id]), None)
     boxes = []
@@ -281,4 +295,4 @@ def load(anchor, budget):
                 dropped=box.suggestion.approval == Approval.DROPPED,
             )
         )
-    return build(boxes, anchor, budget)
+    return boxes

@@ -3524,6 +3524,17 @@ body:has(> main > .ballot-head) > footer.site-footer {
 [data-skin] .track__slot.is-selected {
   z-index: 1;
 }
+/* A box dragged along the track follows the pointer and rides above its neighbours (#139). */
+[data-skin] .track__select {
+  cursor: grab;
+  user-select: none;
+}
+[data-skin] .track__slot.is-dragging {
+  z-index: 2;
+}
+[data-skin] .track__slot.is-dragging .track__select {
+  cursor: grabbing;
+}
 [data-skin] .track__slot.is-selected .box {
   outline: 2px solid var(--accent);
   outline-offset: 1px;

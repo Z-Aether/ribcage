@@ -14,7 +14,7 @@ ADMIN = "admin"
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
 # Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110, #119, #133).
-ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_veto_reason", "ballot_seen", "ballot_card", "ballot_done", "console_pick_anchor", "console_pick_budget", "console_pick_add", "console_pick_remove", "console_pick_break", "console_pick_box"}
+ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_veto_reason", "ballot_seen", "ballot_card", "ballot_done", "console_pick_anchor", "console_pick_budget", "console_pick_add", "console_pick_remove", "console_pick_break", "console_pick_box", "console_pick_preview", "console_pick_move"}
 
 class Fragment(NamedTuple):
     """One htmx answer that swaps a card, its section or a part of one in, which test_dtdd_credit.py sweeps for DoesTheDogDie's data (#112).
@@ -73,6 +73,7 @@ NO_DTDD_DATA = {
     "ballot_veto_reason",  # the card's reason box alone, or the tile it closes to, never matched topics (#120, #128, #132)
     "console_pick_anchor", "console_pick_budget",  # the Pick header's saves: a redirect, or the tab with a refusal (#135)
     "console_pick_add", "console_pick_remove", "console_pick_break",  # the timetable's hand edits: a redirect to the tab (#137)
+    "console_pick_preview", "console_pick_move",  # a drag's preview, the track alone, and its save, a redirect to the tab (#139)
     "console_pick_box",  # a redirect to the tab, or the tab with a refusal (#137, #138)
     "console_roster_remove", "console_roster_reset", "console_backup_upload",  # the roster's and backup page's acts
 }

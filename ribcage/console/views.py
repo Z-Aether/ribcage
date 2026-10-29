@@ -24,7 +24,7 @@ from ribcage.phase.history import current, last_entered, vote_has_opened
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
-from ribcage.timetable import labelling, laying, offering, setting, track
+from ribcage.timetable import editing, engine, labelling, laying, offering, setting, track
 from ribcage.triggers import correction, stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
@@ -266,6 +266,51 @@ def pick_box(request):
     if refused := labelling.save(box, request.POST.get("label", ""), request.POST.get("length", "")):
         return render_pick(request, "timetable", box_refused=refused, box=box)
     return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if selected_box(request, box) else ""))
+
+
+def edit_asked(request):
+    """The box, the change and the mode a move names, or None where the post is no drag's (#139)."""
+    box = selected_box(request, request.POST.get("box", ""))
+    start = editing.valid_start(request.POST.get("start"))
+    mode = request.POST.get("mode", engine.NONE)
+    if box is None or start is None or mode not in engine.MODES:
+        return None
+    return box, engine.Move(start), mode
+
+
+def kept_scale(request):
+    """The scale a drag holds still, from the post, or None to fit the evening afresh (#139)."""
+    try:
+        start, length = int(request.POST["scale_start"]), int(request.POST["scale_length"])
+    except (KeyError, ValueError):
+        return None
+    return track.Scale(start, length) if 0 < length <= 2 * editing.FURTHEST and abs(start) <= editing.FURTHEST else None
+
+
+@admin_required
+@require_POST
+def pick_preview(request):
+    # The same edit as the save, writing nothing: the answer is the track and tool row alone, for the browser to morph in (#22, #139).
+    if not (asked := edit_asked(request)):
+        return HttpResponseBadRequest()
+    box, change, mode = asked
+    timetable = setting.read()
+    boxes = editing.run(box, change, mode, save=False) if timetable.anchor else None
+    if boxes is None:
+        return reload_the_tab(request, reverse("console_pick"))
+    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request))
+    return render(request, "console/track.html", {"track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
+
+
+@admin_required
+@require_POST
+def pick_move(request):
+    # The release: the preview's call, saving. A box gone since reloads the tab as it is now (#139).
+    if not (asked := edit_asked(request)):
+        return HttpResponseBadRequest()
+    box, change, mode = asked
+    kept = editing.run(box, change, mode, save=True) if setting.read().anchor else None
+    return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if kept else ""))
 
 
 def named_voter(pk):
