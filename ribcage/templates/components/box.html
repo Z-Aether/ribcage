@@ -2,7 +2,10 @@
 <div class="box {% if box.labelled %}box--labelled{% else %}box--film{% endif %}{% if box.dropped %} box--dropped{% endif %}{% if box.overlapping %} box--overlapping{% endif %}"{% if box.key %} data-box="{{ box.key }}"{% endif %} title="{{ box.title }}, {{ box.starts }}–{{ box.ends }}, {{ box.length }}">
   {% if box.film %}<span class="box__poster">{% include "components/poster.html" with film=box.film size="tile" %}</span>{% endif %}
   <span class="box__text">
-    <span class="box__title">{{ box.title }}</span>
+    <span class="box__head">
+      <span class="box__title">{{ box.title }}</span>
+      {% if box.flexible %}<span class="box__flexible" title="Flexible: may shrink under Push · keep end time" aria-label="flexible">&#8596;</span>{% endif %}
+    </span>
     <span class="box__times">{{ box.starts }}–{{ box.ends }}</span>
     <span class="box__length">{{ box.length }}</span>
     {% if box.dropped %}<span class="box__mark">dropped</span>{% endif %}

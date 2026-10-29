@@ -6,6 +6,7 @@ and stay separately named: only screen time is compared with the budget (#12).
 """
 
 from dataclasses import dataclass, replace
+from math import ceil, floor
 
 
 @dataclass(frozen=True)
@@ -104,9 +105,10 @@ def read(boxes, budget):
     )
 
 
-# The ripple modes (#13): a name each, and in `RIPPLE_MODES` the function that acts on the edit. #141 adds a name and its function.
+# The ripple modes (#13): a name each, and in `RIPPLE_MODES` the function that acts on the edit.
 NONE = "none"
 KEEP_GAPS = "keep-gaps"
+KEEP_END_TIME = "keep-end-time"
 
 
 @dataclass(frozen=True)
@@ -141,34 +143,145 @@ def leave_alone(before, after, key):
     return after
 
 
-def keep_gaps(before, after, key):
-    """Push · keep gaps: once the edited box touches into its neighbour, every box on that side moves by the edit's own delta (#13, #22, #140).
+def pushed_side(before, after, key):
+    """The boxes an edit pushes and by how much, as (side, delta, later), or None where nothing is touched (#13, #140).
 
-    A later end (a move later, a longer box) pushes every other box starting at or after the edited box's old start, by the
-    end's delta. An earlier start pushes every box starting before the old start, by the start's delta, which may carry them
-    before the anchor. A move short of contact pushes nothing, and so does a shorter box: dragging back never undoes a push.
+    A later end pushes every other box starting at or after the edited box's old start, by the end's delta. An earlier start
+    pushes every box starting before the old start, by the start's delta. A move short of contact pushes nothing, and so does a
+    shorter box: dragging back never undoes a push.
     """
     old = next((box for box in before if box.key == key), None)
     new = next((box for box in after if box.key == key), None)
     if old is None or new is None:
-        return after
+        return None
     if new.end > old.end:
         side = [box for box in after if box.key != key and box.start >= old.start]
-        delta = new.end - old.end
         touched = bool(side) and new.end > min(box.start for box in side)
-    elif new.start < old.start:
+        return (side, new.end - old.end, True) if touched else None
+    if new.start < old.start:
         side = [box for box in after if box.key != key and box.start < old.start]
-        delta = new.start - old.start
         touched = bool(side) and new.start < max(box.end for box in side)
+        return (side, new.start - old.start, False) if touched else None
+    return None
+
+
+def keep_gaps(before, after, key):
+    """Push · keep gaps: once the edited box touches into its neighbour, every box on that side moves by the edit's own delta (#13, #22, #140)."""
+    pushed = pushed_side(before, after, key)
+    if pushed is None:
+        return after
+    side, delta, _ = pushed
+    moved = {box.key for box in side}
+    return [replace(box, start=box.start + delta) if box.key in moved else box for box in after]
+
+
+# A flexible box never shrinks below one step of the 5-minute grid (#22, #141).
+FLOOR = 5
+GRID = 5
+
+
+def on_grid(minute):
+    """The nearest 5-minute mark, halves rounding up."""
+    return floor(minute / GRID + 0.5) * GRID
+
+
+def grid_up(minute):
+    """The first 5-minute mark at or after the minute."""
+    return ceil(minute / GRID) * GRID
+
+
+def grid_down(minute):
+    """The last 5-minute mark at or before the minute."""
+    return floor(minute / GRID) * GRID
+
+
+def latest_ends(items, edge):
+    """Mirrored: for each box, the latest reflected end, so the earliest real start, that still lets the boxes before it in real time start on a mark from the held edge."""
+    latest, start = [0] * len(items), -edge
+    for index in reversed(range(len(items))):
+        if index != len(items) - 1:
+            start = grid_up(start)
+        latest[index] = -start
+        start += FLOOR if items[index].flexible else items[index].length
+    return latest
+
+
+def squeezed(items, old_end, new_end, mirrored=False):
+    """The side's boxes after the squeeze, later than the edited box's end: gaps and flexible boxes give up the edit's delta between them (#22, #141).
+
+    The outer edge, the last end, holds. Each gap and each flexible box above `FLOOR` gives up the same fraction of what it can
+    give, never below zero or `FLOOR`. Each start is rounded to the grid one by one, and each box's share is recomputed from where the box before really
+    ended, so the residue never accumulates and the edge lands within 2.5 minutes; a start that would fall behind the box before it (an odd-length film
+    with its gap squeezed out) rounds up to the next mark instead. With no slack left, boxes pack flat against the edited box's
+    end, flush and off the grid, as keep gaps pushes by the delta. `mirrored` is the earlier edit seen from the other end, where
+    the real start is the reflected end, so that is what is rounded, and the held edge, the first real start, goes back to exactly where it was
+    while the boxes after it can still start on marks from it.
+    """
+    items = in_start_order(items)
+    edge = max(box.end for box in items)
+    gaps, reach = [], old_end
+    for box in items:
+        gaps.append(max(0, box.start - reach))
+        reach = max(reach, box.end)
+    give = [max(0, box.length - FLOOR) if box.flexible else 0 for box in items]
+    if sum(box.length for box in items) + sum(gaps) - (edge - new_end) <= 0:
+        return items
+    squeezed_items, cursor = [], new_end
+    latest = latest_ends(items, edge) if mirrored else []
+    for index, box in enumerate(items):
+        gap, spare = gaps[index], give[index]
+        # What is still owed over what is still giveable, from where the last box really ended: rounding residue is taken up by the boxes after.
+        owed = sum(each.length for each in items[index:]) + sum(gaps[index:]) - (edge - cursor)
+        room = sum(gaps[index:]) + sum(give[index:])
+        share = 1 if room == 0 else max(0, min(1, owed / room))
+        if share >= 1:
+            start, length = cursor, box.length - spare
+        elif mirrored:
+            start = max(cursor, on_grid(cursor + gap * (1 - share)) if spare else cursor + gap * (1 - share))
+            if spare:
+                if index == len(items) - 1:
+                    # The last box mirrored is the first one really, and the held edge is its start: back to exactly where it was.
+                    end = min(edge, start + box.length)
+                else:
+                    end = min(on_grid(start + box.length - spare * share), grid_down(start + box.length), latest[index])
+                length = max(FLOOR, end - start)
+            else:
+                end = max(min(on_grid(start + box.length), latest[index]), grid_up(cursor + box.length))
+                start, length = end - box.length, box.length
+        else:
+            start = max(grid_up(cursor), on_grid(cursor + gap * (1 - share)))
+            length = box.length
+            if spare:
+                length = min(box.length, on_grid(start + box.length - spare * share) - start)
+        squeezed_items.append(replace(box, start=start, length=length))
+        cursor = start + length
+    return squeezed_items
+
+
+def reflected(box):
+    """The box seen from the other end of the evening, so an earlier push is a later one."""
+    return replace(box, start=-box.end)
+
+
+def keep_end_time(before, after, key):
+    """Push · keep end time: the edit's delta is taken out of the gaps and flexible boxes on the pushed side, so its outer edge holds (#13, #22, #141).
+
+    Contact, the side and the delta are keep gaps'. An earlier edit holds the first box's start, the same squeeze mirrored.
+    """
+    pushed = pushed_side(before, after, key)
+    if pushed is None:
+        return after
+    side, _, later = pushed
+    old = next(box for box in before if box.key == key)
+    new = next(box for box in after if box.key == key)
+    if later:
+        result = {box.key: box for box in squeezed(side, old.end, new.end)}
     else:
-        return after
-    if not touched:
-        return after
-    pushed = {box.key for box in side}
-    return [replace(box, start=box.start + delta) if box.key in pushed else box for box in after]
+        result = {box.key: reflected(box) for box in squeezed([reflected(each) for each in side], -old.start, -new.start, mirrored=True)}
+    return [result.get(box.key, box) for box in after]
 
 
-RIPPLE_MODES = {NONE: leave_alone, KEEP_GAPS: keep_gaps}
+RIPPLE_MODES = {NONE: leave_alone, KEEP_GAPS: keep_gaps, KEEP_END_TIME: keep_end_time}
 MODES = tuple(RIPPLE_MODES)
 
 

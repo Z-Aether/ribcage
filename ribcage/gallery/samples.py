@@ -424,7 +424,7 @@ def timetable_track():
     """The admin's track on a made-up evening: a film with vetoers, a labelled box, a film with no poster, a dropped film and two overlapping, under a budget that runs out inside a film (#136)."""
     boxes = [
         track.Loaded(1, 0, 109, film=film(THE_THING), vetoed_by="SZ", vetoers="Vetoed by Sam, Zoë"),
-        track.Loaded(2, 120, 45, label="Dinner"),
+        track.Loaded(2, 120, 45, label="Dinner", flexible=True),
         track.Loaded(3, 170, 147, film=film(MIDSOMMAR)),
         track.Loaded(4, 330, 47, film=film(CABINET_OF_CURIOSITIES)),
         track.Loaded(5, 390, 93, film=film(POOH_2), dropped=True),

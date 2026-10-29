@@ -177,8 +177,8 @@ def selected_box(request, chosen=None):
     return int(chosen) if chosen.isascii() and chosen.isdigit() and len(chosen) < 10 else None
 
 
-# The ripple mode control's words, in the tool row's order; #141 adds the third (#140).
-RIPPLE_NAMES = ((engine.NONE, "None"), (engine.KEEP_GAPS, "Push · keep gaps"))
+# The ripple mode control's words, in the tool row's order (#140, #141).
+RIPPLE_NAMES = ((engine.NONE, "None"), (engine.KEEP_GAPS, "Push · keep gaps"), (engine.KEEP_END_TIME, "Push · keep end time"))
 RIPPLE_SESSION_KEY = "ripple_mode"
 
 
@@ -288,7 +288,7 @@ def pick_box(request):
     box = request.POST.get("box", "")
     mode = request.POST.get("mode", "")
     mode = mode if mode in engine.MODES else ripple_mode(request)
-    if refused := labelling.save(box, request.POST.get("label", ""), request.POST.get("length", ""), mode):
+    if refused := labelling.save(box, request.POST.get("label", ""), request.POST.get("length", ""), mode, "flexible" in request.POST):
         return render_pick(request, "timetable", box_refused=refused, box=box, mode=mode)
     return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if selected_box(request, box) else ""))
 

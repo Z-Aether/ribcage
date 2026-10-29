@@ -12,7 +12,7 @@ from tests.http.signing_in import sign_in_as_the_admin
 
 PICK, ANCHOR, MODE = "/console/pick/", "/console/pick/anchor/", "/console/pick/mode/"
 PREVIEW, MOVE, SAVE_BOX, REMOVE = "/console/pick/preview/", "/console/pick/move/", "/console/pick/box/", "/console/pick/remove/"
-GAPS, NONE = "keep-gaps", "none"
+GAPS, END, NONE = "keep-gaps", "keep-end-time", "none"
 
 
 @pytest.fixture
@@ -192,3 +192,70 @@ def test_the_move_form_names_the_sessions_mode_and_the_script_for_typed_lengths_
 
     assert re.search(r'pick/move/.*?name="mode" value="keep-gaps"', page, re.S)
     assert re.search(r'<script src="[^"]*timetable/typed[^"]*\.js"', page)
+
+
+def test_the_tool_row_offers_keep_end_time(evening):
+    assert "Push · keep end time" in evening["admin"].get(PICK).text
+
+
+def test_the_flexible_checkbox_saves_and_clears_the_flag(evening):
+    dinner = evening["dinner"].pk
+    asked = {"box": dinner, "label": "Dinner", "length": "45", "mode": NONE}
+
+    evening["admin"].post(SAVE_BOX, {**asked, "flexible": "on"})
+    assert Box.objects.get(pk=dinner).flexible
+    assert re.search(r'<input type="checkbox" id="box-flexible" name="flexible" checked>', evening["admin"].get(f"{PICK}?box={dinner}").text)
+
+    evening["admin"].post(SAVE_BOX, asked)
+    assert not Box.objects.get(pk=dinner).flexible
+    assert 'name="flexible" checked' not in evening["admin"].get(f"{PICK}?box={dinner}").text
+
+
+def test_a_film_box_has_no_flexible_checkbox_and_a_post_cannot_flag_one(evening):
+    cube = evening["cube"].pk
+
+    evening["admin"].post(SAVE_BOX, {"box": cube, "label": "x", "length": "45", "flexible": "on", "mode": NONE})
+
+    assert 'name="flexible"' not in evening["admin"].get(f"{PICK}?box={cube}").text
+    assert not Box.objects.get(pk=cube).flexible
+
+
+def test_a_refused_save_keeps_the_flexible_tick(evening):
+    page = evening["admin"].post(SAVE_BOX, {"box": evening["dinner"].pk, "label": "Dinner", "length": "x", "flexible": "on", "mode": NONE}).text
+
+    assert 'name="flexible" checked' in page
+
+
+def test_a_flexible_box_carries_its_mark_on_the_track_and_others_do_not(evening):
+    assert "box__flexible" not in evening["admin"].get(PICK).text
+    Box.objects.filter(pk=evening["dinner"].pk).update(flexible=True)
+
+    assert evening["admin"].get(PICK).text.count("box__flexible") == 1
+
+
+def test_a_save_under_keep_end_time_stores_the_squeezed_boxes_and_holds_the_end(evening):
+    Box.objects.filter(pk=evening["dinner"].pk).update(flexible=True)
+    asked = {"box": evening["cube"].pk, "start": "20", "mode": END}
+
+    previewed = evening["admin"].post(PREVIEW, asked).text
+    assert starts()[evening["cube"].pk] == 0
+    evening["admin"].post(MOVE, asked)
+
+    assert starts() == {evening["cube"].pk: 20, evening["dinner"].pk: 115, evening["thing"].pk: 160}
+    assert Box.objects.get(pk=evening["dinner"].pk).length == 35
+    assert re.search(rf'id="box-{evening["dinner"].pk}"[^>]*data-start="115" data-length="35"', previewed)
+
+
+def test_a_save_under_keep_end_time_squeezes_the_gaps_alone_without_the_flag(evening):
+    evening["admin"].post(MOVE, {"box": evening["cube"].pk, "start": "20", "mode": END})
+
+    assert starts() == {evening["cube"].pk: 20, evening["dinner"].pk: 110, evening["thing"].pk: 160}
+    assert Box.objects.get(pk=evening["dinner"].pk).length == 45
+
+
+def test_keep_gaps_leaves_a_flexible_box_at_full_length(evening):
+    Box.objects.filter(pk=evening["dinner"].pk).update(flexible=True)
+
+    evening["admin"].post(MOVE, {"box": evening["cube"].pk, "start": "20", "mode": GAPS})
+
+    assert Box.objects.get(pk=evening["dinner"].pk).length == 45

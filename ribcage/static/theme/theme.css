@@ -3403,6 +3403,22 @@ body:has(> main > .ballot-head) > footer.site-footer {
   border-style: dashed;
   background: transparent;
 }
+/* A flexible labelled box carries a quiet two-way arrow beside its label, outside the title so a cut label never takes it (#141). */
+[data-skin] .box__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  min-width: 0;
+}
+[data-skin] .box__head .box__title {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+[data-skin] .box__flexible {
+  flex: none;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
 [data-skin] .box--overlapping {
   border-color: var(--veto);
   box-shadow: inset 0 0 0 1px var(--veto);
@@ -3616,6 +3632,14 @@ body:has(> main > .ballot-head) > footer.site-footer {
 [data-skin] .box-panel__field input[inputmode="numeric"] {
   width: 5em;
   text-align: right;
+}
+[data-skin] .box-panel__field input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--accent, currentColor);
+}
+[data-skin] .box-panel__hint {
+  color: var(--ink-muted);
+  font-size: 0.85em;
 }
 [data-skin] .box-panel button {
   width: auto;

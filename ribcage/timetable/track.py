@@ -76,6 +76,8 @@ class BoxView:
     minutes: int = 0
     # The start in elapsed minutes, which a drag snaps against the neighbours' (#139).
     start: int = 0
+    # A labelled box Push · keep end time may shrink; the track marks it beside its label (#141).
+    flexible: bool = False
 
     @property
     def labelled(self):
@@ -223,6 +225,7 @@ def view_of(box, clock, overlapping):
         span=clock.span(box.start, box.start + box.length),
         minutes=box.length,
         start=box.start,
+        flexible=box.flexible,
     )
 
 

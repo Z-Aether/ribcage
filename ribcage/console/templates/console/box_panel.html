@@ -32,7 +32,11 @@
         </p>
         {% if box_refused.says_length %}<p class="pick-field__refusal" id="box-length-refusal">{{ box_refused.says_length }}</p>{% endif %}
         <p>Starts <strong data-box-span>{{ selected.span }}</strong></p>
-        {# Room for #141's Flexible checkbox. #}
+        <p class="box-panel__field box-panel__flexible">
+          <input type="checkbox" id="box-flexible" name="flexible"{% if box_refused %}{% if box_refused.flexible %} checked{% endif %}{% elif selected.flexible %} checked{% endif %}>
+          <label for="box-flexible">Flexible</label>
+          <span class="box-panel__hint">May shrink, to 5 minutes, under Push · keep end time</span>
+        </p>
         <button type="submit" class="button--quiet">Save</button>
       </form>
       <form method="post" action="{% url 'console_pick_remove' %}" data-lands-on="{% url 'console_pick' %}">
