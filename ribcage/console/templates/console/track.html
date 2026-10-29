@@ -1,0 +1,37 @@
+{# The Timetable sub-tab's tool row and track over a `track.Track`: one template, so the live preview of a drag can answer with it (#22, #136, #139). #}
+<div class="track-tools" id="track-tools">
+  <div class="track-tools__readouts">
+    <p class="track-tools__screen">
+      Screen time <strong>{{ track.tools.screen }}</strong>{% if track.tools.budget %} of <strong>{{ track.tools.budget }}</strong> budget{% else %} · no budget set{% endif %}
+      {% if track.tools.budget %}
+        <span class="meter{% if track.tools.is_over %} is-over{% endif %}" role="meter" aria-label="Screen time against the budget" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ track.tools.filled }}"><span class="meter__fill" style="width: {{ track.tools.filled }}%"></span></span>
+        <span class="track-tools__spare{% if track.tools.is_over %} is-over{% endif %}">{{ track.tools.spare }}</span>
+      {% endif %}
+    </p>
+    <p class="track-tools__evening">Evening <strong>{{ track.tools.evening }}</strong> · {{ track.tools.elapsed }} elapsed</p>
+    {% if track.tools.overlaps %}<p class="track-tools__overlaps">{{ track.tools.overlaps }} overlap{{ track.tools.overlaps|pluralize }}</p>{% endif %}
+  </div>
+  {# Room for the ripple mode (#140), + Break (#138), the arrange utilities (#145) and Shared (#149). #}
+  <div class="track-tools__acts"></div>
+</div>
+
+<div class="track-frame">
+  <div class="track" style="--lanes: {{ track.lanes }}">
+    <ol class="track__axis" aria-label="Clock times">
+      {% for tick in track.ticks %}
+        <li class="track__tick" style="--at: {{ tick.left }}"><span class="track__tick-label">{% if tick.day %}<span class="track__day">{{ tick.day }}</span> {% endif %}{{ tick.label }}</span></li>
+      {% endfor %}
+    </ol>
+    <div class="track__lanes">
+      {% for placement in track.placements %}
+        <div class="track__slot" style="--at: {{ placement.left }}; --span: {{ placement.width }}; --lane: {{ placement.lane }}">{% include "components/box.html" with box=placement.box %}</div>
+      {% endfor %}
+      {% for band in track.bands %}
+        <div class="track__overlap" style="--at: {{ band.left }}; --span: {{ band.width }}" aria-hidden="true"></div>
+      {% endfor %}
+    </div>
+    {% if track.marker %}
+      <div class="track__budget{% if track.marker.late %} is-late{% endif %}" style="--at: {{ track.marker.left }}"><span class="track__budget-label">{{ track.marker.label }}</span></div>
+    {% endif %}
+  </div>
+</div>

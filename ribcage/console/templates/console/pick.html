@@ -61,6 +61,8 @@
     <p>The plan's readouts will be here.</p>
   {% elif not timetable.anchor %}
     <p>Set the start time above first.</p>
+  {% elif track %}
+    {% include "console/track.html" %}
   {% else %}
     <p>Nothing on the timetable yet.</p>
   {% endif %}

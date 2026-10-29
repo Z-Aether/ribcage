@@ -1,0 +1,11 @@
+{# A timetable box over a `track.BoxView`, with no geometry of its own: the admin's track positions it, and M8's evening lays it out its own way (#56, #136). #}
+<div class="box {% if box.labelled %}box--labelled{% else %}box--film{% endif %}{% if box.dropped %} box--dropped{% endif %}{% if box.overlapping %} box--overlapping{% endif %}"{% if box.key %} data-box="{{ box.key }}"{% endif %} title="{{ box.title }}, {{ box.starts }}–{{ box.ends }}, {{ box.length }}">
+  {% if box.film %}<span class="box__poster">{% include "components/poster.html" with film=box.film size="tile" %}</span>{% endif %}
+  <span class="box__text">
+    <span class="box__title">{{ box.title }}</span>
+    <span class="box__times">{{ box.starts }}–{{ box.ends }}</span>
+    <span class="box__length">{{ box.length }}</span>
+    {% if box.dropped %}<span class="box__mark">dropped</span>{% endif %}
+  </span>
+  {% if box.vetoed_by %}<span class="box__vetoes"{% if box.vetoers %} title="{{ box.vetoers }}"{% endif %}>{{ box.vetoed_by }}</span>{% endif %}
+</div>

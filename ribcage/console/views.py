@@ -24,7 +24,7 @@ from ribcage.phase.history import current, last_entered, vote_has_opened
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
-from ribcage.timetable import setting
+from ribcage.timetable import setting, track
 from ribcage.triggers import correction, stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
@@ -182,6 +182,7 @@ def render_pick(request, sub, refused=None):
         "budget_minutes": None if budget is None else budget % 60,
         "budget_words": None if budget is None else films.screen_time_words(budget),
         "refused": refused,
+        "track": track.load(timetable.anchor, budget) if sub == "timetable" and timetable.anchor else None,
     }
     return render_tab(request, "console/pick.html", context)
 

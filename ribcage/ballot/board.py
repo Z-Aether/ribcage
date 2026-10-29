@@ -98,10 +98,13 @@ def vetoes_on(candidate_ids):
 
 
 def veto_marks(rows, viewer):
-    """What the other voters' vetoes put on a tile: their initials and their names, by suggestion, sorted by name (#120)."""
+    """What the other voters' vetoes put on a tile: their initials and their names, by suggestion, sorted by name (#120).
+
+    The admin has no ballot, so `viewer=None` marks everyone's, as the timetable's boxes do (#136).
+    """
     names = {}
     for suggestion_id, voter_id, name in rows:
-        if voter_id != viewer.pk:
+        if viewer is None or voter_id != viewer.pk:
             names.setdefault(suggestion_id, []).append(name)
     return {
         suggestion_id: ("".join(name.strip()[:1].upper() for name in sorted(each)), "Vetoed by " + ", ".join(sorted(each))) for suggestion_id, each in names.items()
