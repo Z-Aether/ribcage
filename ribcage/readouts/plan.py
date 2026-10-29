@@ -2,6 +2,8 @@
 
 from dataclasses import dataclass
 
+from ribcage.readouts.slate import film_points, slate_sum
+
 
 @dataclass(frozen=True)
 class Row:
@@ -81,3 +83,85 @@ def clock(minutes):
     if not hours:
         return f"{minutes}m"
     return f"{hours}h{minutes:02d}m" if minutes else f"{hours}h"
+
+
+@dataclass(frozen=True)
+class FilmLine:
+    """One slate film: its runtime, its film points over every voter, whom it represents and how many scored it positively."""
+
+    film: object
+    runtime: int
+    points: int
+    represents: tuple  # (voter, pins) in voter order
+    likes: int
+    most: bool  # carries the most film points
+
+
+@dataclass(frozen=True)
+class Person:
+    """One voter's row of the breakdown: the representative, the slate sum and, at zero, the best eligible candidate as (film, score)."""
+
+    voter: object
+    representative: object
+    representation: int
+    out: str
+    pins: bool
+    slate_sum: int
+    best_eligible: object  # (film, score) or None
+    served: str  # "best", "worst" or "": the floor set's best- and worst-served slate sums
+
+
+@dataclass(frozen=True)
+class Breakdown:
+    films: tuple
+    people: tuple
+
+
+def breakdown(read, slate, runtimes, held, candidates, candidate_records):
+    """The slate's film points and slate sums beside `read`, a `Plan` of the same `slate` (film keys in slate order) (#24, #148).
+
+    `held` are the (voter, film, score, vetoed, seen_it) records on the slate's films, `candidates` the ballot's film keys in slate order
+    with their `candidate_records`; a dropped film is on the slate but not a candidate, so it is never offered to a voter at zero.
+    """
+    on_slate = set(slate)
+    by_film, by_voter, likes = {}, {}, {}
+    for voter, film, score, vetoed, _ in held:
+        if film not in on_slate:
+            continue
+        by_film.setdefault(film, []).append((score, vetoed))
+        by_voter.setdefault(voter, []).append((score, vetoed))
+        if not vetoed and score is not None and score > 0:
+            likes[film] = likes.get(film, 0) + 1
+    points = {film: film_points(by_film.get(film, ())) for film in slate}
+    top = max(points.values(), default=0)
+    represented = {}
+    for each in read.rows:
+        if each.representative is not None:
+            represented.setdefault(each.representative, []).append((each.voter, each.pins))
+    films = tuple(FilmLine(film, runtimes[film], points[film], tuple(represented.get(film, ())), likes.get(film, 0), points[film] == top) for film in slate)
+    eligible = {}
+    for voter, film, score, vetoed, seen_it in candidate_records:
+        eligible.setdefault(voter, []).append((film, score, vetoed, seen_it))
+    sums = {each.voter: slate_sum(by_voter.get(each.voter, ())) for each in read.rows}
+    members = [sums[each.voter] for each in read.rows if not each.out]
+    best, worst = max(members, default=0), min(members, default=0)
+    people = tuple(
+        Person(
+            each.voter,
+            each.representative,
+            each.representation,
+            each.out,
+            each.pins,
+            sums[each.voter],
+            _best_eligible(candidates, eligible.get(each.voter, ())) if not each.out and each.representation == 0 else None,
+            "" if each.out or best == worst else "best" if sums[each.voter] == best else "worst" if sums[each.voter] == worst else "",
+        )
+        for each in read.rows
+    )
+    return Breakdown(films, people)
+
+
+def _best_eligible(candidates, rows):
+    """The voter's best-scored candidate they have neither seen nor vetoed, with a positive score, as (film, score), or None (#17, #148)."""
+    film, score = representative(candidates, rows)
+    return None if film is None else (film, score)

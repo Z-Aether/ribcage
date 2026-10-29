@@ -1,6 +1,6 @@
 """Film points and slate order (#24, #36, #137)."""
 
-from ribcage.readouts.slate import SlateEntry, film_points, slate_order
+from ribcage.readouts.slate import SlateEntry, film_points, slate_order, slate_sum
 
 
 def test_a_veto_counts_minus_two_and_an_unplaced_film_zero():
@@ -23,3 +23,9 @@ def test_then_more_points_then_title():
     order = slate_order([SlateEntry(1, "Cube", 0, 3), SlateEntry(2, "Alien", 0, 5), SlateEntry(3, "bat", 0, 3), SlateEntry(4, "Aliens", 0, 3)])
 
     assert [each.key for each in order] == [2, 4, 3, 1]
+
+
+def test_a_slate_sum_counts_a_veto_as_minus_two_and_an_unplaced_film_as_zero():
+    assert slate_sum([(3, False), (None, True), (None, False), (-1, False)]) == 0
+    assert slate_sum([(2, False), (None, True)]) == 0
+    assert slate_sum([]) == 0

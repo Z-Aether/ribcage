@@ -21,6 +21,11 @@ def film_points(records):
     return sum(VETO_POINTS if vetoed else score or 0 for score, vetoed in records)
 
 
+def slate_sum(records):
+    """One voter's scores for every film in the slate, summed, from their (score, vetoed) records: a veto counts -2 (#24, #148)."""
+    return film_points(records)
+
+
 def slate_order(standings):
     """Fewest vetoes first, then most film points, then title (#36)."""
     return sorted(standings, key=lambda each: (each.vetoes, -each.points, each.title.casefold(), each.title))

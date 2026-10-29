@@ -1,4 +1,4 @@
-{# The plan's set readouts, minimal and plain so M9's slate ledger row can replace it; #148's film points and sums join it (#12, #147). #}
+{# The plan's set readouts, minimal and plain so M9's slate ledger row can replace it; its breakdown opens in place beneath (#12, #147, #148). #}
 <section class="the-plan" aria-label="The plan" data-keeps-scroll>
   <h2>The plan</h2>
   {% if plan.empty %}
@@ -33,5 +33,50 @@
       <strong>Vetoed:</strong>
       {% for each in plan.vetoed %}{% if not forloop.first %}; {% endif %}{{ each.film }} ({{ each.by|join:", " }}){% empty %}none{% endfor %}
     </p>
+    <details class="the-plan__breakdown">
+      <summary>Breakdown</summary>
+      <h3>Films</h3>
+      <table class="ledger the-plan__films">
+        <thead>
+          <tr><th scope="col">Film</th><th scope="col" class="ledger__number">Runtime</th><th scope="col" class="ledger__number">Points</th><th scope="col">Represents</th></tr>
+        </thead>
+        <tbody>
+          {% for film in plan.film_lines %}
+            <tr>
+              <td class="the-plan__title{% if film.most %} the-plan__most{% endif %}">{{ film.title }}</td>
+              <td class="ledger__number">{{ film.runtime }}m</td>
+              <td class="ledger__number the-plan__points">{{ film.points }}</td>
+              <td class="the-plan__represents">
+                {% for each in film.represents %}{% if not forloop.first %}, {% endif %}{{ each.name }}{% if each.pins %} <span class="the-plan__pin" title="Pins the floor">★</span>{% endif %}{% empty %}<span class="ledger__muted">nobody · {{ film.likes }} like it</span>{% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <h3>People</h3>
+      <table class="ledger the-plan__people">
+        <thead>
+          <tr><th scope="col">Voter</th><th scope="col">Representative</th><th scope="col" class="ledger__number">Score</th><th scope="col" class="ledger__number">Slate sum</th></tr>
+        </thead>
+        <tbody>
+          {% for person in plan.people %}
+            <tr>
+              <td class="the-plan__person">{{ person.name }}{% if person.pins %} <span class="the-plan__pin" title="Pins the floor">★</span>{% endif %}</td>
+              {% if person.out %}
+                <td colspan="2" class="ledger__muted">{{ person.out }}</td>
+              {% elif person.film %}
+                <td>{{ person.film }}</td>
+                <td class="ledger__number">{{ person.score }}</td>
+              {% else %}
+                <td class="the-plan__zero" colspan="2">
+                  0 · {% if person.best %}best eligible: {{ person.best.title }} ({{ person.best.runtime }}m, scored {{ person.best.score }}){% else %}<span class="ledger__muted">nothing eligible scored</span>{% endif %}
+                </td>
+              {% endif %}
+              <td class="ledger__number the-plan__sum{% if person.served %} the-plan__sum--{{ person.served }}{% endif %}">{{ person.sum }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </details>
   {% endif %}
 </section>

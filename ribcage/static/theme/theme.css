@@ -3816,6 +3816,22 @@ body:has(> main > .ballot-head) > footer.site-footer {
 [data-skin] .the-plan__vetoed {
   margin-top: 0.75rem;
 }
+[data-skin] .the-plan__most {
+  font-weight: 700;
+}
+[data-skin] .ledger td.the-plan__sum--best {
+  color: var(--score-top-pick);
+}
+[data-skin] .ledger td.the-plan__sum--worst {
+  color: var(--veto-ink);
+}
+[data-skin] .the-plan__breakdown {
+  margin-top: 0.75rem;
+  overflow-x: auto;
+}
+[data-skin] .the-plan__people th.ledger__number {
+  white-space: normal;
+}
 [data-skin] .the-plan__pin {
   color: var(--accent);
 }

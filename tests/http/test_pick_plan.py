@@ -4,6 +4,7 @@ import html
 import re
 
 import pytest
+from django.conf import settings
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
 
@@ -144,3 +145,79 @@ def test_the_query_count_does_not_grow_with_the_slate(admin, plan):
         BallotRecord.objects.create(voter=plan["voters"]["Dani"], suggestion=film, vetoed=True)
 
     assert queries() == small
+
+
+def breakdown(page, kind):
+    return [
+        [text(cell) for cell in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.S)]
+        for row in re.findall(r"<tr>(.*?)</tr>", re.search(rf'<table class="ledger the-plan__{kind}">.*?</table>', page, re.S)[0], re.S)[1:]
+    ]
+
+
+def test_the_breakdown_lists_the_films_and_the_people_in_place(admin, plan):
+    page = admin.get(COMPARE).text
+
+    assert "<details" in the_plan(page) and "<dialog" not in the_plan(page)
+    assert breakdown(page, "films") == [
+        ["The Thing", "109m", "3", "Dani ★"],
+        ["Cube", "90m", "1", "ada"],
+    ]
+    assert breakdown(page, "people") == [
+        ["ada", "Cube", "3", "4"],
+        ["Dani ★", "The Thing", "2", "0"],
+        ["Hanna", "no ballot", "0"],
+    ]
+    assert re.search(r'the-plan__title the-plan__most">The Thing', page)
+
+
+def test_a_film_representing_nobody_reads_how_many_like_it(admin, plan):
+    ada = put("Alien", 117, start=199)
+    BallotRecord.objects.create(voter=plan["voters"]["ada"], suggestion=ada, score=1)
+    BallotRecord.objects.create(voter=plan["voters"]["Dani"], suggestion=ada, score=1)
+
+    assert ["Alien", "117m", "2", "nobody · 2 like it"] in breakdown(admin.get(COMPARE).text, "films")
+
+
+def test_a_voter_at_zero_shows_their_best_eligible_film_never_a_dropped_one(admin, plan):
+    voters = plan["voters"]
+    ada = voters["ada"]
+    BallotRecord.objects.filter(voter=ada).delete()
+    BallotRecord.objects.create(voter=ada, suggestion=plan["cube"], vetoed=True)
+    BallotRecord.objects.create(voter=ada, suggestion=plan["thing"], seen_it=True, score=3)
+    BallotRecord.objects.create(voter=ada, suggestion=put("Tron", 96, suggester=ada), score=2)
+    BallotRecord.objects.create(voter=ada, suggestion=put("Ripley", 100, approval=Approval.DROPPED, suggester=ada), score=3)
+
+    people = dict((each[0], each) for each in breakdown(admin.get(COMPARE).text, "people"))
+
+    assert people["ada ★"] == ["ada ★", "0 · best eligible: Tron (96m, scored 2)", "1"]
+
+
+def test_the_best_and_worst_served_slate_sums_are_coloured(admin, plan):
+    page = admin.get(COMPARE).text
+
+    assert re.search(r"the-plan__sum--best\">4<", page)
+    assert re.search(r"the-plan__sum--worst\">0<", page)
+
+
+def test_the_breakdown_query_count_does_not_grow_with_the_slate(admin, plan):
+    def queries():
+        with CaptureQueriesContext(connection) as captured:
+            admin.get(COMPARE)
+        return len(captured)
+
+    admin.get(COMPARE)
+    small = queries()
+    for number in range(6):
+        film = put(f"More {number}", 80, start=300 + 100 * number)
+        BallotRecord.objects.create(voter=plan["voters"]["ada"], suggestion=film, score=2)
+        BallotRecord.objects.create(voter=plan["voters"]["Dani"], suggestion=film, vetoed=True)
+        put(f"Unplaced {number}", 80)
+
+    assert queries() == small
+
+
+def test_the_coloured_sums_outrank_the_ledger_cell_ink():
+    css = (settings.BASE_DIR / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
+
+    assert "[data-skin] .ledger td.the-plan__sum--best {" in css
+    assert "[data-skin] .ledger td.the-plan__sum--worst {" in css
