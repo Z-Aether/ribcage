@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "ribcage.ballot",
     "ribcage.triggers",
     "ribcage.phase",
+    "ribcage.timetable",
     "ribcage.console",
     "ribcage.seeding",
     "ribcage.gallery",
