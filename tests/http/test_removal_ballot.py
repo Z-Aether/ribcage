@@ -63,7 +63,7 @@ def test_the_confirm_lists_only_what_the_voter_has(admin, voters, voted):
     assert dani[2:4] == ["their 1 score", "their done marker"]
 
     DoneMarker.objects.filter(voter=voters["Dani"]).delete()
-    assert goes(admin.get(TAB, {"remove": voters["Dani"].pk}).text)[2:] == ["their 1 score"]
+    assert goes(admin.get(TAB, {"remove": voters["Dani"].pk}).text)[2:-1] == ["their 1 score"]
 
 
 def test_the_confirm_says_nothing_of_a_ballot_the_voter_never_touched(admin, voters, voted):

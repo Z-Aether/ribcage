@@ -16,6 +16,8 @@ SEEDED_SCORES = {
     "Zoë": {THE_THING: 3, CUBE: 2, EXIT_8: 1, INFESTED: -1, COTTON_CANDY: 0, MARIA: 2},
     "Anne-Marie": {THE_THING: 1, THE_SHINING: 2},
     "Sam": {COTTON_CANDY: 3},
+    # Only 0 and -1: no film to stand for them, so the floor set shows *nothing representable* beside Bartholomew Winthrop's *no ballot* (#146).
+    "O'Brien": {COTTON_CANDY: 0, TERRIFIER: -1},
 }
 
 # Each veto is (film, the note it is written as or None): Terrifier is vetoed by two voters, for the ribbon's two initials.

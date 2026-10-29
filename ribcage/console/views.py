@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods, require_POST, require_safe
 
-from ribcage.ballot import progress
+from ribcage.ballot import floor, progress
 from ribcage.console import films
 from ribcage.console.forms import BackupCodeForm, BackupUploadForm
 from ribcage.console.moves import make, offered
@@ -502,7 +502,14 @@ def render_roster(request, context):
     for voter in voters:
         voter.progress = shown.get(voter.pk)
     ballot_size = candidates().count() if opened else 0
-    return render_tab(request, "console/roster.html", {"voters": voters, "ballot_size": ballot_size, "tab": "console_roster", "open_row": open_row, **context})
+    floor_line, out_for = floor.of_the_roster()
+    for voter in voters:
+        voter.out_for = out_for.get(voter.pk)
+    return render_tab(
+        request,
+        "console/roster.html",
+        {"voters": voters, "ballot_size": ballot_size, "floor_line": floor_line, "floor_opened": opened, "tab": "console_roster", "open_row": open_row, **context},
+    )
 
 
 def armed_reset(voter, used=False):

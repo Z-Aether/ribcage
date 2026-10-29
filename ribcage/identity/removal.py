@@ -2,6 +2,7 @@
 
 from django.db import transaction
 
+from ribcage.ballot import floor
 from ribcage.ballot.models import BallotRecord, DoneMarker
 from ribcage.suggestions import departure
 
@@ -41,6 +42,8 @@ def what_goes(voter):
             if suggestions == 1
             else f"their {suggestions} suggestions stay, with their pitches, marked removed"
         )
+    before, after = floor.change_on_removing(voter)
+    goes.append(f"The floor set goes from {before.size} of {before.of} to {after.size} of {after.of}.")
     return goes
 
 

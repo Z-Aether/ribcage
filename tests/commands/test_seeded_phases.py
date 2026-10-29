@@ -8,6 +8,7 @@ from django.db.models import F
 from django.test import override_settings
 from django.utils import timezone
 
+from ribcage.ballot.floor import of_the_roster
 from ribcage.ballot.models import BallotRecord, DoneMarker
 from ribcage.films.corpus import read_entries
 from ribcage.phase.history import current
@@ -163,3 +164,10 @@ def test_in_pick_and_run_terrifier_is_last_vetoed_by_zoe_and_anne_marie_and_sam_
     assert boxes[-1].suggestion.title == "Terrifier" and vetoers(boxes[-1]) == ["Anne-Marie", "Zoë"]
     middle = boxes[len(boxes) // 2 - 1 : len(boxes) // 2 + 2]
     assert any(box.suggestion and vetoers(box) == ["Sam"] for box in middle)
+
+
+@pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
+def test_from_vote_on_the_floor_set_shows_obrien_nothing_representable_and_bartholomew_no_ballot(db, seeded):
+    line, out_for = of_the_roster()
+
+    assert sorted(line["out"]) == [("Bartholomew Winthrop", "no ballot"), ("O'Brien", "nothing representable")]

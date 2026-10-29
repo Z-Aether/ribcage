@@ -1,0 +1,4 @@
+{# The floor set line: who the floor is computed over, and each voter outside it with the reason; highlighted whenever anyone is out (#33, #146). #}
+<p class="floor-line{% if line.out %} floor-line--out{% endif %}" data-floor-set>
+  Floor computed over {{ line.size }} of {{ line.of }}{% for name, reason in line.out %}{% if forloop.first %} — {% else %} · {% endif %}{{ name }}: {{ reason }}{% endfor %}
+</p>

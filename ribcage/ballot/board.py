@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from ribcage.ballot import order
 from ribcage.ballot.models import BallotRecord
 from ribcage.films.film import Film
+from ribcage.readouts.placement import is_placed
 from ribcage.suggestions.models import Approval, Suggestion
 from ribcage.triggers import stored, watched
 
@@ -85,11 +86,6 @@ def records_of(viewer):
             "suggestion_id", "score", "vetoed", "seen_it"
         )
     }
-
-
-def is_placed(record):
-    """The one rule for a film being out of Unsorted: a record with a score or a veto; a record holding only seen-it is not (#119)."""
-    return record is not None and (record[0] is not None or record[1])
 
 
 def vetoes_on(candidate_ids):

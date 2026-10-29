@@ -3786,3 +3786,20 @@ body:has(> main > .ballot-head) > footer.site-footer {
   color: var(--surface);
   border-color: var(--ink);
 }
+
+/* ---------- The floor set line: muted when nobody is out, highlighted when anyone is (#33, #146) ---------- */
+
+[data-skin] .floor-line {
+  margin: 0 0 0.75rem;
+  padding: 0.4rem 0.75rem;
+  border-left: 3px solid var(--line-strong);
+  color: var(--ink-muted);
+}
+[data-skin] .floor-line--out {
+  border-left-color: var(--accent);
+  background: var(--surface-raised);
+  color: var(--ink);
+}
+[data-skin] .roster .roster__out {
+  color: var(--accent);
+}

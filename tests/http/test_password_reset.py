@@ -56,7 +56,7 @@ def test_arming_resets_nothing_and_prints_the_confirm_under_the_voters_row(admin
         "Resetting Dani's password signs them out everywhere and shows you a new one, once, to send them directly. "
         "At their next login they must choose their own before anything else."
     )
-    assert re.search(rf'<tr data-voter="{dani.pk}" class="is-armed">.*?</tr>\s*<tr class="ledger__detail">\s*<td colspan="5">\s*<form', page, re.S)
+    assert re.search(rf'<tr data-voter="{dani.pk}" class="is-armed">.*?</tr>\s*<tr class="ledger__detail">\s*<td colspan="6">\s*<form', page, re.S)
     assert shown_password(page) is None
 
 

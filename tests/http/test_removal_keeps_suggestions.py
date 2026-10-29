@@ -95,23 +95,23 @@ def test_a_voter_who_rejoins_under_the_same_name_owns_none_of_it(admin, voters, 
 def test_the_confirm_lists_the_counts_of_notes_and_suggestions(admin, voters, pool):
     page = admin.get(TAB, {"remove": voters["ada"].pk}).text
 
-    assert goes(page)[2:] == ["their one note on another film", "their 2 suggestions stay, with their pitches, marked removed"]
+    assert goes(page)[2:-1] == ["their one note on another film", "their 2 suggestions stay, with their pitches, marked removed"]
     assert confirm(page) is not None
 
 
 def test_the_confirm_leaves_out_what_the_voter_does_not_have(admin, voters, pool):
     dani = goes(admin.get(TAB, {"remove": voters["Dani"].pk}).text)
 
-    assert dani[2:] == ["their one note on another film"]
+    assert dani[2:-1] == ["their one note on another film"]
     hanna = goes(admin.get(TAB, {"remove": voters["Hanna"].pk}).text)
-    assert hanna[2:] == ["their one note on another film", "their suggestion stays, with its pitch, marked removed"]
+    assert hanna[2:-1] == ["their one note on another film", "their suggestion stays, with its pitch, marked removed"]
     remove(voters["Dani"])
     nothing = goes(admin.get(TAB, {"remove": voters["Hanna"].pk}).text)
-    assert nothing[2:] == hanna[2:]
+    assert nothing[2:-1] == hanna[2:-1]
     Note.objects.filter(author=voters["Hanna"]).delete()
-    assert goes(admin.get(TAB, {"remove": voters["Hanna"].pk}).text)[2:] == ["their suggestion stays, with its pitch, marked removed"]
+    assert goes(admin.get(TAB, {"remove": voters["Hanna"].pk}).text)[2:-1] == ["their suggestion stays, with its pitch, marked removed"]
     Suggestion.objects.filter(suggester=voters["Hanna"]).delete()
-    assert len(goes(admin.get(TAB, {"remove": voters["Hanna"].pk}).text)) == 2
+    assert len(goes(admin.get(TAB, {"remove": voters["Hanna"].pk}).text)) == 3
 
 
 def test_the_withdraw_count_takes_every_note_but_the_pitch(admin, voters, pool):

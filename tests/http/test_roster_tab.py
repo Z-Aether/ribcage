@@ -99,7 +99,7 @@ def test_arming_removal_deletes_nothing_and_prints_the_confirm_under_the_voters_
     assert get_user(dani_browser).pk == dani.pk
     action, fields, act, cancel, _ = confirm(page)
     assert (action, fields, act, cancel) == (REMOVE, {"voter": str(dani.pk)}, "Remove Dani", TAB)
-    assert re.search(rf'<tr data-voter="{dani.pk}" class="is-armed">.*?</tr>\s*<tr class="ledger__detail">\s*<td colspan="5">\s*<form', page, re.S)
+    assert re.search(rf'<tr data-voter="{dani.pk}" class="is-armed">.*?</tr>\s*<tr class="ledger__detail">\s*<td colspan="6">\s*<form', page, re.S)
 
 
 def test_the_confirm_lists_what_goes_and_says_the_join_code_still_lets_them_back(admin, voters):
@@ -108,7 +108,7 @@ def test_the_confirm_lists_what_goes_and_says_the_join_code_still_lets_them_back
     *_, said = confirm(page)
     goes = [text(item) for item in re.findall(r'<li class="roster-confirm__goes">(.*?)</li>', page, re.S)]
     assert said.startswith("Removing Dani takes away: ")
-    assert goes == ["their display name and password", "their sessions, so they are signed out everywhere"]
+    assert goes[:-1] == ["their display name and password", "their sessions, so they are signed out everywhere"]
     assert said.endswith("Removal is not a ban: the join code still lets them register again.")
 
 

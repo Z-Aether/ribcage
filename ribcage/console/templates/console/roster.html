@@ -9,6 +9,7 @@
     {% url 'console_roster' as tab_address %}
     {# One row per voter; later milestones add their columns, and the floor set line above (#28, #79). #}
     {# Scrolls sideways within its frame on a phone, as the Films ledger does (#124). #}
+    {% include "components/floor_line.html" with line=floor_line %}
     <div class="roster__frame" data-keeps-scroll>
     <table class="ledger roster">
       <thead>
@@ -17,6 +18,7 @@
           <th scope="col" class="ledger__number">Scored</th>
           <th scope="col" class="ledger__number">Vetoes</th>
           <th scope="col">Done</th>
+          <th scope="col">Floor set</th>
           <th scope="col"><span class="visually-hidden">Actions</span></th>
         </tr>
       </thead>
@@ -34,6 +36,12 @@
               <td class="ledger__number roster__vetoes">—</td>
               <td class="roster__done">—</td>
             {% endif %}
+            {# Reads — until VOTE has opened, as its neighbours do (#124, #146). #}
+            {% if floor_opened %}
+              <td class="roster__floor">{% if voter.out_for %}<span class="roster__out">{{ voter.out_for }}</span>{% else %}in{% endif %}</td>
+            {% else %}
+              <td class="roster__floor">—</td>
+            {% endif %}
             <td class="roster__actions">
               {# The open row loses its arms; Cancel takes the clicked one's place, and the other's stays empty (#79, #85). #}
               {% if voter == armed and arming == "reset" %}
@@ -50,7 +58,7 @@
           </tr>
           {% if voter == armed and arming == "remove" %}
             <tr class="ledger__detail">
-              <td colspan="5">
+              <td colspan="6">
                 <form method="post" action="{% url 'console_roster_remove' %}" class="roster-confirm">
                   {% csrf_token %}
                   <input type="hidden" name="voter" value="{{ voter.pk }}">
@@ -67,7 +75,7 @@
             </tr>
           {% elif voter == armed and arming == "reset" %}
             <tr class="ledger__detail">
-              <td colspan="5">
+              <td colspan="6">
                 <form method="post" action="{% url 'console_roster_reset' %}" class="roster-confirm">
                   {% csrf_token %}
                   <input type="hidden" name="voter" value="{{ voter.pk }}">
@@ -83,7 +91,7 @@
             </tr>
           {% elif voter == was_reset %}
             <tr class="ledger__detail">
-              <td colspan="5">
+              <td colspan="6">
                 <div class="roster-reset">
                   <p>{{ voter.display_name }}'s new password:</p>
                   <p class="roster-reset__password"><code>{{ password }}</code></p>
