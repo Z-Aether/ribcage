@@ -125,8 +125,15 @@ class Resize:
     length: int
 
 
-# An inserted box (#144) joins as its own class, and `apply` learns it. Every change goes through `edit`, so a preview and a save
-# are the same call (#22).
+@dataclass(frozen=True)
+class Insert:
+    """A film's box that is not on the timetable yet, laid at `start` for `length` minutes; the key `edit` is given names it (#144)."""
+
+    start: int
+    length: int
+
+
+# Every change goes through `edit`, so a preview and a save are the same call (#22).
 
 
 def apply(boxes, key, change):
@@ -135,6 +142,8 @@ def apply(boxes, key, change):
         return [replace(box, start=change.start) if box.key == key else box for box in boxes]
     if isinstance(change, Resize):
         return [replace(box, length=change.length) if box.key == key else box for box in boxes]
+    if isinstance(change, Insert):
+        return [*boxes, Placed(key, change.start, change.length, True)]
     raise TypeError(f"not a change: {change!r}")
 
 
@@ -152,8 +161,10 @@ def pushed_side(before, after, key):
     """
     old = next((box for box in before if box.key == key), None)
     new = next((box for box in after if box.key == key), None)
-    if old is None or new is None:
+    if new is None:
         return None
+    if old is None:
+        return pushed_by_insert(after, new)
     if new.end > old.end:
         side = [box for box in after if box.key != key and box.start >= old.start]
         touched = bool(side) and new.end > min(box.start for box in side)
@@ -163,6 +174,23 @@ def pushed_side(before, after, key):
         touched = bool(side) and new.start < max(box.end for box in side)
         return (side, new.start - old.start, False) if touched else None
     return None
+
+
+def contact_of_insert(after, new):
+    """The start of the earliest box the inserted one lands on or reaches into, or None where it touches none (#144).
+
+    A box it lands on starts before the insert's own start and ends after it, so the minutes that must clear begin at that
+    box's start, not the insert's. A box merely touched is no contact, as everywhere (#139).
+    """
+    side = [box for box in after if box.key != new.key and box.end > new.start]
+    contact = min((box.start for box in side), default=None)
+    return (side, contact) if contact is not None and new.end > contact else (None, None)
+
+
+def pushed_by_insert(after, new):
+    """An insert is a box grown from nothing at its start: it pushes later by its reach past the contact, so the first box it lands on starts where it ends (#13, #144)."""
+    side, contact = contact_of_insert(after, new)
+    return None if side is None else (side, new.end - contact, True)
 
 
 def keep_gaps(before, after, key):
@@ -272,10 +300,12 @@ def keep_end_time(before, after, key):
     if pushed is None:
         return after
     side, _, later = pushed
-    old = next(box for box in before if box.key == key)
+    old = next((box for box in before if box.key == key), None)
     new = next(box for box in after if box.key == key)
     if later:
-        result = {box.key: box for box in squeezed(side, old.end, new.end)}
+        # An insert had no end before: the squeeze counts from the contact it made (#144).
+        old_end = old.end if old else contact_of_insert(after, new)[1]
+        result = {box.key: box for box in squeezed(side, old_end, new.end)}
     else:
         result = {box.key: reflected(box) for box in squeezed([reflected(each) for each in side], -old.start, -new.start, mirrored=True)}
     return [result.get(box.key, box) for box in after]
