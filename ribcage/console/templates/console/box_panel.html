@@ -5,7 +5,21 @@
     <div class="box-panel__body">
       <h2 class="box-panel__title">{{ selected.title }}{% if selected.film.year %} <span class="box-panel__year">({{ selected.film.year }})</span>{% endif %}</h2>
       <p>Starts <strong data-box-span>{{ selected.span }}</strong></p>
-      <p>Runtime <strong>{{ selected.film.runtime }} min</strong></p>
+      <form method="post" action="{% url 'console_pick_runtime' %}" class="box-panel__form" data-lands-on="{% url 'console_pick' %}" data-preview="{% url 'console_pick_preview' %}">
+        {% csrf_token %}
+        <input type="hidden" name="box" value="{{ selected.key }}">
+        <input type="hidden" name="mode" value="{{ ripple_mode }}">
+        <p class="box-panel__field">
+          <label for="box-runtime">Runtime</label>
+          <input type="text" inputmode="numeric" id="box-runtime" name="runtime" value="{% if runtime_refused %}{{ runtime_refused.typed }}{% else %}{{ selected.film.runtime }}{% endif %}" autocomplete="off"{% if runtime_refused %} aria-describedby="box-runtime-refusal" autofocus{% endif %}>
+          <span>min</span>
+          <span class="runtime__source">{% if selected.film.runtime_source == "tmdb" %}TMDB{% else %}by hand{% endif %}</span>
+        </p>
+        {% if runtime_refused %}<p class="pick-field__refusal" id="box-runtime-refusal">{{ runtime_refused.says }}</p>{% endif %}
+        <p class="box-panel__hint">The film's runtime everywhere — SOLVE reads it too.</p>
+        {% if selected.tmdb_says %}<p class="box-panel__hint">TMDB says {{ selected.tmdb_says }} · <button type="button" class="button--quiet" data-reset="{{ selected.tmdb_says }}">reset</button></p>{% endif %}
+        <button type="submit" class="button--quiet">Save</button>
+      </form>
       {% if selected.vetoers %}<p class="box-panel__vetoes">{{ selected.vetoers }}</p>{% endif %}
       {% if selected.dropped %}<p class="box-panel__dropped">Dropped</p>{% endif %}
       <form method="post" action="{% url 'console_pick_remove' %}" data-lands-on="{% url 'console_pick' %}">

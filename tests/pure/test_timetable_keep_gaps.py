@@ -119,3 +119,13 @@ def test_every_mode_is_acted_on():
     assert set(engine.MODES) == set(engine.RIPPLE_MODES) == {engine.NONE, engine.KEEP_GAPS, engine.KEEP_END_TIME}
     with pytest.raises(ValueError):
         engine.edit(EVENING, "a", engine.Move(5), "squeeze")
+
+
+def test_a_longer_film_runtime_pushes_the_boxes_after_it_by_the_difference_under_keep_gaps_and_only_overlaps_under_none():
+    # a lengthened 60 to 80 (a film's runtime is the same Resize as a labelled box's length, #142).
+    kept = engine.edit(EVENING, "a", engine.Resize(80), engine.KEEP_GAPS)
+    left = engine.edit(EVENING, "a", engine.Resize(80), engine.NONE)
+
+    assert starts(kept) == {"a": 0, "b": 90, "c": 170}
+    assert starts(left) == starts(EVENING)
+    assert [(each.first, each.second) for each in engine.overlaps(left)] == [("a", "b")]

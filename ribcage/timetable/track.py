@@ -54,6 +54,8 @@ class Loaded:
     vetoers: str = ""
     dropped: bool = False
     flexible: bool = False
+    # TMDB's runtime for a film, which the panel's reset offers while the copy's differs (#142).
+    tmdb_runtime: int | None = None
 
 
 @dataclass(frozen=True)
@@ -78,6 +80,8 @@ class BoxView:
     start: int = 0
     # A labelled box Push · keep end time may shrink; the track marks it beside its label (#141).
     flexible: bool = False
+    # TMDB's runtime where it differs from the film's, else None (#142).
+    tmdb_says: int | None = None
 
     @property
     def labelled(self):
@@ -226,6 +230,7 @@ def view_of(box, clock, overlapping):
         minutes=box.length,
         start=box.start,
         flexible=box.flexible,
+        tmdb_says=box.tmdb_runtime if box.tmdb_runtime != box.length else None,
     )
 
 
@@ -297,6 +302,7 @@ def stored_boxes():
                 vetoers=names,
                 # The mark is the admin's alone; voters never see approval (#26 §5).
                 dropped=box.suggestion.approval == Approval.DROPPED,
+                tmdb_runtime=box.suggestion.tmdb_runtime,
             )
         )
     return boxes

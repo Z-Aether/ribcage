@@ -75,6 +75,7 @@ NO_DTDD_DATA = {
     "console_pick_add", "console_pick_remove", "console_pick_break",  # the timetable's hand edits: a redirect to the tab (#137)
     "console_pick_preview", "console_pick_move",  # a drag's preview, the track alone, and its save, a redirect to the tab (#139)
     "console_pick_mode",  # the ripple mode's save: a redirect to the tab (#140)
+    "console_pick_runtime",  # a film box's runtime save: a redirect to the tab, or the tab with a refusal (#142)
     "console_pick_box",  # a redirect to the tab, or the tab with a refusal (#137, #138)
     "console_roster_remove", "console_roster_reset", "console_backup_upload",  # the roster's and backup page's acts
 }

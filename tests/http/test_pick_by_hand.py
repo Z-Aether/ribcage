@@ -113,7 +113,7 @@ def test_a_click_selects_a_box_through_the_address_and_shows_its_panel(hand):
     assert page.count("track__slot is-selected") == 1
     panel = re.search(r'<section class="box-panel".*?</section>', page, re.S)[0]
     text = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", panel)).split())
-    assert "The Thing" in text and "Starts Sat 19:30 → 21:19" in text and "Runtime 109 min" in text
+    assert "The Thing" in text and "Starts Sat 19:30 → 21:19" in text and "Runtime" in text and 'id="box-runtime" name="runtime" value="109"' in page
     assert "Vetoed by Dani" in text and "Dropped" not in text and "Remove from the plan" in text
 
 

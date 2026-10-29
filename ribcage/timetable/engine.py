@@ -120,7 +120,7 @@ class Move:
 
 @dataclass(frozen=True)
 class Resize:
-    """A labelled box's new length in minutes; its start stays (#140). A film's runtime and the drag handle join as #142 and #143 land."""
+    """A box's new length in minutes, a labelled box's own or a film's corrected runtime; its start stays (#140, #142). The drag handle joins as #143 lands."""
 
     length: int
 

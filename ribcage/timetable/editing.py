@@ -9,6 +9,8 @@ from dataclasses import replace
 
 from django.db import transaction
 
+from ribcage.suggestions import runtime
+from ribcage.suggestions.models import Suggestion
 from ribcage.timetable import engine, track
 from ribcage.timetable.models import Box
 
@@ -40,9 +42,12 @@ def run(box_id, change, mode, save):
 
 
 def stored(before, after):
-    """Write what changed: a box's start, and a labelled box's length. A film's runtime (#142) joins as its change does."""
+    """Write what changed: a box's start, a labelled box's length and a film's runtime, which every card and SOLVE read (#142)."""
     for each, new in zip(before, after, strict=True):
         if each.start != new.start:
             Box.objects.filter(pk=each.key).update(start=new.start)
         if each.length != new.length and each.film is None:
             Box.objects.filter(pk=each.key, suggestion__isnull=True).update(length=new.length)
+        elif each.length != new.length:
+            # The film's own runtime, so the source then reads by hand, or TMDB again once corrected back (#21, #142).
+            runtime.correct(Suggestion.objects.get(box=each.key), str(new.length))

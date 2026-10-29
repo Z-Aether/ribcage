@@ -24,8 +24,9 @@ from ribcage.ballot.board import candidates
 from ribcage.phase.history import current, last_entered, vote_has_opened
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
+from ribcage.suggestions import runtime
 from ribcage.suggestions.models import Suggestion
-from ribcage.timetable import editing, engine, labelling, laying, offering, setting, track
+from ribcage.timetable import editing, engine, labelling, laying, offering, retiming, setting, track
 from ribcage.timetable.models import Box
 from ribcage.triggers import correction, stored
 
@@ -192,7 +193,7 @@ def track_context(request, mode=None):
     return {"ripple_mode": mode or ripple_mode(request), "ripple_names": RIPPLE_NAMES}
 
 
-def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=None):
+def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=None, runtime_refused=None):
     """The Pick tab on one of its two sub-tabs; the header is the same on both (#135)."""
     timetable = setting.read()
     budget = timetable.budget
@@ -214,6 +215,7 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
         "track": the_track,
         "selected": the_track.box(labelled) if the_track else None,
         "box_refused": box_refused,
+        "runtime_refused": runtime_refused,
         **track_context(request, mode),
         "candidates": offering.not_in_the_plan() if sub == "timetable" else (),
     }
@@ -293,6 +295,20 @@ def pick_box(request):
     return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if selected_box(request, box) else ""))
 
 
+@admin_required
+@require_http_methods(["GET", "HEAD", "POST"])
+def pick_runtime(request):
+    # A film box's runtime, saved through the ripple mode with what it pushes; a refusal keeps the box selected and the typing (#142).
+    if request.method != "POST":
+        return redirect("console_pick")
+    box = request.POST.get("box", "")
+    mode = request.POST.get("mode", "")
+    mode = mode if mode in engine.MODES else ripple_mode(request)
+    if refused := retiming.save(box, request.POST.get("runtime", ""), mode):
+        return render_pick(request, "timetable", runtime_refused=refused, box=box, mode=mode)
+    return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if selected_box(request, box) else ""))
+
+
 def edit_asked(request, typed_lengths=False):
     """The box, the change and the mode a post names, or None where the post is no edit's (#139, #140).
 
@@ -303,6 +319,11 @@ def edit_asked(request, typed_lengths=False):
     mode = request.POST.get("mode", engine.NONE)
     if box is None or mode not in engine.MODES:
         return None
+    if typed_lengths and "runtime" in request.POST:
+        typed = request.POST["runtime"]
+        if not Box.objects.filter(pk=box, suggestion__isnull=False).exists():
+            return None
+        return box, (None if retiming.refusal(typed) else engine.Resize(runtime.minutes(typed))), mode
     if typed_lengths and "length" in request.POST:
         typed = request.POST["length"]
         if not Box.objects.filter(pk=box, suggestion__isnull=True).exists():
