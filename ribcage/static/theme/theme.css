@@ -3688,6 +3688,31 @@ body:has(> main > .ballot-head) > footer.site-footer {
   padding: 0.35rem 0;
   border-bottom: 1px solid var(--line);
 }
+/* A candidate is picked up by its row once there is a track to drop it on; the chip follows the pointer off the track (#144). */
+[data-skin] .candidate[data-drag-film] {
+  cursor: grab;
+  user-select: none;
+}
+[data-skin] .candidate.is-dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+[data-skin] .drag-chip {
+  position: fixed;
+  z-index: 10;
+  transform: translate(-50%, -120%);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--surface);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 25%);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+[data-skin] .drag-chip[hidden] {
+  display: none;
+}
 [data-skin] .candidate__poster {
   line-height: 0;
 }

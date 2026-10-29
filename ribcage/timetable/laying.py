@@ -23,19 +23,24 @@ def next_start():
     return -(-max(ends) // GRID) * GRID
 
 
-def lay_film(suggestion_id):
-    """Place an approved film's box after the last one, returning the box, or None where nothing changes.
-
-    Nothing changes with no anchor, for a film already on the timetable, one no longer approved, or one gone (#137).
-    """
+def placeable(suggestion_id):
+    """The approved film that can be placed now, or None: no anchor, a film already on the timetable, one no longer approved or one gone (#137, #144)."""
     if setting.read().anchor is None:
         return None
     try:
+        return Suggestion.objects.filter(pk=suggestion_id, approval=Approval.APPROVED, box__isnull=True).first()
+    except (TypeError, ValueError):
+        return None
+
+
+def lay_film(suggestion_id, start=None):
+    """Place an approved film's box at `start`, or after the last one, returning the box, or None where nothing changes (#137, #144)."""
+    try:
         with transaction.atomic():
-            film = Suggestion.objects.filter(pk=suggestion_id, approval=Approval.APPROVED, box__isnull=True).first()
+            film = placeable(suggestion_id)
             if film is None:
                 return None
-            return Box.objects.create(suggestion=film, start=next_start())
+            return Box.objects.create(suggestion=film, start=next_start() if start is None else start)
     # A second placement of the same film lost the race to the unique key.
     except (IntegrityError, TypeError, ValueError):
         return None

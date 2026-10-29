@@ -282,6 +282,12 @@ def load(anchor, budget):
     return build(stored_boxes(), anchor, budget)
 
 
+def candidate_box(suggestion, key, start):
+    """A candidate film as the box it would be, for a preview of its insert; nothing is stored (#144)."""
+    initials, names = board.veto_marks(board.vetoes_on([suggestion.pk]), None).get(suggestion.pk, ("", ""))
+    return Loaded(key, start, suggestion.runtime, film=suggestion.film, vetoed_by=initials, vetoers=names, tmdb_runtime=suggestion.tmdb_runtime)
+
+
 def stored_boxes():
     """The timetable's boxes as the track shows them, in start order."""
     stored = list(Box.objects.select_related("suggestion").order_by("start", "pk"))

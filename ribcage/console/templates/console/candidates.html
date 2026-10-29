@@ -6,7 +6,8 @@
   {% else %}
     <ul class="candidates__list">
       {% for each in candidates %}
-        <li class="candidate">
+        {# With a track to land on, an entry is picked up by its row; the + stays for a click (#144). #}
+        <li class="candidate"{% if track %} data-drag-film="{{ each.suggestion }}" data-length="{{ each.runtime }}"{% endif %}>
           <span class="candidate__poster">{% include "components/poster.html" with film=each.film size="thumb" %}</span>
           <span class="candidate__title">{{ each.film.title }}</span>
           <span class="candidate__runtime">{{ each.runtime }} min</span>

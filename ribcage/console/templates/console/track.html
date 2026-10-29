@@ -33,6 +33,11 @@
     {% csrf_token %}
     <input type="hidden" name="box"><input type="hidden" name="length"><input type="hidden" name="mode" value="{{ ripple_mode }}">
   </form>
+  {# A candidate's drop fills this in and submits it: the film laid on the track at that start, in the mode the page shows (#144). #}
+  <form method="post" action="{% url 'console_pick_place' %}" class="track-place" data-lands-on="/console/pick/" hidden>
+    {% csrf_token %}
+    <input type="hidden" name="suggestion"><input type="hidden" name="start"><input type="hidden" name="mode" value="{{ ripple_mode }}">
+  </form>
   <div class="track" style="--lanes: {{ track.lanes }}" data-scale-start="{{ track.scale.start }}" data-scale-length="{{ track.scale.length }}">
     <ol class="track__axis" aria-label="Clock times">
       {% for tick in track.ticks %}

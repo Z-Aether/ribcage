@@ -347,6 +347,8 @@ def kept_scale(request):
 @require_POST
 def pick_preview(request):
     # The same edit as the save, writing nothing: the answer is the track and tool row alone, for the browser to morph in (#22, #139).
+    if "suggestion" in request.POST:
+        return preview_insert(request)
     if not (asked := edit_asked(request, typed_lengths=True)):
         return HttpResponseBadRequest()
     box, change, mode = asked
@@ -363,6 +365,36 @@ def pick_preview(request):
         return reload_the_tab(request, reverse("console_pick"))
     the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request))
     return render(request, "console/track.html", {**track_context(request, mode), "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
+
+
+def insert_asked(request):
+    """The film, start and mode a candidate's drag names, or None where the post is no insert's (#144)."""
+    start = editing.valid_start(request.POST.get("start"))
+    mode = request.POST.get("mode", engine.NONE)
+    film = request.POST.get("suggestion")
+    return None if film is None or start is None or mode not in engine.MODES else (film, start, mode)
+
+
+def preview_insert(request):
+    if not (asked := insert_asked(request)):
+        return HttpResponseBadRequest()
+    boxes = editing.insert(*asked, save=False)
+    # A film placed or dropped since reloads the tab as it is now (#26 §5, #144).
+    if boxes is None:
+        return reload_the_tab(request, reverse("console_pick"))
+    timetable = setting.read()
+    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request))
+    return render(request, "console/track.html", {**track_context(request, asked[2]), "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
+
+
+@admin_required
+@require_POST
+def pick_place(request):
+    # A candidate dropped on the track: the preview's call, saving. The new box is selected; a film gone from the list changes nothing (#144).
+    if not (asked := insert_asked(request)):
+        return HttpResponseBadRequest()
+    boxes = editing.insert(*asked, save=True)
+    return reload_the_tab(request, reverse("console_pick") + (f"?box={boxes[-1].key}" if boxes else ""))
 
 
 @admin_required

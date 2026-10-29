@@ -1,5 +1,6 @@
 // Dragging a box along the admin's track: the box follows the pointer, the server answers each new snapped value with the track it
 // would leave, and the release saves through the same call. The engine is the server's alone; this file only snaps and paints (#22, #139).
+// A candidate picked up from the list is the same drag with no box yet: over the track it previews an insert, and a drop there places it (#144).
 {
   const GRID = 5;
   // Within this many minutes of a neighbour's edge, the box lands flush against it.
@@ -85,14 +86,15 @@
   const preview = (d, value) => {
     d.lastValue = value;
     const seq = ++d.sent;
-    // A handle names the new length, a drag the new start.
-    const named = d.resizing ? { length: value } : { start: value };
-    ask(form().dataset.preview, { box: d.key, ...named, scale_start: d.scale.start, scale_length: d.scale.length }).then((answer) => {
+    // A handle names the new length, a drag the new start; a candidate names its film, or with no start, asks for the track as stored.
+    let named = d.resizing ? { box: d.key, length: value } : { box: d.key, start: value };
+    if (d.film) named = value === null ? { box: d.rest.key, start: d.rest.start } : { suggestion: d.film, start: value };
+    ask(form().dataset.preview, { ...named, scale_start: d.scale.start, scale_length: d.scale.length }).then((answer) => {
       if (answer.redirect) return location.assign(answer.redirect);
       // Any answer newer than the one on screen is shown, not only the latest: strict latest-wins froze the neighbours while the pointer outran the round trip (#22).
       if (drag !== d || d.cancelled || seq <= d.shown) return;
       d.shown = seq;
-      show(answer.html, d.slot);
+      show(answer.html, d.slot ?? null);
       // A selected box's panel shows the length it would have.
       const field = d.resizing && document.querySelector(".box-panel #box-length");
       if (field && field.form.elements.box.value === d.key) field.value = d.length;
@@ -129,9 +131,80 @@
     };
   });
 
+  // A candidate row, picked up: nothing is on the track until the pointer is over it (#144).
+  addEventListener("pointerdown", (event) => {
+    const row = event.target.closest?.("[data-drag-film]");
+    if (!row || !region() || event.button !== 0 || event.pointerType === "touch" || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    if (event.target.closest("form, a, button")) return;
+    const track = region().querySelector(".track");
+    const slots = [...track.querySelectorAll(".track__slot")];
+    drag = {
+      film: row.dataset.dragFilm,
+      row,
+      x0: event.clientX,
+      y0: event.clientY,
+      length: Number(row.dataset.length),
+      // Widened by the film's length on the right, so a drop after the last box fits; posted so the server draws this scale (#144).
+      scale: { start: Number(track.dataset.scaleStart), length: Number(track.dataset.scaleLength) + Number(row.dataset.length) },
+      others: slots.map((other) => ({ start: Number(other.dataset.start), length: Number(other.dataset.length) })),
+      // Any stored box, to ask for the track as stored when the pointer leaves it.
+      rest: { key: slots[0].dataset.box, start: Number(slots[0].dataset.start) },
+      pushes: form().elements.mode.value !== "none",
+      moved: false,
+      cancelled: false,
+      over: false,
+      sent: 0,
+      shown: 0,
+      lastValue: null,
+      start: null,
+      chip: null,
+    };
+  });
+
+  const overTrack = (event) => {
+    const lanes = region().querySelector(".track__lanes");
+    const rect = lanes.getBoundingClientRect();
+    const inside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top - 24 && event.clientY <= rect.bottom + 24;
+    return inside ? rect : null;
+  };
+
+  const carryFilm = (event, d) => {
+    if (!d.moved && Math.hypot(event.clientX - d.x0, event.clientY - d.y0) < SLOP) return;
+    if (!d.moved) {
+      d.moved = true;
+      d.row.classList.add("is-dragging");
+      d.row.setPointerCapture(event.pointerId);
+      d.chip = document.createElement("div");
+      d.chip.className = "drag-chip";
+      d.chip.textContent = `${d.row.querySelector(".candidate__title").textContent} · ${d.length} min`;
+      document.body.append(d.chip);
+    }
+    d.chip.style.left = `${event.clientX}px`;
+    d.chip.style.top = `${event.clientY}px`;
+    const rect = overTrack(event);
+    d.chip.hidden = !!rect;
+    if (!rect) {
+      // Back off the track: it shows as stored again, and a drop here saves nothing.
+      if (d.over) {
+        d.over = false;
+        d.start = null;
+        preview(d, null);
+      }
+      return;
+    }
+    d.over = true;
+    // The box's middle is under the pointer, read against the scale the track is drawn in now: the first answer widens it.
+    const shown = region().querySelector(".track");
+    const drawn = { start: Number(shown.dataset.scaleStart), length: Number(shown.dataset.scaleLength) };
+    const raw = drawn.start + ((event.clientX - rect.left) / rect.width) * drawn.length - d.length / 2;
+    d.start = snap(raw, d);
+    if (d.start !== d.lastValue) preview(d, d.start);
+  };
+
   addEventListener("pointermove", (event) => {
     const d = drag;
     if (!d || d.cancelled) return;
+    if (d.film) return carryFilm(event, d);
     const travelled = event.clientX - d.x0;
     if (!d.moved && Math.abs(travelled) < SLOP) return;
     if (!d.moved) {
@@ -150,6 +223,24 @@
     if (d.start !== d.lastValue) preview(d, d.start);
   });
 
+  const putDown = (d) => {
+    d.row.classList.remove("is-dragging");
+    d.chip?.remove();
+  };
+
+  const dropFilm = (d) => {
+    putDown(d);
+    if (!d.moved || d.cancelled) return;
+    if (d.over && d.start !== null) {
+      const placing = region().querySelector("form.track-place");
+      placing.querySelector("[name=suggestion]").value = d.film;
+      placing.querySelector("[name=start]").value = d.start;
+      return placing.requestSubmit();
+    }
+    // Dropped anywhere else: nothing is saved, and an answer still in flight must not leave the insert showing.
+    if (d.sent) ask(form().dataset.preview, { box: d.rest.key, start: d.rest.start }).then((answer) => (answer.redirect ? location.assign(answer.redirect) : show(answer.html, null)));
+  };
+
   addEventListener("pointerup", () => {
     const d = drag;
     if (!d) return;
@@ -159,6 +250,7 @@
       suppressClick = true;
       setTimeout(() => (suppressClick = false));
     }
+    if (d.film) return dropFilm(d);
     if (!d.moved || d.cancelled) return;
     // A handle saves through its own form, whose route is the labelled box's one write of a length (#143).
     const saving = d.resizing ? region().querySelector("form.track-resize") : form();
@@ -173,6 +265,10 @@
     const d = drag;
     if (!d || !d.moved || d.cancelled) return;
     d.cancelled = true;
+    if (d.film) {
+      putDown(d);
+      return ask(form().dataset.preview, { box: d.rest.key, start: d.rest.start }).then((answer) => (answer.redirect ? location.assign(answer.redirect) : show(answer.html, null)));
+    }
     d.slot.classList.remove("is-dragging");
     // Asking for the box's own start puts the track back as stored, refitted, with nothing written.
     const field = d.resizing && document.querySelector(".box-panel #box-length");
@@ -195,5 +291,5 @@
     true,
   );
   // A poster or link dragged natively would start the browser's own drag and take the pointer events.
-  addEventListener("dragstart", (event) => event.target.closest?.("#track-region") && event.preventDefault());
+  addEventListener("dragstart", (event) => event.target.closest?.("#track-region, [data-drag-film]") && event.preventDefault());
 }

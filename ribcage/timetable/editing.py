@@ -2,7 +2,7 @@
 
 `run` loads the boxes, has `engine.edit` return them after the change and, only when told to save, stores what differs. A preview
 and a save of the same values therefore show and store exactly the same boxes, and the save is the server's however slow the
-preview ran. #141's mode, #142's and #143's resizes and #144's insert add a change or a mode to the engine and a line to `stored`, not a new call.
+preview ran. #141's mode, #142's and #143's resizes add a change or a mode to the engine and a line to `stored`, not a new call. #144's insert is the one change of a box that is not stored yet, so `insert` loads its film and `stored` creates the box.
 """
 
 from dataclasses import replace
@@ -11,7 +11,7 @@ from django.db import transaction
 
 from ribcage.suggestions import runtime
 from ribcage.suggestions.models import Suggestion
-from ribcage.timetable import engine, track
+from ribcage.timetable import engine, laying, track
 from ribcage.timetable.models import Box
 
 # Far enough for any evening; a start outside it is a tampered post, not a drag.
@@ -39,6 +39,35 @@ def run(box_id, change, mode, save):
         if save:
             stored(before, boxes)
     return boxes
+
+
+# What the previewed box is called until a save gives it a primary key.
+INSERTED = "new"
+
+
+def insert(suggestion_id, start, mode, save):
+    """The track's boxes after laying a candidate film at `start` under a ripple mode, stored when `save`; None where nothing can change.
+
+    Nothing can change with no anchor, for a film already on the timetable, one no longer approved, or one gone: the caller reloads
+    the tab as it is (#144, #26 §5). The new box is last, keyed INSERTED, or by its primary key once saved.
+    """
+    with transaction.atomic():
+        film = laying.placeable(suggestion_id)
+        if film is None:
+            return None
+        before = track.stored_boxes()
+        placed = [engine.Placed(each.key, each.start, each.length, each.film is not None, each.flexible) for each in before]
+        after = {each.key: each for each in engine.edit(placed, INSERTED, engine.Insert(start, film.runtime), mode)}
+        boxes = [replace(each, start=after[each.key].start, length=after[each.key].length) for each in before]
+        entering = track.candidate_box(film, INSERTED, after[INSERTED].start)
+        if save:
+            # The box first, so a lost race writes nothing; `laying` owns the rule and the create.
+            laid = laying.lay_film(film.pk, entering.start)
+            if laid is None:
+                return None
+            stored(before, boxes)
+            entering = replace(entering, key=laid.pk)
+        return [*boxes, entering]
 
 
 def stored(before, after):
