@@ -110,3 +110,29 @@ def test_an_hour_too_near_the_right_edge_for_its_label_is_left_out():
 
     assert "00:00" not in [each.label for each in built.ticks]
     assert all(float(each.left.rstrip("%")) <= track.LABEL_ROOM_UNTIL for each in built.ticks)
+
+
+VOTERS = ((1, "Ada"), (2, "Bo"), (3, "Cy"))
+
+
+def test_the_strips_and_the_line_come_from_the_boxes_vetoes_whatever_a_films_approval():
+    boxes = [film(1, 0, 100, veto_voters=frozenset({2}), dropped=True), film(2, 100, 100), film(3, 200, 100, veto_voters=frozenset({1}))]
+
+    built = track.build(boxes, ANCHOR, None, voters=VOTERS)
+
+    assert [strip.name for strip in built.strips] == ["Ada", "Bo"]
+    assert built.presence_line == "1 of 3 present throughout · shared time 1h40m"
+    assert built.tools.shared == "1h40m"
+    assert len(built.shared_bands) == 1
+
+
+def test_with_no_strip_the_line_stays_and_shared_time_is_the_elapsed_time():
+    built = track.build([film(1, 0, 100), film(2, 100, 100)], ANCHOR, None, voters=VOTERS)
+
+    assert built.strips == () and built.shared_bands == ()
+    assert built.presence_line == "3 of 3 present throughout"
+    assert built.tools.shared == built.tools.elapsed
+
+
+def test_with_no_voters_there_is_no_line():
+    assert track.build([film(1, 0, 100)], ANCHOR, None).presence_line == ""

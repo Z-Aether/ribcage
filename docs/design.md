@@ -253,8 +253,8 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **Ballot** | Score, veto, seen it, done; a veto's reason is the voter's note, written through the notes rule (#128). Per-voter Unsorted order: matched films first, then the rest, in a stable per-voter shuffle. |
 | **Trigger warnings** | DTDD matching and correction, snapshots and vocabulary, refresh scheduling against the live rate limit, watched lists, matched topics, icon threshold, purge. |
 | **Solver** | Floor set, objective, knobs, batch with diversity cut, the solver's own reasons for a short batch. Pure function over plain data. |
-| **Readouts** | Standing, tier, swap, film points, slate sum, slate order, set readouts. Shared by Compare and Timetable. |
-| **Timetable engine** | Boxes, anchor, ripple modes and push, flexible squeeze, arrange utilities, preview, overlap, presence strips, shared time, elapsed time, now playing. Pure, and computed on the server. |
+| **Readouts** | Standing, tier, swap, film points, slate sum, slate order, set readouts, presence strips and shared time. Shared by Compare and Timetable. |
+| **Timetable engine** | Boxes, anchor, ripple modes and push, flexible squeeze, arrange utilities, preview, overlap, elapsed time, now playing. Pure, and computed on the server. |
 | **Reveal** | The score matrix, sorts, and the reopened-VOTE line read from the phase history. |
 | **Operations** | One container behind the host's proxy. SQLite on a volume. A backup sidecar taking a backup each night and keeping the 7 newest, with a row-count check. A backup pulled from the host, and put back for a restore, through the admin side with a one-time code from the container's terminal (#55, #68, #81). Configuration only through the environment. Teardown. The app reads nothing the proxy forwards and takes every request as HTTPS. HSTS. Access logs without client addresses (#16, #18, #30, #31). |
 

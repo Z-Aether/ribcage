@@ -224,13 +224,13 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
     # Arming is a plain GET: the arranged track in place of the stored one, nothing written (#26, #145).
     armed = arrange_asked(request.GET) if request.method == "GET" and the_track else None
     if armed and (arranged := editing.arrange(*armed, save=False)):
-        the_track = track.build(arranged, timetable.anchor, budget)
+        the_track = track.build(arranged, timetable.anchor, budget, voters=track.voters())
     else:
         armed = None
     if the_track and box_refused and not box_refused.says_length and Box.objects.filter(pk=labelled, suggestion__isnull=True).exists():
         # A refusal over the label alone keeps the typed length, so the track keeps showing it as the preview did (#140).
         kept = editing.run(labelled, engine.Resize(int(box_refused.length.strip())), mode or ripple_mode(request), save=False)
-        the_track = track.build(kept, timetable.anchor, budget) if kept else the_track
+        the_track = track.build(kept, timetable.anchor, budget, voters=track.voters()) if kept else the_track
     context = {
         "tab": "console_pick",
         "sub": sub,
@@ -395,7 +395,7 @@ def pick_preview(request):
         boxes = editing.run(box, change, mode, save=False)
     if boxes is None:
         return reload_the_tab(request, reverse("console_pick"))
-    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request))
+    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters())
     return render(request, "console/track.html", {**track_context(request, mode), "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
 
 
@@ -415,7 +415,7 @@ def preview_insert(request):
     if boxes is None:
         return reload_the_tab(request, reverse("console_pick"))
     timetable = setting.read()
-    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request))
+    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters())
     return render(request, "console/track.html", {**track_context(request, asked[2]), "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
 
 
@@ -427,7 +427,7 @@ def preview_arrange(request):
     if boxes is None:
         return reload_the_tab(request, reverse("console_pick"))
     timetable = setting.read()
-    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request))
+    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters())
     return render(request, "console/track.html", {**track_context(request), **armed_context(asked), "timetable": timetable, "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
 
 

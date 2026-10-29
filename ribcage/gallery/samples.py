@@ -421,17 +421,18 @@ def evening():
 
 
 def timetable_track():
-    """The admin's track on a made-up evening: a film with vetoers, a labelled box, a film with no poster, a dropped film and two overlapping, under a budget that runs out inside a film (#136)."""
+    """The admin's track on a made-up evening: a film with vetoers, a labelled box, a film with no poster, a dropped film and two overlapping, with the presence strips of four voters of five, under a budget that runs out inside a film (#136)."""
     boxes = [
-        track.Loaded(1, 0, 109, film=film(THE_THING), vetoed_by="SZ", vetoers="Vetoed by Sam, Zoë"),
+        track.Loaded(1, 0, 109, film=film(THE_THING), vetoed_by="SZ", vetoers="Vetoed by Sam, Zoë", veto_voters=frozenset({"sam", "zoe"})),
         track.Loaded(2, 120, 45, label="Dinner", flexible=True),
-        track.Loaded(3, 170, 147, film=film(MIDSOMMAR)),
+        track.Loaded(3, 170, 147, film=film(MIDSOMMAR), vetoed_by="A", vetoers="Vetoed by Ada", veto_voters=frozenset({"ada"})),
         track.Loaded(4, 330, 47, film=film(CABINET_OF_CURIOSITIES)),
         track.Loaded(5, 390, 93, film=film(POOH_2), dropped=True),
         track.Loaded(6, 500, 95, film=film(EXIT_8)),
-        track.Loaded(7, 560, 90, film=film(CUBE)),
+        track.Loaded(7, 560, 90, film=film(CUBE), vetoed_by="A", vetoers="Vetoed by Anne-Marie", veto_voters=frozenset({"anne-marie"})),
     ]
-    return track.build(boxes, datetime(2026, 11, 7, 18, 0, tzinfo=utc.utc), 8 * 60)
+    voters = (("ada", "Ada"), ("anne-marie", "Anne-Marie"), ("sam", "Sam"), ("zoe", "Zoë"), ("bartholomew", "Bartholomew"))
+    return track.build(boxes, datetime(2026, 11, 7, 18, 0, tzinfo=utc.utc), 8 * 60, voters=voters)
 
 
 def gallery():

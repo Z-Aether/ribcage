@@ -75,6 +75,8 @@
   --score-rather-not-ink: #2a1520;
   --veto: #ff6363;
   --veto-ink: #ff9a8f;
+  /* A vetoed film inside a presence strip: visible, and not the veto's red or the accent's pumpkin (#149). */
+  --presence-hole: #e0a43c;
   --trigger-icon-ring: #b9e46e;
   --trigger-icon-ink: #1b2a08;
   --seen-it-filter: grayscale(1) brightness(0.5) contrast(0.9);
@@ -3259,6 +3261,12 @@ body:has(> main > .ballot-head) > footer.site-footer {
 [data-skin] .track-tools__evening strong {
   color: var(--ink);
 }
+[data-skin] .track-tools__shared {
+  color: var(--ink-muted);
+}
+[data-skin] .track-tools__shared strong {
+  color: var(--ink);
+}
 [data-skin] .track-tools__overlaps {
   color: var(--veto-ink);
   font-weight: 700;
@@ -3305,9 +3313,10 @@ body:has(> main > .ballot-head) > footer.site-footer {
   --lane-height: 6.2rem;
   --axis-height: 2rem;
   --foot-height: 1.8rem;
+  --strip-height: 2.5rem;
   position: relative;
   min-width: 44rem;
-  height: calc(var(--axis-height) + var(--lanes) * var(--lane-height) + var(--foot-height));
+  height: calc(var(--axis-height) + var(--lanes) * var(--lane-height) + var(--strips, 0) * var(--strip-height) + var(--foot-height));
 }
 [data-skin] .track__axis {
   position: absolute;
@@ -3348,6 +3357,73 @@ body:has(> main > .ballot-head) > footer.site-footer {
   top: calc(var(--lane) * var(--lane-height));
   height: calc(var(--lane-height) - 0.3rem);
   container-type: inline-size;
+}
+/* The shared time: a pale band behind the boxes and strips, holes left out of it (#149). */
+[data-skin] .track__shared {
+  position: absolute;
+  top: var(--axis-height);
+  bottom: var(--foot-height);
+  left: var(--at);
+  width: var(--span);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  pointer-events: none;
+}
+/* Presence strips: one row a voter under the plan row, on the track's scale (#12, #149). */
+[data-skin] .track__strips {
+  position: absolute;
+  top: calc(var(--axis-height) + var(--lanes) * var(--lane-height));
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+[data-skin] .track__strip {
+  position: relative;
+  height: var(--strip-height);
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+[data-skin] .track__present {
+  position: absolute;
+  top: 1.35rem;
+  bottom: 0.3rem;
+  left: var(--at);
+  width: var(--span);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--score-keen) 55%, var(--surface));
+}
+/* A hole is dashed amber over the bar's row, visible without shouting. */
+[data-skin] .track__hole {
+  position: absolute;
+  top: 1.35rem;
+  bottom: 0.3rem;
+  left: var(--at);
+  width: var(--span);
+  box-sizing: border-box;
+  border: 1px dashed var(--presence-hole);
+  border-radius: 3px;
+  background: var(--surface);
+}
+/* The name sits on its own line above the bar, never on it, and sticks to the frame's left edge so a scrolled phone still names every bar (#149). */
+[data-skin] .track__strip-name {
+  position: sticky;
+  left: 0.4rem;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin-left: 0.4rem;
+  padding-top: 0.2rem;
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+  line-height: 1.1rem;
+  white-space: nowrap;
+}
+[data-skin] .track-presence {
+  margin: 0.4rem 0 0;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
 }
 /* The shared minutes of two boxes, hatched over both (#12, #22). */
 [data-skin] .track__overlap {

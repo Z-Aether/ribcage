@@ -167,6 +167,26 @@ def test_in_pick_and_run_terrifier_is_last_vetoed_by_zoe_and_anne_marie_and_sam_
     assert any(box.suggestion and vetoers(box) == ["Sam"] for box in middle)
 
 
+@pytest.mark.parametrize("seeded", [Phase.PICK, Phase.RUN], indirect=True)
+def test_in_pick_and_run_the_seeded_evening_shows_sams_strip_with_a_hole_and_zoe_and_anne_marie_leaving_before_terrifier(db, seeded):
+    from ribcage.timetable import track
+
+    timetable = Timetable.objects.get()
+    built = track.load(timetable.anchor, timetable.budget)
+    boxes = list(Box.objects.select_related("suggestion").order_by("start"))
+    terrifier = boxes[-1]
+    when_evil_lurks = next(box for box in boxes if box.suggestion and box.suggestion.title == "When Evil Lurks")
+
+    strips = {strip.name: strip for strip in built.strips}
+    assert sorted(strips) == ["Anne-Marie", "Sam", "Zoë"]
+    assert len(strips["Sam"].holes) == 1 and not strips["Sam"].empty
+    assert strips["Zoë"].holes == () and strips["Anne-Marie"].holes == ()
+    assert built.presence_line.startswith("3 of 6 present throughout · shared time ")
+    first = boxes[0].start
+    # Everyone is there from the evening's start until Terrifier, less the one film Sam steps out for.
+    assert built.tools.shared == track.duration(terrifier.start - first - when_evil_lurks.suggestion.runtime)
+
+
 @pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
 def test_from_vote_on_the_floor_set_shows_obrien_nothing_representable_and_bartholomew_no_ballot(db, seeded):
     line, out_for = of_the_roster()

@@ -12,9 +12,9 @@
       {% endif %}
     </p>
     <p class="track-tools__evening">Evening <strong>{{ track.tools.evening }}</strong> · {{ track.tools.elapsed }} elapsed</p>
+    <p class="track-tools__shared">Shared <strong>{{ track.tools.shared }}</strong></p>
     {% if track.tools.overlaps %}<p class="track-tools__overlaps">{{ track.tools.overlaps }} overlap{{ track.tools.overlaps|pluralize }}</p>{% endif %}
   </div>
-  {# Room for Shared (#149). #}
   <div class="track-tools__acts" data-keeps-scroll>
     {% if not armed %}{% include "console/ripple_mode.html" %}{% endif %}
     {% include "console/arrange_tools.html" %}
@@ -40,12 +40,16 @@
     {% csrf_token %}
     <input type="hidden" name="suggestion"><input type="hidden" name="start"><input type="hidden" name="mode" value="{{ ripple_mode }}">
   </form>
-  <div class="track" style="--lanes: {{ track.lanes }}" data-scale-start="{{ track.scale.start }}" data-scale-length="{{ track.scale.length }}">
+  <div class="track" style="--lanes: {{ track.lanes }}; --strips: {{ track.strips|length }}" data-scale-start="{{ track.scale.start }}" data-scale-length="{{ track.scale.length }}">
     <ol class="track__axis" aria-label="Clock times">
       {% for tick in track.ticks %}
         <li class="track__tick" style="--at: {{ tick.left }}"><span class="track__tick-label">{% if tick.day %}<span class="track__day">{{ tick.day }}</span> {% endif %}{{ tick.label }}</span></li>
       {% endfor %}
     </ol>
+    {# The shared time, a pale band behind the boxes and the strips alike: only while a strip shows, since otherwise it is the whole evening (#149). #}
+    {% for band in track.shared_bands %}
+      <div class="track__shared" style="--at: {{ band.left }}; --span: {{ band.width }}" aria-hidden="true"></div>
+    {% endfor %}
     <div class="track__lanes">
       {% for placement in track.placements %}
         <div id="box-{{ placement.box.key }}" class="track__slot{% if placement.box.key == selected.key %} is-selected{% endif %}" style="--at: {{ placement.left }}; --span: {{ placement.width }}; --lane: {{ placement.lane }}" data-box="{{ placement.box.key }}" data-start="{{ placement.box.start }}" data-length="{{ placement.box.minutes }}">
@@ -59,9 +63,22 @@
         <div class="track__overlap" style="--at: {{ band.left }}; --span: {{ band.width }}" aria-hidden="true"></div>
       {% endfor %}
     </div>
+    {# Presence strips, admin only: one row per voter not present throughout, on the track's scale, under the plan row (#12, #149). #}
+    {% if track.strips %}
+      <ol class="track__strips" aria-label="Who is in the room when">
+        {% for strip in track.strips %}
+          <li class="track__strip{% if strip.empty %} is-empty{% endif %}" title="{{ strip.title }}">
+            {% if not strip.empty %}<span class="track__present" style="--at: {{ strip.left }}; --span: {{ strip.width }}"></span>{% endif %}
+            {% for hole in strip.holes %}<span class="track__hole" style="--at: {{ hole.left }}; --span: {{ hole.width }}" title="{{ hole.title }}"></span>{% endfor %}
+            <span class="track__strip-name">{{ strip.name }}</span>
+          </li>
+        {% endfor %}
+      </ol>
+    {% endif %}
     {% if track.marker %}
       <div class="track__budget{% if track.marker.late %} is-late{% endif %}" style="--at: {{ track.marker.left }}"><span class="track__budget-label">{{ track.marker.label }}</span></div>
     {% endif %}
   </div>
 </div>
+{% if track.presence_line %}<p class="track-presence" id="track-presence">{{ track.presence_line }}</p>{% endif %}
 </div>

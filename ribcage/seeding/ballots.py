@@ -7,18 +7,18 @@ from ribcage.ballot.models import BallotRecord, DoneMarker
 from ribcage.identity.models import Voter
 from ribcage.suggestions.models import Note, Suggestion
 
-THE_THING, MIDSOMMAR, EXIT_8, MARIA, EVENT_HORIZON, TERRIFIER, THE_SHINING, COTTON_CANDY = 1091, 530385, 1408208, 499537, 8413, 420634, 694, 16296
-GOODNIGHT_MOMMY, INFESTED, SHORT_MONSTER, WOLF_HOUSE, CUBE, VHS_99 = 284303, 1063879, 894205, 744857, 431, 1005776
+THE_THING, MIDSOMMAR, EXIT_8, WOLF_HOUSE, EVENT_HORIZON, TERRIFIER, THE_SHINING, KILLER_KLOWNS = 1091, 530385, 1408208, 499537, 8413, 420634, 694, 16296
+GOODNIGHT_MOMMY, INFESTED, WEREWOLF_BY_NIGHT, WHEN_EVIL_LURKS, CUBE, VHS_99 = 284303, 1063879, 894205, 744857, 431, 1005776
 
 # Ada leaves The Thing, Event Horizon, Infested, Cube and Werewolf by Night in her tray: the first four ring for her, the last does not.
 SEEDED_SCORES = {
-    "Ada": {MIDSOMMAR: 3, EXIT_8: 2, MARIA: 1, TERRIFIER: -1, THE_SHINING: 3, COTTON_CANDY: 0, GOODNIGHT_MOMMY: 2, WOLF_HOUSE: -1, VHS_99: 2},
-    "Zoë": {THE_THING: 3, CUBE: 2, EXIT_8: 1, INFESTED: -1, COTTON_CANDY: 0, MARIA: 2},
+    "Ada": {MIDSOMMAR: 3, EXIT_8: 2, WOLF_HOUSE: 1, TERRIFIER: -1, THE_SHINING: 3, KILLER_KLOWNS: 0, GOODNIGHT_MOMMY: 2, WHEN_EVIL_LURKS: -1, VHS_99: 2},
+    "Zoë": {THE_THING: 3, CUBE: 2, EXIT_8: 1, INFESTED: -1, KILLER_KLOWNS: 0, WOLF_HOUSE: 2},
     # Exit 8 is on the seeded evening, so the floor is above 0 and removing a box can drop it (#147).
     "Anne-Marie": {THE_THING: 1, THE_SHINING: 2, EXIT_8: 2},
-    "Sam": {COTTON_CANDY: 3},
+    "Sam": {KILLER_KLOWNS: 3},
     # Only 0 and -1: no film to stand for them, so the floor set shows *nothing representable* beside Bartholomew Winthrop's *no ballot* (#146).
-    "O'Brien": {COTTON_CANDY: 0, TERRIFIER: -1},
+    "O'Brien": {KILLER_KLOWNS: 0, TERRIFIER: -1},
 }
 
 # Each veto is (film, the note it is written as or None): Terrifier is vetoed by two voters, for the ribbon's two initials.
@@ -26,7 +26,7 @@ SEEDED_SCORES = {
 SEEDED_VETOES = {
     "Zoë": {TERRIFIER: "I won't sit through that one, and I'd rather say so now."},
     "Anne-Marie": {TERRIFIER: None},
-    "Sam": {WOLF_HOUSE: None},
+    "Sam": {WHEN_EVIL_LURKS: None},
 }
 
 # Seen it, by film: Ada's Midsommar is seen and scored, Zoë's Terrifier seen and vetoed, Ada's Cube seen and left in her tray, Zoë's The Shining seen with no other say (#121).

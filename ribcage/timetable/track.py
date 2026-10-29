@@ -12,6 +12,8 @@ from datetime import UTC, timedelta
 from django.utils import timezone
 
 from ribcage.ballot import board
+from ribcage.identity.models import Voter
+from ribcage.readouts import presence as presences
 from ribcage.suggestions.models import Approval
 from ribcage.timetable import engine
 from ribcage.timetable.engine import Placed
@@ -56,6 +58,8 @@ class Loaded:
     flexible: bool = False
     # TMDB's runtime for a film, which the panel's reset offers while the copy's differs (#142).
     tmdb_runtime: int | None = None
+    # The ids of the voters who vetoed the film, whatever its approval: what the presence strips read (#149).
+    veto_voters: frozenset = frozenset()
 
 
 @dataclass(frozen=True)
@@ -128,6 +132,29 @@ class Tools:
     evening: str
     elapsed: str
     overlaps: int
+    # The shared time, which is the whole elapsed time while nobody's strip shows (#149).
+    shared: str = ""
+
+
+@dataclass(frozen=True)
+class Hole:
+    """A vetoed film inside a strip, drawn dashed in amber."""
+
+    left: str
+    width: str
+    title: str
+
+
+@dataclass(frozen=True)
+class StripRow:
+    """One voter's presence strip: the bar from arrival to departure, with a hole for each film they step out for (#149)."""
+
+    name: str
+    left: str
+    width: str
+    holes: tuple[Hole, ...]
+    title: str
+    empty: bool = False
 
 
 @dataclass(frozen=True)
@@ -140,6 +167,11 @@ class Track:
     lanes: int
     # The scale in minutes from the anchor, which a drag reads its pointer against and sends back to keep (#139).
     scale: "Scale"
+    # Only the voters not present throughout, and the pieces of the evening everyone is there for, which show behind the rows (#149).
+    strips: tuple[StripRow, ...] = ()
+    shared_bands: tuple[Band, ...] = ()
+    # *6 of 9 present throughout · shared time 6h58m*; empty with no voters.
+    presence_line: str = ""
 
     def box(self, key):
         """The box with this key, or None: a selection naming a box gone since is no selection (#137)."""
@@ -180,8 +212,10 @@ class Clock:
         return f"{self.day_hm(start)} → {self.day_hm(end) if last.date() != first.date() else self.hm(end)}"
 
 
-def build(boxes, anchor, budget, scale=None):
+def build(boxes, anchor, budget, scale=None, voters=()):
     """The track for the loaded boxes against the anchor (an aware datetime) and the budget in minutes; None for no boxes.
+
+    `voters` are every voter as (id, name) pairs in the order the strips take; the strips and the shared time read the boxes' vetoes against them (#149).
 
     A `scale` is kept as given, which is how a drag holds the track still while the evening changes under it (#139).
     """
@@ -203,15 +237,40 @@ def build(boxes, anchor, budget, scale=None):
     if reading.marker is not None:
         at = scale.at(reading.marker)
         marker = Marker(percent(at), f"budget {duration(budget)}", at > LABEL_LEFT_FROM)
+    present = presences.presence(
+        [pk for pk, _ in voters], [presences.Showing(box.key, box.start, box.start + box.length, box.film is not None, box.veto_voters) for box in boxes]
+    )
     return Track(
-        tools=tools_of(reading, budget, clock),
+        tools=tools_of(reading, budget, clock, present),
         placements=placements,
         ticks=ticks_of(scale, clock),
         bands=tuple(Band(percent(scale.at(each.start)), percent(scale.size(each.end - each.start))) for each in reading.overlaps),
         marker=marker,
         lanes=max(lane_of.values()) + 1,
         scale=scale,
+        strips=strips_of(present, dict(voters), {box.key: box for box in boxes}, scale),
+        shared_bands=tuple(Band(percent(scale.at(start)), percent(scale.size(end - start))) for start, end in present.shared_pieces) if present.strips else (),
+        presence_line=presence_line(present, len(voters)),
     )
+
+
+def strips_of(present, names, boxes, scale):
+    rows = []
+    for strip in present.strips:
+        holes = tuple(
+            Hole(percent(scale.at(hole.start)), percent(scale.size(hole.end - hole.start)), f"Vetoed {boxes[hole.film].film.title}: steps out") for hole in strip.holes
+        )
+        name = names[strip.voter]
+        title = f"{name} is not here" if strip.empty else f"{name} is in the room for part of the evening"
+        rows.append(StripRow(name, percent(scale.at(strip.arrive)), percent(scale.size(strip.leave - strip.arrive)), holes, title, strip.empty))
+    return tuple(rows)
+
+
+def presence_line(present, everyone):
+    if not everyone:
+        return ""
+    line = f"{present.throughout} of {everyone} present throughout"
+    return f"{line} · shared time {duration(present.shared)}" if present.strips else line
 
 
 def view_of(box, clock, overlapping):
@@ -265,33 +324,46 @@ def ticks_of(scale, clock):
     return tuple(ticks)
 
 
-def tools_of(reading, budget, clock):
+def tools_of(reading, budget, clock, present):
     evening = f"{clock.day_hm(reading.first_start)} → {clock.day_hm(reading.last_end)}"
     elapsed = duration(reading.elapsed)
     screen = duration(reading.screen_time)
+    shared = duration(present.shared)
     if budget is None:
-        return Tools(screen, None, None, False, 0, evening, elapsed, len(reading.overlaps))
+        return Tools(screen, None, None, False, 0, evening, elapsed, len(reading.overlaps), shared)
     over = reading.over
     spare = f"{duration(over)} over" if over > 0 else f"{duration(-over)} to spare"
     filled = 100 if over > 0 else round(reading.screen_time / budget * 100)
-    return Tools(screen, duration(budget), spare, over > 0, filled, evening, elapsed, len(reading.overlaps))
+    return Tools(screen, duration(budget), spare, over > 0, filled, evening, elapsed, len(reading.overlaps), shared)
 
 
 def load(anchor, budget):
-    """Read the timetable's boxes and build its track: two queries however many boxes there are (one with no film box)."""
-    return build(stored_boxes(), anchor, budget)
+    """Read the timetable's boxes and build its track: three queries however many boxes there are (the boxes, the vetoes, the voters)."""
+    return build(stored_boxes(), anchor, budget, voters=voters())
+
+
+def voters():
+    """Every voter as (id, name), by name: the strips' order and the *of 9* in their line (#149)."""
+    return tuple(Voter.objects.order_by("display_name_key").values_list("pk", "display_name"))
 
 
 def candidate_box(suggestion, key, start):
     """A candidate film as the box it would be, for a preview of its insert; nothing is stored (#144)."""
-    initials, names = board.veto_marks(board.vetoes_on([suggestion.pk]), None).get(suggestion.pk, ("", ""))
-    return Loaded(key, start, suggestion.runtime, film=suggestion.film, vetoed_by=initials, vetoers=names, tmdb_runtime=suggestion.tmdb_runtime)
+    rows = list(board.vetoes_on([suggestion.pk]))
+    initials, names = board.veto_marks(rows, None).get(suggestion.pk, ("", ""))
+    return Loaded(
+        key, start, suggestion.runtime, film=suggestion.film, vetoed_by=initials, vetoers=names, tmdb_runtime=suggestion.tmdb_runtime, veto_voters=frozenset(voter for _, voter, _ in rows)
+    )
 
 
 def stored_boxes():
     """The timetable's boxes as the track shows them, in start order."""
     stored = list(Box.objects.select_related("suggestion").order_by("start", "pk"))
-    marks = board.veto_marks(board.vetoes_on([box.suggestion_id for box in stored if box.suggestion_id]), None)
+    rows = list(board.vetoes_on([box.suggestion_id for box in stored if box.suggestion_id]))
+    marks = board.veto_marks(rows, None)
+    vetoers = {}
+    for suggestion_id, voter_id, _ in rows:
+        vetoers.setdefault(suggestion_id, set()).add(voter_id)
     boxes = []
     for box in stored:
         if box.suggestion is None:
@@ -309,6 +381,7 @@ def stored_boxes():
                 # The mark is the admin's alone; voters never see approval (#26 §5).
                 dropped=box.suggestion.approval == Approval.DROPPED,
                 tmdb_runtime=box.suggestion.tmdb_runtime,
+                veto_voters=frozenset(vetoers.get(box.suggestion_id, ())),
             )
         )
     return boxes
