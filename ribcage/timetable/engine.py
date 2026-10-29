@@ -321,3 +321,56 @@ def edit(boxes, key, change, mode):
         raise ValueError(f"not a mode: {mode!r}")
     boxes = list(boxes)
     return RIPPLE_MODES[mode](boxes, apply(boxes, key, change), key)
+
+
+# The arrange utilities (#22, #145): whole-timetable rearrangements that ignore the ripple mode. Each takes every box in its
+# current start order, ties in the order given, at full length (flexible boxes included), and returns them with new starts.
+LAY_OUT = "lay-out"
+SPREAD = "spread"
+DEFAULT_BREAK = 15
+
+
+def by_start(boxes):
+    """Start order; boxes starting together keep the order given, so a result is the same on every call."""
+    return sorted(boxes, key=lambda box: box.start)
+
+
+def lay_out_with_a_break(boxes, gap):
+    """Back to back from the anchor, `gap` minutes apart."""
+    laid, at = [], 0
+    for box in by_start(boxes):
+        laid.append(replace(box, start=at))
+        at = box.length + at + gap
+    return laid
+
+
+def spread_evenly(boxes, _minutes=None):
+    """From the anchor to the current last end, the empty time shared equally and each start rounded to the grid.
+
+    Boxes that don't fit in that span sit back to back (zero gaps). A rounded start never runs into the box before it: it moves up to the next grid mark, so the evening can end a few minutes late.
+    """
+    ordered = by_start(boxes)
+    if not ordered:
+        return []
+    spare = max(box.end for box in ordered) - sum(box.length for box in ordered)
+    if spare <= 0 or len(ordered) == 1:
+        return lay_out_with_a_break(ordered, 0)
+    gap = spare / (len(ordered) - 1)
+    spread, ideal, floor_ = [], 0.0, 0
+    for box in ordered:
+        start = max(on_grid(ideal), grid_up(floor_))
+        spread.append(replace(box, start=start))
+        floor_ = start + box.length
+        ideal += box.length + gap
+    return spread
+
+
+UTILITIES = {LAY_OUT: lay_out_with_a_break, SPREAD: spread_evenly}
+
+
+def arrange(boxes, utility, minutes=DEFAULT_BREAK):
+    """The boxes after an arrange utility, in the order given (#145)."""
+    if utility not in UTILITIES:
+        raise ValueError(f"unknown arrange utility: {utility}")
+    after = {box.key: box for box in UTILITIES[utility](boxes, minutes)}
+    return [after[box.key] for box in boxes]

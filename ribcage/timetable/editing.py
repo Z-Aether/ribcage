@@ -11,7 +11,7 @@ from django.db import transaction
 
 from ribcage.suggestions import runtime
 from ribcage.suggestions.models import Suggestion
-from ribcage.timetable import engine, laying, track
+from ribcage.timetable import engine, laying, setting, track
 from ribcage.timetable.models import Box
 
 # Far enough for any evening; a start outside it is a tampered post, not a drag.
@@ -68,6 +68,33 @@ def insert(suggestion_id, start, mode, save):
             stored(before, boxes)
             entering = replace(entering, key=laid.pk)
         return [*boxes, entering]
+
+
+# A break of more than a day is a typo, not an evening.
+MOST_BREAK = 1440
+
+
+def valid_break(typed):
+    """Whole minutes of break, at least 0, or None (#145)."""
+    typed = str(typed).strip()
+    return int(typed) if typed.isascii() and typed.isdigit() and int(typed) <= MOST_BREAK else None
+
+
+def arrange(utility, minutes, save):
+    """The track's boxes after an arrange utility over the timetable as stored now, stored when `save`; None with no anchor or no boxes (#145).
+
+    The ripple mode plays no part. Only starts move, so `stored` writes starts alone.
+    """
+    with transaction.atomic():
+        before = track.stored_boxes()
+        if not before or not setting.read().anchor:
+            return None
+        placed = [engine.Placed(each.key, each.start, each.length, each.film is not None, each.flexible) for each in before]
+        after = {each.key: each for each in engine.arrange(placed, utility, minutes)}
+        boxes = [replace(each, start=after[each.key].start) for each in before]
+        if save:
+            stored(before, boxes)
+    return boxes
 
 
 def stored(before, after):

@@ -190,7 +190,28 @@ def ripple_mode(request):
 
 
 def track_context(request, mode=None):
-    return {"ripple_mode": mode or ripple_mode(request), "ripple_names": RIPPLE_NAMES}
+    # The timetable and the break the tool row reads, for every render of the track, a preview's included (#145).
+    return {"ripple_mode": mode or ripple_mode(request), "ripple_names": RIPPLE_NAMES, "timetable": setting.read(), "default_break": engine.DEFAULT_BREAK}
+
+
+# The arrange utilities' words, for the tool row (#145).
+ARRANGE_NAMES = {engine.LAY_OUT: "Lay out with a break", engine.SPREAD: "Spread evenly"}
+
+
+def arrange_asked(data):
+    """The utility and break a request names, or None where it names none or a nonsense one (#145)."""
+    utility = data.get("arrange")
+    if utility not in engine.UTILITIES:
+        return None
+    if utility == engine.SPREAD:
+        return utility, 0
+    minutes = editing.valid_break(data.get("minutes", engine.DEFAULT_BREAK))
+    return None if minutes is None else (utility, minutes)
+
+
+def armed_context(asked):
+    """What the tool row needs to show an utility armed: its name and its break, or nothing."""
+    return {"armed": {"utility": asked[0], "minutes": asked[1], "name": ARRANGE_NAMES[asked[0]]} if asked else None, "arrange_names": ARRANGE_NAMES, "default_break": engine.DEFAULT_BREAK}
 
 
 def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=None, runtime_refused=None):
@@ -199,6 +220,12 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
     budget = timetable.budget
     the_track = track.load(timetable.anchor, budget) if sub == "timetable" and timetable.anchor else None
     labelled = selected_box(request, box)
+    # Arming is a plain GET: the arranged track in place of the stored one, nothing written (#26, #145).
+    armed = arrange_asked(request.GET) if request.method == "GET" and the_track else None
+    if armed and (arranged := editing.arrange(*armed, save=False)):
+        the_track = track.build(arranged, timetable.anchor, budget)
+    else:
+        armed = None
     if the_track and box_refused and not box_refused.says_length and Box.objects.filter(pk=labelled, suggestion__isnull=True).exists():
         # A refusal over the label alone keeps the typed length, so the track keeps showing it as the preview did (#140).
         kept = editing.run(labelled, engine.Resize(int(box_refused.length.strip())), mode or ripple_mode(request), save=False)
@@ -217,6 +244,7 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
         "box_refused": box_refused,
         "runtime_refused": runtime_refused,
         **track_context(request, mode),
+        **armed_context(armed),
         "candidates": offering.not_in_the_plan() if sub == "timetable" else (),
     }
     return render_tab(request, "console/pick.html", context)
@@ -349,6 +377,8 @@ def pick_preview(request):
     # The same edit as the save, writing nothing: the answer is the track and tool row alone, for the browser to morph in (#22, #139).
     if "suggestion" in request.POST:
         return preview_insert(request)
+    if "arrange" in request.POST:
+        return preview_arrange(request)
     if not (asked := edit_asked(request, typed_lengths=True)):
         return HttpResponseBadRequest()
     box, change, mode = asked
@@ -385,6 +415,29 @@ def preview_insert(request):
     timetable = setting.read()
     the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request))
     return render(request, "console/track.html", {**track_context(request, asked[2]), "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
+
+
+def preview_arrange(request):
+    # An armed utility, shown through the preview's template; it ignores the mode but the forms on the track post the page's (#145).
+    if not (asked := arrange_asked(request.POST)):
+        return HttpResponseBadRequest()
+    boxes = editing.arrange(*asked, save=False)
+    if boxes is None:
+        return reload_the_tab(request, reverse("console_pick"))
+    timetable = setting.read()
+    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request))
+    return render(request, "console/track.html", {**track_context(request), **armed_context(asked), "timetable": timetable, "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
+
+
+@admin_required
+@require_POST
+def pick_arrange(request):
+    # Apply: the utility again over the timetable as stored now, saving; the tab reloads unarmed (#145).
+    if not (asked := arrange_asked(request.POST)):
+        return HttpResponseBadRequest()
+    editing.arrange(*asked, save=True)
+    kept = selected_box(request, request.POST.get("selected", ""))
+    return reload_the_tab(request, reverse("console_pick") + (f"?box={kept}" if kept and Box.objects.filter(pk=kept).exists() else ""))
 
 
 @admin_required

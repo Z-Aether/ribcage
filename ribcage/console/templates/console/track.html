@@ -1,6 +1,7 @@
 {# The Timetable sub-tab's tool row and track over a `track.Track`: one template, so the live preview of a drag can answer with it (#22, #136, #139). #}
+{# While an utility is armed the track is inert: no pick-up, no handle, and the panel is gone, since every edit runs on the stored timetable (#36, #145). #}
 {# The selected box's span rides on the region, for the panel beside the track to show the previewed end (#140). #}
-<div id="track-region"{% if selected %} data-selected-span="{{ selected.span }}"{% endif %}>
+<div id="track-region"{% if armed %} data-armed{% endif %}{% if selected %} data-selected-span="{{ selected.span }}"{% endif %}>
 <div class="track-tools" id="track-tools">
   <div class="track-tools__readouts">
     <p class="track-tools__screen">
@@ -13,10 +14,11 @@
     <p class="track-tools__evening">Evening <strong>{{ track.tools.evening }}</strong> · {{ track.tools.elapsed }} elapsed</p>
     {% if track.tools.overlaps %}<p class="track-tools__overlaps">{{ track.tools.overlaps }} overlap{{ track.tools.overlaps|pluralize }}</p>{% endif %}
   </div>
-  {# Room for the arrange utilities (#145) and Shared (#149). #}
+  {# Room for Shared (#149). #}
   <div class="track-tools__acts" data-keeps-scroll>
-    {% include "console/ripple_mode.html" %}
-    {% include "console/break_button.html" %}
+    {% if not armed %}{% include "console/ripple_mode.html" %}{% endif %}
+    {% include "console/arrange_tools.html" %}
+    {% if not armed %}{% include "console/break_button.html" %}{% endif %}
   </div>
 </div>
 
@@ -50,7 +52,7 @@
           {# A click selects: the selection is in the tab's address, so Back, Forward and a reload keep it (#137). #}
           <a class="track__select" href="{% url 'console_pick' %}?box={{ placement.box.key }}"{% if placement.box.key == selected.key %} aria-current="true"{% endif %}>{% include "components/box.html" with box=placement.box %}</a>
           {# A film is fixed at its runtime and shows no handle (#12, #143). #}
-          {% if placement.box.labelled %}<span class="track__handle" role="separator" aria-orientation="vertical" aria-label="Drag to change the length of {{ placement.box.title }}"></span>{% endif %}
+          {% if placement.box.labelled and not armed %}<span class="track__handle" role="separator" aria-orientation="vertical" aria-label="Drag to change the length of {{ placement.box.title }}"></span>{% endif %}
         </div>
       {% endfor %}
       {% for band in track.bands %}

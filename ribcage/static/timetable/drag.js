@@ -102,6 +102,8 @@
   };
 
   addEventListener("pointerdown", (event) => {
+    // An armed preview is inert: its times are not the stored ones an edit would run on (#145).
+    if (region()?.hasAttribute("data-armed")) return;
     const slot = event.target.closest?.("#track-region .track__slot");
     const resizing = !!event.target.closest?.(".track__handle");
     if (!slot || event.button !== 0 || event.pointerType === "touch" || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
@@ -133,6 +135,7 @@
 
   // A candidate row, picked up: nothing is on the track until the pointer is over it (#144).
   addEventListener("pointerdown", (event) => {
+    if (region()?.hasAttribute("data-armed")) return;
     const row = event.target.closest?.("[data-drag-film]");
     if (!row || !region() || event.button !== 0 || event.pointerType === "touch" || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     if (event.target.closest("form, a, button")) return;

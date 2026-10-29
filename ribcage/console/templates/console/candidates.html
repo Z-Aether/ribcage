@@ -7,7 +7,7 @@
     <ul class="candidates__list">
       {% for each in candidates %}
         {# With a track to land on, an entry is picked up by its row; the + stays for a click (#144). #}
-        <li class="candidate"{% if track %} data-drag-film="{{ each.suggestion }}" data-length="{{ each.runtime }}"{% endif %}>
+        <li class="candidate"{% if track and not armed %} data-drag-film="{{ each.suggestion }}" data-length="{{ each.runtime }}"{% endif %}>
           <span class="candidate__poster">{% include "components/poster.html" with film=each.film size="thumb" %}</span>
           <span class="candidate__title">{{ each.film.title }}</span>
           <span class="candidate__runtime">{{ each.runtime }} min</span>
@@ -15,7 +15,7 @@
           <form method="post" action="{% url 'console_pick_add' %}" class="candidate__add" data-lands-on="{% url 'console_pick' %}">
             {% csrf_token %}
             <input type="hidden" name="suggestion" value="{{ each.suggestion }}">
-            <button type="submit" aria-label="Add {{ each.film.title }} to the plan" {% if not timetable.anchor %}disabled title="Set the start time first"{% endif %}>+</button>
+            <button type="submit" aria-label="Add {{ each.film.title }} to the plan" {% if not timetable.anchor %}disabled title="Set the start time first"{% elif armed %}disabled title="Apply or cancel the preview first"{% endif %}>+</button>
           </form>
         </li>
       {% endfor %}

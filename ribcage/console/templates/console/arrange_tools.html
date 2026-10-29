@@ -1,0 +1,25 @@
+{# The arrange utilities: arming is a plain GET, which shows the result on the track; Apply posts it, Cancel shows the timetable as it is (#22, #145). #}
+{% if armed %}
+  <div class="arrange arrange--armed" role="group" aria-label="Arranged preview">
+    <span class="arrange__armed">{{ armed.name }}{% if armed.utility == "lay-out" %} of {{ armed.minutes }} min{% endif %}: previewed, not applied.</span>
+    <form method="post" action="{% url 'console_pick_arrange' %}" class="arrange__form" data-lands-on="{% url 'console_pick' %}">
+      {% csrf_token %}
+      <input type="hidden" name="arrange" value="{{ armed.utility }}"><input type="hidden" name="minutes" value="{{ armed.minutes }}">
+      <input type="hidden" name="selected" value="{{ selected.key|default_if_none:'' }}">
+      <button type="submit">Apply</button>
+    </form>
+    <a class="button button--quiet arrange__cancel" href="{% url 'console_pick' %}{% if selected %}?box={{ selected.key }}{% endif %}">Cancel</a>
+  </div>
+{% else %}
+  <form method="get" action="{% url 'console_pick' %}" class="arrange arrange__form">
+    {% if selected %}<input type="hidden" name="box" value="{{ selected.key }}">{% endif %}
+    <label for="arrange-break">Lay out with a break of</label>
+    <input type="number" id="arrange-break" name="minutes" value="{{ default_break }}" min="0" max="1440" step="1" inputmode="numeric" size="3"{% if not timetable.anchor %} disabled{% endif %}>
+    <span>min</span>
+    <button type="submit" name="arrange" value="lay-out" class="button--quiet"{% if not timetable.anchor or not track %} disabled title="{% if timetable.anchor %}Nothing on the timetable yet{% else %}Set the start time first{% endif %}"{% endif %}>Lay out</button>
+  </form>
+  <form method="get" action="{% url 'console_pick' %}" class="arrange arrange__form">
+    {% if selected %}<input type="hidden" name="box" value="{{ selected.key }}">{% endif %}
+    <button type="submit" name="arrange" value="spread" class="button--quiet"{% if not timetable.anchor or not track %} disabled title="{% if timetable.anchor %}Nothing on the timetable yet{% else %}Set the start time first{% endif %}"{% endif %}>Spread evenly</button>
+  </form>
+{% endif %}
