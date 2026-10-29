@@ -69,3 +69,15 @@ def save(box_id, label, length, mode=engine.NONE, flexible=False):
     except (TypeError, ValueError):
         pass
     return None
+
+
+def resize(box_id, length, mode=engine.NONE):
+    """The handle's release: the box's own label and flag kept, its length saved through `save`, so that stays the one write (#143).
+
+    Returns a Refused for a length `save` refuses, which the handle never sends; a box gone or a film's changes nothing.
+    """
+    try:
+        box = Box.objects.filter(pk=box_id, suggestion__isnull=True).first()
+    except (TypeError, ValueError):
+        return None
+    return save(box_id, box.label, length, mode, box.flexible) if box else None

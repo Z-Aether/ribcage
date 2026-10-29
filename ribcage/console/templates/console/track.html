@@ -28,6 +28,11 @@
     {# The page's own selection, so a preview marks it and not the box being dragged (#139). #}
     <input type="hidden" name="selected" value="{{ selected.key|default_if_none:'' }}">
   </form>
+  {# A handle's release fills this in and submits it: a labelled box's length is saved by `labelling`, never by the move form (#143). #}
+  <form method="post" action="{% url 'console_pick_resize' %}" class="track-resize" data-lands-on="/console/pick/" hidden>
+    {% csrf_token %}
+    <input type="hidden" name="box"><input type="hidden" name="length"><input type="hidden" name="mode" value="{{ ripple_mode }}">
+  </form>
   <div class="track" style="--lanes: {{ track.lanes }}" data-scale-start="{{ track.scale.start }}" data-scale-length="{{ track.scale.length }}">
     <ol class="track__axis" aria-label="Clock times">
       {% for tick in track.ticks %}
@@ -39,6 +44,8 @@
         <div id="box-{{ placement.box.key }}" class="track__slot{% if placement.box.key == selected.key %} is-selected{% endif %}" style="--at: {{ placement.left }}; --span: {{ placement.width }}; --lane: {{ placement.lane }}" data-box="{{ placement.box.key }}" data-start="{{ placement.box.start }}" data-length="{{ placement.box.minutes }}">
           {# A click selects: the selection is in the tab's address, so Back, Forward and a reload keep it (#137). #}
           <a class="track__select" href="{% url 'console_pick' %}?box={{ placement.box.key }}"{% if placement.box.key == selected.key %} aria-current="true"{% endif %}>{% include "components/box.html" with box=placement.box %}</a>
+          {# A film is fixed at its runtime and shows no handle (#12, #143). #}
+          {% if placement.box.labelled %}<span class="track__handle" role="separator" aria-orientation="vertical" aria-label="Drag to change the length of {{ placement.box.title }}"></span>{% endif %}
         </div>
       {% endfor %}
       {% for band in track.bands %}

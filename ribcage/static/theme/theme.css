@@ -3551,6 +3551,23 @@ body:has(> main > .ballot-head) > footer.site-footer {
 [data-skin] .track__slot.is-dragging .track__select {
   cursor: grabbing;
 }
+/* A labelled box's handle on its right edge: a grip that stretches or shortens it (#143). */
+[data-skin] .track__handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 0.75rem;
+  cursor: ew-resize;
+  touch-action: none;
+  border-radius: 0 0.4rem 0.4rem 0;
+  background: linear-gradient(90deg, transparent 0 55%, var(--accent) 55% 65%, transparent 65% 75%, var(--accent) 75% 85%, transparent 85%);
+  opacity: 0.55;
+}
+[data-skin] .track__slot:hover .track__handle,
+[data-skin] .track__slot.is-dragging .track__handle {
+  opacity: 1;
+}
 [data-skin] .track__slot.is-selected .box {
   outline: 2px solid var(--accent);
   outline-offset: 1px;

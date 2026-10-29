@@ -326,7 +326,8 @@ def edit_asked(request, typed_lengths=False):
         return box, (None if retiming.refusal(typed) else engine.Resize(runtime.minutes(typed))), mode
     if typed_lengths and "length" in request.POST:
         typed = request.POST["length"]
-        if not Box.objects.filter(pk=box, suggestion__isnull=True).exists():
+        # A film's is no length, but a box gone since is the reload's, like a drag's (#143).
+        if Box.objects.filter(pk=box, suggestion__isnull=False).exists():
             return None
         return box, (None if labelling.length_refusal(typed) else engine.Resize(int(typed.strip()))), mode
     start = editing.valid_start(request.POST.get("start"))
@@ -355,6 +356,7 @@ def pick_preview(request):
         boxes = None
     elif change is None:
         boxes = track.stored_boxes()
+        boxes = boxes if any(each.key == box for each in boxes) else None
     else:
         boxes = editing.run(box, change, mode, save=False)
     if boxes is None:
@@ -372,6 +374,19 @@ def pick_move(request):
     box, change, mode = asked
     kept = editing.run(box, change, mode, save=True) if setting.read().anchor else None
     return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if kept else ""))
+
+
+@admin_required
+@require_POST
+def pick_resize(request):
+    # The handle's release: a labelled box's length, saved by `labelling.resize` so `labelling.save` stays its one write (#143).
+    box = selected_box(request, request.POST.get("box", ""))
+    mode = request.POST.get("mode", engine.NONE)
+    if box is None or mode not in engine.MODES:
+        return HttpResponseBadRequest()
+    if labelling.resize(box, request.POST.get("length", ""), mode):
+        return HttpResponseBadRequest()
+    return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if Box.objects.filter(pk=box).exists() else ""))
 
 
 @admin_required

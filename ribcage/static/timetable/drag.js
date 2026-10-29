@@ -33,6 +33,22 @@
     return high < low ? best : Math.min(Math.max(best, low), high);
   };
 
+  // A handle's new length: its end flush with a neighbour's start when that is whole 5-minute steps long, else the grid; never under the smallest (#22, #143).
+  const snapLength = (raw, d) => {
+    let best = Math.round(raw / GRID) * GRID;
+    let distance = NEAR;
+    for (const other of d.pushes ? [] : d.others) {
+      const flush = other.start - d.start0;
+      if (flush % GRID === 0 && Math.abs(raw - flush) < distance) {
+        distance = Math.abs(raw - flush);
+        best = flush;
+      }
+    }
+    // Held inside the locked scale, which the track keeps until the release refits it.
+    const reach = Math.floor((d.scale.start + d.scale.length - d.start0) / GRID) * GRID;
+    return Math.max(GRID, Math.min(best, Math.max(reach, GRID)));
+  };
+
   const ask = async (url, fields) => {
     const body = new FormData(form());
     for (const [name, value] of Object.entries(fields)) body.set(name, value);
@@ -63,22 +79,29 @@
     const said = answered.querySelector(".box");
     box.className = said.className;
     box.querySelector(".box__times").textContent = said.querySelector(".box__times").textContent;
+    box.querySelector(".box__length").textContent = said.querySelector(".box__length").textContent;
   };
 
-  const preview = (d, start) => {
-    d.lastStart = start;
+  const preview = (d, value) => {
+    d.lastValue = value;
     const seq = ++d.sent;
-    ask(form().dataset.preview, { box: d.key, start, scale_start: d.scale.start, scale_length: d.scale.length }).then((answer) => {
+    // A handle names the new length, a drag the new start.
+    const named = d.resizing ? { length: value } : { start: value };
+    ask(form().dataset.preview, { box: d.key, ...named, scale_start: d.scale.start, scale_length: d.scale.length }).then((answer) => {
       if (answer.redirect) return location.assign(answer.redirect);
       // Any answer newer than the one on screen is shown, not only the latest: strict latest-wins froze the neighbours while the pointer outran the round trip (#22).
       if (drag !== d || d.cancelled || seq <= d.shown) return;
       d.shown = seq;
       show(answer.html, d.slot);
+      // A selected box's panel shows the length it would have.
+      const field = d.resizing && document.querySelector(".box-panel #box-length");
+      if (field && field.form.elements.box.value === d.key) field.value = d.length;
     });
   };
 
   addEventListener("pointerdown", (event) => {
     const slot = event.target.closest?.("#track-region .track__slot");
+    const resizing = !!event.target.closest?.(".track__handle");
     if (!slot || event.button !== 0 || event.pointerType === "touch" || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     const track = slot.closest(".track");
     const width = track.querySelector(".track__lanes").getBoundingClientRect().width;
@@ -89,6 +112,7 @@
       x0: event.clientX,
       start0: Number(slot.dataset.start),
       length: Number(slot.dataset.length),
+      length0: Number(slot.dataset.length),
       scale,
       minutesPerPixel: scale.length / width,
       others: [...track.querySelectorAll(".track__slot")]
@@ -99,7 +123,8 @@
       cancelled: false,
       sent: 0,
       shown: 0,
-      lastStart: null,
+      resizing,
+      lastValue: null,
       start: null,
     };
   });
@@ -114,9 +139,15 @@
       d.slot.classList.add("is-dragging");
       d.slot.setPointerCapture(event.pointerId);
     }
+    if (d.resizing) {
+      d.length = snapLength(d.length0 + travelled * d.minutesPerPixel, d);
+      d.slot.style.setProperty("--span", `${(d.length / d.scale.length) * 100}%`);
+      if (d.length !== d.lastValue) preview(d, d.length);
+      return;
+    }
     d.start = snap(d.start0 + travelled * d.minutesPerPixel, d);
     d.slot.style.setProperty("--at", `${((d.start - d.scale.start) / d.scale.length) * 100}%`);
-    if (d.start !== d.lastStart) preview(d, d.start);
+    if (d.start !== d.lastValue) preview(d, d.start);
   });
 
   addEventListener("pointerup", () => {
@@ -129,9 +160,11 @@
       setTimeout(() => (suppressClick = false));
     }
     if (!d.moved || d.cancelled) return;
-    const saving = form();
+    // A handle saves through its own form, whose route is the labelled box's one write of a length (#143).
+    const saving = d.resizing ? region().querySelector("form.track-resize") : form();
     saving.elements.box.value = d.key;
-    saving.elements.start.value = d.start;
+    // By name: `elements.length` is the collection's own count.
+    saving.querySelector(d.resizing ? "[name=length]" : "[name=start]").value = d.resizing ? d.length : d.start;
     saving.requestSubmit();
   });
 
@@ -142,6 +175,8 @@
     d.cancelled = true;
     d.slot.classList.remove("is-dragging");
     // Asking for the box's own start puts the track back as stored, refitted, with nothing written.
+    const field = d.resizing && document.querySelector(".box-panel #box-length");
+    if (field && field.form.elements.box.value === d.key) field.value = d.length0;
     ask(form().dataset.preview, { box: d.key, start: d.start0 }).then((answer) => {
       if (answer.redirect) return location.assign(answer.redirect);
       show(answer.html, null);
