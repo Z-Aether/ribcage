@@ -3676,3 +3676,20 @@ body:has(> main > .ballot-head) > footer.site-footer {
   width: 5.5rem;
   max-width: none;
 }
+
+/* The ripple mode control in the tool row (#140). */
+[data-skin] .ripple-mode {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+[data-skin] .ripple-mode__label {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+[data-skin] :is(button, a.button).button--quiet.ripple-mode__choice.is-chosen {
+  background: var(--ink);
+  color: var(--surface);
+  border-color: var(--ink);
+}

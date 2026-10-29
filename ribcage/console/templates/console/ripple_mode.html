@@ -1,0 +1,9 @@
+{# The ripple mode: what an edit does to the boxes it runs into. Sticky in the admin's session; the page reloads to set it (#13, #140). #}
+<form method="post" action="{% url 'console_pick_mode' %}" class="ripple-mode" data-lands-on="{% url 'console_pick' %}" role="group" aria-label="On a clash">
+  {% csrf_token %}
+  <input type="hidden" name="selected" value="{{ selected.key|default_if_none:'' }}">
+  <span class="ripple-mode__label">On a clash:</span>
+  {% for value, name in ripple_names %}
+    <button type="submit" name="mode" value="{{ value }}" class="button--quiet ripple-mode__choice{% if value == ripple_mode %} is-chosen{% endif %}" aria-pressed="{% if value == ripple_mode %}true{% else %}false{% endif %}">{{ name }}</button>
+  {% endfor %}
+</form>

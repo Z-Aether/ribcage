@@ -15,7 +15,8 @@
   const snap = (raw, d) => {
     let best = Math.round(raw / GRID) * GRID;
     let distance = NEAR;
-    for (const other of d.others) {
+    // Under a push mode the grid alone: flush-to-neighbour fought the push (#22, #140).
+    for (const other of d.pushes ? [] : d.others) {
       const end = other.start + other.length;
       if (Math.abs(raw - end) < distance) {
         distance = Math.abs(raw - end);
@@ -51,6 +52,10 @@
       morphStyle: "outerHTML",
       callbacks: { beforeNodeMorphed: (old) => old !== held },
     });
+    // The panel beside the track shows the selected box's end as the preview has it (#140).
+    const span = region().dataset.selectedSpan;
+    const starts = document.querySelector(".box-panel [data-box-span]");
+    if (span && starts) starts.textContent = span;
     if (!answered) return;
     // What the server says of the held box: the row it sits in, whether it overlaps, and its times as of that answer.
     held.style.setProperty("--lane", answered.style.getPropertyValue("--lane"));
@@ -89,6 +94,7 @@
       others: [...track.querySelectorAll(".track__slot")]
         .filter((other) => other !== slot)
         .map((other) => ({ start: Number(other.dataset.start), length: Number(other.dataset.length) })),
+      pushes: form().elements.mode.value !== "none",
       moved: false,
       cancelled: false,
       sent: 0,

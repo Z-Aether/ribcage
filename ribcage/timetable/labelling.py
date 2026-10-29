@@ -1,11 +1,14 @@
 """The one write of a labelled box's label and length together, refused whole and gently (#22, #138).
 
-#140 later sends the length through the ripple mode; it replaces `save`'s plain update and keeps its refusals.
+A changed length goes through the ripple mode, as a drag does (#140); a changed label alone ripples nothing.
 """
 
 from dataclasses import dataclass
 
+from django.db import transaction
+
 from ribcage.suggestions import runtime
+from ribcage.timetable import editing, engine
 from ribcage.timetable.models import LABEL_LENGTH, SMALLEST_LABELLED_LENGTH, Box
 
 STEP = 5
@@ -48,14 +51,19 @@ def length_refusal(typed):
     return None if value % STEP == 0 else NOT_IN_STEPS
 
 
-def save(box_id, label, length):
-    """Save a labelled box's label and length together, or return a Refused and save nothing; a box gone or a film's changes nothing."""
+def save(box_id, label, length, mode=engine.NONE):
+    """Save a labelled box's label and length together, or return a Refused and save nothing; a box gone or a film's changes nothing.
+
+    The length is the one change that ripples, under `mode`, in the same transaction as the label (#140).
+    """
     says_label = NO_LABEL if not label.strip() else LONG_LABEL if len(label.strip()) > LABEL_LENGTH else None
     says_length = length_refusal(length)
     if says_label or says_length:
         return Refused(label, length, says_label, says_length)
     try:
-        Box.objects.filter(pk=box_id, suggestion__isnull=True).update(label=label.strip(), length=int(length.strip()))
+        with transaction.atomic():
+            if Box.objects.filter(pk=box_id, suggestion__isnull=True).update(label=label.strip()):
+                editing.run(int(box_id), engine.Resize(int(length.strip())), mode, save=True)
     except (TypeError, ValueError):
         pass
     return None

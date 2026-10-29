@@ -1,5 +1,6 @@
 {# The Timetable sub-tab's tool row and track over a `track.Track`: one template, so the live preview of a drag can answer with it (#22, #136, #139). #}
-<div id="track-region">
+{# The selected box's span rides on the region, for the panel beside the track to show the previewed end (#140). #}
+<div id="track-region"{% if selected %} data-selected-span="{{ selected.span }}"{% endif %}>
 <div class="track-tools" id="track-tools">
   <div class="track-tools__readouts">
     <p class="track-tools__screen">
@@ -12,15 +13,18 @@
     <p class="track-tools__evening">Evening <strong>{{ track.tools.evening }}</strong> · {{ track.tools.elapsed }} elapsed</p>
     {% if track.tools.overlaps %}<p class="track-tools__overlaps">{{ track.tools.overlaps }} overlap{{ track.tools.overlaps|pluralize }}</p>{% endif %}
   </div>
-  {# Room for the ripple mode (#140), the arrange utilities (#145) and Shared (#149). #}
-  <div class="track-tools__acts" data-keeps-scroll>{% include "console/break_button.html" %}</div>
+  {# Room for the arrange utilities (#145) and Shared (#149). #}
+  <div class="track-tools__acts" data-keeps-scroll>
+    {% include "console/ripple_mode.html" %}
+    {% include "console/break_button.html" %}
+  </div>
 </div>
 
 <div class="track-frame" data-keeps-scroll>
   {# A drag fills this in: each new snapped value posts it to the preview, and the release submits it to save (#139). #}
   <form method="post" action="{% url 'console_pick_move' %}" class="track-move" data-preview="{% url 'console_pick_preview' %}" data-lands-on="/console/pick/" hidden>
     {% csrf_token %}
-    <input type="hidden" name="box"><input type="hidden" name="start"><input type="hidden" name="mode" value="none">
+    <input type="hidden" name="box"><input type="hidden" name="start"><input type="hidden" name="mode" value="{{ ripple_mode }}">
     {# The page's own selection, so a preview marks it and not the box being dragged (#139). #}
     <input type="hidden" name="selected" value="{{ selected.key|default_if_none:'' }}">
   </form>

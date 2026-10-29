@@ -116,6 +116,6 @@ def test_a_resize_under_none_changes_that_box_alone():
 
 
 def test_every_mode_is_acted_on():
-    assert set(engine.MODES) == set(engine.RIPPLES) == {engine.NONE, engine.KEEP_GAPS}
+    assert set(engine.MODES) == set(engine.RIPPLE_MODES) == {engine.NONE, engine.KEEP_GAPS}
     with pytest.raises(ValueError):
         engine.edit(EVENING, "a", engine.Move(5), "squeeze")

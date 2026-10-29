@@ -2,7 +2,7 @@
 {% load static %}
 
 {# The drag acts only on a track, so Compare and an empty timetable carry it harmlessly (#139). #}
-{% block head %}{{ block.super }}<script src="{% static 'timetable/drag.js' %}" defer></script>{% endblock %}
+{% block head %}{{ block.super }}<script src="{% static 'timetable/drag.js' %}" defer></script><script src="{% static 'timetable/typed.js' %}" defer></script>{% endblock %}
 
 {% block title %}Pick · Admin · {{ marathon_name }}{% endblock %}
 

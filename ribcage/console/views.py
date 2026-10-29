@@ -13,6 +13,7 @@ from ribcage.ballot import progress
 from ribcage.console import films
 from ribcage.console.forms import BackupCodeForm, BackupUploadForm
 from ribcage.console.moves import make, offered
+from ribcage.identity import admin_session
 from ribcage.identity.admin_session import admin_required
 from ribcage.identity.models import Voter
 from ribcage.identity.removal import remove, what_goes
@@ -25,6 +26,7 @@ from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions.models import Suggestion
 from ribcage.timetable import editing, engine, labelling, laying, offering, setting, track
+from ribcage.timetable.models import Box
 from ribcage.triggers import correction, stored
 
 # Where each phase's work is: Films through VOTE, Pick from PICK on (#28).
@@ -175,11 +177,31 @@ def selected_box(request, chosen=None):
     return int(chosen) if chosen.isascii() and chosen.isdigit() and len(chosen) < 10 else None
 
 
-def render_pick(request, sub, refused=None, box_refused=None, box=None):
+# The ripple mode control's words, in the tool row's order; #141 adds the third (#140).
+RIPPLE_NAMES = ((engine.NONE, "None"), (engine.KEEP_GAPS, "Push · keep gaps"))
+RIPPLE_SESSION_KEY = "ripple_mode"
+
+
+def ripple_mode(request):
+    """The admin's sticky ripple mode, kept in their session; None until set (#13, #140)."""
+    mode = admin_session.kept(request, RIPPLE_SESSION_KEY, engine.NONE)
+    return mode if mode in engine.MODES else engine.NONE
+
+
+def track_context(request, mode=None):
+    return {"ripple_mode": mode or ripple_mode(request), "ripple_names": RIPPLE_NAMES}
+
+
+def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=None):
     """The Pick tab on one of its two sub-tabs; the header is the same on both (#135)."""
     timetable = setting.read()
     budget = timetable.budget
     the_track = track.load(timetable.anchor, budget) if sub == "timetable" and timetable.anchor else None
+    labelled = selected_box(request, box)
+    if the_track and box_refused and not box_refused.says_length and Box.objects.filter(pk=labelled, suggestion__isnull=True).exists():
+        # A refusal over the label alone keeps the typed length, so the track keeps showing it as the preview did (#140).
+        kept = editing.run(labelled, engine.Resize(int(box_refused.length.strip())), mode or ripple_mode(request), save=False)
+        the_track = track.build(kept, timetable.anchor, budget) if kept else the_track
     context = {
         "tab": "console_pick",
         "sub": sub,
@@ -190,8 +212,9 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None):
         "budget_words": None if budget is None else films.screen_time_words(budget),
         "refused": refused,
         "track": the_track,
-        "selected": the_track.box(selected_box(request, box)) if the_track else None,
+        "selected": the_track.box(labelled) if the_track else None,
         "box_refused": box_refused,
+        **track_context(request, mode),
         "candidates": offering.not_in_the_plan() if sub == "timetable" else (),
     }
     return render_tab(request, "console/pick.html", context)
@@ -263,19 +286,30 @@ def pick_box(request):
         return redirect("console_pick")
     # A refusal renders the tab with the box still selected and the typing kept; a box gone since reloads as it is (#138).
     box = request.POST.get("box", "")
-    if refused := labelling.save(box, request.POST.get("label", ""), request.POST.get("length", "")):
-        return render_pick(request, "timetable", box_refused=refused, box=box)
+    mode = request.POST.get("mode", "")
+    mode = mode if mode in engine.MODES else ripple_mode(request)
+    if refused := labelling.save(box, request.POST.get("label", ""), request.POST.get("length", ""), mode):
+        return render_pick(request, "timetable", box_refused=refused, box=box, mode=mode)
     return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if selected_box(request, box) else ""))
 
 
-def edit_asked(request):
-    """The box, the change and the mode a move names, or None where the post is no drag's (#139)."""
+def edit_asked(request, typed_lengths=False):
+    """The box, the change and the mode a post names, or None where the post is no edit's (#139, #140).
+
+    A drag's post names a `start`. A typed `length` is the preview's alone, as the save is `labelling.save`'s: only the
+    preview asks with `typed_lengths`, and a `length` the save would refuse is a Resize of nothing, left to the caller.
+    """
     box = selected_box(request, request.POST.get("box", ""))
-    start = editing.valid_start(request.POST.get("start"))
     mode = request.POST.get("mode", engine.NONE)
-    if box is None or start is None or mode not in engine.MODES:
+    if box is None or mode not in engine.MODES:
         return None
-    return box, engine.Move(start), mode
+    if typed_lengths and "length" in request.POST:
+        typed = request.POST["length"]
+        if not Box.objects.filter(pk=box, suggestion__isnull=True).exists():
+            return None
+        return box, (None if labelling.length_refusal(typed) else engine.Resize(int(typed.strip()))), mode
+    start = editing.valid_start(request.POST.get("start"))
+    return None if start is None else (box, engine.Move(start), mode)
 
 
 def kept_scale(request):
@@ -291,15 +325,21 @@ def kept_scale(request):
 @require_POST
 def pick_preview(request):
     # The same edit as the save, writing nothing: the answer is the track and tool row alone, for the browser to morph in (#22, #139).
-    if not (asked := edit_asked(request)):
+    if not (asked := edit_asked(request, typed_lengths=True)):
         return HttpResponseBadRequest()
     box, change, mode = asked
     timetable = setting.read()
-    boxes = editing.run(box, change, mode, save=False) if timetable.anchor else None
+    # A typed length passes through values the save would refuse, like the 9 of 90: those show the stored track, not an error (#140).
+    if not timetable.anchor:
+        boxes = None
+    elif change is None:
+        boxes = track.stored_boxes()
+    else:
+        boxes = editing.run(box, change, mode, save=False)
     if boxes is None:
         return reload_the_tab(request, reverse("console_pick"))
     the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request))
-    return render(request, "console/track.html", {"track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
+    return render(request, "console/track.html", {**track_context(request, mode), "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
 
 
 @admin_required
@@ -311,6 +351,16 @@ def pick_move(request):
     box, change, mode = asked
     kept = editing.run(box, change, mode, save=True) if setting.read().anchor else None
     return reload_the_tab(request, reverse("console_pick") + (f"?box={box}" if kept else ""))
+
+
+@admin_required
+@require_http_methods(["GET", "HEAD", "POST"])
+def pick_mode(request):
+    # The mode is sticky in the admin's session; the tab reloads so every form on it names the mode the page shows (#140).
+    if request.method == "POST" and request.POST.get("mode") in engine.MODES:
+        admin_session.keep(request, RIPPLE_SESSION_KEY, request.POST["mode"])
+    kept = selected_box(request, request.POST.get("selected", "")) if request.method == "POST" else None
+    return reload_the_tab(request, reverse("console_pick") + (f"?box={kept}" if kept else ""))
 
 
 def named_voter(pk):

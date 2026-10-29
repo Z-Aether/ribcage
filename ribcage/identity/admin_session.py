@@ -28,6 +28,18 @@ def signed_in(request):
     return constant_time_compare(session_store(key).get(PASSWORD_DIGEST, ""), password_digest())
 
 
+def kept(request, name, default=None):
+    """A setting the admin's session holds, or `default` without a session (#140)."""
+    key = request.COOKIES.get(COOKIE_NAME)
+    return session_store(key).get(name, default) if key else default
+
+
+def keep(request, name, value):
+    session = session_store(request.COOKIES.get(COOKIE_NAME))
+    session[name] = value
+    session.save()
+
+
 def sign_in(request, response):
     # A fresh key, so a planted one never becomes the admin's; the CSRF token stays, so a voter tab can still post (#76).
     end_the_session(request)
