@@ -2,7 +2,7 @@
 
 `run` loads the boxes, has `engine.edit` return them after the change and, only when told to save, stores what differs. A preview
 and a save of the same values therefore show and store exactly the same boxes, and the save is the server's however slow the
-preview ran. #140's modes, #143's resize and #144's insert add a change or a mode to the engine and a line to `stored`, not a new call.
+preview ran. #141's mode, #142's and #143's resizes and #144's insert add a change or a mode to the engine and a line to `stored`, not a new call.
 """
 
 from dataclasses import replace
@@ -31,7 +31,7 @@ def run(box_id, change, mode, save):
         before = track.stored_boxes()
         if not any(each.key == box_id for each in before):
             return None
-        placed = [engine.Placed(each.key, each.start, each.length, each.film is not None) for each in before]
+        placed = [engine.Placed(each.key, each.start, each.length, each.film is not None, each.flexible) for each in before]
         after = {each.key: each for each in engine.edit(placed, box_id, change, mode)}
         boxes = [replace(each, start=after[each.key].start, length=after[each.key].length) for each in before]
         if save:
@@ -40,7 +40,9 @@ def run(box_id, change, mode, save):
 
 
 def stored(before, after):
-    """Write what changed. Only starts so far; a labelled box's length (#140) and a film's runtime (#142) join as changes do."""
-    moved = [(each.key, new.start) for each, new in zip(before, after, strict=True) if each.start != new.start]
-    for key, start in moved:
-        Box.objects.filter(pk=key).update(start=start)
+    """Write what changed: a box's start, and a labelled box's length. A film's runtime (#142) joins as its change does."""
+    for each, new in zip(before, after, strict=True):
+        if each.start != new.start:
+            Box.objects.filter(pk=each.key).update(start=new.start)
+        if each.length != new.length and each.film is None:
+            Box.objects.filter(pk=each.key, suggestion__isnull=True).update(length=new.length)

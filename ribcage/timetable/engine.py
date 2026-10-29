@@ -16,6 +16,8 @@ class Placed:
     start: int
     length: int
     is_film: bool
+    # A flexible box keeps its full length under Push · keep gaps; #141's squeeze is what reads this (#22, #140).
+    flexible: bool = False
 
     @property
     def end(self):
@@ -102,9 +104,9 @@ def read(boxes, budget):
     )
 
 
-# The ripple modes (#13). Only None exists so far; #140 and #141 add the push modes as further names `edit` understands.
+# The ripple modes (#13): a name each, and in `RIPPLE_MODES` the function that acts on the edit. #141 adds a name and its function.
 NONE = "none"
-MODES = (NONE,)
+KEEP_GAPS = "keep-gaps"
 
 
 @dataclass(frozen=True)
@@ -114,22 +116,65 @@ class Move:
     start: int
 
 
-# Further changes join here as their own classes, and `apply` learns each: a labelled box's new length (#140), a film's new
-# runtime (#142) and an inserted box (#144). Every one goes through `edit`, so a preview and a save are the same call (#22).
+@dataclass(frozen=True)
+class Resize:
+    """A labelled box's new length in minutes; its start stays (#140). A film's runtime and the drag handle join as #142 and #143 land."""
+
+    length: int
+
+
+# An inserted box (#144) joins as its own class, and `apply` learns it. Every change goes through `edit`, so a preview and a save
+# are the same call (#22).
 
 
 def apply(boxes, key, change):
     """The edited box alone, changed as the change says, before any ripple mode acts."""
     if isinstance(change, Move):
         return [replace(box, start=change.start) if box.key == key else box for box in boxes]
+    if isinstance(change, Resize):
+        return [replace(box, length=change.length) if box.key == key else box for box in boxes]
     raise TypeError(f"not a change: {change!r}")
 
 
-def edit(boxes, key, change, mode):
-    """The boxes after one change to the box `key` under a ripple mode; nothing is mutated, so a preview and a save can share it.
+def leave_alone(before, after, key):
+    """None: the edited box changed and nothing else does; any overlap it makes is left for `overlaps` to flag (#12, #139)."""
+    return after
 
-    Under None the edited box changes and nothing else does; any overlap it makes is left for `overlaps` to flag (#12, #139).
+
+def keep_gaps(before, after, key):
+    """Push · keep gaps: once the edited box touches into its neighbour, every box on that side moves by the edit's own delta (#13, #22, #140).
+
+    A later end (a move later, a longer box) pushes every other box starting at or after the edited box's old start, by the
+    end's delta. An earlier start pushes every box starting before the old start, by the start's delta, which may carry them
+    before the anchor. A move short of contact pushes nothing, and so does a shorter box: dragging back never undoes a push.
     """
-    if mode not in MODES:
+    old = next((box for box in before if box.key == key), None)
+    new = next((box for box in after if box.key == key), None)
+    if old is None or new is None:
+        return after
+    if new.end > old.end:
+        side = [box for box in after if box.key != key and box.start >= old.start]
+        delta = new.end - old.end
+        touched = bool(side) and new.end > min(box.start for box in side)
+    elif new.start < old.start:
+        side = [box for box in after if box.key != key and box.start < old.start]
+        delta = new.start - old.start
+        touched = bool(side) and new.start < max(box.end for box in side)
+    else:
+        return after
+    if not touched:
+        return after
+    pushed = {box.key for box in side}
+    return [replace(box, start=box.start + delta) if box.key in pushed else box for box in after]
+
+
+RIPPLE_MODES = {NONE: leave_alone, KEEP_GAPS: keep_gaps}
+MODES = tuple(RIPPLE_MODES)
+
+
+def edit(boxes, key, change, mode):
+    """The boxes after one change to the box `key` under a ripple mode; nothing is mutated, so a preview and a save can share it."""
+    if mode not in RIPPLE_MODES:
         raise ValueError(f"not a mode: {mode!r}")
-    return apply(list(boxes), key, change)
+    boxes = list(boxes)
+    return RIPPLE_MODES[mode](boxes, apply(boxes, key, change), key)

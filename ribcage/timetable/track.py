@@ -53,6 +53,7 @@ class Loaded:
     vetoed_by: str = ""
     vetoers: str = ""
     dropped: bool = False
+    flexible: bool = False
 
 
 @dataclass(frozen=True)
@@ -280,7 +281,7 @@ def stored_boxes():
     boxes = []
     for box in stored:
         if box.suggestion is None:
-            boxes.append(Loaded(box.pk, box.start, box.length, label=box.label))
+            boxes.append(Loaded(box.pk, box.start, box.length, label=box.label, flexible=box.flexible))
             continue
         initials, names = marks.get(box.suggestion_id, ("", ""))
         boxes.append(
