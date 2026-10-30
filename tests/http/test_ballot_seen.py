@@ -1,4 +1,4 @@
-"""Seen it: the voter's own fact about a film, set on its tile without moving it, and the board's legend (#10, #121)."""
+"""Seen it: the voter's own fact about a film, set on its tile without moving it, and the board's legend (#10, #121); before VOTE it is set from the card, in test_early_marks.py (#152)."""
 
 import re
 
@@ -126,8 +126,8 @@ def test_the_answer_redraws_the_tile_out_of_band_vetoed_or_not(ballot):
     assert f"hx-swap-oob=\"outerHTML:li[data-suggestion='{ballot['two'].pk}']\"" in vetoed and "is-seen-it" in vetoed and "<textarea" not in vetoed
 
 
-@pytest.mark.parametrize("phase", [Phase.SUGGEST, Phase.APPROVE, Phase.PICK, Phase.RUN])
-def test_a_post_outside_vote_reloads_the_tab_and_writes_nothing(ballot, phase):
+@pytest.mark.parametrize("phase", [Phase.PICK, Phase.RUN])
+def test_a_post_after_vote_reloads_the_tab_and_writes_nothing(ballot, phase):
     walk_on_to(phase)
 
     answer = seen(ballot["client"], ballot["one"], "1", headers=HTMX)

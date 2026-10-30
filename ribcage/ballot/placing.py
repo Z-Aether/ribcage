@@ -1,4 +1,4 @@
-"""Placing a film: the one way a score or a veto is set, and the one way either is cleared (#9, #118, #119, #120)."""
+"""Placing a film: the one way a score or a veto is set, and the one way either is cleared (#9, #118, #119, #120, #152)."""
 
 from ribcage.ballot.board import SCALE, TRAY, VETOES
 from ribcage.ballot.models import BallotRecord
@@ -34,6 +34,17 @@ def place(voter, suggestion, target):
         record.delete()
     else:
         record.save(update_fields=["score", "vetoed"])
+
+
+def set_veto(voter, suggestion, vetoed):
+    """Set the voter's veto on the suggestion to `vetoed` and nothing else about the film, for the phases that have no scores. A repeat changes nothing.
+
+    Through `place`: vetoing replaces a score, as in VOTE, and taking the veto back leaves no score; a film that is not vetoed is left as it stands, scored or not (#10, #152).
+    """
+    if vetoed:
+        return place(voter, suggestion, VETO)
+    if BallotRecord.objects.filter(voter=voter, suggestion=suggestion, vetoed=True).exists():
+        place(voter, suggestion, UNSORTED)
 
 
 def mark_seen(voter, suggestion, seen):

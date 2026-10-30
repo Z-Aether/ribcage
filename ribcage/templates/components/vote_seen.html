@@ -1,5 +1,5 @@
-{# The viewer's seen it on the opened card, a checkbox that posts the state it sets and is drawn again from what the server holds (#10, #121, #122). #}
-{% with vote=card.vote %}<form class="vote-seen" method="post" action="{% url 'ballot_seen' %}"{% if vote.inert %} onsubmit="return false"{% else %} hx-post="{% url 'ballot_seen' %}" hx-trigger="change" hx-target="this" hx-swap="outerHTML"{% endif %}>
+{# The viewer's seen it on the opened card, a checkbox that posts the state it sets; the answer draws the row again from what the server holds (#10, #121, #122, #152). #}
+{% with vote=card.vote %}<form class="vote-seen" method="post" action="{% url 'ballot_seen' %}"{% if vote.inert %} onsubmit="return false"{% else %} hx-post="{% url 'ballot_seen' %}" hx-trigger="change" hx-target="closest .vote-bar__scores" hx-swap="outerHTML"{% endif %}>
   {% csrf_token %}
   <input type="hidden" name="suggestion" value="{{ card.suggestion_id|default_if_none:'' }}">
   <input type="hidden" name="card" value="1">

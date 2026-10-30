@@ -70,7 +70,7 @@ def test_the_pool_shows_no_mark_of_approval(voter_client, voters, phase):
     # In SUGGEST an approved film's runtime pencil is absent, with no word on why: no mark, by design (#34, #90).
     expected = without_the_pencil(undecided, approved) if phase is Phase.SUGGEST else undecided
     assert decided == expected
-    assert not re.search(r"approved|dropped|undecided|ballot", decided, re.I)
+    assert not re.search(r"approved|dropped|undecided|(?<!/)ballot(?!/)", decided, re.I)
 
 
 @pytest.mark.parametrize("phase", POOL_PHASES)

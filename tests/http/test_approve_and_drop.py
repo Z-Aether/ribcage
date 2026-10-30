@@ -240,4 +240,4 @@ def test_voters_see_no_mark_of_a_decision_but_an_approved_films_missing_pencil_a
     expected = pencil_and_withdraw_removed(undecided, approved) if phase is Phase.SUGGEST else undecided
     # Spacing aside, as the bar's template leaves Withdraw's line behind it.
     assert decided.split() == expected.split()
-    assert not re.search(r"approved|dropped|undecided|ballot", decided, re.I)
+    assert not re.search(r"approved|dropped|undecided|(?<!/)ballot(?!/)", decided, re.I)

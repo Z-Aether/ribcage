@@ -312,7 +312,7 @@ def yours(sample, index):
 
 def marks(**said):
     """The row outside VOTE: the veto and seen it, no score pills, posting nowhere here (#152)."""
-    return VoteBar(scale=(), scoring=False, inert=True, **said)
+    return VoteBar(scale=(), inert=True, **said)
 
 
 def phase_bars():

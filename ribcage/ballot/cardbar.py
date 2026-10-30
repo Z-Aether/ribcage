@@ -1,4 +1,4 @@
-"""What VOTE's phase bar shows on a film's opened card, and who vetoes the film for its notes (#10, #35 §4, #122, #128, #150)."""
+"""What the phase bar's row shows on a film's opened card, and who vetoes the film for its notes (#10, #35 §4, #122, #128, #150, #152)."""
 
 from ribcage.ballot.board import SCALE
 from ribcage.ballot.models import BallotRecord
@@ -17,6 +17,22 @@ def of(viewer, suggestion):
         seen_it=bool(own and own.seen_it),
         seen_by=tuple(record.voter.display_name for record in others if record.seen_it),
     )
+
+
+# The row outside VOTE for a film the viewer has marked nothing on: the veto and seen it, no scores (#152).
+UNMARKED = VoteBar(scale=())
+
+
+def marks_of(viewer):
+    """The viewer's veto and seen it as SUGGEST's and APPROVE's row draws them, by suggestion id, in one query; a film they have no record on is `UNMARKED` (#152)."""
+    records = BallotRecord.objects.filter(voter=viewer).values_list("suggestion_id", "vetoed", "seen_it")
+    return {suggestion_id: VoteBar(scale=(), vetoed=vetoed, seen_it=seen_it) for suggestion_id, vetoed, seen_it in records}
+
+
+def marks_on(viewer, suggestion):
+    """The row outside VOTE for one film (#152)."""
+    own = BallotRecord.objects.filter(voter=viewer, suggestion=suggestion).first()
+    return VoteBar(scale=(), vetoed=own.vetoed, seen_it=own.seen_it) if own else UNMARKED
 
 
 def vetoers_on(suggestion):

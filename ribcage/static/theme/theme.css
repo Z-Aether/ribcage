@@ -1819,6 +1819,10 @@ body > aside.nag-bar a {
   color: var(--ink-muted);
   font-size: 0.85em;
 }
+/* The hint's paragraph is drawn empty, and classless, while the voter does not veto the film (#152). */
+[data-skin] .note-box p[id^="note-hint-"]:not(.note-box__hint) {
+  display: none;
+}
 .note-box__foot {
   display: flex;
   flex-wrap: wrap;
@@ -1840,28 +1844,32 @@ body > aside.nag-bar a {
   color: var(--score-rather-not);
 }
 /* Withdraw ends the line Save starts, far from it; armed, its confirm takes lines of its own below (#85, #89). */
-.phase-bar--suggest:has(> .withdraw) {
+.phase-bar__write:has(> .withdraw) {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   column-gap: 1.1rem;
 }
-.phase-bar--suggest:has(> .withdraw) :is(.note-box, .note-box__foot, .withdraw) {
+.phase-bar__write:has(> .withdraw) :is(.note-box, .note-box__foot, .withdraw) {
   display: contents;
 }
-.phase-bar--suggest:has(> .withdraw) .note-box__label {
+.phase-bar__write:has(> .withdraw) .note-box__label {
   grid-area: 1 / 1 / 2 / -1;
 }
-.phase-bar--suggest:has(> .withdraw) .note-box__foot > button {
-  grid-area: 2 / 1;
+/* The veto-reason line sits under the box, in a row of its own, so the Save line is the third (#152). */
+.phase-bar__write:has(> .withdraw) .note-box__hint {
+  grid-area: 2 / 1 / 3 / -1;
+}
+.phase-bar__write:has(> .withdraw) .note-box__foot > button {
+  grid-area: 3 / 1;
   margin-top: 0.75rem;
 }
-.phase-bar--suggest:has(> .withdraw) .note-box__said {
-  grid-area: 2 / 2;
+.phase-bar__write:has(> .withdraw) .note-box__said {
+  grid-area: 3 / 2;
   margin-top: 0.75rem;
 }
 [data-skin] .withdraw__act {
-  grid-area: 2 / 3;
+  grid-area: 3 / 3;
   margin: 0.75rem 0 0;
 }
 /* Cancel takes the arm's place at its size, as on the console: an invisible copy of the arm's label widens it (#85). */
@@ -1876,7 +1884,7 @@ body > aside.nag-bar a {
   visibility: hidden;
 }
 .withdraw__confirm {
-  grid-area: 3 / 1 / 4 / -1;
+  grid-area: 4 / 1 / 5 / -1;
   margin: 1.1rem 0 0;
 }
 [data-skin] .withdraw__confirm p {
@@ -1944,14 +1952,14 @@ body > aside.nag-bar a {
     grid-column: 1 / -1;
   }
   /* A refusal beside Save would be squeezed between it and Withdraw, so it takes the line below. */
-  .phase-bar--suggest:has(> .withdraw) .note-box__said {
-    grid-area: 3 / 1 / 4 / -1;
+  .phase-bar__write:has(> .withdraw) .note-box__said {
+    grid-area: 4 / 1 / 5 / -1;
   }
-  .phase-bar--suggest:has(> .withdraw) .note-box__said:empty {
+  .phase-bar__write:has(> .withdraw) .note-box__said:empty {
     margin-top: 0;
   }
   .withdraw__confirm {
-    grid-area: 4 / 1 / 5 / -1;
+    grid-area: 5 / 1 / 6 / -1;
   }
 }
 
@@ -2736,11 +2744,12 @@ body:has(> main > .ballot-head) > footer.site-footer {
   flex-wrap: wrap;
   overflow: visible;
 }
-.phase-bar--vote {
+/* Every phase's bar stacks its parts: the row, the note box and, in SUGGEST, Withdraw (#152). */
+:is(.phase-bar--vote, .phase-bar--suggest, .phase-bar--approve) {
   display: grid;
   gap: 0.9rem;
 }
-.phase-bar--vote > * {
+:is(.phase-bar--vote, .phase-bar--suggest, .phase-bar--approve) > * {
   margin: 0;
 }
 .vote-bar__scores {

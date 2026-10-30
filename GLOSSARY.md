@@ -121,11 +121,11 @@ A voter's stated appetite for a candidate on a coarse five-point scale from "rat
 _Avoid_: rating, preference, vote, points
 
 **Veto**:
-A voter's declaration that they would not be in the room for a film. It bars the film from representing them and scores it −2 for them, a reserved step below anything hand-entered that prices the group's loss of them; uncapped, attributed and visible while VOTE is open — initials on the tile, names in the opened card, where a vetoer's note is marked as theirs. Its reason is the voter's **note** on the film, written in the card's note box and kept as their note if they take the veto back. (#10, #12, #35, #63, #128, #150)
+A voter's declaration that they would not be in the room for a film. It bars the film from representing them and scores it −2 for them, a reserved step below anything hand-entered that prices the group's loss of them; uncapped, attributed and visible from SUGGEST on, not only while VOTE is open — initials on the tile, names in the opened card, where a vetoer's note is marked as theirs. Set and cleared from the opened card in SUGGEST, APPROVE and VOTE alike, on any film in the pool before VOTE; only a score then holds the film from a withdraw. Its reason is the voter's **note** on the film, written in the card's note box and kept as their note if they take the veto back. (#10, #12, #35, #63, #128, #150, #152)
 _Avoid_: hard veto, ban, block, exclusion
 
 **Seen it**:
-A voter's flag that a candidate could not count as something they wanted from the night. It bars the film from representing them and does nothing else. A fact about the voter, not an appetite, so others see it while VOTE is open, by name in the opened card. (#10, #35)
+A voter's flag that a film could not count as something they wanted from the night. It bars the film from representing them and does nothing else. A fact about the voter, not an appetite, so others see it from SUGGEST on, by name in the opened card; set and cleared from the opened card in SUGGEST, APPROVE and VOTE, on any film in the pool before VOTE. (#10, #35, #152)
 _Avoid_: watched, rewatch penalty
 
 **Absence**:
@@ -306,7 +306,7 @@ The topics a voter has declared they want to be told about. Private to that vote
 _Avoid_: trigger profile, watchlist, trigger list (the page carrying the full vocabulary)
 
 **Matched topic**:
-A topic on a film that is also on the viewing voter's watched list, evaluated at the moment of viewing. Voter side only — the admin has no list, so admin surfaces show none. Listed in the opened card and beside the veto control in VOTE; on a closed card or tile only the trigger icon speaks for them. It never touches the objective and never vetoes on anyone's behalf. (#20, #35)
+A topic on a film that is also on the viewing voter's watched list, evaluated at the moment of viewing. Voter side only — the admin has no list, so admin surfaces show none. Listed in the opened card, whose bar carries the veto control; on a closed card or tile only the trigger icon speaks for them. It never touches the objective and never vetoes on anyone's behalf. (#20, #35)
 _Avoid_: trigger warning (unqualified), hit, flagged topic
 
 **Trigger icon**:

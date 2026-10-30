@@ -1,2 +1,2 @@
-{# SUGGEST's phase bar on the opened card: the note box, and Withdraw on your own card while nothing holds the film (#27, #88, #89). #}
-<div class="phase-bar phase-bar--suggest">{% include "components/note_box.html" %}{% if card.withdraw %}{% include "components/withdraw.html" %}{% endif %}</div>
+{# SUGGEST's phase bar on the opened card: the veto and seen it row, then the note box, and Withdraw on your own card while no score holds the film (#27, #88, #89, #152). #}
+<div class="phase-bar phase-bar--suggest">{% include "components/vote_row.html" %}<div class="phase-bar__write">{% include "components/note_box.html" %}{% if card.withdraw %}{% include "components/withdraw.html" %}{% endif %}</div></div>

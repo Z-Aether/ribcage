@@ -31,8 +31,18 @@ def notes_in_order():
 def film_cards(viewer, phase):
     pool = list(withdrawal.with_holds(Suggestion.objects.prefetch_related(Prefetch("notes", queryset=notes_in_order()))).order_by("-pk"))
     loaded = stored.sections_and_matches_of(pool, watched.ticked_ids(viewer))
+    # SUGGEST's and APPROVE's cards carry the viewer's veto and seen it; VOTE's are the ballot's (#152).
+    marks = cardbar.marks_of(viewer)
     return [
-        film_card(suggestion, suggestion.notes.all(), viewer, phase, listed_from(loaded[suggestion.pk][0], suggestion), loaded[suggestion.pk][1])
+        film_card(
+            suggestion,
+            suggestion.notes.all(),
+            viewer,
+            phase,
+            listed_from(loaded[suggestion.pk][0], suggestion),
+            loaded[suggestion.pk][1],
+            marks.get(suggestion.pk, cardbar.UNMARKED),
+        )
         for suggestion in pool
     ]
 
@@ -40,8 +50,11 @@ def film_cards(viewer, phase):
 def the_card(suggestion, viewer, phase):
     """One suggestion's card as the pool shows it to the viewer in the phase, to swap in where it was acted on (#88, #89)."""
     ((section, matched),) = stored.sections_and_matches_of([suggestion], watched.ticked_ids(viewer)).values()
-    # VOTE's bar holds the viewer's own say and the others' vetoes, read for this one card (#122).
-    vote, vetoers = (cardbar.of(viewer, suggestion), cardbar.vetoers_on(suggestion)) if phase == Phase.VOTE else (None, None)
+    # VOTE's bar holds the viewer's own say and the others' vetoes, read for this one card (#122); the other phases' row holds the veto and seen it (#152).
+    if phase == Phase.VOTE:
+        vote, vetoers = cardbar.of(viewer, suggestion), cardbar.vetoers_on(suggestion)
+    else:
+        vote, vetoers = cardbar.marks_on(viewer, suggestion), None
     return film_card(suggestion, notes_in_order().filter(suggestion=suggestion), viewer, phase, listed_from(section, suggestion), matched, vote, vetoers)
 
 

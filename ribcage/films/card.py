@@ -191,11 +191,13 @@ class Matched:
 
 @dataclass(frozen=True)
 class VoteBar:
-    """What VOTE's phase bar shows for the viewer on one film: their own score, veto and seen it, which are theirs alone, and the other voters' seen it (#10, #35 §4, #122).
+    """What the phase bar's row shows for the viewer on one film: their own score, veto and seen it, which are theirs alone, and the other voters' seen it (#10, #35 §4, #122).
+
+    The row is the same in every phase; only VOTE offers the scores, so SUGGEST's and APPROVE's start with the veto (#152).
 
     The vetoes are in the card's notes, and the viewer's note is the card's note box (#128, #150)."""
 
-    # The scale's buttons as (score, key, sign, name), top pick first.
+    # The scale's buttons as (score, key, sign, name), top pick first; empty where the scores are not offered.
     scale: tuple[tuple[int, str, str, str], ...]
     score: int | None = None
     vetoed: bool = False
@@ -203,6 +205,11 @@ class VoteBar:
     seen_by: tuple[str, ...] = ()
     # The gallery's bar posts nowhere, so its buttons only look.
     inert: bool = False
+
+    @property
+    def scoring(self):
+        # The scale is the one source for whether the score pills are on the row: VOTE's alone (#152).
+        return bool(self.scale)
 
 
 @dataclass(frozen=True)

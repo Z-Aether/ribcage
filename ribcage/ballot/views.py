@@ -8,7 +8,7 @@ from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions import pool, withdrawal
-from ribcage.suggestions.models import Suggestion
+from ribcage.suggestions.models import Approval, Suggestion
 
 
 def candidate(posted):
@@ -57,19 +57,50 @@ def board_place(viewer, suggestion):
 SEEN_STATES = {"1": True, "0": False}
 
 
-@phase_window(Phase.VOTE)
+def pooled(posted):
+    """The film a post names in the pool, whatever its approval, loaded with its holds; None for one withdrawn since or no id at all (#152)."""
+    try:
+        return withdrawal.with_holds(Suggestion.objects.filter(pk=posted)).first()
+    except (TypeError, ValueError):
+        return None
+
+
+def row_of(request, suggestion):
+    """The answer to a veto or seen it made from an open card: the bar's row alone, and the veto reason's line out of band, so the note box and a runtime box are never redrawn (#152)."""
+    card = pool.the_card(suggestion, request.user, current())
+    row = render(request, "components/vote_row.html", {"card": card})
+    row.content += render(request, "components/note_hint.html", {"card": card, "oob": True}).content
+    return row
+
+
+@phase_window(Phase.SUGGEST, Phase.APPROVE)
+@require_POST
+def veto(request):
+    """A veto set or taken back on any film in the pool, scores being VOTE's alone; VOTE's own are the placement's. A film withdrawn since reloads the tab (#10, #34, #78, #152)."""
+    state = SEEN_STATES.get(request.POST.get("veto"))
+    suggestion = pooled(request.POST.get("suggestion"))
+    if suggestion is None or state is None:
+        return reload_the_tab(request, reverse("phase_page"))
+    placing.set_veto(request.user, suggestion, state)
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    return row_of(request, suggestion)
+
+
+@phase_window(Phase.SUGGEST, Phase.APPROVE, Phase.VOTE)
 @require_POST
 def seen(request):
-    """Seen it set to the state the post names, and the film's tile drawn again; a stale post reloads the ballot as it is (#10, #34, #78, #121)."""
+    """Seen it set to the state the post names: on any film in the pool before VOTE, on a candidate in it. The open card's row is drawn again, a tile its tile; a stale post reloads the tab (#10, #34, #78, #121, #152)."""
     state = SEEN_STATES.get(request.POST.get("seen"))
-    suggestion = candidate(request.POST.get("suggestion"))
-    if suggestion is None or state is None:
+    voting = current() == Phase.VOTE
+    suggestion = pooled(request.POST.get("suggestion"))
+    if suggestion is None or state is None or (voting and suggestion.approval != Approval.APPROVED):
         return reload_the_tab(request, reverse("phase_page"))
     placing.mark_seen(request.user, suggestion, state)
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
     if request.POST.get("card"):
-        return render(request, "components/vote_seen.html", {"card": opened_card(request, suggestion), "oob": False})
+        return row_of(request, suggestion)
     return render(request, "components/ballot_tile.html", {"tile": board.one_tile(request.user, suggestion), "oob": True})
 
 

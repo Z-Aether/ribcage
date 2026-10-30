@@ -146,7 +146,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 ## M6 — VOTE
 
 **Scope**
-- **Ballot:** one record per voter and film. Score, veto, seen it, done, each windowed to VOTE; a veto's reason is the voter's note (#9, #26, #34, #128).
+- **Ballot:** one record per voter and film. Score and done are windowed to VOTE, veto and seen it to SUGGEST through VOTE; a veto's reason is the voter's note (#9, #26, #34, #128, #152).
 - **The ballot page:** the header (`n of N scored`, done roster, *I'm done*), the sticky Unsorted tray in its per-voter order, the five bands, the dashed-red Veto band, which holds the same collapsed tiles as any band, and a drop into it with no note opens the card with the note box focused; notes are written in VOTE as in SUGGEST and APPROVE (#9, #35, #38, #120, #128, #150).
 - **Tiles:** frame states, opening the card in place with vetoers' notes marked, a bare line for a vetoer with none, and seen-it flags (#35, #128).
 - **The admin's side of VOTE:** approval staying open, growing the ballot clearing every done marker with its cost in the confirm ("6 of 9 → 0 of 9"), shrinking clearing nothing. The done count on the Films and Phase tabs, and the Roster's *Scored*, *Vetoes* and *Done* columns (#15, #28, #63).

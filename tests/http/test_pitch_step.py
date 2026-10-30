@@ -414,7 +414,7 @@ def test_a_film_already_in_the_pool_opens_its_card_with_the_typed_text_in_its_bo
 
     card = card_of(hanna.get("/").text, burn_by_ada)
     assert card.startswith('<article class="film-card is-open"')
-    assert re.search(r'<textarea name="text" rows="3" data-saved="" autofocus>Me too!</textarea>', card)
+    assert re.search(r'<textarea name="text" rows="3" data-saved="" aria-describedby="note-hint-\d+" autofocus>Me too!</textarea>', card)
     assert "data-save-waits data-unsaved" in card and 'type="submit">Save' in card and "disabled" not in card
     assert "ada suggested it first, so your words are here, not yet saved." in card
     assert not Note.objects.filter(author=voters["Hanna"]).exists()
@@ -442,7 +442,7 @@ def test_kept_words_go_under_a_note_the_voter_already_saved_and_neither_is_saved
     add(hanna, a_tmdb_film(EVIL_DEAD_BURN, "Evil Dead Burn"), pitch="Me too!", runtime_typed="110")
 
     card = card_of(hanna.get("/").text, burn_by_ada)
-    assert re.search(r"<textarea name=\"text\" rows=\"3\" data-saved=\"I&#x27;m in.\" autofocus>I&#x27;m in.\n\nMe too!</textarea>", card)
+    assert re.search(r"<textarea name=\"text\" rows=\"3\" data-saved=\"I&#x27;m in.\" aria-describedby=\"note-hint-\d+\" autofocus>I&#x27;m in.\n\nMe too!</textarea>", card)
     assert "ada suggested it first, so your words are under your note, not yet saved." in card
     assert Note.objects.get(author=voters["Hanna"]).text == "I'm in."
 
