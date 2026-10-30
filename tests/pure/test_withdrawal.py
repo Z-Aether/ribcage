@@ -71,6 +71,19 @@ def test_what_goes_names_the_pitch_and_counts_the_groups_notes(notes_by_others, 
     assert what_goes(notes_by_others) == said
 
 
+@pytest.mark.parametrize(
+    ("counts", "said"),
+    [
+        ((0, 1, 0), "your pitch and a veto from the group"),
+        ((0, 0, 2), "your pitch and 2 seen-it flags from the group"),
+        ((3, 2, 1), "your pitch, 3 notes, 2 vetoes and a seen-it flag from the group"),
+        ((1, 0, 1), "your pitch, one note and a seen-it flag from the group"),
+    ],
+)
+def test_what_goes_counts_the_groups_marks_as_it_counts_their_notes(counts, said):
+    assert what_goes(*counts) == said
+
+
 def test_the_card_offers_withdraw_on_the_viewers_own_withdrawable_suggestion():
     notes = [Note(author=ADA, text="Heeere's Johnny."), Note(author=BO, text="I'm in.")]
 

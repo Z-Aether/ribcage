@@ -47,8 +47,10 @@ def a_tmdb_film(tmdb_id, title, runtime=100):
     )
 
 
-def as_loaded(suggestion, held_by_ballot=False, held_by_box=False):
+def as_loaded(suggestion, held_by_ballot=False, held_by_box=False, vetoes_by_others=0, seen_its_by_others=0):
     """A suggestion built in memory, annotated as `withdrawal.with_holds` would (#118)."""
     suggestion.held_by_ballot = held_by_ballot
     suggestion.held_by_box = held_by_box
+    suggestion.vetoes_by_others = vetoes_by_others
+    suggestion.seen_its_by_others = seen_its_by_others
     return suggestion

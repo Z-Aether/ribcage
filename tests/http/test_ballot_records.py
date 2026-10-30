@@ -1,4 +1,4 @@
-"""The ballot's records: what the database holds them to, and that a record holds its film (#26 §8, #34, #118)."""
+"""The ballot's records: what the database holds them to, and that the key to its film is `PROTECT` (#26 §8, #34, #118)."""
 
 import pytest
 from django.db import IntegrityError, transaction

@@ -10,8 +10,8 @@ class BallotRecord(models.Model):
     """One voter's say on one film: a score or a veto, and whether they have seen it (#26 §4, #118).
 
     A veto's reason is the voter's note on the film, kept as a note is, not a field here (#63, #128).
-    No record means untouched. A write that leaves a record with no score, no veto and no seen it deletes it,
-    so any record that exists holds its film (#63, #118).
+    No record means untouched. A write that leaves a record with no score, no veto and no seen it deletes it.
+    Only a score holds its film: a veto or seen it alone goes with a withdraw (#63, #118, #151).
     """
 
     voter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="ballot_records")

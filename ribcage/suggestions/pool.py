@@ -99,7 +99,7 @@ def offered_withdraw(suggestion, others, viewer):
     # Absent where it isn't allowed, with no explanation (#27).
     if viewer is None or not withdrawal.may_withdraw(viewer, suggestion):
         return None
-    return card.Withdraw(goes=withdrawal.what_goes(len(others)))
+    return card.Withdraw(goes=withdrawal.what_goes(len(others), suggestion.vetoes_by_others, suggestion.seen_its_by_others))
 
 
 def offered_pencil(suggestion, viewer, phase):

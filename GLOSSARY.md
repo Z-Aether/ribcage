@@ -67,7 +67,7 @@ _Avoid_: publish (that is what advancing to RUN does to the timetable), results
 ### Suggesting
 
 **Suggestion**:
-A film a voter puts forward in SUGGEST, attributed to them and carrying the admin's approval. Made and withdrawn in SUGGEST only, and withdrawable only while it is not approved and nothing downstream holds it — no ballot record (a score, a veto or seen it), no timetable box, no kept proposal — so the phase moving back to SUGGEST reopens nothing. A withdrawn suggestion is simply gone, while one whose suggester is removed stays. (#8, #15, #27, #28, #34, #118)
+A film a voter puts forward in SUGGEST, attributed to them and carrying the admin's approval. Made and withdrawn in SUGGEST only, and withdrawable only while it is not approved and nothing downstream holds it — no score, no timetable box, no kept proposal — so the phase moving back to SUGGEST reopens nothing. A withdrawn suggestion is simply gone, while one whose suggester is removed stays. (#8, #15, #27, #28, #34, #118)
 _Avoid_: nomination, entry, submission
 
 **Pool**:
