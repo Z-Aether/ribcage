@@ -1525,6 +1525,28 @@ body > aside.nag-bar a {
   content: none;
 }
 
+/* Seen it has no colour of its own: a 👁 in muted ink ends the author line, even a vetoer's; those who saw it and said nothing else share one line (#58, #121, #153). */
+.note__seen {
+  color: var(--ink-muted);
+  font-style: normal;
+}
+.note--seers .seers {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.88em;
+}
+.seers__label {
+  font-weight: 600;
+}
+/* An opened card leaves the viewer out of the line, as it leaves out their note: the bar's Seen it holds it (#128, #153). */
+.seers__others,
+.film-card.is-open .seers--yours .seers__all {
+  display: none;
+}
+.film-card.is-open .seers--yours .seers__others {
+  display: inline;
+}
+
 .film-card__phase-bar:empty {
   display: none;
 }
@@ -2817,10 +2839,6 @@ body:has(> main > .ballot-head) > footer.site-footer {
 [data-skin] .vote-seen__label input {
   margin: 0;
 }
-.vote-bar__line {
-  margin: 0;
-  color: var(--ink-muted);
-}
 @media (max-width: 600px) {
   /* A thumb's targets: the scores share the bar's width two or three to a line. */
   [data-skin] .vote-bar__score {
@@ -2939,8 +2957,16 @@ body:has(> main > .ballot-head) > footer.site-footer {
   color: var(--ink-muted);
   font-weight: 400;
 }
-.films-ledger__approval {
+.films-ledger__approval,
+.films-ledger__marks {
   white-space: nowrap;
+}
+/* The vetoes and seen-its on a film, one compact cell, each part only when it isn't zero, its names on hover (#153). */
+.films-ledger__marks [title] {
+  cursor: help;
+}
+.films-ledger__marks .ledger__muted {
+  margin-inline: 0.15em;
 }
 .approval-tag {
   font-family: var(--font-label);
@@ -2958,7 +2984,7 @@ body:has(> main > .ballot-head) > footer.site-footer {
 .approval-tag--dropped {
   color: var(--ink-muted);
 }
-/* Fixed columns, sized for what each can hold, so every filter lays out alike and only the film's column gives (the dev, 2026-10-24). */
+/* Fixed columns, sized for what each can hold, so every filter lays out alike and only the film's column gives, and together they fit the frame at 1280 px (the dev, 2026-10-24; #153). */
 [data-skin] table.films-ledger {
   table-layout: fixed;
   min-width: 60rem;
@@ -2967,19 +2993,22 @@ body:has(> main > .ballot-head) > footer.site-footer {
   width: calc(var(--thumb-width) + 1.2rem);
 }
 .films-ledger__col--suggester {
-  width: 9rem;
+  width: 6.8rem;
 }
 .films-ledger__col--notes {
-  width: 4rem;
+  width: 3.6rem;
+}
+.films-ledger__col--marks {
+  width: 5.6rem;
 }
 .films-ledger__col--runtime {
   width: 13.4rem;
 }
 .films-ledger__col--dtdd {
-  width: 6rem;
+  width: 5.4rem;
 }
 .films-ledger__col--approval {
-  width: 5.6rem;
+  width: 5rem;
 }
 .films-ledger__col--decide {
   width: 9.8rem;

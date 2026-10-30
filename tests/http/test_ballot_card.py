@@ -178,7 +178,9 @@ def test_seen_it_is_set_from_the_card_and_the_checkbox_is_answered(ballot):
     answer = ballot["client"].post(SEEN, {"suggestion": str(ballot["one"].pk), "seen": ["0", "1"], "card": "1"}, headers=HTMX).text
 
     assert BallotRecord.objects.get().seen_it is True
-    assert "checked" in answer and "<li" not in answer
+    # The row, with the notes list out of band so the viewer's own 👁 is there when the card closes (#153).
+    row, notes = answer.split('<ul class="film-card__notes"')
+    assert "checked" in row and "<li" not in row and 'hx-swap-oob="true"' in notes
     answer = ballot["client"].post(SEEN, {"suggestion": str(ballot["one"].pk), "seen": ["0"], "card": "1"}, headers=HTMX).text
     assert BallotRecord.objects.count() == 0 and "checked" not in answer
 
@@ -275,33 +277,21 @@ def test_the_answer_to_a_veto_from_the_card_draws_the_card_with_the_box_holding_
     assert re.search(r"<textarea[^>]*>Ada wrote this\.</textarea>", answer)
 
 
-@pytest.mark.parametrize("phase", [Phase.APPROVE, Phase.SUGGEST])
-def test_the_pools_cards_mark_no_veto_even_after_a_move_back(ballot, phase):
-    voters = ballot["voters"]
-    Note.objects.create(suggestion=ballot["one"], author=voters["Hanna"], text="Spiders.")
-    place(signed_in(voters["Hanna"]), ballot["one"], "veto")
-    place(signed_in(voters["Dani"]), ballot["one"], "veto")
-    walk_on_to(phase)
-
-    page = ballot["client"].get("/").text
-
-    assert "Spiders." in page and "note--vetoed" not in page and "Vetoed by" not in page and "vetoed by" not in page
-
-
-def test_the_seen_by_line_lists_other_voters_who_have_seen_it(ballot):
+def test_the_bar_has_no_seen_by_line_whoever_has_seen_the_film(ballot):
     voters = ballot["voters"]
     for name in ("Hanna", "Dani", "ada"):
         signed_in(voters[name]).post(SEEN, {"suggestion": str(ballot["one"].pk), "seen": "1"})
 
-    line = re.search(r'<span class="film-card__label">Seen by</span>(.*?)</p>', opened(ballot["client"], ballot["one"]).text, re.S)[1]
+    page = opened(ballot["client"], ballot["one"]).text
 
-    assert line.strip() == "Dani, Hanna"
+    assert "Seen by" not in bar_of(page) and "vote-bar__line" not in page
+    assert "Seen by" in page
 
 
 def test_each_line_is_absent_when_empty(ballot):
     page = opened(ballot["client"], ballot["one"]).text
 
-    assert "Vetoed by" not in page and "Seen by" not in page
+    assert "Vetoed by" not in page and "Seen by" not in page and "note__seen" not in page
 
 
 def test_opening_one_card_closes_the_other_in_the_same_answer(ballot):

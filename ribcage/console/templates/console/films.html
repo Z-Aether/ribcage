@@ -29,6 +29,7 @@
           <col>
           <col class="films-ledger__col--suggester">
           <col class="films-ledger__col--notes">
+          <col class="films-ledger__col--marks">
           <col class="films-ledger__col--runtime">
           {% if ledger.shows_dtdd %}<col class="films-ledger__col--dtdd">{% endif %}
           <col class="films-ledger__col--approval">
@@ -40,6 +41,7 @@
             <th scope="col">Film</th>
             <th scope="col">Suggested by</th>
             <th scope="col" class="ledger__number">Notes</th>
+            <th scope="col">Veto · seen</th>
             <th scope="col">Runtime</th>
             {% if ledger.shows_dtdd %}<th scope="col"><abbr title="DoesTheDogDie">DTDD</abbr></th>{% endif %}
             <th scope="col">Approval</th>
@@ -54,6 +56,8 @@
                 <td class="films-ledger__film"><button type="button" class="ledger__title ledger__opens" aria-expanded="false" aria-controls="film-{{ card.suggestion_id }}">{{ card.film.title }}</button> <span class="ledger__muted">{{ card.film.year|default:"" }}</span> <span class="ledger__muted ledger__directors">{{ card.film.directors|join:", " }}</span></td>
                 <td class="films-ledger__suggester">{{ card.suggester }}{% if card.suggester_removed %} <span class="removed-tag">removed</span>{% endif %}</td>
                 <td class="ledger__number films-ledger__notes">{{ row.note_count }}</td>
+                {# Counted over every voter whatever the film's approval; a part shows only when it isn't zero, and its names are on hover as the timetable's vetoer pill gives them (#137, #153). #}
+                <td class="films-ledger__marks">{% if row.marks.vetoes %}<span title="Vetoed by {{ row.marks.vetoed_by }}">☒ {{ row.marks.vetoes }}</span>{% endif %}{% if row.marks.vetoes and row.marks.seen_its %} <span class="ledger__muted">·</span> {% endif %}{% if row.marks.seen_its %}<span title="Seen by {{ row.marks.seen_by }}">👁 {{ row.marks.seen_its }}</span>{% endif %}</td>
                 <td class="films-ledger__runtime">{% include "console/runtime_box.html" %}</td>
                 {% if ledger.shows_dtdd %}<td class="films-ledger__dtdd films-ledger__dtdd--{{ row.dtdd.state|slugify }}">{{ row.dtdd_status }}</td>{% endif %}
                 <td class="films-ledger__approval"><span class="approval-tag approval-tag--{{ row.approval }}">{{ row.approval.label|lower }}</span></td>
@@ -80,12 +84,12 @@
               </tr>
               {# Hidden until its title opens it; lazy, so a closed card's poster is never fetched. #}
               <tr class="ledger__detail" id="film-{{ card.suggestion_id }}" hidden>
-                <td colspan="{% if ledger.shows_dtdd %}8{% else %}7{% endif %}">{% include "components/film_card.html" with card=card expanded=True lazy=True %}</td>
+                <td colspan="{% if ledger.shows_dtdd %}9{% else %}8{% endif %}">{% include "components/film_card.html" with card=card expanded=True lazy=True %}</td>
               </tr>
               {% if asks_first and card.suggestion_id == armed %}
                 {# After the card's own row, which the hover rules read as the row's neighbour; its place is the row's (#96, #124). #}
                 <tr class="ledger__detail" data-place-of="{{ card.suggestion_id }}">
-                  <td colspan="{% if ledger.shows_dtdd %}8{% else %}7{% endif %}">
+                  <td colspan="{% if ledger.shows_dtdd %}9{% else %}8{% endif %}">
                     <form method="post" action="{% url 'console_films_approval' %}" class="films-confirm" data-lands-on="{{ ledger.show.address }}">
                       {% csrf_token %}
                       <input type="hidden" name="suggestion" value="{{ card.suggestion_id }}">

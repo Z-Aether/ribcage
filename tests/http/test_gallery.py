@@ -126,13 +126,13 @@ def vote_cards(page):
     return [card for card in re.findall(r"<article.*?</article>", page, re.S) if "data-vote-bar" in card]
 
 
-def test_the_gallery_shows_votes_bar_on_opened_cards_with_a_veto_and_the_seen_it_line(client, debug):
+def test_the_gallery_shows_votes_bar_on_opened_cards_with_a_veto_and_no_seen_by_line(client, debug):
     cards = vote_cards(client.get(GALLERY).content.decode())
 
     bars = [re.search(r'<div class="film-card__phase-bar" data-phase-bar>(.*)</div>\s*(?:<section|$)', card, re.S)[1] for card in cards]
     # The note box posts with no suggestion, so a save only reloads; the pills and seen it post nowhere (#150).
     assert len(bars) == 3 and "hx-post=\"/ballot/" not in "".join(bars)
-    assert "score--keen is-current" in bars[0] and "Seen by" in bars[0]
+    assert "score--keen is-current" in bars[0] and not any("Seen by" in bar for bar in bars)
     # The bar no longer names the vetoers: the card's notes do (#128).
     assert not any("Vetoed by" in bar for bar in bars)
     for bar in bars:
@@ -144,8 +144,9 @@ def test_the_gallery_shows_votes_bar_on_opened_cards_with_a_veto_and_the_seen_it
 def test_the_gallery_shows_a_marked_note_a_bare_veto_line_and_the_boxes_quiet_line(client, debug):
     cards = vote_cards(client.get(GALLERY).content.decode())
 
-    assert re.search(r'<li class="note note--vetoed">.*?<span class="note__author">vetoed by Ash</span>', cards[0], re.S)
-    assert re.search(r'<li class="note note--vetoed note--bare"><span class="note__author">Vetoed by Zoë</span></li>', cards[0])
+    assert re.search(r'<li class="note note--vetoed">.*?<span class="note__author">vetoed by Ash&nbsp;<span class="note__seen"[^>]*>👁</span></span>', cards[0], re.S)
+    assert re.search(r'<li class="note note--vetoed note--bare"><span class="note__author">Vetoed by Zoë&nbsp;<span class="note__seen"[^>]*>👁</span></span></li>', cards[0])
+    assert re.search(r'<li class="note note--seers"><p class="seers"><span class="seers__label">👁 Seen by</span> <span class="seers__all">Cleo, Gus</span></p></li>', cards[0])
     assert "Your note on this film shows as your veto reason, and stays your note if you take the veto back." in cards[1]
     assert "Subtitled, so not the last film of the night.</textarea>" in cards[1]
     assert "Your pitch shows as your veto reason" in cards[2] and "is-refusal" in cards[2]

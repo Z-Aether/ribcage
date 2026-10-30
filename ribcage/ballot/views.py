@@ -66,10 +66,14 @@ def pooled(posted):
 
 
 def row_of(request, suggestion):
-    """The answer to a veto or seen it made from an open card: the bar's row alone, and the veto reason's line out of band, so the note box and a runtime box are never redrawn (#152)."""
+    """The answer to a veto or seen it made from an open card: the bar's row alone, with the veto reason's line and the notes list out of band, so the note box and a runtime box are never redrawn (#152).
+
+    The notes list carries the viewer's own mark, which the open card hides and the card shows once closed, so a mark changed here is there when it closes (#128, #153).
+    """
     card = pool.the_card(suggestion, request.user, current())
     row = render(request, "components/vote_row.html", {"card": card})
     row.content += render(request, "components/note_hint.html", {"card": card, "oob": True}).content
+    row.content += render(request, "components/film_notes.html", {"card": card, "oob": True}).content
     return row
 
 

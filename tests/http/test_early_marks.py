@@ -245,7 +245,8 @@ def test_the_row_reads_what_the_voter_marked_when_the_page_is_drawn_and_no_one_e
     other = signed_in(pool["voters"]["Dani"]).get("/").text
 
     assert "<b>−2</b> Vetoed" in page and '"veto": "0"' in page and "checked" in page
-    assert "Vetoed" not in other and "checked" not in other
+    # Dani's own row is untouched; ada's marks are in the notes for everyone (#153).
+    assert "<b>−2</b> Vetoed" not in other and '"veto": "0"' not in other and "checked" not in other
 
 
 @pytest.mark.parametrize("phase", BEFORE_VOTE)

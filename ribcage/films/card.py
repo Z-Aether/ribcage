@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ribcage.films.film import Film
 
@@ -13,8 +13,34 @@ class Note:
     text: str
     # The viewing voter's own, which an opened card leaves out because their note box holds it (#88).
     yours: bool = False
-    # The author vetoes the film, on a surface that shows vetoes; with no text it is a bare line naming them (#128).
+    # The author vetoes the film; with no text it is a bare line naming them (#128, #153).
     vetoed: bool = False
+    # The author has seen the film, which ends their author line in a 👁 (#153).
+    seen: bool = False
+
+
+@dataclass(frozen=True)
+class Marks:
+    """Who vetoes a film and who has seen it, each as {voter id: display name}, the viewer included, for a card's notes to mark (#128, #153)."""
+
+    vetoers: dict[int, str] = field(default_factory=dict)
+    seers: dict[int, str] = field(default_factory=dict)
+
+    @property
+    def vetoes(self):
+        return len(self.vetoers)
+
+    @property
+    def seen_its(self):
+        return len(self.seers)
+
+    @property
+    def vetoed_by(self):
+        return ", ".join(sorted(self.vetoers.values(), key=str.casefold))
+
+    @property
+    def seen_by(self):
+        return ", ".join(sorted(self.seers.values(), key=str.casefold))
 
 
 @dataclass(frozen=True)
@@ -191,18 +217,17 @@ class Matched:
 
 @dataclass(frozen=True)
 class VoteBar:
-    """What the phase bar's row shows for the viewer on one film: their own score, veto and seen it, which are theirs alone, and the other voters' seen it (#10, #35 §4, #122).
+    """What the phase bar's row shows for the viewer on one film: their own score, veto and seen it, which are theirs alone (#10, #35 §4, #122).
 
     The row is the same in every phase; only VOTE offers the scores, so SUGGEST's and APPROVE's start with the veto (#152).
 
-    The vetoes are in the card's notes, and the viewer's note is the card's note box (#128, #150)."""
+    The others' vetoes and seen-its are in the card's notes, and the viewer's note is the card's note box (#128, #150, #153)."""
 
     # The scale's buttons as (score, key, sign, name), top pick first; empty where the scores are not offered.
     scale: tuple[tuple[int, str, str, str], ...]
     score: int | None = None
     vetoed: bool = False
     seen_it: bool = False
-    seen_by: tuple[str, ...] = ()
     # The gallery's bar posts nowhere, so its buttons only look.
     inert: bool = False
 
@@ -236,8 +261,16 @@ class FilmCard:
     matched: Matched | None = None
     # VOTE's bar data; None in every other phase (#122).
     vote: VoteBar | None = None
-    # The suggester vetoes the film, on a surface that shows vetoes (#128).
+    # The suggester vetoes the film, and has seen it (#128, #153).
     pitch_vetoed: bool = False
+    pitch_seen: bool = False
+    # The voters who have seen the film, wrote no note and don't veto it, sorted by name: one line after the notes; `seen_by_others` leaves the viewer out, for an opened card whose bar holds their own (#153).
+    seen_by: tuple[str, ...] = ()
+    seen_by_others: tuple[str, ...] = ()
+
+    @property
+    def seen_by_you(self):
+        return self.seen_by != self.seen_by_others
 
     @property
     def pitch_yours(self):

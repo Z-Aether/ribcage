@@ -43,7 +43,7 @@ def pool(voters):
 
 
 def rows(page):
-    """Each row's cells as text, short of its acts: the film, the suggester, the notes, the runtime box's value and what follows it, and the approval."""
+    """Each row's cells as text, short of its acts: the film, the suggester, the notes, the vetoes and seen-its, the runtime box's value and what follows it, and the approval."""
     found = re.findall(r"<tr data-suggestion=\"\d+\" data-ledger-row data-keeps-place=\"\d+\">(.*?)</tr>", page, re.S)
     return [[text(as_shown(cell)) for cell in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)[1:-1]] for row in found]
 
@@ -89,9 +89,9 @@ def test_a_row_shows_the_film_its_suggester_its_notes_its_runtime_its_dtdd_statu
 
     shown = rows(admin.get(TAB).text)
 
-    assert shown[-1] == ["The Thing 2000", "ada", "3", "109 TMDB", "not fetched", "approved"]
-    assert shown[-2] == ["Cube 2000", "Hanna", "1", "90 TMDB", "not fetched", "undecided"]
-    assert shown[2] == ["Pulse 2000", "Hanna", "1", "119 TMDB", "not fetched", "dropped"]
+    assert shown[-1] == ["The Thing 2000", "ada", "3", "", "109 TMDB", "not fetched", "approved"]
+    assert shown[-2] == ["Cube 2000", "Hanna", "1", "", "90 TMDB", "not fetched", "undecided"]
+    assert shown[2] == ["Pulse 2000", "Hanna", "1", "", "119 TMDB", "not fetched", "dropped"]
 
 
 def test_the_approval_column_is_named_approval_not_state(admin, pool):
@@ -106,7 +106,7 @@ def test_a_row_shows_the_director_and_a_runtime_by_hand(admin, voters):
     Suggestion.objects.suggest(voters["ada"], THE_SHINING, "Pitch.", runtime=146)
     Suggestion.objects.suggest(voters["ada"], CABINET_OF_CURIOSITIES, "Pitch.")
 
-    assert [row[0::3] for row in rows(admin.get(TAB).text)] == [
+    assert [[row[0], row[4]] for row in rows(admin.get(TAB).text)] == [
         ["Cabinet of Curiosities", "47 by hand"],
         ["The Shining 1980 Stanley Kubrick", "146 by hand ⚠ TMDB says 144"],
     ]

@@ -7,8 +7,8 @@ from django.db.models import Count, Prefetch, Q
 from django.urls import reverse
 from django.utils import timezone
 
-from ribcage.ballot import done
-from ribcage.films.card import FilmCard
+from ribcage.ballot import cardbar, done
+from ribcage.films.card import FilmCard, Marks
 from ribcage.identity.models import Voter
 from ribcage.phase.history import current, vote_has_opened
 from ribcage.phase.order import Phase
@@ -75,11 +75,13 @@ class Row:
     dtdd: Status = Status(has_tmdb_id=False)
     # The topics the card lists: named, with a yes vote (#62, #103).
     shown_topics: int = 0
+    # Who vetoes the film and who has seen it, counted over every voter's records whatever its approval (#153).
+    marks: Marks = Marks()
 
     @property
     def note_count(self):
-        # The pitch counts as a note, as it is the suggester's (#21, #26).
-        return len(self.card.notes) + (self.card.pitch is not None)
+        # The pitch counts as a note, as it is the suggester's (#21, #26); a vetoer's bare line is no note (#153).
+        return sum(1 for note in self.card.notes if note.text) + (self.card.pitch is not None)
 
     @property
     def may_approve(self):
@@ -163,28 +165,33 @@ LISTED_FROM, CORRECTED_AT = "console_films_dtdd", "console_films_dtdd_match"
 def ledger(show):
     """The tab's ledger, in a query each for the suggestions, their notes, their trigger data and the vocabulary, however large the pool."""
     suggestions = list(Suggestion.objects.prefetch_related(Prefetch("notes", queryset=pool.notes_in_order())).order_by("-pk"))
+    marks = cardbar.marks_by_film()
     if current() == Phase.RUN:
-        return run_ledger(suggestions, show)
+        return run_ledger(suggestions, show, marks)
     statuses, vocabulary = stored.statuses_of(suggestions), stored.stored_vocabulary()
     named = {topic.topic_id for topic in vocabulary.topics}
     # No viewer: the admin's card has no note box, withdraw or pencil, and shows nothing personal (#28, #35 §2, #95).
     # Its DoesTheDogDie section is the one every voter sees (#35 §2, #103).
     rows = [
         Row(
-            pool.film_card(suggestion, suggestion.notes.all(), dtdd=listed_section(section(statuses[suggestion.pk], vocabulary), suggestion)),
+            pool.film_card(suggestion, suggestion.notes.all(), dtdd=listed_section(section(statuses[suggestion.pk], vocabulary), suggestion), marks=marks.get(suggestion.pk)),
             Approval(suggestion.approval),
             suggestion.tmdb_runtime,
             statuses[suggestion.pk],
             statuses[suggestion.pk].topics_shown_by(named),
+            marks.get(suggestion.pk, cardbar.NO_MARKS),
         )
         for suggestion in suggestions
     ]
     return Ledger.of(rows, show, timezone.now())
 
 
-def run_ledger(suggestions, show):
+def run_ledger(suggestions, show, marks):
     """RUN's ledger: the purge left no trigger data to show, so a card has no section and the rows no status (#106)."""
-    rows = [Row(pool.film_card(suggestion, suggestion.notes.all()), Approval(suggestion.approval), suggestion.tmdb_runtime) for suggestion in suggestions]
+    rows = [
+        Row(pool.film_card(suggestion, suggestion.notes.all(), marks=marks.get(suggestion.pk)), Approval(suggestion.approval), suggestion.tmdb_runtime, marks=marks.get(suggestion.pk, cardbar.NO_MARKS))
+        for suggestion in suggestions
+    ]
     return Ledger.of(rows, show, timezone.now(), shows_dtdd=False)
 
 
@@ -194,7 +201,8 @@ def listed_section(dtdd, suggestion):
 
 def the_card(suggestion):
     """One suggestion's card as it opens under its row, to swap its section in place after a correction (#105)."""
-    return pool.film_card(suggestion, pool.notes_in_order().filter(suggestion=suggestion), dtdd=listed_section(stored.section_of(suggestion), suggestion))
+    marks = cardbar.marks_by_film([suggestion.pk]).get(suggestion.pk)
+    return pool.film_card(suggestion, pool.notes_in_order().filter(suggestion=suggestion), dtdd=listed_section(stored.section_of(suggestion), suggestion), marks=marks)
 
 
 def decide(suggestion, expected, to):

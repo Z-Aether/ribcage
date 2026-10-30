@@ -1,22 +1,16 @@
-"""What the phase bar's row shows on a film's opened card, and who vetoes the film for its notes (#10, #35 §4, #122, #128, #150, #152)."""
+"""What the phase bar's row shows on a film's opened card, and who vetoes and has seen the film for its notes (#10, #35 §4, #122, #128, #150, #152, #153)."""
+
+from django.db.models import Q
 
 from ribcage.ballot.board import SCALE
 from ribcage.ballot.models import BallotRecord
-from ribcage.films.card import VoteBar
+from ribcage.films.card import Marks, VoteBar
 
 
 def of(viewer, suggestion):
-    """The viewer's own score, veto and seen it, and the names of the other voters who have seen the film, sorted by name (#122, #128)."""
-    records = list(BallotRecord.objects.filter(suggestion=suggestion).select_related("voter"))
-    own = next((record for record in records if record.voter_id == viewer.pk), None)
-    others = sorted((record for record in records if record.voter_id != viewer.pk), key=lambda record: record.voter.display_name)
-    return VoteBar(
-        scale=SCALE,
-        score=own.score if own else None,
-        vetoed=bool(own and own.vetoed),
-        seen_it=bool(own and own.seen_it),
-        seen_by=tuple(record.voter.display_name for record in others if record.seen_it),
-    )
+    """The viewer's own score, veto and seen it (#122, #128)."""
+    own = BallotRecord.objects.filter(voter=viewer, suggestion=suggestion).first()
+    return VoteBar(scale=SCALE, score=own.score if own else None, vetoed=bool(own and own.vetoed), seen_it=bool(own and own.seen_it))
 
 
 # The row outside VOTE for a film the viewer has marked nothing on: the veto and seen it, no scores (#152).
@@ -35,6 +29,19 @@ def marks_on(viewer, suggestion):
     return VoteBar(scale=(), vetoed=own.vetoed, seen_it=own.seen_it) if own else UNMARKED
 
 
-def vetoers_on(suggestion):
-    """Every voter who vetoes the film, the viewer included, as {voter id: name}, for the card's notes to mark (#10, #128)."""
-    return dict(BallotRecord.objects.filter(suggestion=suggestion, vetoed=True).values_list("voter_id", "voter__display_name"))
+NO_MARKS = Marks()
+
+
+def marks_by_film(suggestion_ids=None):
+    """Who vetoes each film and who has seen it, every voter, the viewer and the admin's view alike, as {suggestion id: Marks}, in one query for the films named or all of them (#128, #153)."""
+    records = BallotRecord.objects.filter(Q(vetoed=True) | Q(seen_it=True))
+    if suggestion_ids is not None:
+        records = records.filter(suggestion__in=suggestion_ids)
+    found = {}
+    for suggestion_id, voter_id, name, vetoed, seen_it in records.values_list("suggestion_id", "voter_id", "voter__display_name", "vetoed", "seen_it"):
+        marks = found.setdefault(suggestion_id, Marks())
+        if vetoed:
+            marks.vetoers[voter_id] = name
+        if seen_it:
+            marks.seers[voter_id] = name
+    return found

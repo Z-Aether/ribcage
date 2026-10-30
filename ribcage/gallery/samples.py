@@ -235,7 +235,7 @@ def plain_cards():
                 "Watch it late, after the loud ones, when everyone is a bit raw. Bring tissues, honestly."
             ),
             notes=(
-                Note("Ash", "Seen it twice. The second time is worse, because you know where it is going."),
+                Note("Ash", "Seen it twice. The second time is worse, because you know where it is going.", seen=True),
                 Note(
                     "Bex",
                     "Fair warning for anyone squeamish: there is one scene about halfway through that you will "
@@ -249,6 +249,10 @@ def plain_cards():
                 ),
                 Note("Fen", "The flower dress alone earns its place on the ballot."),
             ),
+            # Hanna has seen her own pick; Cleo and Gus have seen it and wrote nothing (#153).
+            pitch_seen=True,
+            seen_by=("Cleo", "Gus"),
+            seen_by_others=("Cleo", "Gus"),
         ),
         FilmCard(
             film=film(POOH_2),
@@ -283,9 +287,11 @@ def plain_cards():
             suggester_removed=False,
             pitch="Five shorts and a frame story, so if one is dull the next is ten minutes away.",
             notes=(
-                Note("Fen", "The punk one is the best opening of the series."),
+                Note("Fen", "The punk one is the best opening of the series.", seen=True),
                 Note("Ash", "Bit loud for late on. Earlier in the evening, maybe?"),
             ),
+            seen_by=("Dani",),
+            seen_by_others=("Dani",),
         ),
         FilmCard(
             film=film(EXIT_8),
@@ -304,9 +310,9 @@ def own(sample, armed=False):
     return replace(sample, mine=True, note_box=NoteBox(text=sample.pitch, is_pitch=True), withdraw=withdraw)
 
 
-def yours(sample, index):
-    """The sample's note at that index as the viewer's own, which the opened card leaves to their box (#88)."""
-    notes = tuple(replace(note, yours=True) if i == index else note for i, note in enumerate(sample.notes))
+def yours(sample, index, **marks):
+    """The sample's note at that index as the viewer's own, which the opened card leaves to their box (#88), wearing the viewer's own marks (#153)."""
+    notes = tuple(replace(note, yours=True, **marks) if i == index else note for i, note in enumerate(sample.notes))
     return replace(sample, notes=notes)
 
 
@@ -326,7 +332,7 @@ def phase_bars():
         (
             "SUGGEST's runtime box, open on Hanna's suggestion, as Dani typed the director's cut in hours; the note box's Save takes both",
             replace(
-                yours(midsommar, 2),
+                yours(midsommar, 2, seen=True),
                 note_box=NoteBox(text=midsommar.notes[2].text, is_pitch=False),
                 runtime_pencil=RuntimePencil(open=True, typed="2h 51", refusal=NOT_WHOLE_MINUTES),
                 vote=marks(seen_it=True),
@@ -355,23 +361,27 @@ def phase_bars():
         ),
         (
             "APPROVE's phase bar, on Cass's suggestion, vetoed and seen by the viewer",
-            replace(yours(wolf_house, 0), note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, vetoed=True), vote=marks(vetoed=True, seen_it=True)),
+            replace(
+                yours(wolf_house, 0, vetoed=True, seen=True),
+                note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, vetoed=True),
+                vote=marks(vetoed=True, seen_it=True),
+            ),
             "components/approve_bar.html",
         ),
         (
-            "VOTE's phase bar, on Hanna's suggestion, scored +2 by the viewer, with others' seen it read-only; the notes carry the vetoes, Ash's marked and Zoë's a bare line; the viewer has no note yet",
+            "VOTE's phase bar, on Hanna's suggestion, scored +2 by the viewer, with the notes carrying everyone's marks: Ash's veto marked and his 👁, Zoë's a bare line that has seen it, Cleo and Gus on the Seen by line; the viewer has no note yet",
             replace(
                 midsommar,
                 note_box=NoteBox(text="", is_pitch=False),
-                notes=(replace(midsommar.notes[0], vetoed=True), *midsommar.notes[1:], Note("Zoë", "", vetoed=True)),
-                vote=VoteBar(scale=board.SCALE, score=2, seen_by=("Bex", "Dani"), inert=True),
+                notes=(replace(midsommar.notes[0], vetoed=True), *midsommar.notes[1:], Note("Zoë", "", vetoed=True, seen=True)),
+                vote=VoteBar(scale=board.SCALE, score=2, inert=True),
             ),
             "components/vote_bar.html",
         ),
         (
             "VOTE's phase bar after a veto on a film the viewer has a note on: −2 replaces the score, the note box holds the note and says it shows as the veto reason, and the viewer has seen it. Cass's pitch is marked as her veto",
             replace(
-                yours(wolf_house, 0),
+                yours(wolf_house, 0, vetoed=True, seen=True),
                 note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, vetoed=True),
                 pitch_vetoed=True,
                 vote=VoteBar(scale=board.SCALE, vetoed=True, seen_it=True, inert=True),

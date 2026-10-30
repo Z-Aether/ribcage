@@ -1,6 +1,5 @@
-{# VOTE's phase bar on the opened card: the row of scores, veto and seen it, then the note box, the two parts every phase's bar can share; and the other voters' seen it, read-only. The vetoes are in the card's notes (#128, #150). #}
+{# VOTE's phase bar on the opened card: the row of scores, veto and seen it, then the note box, the two parts every phase's bar can share: the viewer's own controls alone. Others' vetoes and seen-its are in the card's notes (#128, #150, #153). #}
 {% with vote=card.vote %}<div class="phase-bar phase-bar--vote{% if vote.vetoed %} is-vetoed{% endif %}" data-vote-bar>
   {% include "components/vote_row.html" %}
   {% include "components/note_box.html" %}
-  {% if vote.seen_by %}<p class="vote-bar__line"><span class="film-card__label">Seen by</span> {{ vote.seen_by|join:", " }}</p>{% endif %}
 </div>{% endwith %}

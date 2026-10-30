@@ -32,7 +32,7 @@ def film_cards(viewer, phase):
     pool = list(withdrawal.with_holds(Suggestion.objects.prefetch_related(Prefetch("notes", queryset=notes_in_order()))).order_by("-pk"))
     loaded = stored.sections_and_matches_of(pool, watched.ticked_ids(viewer))
     # SUGGEST's and APPROVE's cards carry the viewer's veto and seen it; VOTE's are the ballot's (#152).
-    marks = cardbar.marks_of(viewer)
+    marks, everyones = cardbar.marks_of(viewer), cardbar.marks_by_film()
     return [
         film_card(
             suggestion,
@@ -42,6 +42,7 @@ def film_cards(viewer, phase):
             listed_from(loaded[suggestion.pk][0], suggestion),
             loaded[suggestion.pk][1],
             marks.get(suggestion.pk, cardbar.UNMARKED),
+            everyones.get(suggestion.pk, cardbar.NO_MARKS),
         )
         for suggestion in pool
     ]
@@ -50,12 +51,10 @@ def film_cards(viewer, phase):
 def the_card(suggestion, viewer, phase):
     """One suggestion's card as the pool shows it to the viewer in the phase, to swap in where it was acted on (#88, #89)."""
     ((section, matched),) = stored.sections_and_matches_of([suggestion], watched.ticked_ids(viewer)).values()
-    # VOTE's bar holds the viewer's own say and the others' vetoes, read for this one card (#122); the other phases' row holds the veto and seen it (#152).
-    if phase == Phase.VOTE:
-        vote, vetoers = cardbar.of(viewer, suggestion), cardbar.vetoers_on(suggestion)
-    else:
-        vote, vetoers = cardbar.marks_on(viewer, suggestion), None
-    return film_card(suggestion, notes_in_order().filter(suggestion=suggestion), viewer, phase, listed_from(section, suggestion), matched, vote, vetoers)
+    # VOTE's bar holds the viewer's own score, veto and seen it (#122); the other phases' row holds the veto and seen it (#152). Every voter's are in the notes (#153).
+    vote = cardbar.of(viewer, suggestion) if phase == Phase.VOTE else cardbar.marks_on(viewer, suggestion)
+    marks = cardbar.marks_by_film([suggestion.pk]).get(suggestion.pk, cardbar.NO_MARKS)
+    return film_card(suggestion, notes_in_order().filter(suggestion=suggestion), viewer, phase, listed_from(section, suggestion), matched, vote, marks)
 
 
 def listed_from(section, suggestion, route="dtdd_topics", corrects_at="dtdd_match"):
@@ -65,26 +64,34 @@ def listed_from(section, suggestion, route="dtdd_topics", corrects_at="dtdd_matc
     return replace(section, topics_at=topics_at, correction=correction.offered(reverse(corrects_at)))
 
 
-def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None, matched=None, vote=None, vetoers=None):
+def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None, matched=None, vote=None, marks=None):
     """The card for a suggestion and its notes, oldest first. The pitch is the note by the suggester, blank or not.
 
     Its DoesTheDogDie section is the same whoever views it, so the caller loads every card's at once (#103); the viewer's matched topics are theirs alone (#111).
-    `vetoers` is {voter id: name} where vetoes are shown, VOTE's card alone: their notes are marked, and one with no note is a line of its own (#128).
+    `marks` is who vetoes the film and who has seen it, on every card: a vetoer's note is marked and one with no note has a line of its own (#128); a seer's note ends in a 👁
+    and those with no note and no veto gather on one line (#153).
     """
-    vetoers = vetoers or {}
+    marks = marks or card.Marks()
+    vetoers, seers = marks.vetoers, marks.seers
     # Notes are written in the note box from SUGGEST through VOTE (#27, #150).
     boxed = viewer is not None
     pitch = next((note for note in notes if note.author_id == suggestion.suggester_id), None)
     # Removal deletes a voter's notes on other films, so every note but the pitch has an author (#98).
     # The viewer's own note stays in the list, flagged: a collapsed card shows it, an opened one leaves it to their box (#88).
     others = tuple(
-        card.Note(note.author.display_name, note.text, yours=boxed and note.author_id == viewer.pk, vetoed=note.author_id in vetoers)
+        card.Note(note.author.display_name, note.text, yours=boxed and note.author_id == viewer.pk, vetoed=note.author_id in vetoers, seen=note.author_id in seers)
         for note in notes
         if note is not pitch
     )
     # A note with no text, a blank pitch, shows nowhere, so its vetoer gets a line of their own (#128).
     wrote = {note.author_id for note in notes if note.text}
-    bare = tuple(card.Note(name, "", yours=boxed and voter_id == viewer.pk, vetoed=True) for voter_id, name in sorted(vetoers.items(), key=lambda each: each[1]) if voter_id not in wrote)
+    bare = tuple(
+        card.Note(name, "", yours=boxed and voter_id == viewer.pk, vetoed=True, seen=voter_id in seers)
+        for voter_id, name in sorted(vetoers.items(), key=lambda each: each[1].casefold())
+        if voter_id not in wrote
+    )
+    # Seen it with no note and no veto: one line, by name (#153).
+    seen_alone = sorted(((name, voter_id) for voter_id, name in seers.items() if voter_id not in wrote and voter_id not in vetoers), key=lambda each: each[0].casefold())
     return card.FilmCard(
         film=suggestion.film,
         suggester=suggestion.suggester_name,
@@ -100,6 +107,9 @@ def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None, matched=Non
         dtdd=dtdd,
         matched=matched,
         pitch_vetoed=pitch is not None and pitch.author_id in wrote and pitch.author_id in vetoers,
+        pitch_seen=pitch is not None and pitch.author_id in wrote and pitch.author_id in seers,
+        seen_by=tuple(name for name, _ in seen_alone),
+        seen_by_others=tuple(name for name, voter_id in seen_alone if not boxed or voter_id != viewer.pk),
     )
 
 

@@ -96,7 +96,7 @@ def test_the_films_tab_in_run_has_no_status_line_section_or_credit(admin, films)
     assert "films-stale" not in page and "not yet fetched" not in page
     assert "film-card__dtdd" not in page and "dtdd__matching" not in page
     assert 'class="films-credit"' not in page and "dtdd__credit" not in page
-    assert re.search(r'<td colspan="7">', page)
+    assert re.search(r'<td colspan="8">', page)
 
 
 def test_the_topic_lists_answer_nothing_in_run(admin, films, voters, client):
