@@ -110,6 +110,18 @@ def test_the_gallery_shows_both_phase_bars_on_opened_cards(client, debug):
     assert "Your pitch" in page and "Your note" in page
 
 
+def test_the_gallery_shows_suggests_and_approves_bars_with_the_row_and_no_score_pills(client, debug):
+    page = client.get(GALLERY).content.decode()
+
+    opened = [card for card in re.findall(r"<article.*?</article>", page, re.S) if 'class="film-card is-open"' in card]
+    for bar in ("phase-bar--suggest", "phase-bar--approve"):
+        cards = [card for card in opened if f'class="phase-bar {bar}"' in card]
+        assert cards and all("vote-bar__scores--marks" in card and "Seen it" in card and "score--top-pick" not in card for card in cards)
+        # Vetoed, the pill reads so, and the note box says its words show as the veto reason; the bar posts nowhere here.
+        assert any("<b>−2</b> Vetoed" in card and "shows as your veto reason" in card for card in cards)
+        assert not any('hx-post="/ballot/' in card for card in cards)
+
+
 def vote_cards(page):
     return [card for card in re.findall(r"<article.*?</article>", page, re.S) if "data-vote-bar" in card]
 

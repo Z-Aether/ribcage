@@ -83,8 +83,27 @@ def test_from_approve_on_the_pool_is_a_mix_of_undecided_approved_and_dropped(db,
 
 
 @pytest.mark.parametrize("seeded", PHASES[: PHASES.index(Phase.VOTE)], indirect=True)
-def test_before_vote_nobody_has_a_ballot(db, seeded):
-    assert not BallotRecord.objects.exists() and not DoneMarker.objects.exists()
+def test_before_vote_nobody_has_a_score_or_is_done(db, seeded):
+    assert not BallotRecord.objects.filter(score__isnull=False).exists() and not DoneMarker.objects.exists()
+
+
+@pytest.mark.parametrize("seeded", PHASES[: PHASES.index(Phase.VOTE)], indirect=True)
+def test_before_vote_several_voters_have_vetoed_and_seen_undecided_films_with_and_without_notes(db, seeded):
+    vetoes = BallotRecord.objects.filter(vetoed=True)
+    noted = [veto for veto in vetoes if Note.objects.filter(suggestion=veto.suggestion, author=veto.voter).exists()]
+
+    assert vetoes.values("voter").distinct().count() >= 3 and BallotRecord.objects.filter(seen_it=True).values("voter").distinct().count() >= 3
+    assert vetoes.filter(suggestion__approval=Approval.UNDECIDED).exists() and 0 < len(noted) < vetoes.count()
+    assert BallotRecord.objects.filter(seen_it=True, vetoed=True).exists()
+
+
+@pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
+def test_from_vote_on_a_film_vetoed_before_its_approval_is_in_the_veto_band_and_one_only_seen_has_no_say(db, seeded):
+    early = BallotRecord.objects.get(voter__display_name="Anne-Marie", suggestion__title="Goodnight Mommy")
+    seen_only = BallotRecord.objects.get(voter__display_name="Sam", suggestion__title="Infested")
+
+    assert early.vetoed and early.score is None and early.suggestion.approval == Approval.APPROVED
+    assert seen_only.seen_it and not seen_only.vetoed and seen_only.score is None
 
 
 @pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.VOTE) :], indirect=True)
@@ -112,8 +131,8 @@ def test_from_vote_on_vetoes_have_a_note_written_for_it_or_in_suggest_or_none_an
     vetoes = BallotRecord.objects.filter(vetoed=True)
     with_note = [veto for veto in vetoes if Note.objects.filter(suggestion=veto.suggestion, author=veto.voter).exists()]
 
-    # Zoë wrote hers as the reason, Anne-Marie's is her SUGGEST note, and Sam has none (#128).
-    assert sorted(veto.voter.display_name for veto in with_note) == ["Anne-Marie", "Zoë"]
+    # Zoë wrote hers as the reason, Anne-Marie's Terrifier is her SUGGEST note, and Sam has none (#128); Anne-Marie's early Goodnight Mommy came with a note (#152).
+    assert sorted(veto.voter.display_name for veto in with_note) == ["Anne-Marie", "Anne-Marie", "Zoë"]
     assert len(with_note) == vetoes.count() - 1
     assert vetoes.filter(score__isnull=False).count() == 0
     assert max(vetoes.filter(suggestion=suggestion).count() for suggestion in Suggestion.objects.filter(ballot_records__vetoed=True)) == 2

@@ -310,6 +310,11 @@ def yours(sample, index):
     return replace(sample, notes=notes)
 
 
+def marks(**said):
+    """The row outside VOTE: the veto and seen it, no score pills, posting nowhere here (#152)."""
+    return VoteBar(scale=(), scoring=False, inert=True, **said)
+
+
 def phase_bars():
     """Each phase's bar on an opened card, with no suggestion, so a save here only reloads onto the phase page (#88).
 
@@ -324,22 +329,33 @@ def phase_bars():
                 yours(midsommar, 2),
                 note_box=NoteBox(text=midsommar.notes[2].text, is_pitch=False),
                 runtime_pencil=RuntimePencil(open=True, typed="2h 51", refusal=NOT_WHOLE_MINUTES),
+                vote=marks(seen_it=True),
             ),
             "components/suggest_bar.html",
         ),
         (
             "SUGGEST's phase bar, on Bex's own suggestion, after she saved her pitch empty",
-            replace(own(exit_8), note_box=NoteBox(text=exit_8.pitch, is_pitch=True, refusal=PITCH_REQUIRED)),
+            replace(own(exit_8), note_box=NoteBox(text=exit_8.pitch, is_pitch=True, refusal=PITCH_REQUIRED), vote=marks()),
             "components/suggest_bar.html",
         ),
         (
             "SUGGEST's phase bar, on Eli's own suggestion, with Withdraw armed",
-            own(vhs_99, armed=True),
+            replace(own(vhs_99, armed=True), vote=marks()),
+            "components/suggest_bar.html",
+        ),
+        (
+            "SUGGEST's phase bar after a veto on Gus's suggestion: the veto pill reads −2 Vetoed, the row has no score pills, and the note box says the note shows as the veto reason",
+            replace(cards()[1], note_box=NoteBox(text="", is_pitch=False, vetoed=True), vote=marks(vetoed=True)),
             "components/suggest_bar.html",
         ),
         (
             "APPROVE's phase bar, on Cass's suggestion, as Dani just saved her note",
-            replace(yours(wolf_house, 0), note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False)),
+            replace(yours(wolf_house, 0), note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False), vote=marks()),
+            "components/approve_bar.html",
+        ),
+        (
+            "APPROVE's phase bar, on Cass's suggestion, vetoed and seen by the viewer",
+            replace(yours(wolf_house, 0), note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, vetoed=True), vote=marks(vetoed=True, seen_it=True)),
             "components/approve_bar.html",
         ),
         (

@@ -11,7 +11,7 @@ from ribcage.identity.models import Voter
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import FRESH_PHASE, PHASES, Phase
 from ribcage.films.corpus import FETCH_COMMAND
-from ribcage.seeding.ballots import seed_the_ballots
+from ribcage.seeding.ballots import seed_the_ballots, seed_the_early_marks
 from ribcage.seeding.timetable import seed_the_timetable
 from ribcage.seeding.watched import seed_the_watched_lists
 from ribcage.seeding.pool import SEEDED_POOL, seed_the_pool, seed_the_trigger_data, trigger_states
@@ -54,6 +54,8 @@ class Command(BaseCommand):
             # From VOTE on, as PICK and RUN keep the scores for M8's reveal (#119).
             if phase in (Phase.VOTE, Phase.PICK, Phase.RUN):
                 seed_the_ballots()
+            # Before VOTE the marks are all there is of a ballot (#152).
+            seed_the_early_marks(phase)
             if phase in (Phase.PICK, Phase.RUN):
                 seed_the_timetable()
             if phase is Phase.RUN:

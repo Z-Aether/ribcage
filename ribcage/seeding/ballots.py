@@ -5,7 +5,8 @@ Each score is by the film's TMDB id. A film a voter leaves out is left in their 
 
 from ribcage.ballot.models import BallotRecord, DoneMarker
 from ribcage.identity.models import Voter
-from ribcage.suggestions.models import Note, Suggestion
+from ribcage.phase.order import PHASES, Phase
+from ribcage.suggestions.models import Approval, Note, Suggestion
 
 THE_THING, MIDSOMMAR, EXIT_8, WOLF_HOUSE, EVENT_HORIZON, TERRIFIER, THE_SHINING, KILLER_KLOWNS = 1091, 530385, 1408208, 499537, 8413, 420634, 694, 16296
 GOODNIGHT_MOMMY, INFESTED, WEREWOLF_BY_NIGHT, WHEN_EVIL_LURKS, CUBE, VHS_99 = 284303, 1063879, 894205, 744857, 431, 1005776
@@ -33,6 +34,25 @@ SEEDED_VETOES = {
 SEEDED_SEEN = {"Ada": (MIDSOMMAR, CUBE), "Zoë": (TERRIFIER, THE_SHINING)}
 
 
+WEAPONS, EVIL_DEAD, COCO, POOH_2 = 1078605, 1212763, 354912, 1079485
+CABINET_OF_CURIOSITIES = "Del Toro's Cabinet of Curiosities"
+
+# What voters marked before VOTE (#152): (voter, the film by TMDB id or title, vetoed, seen it, the note written with it or None).
+# Most are on films left undecided or dropped, which VOTE's ballot never shows; Anne-Marie's veto of Goodnight Mommy, an approved film, is already in her Veto band when VOTE opens, and Sam's seen Infested greys its tile.
+# Sam's veto of the Cabinet sits on the note he already wrote, Ada's of Weapons is a bare line, and Anne-Marie's of Evil Dead comes with a note of its own.
+EARLY_MARKS = (
+    ("Ada", WEAPONS, True, True, None),
+    ("Sam", WEAPONS, False, True, None),
+    ("Sam", CABINET_OF_CURIOSITIES, True, False, None),
+    ("Zoë", CABINET_OF_CURIOSITIES, False, True, None),
+    ("Anne-Marie", EVIL_DEAD, True, False, "Not after Terrifier. I've reached my limit."),
+    ("O'Brien", EVIL_DEAD, False, True, None),
+    ("Zoë", POOH_2, True, False, "Please, no."),
+    ("Anne-Marie", COCO, False, True, None),
+    ("Anne-Marie", GOODNIGHT_MOMMY, True, False, "A mother in bandages is where I stop. Count me out."),
+    ("Sam", INFESTED, False, True, None),
+)
+
 # Anne-Marie and O'Brien are done; Bartholomew Winthrop never votes and is not (#123).
 SEEDED_DONE = ("Anne-Marie", "O'Brien")
 
@@ -55,3 +75,16 @@ def seed_the_ballots():
             record.seen_it = True
             record.save(update_fields=["seen_it"])
     DoneMarker.objects.bulk_create(DoneMarker(voter=voters[name]) for name in SEEDED_DONE)
+
+
+def seed_the_early_marks(phase):
+    """The marks voters made before VOTE, on top of the pool: all of them in SUGGEST and APPROVE, and from VOTE on the ones on films that are candidates, as the seeded ballots hold no record on any other (#152)."""
+    voters = {voter.display_name: voter for voter in Voter.objects.all()}
+    films = {suggestion.tmdb_id or suggestion.title: suggestion for suggestion in Suggestion.objects.all()}
+    for name, key, vetoed, seen_it, note in EARLY_MARKS:
+        suggestion = films[key]
+        if PHASES.index(phase) >= PHASES.index(Phase.VOTE) and suggestion.approval != Approval.APPROVED:
+            continue
+        BallotRecord.objects.update_or_create(voter=voters[name], suggestion=suggestion, defaults={"vetoed": vetoed, "seen_it": seen_it})
+        if note:
+            Note.objects.create(suggestion=suggestion, author=voters[name], text=note)
