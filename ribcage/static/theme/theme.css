@@ -1813,7 +1813,7 @@ body > aside.nag-bar a {
 [data-skin] .note-box--pitch textarea {
   border-left: 3px solid var(--accent);
 }
-/* The quiet line under a veto's reason box, saying it is the voter's note (#128). */
+/* The quiet line under the note box of a film the voter vetoes, saying it shows as their veto reason (#128, #150). */
 [data-skin] .note-box__hint {
   margin: 0.5rem 0 0;
   color: var(--ink-muted);
@@ -2806,9 +2806,6 @@ body:has(> main > .ballot-head) > footer.site-footer {
   cursor: pointer;
 }
 [data-skin] .vote-seen__label input {
-  margin: 0;
-}
-[data-skin] .vote-reason .note-box textarea {
   margin: 0;
 }
 .vote-bar__line {

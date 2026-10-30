@@ -1,15 +1,13 @@
-from dataclasses import replace
-
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST, require_safe
 
-from ribcage.ballot import board, cardbar, done, placing
+from ribcage.ballot import board, done, placing
 from ribcage.phase.check import phase_window
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
-from ribcage.suggestions import notes, pool, withdrawal
+from ribcage.suggestions import pool, withdrawal
 from ribcage.suggestions.models import Suggestion
 
 
@@ -44,7 +42,7 @@ def place(request):
 
 
 def opened_card(request, suggestion):
-    """The film's card as VOTE opens it for the viewer: the pool's card, with the ballot's bar (#9, #122)."""
+    """The film's card as VOTE opens it for the viewer: the pool's card, with the ballot's bar, whose note box is the pool's (#9, #122, #150)."""
     # Loaded with its holds, as every load that feeds `withdrawable` is (#89, #118).
     held = withdrawal.with_holds(Suggestion.objects.filter(pk=suggestion.pk)).get()
     return pool.the_card(held, request.user, Phase.VOTE)
@@ -73,37 +71,6 @@ def seen(request):
     if request.POST.get("card"):
         return render(request, "components/vote_seen.html", {"card": opened_card(request, suggestion), "oob": False})
     return render(request, "components/ballot_tile.html", {"tile": board.one_tile(request.user, suggestion), "oob": True})
-
-
-@phase_window(Phase.VOTE)
-@require_POST
-def veto_reason(request):
-    """The reason on the voter's own veto, which is their note on the film, saved from the open card's box through the notes rule: refused whole over the cap, and for a pitch refused empty. A film they no longer veto reloads the ballot as it is (#10, #88, #120, #128)."""
-    suggestion = candidate(request.POST.get("suggestion"))
-    if suggestion is None:
-        return reload_the_tab(request, reverse("phase_page"))
-    typed = request.POST.get("text", "")
-    # A refusal says so, and puts back in the box the words typed for a long note, or the pitch as it was (#88).
-    refusal, shown = "", None
-    try:
-        kept = placing.give_reason(request.user, suggestion, typed)
-    except notes.TooLong as too_long:
-        kept, refusal, shown = True, notes.too_long(too_long, request.user.pk == suggestion.suggester_id), typed
-    except notes.PitchRequired:
-        kept, refusal = True, notes.PITCH_REQUIRED
-    if not kept:
-        return reload_the_tab(request, reverse("phase_page"))
-    if request.headers.get("HX-Request") != "true":
-        return redirect("phase_page")
-    if not refusal:
-        # A saved reason closes the card to its tile where it stands, as its title does, so the answer lands on the card, not its box (#132).
-        answer = render(request, "components/ballot_tile.html", {"tile": board.one_tile(request.user, suggestion)})
-        answer.headers["HX-Retarget"] = f'li.card-item[data-suggestion="{suggestion.pk}"]'
-        answer.headers["HX-Reswap"] = "outerHTML"
-        return answer
-    vote = cardbar.of(request.user, suggestion)
-    vote = replace(vote, was=vote.note, note=vote.note if shown is None else shown, said=refusal, refused=True)
-    return render(request, "components/vote_reason.html", {"card": replace(opened_card(request, suggestion), vote=vote)})
 
 
 @require_safe

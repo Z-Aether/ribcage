@@ -29,6 +29,8 @@ class NoteBox:
     kept: bool = False
     # What is saved when the box holds other words, typed and refused or kept from the pitch step; None where the box holds what is saved (#132).
     was: str | None = None
+    # The viewer vetoes the film, so the box says its words show as their veto reason (#128, #150).
+    vetoed: bool = False
 
     @property
     def saved_text(self):
@@ -189,28 +191,16 @@ class Matched:
 
 @dataclass(frozen=True)
 class VoteBar:
-    """What VOTE's phase bar shows for the viewer on one film: their own say, which is theirs alone, and the other voters' seen it (#10, #35 §4, #122).
+    """What VOTE's phase bar shows for the viewer on one film: their own score, veto and seen it, which are theirs alone, and the other voters' seen it (#10, #35 §4, #122).
 
-    The vetoes are in the card's notes, not the bar (#128)."""
+    The vetoes are in the card's notes, and the viewer's note is the card's note box (#128, #150)."""
 
     # The scale's buttons as (score, key, sign, name), top pick first.
     scale: tuple[tuple[int, str, str, str], ...]
     score: int | None = None
     vetoed: bool = False
-    # The voter's note on the film, which is their veto's reason, or their pitch on their own suggestion (#128).
-    note: str = ""
-    is_pitch: bool = False
     seen_it: bool = False
     seen_by: tuple[str, ...] = ()
-    # A refusal of the box's save, kept as the note box keeps its refusal; a saved reason answers the tile, so says nothing (#120, #132).
-    said: str = ""
-    refused: bool = False
-    # What is saved when the box holds other words, typed and refused; None where the box holds what is saved (#132).
-    was: str | None = None
-
-    @property
-    def saved_text(self):
-        return self.note if self.was is None else self.was
     # The gallery's bar posts nowhere, so its buttons only look.
     inert: bool = False
 
@@ -244,8 +234,8 @@ class FilmCard:
 
     @property
     def pitch_yours(self):
-        # The viewer's own pitch is left out of an opened card only where a box holds it: the note box, or VOTE's reason box while they veto (#88, #122, #128).
-        return self.mine and (self.note_box is not None or (self.vote is not None and self.vote.vetoed))
+        # The viewer's own pitch is left out of an opened card only where the note box holds it (#88, #150).
+        return self.mine and self.note_box is not None
 
 
 def trimmed(text, length):

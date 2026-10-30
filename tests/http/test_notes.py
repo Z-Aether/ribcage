@@ -14,7 +14,7 @@ from tests.http.test_phase_check import send
 NOTE = "/note/"
 HTMX = {"HX-Request": "true"}
 WINDOW = [Phase.SUGGEST, Phase.APPROVE]
-OUTSIDE_THE_WINDOW = [Phase.VOTE, Phase.PICK, Phase.RUN]
+OUTSIDE_THE_WINDOW = [Phase.PICK, Phase.RUN]
 PITCH = "The one with the kennel scene. Lights off."
 
 

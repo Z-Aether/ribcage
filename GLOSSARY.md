@@ -91,7 +91,7 @@ The length of the particular copy of a film the group will watch, not a fact abo
 _Avoid_: length, duration, official runtime
 
 **Note**:
-A voter's own words on a film: one per voter per film, visible to the whole group, editable only by its author and only in SUGGEST and APPROVE, and in VOTE as the reason of their veto on the film. The suggester's note is their **pitch**, shown first, and it outlives their removal; their notes on other films do not. With scores hidden during VOTE, the only channel for persuading the group; also where anything the crowd evidence misses is written down. (#8, #9, #20, #21, #27, #28, #128)
+A voter's own words on a film: one per voter per film, visible to the whole group, editable only by its author, from SUGGEST through VOTE, and the reason of their veto on the film. The suggester's note is their **pitch**, shown first, and it outlives their removal; their notes on other films do not. With scores hidden during VOTE, the only channel for persuading the group; also where anything the crowd evidence misses is written down. (#8, #9, #20, #21, #27, #28, #128, #150)
 _Avoid_: comment, blurb, description, personal note, freeform note, group note
 
 **Film card**:
@@ -121,7 +121,7 @@ A voter's stated appetite for a candidate on a coarse five-point scale from "rat
 _Avoid_: rating, preference, vote, points
 
 **Veto**:
-A voter's declaration that they would not be in the room for a film. It bars the film from representing them and scores it −2 for them, a reserved step below anything hand-entered that prices the group's loss of them; uncapped, attributed and visible while VOTE is open — initials on the tile, names in the opened card, where a vetoer's note is marked as theirs. Its reason is the voter's **note** on the film, edited while they veto and kept as their note if they take the veto back. (#10, #12, #35, #63, #128)
+A voter's declaration that they would not be in the room for a film. It bars the film from representing them and scores it −2 for them, a reserved step below anything hand-entered that prices the group's loss of them; uncapped, attributed and visible while VOTE is open — initials on the tile, names in the opened card, where a vetoer's note is marked as theirs. Its reason is the voter's **note** on the film, written in the card's note box and kept as their note if they take the veto back. (#10, #12, #35, #63, #128, #150)
 _Avoid_: hard veto, ban, block, exclusion
 
 **Seen it**:

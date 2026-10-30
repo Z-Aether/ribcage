@@ -44,7 +44,7 @@ def test_seen_it_sets_and_clears_without_touching_the_score(ballot):
 
 def test_seen_it_sets_and_clears_without_touching_a_veto_and_its_note(ballot):
     place(ballot["client"], ballot["one"], "veto")
-    ballot["client"].post("/ballot/veto-reason/", {"suggestion": str(ballot["one"].pk), "text": "No."})
+    ballot["client"].post("/note/", {"suggestion": str(ballot["one"].pk), "text": "No."})
 
     seen(ballot["client"], ballot["one"], "1")
     seen(ballot["client"], ballot["one"], "0")

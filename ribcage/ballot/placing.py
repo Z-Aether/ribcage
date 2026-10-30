@@ -2,7 +2,6 @@
 
 from ribcage.ballot.board import SCALE, TRAY, VETOES
 from ribcage.ballot.models import BallotRecord
-from ribcage.suggestions import notes
 from ribcage.suggestions.models import Note
 
 UNSORTED = TRAY
@@ -58,13 +57,3 @@ def needs_a_reason(voter, suggestion):
     """Whether a veto just made has no note of the voter's to be its reason yet, so its card opens for one: on their own suggestion the pitch is the note (#120, #128)."""
     return not Note.objects.filter(author=voter, suggestion=suggestion).exists()
 
-
-def give_reason(voter, suggestion, typed):
-    """Save the voter's reason on their veto, which is their note on the film, through the notes rule: refused whole over the cap, cleared by saving it empty, and for a suggester's pitch refused empty (#88, #120, #128).
-
-    Raises `notes.TooLong` and `notes.PitchRequired` and writes nothing then. Returns False where the voter has no veto on the film, as when a stale tab posts after the veto was dragged out.
-    """
-    if not BallotRecord.objects.filter(voter=voter, suggestion=suggestion, vetoed=True).exists():
-        return False
-    notes.write(suggestion, voter, typed)
-    return True

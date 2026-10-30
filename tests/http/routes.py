@@ -14,7 +14,7 @@ ADMIN = "admin"
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
 # Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110, #119, #133).
-ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_veto_reason", "ballot_seen", "ballot_card", "ballot_done", "console_pick_anchor", "console_pick_budget", "console_pick_add", "console_pick_remove", "console_pick_break", "console_pick_box", "console_pick_preview", "console_pick_move", "console_pick_resize", "console_pick_mode", "console_pick_place", "console_pick_arrange"}
+ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_seen", "ballot_card", "ballot_done", "console_pick_anchor", "console_pick_budget", "console_pick_add", "console_pick_remove", "console_pick_break", "console_pick_box", "console_pick_preview", "console_pick_move", "console_pick_resize", "console_pick_mode", "console_pick_place", "console_pick_arrange"}
 
 class Fragment(NamedTuple):
     """One htmx answer that swaps a card, its section or a part of one in, which test_dtdd_credit.py sweeps for DoesTheDogDie's data (#112).
@@ -33,14 +33,16 @@ class Fragment(NamedTuple):
 # Every answer that shows DoesTheDogDie's data: a voter or admin route that is no page, or whose plain GET redirects or answers 405, is listed here or in NO_DTDD_DATA, which test_dtdd_credit.py holds (#112).
 # The links name records the test's fake DoesTheDogDie answers (9001) or has none of (9002).
 FRAGMENTS = [
+    # First, while the voter has no note: a drop into the Veto band answers the film's card only where they have none, so it carries the section (#120, #150).
+    Fragment("ballot_place", VOTER, "POST", {"suggestion": "{film}", "to": "veto"}),
+    # In VOTE a saved note answers the film's tile, and a refused one the open card, which carries the section (#132, #150).
     Fragment("note", VOTER, "POST", {"suggestion": "{film}", "text": "A note."}),
+    Fragment("note", VOTER, "POST", {"suggestion": "{film}", "text": "x" * 5001}),
     # A refused runtime answers the open card, with the runtime's refusal beside its box (#133).
     Fragment("note", VOTER, "POST", {"suggestion": "{film}", "text": "A note.", "runtime": "abc"}),
     Fragment("withdraw", VOTER, "POST", {"suggestion": "{film}"}),
     # Before the watch toggles below, which untick the list the row's matched topics come from.
-    # A drop into the Veto band answers the film's card where it has no note yet, so it carries the section (#120).
-    Fragment("ballot_place", VOTER, "POST", {"suggestion": "{film}", "to": "veto"}),
-    # The opened card carries the section; its own writes answer the card moved, the reason's box or the checkbox (#122).
+    # The opened card carries the section; its own writes answer the card moved or the checkbox (#122).
     Fragment("ballot_card", VOTER, "GET", {"suggestion": "{film}"}),
     Fragment("ballot_place", VOTER, "POST", {"suggestion": "{film}", "to": "2", "card": "1"}),
     Fragment("dtdd_topics", VOTER, "GET", {"suggestion": "{film}"}, part=True),
@@ -70,7 +72,6 @@ NO_DTDD_DATA = {
     "console", "console_phase_move", "console_films_approval",  # redirects, whatever they act on
     "ballot_done",  # the header's done block: names and ticks, no film (#123)
     "ballot_seen",  # a tile, or the card's checkbox, never matched topics (#121, #122)
-    "ballot_veto_reason",  # the card's reason box alone, or the tile it closes to, never matched topics (#120, #128, #132)
     "console_pick_anchor", "console_pick_budget",  # the Pick header's saves: a redirect, or the tab with a refusal (#135)
     "console_pick_add", "console_pick_remove", "console_pick_break",  # the timetable's hand edits: a redirect to the tab (#137)
     "console_pick_preview", "console_pick_move", "console_pick_resize", "console_pick_place", "console_pick_arrange",  # a drag's preview, the track alone, and its saves, redirects to the tab (#139, #143)

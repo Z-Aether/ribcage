@@ -1,6 +1,6 @@
 from django.urls import path
 
-from ribcage.ballot.views import card, im_done, place, seen, veto_reason
+from ribcage.ballot.views import card, im_done, place, seen
 from ribcage.console.views import (
     backup_page,
     console,
@@ -62,7 +62,6 @@ urlpatterns = [
     path("ballot/done/", im_done, name="ballot_done"),
     path("ballot/place/", place, name="ballot_place"),
     path("ballot/seen/", seen, name="ballot_seen"),
-    path("ballot/veto-reason/", veto_reason, name="ballot_veto_reason"),
     path("warnings/", warnings_page, name="warnings"),
     path("warnings/tick/", tick, name="warnings_tick"),
     path("warnings/dont-care/", dont_care, name="warnings_dont_care"),

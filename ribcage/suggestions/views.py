@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST, require_safe
 
+from ribcage.ballot import board, closing
 from ribcage.films import find as find_text
 from ribcage.films import signed
 from ribcage.films.client import NotAnswering, tmdb_client
@@ -29,17 +30,20 @@ def named_suggestion(pk):
         return None
 
 
-@phase_window(Phase.SUGGEST, Phase.APPROVE)
+@phase_window(Phase.SUGGEST, Phase.APPROVE, Phase.VOTE)
 @require_POST
 def write_note(request):
-    """The card's one Save: the note, and the runtime where its box was open, written together or not at all (#88, #133)."""
-    # The card the post came from is gone, so the tab reloads onto the pool as it is now (#89).
-    if (suggestion := named_suggestion(request.POST.get("suggestion"))) is None:
+    """The card's one Save: the note, and the runtime where its box was open, written together or not at all (#88, #133).
+
+    In VOTE it answers as the ballot does: a save closes the card to its tile, a refusal keeps the card open (#132, #150).
+    """
+    phase = current()
+    # The card the post came from is gone, so the tab reloads onto the pool as it is now (#89); in VOTE a film off the ballot is gone too (#119).
+    if (suggestion := named_suggestion(request.POST.get("suggestion"))) is None or (phase == Phase.VOTE and not board.candidates().filter(pk=suggestion.pk).exists()):
         return reload_the_tab(request, reverse("phase_page"))
     typed = request.POST.get("text", "")
     # None where the box was shut, so the note is saved alone (#133).
     typed_runtime = request.POST.get("runtime")
-    phase = current()
     card = pool.the_card(suggestion, request.user, phase)
     refusals = saving.save(suggestion, request.user, typed, typed_runtime, phase)
     # Only htmx swaps the card in place; a plain post is answered with the page (#88).
@@ -47,6 +51,8 @@ def write_note(request):
         return redirect("phase_page")
     # A save closes the card, which lists the note now and shows the runtime; a refusal keeps it open with both boxes as typed (#132, #133).
     if not refusals:
+        if phase == Phase.VOTE:
+            return closing.to_tile(request, suggestion)
         card = pool.the_card(suggestion, request.user, phase)
         return render(request, "components/film_card.html", {"card": card, "expanded": False, "phase_bar": pool.PHASE_BARS[phase]})
     box = card.note_box
@@ -60,7 +66,8 @@ def write_note(request):
     # The box stays open as typed only where the runtime part acts; a film approved since has lost its pencil (#133).
     if pencil is not None and saving.runtime_acts(suggestion, typed_runtime, phase):
         pencil = replace(pencil, open=True, typed=typed_runtime, refusal=refusals.runtime)
-    context = {"card": replace(card, note_box=box, runtime_pencil=pencil), "expanded": True, "phase_bar": pool.PHASE_BARS[phase]}
+    # On the ballot the title closes the card to its tile, so a card swapped in place keeps that (#122).
+    context = {"card": replace(card, note_box=box, runtime_pencil=pencil), "expanded": True, "phase_bar": pool.PHASE_BARS[phase], "closes_at": phase == Phase.VOTE}
     return render(request, "components/film_card.html", context)
 
 

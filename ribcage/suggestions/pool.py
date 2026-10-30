@@ -59,8 +59,8 @@ def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None, matched=Non
     `vetoers` is {voter id: name} where vetoes are shown, VOTE's card alone: their notes are marked, and one with no note is a line of its own (#128).
     """
     vetoers = vetoers or {}
-    # SUGGEST and APPROVE write notes in the note box. VOTE has none, but the reason box holds the viewer's own note while they veto (#27, #122, #128).
-    boxed = viewer is not None and (phase != Phase.VOTE or (vote is not None and vote.vetoed))
+    # Notes are written in the note box from SUGGEST through VOTE (#27, #150).
+    boxed = viewer is not None
     pitch = next((note for note in notes if note.author_id == suggestion.suggester_id), None)
     # Removal deletes a voter's notes on other films, so every note but the pitch has an author (#98).
     # The viewer's own note stays in the list, flagged: a collapsed card shows it, an opened one leaves it to their box (#88).
@@ -80,7 +80,7 @@ def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None, matched=Non
         notes=others + bare,
         suggestion_id=suggestion.pk,
         mine=viewer is not None and suggestion.suggester_id == viewer.pk,
-        note_box=note_box(suggestion, notes, viewer) if viewer is not None and phase != Phase.VOTE else None,
+        note_box=note_box(suggestion, notes, viewer, vote) if boxed else None,
         vote=vote,
         withdraw=offered_withdraw(suggestion, others, viewer),
         runtime_pencil=offered_pencil(suggestion, viewer, phase),
@@ -90,9 +90,9 @@ def film_card(suggestion, notes, viewer=None, phase=None, dtdd=None, matched=Non
     )
 
 
-def note_box(suggestion, notes, viewer):
+def note_box(suggestion, notes, viewer, vote=None):
     own = next((note for note in notes if note.author_id == viewer.pk), None)
-    return card.NoteBox(text=own.text if own else "", is_pitch=suggestion.suggester_id == viewer.pk)
+    return card.NoteBox(text=own.text if own else "", is_pitch=suggestion.suggester_id == viewer.pk, vetoed=vote is not None and vote.vetoed)
 
 
 def offered_withdraw(suggestion, others, viewer):

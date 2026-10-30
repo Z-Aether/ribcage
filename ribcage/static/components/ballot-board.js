@@ -4,11 +4,11 @@
     window.location.reload();
   }
 
-  // A close swaps the card for its tile, so the reason typed and not saved is kept here by film until that card opens again; a reload drops it (#131).
+  // A close swaps the card for its tile, so the note typed and not saved is kept here by film until that card opens again; a reload drops it (#131, #150).
   var typed = {};
 
   function stash(card) {
-    var box = card && card.querySelector("[data-vote-reason] textarea");
+    var box = card && card.querySelector(".note-box textarea");
     if (!box) return;
     // The baseline is the saved text, not defaultValue, which holds the typing once a refusal draws the box again (#132).
     var saved = (box.dataset.saved || "").replace(/\r\n/g, "\n");
@@ -19,7 +19,7 @@
   function restore(board) {
     board.querySelectorAll(".card-item").forEach(function (card) {
       var text = typed[card.dataset.suggestion];
-      var box = card.querySelector("[data-vote-reason] textarea");
+      var box = card.querySelector(".note-box textarea");
       if (text === undefined || !box) return;
       delete typed[card.dataset.suggestion];
       box.value = text;
@@ -28,10 +28,10 @@
     });
   }
 
-  // A saved reason closes its card, so words stashed for the film before are stale and would overwrite it when the card next opens (#132).
+  // A saved note closes its card, so words stashed for the film before are stale and would overwrite it when the card next opens (#132).
   document.body.addEventListener("htmx:beforeSwap", function (event) {
     var form = event.detail.requestConfig && event.detail.requestConfig.elt;
-    if (!form || !form.matches || !form.matches("[data-vote-reason] form")) return;
+    if (!form || !form.matches || !form.matches(".card-item .note-box")) return;
     if (event.detail.xhr.getResponseHeader("HX-Retarget")) delete typed[form.elements.suggestion.value];
   });
 
@@ -82,6 +82,11 @@
           htmx.ajax("POST", url, { source: event.item, swap: "none", values: values });
         },
       });
+    });
+    // A pill of the open card draws the whole card again, so the note typed and not saved is kept and given back when it lands (#150).
+    board.addEventListener("htmx:beforeRequest", function (event) {
+      var pill = event.target.closest && event.target.closest(".vote-bar__score");
+      if (pill) stash(pill.closest(".card-item"));
     });
     // Seen it redraws the tile it sits on, so the keyboard's focus is put back on the new toggle (#121).
     var refocus = null;
@@ -176,15 +181,15 @@
         open(event.target);
       }
     });
-    // An opened card, or one moved to its new band, is brought into view; the tile or the title that closes it keeps the focus, and a card a veto drop opened has the cursor in its reason box (#120, #122).
+    // An opened card, or one moved to its new band, is brought into view; the tile or the title that closes it keeps the focus, and a card a veto drop opened has the cursor in its note box (#120, #122).
     function bringIntoView() {
       var card = board.querySelector("[data-scroll-here]");
       if (!card) return;
       card.removeAttribute("data-scroll-here");
       card.scrollIntoView({ block: "start", behavior: "smooth" });
-      var reason = card.hasAttribute("data-focus-reason") && card.querySelector("[data-vote-reason] textarea");
-      card.removeAttribute("data-focus-reason");
-      if (reason) return reason.focus({ preventScroll: true });
+      var note = card.hasAttribute("data-focus-note") && card.querySelector(".note-box textarea");
+      card.removeAttribute("data-focus-note");
+      if (note) return note.focus({ preventScroll: true });
       var title = card.querySelector(".film-card__toggle");
       if (title && !card.contains(document.activeElement)) title.focus({ preventScroll: true });
     }

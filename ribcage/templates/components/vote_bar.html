@@ -1,15 +1,6 @@
-{# VOTE's phase bar on the opened card: the five scores, the veto in place of any of them, seen it, and the other voters' seen it, read-only; the vetoes are in the card's notes (#128). Each control is the ballot's own write (#9, #10, #35 §4, #122). #}
+{# VOTE's phase bar on the opened card: the row of scores, veto and seen it, then the note box, the two parts every phase's bar can share; and the other voters' seen it, read-only. The vetoes are in the card's notes (#128, #150). #}
 {% with vote=card.vote %}<div class="phase-bar phase-bar--vote{% if vote.vetoed %} is-vetoed{% endif %}" data-vote-bar>
-  <div class="vote-bar__scores">
-    {# Only the six pills are the "Your score" group: Pico rings a group whose input has focus, so seen it stays outside (#127). #}
-    <div class="vote-bar__pills" role="group" aria-label="Your score">
-    {% for score, key, sign, name in vote.scale %}<button type="button" class="vote-bar__score score score--{{ key }}{% if vote.score == score %} is-current{% endif %}" aria-pressed="{% if vote.score == score %}true{% else %}false{% endif %}"{% if not vote.inert %} hx-post="{% url 'ballot_place' %}" hx-vals='{"suggestion": "{{ card.suggestion_id }}", "to": "{{ score }}", "card": "1"}' hx-swap="none"{% endif %}><b>{{ sign }}</b> {{ name }}</button>{% endfor %}
-    {# Vetoing puts −2 where the score was, and turning it off leaves the film unsorted (#10). #}
-    <button type="button" class="vote-bar__score vote-bar__veto score score--veto{% if vote.vetoed %} is-current{% endif %}" aria-pressed="{% if vote.vetoed %}true{% else %}false{% endif %}"{% if not vote.inert %} hx-post="{% url 'ballot_place' %}" hx-vals='{"suggestion": "{{ card.suggestion_id }}", "to": "{% if vote.vetoed %}unsorted{% else %}veto{% endif %}", "card": "1"}' hx-swap="none"{% endif %}><b>{% if vote.vetoed %}−2{% else %}Veto{% endif %}</b>{% if vote.vetoed %} Vetoed{% endif %}</button>
-    </div>
-    {# Seen it is the row's last cell, a toggle set apart from the pills, and still the ballot's own write (#127). #}
-    {% include "components/vote_seen.html" %}
-  </div>
-  {% if vote.vetoed %}{% include "components/vote_reason.html" %}{% endif %}
+  {% include "components/vote_row.html" %}
+  {% include "components/note_box.html" %}
   {% if vote.seen_by %}<p class="vote-bar__line"><span class="film-card__label">Seen by</span> {{ vote.seen_by|join:", " }}</p>{% endif %}
 </div>{% endwith %}

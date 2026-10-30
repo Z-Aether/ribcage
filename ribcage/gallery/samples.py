@@ -343,22 +343,22 @@ def phase_bars():
             "components/approve_bar.html",
         ),
         (
-            "VOTE's phase bar, on Hanna's suggestion, scored +2 by the viewer, with others' seen it read-only; the notes carry the vetoes, Ash's marked and Zoë's a bare line",
+            "VOTE's phase bar, on Hanna's suggestion, scored +2 by the viewer, with others' seen it read-only; the notes carry the vetoes, Ash's marked and Zoë's a bare line; the viewer has no note yet",
             replace(
                 midsommar,
-                note_box=None,
+                note_box=NoteBox(text="", is_pitch=False),
                 notes=(replace(midsommar.notes[0], vetoed=True), *midsommar.notes[1:], Note("Zoë", "", vetoed=True)),
                 vote=VoteBar(scale=board.SCALE, score=2, seen_by=("Bex", "Dani"), inert=True),
             ),
             "components/vote_bar.html",
         ),
         (
-            "VOTE's phase bar after a veto on a film the viewer has a note on: −2 replaces the score, the reason box holds the note, and the viewer has seen it. Cass's pitch is marked as her veto",
+            "VOTE's phase bar after a veto on a film the viewer has a note on: −2 replaces the score, the note box holds the note and says it shows as the veto reason, and the viewer has seen it. Cass's pitch is marked as her veto",
             replace(
                 yours(wolf_house, 0),
-                note_box=None,
+                note_box=NoteBox(text=wolf_house.notes[0].text, is_pitch=False, vetoed=True),
                 pitch_vetoed=True,
-                vote=VoteBar(scale=board.SCALE, vetoed=True, note=wolf_house.notes[0].text, seen_it=True, inert=True),
+                vote=VoteBar(scale=board.SCALE, vetoed=True, seen_it=True, inert=True),
             ),
             "components/vote_bar.html",
         ),
@@ -366,8 +366,8 @@ def phase_bars():
             "VOTE's phase bar on Bex's own suggestion, vetoed: the box holds her pitch, and emptying it is refused as in SUGGEST",
             replace(
                 own(exit_8),
-                note_box=None,
-                vote=VoteBar(scale=board.SCALE, vetoed=True, note=exit_8.pitch, is_pitch=True, said=PITCH_REQUIRED, refused=True, inert=True),
+                note_box=NoteBox(text=exit_8.pitch, is_pitch=True, refusal=PITCH_REQUIRED, vetoed=True),
+                vote=VoteBar(scale=board.SCALE, vetoed=True, inert=True),
             ),
             "components/vote_bar.html",
         ),

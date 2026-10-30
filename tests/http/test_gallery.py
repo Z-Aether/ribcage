@@ -118,14 +118,15 @@ def test_the_gallery_shows_votes_bar_on_opened_cards_with_a_veto_and_the_seen_it
     cards = vote_cards(client.get(GALLERY).content.decode())
 
     bars = [re.search(r'<div class="film-card__phase-bar" data-phase-bar>(.*)</div>\s*(?:<section|$)', card, re.S)[1] for card in cards]
-    assert len(bars) == 3 and "hx-post" not in "".join(bars)
+    # The note box posts with no suggestion, so a save only reloads; the pills and seen it post nowhere (#150).
+    assert len(bars) == 3 and "hx-post=\"/ballot/" not in "".join(bars)
     assert "score--keen is-current" in bars[0] and "Seen by" in bars[0]
     # The bar no longer names the vetoers: the card's notes do (#128).
     assert not any("Vetoed by" in bar for bar in bars)
     for bar in bars:
-        row = re.search(r'class="vote-bar__scores".*?\n  </div>', bar, re.S)[0]
-        assert row.index("vote-bar__veto") < row.index('class="vote-seen"')
-    assert "is-vetoed" in bars[1] and "−2" in bars[1] and "data-vote-reason" in bars[1] and "checked" in bars[1]
+        row = re.search(r'class="vote-bar__scores".*?\n</div>', bar, re.S)[0]
+        assert row.index("vote-bar__veto") < row.index('class="vote-seen"') and bar.index("vote-bar__scores") < bar.index("note-box")
+    assert "is-vetoed" in bars[1] and "−2" in bars[1] and "note-box__hint" in bars[1] and "checked" in bars[1]
 
 
 def test_the_gallery_shows_a_marked_note_a_bare_veto_line_and_the_boxes_quiet_line(client, debug):

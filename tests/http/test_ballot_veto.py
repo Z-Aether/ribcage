@@ -1,4 +1,4 @@
-"""The Veto band: a veto is one placement that replaces the score, its tile is a band's own, a drop with no note opens the card, the reason is the voter's note and others' vetoes ride the tiles (#9, #10, #88, #120, #128)."""
+"""The Veto band: a veto is one placement that replaces the score, its tile is a band's own, a drop with no note opens the card, the reason is the voter's note, written in the card's note box, and others' vetoes ride the tiles (#9, #10, #88, #120, #128, #150)."""
 
 import re
 
@@ -15,11 +15,11 @@ from tests.http.test_ballot_page import HTMX, approved, film, place, region, sig
 from tests.http.test_matched_topics import DOG, add, dtdd, vocabulary  # noqa: F401
 from tests.http.test_phase import walk_to
 
-REASON, CARD = "/ballot/veto-reason/", "/ballot/card/"
+NOTE, CARD = "/note/", "/ballot/card/"
 
 
 def reason(client, suggestion, text, **extra):
-    return client.post(REASON, {"suggestion": str(suggestion.pk), "text": text}, **extra)
+    return client.post(NOTE, {"suggestion": str(suggestion.pk), "text": text}, **extra)
 
 
 @pytest.fixture
@@ -40,7 +40,7 @@ def note(ballot, key="one", voter="ada"):
 
 
 def box(page):
-    """The text the first reason box in the page or answer holds."""
+    """The text the first note box in the page or answer holds."""
     return re.search(r"<textarea[^>]*>(.*?)</textarea>", page, re.S)[1]
 
 
@@ -152,17 +152,17 @@ def test_a_placement_answer_draws_the_tile_where_it_landed_the_same_for_a_veto_a
 
     oob = f"""<li class="tile" data-suggestion="{pk}" hx-swap-oob="outerHTML:li[data-suggestion='{pk}']" title="One">"""
     assert oob in veto and oob in scored
-    assert "veto-row" not in veto and "data-vote-reason" not in veto
+    assert "veto-row" not in veto and "<textarea" not in veto
 
 
-# What the drop opens: a film with no note yet opens its card with the reason box, closing the card open before it (#120).
-def test_a_drop_into_the_veto_band_with_no_note_answers_the_open_card_with_its_reason_box(ballot):
+# What the drop opens: a film with no note yet opens its card with the note box, closing the card open before it (#120).
+def test_a_drop_into_the_veto_band_with_no_note_answers_the_open_card_with_its_note_box(ballot):
     pk = ballot["one"].pk
 
     answer = drop(ballot["client"], ballot["one"])
 
-    assert f"""<li class="card-item" data-suggestion="{pk}" data-card-open data-scroll-here data-focus-reason hx-swap-oob="outerHTML:li[data-suggestion='{pk}']">""" in answer
-    assert "data-vote-reason" in answer and box(answer) == "" and "Your reason (optional)" in answer
+    assert f"""<li class="card-item" data-suggestion="{pk}" data-card-open data-scroll-here data-focus-note hx-swap-oob="outerHTML:li[data-suggestion='{pk}']">""" in answer
+    assert "note-box__hint" in answer and box(answer) == "" and "Your note" in answer
     assert f'<li class="tile" data-suggestion="{pk}"' not in answer
     assert "1 of 2 scored" in answer
     assert record(ballot).vetoed
@@ -192,7 +192,7 @@ def test_a_drop_into_the_veto_band_with_a_note_already_opens_nothing(ballot):
 
     answer = drop(ballot["client"], ballot["one"], closes=str(ballot["two"].pk))
 
-    assert "card-item" not in answer and "data-vote-reason" not in answer and "data-focus-reason" not in answer
+    assert "card-item" not in answer and "<textarea" not in answer and "data-focus-note" not in answer
     assert 'class="tile"' in answer and record(ballot).vetoed
 
 
@@ -215,19 +215,19 @@ def test_a_drop_into_any_other_band_or_the_tray_opens_nothing(ballot):
     for to in (3, 2, 1, 0, -1, "unsorted"):
         answer = drop(ballot["client"], ballot["one"], to, closes=str(ballot["two"].pk))
 
-        assert "card-item" not in answer and "data-focus-reason" not in answer
+        assert "card-item" not in answer and "data-focus-note" not in answer
 
 
 def test_a_drop_into_the_veto_band_again_with_no_note_opens_the_card_again(ballot):
     drop(ballot["client"], ballot["one"])
 
-    assert "data-focus-reason" in drop(ballot["client"], ballot["one"])
+    assert "data-focus-note" in drop(ballot["client"], ballot["one"])
 
 
 def test_a_veto_set_from_the_cards_bar_opens_nothing_more_and_a_plain_post_redirects(ballot):
     bar = drop(ballot["client"], ballot["one"], card="1")
 
-    assert "data-focus-reason" not in bar and "data-scroll-here" in bar and bar.count("data-card-open") == 1
+    assert "data-focus-note" not in bar and "data-scroll-here" in bar and bar.count("data-card-open") == 1
     assert place(ballot["client"], ballot["two"], "veto")["Location"] == "/"
 
 
@@ -265,7 +265,7 @@ def test_the_box_is_pre_filled_with_the_voters_note_and_says_what_it_is(ballot):
     for shown in (answer, on_reload):
         assert box(shown) == "Written in SUGGEST."
         assert "Your note on this film shows as your veto reason, and stays your note if you take the veto back." in shown
-        assert "Your reason (optional)" in shown
+        assert "Your note" in shown and "Your reason" not in shown
 
 
 def test_the_box_is_empty_where_the_voter_has_no_note(ballot):
@@ -340,8 +340,8 @@ def test_a_veto_needs_no_reason(ballot):
     assert not Note.objects.exists()
 
 
-@pytest.mark.parametrize("phase", [Phase.SUGGEST, Phase.APPROVE, Phase.PICK, Phase.RUN])
-def test_a_reason_outside_vote_reloads_the_tab_and_writes_nothing(ballot, phase):
+@pytest.mark.parametrize("phase", [Phase.PICK, Phase.RUN])
+def test_a_note_after_vote_is_refused_by_the_phase_check_and_writes_nothing(ballot, phase):
     place(ballot["client"], ballot["one"], "veto")
     walk_on_to(phase)
 
@@ -351,33 +351,68 @@ def test_a_reason_outside_vote_reloads_the_tab_and_writes_nothing(ballot, phase)
     assert not Note.objects.exists()
 
 
-def test_a_reason_on_a_film_not_vetoed_any_more_reloads_the_tab_and_writes_nothing(ballot):
-    Note.objects.create(suggestion=ballot["one"], author=ballot["ada"], text="Kept.")
-    place(ballot["client"], ballot["one"], 2)
+def test_a_note_is_saved_changed_and_deleted_in_vote_on_a_film_the_voter_does_not_veto(ballot):
+    saved = reason(ballot["client"], ballot["one"], "  First\r\nthoughts.  ", headers=HTMX)
 
-    assert reason(ballot["client"], ballot["one"], "Stale.", headers=HTMX)["HX-Redirect"] == "/"
-    assert reason(ballot["client"], ballot["two"], "None.", headers=HTMX)["HX-Redirect"] == "/"
-    assert reason(ballot["client"], ballot["one"], "x" * (settings.NOTE_MAX_LENGTH + 1), headers=HTMX)["HX-Redirect"] == "/"
-    assert reason(ballot["client"], ballot["one"], "", headers=HTMX)["HX-Redirect"] == "/"
-    assert list(Note.objects.values_list("text", flat=True)) == ["Kept."]
+    assert note(ballot) == "First\nthoughts." and not BallotRecord.objects.exists()
+    # The answer is the film's tile, put over the open card where it stands (#132).
+    assert saved.text.lstrip().startswith('<li class="tile') and "film-card" not in saved.text
+    assert saved["HX-Retarget"] == f'li.card-item[data-suggestion="{ballot["one"].pk}"]' and saved["HX-Reswap"] == "outerHTML"
+
+    reason(ballot["client"], ballot["one"], "Second thoughts.", headers=HTMX)
+    assert note(ballot) == "Second thoughts." and Note.objects.count() == 1
+
+    reason(ballot["client"], ballot["one"], "  ", headers=HTMX)
+    assert note(ballot) is None
 
 
-def test_a_reason_on_a_dropped_film_or_on_none_reloads_the_tab(ballot):
-    place(ballot["client"], ballot["one"], "veto")
+def test_a_note_in_vote_is_refused_whole_over_the_cap_and_the_card_stays_open_with_the_typing(ballot):
+    Note.objects.create(suggestion=ballot["one"], author=ballot["ada"], text="Short.")
+    typed = "x" * (settings.NOTE_MAX_LENGTH + 1)
+
+    answer = reason(ballot["client"], ballot["one"], typed, headers=HTMX)
+
+    assert note(ballot) == "Short."
+    assert "HX-Retarget" not in answer.headers and "film-card is-open" in answer.text and 'data-vote-bar' in answer.text
+    assert box(answer.text) == typed and 'data-saved="Short."' in answer.text and "data-unsaved" in answer.text
+    assert "a note holds" in answer.text and "is-refusal" in answer.text
+    # The refused card keeps its title closing it to the tile (#150).
+    assert f'class="film-card__toggle" aria-expanded="true" hx-get="/ballot/card/?suggestion={ballot["one"].pk}&amp;close=1"' in answer.text
+
+
+def test_a_pitch_in_vote_can_not_be_emptied_and_is_refused_whole_over_the_cap(ballot):
+    own = film(ballot["ada"], "Ada's own")
+    Note.objects.create(suggestion=own, author=ballot["ada"], text="Ada pitched this.")
+
+    emptied = reason(ballot["client"], own, " ", headers=HTMX)
+    long = reason(ballot["client"], own, "x" * (settings.NOTE_MAX_LENGTH + 1), headers=HTMX)
+
+    assert box(emptied.text) == "Ada pitched this." and "A suggestion needs its pitch" in emptied.text and "Your pitch" in emptied.text
+    assert "a pitch holds" in long.text
+    assert Note.objects.get(suggestion=own).text == "Ada pitched this."
+    reason(ballot["client"], own, "A new pitch.", headers=HTMX)
+    assert Note.objects.get(suggestion=own).text == "A new pitch."
+
+
+def test_a_note_in_vote_on_a_film_off_the_ballot_or_none_reloads_the_tab_and_writes_nothing(ballot):
     ballot["one"].approval = Approval.DROPPED
     ballot["one"].save()
 
     assert reason(ballot["client"], ballot["one"], "x", headers=HTMX)["HX-Redirect"] == "/"
-    assert ballot["client"].post(REASON, {"text": "x"}, headers=HTMX)["HX-Redirect"] == "/"
-    assert reason(ballot["client"], ballot["two"], "x").status_code == 302
+    assert ballot["client"].post(NOTE, {"text": "x"}, headers=HTMX)["HX-Redirect"] == "/"
     assert not Note.objects.exists()
 
 
-def test_a_plain_reason_post_is_answered_with_the_ballot_and_the_route_answers_post_alone(ballot):
+def test_the_veto_reason_route_is_gone(ballot):
+    assert ballot["client"].post("/ballot/veto-reason/", {"suggestion": str(ballot["one"].pk), "text": "x"}, headers=HTMX).status_code == 404
+    assert not Note.objects.exists()
+
+
+def test_a_plain_note_post_is_answered_with_the_ballot_and_the_route_answers_post_alone(ballot):
     place(ballot["client"], ballot["one"], "veto")
 
     assert reason(ballot["client"], ballot["one"], "Plain.")["Location"] == "/"
-    assert ballot["client"].get(REASON).status_code == 405
+    assert ballot["client"].get(NOTE).status_code == 405
 
 
 def test_the_reason_changes_only_the_voters_own_note(ballot):
