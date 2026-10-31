@@ -237,7 +237,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 ### Shared components
 
-- **Film card:** one component for SUGGEST, APPROVE, VOTE and the reveal; only its **phase bar** changes. Collapsed and expanded contents are as defined in the glossary. Every card, in every phase and for every viewer, the admin's included, shows who vetoed the film and who has seen it around its notes: a vetoer's note is marked and one with no note is a bare line, a note by a voter who has seen the film ends in a 👁, and those who have seen it and said nothing else are one *Seen by* line (#128, #153).
+- **Film card:** one component for SUGGEST, APPROVE, VOTE and the reveal; only its **phase bar** changes. Collapsed and expanded contents are as defined in the glossary. Every card, in every phase and for every viewer, the admin's included, shows who vetoed the film and who has seen it around its notes: a vetoer's note is marked and one with no note is a bare line, a note by a voter who has seen the film ends in *seen by <name> 👁*, as a vetoer's ends in *vetoed by <name>*, and those who have seen it and said nothing else are one *Seen by Cleo, Dani 👁* line (#128, #153).
 - **Title card:** stands in for a missing poster anywhere a poster appears (#38).
 - **Slate ledger row:** used in Compare and in the Timetable tab's shortlist.
 - **Box:** one model and box component behind both the admin's track and the voter's RUN evening, in two different layouts.

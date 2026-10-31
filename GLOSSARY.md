@@ -125,7 +125,7 @@ A voter's declaration that they would not be in the room for a film. It bars the
 _Avoid_: hard veto, ban, block, exclusion
 
 **Seen it**:
-A voter's flag that a film could not count as something they wanted from the night. It bars the film from representing them and does nothing else. A fact about the voter, not an appetite, so others see it from SUGGEST on, by name on every card: a 👁 ending the author line of a note by a voter who has seen the film, and one *Seen by* line for those with no note; set and cleared from the opened card in SUGGEST, APPROVE and VOTE with its *Save*, on any film in the pool before VOTE, and in VOTE at once from its tile. (#10, #35, #152, #153)
+A voter's flag that a film could not count as something they wanted from the night. It bars the film from representing them and does nothing else. A fact about the voter, not an appetite, so others see it from SUGGEST on, by name on every card: *seen by <name> 👁* ending the author line of a note by a voter who has seen the film (a vetoer's still *vetoed by <name> 👁*), and one *Seen by Cleo, Dani 👁* line for those with no note; set and cleared from the opened card in SUGGEST, APPROVE and VOTE with its *Save*, on any film in the pool before VOTE, and in VOTE at once from its tile. (#10, #35, #152, #153)
 _Avoid_: watched, rewatch penalty
 
 **Absence**:

@@ -1525,7 +1525,7 @@ body > aside.nag-bar a {
   content: none;
 }
 
-/* Seen it has no colour of its own: a 👁 in muted ink ends the author line, even a vetoer's; those who saw it and said nothing else share one line (#58, #121, #153). */
+/* Seen it has no colour of its own: a 👁 in muted ink ends the author line, even a vetoer's, and the Seen by line; those who saw it and said nothing else share one line (#58, #121, #153). */
 .note__seen {
   color: var(--ink-muted);
   font-style: normal;

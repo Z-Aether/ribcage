@@ -65,11 +65,11 @@ def lines(card):
 
 # What ada reads of `marked`, however the surface draws its card (#128, #153).
 SEEN_BY_OTHERS = [
-    (["note", "note--pitch"], "Spiders.", f"Hanna {EYE}"),
+    (["note", "note--pitch"], "Spiders.", f"seen by Hanna {EYE}"),
     (["note", "note--vetoed"], "Too scary.", f"vetoed by Dani {EYE}"),
     (["note", "note--vetoed", "note--bare"], "", f"Vetoed by Bram {EYE}"),
     (["note", "note--vetoed", "note--bare"], "", "Vetoed by Cleo"),
-    (["note", "note--seers"], "", f"{EYE} Seen by Fen, Gus"),
+    (["note", "note--seers"], "", f"Seen by Fen, Gus {EYE}"),
 ]
 
 
@@ -121,7 +121,7 @@ def test_a_suggester_with_a_blank_pitch_who_has_seen_it_is_on_the_seen_by_line(e
 
     card = pool_card(signed_in(everyone["ada"]).get("/").text, blank)
 
-    assert lines(card) == [(["note", "note--seers"], "", f"{EYE} Seen by Hanna")]
+    assert lines(card) == [(["note", "note--seers"], "", f"Seen by Hanna {EYE}")]
 
 
 def test_the_viewers_own_marks_are_flagged_so_a_closed_card_lists_them_and_an_open_one_leaves_them_to_the_bar(marked):
@@ -141,6 +141,8 @@ def test_the_viewers_own_seen_it_is_on_the_line_for_a_closed_card_and_off_it_for
 
     assert '<p class="seers seers--yours">' in card
     assert '<span class="seers__all">ada, Fen, Gus</span><span class="seers__others">Fen, Gus</span>' in card
+    # The 👁 ends the line after both spans, so the open card's "others" reads *Seen by Fen, Gus 👁* too (#153).
+    assert re.search(r'seers__others">Fen, Gus</span>&nbsp;<span class="note__seen" role="img" aria-label="has seen it">👁</span></p>', card)
 
 
 def test_a_line_of_the_viewers_own_seen_it_alone_is_flagged_so_an_open_card_hides_it(everyone):

@@ -2,5 +2,5 @@
 <ul class="film-card__notes"{% if card.suggestion_id %} id="notes-{{ card.suggestion_id }}"{% endif %}>
   {% if card.pitch %}{% include "components/note.html" with text=card.pitch author=card.suggester pitch=True yours=card.pitch_yours vetoed=card.pitch_vetoed seen=card.pitch_seen %}{% endif %}
   {% for note in card.notes %}{% include "components/note.html" with text=note.text author=note.author pitch=False yours=note.yours vetoed=note.vetoed seen=note.seen %}{% endfor %}
-  {% if card.seen_by %}<li class="note note--seers{% if not card.seen_by_others %} note--yours{% endif %}"><p class="seers{% if card.seen_by_you %} seers--yours{% endif %}"><span class="seers__label">👁 Seen by</span> <span class="seers__all">{{ card.seen_by|join:", " }}</span>{% if card.seen_by_you %}<span class="seers__others">{{ card.seen_by_others|join:", " }}</span>{% endif %}</p></li>{% endif %}
+  {% if card.seen_by %}<li class="note note--seers{% if not card.seen_by_others %} note--yours{% endif %}"><p class="seers{% if card.seen_by_you %} seers--yours{% endif %}"><span class="seers__label">Seen by</span> <span class="seers__all">{{ card.seen_by|join:", " }}</span>{% if card.seen_by_you %}<span class="seers__others">{{ card.seen_by_others|join:", " }}</span>{% endif %}{% include "components/note_seen.html" with seen=True %}</p></li>{% endif %}
 </ul>

@@ -146,7 +146,7 @@ def test_the_gallery_shows_a_marked_note_a_bare_veto_line_and_the_boxes_quiet_li
 
     assert re.search(r'<li class="note note--vetoed">.*?<span class="note__author">vetoed by Ash&nbsp;<span class="note__seen"[^>]*>👁</span></span>', cards[0], re.S)
     assert re.search(r'<li class="note note--vetoed note--bare"><span class="note__author">Vetoed by Zoë&nbsp;<span class="note__seen"[^>]*>👁</span></span></li>', cards[0])
-    assert re.search(r'<li class="note note--seers"><p class="seers"><span class="seers__label">👁 Seen by</span> <span class="seers__all">Cleo, Gus</span></p></li>', cards[0])
+    assert re.search(r'<li class="note note--seers"><p class="seers"><span class="seers__label">Seen by</span> <span class="seers__all">Cleo, Gus</span>&nbsp;<span class="note__seen"[^>]*>👁</span></p></li>', cards[0])
     assert "Your note on this film shows as your veto reason, and stays your note if you take the veto back." in cards[1]
     assert "Subtitled, so not the last film of the night.</textarea>" in cards[1]
     assert "Your pitch shows as your veto reason" in cards[2] and "is-refusal" in cards[2]
