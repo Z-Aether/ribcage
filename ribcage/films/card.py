@@ -220,6 +220,7 @@ class VoteBar:
     """What the phase bar's row shows for the viewer on one film: their own score, veto and seen it, which are theirs alone (#10, #35 §4, #122).
 
     The row is the same in every phase; only VOTE offers the scores, so SUGGEST's and APPROVE's start with the veto (#152).
+    Outside VOTE the veto, and in every phase seen it, are toggles that *Save* writes with the note (#152).
 
     The others' vetoes and seen-its are in the card's notes, and the viewer's note is the card's note box (#128, #150, #153)."""
 
@@ -230,6 +231,17 @@ class VoteBar:
     seen_it: bool = False
     # The gallery's bar posts nowhere, so its buttons only look.
     inert: bool = False
+    # What the voter toggled that waits for *Save* (the veto outside VOTE, seen it everywhere) and a refusal drew again, against the saved `vetoed` and `seen_it` (#152).
+    pending_veto: bool | None = None
+    pending_seen: bool | None = None
+
+    @property
+    def shows_veto(self):
+        return self.vetoed if self.pending_veto is None else self.pending_veto
+
+    @property
+    def shows_seen(self):
+        return self.seen_it if self.pending_seen is None else self.pending_seen
 
     @property
     def scoring(self):
@@ -259,7 +271,7 @@ class FilmCard:
     dtdd: DtddSection | None = None
     # The viewing voter's matched topics; None for the admin, a voter with nothing ticked and a film matching nothing (#35 §2, #111).
     matched: Matched | None = None
-    # VOTE's bar data; None in every other phase (#122).
+    # The viewer's row of the phase bar: VOTE's with the scores, the other phases' without (#122, #152).
     vote: VoteBar | None = None
     # The suggester vetoes the film, and has seen it (#128, #153).
     pitch_vetoed: bool = False
@@ -271,6 +283,11 @@ class FilmCard:
     @property
     def seen_by_you(self):
         return self.seen_by != self.seen_by_others
+
+    @property
+    def note_form(self):
+        """The id of the note box's form, which the row's toggles join so one *Save* takes them (#152); empty where the card has no such form."""
+        return f"note-{self.suggestion_id}" if self.note_box is not None and self.suggestion_id else ""
 
     @property
     def pitch_yours(self):

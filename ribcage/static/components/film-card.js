@@ -1,7 +1,7 @@
 // The film card opens in place, one card at a time within its list, and its title collapses it (#21).
 // A link or a form on it acts rather than toggles, so the runtime pencil edits the card's line in place (#90).
 // The pencil on a closed card also opens the card, the others having closed on this click, so the box it brings is seen and focused (#133).
-// An open card also closes on a click outside it and on Escape, nothing posted, and its boxes stay in the page, so typing in them survives (#131).
+// An open card also closes on a click outside it and on Escape, nothing posted, and its boxes stay in the page, so typing in them and the veto and seen it toggled, not yet saved, survive (#131, #152).
 // A runtime box still holding the stored runtime is no typing: closing the card shuts it, as a reload would, so Save waits again (#133).
 // Under a ledger row the card is always open, and its row's title or its own opens and closes the row (#28, #95).
 // A press that began inside a card and was released outside it, as a text selection dragged past the edge is, fires its click on a common ancestor, so where the press began is kept (#131).

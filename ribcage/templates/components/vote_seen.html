@@ -1,9 +1,4 @@
-{# The viewer's seen it on the opened card, a checkbox that posts the state it sets; the answer draws the row again from what the server holds (#10, #121, #122, #152). #}
-{% with vote=card.vote %}<form class="vote-seen" method="post" action="{% url 'ballot_seen' %}"{% if vote.inert %} onsubmit="return false"{% else %} hx-post="{% url 'ballot_seen' %}" hx-trigger="change" hx-target="closest .vote-bar__scores" hx-swap="outerHTML"{% endif %}>
-  {% csrf_token %}
-  <input type="hidden" name="suggestion" value="{{ card.suggestion_id|default_if_none:'' }}">
-  <input type="hidden" name="card" value="1">
-  {# The state when the box is clear; a ticked box's value follows it and wins (#121). #}
-  <input type="hidden" name="seen" value="0">
-  <label class="vote-seen__label"><input type="checkbox" id="vote-seen-{{ card.suggestion_id|default_if_none:'' }}" name="seen" value="1"{% if vote.seen_it %} checked{% endif %}> Seen it</label>
-</form>{% endwith %}
+{# The viewer's seen it on the opened card, a checkbox that waits for the note box's *Save* with the note, in every phase; the tile's own toggle on the ballot is the one that posts at once (#10, #121, #122, #152). #}
+{% with vote=card.vote %}<div class="vote-seen">
+  <label class="vote-seen__label">{% include "components/vote_toggle.html" with name="seen" id_prefix="vote-seen-" suggestion=card.suggestion_id|default_if_none:"" saved=vote.seen_it shown=vote.shows_seen form_id=card.note_form box_class="" %} Seen it</label>
+</div>{% endwith %}

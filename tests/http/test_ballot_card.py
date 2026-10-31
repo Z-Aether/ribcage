@@ -60,7 +60,8 @@ def test_the_bars_row_and_the_note_box_are_two_parts_the_row_first(ballot):
     bar = bar_of(opened(ballot["client"], ballot["one"]).text)
 
     assert bar.index("vote-bar__scores") < bar.index('class="note-box')
-    assert bar.count("<form") == 2 and "data-vote-reason" not in bar
+    # Seen it is no form of its own: it joins the note box's, whose Save takes it (#152).
+    assert bar.count("<form") == 1 and "data-vote-reason" not in bar
 
 
 def test_the_bar_marks_the_current_score(ballot):
@@ -91,7 +92,12 @@ def test_each_score_button_posts_the_ballots_own_place_route(ballot):
 
     assert bar.count(f'hx-post="{PLACE}"') == 6
     assert re.findall(r'"to": "([^"]+)"', bar) == ["3", "2", "1", "0", "-1", "veto"]
-    assert f'hx-post="{SEEN}"' in bar
+    # Seen it waits for Save: a checkbox joined to the note box's form, posting to no route of its own (#152).
+    form_id = f'note-{ballot["one"].pk}'
+    assert f'hx-post="{SEEN}"' not in bar and f'id="{form_id}"' in bar
+    box = re.search(r'<input type="checkbox"[^>]*name="seen"[^>]*>', bar)[0]
+    assert f'form="{form_id}"' in box and 'data-saved="0"' in box and "checked" not in box
+    assert 'name="veto"' not in bar
 
 
 def test_placing_from_the_card_writes_as_the_drag_does_and_moves_the_card(ballot):
@@ -174,15 +180,48 @@ def test_the_reason_box_names_what_it_was_saved_with_for_save_to_wait_on(ballot)
     assert "data-save-waits" in shown and 'data-saved="Ada wrote this."' in shown and "data-unsaved" not in shown
 
 
-def test_seen_it_is_set_from_the_card_and_the_checkbox_is_answered(ballot):
-    answer = ballot["client"].post(SEEN, {"suggestion": str(ballot["one"].pk), "seen": ["0", "1"], "card": "1"}, headers=HTMX).text
+def test_seen_it_waits_for_the_cards_save_and_is_written_with_the_note(ballot):
+    answer = ballot["client"].post(NOTE, {"suggestion": str(ballot["one"].pk), "text": "Seen it, fine.", "seen": ["0", "1"], "seen_was": "0"}, headers=HTMX)
+
+    assert BallotRecord.objects.get().seen_it is True and Note.objects.get().text == "Seen it, fine."
+    # The card closes to its tile, which wears the greying (#132, #152).
+    assert answer.headers["HX-Retarget"] == f'li.card-item[data-suggestion="{ballot["one"].pk}"]' and "is-seen-it" in answer.text
+    shown = opened(ballot["client"], ballot["one"]).text
+    assert re.search(r'<input type="checkbox"[^>]*name="seen"[^>]*data-saved="1"[^>]* checked', shown)
+
+    ballot["client"].post(NOTE, {"suggestion": str(ballot["one"].pk), "text": "Seen it, fine.", "seen": "0", "seen_was": "1"}, headers=HTMX)
+
+    assert BallotRecord.objects.count() == 0
+
+
+def test_a_save_in_vote_writes_no_veto_and_a_refused_note_writes_no_seen_it(ballot):
+    one = str(ballot["one"].pk)
+
+    ballot["client"].post(NOTE, {"suggestion": one, "text": "Hm.", "veto": "1", "veto_was": "0"}, headers=HTMX)
+    assert BallotRecord.objects.count() == 0 and Note.objects.count() == 1
+
+    answer = ballot["client"].post(NOTE, {"suggestion": one, "text": "x" * (settings.NOTE_MAX_LENGTH + 1), "seen": "1", "seen_was": "0"}, headers=HTMX)
+
+    assert BallotRecord.objects.count() == 0 and "HX-Retarget" not in answer.headers
+    # The card stays open with the tick as the voter left it, against what is saved.
+    assert re.search(r'<input type="checkbox"[^>]*name="seen"[^>]*data-saved="0"[^>]* checked', answer.text)
+
+
+def test_a_score_or_veto_from_the_card_still_moves_at_once_and_leaves_seen_it_unsaved(ballot):
+    one = str(ballot["one"].pk)
+
+    moved = ballot["client"].post(PLACE, {"suggestion": one, "to": "veto", "card": "1"}, headers=HTMX)
+
+    own = BallotRecord.objects.get()
+    assert (own.vetoed, own.seen_it) == (True, False) and "afterbegin:ul[data-place='veto']" in moved.text
+    # The redrawn card carries the saved seen it, unticked; the page's script gives a pending tick back (#152).
+    assert re.search(r'<input type="checkbox"[^>]*name="seen"[^>]*data-saved="0"(?![^>]*checked)', moved.text)
+
+
+def test_the_tiles_seen_it_toggle_still_posts_at_once(ballot):
+    ballot["client"].post(SEEN, {"suggestion": str(ballot["one"].pk), "seen": "1"}, headers=HTMX)
 
     assert BallotRecord.objects.get().seen_it is True
-    # The row, with the notes list out of band so the viewer's own 👁 is there when the card closes (#153).
-    row, notes = answer.split('<ul class="film-card__notes"')
-    assert "checked" in row and "<li" not in row and 'hx-swap-oob="true"' in notes
-    answer = ballot["client"].post(SEEN, {"suggestion": str(ballot["one"].pk), "seen": ["0"], "card": "1"}, headers=HTMX).text
-    assert BallotRecord.objects.count() == 0 and "checked" not in answer
 
 
 def notes_of(page):

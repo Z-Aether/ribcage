@@ -62,7 +62,7 @@ def test_the_ballot_gives_the_typing_back_and_tells_the_page_it_changed():
     source = script("ballot-board.js")
     restore = source.split("function restore(board)")[1].split("function start")[0]
 
-    assert "box.value = text;" in restore
+    assert "box.value = kept.text;" in restore
     assert 'box.dispatchEvent(new Event("input", { bubbles: true }))' in restore
 
 
@@ -167,3 +167,44 @@ def test_the_pencil_beside_a_box_left_open_opens_the_card_and_fetches_nothing():
 
     assert 'card.querySelector(".runtime__edit input")' in click and "left.focus()" in click and "event.preventDefault()" in click
     assert 'matches(".runtime__pencil")' in fetching and 'closest(".is-editing")' in fetching and "event.preventDefault()" in fetching
+
+
+def test_save_waits_reads_a_toggled_checkbox_against_its_saved_state():
+    source = script("save-waits.js")
+    differing = source.split("function differs(box)")[1].split("function changed")[0]
+    checking = source.split("function changed(form)")[1].split("// A form is fresh")[0]
+
+    # The veto and seen it join the note form and light Save while ticked against what was saved (#152).
+    assert 'box.type === "checkbox"' in differing and 'box.checked !== (box.dataset.saved === "1")' in differing
+    assert 'hasAttribute("data-saved") && differs(box)' in checking
+
+
+def test_a_pending_seen_it_is_stashed_against_the_saved_state_and_given_back_with_the_typing():
+    source = script("ballot-board.js")
+    stashing = source.split("function stash(card)")[1].split("function restore")[0]
+    restoring = source.split("function restore(board)")[1].split("function start")[0]
+
+    assert 'seen.checked !== (seen.dataset.saved === "1")' in stashing and "kept.seen = seen.checked" in stashing
+    assert "seen.checked = kept.seen;" in restoring and 'seen.dispatchEvent(new Event("input", { bubbles: true }))' in restoring
+
+
+def test_a_pill_click_stashes_the_card_so_a_pending_seen_it_survives_its_redraw():
+    source = script("ballot-board.js")
+    pill = source.split('board.addEventListener("htmx:beforeRequest"')[1].split("});")[0]
+
+    assert '.vote-bar__score' in pill and 'stash(pill.closest(".card-item"))' in pill
+
+
+def test_the_tiles_own_seen_it_drops_a_tick_kept_for_the_film():
+    source = script("ballot-board.js")
+    toggle = source.split("var refocus = null;")[1].split("document.body.addEventListener")[0]
+
+    assert "delete typed[toggle.closest" in toggle
+
+
+def test_the_pool_keeps_the_toggles_in_the_page_by_never_resetting_them_on_a_close():
+    source = script("film-card.js")
+    closing = source.split("function setOpen(card, open)")[1].split("function shutUntouchedBox")[0]
+
+    # Only a runtime box still holding its stored value is shut on a close; the checkboxes stay as toggled (#152).
+    assert "checkbox" not in source and "checked" not in source and "shutUntouchedBox(card)" in closing

@@ -1,4 +1,4 @@
-"""Seen it: the voter's own fact about a film, set on its tile without moving it, and the board's legend (#10, #121); before VOTE it is set from the card, in test_early_marks.py (#152)."""
+"""Seen it: the voter's own fact about a film, set on its tile without moving it, and the board's legend (#10, #121); from the opened card it waits for the card's Save, tested in test_early_marks.py and test_ballot_card.py (#152)."""
 
 import re
 

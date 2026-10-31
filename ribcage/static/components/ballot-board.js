@@ -4,27 +4,42 @@
     window.location.reload();
   }
 
-  // A close swaps the card for its tile, so the note typed and not saved is kept here by film until that card opens again; a reload drops it (#131, #150).
+  // A close swaps the card for its tile, so the note typed and a seen it ticked, neither saved, are kept here by film until that card opens again; a reload drops them (#131, #150, #152).
   var typed = {};
+
+  function seenBox(card) {
+    return card && card.querySelector(".vote-seen input[type=checkbox]");
+  }
 
   function stash(card) {
     var box = card && card.querySelector(".note-box textarea");
     if (!box) return;
+    var kept = {};
     // The baseline is the saved text, not defaultValue, which holds the typing once a refusal draws the box again (#132).
     var saved = (box.dataset.saved || "").replace(/\r\n/g, "\n");
-    if (box.value.replace(/\r\n/g, "\n") !== saved) typed[card.dataset.suggestion] = box.value;
+    if (box.value.replace(/\r\n/g, "\n") !== saved) kept.text = box.value;
+    var seen = seenBox(card);
+    if (seen && seen.checked !== (seen.dataset.saved === "1")) kept.seen = seen.checked;
+    if (Object.keys(kept).length) typed[card.dataset.suggestion] = kept;
     else delete typed[card.dataset.suggestion];
   }
 
   function restore(board) {
     board.querySelectorAll(".card-item").forEach(function (card) {
-      var text = typed[card.dataset.suggestion];
-      var box = card.querySelector(".note-box textarea");
-      if (text === undefined || !box) return;
+      var kept = typed[card.dataset.suggestion];
+      if (kept === undefined) return;
       delete typed[card.dataset.suggestion];
-      box.value = text;
-      // The box now differs from what is saved, which anything watching it for a change reads (#132).
-      box.dispatchEvent(new Event("input", { bubbles: true }));
+      var box = card.querySelector(".note-box textarea");
+      var seen = seenBox(card);
+      if (kept.text !== undefined && box) {
+        box.value = kept.text;
+        // The box now differs from what is saved, which anything watching it for a change reads (#132).
+        box.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+      if (kept.seen !== undefined && seen) {
+        seen.checked = kept.seen;
+        seen.dispatchEvent(new Event("input", { bubbles: true }));
+      }
     });
   }
 
@@ -83,15 +98,16 @@
         },
       });
     });
-    // A pill of the open card draws the whole card again, so the note typed and not saved is kept and given back when it lands (#150).
+    // A pill of the open card draws the whole card again, so the note typed and the seen it ticked, not saved, are kept and given back when it lands (#150, #152).
     board.addEventListener("htmx:beforeRequest", function (event) {
       var pill = event.target.closest && event.target.closest(".vote-bar__score");
       if (pill) stash(pill.closest(".card-item"));
     });
-    // Seen it redraws the tile it sits on, so the keyboard's focus is put back on the new toggle (#121).
+    // Seen it redraws the tile it sits on, so the keyboard's focus is put back on the new toggle (#121); a tick kept for the film is stale once the tile sets it (#152).
     var refocus = null;
     board.addEventListener("htmx:beforeRequest", function (event) {
       var toggle = event.target.closest && event.target.closest(".seen-toggle");
+      if (toggle) delete typed[toggle.closest("[data-suggestion]").dataset.suggestion];
       refocus = toggle && toggle === document.activeElement ? toggle.closest("[data-suggestion]").dataset.suggestion : null;
     });
     document.body.addEventListener("htmx:oobAfterSwap", function (event) {

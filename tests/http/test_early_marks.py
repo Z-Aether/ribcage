@@ -1,8 +1,9 @@
-"""Veto and seen it before VOTE: set and cleared from the opened card in SUGGEST and APPROVE, on any film in the pool, saved at once, with the row alone answered (#10, #34, #152)."""
+"""Veto and seen it before VOTE: toggled on the opened card in SUGGEST and APPROVE, on any film in the pool, and written by the card's one Save with the note and the runtime (#10, #34, #152)."""
 
 import re
 
 import pytest
+from django.conf import settings
 
 from ribcage.ballot.board import SCALE
 from ribcage.ballot.models import BallotRecord
@@ -14,21 +15,36 @@ from tests.http.test_phase import walk_to
 from tests.http.test_runtime_pencil import pencils_on
 from tests.http.test_withdraw import arms_on
 
-VETO, SEEN = "/ballot/veto/", "/ballot/seen/"
+NOTE = "/note/"
 BEFORE_VOTE = [Phase.SUGGEST, Phase.APPROVE]
 DECISIONS = [Approval.UNDECIDED, Approval.APPROVED, Approval.DROPPED]
 
 
-def veto(client, suggestion, state, **extra):
-    return client.post(VETO, {"suggestion": str(suggestion.pk), "veto": state, "card": "1"}, **extra)
-
-
-def seen(client, suggestion, state, **extra):
-    return client.post(SEEN, {"suggestion": str(suggestion.pk), "seen": state, "card": "1"}, **extra)
-
-
 def record(voter, suggestion):
     return BallotRecord.objects.filter(voter=voter, suggestion=suggestion).first()
+
+
+def marks(voter, suggestion):
+    """The voter's saved (veto, seen it) on the film."""
+    own = record(voter, suggestion)
+    return (own.vetoed, own.seen_it) if own else (False, False)
+
+
+def card_post(voter, suggestion, text="", veto=None, seen=None, runtime=None):
+    """What the card's form posts: the toggles' states and the states the card was drawn with, as the browser sends them (#152)."""
+    drawn_veto, drawn_seen = marks(voter, suggestion)
+    posted = {"suggestion": str(suggestion.pk), "text": text}
+    if veto is not None:
+        posted.update(veto="1" if veto else "0", veto_was="1" if drawn_veto else "0")
+    if seen is not None:
+        posted.update(seen="1" if seen else "0", seen_was="1" if drawn_seen else "0")
+    if runtime is not None:
+        posted["runtime"] = runtime
+    return posted
+
+
+def save(client, voter, suggestion, text="", veto=None, seen=None, runtime=None, **extra):
+    return client.post(NOTE, card_post(voter, suggestion, text, veto, seen, runtime), **extra)
 
 
 @pytest.fixture
@@ -37,57 +53,134 @@ def pool(voters):
     return {"voters": voters, "ada": voters["ada"], "client": signed_in(voters["ada"]), "hanna": hanna, "one": film(hanna, "One", Approval.UNDECIDED)}
 
 
+def saved(pool, **toggles):
+    return save(pool["client"], pool["ada"], pool["one"], headers=HTMX, **toggles)
+
+
 @pytest.mark.parametrize("phase", BEFORE_VOTE)
 @pytest.mark.parametrize("decision", DECISIONS)
-def test_a_veto_and_seen_it_are_set_and_cleared_on_any_film_in_the_pool(pool, phase, decision):
+def test_save_sets_and_clears_a_veto_and_seen_it_on_any_film_in_the_pool(pool, phase, decision):
     walk_to(phase)
     each = film(pool["hanna"], "Decided", decision)
+    client, ada = pool["client"], pool["ada"]
 
-    veto(pool["client"], each, "1", headers=HTMX)
-    seen(pool["client"], each, "1", headers=HTMX)
-    assert (record(pool["ada"], each).vetoed, record(pool["ada"], each).seen_it) == (True, True)
+    save(client, ada, each, veto=True, seen=True, headers=HTMX)
+    assert marks(ada, each) == (True, True)
 
-    veto(pool["client"], each, "0", headers=HTMX)
-    assert (record(pool["ada"], each).vetoed, record(pool["ada"], each).seen_it) == (False, True)
-    seen(pool["client"], each, "0", headers=HTMX)
-    assert record(pool["ada"], each) is None
+    save(client, ada, each, veto=False, headers=HTMX)
+    assert marks(ada, each) == (False, True)
+    save(client, ada, each, seen=False, headers=HTMX)
+    assert record(ada, each) is None
 
 
 @pytest.mark.parametrize("phase", BEFORE_VOTE)
-def test_a_repeat_changes_nothing_and_a_plain_post_redirects(pool, phase):
+def test_save_takes_the_note_the_open_runtime_box_and_both_toggles_together(pool, phase):
     walk_to(phase)
 
-    veto(pool["client"], pool["one"], "1", headers=HTMX)
-    veto(pool["client"], pool["one"], "1", headers=HTMX)
-    assert BallotRecord.objects.count() == 1
-    veto(pool["client"], pool["one"], "0", headers=HTMX)
-    veto(pool["client"], pool["one"], "0", headers=HTMX)
-    assert BallotRecord.objects.count() == 0
-    plain = veto(pool["client"], pool["one"], "1")
+    answer = saved(pool, text="Not for me.", veto=True, seen=True, runtime="95" if phase is Phase.SUGGEST else None)
 
-    assert BallotRecord.objects.count() == 1 and (plain.status_code, plain.headers["Location"]) == (302, "/")
+    assert marks(pool["ada"], pool["one"]) == (True, True)
+    assert Note.objects.get(author=pool["ada"]).text == "Not for me."
+    pool["one"].refresh_from_db()
+    assert pool["one"].runtime == (95 if phase is Phase.SUGGEST else 100)
+    # The card closes, listing the new marks (#132, #153).
+    assert 'class="film-card"' in answer.text and "is-open" not in answer.text
+    assert "vetoed by ada" in answer.text and "Not for me." in answer.text
+
+
+def test_a_refused_note_writes_no_mark_and_no_runtime(pool):
+    answer = saved(pool, text="x" * (settings.NOTE_MAX_LENGTH + 1), veto=True, seen=True, runtime="95")
+
+    assert BallotRecord.objects.count() == 0 and Note.objects.count() == 0
+    pool["one"].refresh_from_db()
+    assert pool["one"].runtime == 100
+    # The card stays open with the toggles as the voter set them, against what is saved.
+    assert "is-open" in answer.text
+    assert re.search(r'<input type="checkbox"[^>]*name="veto"[^>]*data-saved="0"[^>]* checked', answer.text)
+    assert re.search(r'<input type="checkbox"[^>]*name="seen"[^>]*data-saved="0"[^>]* checked', answer.text)
+
+
+def test_a_refused_runtime_writes_no_mark_and_no_note(pool):
+    answer = saved(pool, text="A note.", veto=True, seen=True, runtime="nine")
+
+    assert BallotRecord.objects.count() == 0 and Note.objects.count() == 0
+    assert "is-open" in answer.text and "runtime__refusal" in answer.text
+
+
+def test_a_refused_save_that_clears_a_mark_keeps_the_box_unticked_against_what_is_saved(pool):
+    saved(pool, veto=True)
+
+    answer = saved(pool, text="x" * (settings.NOTE_MAX_LENGTH + 1), veto=False)
+
+    assert marks(pool["ada"], pool["one"]) == (True, False)
+    assert re.search(r'<input type="checkbox"[^>]*name="veto"[^>]*data-saved="1"(?![^>]*checked)', answer.text)
+
+
+@pytest.mark.parametrize("phase", BEFORE_VOTE)
+def test_a_plain_post_saves_the_toggles_and_redirects(pool, phase):
+    walk_to(phase)
+
+    plain = save(pool["client"], pool["ada"], pool["one"], text="No.", veto=True, seen=True)
+
+    assert marks(pool["ada"], pool["one"]) == (True, True) and (plain.status_code, plain.headers["Location"]) == (302, "/")
+
+
+def test_a_save_with_the_toggles_as_drawn_changes_no_mark(pool):
+    saved(pool, veto=True)
+    # A page drawn before the veto was made elsewhere posts the old state and writes nothing of it.
+    stale = card_post(pool["ada"], pool["one"], "Hm.", veto=False)
+    stale["veto_was"] = "0"
+    stale["veto"] = "0"
+
+    pool["client"].post(NOTE, stale, headers=HTMX)
+
+    assert marks(pool["ada"], pool["one"]) == (True, False)
+
+
+def test_a_save_that_posts_no_toggle_leaves_the_marks_alone(pool):
+    saved(pool, veto=True, seen=True)
+
+    save(pool["client"], pool["ada"], pool["one"], text="Only words.", headers=HTMX)
+
+    assert marks(pool["ada"], pool["one"]) == (True, True)
+
+
+@pytest.mark.parametrize("posted", [{"veto": "maybe"}, {"veto": ""}, {"seen": "yes"}])
+def test_a_toggle_naming_no_state_is_no_write(pool, posted):
+    pool["client"].post(NOTE, {"suggestion": str(pool["one"].pk), "text": "", **posted}, headers=HTMX)
+
+    assert BallotRecord.objects.count() == 0
 
 
 @pytest.mark.parametrize("phase", [Phase.PICK, Phase.RUN])
-def test_both_are_refused_after_vote_by_the_phase_check(pool, phase):
+def test_save_is_refused_after_vote_by_the_phase_check(pool, phase):
     walk_to(Phase.VOTE)
     walk_on_to(phase)
 
-    answers = [veto(pool["client"], pool["one"], "1", headers=HTMX), seen(pool["client"], pool["one"], "1", headers=HTMX)]
+    answer = save(pool["client"], pool["ada"], pool["one"], veto=True, seen=True, headers=HTMX)
 
-    assert all(answer.headers["HX-Redirect"] == "/" for answer in answers) and BallotRecord.objects.count() == 0
+    assert answer.headers["HX-Redirect"] == "/" and BallotRecord.objects.count() == 0
 
 
-def test_both_are_refused_in_pick_with_the_ballot_walked_to_it(pool):
-    walk_to(Phase.PICK)
+def test_the_early_veto_route_is_gone(pool):
+    walk_to(Phase.SUGGEST)
 
-    answers = [veto(pool["client"], pool["one"], "1", headers=HTMX), seen(pool["client"], pool["one"], "1", headers=HTMX)]
-
-    assert all(answer.headers["HX-Redirect"] == "/" for answer in answers) and BallotRecord.objects.count() == 0
+    assert pool["client"].post("/ballot/veto/", {"suggestion": str(pool["one"].pk), "veto": "1"}, headers=HTMX).status_code == 404
 
 
 @pytest.mark.parametrize("phase", BEFORE_VOTE)
-def test_a_score_post_outside_vote_is_still_refused_and_so_is_a_veto_posted_to_the_placement(pool, phase):
+def test_the_seen_it_route_is_vote_alone_even_for_an_approved_film(pool, phase):
+    walk_to(Phase.VOTE)
+    approved = film(pool["hanna"], "Approved")
+    walk_on_to(phase)
+
+    refused = pool["client"].post("/ballot/seen/", {"suggestion": str(approved.pk), "seen": "1"}, headers=HTMX)
+
+    assert refused.headers["HX-Redirect"] == "/" and BallotRecord.objects.count() == 0
+
+
+@pytest.mark.parametrize("phase", BEFORE_VOTE)
+def test_a_score_post_outside_vote_is_still_refused(pool, phase):
     walk_to(phase)
 
     answers = [place(pool["client"], pool["one"], 2, headers=HTMX), place(pool["client"], pool["one"], "veto", headers=HTMX)]
@@ -95,43 +188,15 @@ def test_a_score_post_outside_vote_is_still_refused_and_so_is_a_veto_posted_to_t
     assert all(answer.headers["HX-Redirect"] == "/" for answer in answers) and BallotRecord.objects.count() == 0
 
 
-def test_the_early_veto_route_is_no_way_to_veto_in_vote_where_the_placement_is(pool):
-    walk_to(Phase.VOTE)
-    candidate = film(pool["hanna"], "Candidate")
-
-    answer = veto(pool["client"], candidate, "1", headers=HTMX)
-
-    assert answer.headers["HX-Redirect"] == "/" and BallotRecord.objects.count() == 0
-
-
-def test_seen_it_in_vote_still_acts_on_candidates_alone(pool):
-    walk_to(Phase.VOTE)
-    candidate = film(pool["hanna"], "Candidate")
-
-    assert "HX-Redirect" not in seen(pool["client"], candidate, "1", headers=HTMX).headers
-    answer = seen(pool["client"], pool["one"], "1", headers=HTMX)
-
-    assert answer.headers["HX-Redirect"] == "/" and BallotRecord.objects.filter(suggestion=pool["one"]).count() == 0
-
-
-@pytest.mark.parametrize("posted", [{"veto": "maybe"}, {"veto": ""}, {"suggestion": "x", "veto": "1"}, {"suggestion": "999", "veto": "1"}])
-def test_a_stale_or_unnamed_post_reloads_and_writes_nothing(pool, posted):
-    named = {"suggestion": str(pool["one"].pk), **posted}
-
-    answer = pool["client"].post(VETO, named, headers=HTMX)
-
-    assert "HX-Redirect" in answer.headers and BallotRecord.objects.count() == 0
-
-
-def test_a_veto_replaces_the_voters_score_after_a_move_back_to_suggest_and_taking_it_back_leaves_none(pool):
+def test_a_veto_saved_after_a_move_back_to_suggest_replaces_the_voters_score_and_taking_it_back_leaves_none(pool):
     walk_to(Phase.VOTE)
     approved = film(pool["hanna"], "Approved")
     place(pool["client"], approved, 3)
     walk_on_to(Phase.SUGGEST)
 
-    veto(pool["client"], approved, "1", headers=HTMX)
+    save(pool["client"], pool["ada"], approved, veto=True, headers=HTMX)
     assert (record(pool["ada"], approved).score, record(pool["ada"], approved).vetoed) == (None, True)
-    veto(pool["client"], approved, "0", headers=HTMX)
+    save(pool["client"], pool["ada"], approved, veto=False, headers=HTMX)
 
     assert record(pool["ada"], approved) is None
 
@@ -141,33 +206,54 @@ def test_taking_back_a_veto_the_film_never_had_leaves_its_score_alone(pool):
     approved = film(pool["hanna"], "Approved")
     place(pool["client"], approved, 3)
     walk_on_to(Phase.APPROVE)
+    stale = card_post(pool["ada"], approved, veto=False)
+    stale["veto_was"] = "1"
 
-    veto(pool["client"], approved, "0", headers=HTMX)
+    pool["client"].post(NOTE, stale, headers=HTMX)
 
     assert record(pool["ada"], approved).score == 3
 
 
-def test_seen_it_leaves_a_score_alone(pool):
+def test_seen_it_saved_leaves_a_score_alone(pool):
     walk_to(Phase.VOTE)
     approved = film(pool["hanna"], "Approved")
     place(pool["client"], approved, 2)
     walk_on_to(Phase.APPROVE)
 
-    seen(pool["client"], approved, "1", headers=HTMX)
+    save(pool["client"], pool["ada"], approved, seen=True, headers=HTMX)
 
     assert (record(pool["ada"], approved).score, record(pool["ada"], approved).seen_it) == (2, True)
 
 
 def test_the_marks_are_the_voters_own(pool):
-    veto(pool["client"], pool["one"], "1", headers=HTMX)
+    saved(pool, veto=True)
+    dani = pool["voters"]["Dani"]
 
-    veto(signed_in(pool["voters"]["Dani"]), pool["one"], "0", headers=HTMX)
+    save(signed_in(dani), dani, pool["one"], veto=False, seen=False, headers=HTMX)
 
-    assert record(pool["ada"], pool["one"]).vetoed and record(pool["voters"]["Dani"], pool["one"]) is None
+    assert record(pool["ada"], pool["one"]).vetoed and record(dani, pool["one"]) is None
+
+
+def test_a_veto_leaves_the_voters_note_untouched_when_saved_with_it(pool):
+    Note.objects.create(suggestion=pool["one"], author=pool["ada"], text="Not for me.")
+
+    saved(pool, text="Not for me.", veto=True)
+    saved(pool, text="Not for me.", veto=False)
+
+    assert Note.objects.get(author=pool["ada"]).text == "Not for me."
+
+
+def test_a_film_withdrawn_since_reloads_the_tab_and_writes_nothing(pool):
+    posted = card_post(pool["ada"], pool["one"], veto=True)
+    pool["one"].delete()
+
+    answer = pool["client"].post(NOTE, posted, headers=HTMX)
+
+    assert "HX-Redirect" in answer.headers and BallotRecord.objects.count() == 0
 
 
 def test_a_film_vetoed_in_suggest_and_approved_sits_in_the_veto_band_and_counts_as_scored(pool):
-    veto(pool["client"], pool["one"], "1", headers=HTMX)
+    saved(pool, veto=True)
     walk_to(Phase.VOTE)
     Suggestion.objects.filter(pk=pool["one"].pk).update(approval=Approval.APPROVED)
     other = film(pool["hanna"], "Other")
@@ -179,7 +265,7 @@ def test_a_film_vetoed_in_suggest_and_approved_sits_in_the_veto_band_and_counts_
 
 
 def test_a_film_only_seen_sits_in_unsorted_greyed(pool):
-    seen(pool["client"], pool["one"], "1", headers=HTMX)
+    saved(pool, seen=True)
     walk_to(Phase.VOTE)
     Suggestion.objects.filter(pk=pool["one"].pk).update(approval=Approval.APPROVED)
 
@@ -192,8 +278,9 @@ def test_a_film_only_seen_sits_in_unsorted_greyed(pool):
 
 def test_another_voters_early_marks_leave_the_suggesters_withdraw_and_pencil(pool):
     own = film(pool["ada"], "Ada's own", Approval.UNDECIDED)
-    veto(signed_in(pool["voters"]["Dani"]), own, "1", headers=HTMX)
-    seen(signed_in(pool["voters"]["Hanna"]), own, "1", headers=HTMX)
+    dani, hanna = pool["voters"]["Dani"], pool["voters"]["Hanna"]
+    save(signed_in(dani), dani, own, veto=True, headers=HTMX)
+    save(signed_in(hanna), hanna, own, seen=True, headers=HTMX)
 
     page = pool["client"].get("/").text
 
@@ -202,98 +289,88 @@ def test_another_voters_early_marks_leave_the_suggesters_withdraw_and_pencil(poo
 
 def test_the_suggesters_own_marks_change_neither_withdraw_nor_the_pencil(pool):
     own = film(pool["ada"], "Ada's own", Approval.UNDECIDED)
-    veto(pool["client"], own, "1", headers=HTMX)
-    seen(pool["client"], own, "1", headers=HTMX)
+    save(pool["client"], pool["ada"], own, text="Mine.", veto=True, seen=True, headers=HTMX)
 
     page = pool["client"].get("/").text
 
+    assert marks(pool["ada"], own) == (True, True)
     assert own.pk in arms_on(page) and own.pk in pencils_on(page)
+
+
+def row_of(page):
+    return re.search(r'<div class="vote-bar__scores[^"]*">.*?</label>\s*</div>\s*</div>', page, re.S)[0]
 
 
 @pytest.mark.parametrize("marked", [False, True])
 @pytest.mark.parametrize("phase", BEFORE_VOTE)
-def test_the_opened_cards_row_has_the_veto_and_seen_it_and_no_score_pills(pool, phase, marked):
+def test_the_opened_cards_row_is_two_toggles_joined_to_the_note_form_with_no_score_pills_and_no_post(pool, phase, marked):
     walk_to(phase)
     if marked:
-        veto(pool["client"], pool["one"], "1", headers=HTMX)
-        seen(pool["client"], pool["one"], "1", headers=HTMX)
+        saved(pool, veto=True, seen=True)
+    page = pool["client"].get("/").text
+    row = row_of(page)
+    form_id = f'note-{pool["one"].pk}'
 
-    row = re.search(r'<div class="vote-bar__scores[^"]*">.*?</form>\s*</div>', pool["client"].get("/").text, re.S)[0]
+    assert "vote-bar__scores--marks" in row and "Your veto" in row and "Seen it" in row
+    assert row.count('class="vote-bar__score ') == 1 and "<button" not in row and "<form" not in row and "hx-post" not in row
+    for name in ("veto", "seen"):
+        box = re.search(rf'<input type="checkbox"[^>]*name="{name}"[^>]*>', row)[0]
+        assert f'form="{form_id}"' in box and f'data-saved="{int(marked)}"' in box and ('checked' in box) is marked
+        # The unchecked state and the state drawn with post beside the box (#152).
+        assert row.count(f'<input type="hidden" name="{name}" value="0" form="{form_id}">') == 1
+        assert row.count(f'<input type="hidden" name="{name}_was" value="{int(marked)}" form="{form_id}">') == 1
+    assert f'id="{form_id}"' in page and "/ballot/" not in row
 
-    assert "vote-bar__scores--marks" in row and "Your veto" in row
-    assert row.count('class="vote-bar__score ') == 1 and "score--veto" in row and "Seen it" in row
-    assert 'hx-post="/ballot/veto/"' in row and "/ballot/place/" not in row
-    assert 'hx-post="/ballot/seen/"' in row
-    # The answers replace the row itself, not the pill or the form that posted (#152).
-    pill = re.search(r"<button[^>]*vote-bar__veto[^>]*>", row)[0]
-    form = re.search(r"<form[^>]*vote-seen[^>]*>", row)[0]
-    for control in (pill, form):
-        assert 'hx-target="closest .vote-bar__scores"' in control and 'hx-swap="outerHTML"' in control
+
+@pytest.mark.parametrize("phase", BEFORE_VOTE)
+def test_the_row_reads_what_the_voter_saved_when_the_page_is_drawn_and_no_one_elses(pool, phase):
+    walk_to(phase)
+    saved(pool, veto=True, seen=True)
+
+    other = signed_in(pool["voters"]["Dani"]).get("/").text
+
+    assert not re.search(r'<input type="checkbox"[^>]*name="(veto|seen)"[^>]* checked', other)
+    assert re.search(r'<input type="checkbox"[^>]*name="veto"[^>]* checked', pool["client"].get("/").text)
+
+
+@pytest.mark.parametrize("phase", BEFORE_VOTE)
+def test_the_veto_reason_line_is_always_drawn_and_left_to_the_veto_box(pool, phase):
+    walk_to(phase)
+
+    page = pool["client"].get("/").text
+
+    # Shown or hidden by the page's style from the box's state, so a pending veto shows it before it is saved (#152).
+    assert re.search(r'<p class="note-box__hint note-box__hint--follows" id="note-hint-\d+">Your note on this film shows as your veto reason', page)
+    assert "aria-describedby" not in page
+
+
+def test_the_pitch_reads_as_the_veto_reason_on_the_suggesters_own_card(pool):
+    own = film(pool["ada"], "Ada's own", Approval.UNDECIDED)
+
+    page = pool["client"].get("/").text
+
+    assert f'id="note-hint-{own.pk}">Your pitch shows as your veto reason' in page
 
 
 def test_the_score_pills_follow_the_scale_alone():
     assert VoteBar(scale=SCALE).scoring and not VoteBar(scale=()).scoring
 
 
-@pytest.mark.parametrize("phase", BEFORE_VOTE)
-def test_the_row_reads_what_the_voter_marked_when_the_page_is_drawn_and_no_one_elses(pool, phase):
-    walk_to(phase)
-    veto(pool["client"], pool["one"], "1", headers=HTMX)
-    seen(pool["client"], pool["one"], "1", headers=HTMX)
+def test_a_pending_toggle_shows_against_what_is_saved():
+    bar = VoteBar(scale=(), vetoed=True, seen_it=False, pending_veto=False, pending_seen=True)
 
-    page = pool["client"].get("/").text
-    other = signed_in(pool["voters"]["Dani"]).get("/").text
-
-    assert "<b>−2</b> Vetoed" in page and '"veto": "0"' in page and "checked" in page
-    # Dani's own row is untouched; ada's marks are in the notes for everyone (#153).
-    assert "<b>−2</b> Vetoed" not in other and '"veto": "0"' not in other and "checked" not in other
+    assert (bar.shows_veto, bar.shows_seen, bar.vetoed, bar.seen_it) == (False, True, True, False)
+    assert (VoteBar(scale=(), vetoed=True).shows_veto, VoteBar(scale=(), seen_it=True).shows_seen) == (True, True)
 
 
-@pytest.mark.parametrize("phase", BEFORE_VOTE)
-def test_the_answer_is_the_row_alone_and_the_note_box_and_runtime_box_are_never_drawn(pool, phase):
-    walk_to(phase)
+def test_the_note_save_in_the_pool_draws_the_closed_card_with_the_new_marks(pool):
+    answer = saved(pool, veto=True, seen=True)
 
-    answer = veto(pool["client"], pool["one"], "1", headers=HTMX).text
-    seen_answer = seen(pool["client"], pool["one"], "1", headers=HTMX).text
-
-    assert answer.lstrip().startswith('<div class="vote-bar__scores') and "<b>−2</b> Vetoed" in answer
-    for each in (answer, seen_answer):
-        assert "<textarea" not in each and 'name="runtime"' not in each and "<article" not in each and "data-withdraw" not in each
-    # Seen it answers the row holding the veto already made.
-    assert "<b>−2</b> Vetoed" in seen_answer and "checked" in seen_answer
+    assert "Vetoed by ada" in answer.text and "👁" in answer.text
 
 
-def test_the_veto_answer_fills_and_empties_the_note_boxs_veto_reason_line_out_of_band(pool):
-    on = veto(pool["client"], pool["one"], "1", headers=HTMX).text
-    off = veto(pool["client"], pool["one"], "0", headers=HTMX).text
+def test_the_style_leaves_the_veto_pill_and_its_reason_line_to_the_box_with_no_script():
+    css = (settings.BASE_DIR / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
 
-    hint = f'id="note-hint-{pool["one"].pk}" hx-swap-oob="true"'
-    assert hint in on and "shows as your veto reason" in on and 'class="note-box__hint"' in on
-    assert hint in off and "veto reason" not in off and 'class="note-box__hint"' not in off
-
-
-def test_the_veto_reason_line_is_on_the_page_only_while_the_voter_vetoes(pool):
-    walk_to(Phase.APPROVE)
-    assert "veto reason" not in pool["client"].get("/").text
-    veto(pool["client"], pool["one"], "1", headers=HTMX)
-
-    page = pool["client"].get("/").text
-
-    assert "Your note on this film shows as your veto reason" in page and f'aria-describedby="note-hint-{pool["one"].pk}"' in page
-
-
-def test_the_veto_leaves_the_voters_note_untouched(pool):
-    Note.objects.create(suggestion=pool["one"], author=pool["ada"], text="Not for me.")
-
-    veto(pool["client"], pool["one"], "1", headers=HTMX)
-    veto(pool["client"], pool["one"], "0", headers=HTMX)
-
-    assert Note.objects.get(author=pool["ada"]).text == "Not for me."
-
-
-def test_a_note_saved_from_the_card_still_draws_the_row_with_the_marks(pool):
-    veto(pool["client"], pool["one"], "1", headers=HTMX)
-
-    saved = pool["client"].post("/note/", {"suggestion": str(pool["one"].pk), "text": "Nope."}, headers=HTMX).text
-
-    assert "<b>−2</b> Vetoed" in saved
+    assert ".phase-bar:has(.vote-bar__veto-box:checked) .note-box__hint--follows" in css
+    assert ".vote-bar__veto--toggle:has(.vote-bar__veto-box:checked) .vote-bar__veto-on" in css

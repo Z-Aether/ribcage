@@ -1,14 +1,21 @@
 // A box's Save waits for a change: it is disabled while the box holds the text it was saved with, and enabled as soon as the box differs (#132).
 // A form marked data-save-waits holds its boxes, each naming its saved text in data-saved; one more box or flag joins the same check (#133).
+// A checkbox naming its saved state, data-saved="1" or "0", is a change while it is ticked against it, so the veto and seen it toggled on the card light *Save*, and toggling back puts the wait back (#152).
 // A box marked data-counts-as-change is a change while it is there, as the runtime box is once opened, whatever it holds; it may sit outside the form and join it by its form attribute (#133).
 // A box drawn holding words not yet saved, data-unsaved, starts enabled; without script Save is always enabled and the post is as it was.
 (function () {
+  // A checkbox differs when it is ticked against what was saved, as 1 or 0 (#152); any other box when its text is.
+  function differs(box) {
+    if (box.type === "checkbox") return box.checked !== (box.dataset.saved === "1");
+    return box.value.replace(/\r\n/g, "\n") !== box.dataset.saved.replace(/\r\n/g, "\n");
+  }
+
   function changed(form) {
     // The form's own elements, which include a box elsewhere on the card that joins it by its form attribute.
     const boxes = [...form.elements];
     return (
       boxes.some((box) => box.hasAttribute("data-counts-as-change")) ||
-      boxes.some((box) => box.hasAttribute("data-saved") && box.value.replace(/\r\n/g, "\n") !== box.dataset.saved.replace(/\r\n/g, "\n"))
+      boxes.some((box) => box.hasAttribute("data-saved") && differs(box))
     );
   }
 

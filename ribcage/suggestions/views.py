@@ -33,7 +33,7 @@ def named_suggestion(pk):
 @phase_window(Phase.SUGGEST, Phase.APPROVE, Phase.VOTE)
 @require_POST
 def write_note(request):
-    """The card's one Save: the note, and the runtime where its box was open, written together or not at all (#88, #133).
+    """The card's one Save: the note, the runtime where its box was open, and the veto and seen it the card toggled, written together or not at all (#88, #133, #152).
 
     In VOTE it answers as the ballot does: a save closes the card to its tile, a refusal keeps the card open (#132, #150).
     """
@@ -45,7 +45,8 @@ def write_note(request):
     # None where the box was shut, so the note is saved alone (#133).
     typed_runtime = request.POST.get("runtime")
     card = pool.the_card(suggestion, request.user, phase)
-    refusals = saving.save(suggestion, request.user, typed, typed_runtime, phase)
+    toggles = saving.Toggles.posted(request.POST)
+    refusals = saving.save(suggestion, request.user, typed, typed_runtime, phase, toggles)
     # Only htmx swaps the card in place; a plain post is answered with the page (#88).
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
@@ -67,7 +68,9 @@ def write_note(request):
     if pencil is not None and saving.runtime_acts(suggestion, typed_runtime, phase):
         pencil = replace(pencil, open=True, typed=typed_runtime, refusal=refusals.runtime)
     # On the ballot the title closes the card to its tile, so a card swapped in place keeps that (#122).
-    context = {"card": replace(card, note_box=box, runtime_pencil=pencil), "expanded": True, "phase_bar": pool.PHASE_BARS[phase], "closes_at": phase == Phase.VOTE}
+    # The toggles stay as the voter set them, against what is saved (#152).
+    vote = replace(card.vote, pending_veto=saving.STATES.get(request.POST.get("veto")), pending_seen=saving.STATES.get(request.POST.get("seen")))
+    context = {"card": replace(card, note_box=box, runtime_pencil=pencil, vote=vote), "expanded": True, "phase_bar": pool.PHASE_BARS[phase], "closes_at": phase == Phase.VOTE}
     return render(request, "components/film_card.html", context)
 
 

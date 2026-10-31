@@ -13,7 +13,7 @@ from ribcage.phase.order import Phase
 from ribcage.suggestions.models import Approval, Note
 from tests.http.signing_in import PASSWORD
 from tests.http.test_ballot_page import HTMX, film, signed_in
-from tests.http.test_early_marks import SEEN, VETO
+from tests.http.test_early_marks import save
 from tests.http.test_films_tab import TAB, opened_card
 from tests.http.test_phase import walk_to
 
@@ -153,20 +153,20 @@ def test_a_line_of_the_viewers_own_seen_it_alone_is_flagged_so_an_open_card_hide
 
 
 @pytest.mark.parametrize("phase", [Phase.SUGGEST, Phase.APPROVE])
-@pytest.mark.parametrize("route, field, expected", [(VETO, "veto", "Vetoed by ada"), (SEEN, "seen", "Seen by ada")])
-def test_a_veto_or_seen_it_on_an_open_card_answers_the_notes_list_out_of_band_and_not_the_note_box(everyone, phase, route, field, expected):
+@pytest.mark.parametrize("toggle, expected", [("veto", "Vetoed by ada"), ("seen", "Seen by ada")])
+def test_a_save_with_a_veto_or_seen_it_closes_the_card_listing_the_mark(everyone, phase, toggle, expected):
     walk_to(phase)
     each = film(everyone["Hanna"], "One", Approval.UNDECIDED)
 
-    answer = signed_in(everyone["ada"]).post(route, {"suggestion": str(each.pk), field: "1", "card": "1"}, headers=HTMX).text
+    answer = save(signed_in(everyone["ada"]), everyone["ada"], each, **{toggle: True}, headers=HTMX).text
 
-    assert f'<ul class="film-card__notes" id="notes-{each.pk}" hx-swap-oob="true">' in answer
-    assert expected in lines(answer)[-1][2] and "<textarea" not in answer
+    assert f'<ul class="film-card__notes" id="notes-{each.pk}">' in answer and 'class="film-card"' in answer
+    assert expected in lines(answer)[-1][2]
 
 
-def test_a_veto_taken_back_leaves_the_card_unmarked(marked):
+def test_a_veto_taken_back_by_a_save_leaves_the_card_unmarked(marked):
     mark(marked["ada"], marked["film"], vetoed=True)
-    signed_in(marked["ada"]).post(VETO, {"suggestion": str(marked["film"].pk), "veto": "0", "card": "1"}, headers=HTMX)
+    save(signed_in(marked["ada"]), marked["ada"], marked["film"], veto=False, headers=HTMX)
 
     assert "Vetoed by ada" not in marked["client"].get("/").text
 

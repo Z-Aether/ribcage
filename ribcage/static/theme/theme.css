@@ -1841,9 +1841,12 @@ body > aside.nag-bar a {
   color: var(--ink-muted);
   font-size: 0.85em;
 }
-/* The hint's paragraph is drawn empty, and classless, while the voter does not veto the film (#152). */
-[data-skin] .note-box p[id^="note-hint-"]:not(.note-box__hint) {
+/* Outside VOTE the line follows the veto box, saved or not: it shows while the box is checked and the voter's veto is still waiting for Save (#152). */
+[data-skin] .note-box__hint--follows {
   display: none;
+}
+[data-skin] .phase-bar:has(.vote-bar__veto-box:checked) .note-box__hint--follows {
+  display: block;
 }
 .note-box__foot {
   display: flex;
@@ -2812,11 +2815,34 @@ body:has(> main > .ballot-head) > footer.site-footer {
   color: var(--veto-ink);
   border: 2px dashed var(--veto);
 }
-[data-skin] .vote-bar__score.score--veto.is-current {
+[data-skin] .vote-bar__score.score--veto.is-current,
+[data-skin] .vote-bar__veto--toggle:has(.vote-bar__veto-box:checked) {
   background-color: var(--veto);
   color: var(--ground);
   border-style: solid;
   box-shadow: none;
+}
+/* Outside VOTE the veto pill is a label over a checkbox, and the box alone says whether it is on: the pill reads and looks so with no script (#152). */
+[data-skin] .vote-bar__veto--toggle {
+  position: relative;
+  display: inline-flex;
+  gap: 0.3em;
+  justify-content: center;
+}
+[data-skin] .vote-bar__veto--toggle:has(.vote-bar__veto-box:checked),
+[data-skin] .vote-bar__veto--toggle:has(.vote-bar__veto-box:focus-visible) {
+  opacity: 1;
+}
+[data-skin] .vote-bar__veto--toggle:has(.vote-bar__veto-box:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.vote-bar__veto-on,
+.vote-bar__veto--toggle:has(.vote-bar__veto-box:checked) .vote-bar__veto-off {
+  display: none;
+}
+.vote-bar__veto--toggle:has(.vote-bar__veto-box:checked) .vote-bar__veto-on {
+  display: inline;
 }
 /* A veto stands in for the score: the five sit back further, and none is marked. */
 .is-vetoed .vote-bar__score:not(.vote-bar__veto) {
