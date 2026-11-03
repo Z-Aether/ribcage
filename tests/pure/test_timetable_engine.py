@@ -113,3 +113,54 @@ def test_an_unknown_mode_or_change_is_refused():
         engine.edit(EVENING, "a", engine.Move(5), "gaps")
     with pytest.raises(TypeError):
         engine.edit(EVENING, "a", 5, engine.NONE)
+
+
+# ---------- Where the night is (#159) ----------
+
+
+def states(boxes, now):
+    return {key: moment.state for key, moment in engine.now_playing(boxes, now).items()}
+
+
+def test_before_the_start_the_first_box_is_next_and_the_rest_later():
+    assert states(EVENING, -2880) == {"a": "next", "dinner": "later", "b": "later"}
+    assert engine.now_playing(EVENING, -2880)["a"].minutes_until == 2880
+
+
+def test_inside_a_box_it_is_playing_with_the_minutes_left_and_the_elapsed_share_and_the_next_waits():
+    short = [film("a", 0, 80), labelled("dinner", 110, 45), film("b", 170, 120)]
+    found = engine.now_playing(short, 20)
+
+    assert {key: moment.state for key, moment in found.items()} == {"a": "playing", "dinner": "later", "b": "later"}
+    assert found["a"].minutes_left == 60
+    assert found["a"].elapsed == 0.25
+
+
+def test_a_box_starts_playing_at_its_start_and_is_past_at_its_end():
+    assert states(EVENING, 0)["a"] == "playing"
+    assert states(EVENING, 100)["a"] == "past"
+
+
+def test_in_a_gap_the_next_box_is_next_and_the_earlier_ones_are_past():
+    found = engine.now_playing(EVENING, 160)
+
+    assert {key: moment.state for key, moment in found.items()} == {"a": "past", "dinner": "past", "b": "next"}
+    assert found["b"].minutes_until == 10
+
+
+def test_after_the_end_every_box_is_past():
+    assert states(EVENING, 290) == {"a": "past", "dinner": "past", "b": "past"}
+
+
+def test_overlapping_boxes_sharing_the_present_are_each_playing():
+    assert states([film("a", 0, 100), film("b", 50, 100), film("c", 200, 30)], 60) == {"a": "playing", "b": "playing", "c": "later"}
+
+
+def test_no_boxes_is_nobody_playing():
+    assert engine.now_playing([], 0) == {}
+
+
+def test_the_in_wording_in_minutes_hours_and_days():
+    assert [engine.in_words(m) for m in (0, 0.2, 25, 25.5, 59, 60, 61, 125, 23 * 60 + 59.5, 1440, 2880, 2 * 1440 + 600)] == [
+        "1m", "1m", "25m", "26m", "59m", "1h", "1h01m", "2h05m", "1 day", "1 day", "2 days", "2 days",
+    ]

@@ -1,6 +1,6 @@
 """The evening's build: the fitted scale, labels in TIME_ZONE, and none of the admin's readouts (#155)."""
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -101,3 +101,22 @@ def test_a_dropped_film_is_an_ordinary_box():
     ordinary = evening.build([Loaded(1, 0, 90, film=same)], ANCHOR).slots[0].box
 
     assert dropped == ordinary
+
+
+def test_the_states_are_read_at_the_given_instant_and_the_status_lines_worded():
+    boxes = [film_box(1, 0, 80), Loaded(2, 100, 50, label="Dinner"), film_box(3, 300, 100)]
+
+    inside = evening.build(boxes, ANCHOR, ANCHOR + timedelta(minutes=20))
+    assert [slot.state for slot in inside.slots] == ["playing", "later", "later"]
+    assert inside.slots[0].status == "NOW PLAYING · 1h left"
+    assert inside.slots[0].elapsed == "25.000%"
+
+    gap = evening.build(boxes, ANCHOR, ANCHOR + timedelta(minutes=175))
+    assert [slot.state for slot in gap.slots] == ["past", "past", "next"]
+    assert gap.slots[2].status == "NEXT · in 2h05m"
+
+    ahead = evening.build(boxes, ANCHOR, ANCHOR - timedelta(days=2))
+    assert ahead.slots[0].status == "NEXT · in 2 days"
+
+    over = evening.build(boxes, ANCHOR, ANCHOR + timedelta(minutes=400))
+    assert {slot.state for slot in over.slots} == {"past"} and {slot.status for slot in over.slots} == {""}

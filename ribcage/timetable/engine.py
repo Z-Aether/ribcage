@@ -374,3 +374,52 @@ def arrange(boxes, utility, minutes=DEFAULT_BREAK):
         raise ValueError(f"unknown arrange utility: {utility}")
     after = {box.key: box for box in UTILITIES[utility](boxes, minutes)}
     return [after[box.key] for box in boxes]
+
+
+# ---------- Where the night is (#159) ----------
+
+PAST, PLAYING, NEXT, LATER = "past", "playing", "next", "later"
+
+
+@dataclass(frozen=True)
+class Moment:
+    """A box against the present: its state, and for a playing box the minutes left and the elapsed share, for a next one the minutes until it starts."""
+
+    state: str
+    minutes_left: float = 0
+    elapsed: float = 0
+    minutes_until: float = 0
+
+
+def now_playing(boxes, now):
+    """Each box (by key) as past, playing, next or later at `now`, in minutes since the anchor; nothing is stored (#13).
+
+    A box is playing from its start up to its end; every box sharing the present is playing. With none playing, the boxes
+    starting soonest are next, whether the gap is 25 minutes or days; while one plays, the rest are later.
+    """
+    playing = [box for box in boxes if box.start <= now < box.end]
+    coming = [box.start for box in boxes if box.start > now]
+    soonest = min(coming) if coming and not playing else None
+    found = {}
+    for box in boxes:
+        if box in playing:
+            found[box.key] = Moment(PLAYING, box.end - now, (now - box.start) / box.length)
+        elif box.end <= now:
+            found[box.key] = Moment(PAST)
+        elif box.start == soonest:
+            found[box.key] = Moment(NEXT, minutes_until=box.start - now)
+        else:
+            found[box.key] = Moment(LATER)
+    return found
+
+
+def in_words(minutes):
+    """A span of minutes as people say it, rounded up to the minute: 25m, 2h05m, 2 days. The phone's script words it the same (#159)."""
+    whole = max(1, ceil(minutes))
+    if whole < 60:
+        return f"{whole}m"
+    if whole < 24 * 60:
+        hours, rest = divmod(whole, 60)
+        return f"{hours}h{rest:02d}m" if rest else f"{hours}h"
+    days = whole // (24 * 60)
+    return f"{days} day" if days == 1 else f"{days} days"

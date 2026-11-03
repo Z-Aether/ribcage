@@ -1,11 +1,14 @@
-{# The evening over a `timetable.evening.Evening`: one region of its own, which a later poll swaps in place, each box carrying its start and end instants and the region the span the scale fits (#155, #159, #160). #}
+{# The evening over a `timetable.evening.Evening`: one region of its own, which a later poll swaps in place, each box carrying its start and end instants, the region the span the scale fits (#155, #160) and each slot its state at the request's instant, which `static/run/now.js` keeps right from then on (#159). #}
 <section class="evening" id="evening" aria-label="The evening"{% if not evening.empty %} data-evening-start="{{ evening.starts_at }}" data-evening-end="{{ evening.ends_at }}" data-evening-minutes="{{ evening.minutes }}"{% endif %}>
   {% if evening.empty %}
     <p class="evening__empty">{{ evening.empty_line }}</p>
   {% else %}
     {% for slot in evening.slots %}
-      <div class="evening__slot" style="--top: {{ slot.top }}; --height: {{ slot.height }}; --left: {{ slot.left }}; --width: {{ slot.width }}" data-start="{{ slot.starts_at }}" data-end="{{ slot.ends_at }}">
+      <div class="evening__slot evening__slot--{{ slot.state }}" style="--top: {{ slot.top }}; --height: {{ slot.height }}; --left: {{ slot.left }}; --width: {{ slot.width }}; --elapsed: {{ slot.elapsed }}" data-start="{{ slot.starts_at }}" data-end="{{ slot.ends_at }}">
+        <span class="evening__tint" aria-hidden="true"></span>
         {% include "components/box.html" with box=slot.box %}
+        <span class="evening__status" data-status>{{ slot.status }}</span>
+        <span class="evening__progress" aria-hidden="true"></span>
       </div>
     {% endfor %}
   {% endif %}

@@ -4,6 +4,9 @@
 
 {% block skin %}run{% endblock %}
 
+{% load static %}
+{% block head %}<script src="{% static 'run/now.js' %}" defer></script>{% endblock %}
+
 {% block content %}
   <header class="visually-hidden"><h1>The evening</h1></header>
   {% include "components/evening.html" %}

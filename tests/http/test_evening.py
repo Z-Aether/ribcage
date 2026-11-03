@@ -2,6 +2,7 @@
 
 import html
 import re
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from django.db import connection
@@ -45,10 +46,11 @@ def running(voters):
 
 
 def slots_of(page):
-    return re.findall(r'<div class="evening__slot".*?</div>\s*</div>', page, re.S)
+    return re.findall(r'<div class="evening__slot .*?<span class="evening__progress".*?</div>', page, re.S)
 
 
 def text_of(fragment):
+    fragment = re.sub(r'<span class="evening__status".*?</span>', "", fragment, flags=re.S)
     fragment = re.sub(r'<span class="box__poster">.*?</span></span>', "", fragment, flags=re.S)
     return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", fragment)).split())
 
@@ -126,3 +128,32 @@ def test_the_query_count_does_not_grow_with_the_boxes(running):
         Box.objects.create(suggestion=film, start=2000 + index * 100)
 
     assert queries() == before
+
+
+def test_for_an_anchor_in_the_past_the_first_render_marks_past_playing_and_next(running, clock):
+    clock.now = datetime(2026, 11, 7, 20, 35, tzinfo=UTC)  # Cube is over, in the gap before The Thing
+
+    page = reader(running["ada"]).get("/").text
+    gap = [re.search(r"evening__slot--(\w+)", slot)[1] for slot in slots_of(page)]
+    assert gap == ["past", "past", "next", "later"]
+    assert "NEXT · in 5m" in page
+
+    clock.now = datetime(2026, 11, 7, 18, 30, tzinfo=UTC)  # a third of the way into Cube
+    page = reader(running["ada"]).get("/").text
+    assert [re.search(r"evening__slot--(\w+)", slot)[1] for slot in slots_of(page)] == ["playing", "later", "later", "later"]
+    assert "NOW PLAYING · 1h left" in page
+    assert "--elapsed: 33.333%" in page
+
+    clock.now = datetime(2026, 11, 7, 18, 30, tzinfo=UTC) + timedelta(hours=7)  # Event Horizon is over
+    page = reader(running["ada"]).get("/").text
+    assert {re.search(r"evening__slot--(\w+)", slot)[1] for slot in slots_of(page)} == {"past"}
+    assert "NOW PLAYING" not in page and "NEXT" not in page
+
+
+def test_for_an_anchor_ahead_the_first_box_is_next_in_two_days(running, clock):
+    clock.now = datetime(2026, 11, 5, 18, 0, tzinfo=UTC)
+
+    page = reader(running["ada"]).get("/").text
+
+    assert [re.search(r"evening__slot--(\w+)", slot)[1] for slot in slots_of(page)] == ["next", "later", "later", "later"]
+    assert "NEXT · in 2 days" in page

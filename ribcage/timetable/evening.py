@@ -10,8 +10,10 @@ overlap mark or budget (#22, #149). Each box carries its start and end as instan
 from dataclasses import dataclass, replace
 from datetime import UTC, timedelta
 
+from django.utils import timezone
+
 from ribcage.timetable import setting, track
-from ribcage.timetable.engine import Placed
+from ribcage.timetable.engine import NEXT, PLAYING, Placed, in_words, now_playing
 
 
 # What the evening reads with nothing to show; the Phase tab's publish sentence names it too (#156).
@@ -34,6 +36,19 @@ class Slot:
     width: str
     starts_at: str
     ends_at: str
+    # Where the night is at the request's instant (#159): past, playing, next or later, the words a playing or next box wears, and the elapsed share.
+    state: str = "later"
+    status: str = ""
+    elapsed: str = "0.000%"
+
+
+def status_of(moment):
+    """The line a playing or next box wears: `NOW PLAYING · 42m left`, `NEXT · in 25m`; the phone's script words the same (#159)."""
+    if moment.state == PLAYING:
+        return f"NOW PLAYING · {in_words(moment.minutes_left)} left"
+    if moment.state == NEXT:
+        return f"NEXT · in {in_words(moment.minutes_until)}"
+    return ""
 
 
 @dataclass(frozen=True)
@@ -62,8 +77,16 @@ def plain(box):
     return replace(box, vetoed_by="", vetoers="", dropped=False, veto_voters=frozenset(), flexible=False)
 
 
-def build(boxes, anchor):
-    """The evening for the loaded boxes against the anchor (an aware datetime); an empty one with no boxes or no anchor."""
+def states_of(moment):
+    if moment is None:
+        return ()
+    return moment.state, status_of(moment), track.percent(moment.elapsed * 100)
+
+
+def build(boxes, anchor, now=None):
+    """The evening for the loaded boxes against the anchor (an aware datetime); an empty one with no boxes or no anchor.
+
+    `now` is the instant the states are read at; without it every box is later (#159)."""
     if whats_missing(bool(boxes), anchor):
         return Evening()
     boxes = [plain(box) for box in boxes]
@@ -71,6 +94,10 @@ def build(boxes, anchor):
     last = max(box.start + box.length for box in boxes)
     minutes = last - first
     clock = track.Clock(anchor)
+    where = {}
+    if now is not None:
+        elapsed = (now - anchor).total_seconds() / 60
+        where = now_playing([Placed(box.key, box.start, box.length, box.film is not None) for box in boxes], elapsed)
     lane_of = track.in_lanes([Placed(box.key, box.start, box.length, box.film is not None) for box in boxes])
     lanes = max(lane_of.values()) + 1
     slots = tuple(
@@ -82,6 +109,7 @@ def build(boxes, anchor):
             track.percent(100 / lanes),
             instant(anchor, box.start),
             instant(anchor, box.start + box.length),
+            *states_of(where.get(box.key)),
         )
         for box in boxes
     )
@@ -90,4 +118,4 @@ def build(boxes, anchor):
 
 def load():
     """The timetable as it stands, read now: advancing to RUN is publishing, and nothing is stored (#12, #26)."""
-    return build(track.stored_boxes(), setting.read().anchor)
+    return build(track.stored_boxes(), setting.read().anchor, timezone.now())
