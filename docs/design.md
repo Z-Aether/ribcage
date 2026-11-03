@@ -96,7 +96,7 @@ A fresh database starts in SUGGEST. The admin moves the phase one step at a time
 - **Every move,** in either direction, refreshes DTDD data within the rate limit (§6) and is appended to the **phase history**.
 - **VOTE → PICK** is the reveal. It cannot be undone. The confirm step names who isn't done and says the move can't be taken back.
 - **PICK → VOTE** hides the scores again. The ballot then carries one line saying scores were open while VOTE was closed. Done markers are kept.
-- **PICK → RUN** publishes the timetable and purges the DTDD cache. **RUN → PICK** takes the evening down at once.
+- **PICK → RUN** publishes the timetable and purges the DTDD cache. Its confirm step says the evening shows the timetable as it stands, with every later edit reaching it within a poll interval, and with no anchor or no boxes names the empty evening voters will see; it never refuses the move (#156). **RUN → PICK** takes the evening down at once.
 - Nothing follows RUN. The marathon ending is a fact about the world, and the app stays in RUN until teardown (#13).
 
 **Phase check.** Every voter action has a window of phases. One server-side check refuses a post from outside its window and reloads the tab into the current phase (#34). Log out and changing a password are account actions, outside the check, and work in every phase (#78).

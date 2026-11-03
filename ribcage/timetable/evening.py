@@ -14,6 +14,15 @@ from ribcage.timetable import setting, track
 from ribcage.timetable.engine import Placed
 
 
+# What the evening reads with nothing to show; the Phase tab's publish sentence names it too (#156).
+EMPTY_LINE = "The running order isn't out yet."
+
+
+def whats_missing(has_boxes, anchor):
+    """What leaves the evening with nothing to show, from "start time" and "boxes"; the one rule `build` and the Phase tab share (#156)."""
+    return [name for name, present in [("start time", anchor is not None), ("boxes", has_boxes)] if not present]
+
+
 @dataclass(frozen=True)
 class Slot:
     """One box placed on the fitted scale: percentages of the evening's height and width, and its instants as ISO strings."""
@@ -39,6 +48,10 @@ class Evening:
     def empty(self):
         return not self.slots
 
+    @property
+    def empty_line(self):
+        return EMPTY_LINE
+
 
 def instant(anchor, minute):
     return (anchor.astimezone(UTC) + timedelta(minutes=minute)).isoformat()
@@ -51,7 +64,7 @@ def plain(box):
 
 def build(boxes, anchor):
     """The evening for the loaded boxes against the anchor (an aware datetime); an empty one with no boxes or no anchor."""
-    if not boxes or anchor is None:
+    if whats_missing(bool(boxes), anchor):
         return Evening()
     boxes = [plain(box) for box in boxes]
     first = min(box.start for box in boxes)

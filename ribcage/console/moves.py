@@ -2,6 +2,7 @@
 
 from typing import NamedTuple
 
+from django.conf import settings
 from django.db import transaction
 from django.utils.html import format_html, format_html_join
 
@@ -10,6 +11,8 @@ from ribcage.ballot.board import candidates
 from ribcage.phase.history import move
 from ribcage.phase.order import Phase, neighbours
 from ribcage.suggestions.models import Approval, Suggestion
+from ribcage.timetable import evening, setting
+from ribcage.timetable.models import Box
 from ribcage.triggers import refresh, stored
 
 SUGGEST, APPROVE, VOTE, PICK, RUN = Phase
@@ -76,13 +79,24 @@ def who_is_not_done():
     return format_html("Not done yet: {}.", format_html_join(" · ", "{} {}", waiting))
 
 
+def what_the_evening_shows():
+    # Publishing is the move alone: the evening reads the timetable as it stands (#12, #156).
+    sentences = [f"It shows the timetable as it stands, and every later edit within about {settings.POLL_INTERVAL_SECONDS} seconds."]
+    missing = evening.whats_missing(Box.objects.exists(), setting.read().anchor)
+    if missing:
+        sentences.append(format_html("The timetable has no {} yet, so the evening will read “{}”", " and no ".join(missing), evening.EMPTY_LINE))
+    return sentences
+
+
 def consequences(from_phase, to_phase):
     # Later milestones add their sentences here: the reveal, reopened VOTE and publishing (#77).
     sentences = [format_html("Everyone's page becomes “{}”.", VOTER_PAGES[to_phase])]
     if (from_phase, to_phase) == (PICK, RUN):
         sentences.append("Every film's trigger data is cleared, as DoesTheDogDie's terms ask, and fetched again if the evening is unpublished.")
+        sentences += what_the_evening_shows()
     if (from_phase, to_phase) == (RUN, PICK):
         sentences.append("Trigger data is fetched again, oldest first.")
+        sentences.append(f"The evening is taken down at once: every open evening reloads onto the reveal at its next poll, within about {settings.POLL_INTERVAL_SECONDS} seconds.")
     if (from_phase, to_phase) == (APPROVE, VOTE):
         # Only approved films are on the ballot, so the move names the films no decision has reached (#28, #96).
         sentences.append(left_off_the_ballot())

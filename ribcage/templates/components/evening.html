@@ -1,7 +1,7 @@
 {# The evening over a `timetable.evening.Evening`: one region of its own, which a later poll swaps in place, each box carrying its start and end instants and the region the span the scale fits (#155, #159, #160). #}
 <section class="evening" id="evening" aria-label="The evening"{% if not evening.empty %} data-evening-start="{{ evening.starts_at }}" data-evening-end="{{ evening.ends_at }}" data-evening-minutes="{{ evening.minutes }}"{% endif %}>
   {% if evening.empty %}
-    <p class="evening__empty">The running order isn't out yet.</p>
+    <p class="evening__empty">{{ evening.empty_line }}</p>
   {% else %}
     {% for slot in evening.slots %}
       <div class="evening__slot" style="--top: {{ slot.top }}; --height: {{ slot.height }}; --left: {{ slot.left }}; --width: {{ slot.width }}" data-start="{{ slot.starts_at }}" data-end="{{ slot.ends_at }}">

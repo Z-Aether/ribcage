@@ -188,18 +188,77 @@ def test_no_other_move_prints_more_than_the_page_voters_see_after_it(admin, vote
     assert consequences_of(admin, to_phase) == [f"Everyone's page becomes “{PAGE_HEADINGS[to_phase]}”."]
 
 
+PURGE = "Every film's trigger data is cleared, as DoesTheDogDie's terms ask, and fetched again if the evening is unpublished."
+SHOWS = "It shows the timetable as it stands, and every later edit within about 30 seconds."
+NOT_OUT = "so the evening will read “The running order isn't out yet.”"
+
+
+def a_timetable(anchor, boxes):
+    from ribcage.timetable.models import Box, Timetable
+
+    Timetable.objects.create(pk=1, anchor=anchor, budget=None)
+    if boxes:
+        Box.objects.create(label="Dinner", length=45, start=0)
+
+
 @pytest.mark.parametrize(
-    ("from_phase", "to_phase", "added"),
+    ("anchor", "boxes", "said"),
     [
-        (PICK, RUN, "Every film's trigger data is cleared, as DoesTheDogDie's terms ask, and fetched again if the evening is unpublished."),
-        (RUN, PICK, "Trigger data is fetched again, oldest first."),
+        ("2026-11-07T18:00:00Z", True, []),
+        (None, True, ["The timetable has no start time yet, " + NOT_OUT]),
+        ("2026-11-07T18:00:00Z", False, ["The timetable has no boxes yet, " + NOT_OUT]),
+        (None, False, ["The timetable has no start time and no boxes yet, " + NOT_OUT]),
     ],
 )
-def test_the_moves_into_and_out_of_run_add_exactly_the_trigger_data_sentence(admin, voters, from_phase, to_phase, added):
+def test_publishing_says_the_evening_shows_the_timetable_and_names_what_leaves_it_empty(admin, voters, anchor, boxes, said):
     Suggestion.objects.suggest(voters["ada"], a_tmdb_film(1, "Cube"), "Pitch.")
-    walk_to(from_phase)
+    a_timetable(anchor, boxes)
+    walk_to(PICK)
 
-    assert consequences_of(admin, to_phase) == [f"Everyone's page becomes “{PAGE_HEADINGS[to_phase]}”.", added]
+    assert consequences_of(admin, RUN) == [f"Everyone's page becomes “{PAGE_HEADINGS[RUN]}”.", PURGE, SHOWS, *said]
+
+
+def test_publishing_with_no_timetable_row_at_all_names_both(admin, voters):
+    Suggestion.objects.suggest(voters["ada"], a_tmdb_film(1, "Cube"), "Pitch.")
+    walk_to(PICK)
+
+    assert consequences_of(admin, RUN)[3:] == ["The timetable has no start time and no boxes yet, " + NOT_OUT]
+
+
+def test_the_publish_sentence_reads_the_poll_interval(admin, voters, settings):
+    settings.POLL_INTERVAL_SECONDS = 45
+    walk_to(PICK)
+
+    assert "within about 45 seconds." in consequences_of(admin, RUN)[2]
+
+
+def test_the_unpublish_sentence_reads_the_poll_interval(admin, voters, settings):
+    settings.POLL_INTERVAL_SECONDS = 45
+    walk_to(RUN)
+
+    assert any("within about 45 seconds" in s for s in consequences_of(admin, PICK))
+
+
+def test_the_empty_sentence_quotes_what_the_evening_reads(admin, voters):
+    from ribcage.timetable.evening import EMPTY_LINE
+
+    assert f"“{EMPTY_LINE}”" in " ".join(consequences_of_empty(admin))
+
+
+def consequences_of_empty(admin):
+    walk_to(PICK)
+    return consequences_of(admin, RUN)
+
+
+def test_unpublishing_adds_the_trigger_data_sentence_and_that_the_evening_comes_down_at_once(admin, voters):
+    Suggestion.objects.suggest(voters["ada"], a_tmdb_film(1, "Cube"), "Pitch.")
+    walk_to(RUN)
+
+    assert consequences_of(admin, PICK) == [
+        f"Everyone's page becomes “{PAGE_HEADINGS[PICK]}”.",
+        "Trigger data is fetched again, oldest first.",
+        "The evening is taken down at once: every open evening reloads onto the reveal at its next poll, within about 30 seconds.",
+    ]
 
 
 @pytest.mark.parametrize(("from_phase", "to_phase"), EVERY_MOVE)
