@@ -3799,7 +3799,7 @@ body:has(> main > .ballot-head) > footer.site-footer {
   margin: 0;
   font-weight: 700;
 }
-[data-skin] .box-panel__field input {
+[data-skin] .box-panel__field input:not([type="checkbox"]) {
   width: 16rem;
   max-width: 100%;
   height: auto;
@@ -3811,8 +3811,7 @@ body:has(> main > .ballot-head) > footer.site-footer {
   text-align: right;
 }
 [data-skin] .box-panel__field input[type="checkbox"] {
-  width: auto;
-  accent-color: var(--accent, currentColor);
+  margin: 0;
 }
 [data-skin] .box-panel__hint {
   color: var(--ink-muted);
