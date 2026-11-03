@@ -3986,3 +3986,335 @@ body:has(> main > .ballot-head) > footer.site-footer {
 [data-skin] .the-plan__pin {
   color: var(--accent);
 }
+
+/* ---------- The reveal's matrix (#154) ---------- */
+
+[data-skin] main:has(> .reveal-head) {
+  max-width: none;
+  padding-inline: 1.5rem;
+}
+[data-skin] .reveal-head h1 {
+  margin-bottom: 0.2rem;
+}
+[data-skin] .reveal-head__line {
+  margin: 0 0 1rem;
+  color: var(--ink-muted);
+}
+
+.reveal {
+  --film-width: 22rem;
+  --points-width: 9rem;
+  --voter-min: 4.75rem;
+  --pill-width: 2.9rem;
+  --pill-height: 2.3rem;
+  --row-height: 4rem;
+}
+@media (max-width: 40rem) {
+  .reveal {
+    --film-width: 9.5rem;
+    --points-width: 5.5rem;
+    --voter-min: 3.9rem;
+    --pill-width: 2.5rem;
+    --pill-height: 2.1rem;
+  }
+}
+
+/* One line of the same pills the cells use. */
+.reveal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.1rem;
+  margin: 0 0 0.9rem;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+}
+.reveal-legend__state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+}
+.reveal-legend .reveal-pill {
+  width: auto;
+  min-width: 1.9rem;
+  height: 1.5rem;
+  padding-inline: 0.4rem;
+  font-size: 0.85rem;
+}
+
+/* A sideways-scrolling frame: on a phone the film column sticks to its left edge while the voters scroll under it. */
+.reveal__scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background-color: var(--surface);
+}
+.reveal__matrix {
+  --pico-border-color: var(--line);
+  width: 100%;
+  min-width: calc(var(--film-width) + var(--points-width) + var(--voters) * var(--voter-min));
+  margin: 0;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.reveal__matrix :is(th, td) {
+  padding: 0;
+  background-color: transparent;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+  vertical-align: middle;
+}
+.reveal__matrix tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+.reveal__film-head,
+.reveal__film {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: var(--film-width);
+  background-color: var(--surface) !important;
+  text-align: left !important;
+  box-shadow: 1px 0 0 var(--line);
+}
+.reveal__film-head {
+  padding: 0.8rem 1rem !important;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  vertical-align: bottom !important;
+}
+.reveal__points-head {
+  width: var(--points-width);
+  padding: 0.8rem 1.2rem 0.8rem 0 !important;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: right !important;
+  vertical-align: bottom !important;
+}
+
+.reveal__voter {
+  padding: 0.7rem 0.2rem 0.6rem !important;
+  vertical-align: bottom !important;
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.reveal__voter > span:not(.avatar) {
+  display: block;
+}
+.reveal__name {
+  overflow-wrap: break-word;
+  hyphens: auto;
+  font-size: 0.75rem;
+}
+.reveal__sub {
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+.reveal__voter.is-absent {
+  color: var(--ink-muted);
+}
+.reveal__voter.is-absent .avatar {
+  opacity: 0.45;
+}
+.reveal__voter.is-absent .reveal__sub {
+  font-style: italic;
+}
+/* The viewer's own column, in the cells and the head alike. */
+.reveal__voter.is-mine,
+.reveal__cell.is-mine {
+  background-color: rgb(239 138 63 / 0.1) !important;
+}
+.reveal__voter.is-mine .reveal__name {
+  color: var(--accent);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 auto 0.3rem;
+  border-radius: var(--radius-pill);
+  background-color: hsl(var(--shade) 45% 72%);
+  color: hsl(var(--shade) 50% 14%);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.avatar--0 { --shade: 50; }
+.avatar--1 { --shade: 75; }
+.avatar--2 { --shade: 100; }
+.avatar--3 { --shade: 125; }
+.avatar--4 { --shade: 190; }
+.avatar--5 { --shade: 210; }
+.avatar--6 { --shade: 230; }
+.avatar--7 { --shade: 250; }
+
+.reveal__row > * {
+  height: var(--row-height);
+}
+.reveal__film {
+  display: flex !important;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0 0.8rem 0 1rem !important;
+  font-weight: 400;
+}
+.reveal__poster {
+  flex: none;
+  width: 2.6rem;
+}
+@media (max-width: 40rem) {
+  .reveal__poster {
+    width: 2rem;
+  }
+  .reveal__film {
+    gap: 0.5rem;
+    padding: 0 0.5rem !important;
+  }
+}
+.reveal__poster .title-card {
+  padding: 0.15rem;
+}
+.reveal__poster .title-card__title {
+  font-size: 0.5rem;
+}
+.reveal__title {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.reveal__title-line {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.reveal__year {
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+.reveal__vetoers {
+  justify-self: start;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0 0.45rem;
+  border-radius: 4px;
+  background-color: color-mix(in srgb, var(--veto) 18%, transparent);
+  color: var(--veto-ink);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 40rem) {
+  .reveal__title-line {
+    font-size: 0.95rem;
+  }
+}
+
+.reveal-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--pill-width);
+  height: var(--pill-height);
+  box-sizing: border-box;
+  border-radius: 0.75rem;
+  background-color: var(--score-fill);
+  color: var(--score-ink);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.reveal-pill--top-pick { --score-fill: var(--score-top-pick); --score-ink: var(--score-top-pick-ink); }
+.reveal-pill--keen { --score-fill: var(--score-keen); --score-ink: var(--score-keen-ink); }
+.reveal-pill--happy { --score-fill: var(--score-happy); --score-ink: var(--score-happy-ink); }
+.reveal-pill--dont-mind { --score-fill: var(--score-dont-mind); --score-ink: var(--score-dont-mind-ink); }
+.reveal-pill--rather-not { --score-fill: var(--score-rather-not); --score-ink: var(--score-rather-not-ink); }
+.reveal-pill--veto {
+  background-color: transparent;
+  border: 2px dashed var(--veto);
+  color: var(--veto-ink);
+  font-size: 1.2rem;
+}
+.reveal-pill--blank {
+  background-color: transparent;
+  border: 2px dotted var(--line-strong);
+}
+.reveal-pill--seen-mark {
+  background-color: transparent;
+  border: 0;
+  min-width: 1.4rem;
+}
+.reveal-pill__seen {
+  position: absolute;
+  top: -0.4rem;
+  right: -0.4rem;
+  display: grid;
+  place-items: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background-color: var(--surface-raised);
+  color: var(--ink-muted);
+  font-size: 0.6rem;
+  line-height: 1;
+}
+.reveal-legend .reveal-pill--seen-mark .reveal-pill__seen {
+  position: static;
+}
+
+.reveal__points {
+  width: var(--points-width);
+  padding-right: 1.2rem !important;
+  text-align: right !important;
+  white-space: nowrap;
+}
+.reveal__points b {
+  display: inline-block;
+  min-width: 2rem;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.reveal__bar {
+  display: inline-block;
+  width: 3rem;
+  height: 0.4rem;
+  margin-right: 0.5rem;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background-color: var(--line);
+  vertical-align: 0.15rem;
+}
+.reveal__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background-color: var(--score-keen);
+}
+.reveal__bar-fill.is-negative {
+  background-color: var(--score-rather-not);
+}
+@media (max-width: 40rem) {
+  .reveal__bar {
+    display: none;
+  }
+  .reveal__points {
+    padding-right: 0.7rem !important;
+  }
+  .reveal__points-head {
+    padding-right: 0.7rem !important;
+  }
+}

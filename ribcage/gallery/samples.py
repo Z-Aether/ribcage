@@ -12,7 +12,7 @@ from dataclasses import dataclass, replace
 from datetime import datetime, timezone as utc
 from functools import cache
 
-from ribcage.ballot import board, done
+from ribcage.ballot import board, done, reveal
 from ribcage.films import corpus
 from ribcage.films.card import (
     DtddMatch,
@@ -461,8 +461,35 @@ def timetable_track():
     return track.build(boxes, datetime(2026, 11, 7, 18, 0, tzinfo=utc.utc), 8 * 60, voters=voters)
 
 
+def reveal_cells():
+    """Each cell the reveal draws, with seen it on a score, a veto and a blank alike (#154)."""
+    cell = reveal.cell_of
+    scored = [cell("Ada", False, (score, False, False), "") for score in (3, 2, 1, 0, -1)]
+    return (
+        ("a score, +3 down to −1", scored),
+        ("a veto, its reason on hover", [cell("Ada", False, (None, True, False), "Not after Terrifier.")]),
+        ("a blank, never a 0", [cell("Ada", False, (None, False, False), "")]),
+        ("seen it on a score, a veto and a blank", [cell("Ada", False, (3, False, True), ""), cell("Ada", False, (None, True, True), ""), cell("Ada", False, (None, False, True), "")]),
+    )
+
+
+def reveal_matrix():
+    """A small matrix as Ada reads it: Bo has scored four of six, Cy nothing, and Ada's own column is tinted (#154)."""
+    voters = [(1, "Ada", 6), (2, "Bo", 4), (3, "Cy", 0), (4, "Dee", 6), (5, "Eli", 3)]
+    shown = [(10 + index, film(key)) for index, key in enumerate((THE_THING, EVENT_HORIZON, CABINET_OF_CURIOSITIES, INFESTED, TERRIFIER, MIDSOMMAR))]
+    records = [
+        (1, 10, 3, False, True), (1, 11, 2, False, False), (1, 12, 1, False, False), (1, 13, 0, False, False), (1, 14, -1, False, False), (1, 15, 2, False, False),
+        (2, 10, 2, False, False), (2, 11, 3, False, False), (2, 13, 1, False, False), (2, 14, None, True, True),
+        (4, 10, 3, False, False), (4, 11, 1, False, True), (4, 12, 2, False, False), (4, 13, -1, False, False), (4, 14, None, True, False), (4, 15, 3, False, False),
+        (5, 10, 1, False, False), (5, 12, 3, False, False), (5, 15, None, True, False),
+    ]  # fmt: skip
+    return reveal.build(voters, shown, records, {(4, 14): "I won't sit through that one."}, viewer_id=1)
+
+
 def gallery():
     return {
+        "reveal_cells": reveal_cells(),
+        "reveal_matrix": reveal_matrix(),
         "cards": cards(),
         "phase_bars": phase_bars(),
         "dtdd_states": dtdd_states(),

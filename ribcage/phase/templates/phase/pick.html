@@ -3,7 +3,9 @@
 {% block title %}Voting is closed · {{ marathon_name }}{% endblock %}
 
 {% block content %}
-  <h1>Voting is closed</h1>
-  <p>Everyone's scores will be open here, by name, while the admin chooses the evening's films.</p>
-  <p>Once they publish it, the evening's running order shows here.</p>
+  <header class="reveal-head">
+    <h1>Voting is closed</h1>
+    <p class="reveal-head__line">VOTE is closed · the admin is choosing the slate · everyone's scores are open, by name</p>
+  </header>
+  {% include "components/reveal.html" %}
 {% endblock %}

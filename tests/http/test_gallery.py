@@ -283,3 +283,13 @@ def test_the_gallery_shows_the_box_samples_alone_and_on_the_track(client, debug)
     assert sum("box--overlapping" in box for box in boxes) == 2
     assert "title-card" in alone and 'class="box__vetoes"' in alone
     assert 'class="track"' in page and 'class="track__budget' in page and 'class="track__overlap"' in page
+
+
+def test_the_gallery_shows_each_reveal_cell_and_a_sample_matrix(client, debug):
+    page = client.get(GALLERY).text
+
+    for kind in ("top-pick", "keen", "happy", "dont-mind", "rather-not", "veto", "blank"):
+        assert f"reveal-pill--{kind}" in page
+    assert "reveal-pill__seen" in page
+    assert page.count('class="reveal__matrix"') == 1
+    assert "didn't vote" in page and "4 of 6" in page

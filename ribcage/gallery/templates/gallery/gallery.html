@@ -101,6 +101,16 @@
       <p class="gallery-label">{{ label }}</p>
       <div class="film-cards" data-film-cards>{% include "components/film_card.html" with card=card expanded=True phase_bar=bar %}</div>
     {% endfor %}
+
+    <div class="reveal">
+      {% for label, cells in reveal_cells %}
+        <p class="gallery-label">The reveal's cells: {{ label }}</p>
+        <p class="gallery-reveal-cells">{% for cell in cells %}{% include "components/reveal_cell.html" %}{% endfor %}</p>
+      {% endfor %}
+    </div>
+
+    <p class="gallery-label">The reveal's matrix: Ada's column tinted, Bo's header <em>4 of 6</em>, Cy <em>didn't vote</em></p>
+    {% include "components/reveal.html" with reveal=reveal_matrix %}
   </section>
 
   <section class="gallery-skin" data-skin="admin" id="admin" aria-labelledby="admin-name">

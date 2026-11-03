@@ -24,7 +24,7 @@ class Progress:
 
 
 def of_every_voter():
-    """Every voter's Progress, in the Roster's case-blind order, for the admin alone; the ballot's size is `board.candidates().count()` (#35 §5, #124)."""
+    """Every voter's Progress, in the Roster's case-blind order; the ballot's size is `board.candidates().count()` (#35 §5, #124)."""
     voters = (
         Voter.objects.annotate(
             scored=Count("ballot_records", filter=PLACED),

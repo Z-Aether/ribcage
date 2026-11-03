@@ -218,6 +218,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 
 **Reveal** (#29):
 - A matrix: one row per film, one column per voter, scores in the cells, a points column on the right.
+- Rows are the ballot's films, by points, ties by title; columns are the roster in name order, the viewer's tinted. A partial voter's header reads *24 of 32*. On a phone the film column sticks while the voter columns scroll sideways (#154).
 - Sorted by points. Clicking a name re-sorts by that voter's ballot.
 - A blank is a blank, a voter who never scored shows as *didn't vote*, vetoes are ☒ and seen it is a badge.
 - The film card opens inline under its row, read-only.

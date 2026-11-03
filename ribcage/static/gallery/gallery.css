@@ -267,3 +267,9 @@ body > main:has(.gallery-skin) {
   width: 15rem;
   height: 5.9rem;
 }
+
+.gallery-reveal-cells {
+  display: flex;
+  gap: 1rem;
+  margin: 0.4rem 0 1rem;
+}
