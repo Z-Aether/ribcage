@@ -1,0 +1,19 @@
+{# One film of the reveal, a tbody of its own: its row and, once a click has opened it, its card under it. Needs `row` and `sort`; `card` opens it, `oob` swaps it over the tbody the page holds, and `scroll` has the page bring it into view (#29, #154, #158). #}
+<tbody class="reveal__group" id="reveal-film-{{ row.suggestion_id }}"{% if oob %} hx-swap-oob="outerHTML"{% endif %}{% if scroll %} data-scroll-here{% endif %}>
+  <tr class="reveal__row{% if card %} is-open{% endif %}" data-suggestion="{{ row.suggestion_id }}">
+    <th scope="row" class="reveal__film">
+      <span class="reveal__poster">{% include "components/poster.html" with film=row.film size="tile" lazy=True %}</span>
+      <span class="reveal__title"><button type="button" class="reveal__open" aria-expanded="{% if card %}true{% else %}false{% endif %}"{% if card %} aria-controls="reveal-card-{{ row.suggestion_id }}"{% endif %}><span class="reveal__title-line">{{ row.film.title }}{% if row.film.year %} <span class="reveal__year">{{ row.film.year }}</span>{% endif %}</span></button>{% if row.vetoers %}<span class="reveal__vetoers">☒ {{ row.vetoers }}</span>{% endif %}</span>
+    </th>
+    {% for cell in row.cells %}
+    <td class="reveal__cell{% if cell.mine %} is-mine{% endif %}">{% include "components/reveal_cell.html" %}</td>
+    {% endfor %}
+    <td class="reveal__points"><span class="reveal__bar"><span class="reveal__bar-fill{% if row.negative %} is-negative{% endif %}" style="width: {{ row.bar }}%"></span></span><b>{{ row.points }}</b></td>
+  </tr>
+  {% if card %}
+  {# The card sits as wide as the frame the matrix scrolls in, and sticks to its left edge, so a phone's sideways scroll never takes it out of view. #}
+  <tr class="reveal__detail" id="reveal-card-{{ row.suggestion_id }}">
+    <td colspan="{{ row.cells|length|add:2 }}"><div class="reveal__card">{% include "components/film_card.html" with card=card expanded=True phase_bar="components/reveal_bar.html" closes_row=True %}</div></td>
+  </tr>
+  {% endif %}
+</tbody>

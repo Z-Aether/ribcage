@@ -104,8 +104,12 @@ def watch_from_card(request):
         return reload_the_tab(request, reverse("phase_page"))
     if request.headers.get("HX-Request") != "true":
         return redirect("phase_page")
-    card = pool.the_card(suggestion, request.user, current())
+    phase = current()
+    card = pool.the_card(suggestion, request.user, phase)
     opened = replace(card.dtdd, topics_at="", opened=True, watch=offered_watch(request.user, suggestion))
+    # The reveal's card in PICK writes no match, so its answer offers no correction either (#105, #158).
+    if phase not in CORRECTING:
+        opened = replace(opened, correction=None)
     # The match line's control keeps whatever it holds; the poster's ring follows the list out of band (#111).
     return dtdd_section(request, replace(card, dtdd=opened), ring_too=True, answers_the_control=False)
 

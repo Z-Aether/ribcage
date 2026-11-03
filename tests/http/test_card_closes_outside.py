@@ -17,10 +17,10 @@ def test_the_pool_closes_an_open_card_on_a_click_outside_it_and_on_escape():
     assert re.search(r'open\.querySelector\("\.film-card__toggle"\)\.focus\(\)', source)
 
 
-def test_the_pool_leaves_the_ledger_and_the_ballot_to_their_own_closing():
+def test_the_pool_leaves_the_ledger_the_ballot_and_the_reveal_to_their_own_closing():
     source = script("film-card.js")
 
-    assert '.closest(".ledger__detail, [data-board]")' in source
+    assert '.closest(".ledger__detail, [data-board], [data-reveal]")' in source
 
 
 def test_the_ballot_closes_through_the_server_and_keeps_the_typing():

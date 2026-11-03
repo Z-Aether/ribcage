@@ -250,6 +250,39 @@ class VoteBar:
 
 
 @dataclass(frozen=True)
+class Chip:
+    """One voter's mark on the film in the reveal's bar: their score (or ☒ for a veto) as a named chip in the score colours, and 👁 if they have seen it (#158)."""
+
+    name: str
+    # A score band's key from `board.SCALE`, "veto", or "blank" for a voter who has only seen the film.
+    key: str
+    sign: str
+    seen_it: bool
+    # The viewer's own, which is outlined.
+    mine: bool
+    # The chip in words for a screen reader: the voter, the score or *vetoed*, and *seen it*; never a veto's reason.
+    said: str
+
+
+@dataclass(frozen=True)
+class RevealBar:
+    """The reveal's read-only phase bar: everyone's chips, the film's points and who didn't vote (#29, #158)."""
+
+    chips: tuple[Chip, ...]
+    points: int
+    # The voters with nothing placed on the whole ballot, by name, in the roster's order.
+    didnt_vote: tuple[str, ...] = ()
+
+    @property
+    def points_word(self):
+        return "point" if abs(self.points) == 1 else "points"
+
+    @property
+    def didnt_vote_names(self):
+        return ", ".join(self.didnt_vote)
+
+
+@dataclass(frozen=True)
 class FilmCard:
     """Everything the film card shows, as plain data, so a model binds to it without touching the template (#21, #58)."""
 
@@ -273,6 +306,8 @@ class FilmCard:
     matched: Matched | None = None
     # The viewer's row of the phase bar: VOTE's with the scores, the other phases' without (#122, #152).
     vote: VoteBar | None = None
+    # The reveal's phase bar, where the card is opened under a reveal row (#158).
+    reveal: RevealBar | None = None
     # The suggester vetoes the film, and has seen it (#128, #153).
     pitch_vetoed: bool = False
     pitch_seen: bool = False

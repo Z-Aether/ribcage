@@ -1,0 +1,1 @@
+{# A reveal row's answer when opened: its tbody with the card under it, and the film open before drawn closed again, out of band (#158). #}{% include "components/reveal_row.html" with card=card scroll=scroll %}{% if closed %}{% include "components/reveal_row.html" with row=closed card=None scroll=False oob=True %}{% endif %}

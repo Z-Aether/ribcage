@@ -4,6 +4,7 @@
 // An open card also closes on a click outside it and on Escape, nothing posted, and its boxes stay in the page, so typing in them and the veto and seen it toggled, not yet saved, survive (#131, #152).
 // A runtime box still holding the stored runtime is no typing: closing the card shuts it, as a reload would, so Save waits again (#133).
 // Under a ledger row the card is always open, and its row's title or its own opens and closes the row (#28, #95).
+// A card under a reveal row is opened and closed by the server and its own script, like the ballot's (#158).
 // A press that began inside a card and was released outside it, as a text selection dragged past the edge is, fires its click on a common ancestor, so where the press began is kept (#131).
 let pressPath = [];
 document.addEventListener("pointerdown", (event) => {
@@ -21,7 +22,7 @@ document.addEventListener("click", (event) => {
   const opens = event.target.closest(".ledger__opens");
   if (opens) return setRowOpen(opens, opens.getAttribute("aria-expanded") !== "true");
   const card = event.target.closest("[data-film-card]");
-  if (card && event.target.closest(".runtime__pencil") && !card.classList.contains("is-open") && !card.closest(".ledger__detail, [data-board]")) {
+  if (card && event.target.closest(".runtime__pencil") && !card.classList.contains("is-open") && !card.closest(".ledger__detail, [data-board], [data-reveal]")) {
     setOpen(card, true);
     // A box left open comes back as it was left, focused, rather than fetched again (#133).
     const left = card.querySelector(".runtime__edit input");
@@ -31,7 +32,7 @@ document.addEventListener("click", (event) => {
     }
   }
   // A card on the ballot opens from its tile and closes by its title, both answered by the server (#122).
-  if (!card || event.target.closest("a, form") || card.closest("[data-board]")) return;
+  if (!card || event.target.closest("a, form") || card.closest("[data-board], [data-reveal]")) return;
   const onTitle = event.target.closest(".film-card__toggle");
   const detail = card.closest(".ledger__detail");
   if (detail) {
@@ -59,9 +60,9 @@ document.addEventListener("keydown", (event) => {
   });
 });
 
-// The open cards that close by themselves: a ledger row's and the ballot's have their own ways (#95, #122).
+// The open cards that close by themselves: a ledger row's, the ballot's and the reveal's have their own ways (#95, #122, #158).
 function poolCards() {
-  return [...document.querySelectorAll("[data-film-card].is-open")].filter((card) => !card.closest(".ledger__detail, [data-board]"));
+  return [...document.querySelectorAll("[data-film-card].is-open")].filter((card) => !card.closest(".ledger__detail, [data-board], [data-reveal]"));
 }
 
 // A pencil beside a box already open only opens the card: fetching the line again would wipe what was typed (#133).

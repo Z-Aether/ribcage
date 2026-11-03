@@ -4044,6 +4044,7 @@ body:has(> main > .ballot-head) > footer.site-footer {
 
 /* A sideways-scrolling frame: on a phone the film column sticks to its left edge while the voters scroll under it. */
 .reveal__scroll {
+  container-type: inline-size;
   overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
@@ -4065,7 +4066,7 @@ body:has(> main > .ballot-head) > footer.site-footer {
   text-align: center;
   vertical-align: middle;
 }
-.reveal__matrix tbody tr:last-child :is(th, td) {
+.reveal__matrix tbody:last-of-type tr:last-child :is(th, td) {
   border-bottom: 0;
 }
 .reveal__film-head,
@@ -4347,6 +4348,124 @@ body:has(> main > .ballot-head) > footer.site-footer {
   .reveal__points-head {
     padding-right: 0.7rem !important;
   }
+}
+
+/* ---------- The reveal's card under its row (#158) ---------- */
+
+/* The row's title is the button that opens its card; it reads as the title it holds. */
+.reveal__open {
+  display: block;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.reveal__open:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+[data-reveal] .reveal__row {
+  cursor: pointer;
+}
+.reveal__row.is-open :is(th, td) {
+  background-color: var(--surface-raised) !important;
+}
+.reveal__row.is-open .reveal__title-line {
+  color: var(--accent);
+}
+/* The card is as wide as the frame the matrix scrolls in and sticks to its left edge, so a sideways scroll on a phone never takes it out of view. */
+.reveal__matrix .reveal__detail td {
+  padding: 0;
+  background-color: var(--surface-raised);
+  text-align: left;
+}
+.reveal__card {
+  position: sticky;
+  left: 0;
+  box-sizing: border-box;
+  width: 100cqw;
+  padding: 0.6rem 1rem 1rem;
+}
+@media (max-width: 40rem) {
+  .reveal__card {
+    padding-inline: 0.6rem;
+  }
+}
+
+/* The reveal's phase bar: a named chip per voter, then the film's points (#158). */
+.phase-bar--reveal {
+  display: grid;
+  gap: 0.7rem;
+}
+.phase-bar--reveal > * {
+  margin: 0;
+}
+.reveal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.reveal-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0;
+  padding: 0.2rem 0.65rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  background-color: var(--score-fill);
+  color: var(--score-ink);
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+.reveal-chip__name {
+  font-weight: 400;
+}
+.reveal-chip__sign {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.reveal-chip--top-pick { --score-fill: var(--score-top-pick); --score-ink: var(--score-top-pick-ink); }
+.reveal-chip--keen { --score-fill: var(--score-keen); --score-ink: var(--score-keen-ink); }
+.reveal-chip--happy { --score-fill: var(--score-happy); --score-ink: var(--score-happy-ink); }
+.reveal-chip--dont-mind { --score-fill: var(--score-dont-mind); --score-ink: var(--score-dont-mind-ink); }
+.reveal-chip--rather-not { --score-fill: var(--score-rather-not); --score-ink: var(--score-rather-not-ink); }
+.reveal-chip--veto {
+  border: 2px dashed var(--veto);
+  background-color: transparent;
+  color: var(--veto-ink);
+}
+/* A voter who only saw the film: the dotted blank, as in the matrix. */
+.reveal-chip--blank {
+  border: 2px dotted var(--line-strong);
+  background-color: transparent;
+  color: var(--ink-muted);
+}
+/* The viewer's own, outlined. */
+.reveal-chip.is-mine {
+  border-style: solid;
+  border-color: var(--ink);
+}
+.reveal-chip__seen {
+  font-size: 0.85em;
+  line-height: 1;
+}
+.reveal-points {
+  color: var(--ink-muted);
+}
+.reveal-points b {
+  color: var(--ink);
+  font-size: 1.1rem;
 }
 
 /* ---------- The evening: RUN's page, the timetable fitted to one screen (#155) ---------- */

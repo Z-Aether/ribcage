@@ -1,5 +1,5 @@
-{# The reveal's matrix over a Reveal from `ballot.reveal.load`: a row per film on the ballot, a column per voter, points on the right (#29, #154). The sort in force rides as data-sort, for a link that keeps it, and `reveal-scroll.js` brings a sorted voter's column into view (#157, #158). Every voter header holds a marker slot, empty unless active, so the header row keeps its height under any sort. A row carries its film as data-suggestion for the card under it (#158). #}
-<div class="reveal" data-sort="{{ reveal.sort }}">
+{# The reveal's matrix over a Reveal from `ballot.reveal.load`: a row per film on the ballot, a column per voter, points on the right (#29, #154). The sort in force rides as data-sort, for a link that keeps it, and `reveal-scroll.js` brings a sorted voter's column into view (#157, #158). Every voter header holds a marker slot, empty unless active, so the header row keeps its height under any sort. Each film is a tbody of its own, its row and, once opened, the card under it, which `reveal_card` swaps whole; data-reveal marks the matrix whose cards the server opens and closes, which the gallery's sample leaves out with `inert` (#158). #}{% load static %}
+<div class="reveal" data-sort="{{ reveal.sort }}"{% if not inert %} data-reveal data-card-at="{% url 'reveal_card' %}"{% endif %}>
   <p class="reveal-legend">{% for score, key, sign, name in reveal.scale %}<span class="reveal-legend__state"><span class="reveal-pill reveal-pill--{{ key }}">{{ sign }}</span>{{ name }}</span>{% endfor %}<span class="reveal-legend__state"><span class="reveal-pill reveal-pill--veto">☒</span>vetoed</span><span class="reveal-legend__state"><span class="reveal-pill reveal-pill--blank"></span>no score, counts 0</span><span class="reveal-legend__state"><span class="reveal-pill reveal-pill--seen-mark"><span class="reveal-pill__seen">👁</span></span>seen it</span></p>
   <div class="reveal__scroll">
     <table class="reveal__matrix" style="--voters: {{ reveal.columns|length }}">
@@ -19,20 +19,8 @@
           <th scope="col" class="reveal__points-head"{% if reveal.points_aria_sort %} aria-sort="{{ reveal.points_aria_sort }}"{% endif %}><a class="reveal__sort" href="{{ reveal.points_link }}">Points{% if reveal.points_marker %} <span class="reveal__marker" aria-hidden="true">{{ reveal.points_marker }}</span>{% endif %}</a></th>
         </tr>
       </thead>
-      <tbody>
-        {% for row in reveal.rows %}
-        <tr class="reveal__row" data-suggestion="{{ row.suggestion_id }}">
-          <th scope="row" class="reveal__film">
-            <span class="reveal__poster">{% include "components/poster.html" with film=row.film size="tile" lazy=True %}</span>
-            <span class="reveal__title"><span class="reveal__title-line">{{ row.film.title }}{% if row.film.year %} <span class="reveal__year">{{ row.film.year }}</span>{% endif %}</span>{% if row.vetoers %}<span class="reveal__vetoers">☒ {{ row.vetoers }}</span>{% endif %}</span>
-          </th>
-          {% for cell in row.cells %}
-          <td class="reveal__cell{% if cell.mine %} is-mine{% endif %}">{% include "components/reveal_cell.html" %}</td>
-          {% endfor %}
-          <td class="reveal__points"><span class="reveal__bar"><span class="reveal__bar-fill{% if row.negative %} is-negative{% endif %}" style="width: {{ row.bar }}%"></span></span><b>{{ row.points }}</b></td>
-        </tr>
-        {% endfor %}
-      </tbody>
+      {% for row in reveal.rows %}{% include "components/reveal_row.html" with sort=reveal.sort %}{% endfor %}
     </table>
   </div>
 </div>
+{% if not inert %}<script src="{% static 'components/reveal-card.js' %}" defer></script>{% endif %}

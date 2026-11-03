@@ -14,7 +14,7 @@ ADMIN = "admin"
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
 # Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110, #119, #133).
-ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_seen", "ballot_card", "ballot_done", "console_pick_anchor", "console_pick_budget", "console_pick_add", "console_pick_remove", "console_pick_break", "console_pick_box", "console_pick_preview", "console_pick_move", "console_pick_resize", "console_pick_mode", "console_pick_place", "console_pick_arrange"}
+ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_seen", "ballot_card", "reveal_card", "ballot_done", "console_pick_anchor", "console_pick_budget", "console_pick_add", "console_pick_remove", "console_pick_break", "console_pick_box", "console_pick_preview", "console_pick_move", "console_pick_resize", "console_pick_mode", "console_pick_place", "console_pick_arrange"}
 
 class Fragment(NamedTuple):
     """One htmx answer that swaps a card, its section or a part of one in, which test_dtdd_credit.py sweeps for DoesTheDogDie's data (#112).
@@ -44,6 +44,8 @@ FRAGMENTS = [
     # Before the watch toggles below, which untick the list the row's matched topics come from.
     # The opened card carries the section; its own writes answer the card moved or the checkbox (#122).
     Fragment("ballot_card", VOTER, "GET", {"suggestion": "{film}"}),
+    # The reveal's card carries the section in PICK and none in RUN; its row's close answers no card (#158).
+    Fragment("reveal_card", VOTER, "GET", {"suggestion": "{film}"}),
     Fragment("ballot_place", VOTER, "POST", {"suggestion": "{film}", "to": "2", "card": "1"}),
     Fragment("dtdd_topics", VOTER, "GET", {"suggestion": "{film}"}, part=True),
     Fragment("dtdd_match", VOTER, "GET", {"suggestion": "{film}", "cancel": ""}),

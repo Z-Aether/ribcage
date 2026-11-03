@@ -76,6 +76,15 @@ def test_the_answer_is_the_section_open_with_the_row_watched_the_matched_block_a
     assert answer.count("Powered by DoesTheDogDie.com") == 1
 
 
+@pytest.mark.parametrize(("phase", "corrects"), [(Phase.SUGGEST, True), (Phase.APPROVE, True), (Phase.VOTE, True), (Phase.PICK, False)])
+def test_the_answer_offers_the_match_correction_only_where_a_match_can_be_corrected(voters, heavy, phase, corrects):
+    walk_to(phase)
+
+    answer = watch(signed_in(voters["ada"]), heavy, DOG, headers=HTMX).text
+
+    assert ("dtdd__correct" in answer) is corrects and ("dtdd/match" in answer) is corrects and ("Wrong film?" in answer) is corrects
+
+
 def test_unwatching_takes_the_row_the_block_and_the_ring_away(voters, heavy):
     watched.set_ticked(voters["ada"], DOG, True)
     answer = watch(signed_in(voters["ada"]), heavy, DOG, on=False, headers=HTMX).text

@@ -2,8 +2,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST, require_safe
 
-from ribcage.ballot import board, done, placing
-from ribcage.phase.check import phase_window
+from ribcage.ballot import board, done, placing, reveal, revealed_card
+from ribcage.phase.check import phase_window, reload_into_the_current_phase
 from ribcage.phase.history import current
 from ribcage.phase.order import Phase
 from ribcage.reload import reload_the_tab
@@ -107,3 +107,35 @@ def im_done(request):
         return redirect("phase_page")
     # The size posted is echoed, not the current one, so a stale page stays stale after unpressing (#124).
     return render(request, "ballot/done.html", {"roster": done.roster(request.user), "size": size})
+
+
+# Where the reveal is drawn: PICK, and RUN behind the evening (#13, #158).
+REVEALED_IN = (Phase.PICK, Phase.RUN)
+
+
+@phase_window(*REVEALED_IN)
+@require_safe
+def reveal_card(request):
+    """A reveal row opens as its film's read-only card under it, or an opened one closes to its row; a card named in `closes` is closed in the same answer (#29, #158).
+
+    A GET, which the window leaves to the view: a tab left open past the reveal reloads into the phase, so no score shows outside it (#8, #34).
+    RUN's card carries no trigger data (#106, #161).
+    """
+    if request.headers.get("HX-Request") != "true":
+        return redirect("phase_page")
+    phase = current()
+    if phase not in REVEALED_IN:
+        return reload_into_the_current_phase(request)
+    shown = reveal.load(request.user, request.GET.get("sort", ""))
+    suggestion = candidate(request.GET.get("suggestion"))
+    row = next((each for each in shown.rows if suggestion is not None and each.suggestion_id == suggestion.pk), None)
+    # A film dropped since is on no ballot: the tab reloads as it is now.
+    if row is None:
+        return reload_the_tab(request, reverse("phase_page"))
+    if "close" in request.GET:
+        return render(request, "components/reveal_row.html", {"row": row, "sort": shown.sort})
+    context = {"row": row, "sort": shown.sort, "card": revealed_card.of(request.user, suggestion, shown, triggers=phase is Phase.PICK), "scroll": True}
+    other = candidate(request.GET.get("closes"))
+    if other is not None and other.pk != suggestion.pk:
+        context["closed"] = next((each for each in shown.rows if each.suggestion_id == other.pk), None)
+    return render(request, "ballot/reveal_opened.html", context)

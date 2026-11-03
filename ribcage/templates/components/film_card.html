@@ -1,9 +1,9 @@
-{# The film card over plain data, a FilmCard (#21, #58). Opens in place; only the phase bar differs between surfaces. On the ballot, `closes_at` has the title swap the card for its tile (#122). #}
+{# The film card over plain data, a FilmCard (#21, #58). Opens in place; only the phase bar differs between surfaces. On the ballot, `closes_at` has the title swap the card for its tile (#122); under a reveal row, `closes_row` and `sort` have it swap the card for its row (#158). #}
 <article class="film-card{% if expanded %} is-open{% endif %}" data-film-card{% if card.suggestion_id %} data-suggestion="{{ card.suggestion_id }}"{% endif %}{% if card.mine %} data-mine{% endif %}>
   {% include "components/film_card_poster.html" %}
   <div class="film-card__body">
     <div class="film-card__head">
-      <h3 class="film-card__title"><button type="button" class="film-card__toggle" aria-expanded="{% if expanded %}true{% else %}false{% endif %}"{% if closes_at %} hx-get="{% url 'ballot_card' %}?suggestion={{ card.suggestion_id }}&amp;close=1" hx-target="closest li" hx-swap="outerHTML"{% endif %}>{{ card.film.title }}</button>{% if card.film.year %} <span class="film-card__year">{{ card.film.year }}</span>{% endif %}</h3>
+      <h3 class="film-card__title"><button type="button" class="film-card__toggle" aria-expanded="{% if expanded %}true{% else %}false{% endif %}"{% if closes_at %} hx-get="{% url 'ballot_card' %}?suggestion={{ card.suggestion_id }}&amp;close=1" hx-target="closest li" hx-swap="outerHTML"{% elif closes_row %} hx-get="{% url 'reveal_card' %}?suggestion={{ card.suggestion_id }}&amp;close=1&amp;sort={{ sort|urlencode }}" hx-target="closest tbody" hx-swap="outerHTML"{% endif %}>{{ card.film.title }}</button>{% if card.film.year %} <span class="film-card__year">{{ card.film.year }}</span>{% endif %}</h3>
       {% include "components/runtime.html" %}
     </div>
     {% if card.film.original_title and card.film.original_title != card.film.title %}<p class="film-card__original"><span class="film-card__label">Original title</span> {{ card.film.original_title }}</p>{% endif %}

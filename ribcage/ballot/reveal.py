@@ -1,12 +1,13 @@
 """The reveal's matrix: every voter's score on every film of the ballot, plain data for `components/reveal.html` from one loader (#29, #154).
 
-#157 sorts it by a query value, #158 opens a card under a row and #161 draws it again behind the evening, so the page's view only calls `load`.
+#157 sorts it by a query value, #158 opens a card under a row (`ballot.revealed_card`) and #161 draws it again behind the evening, so the page's view only calls `load`.
 """
 
 from dataclasses import dataclass, replace
 
 from ribcage.ballot import board, progress
 from ribcage.ballot.models import BallotRecord
+from ribcage.films.card import Chip, RevealBar
 from ribcage.films.film import Film
 from ribcage.readouts.placement import is_placed
 from ribcage.readouts.slate import film_points
@@ -185,6 +186,29 @@ def build(voters, films, records, reasons, viewer_id, sort=""):
         points_marker=MARKERS[False] if by is None else "",
         points_aria_sort=SCORE_ARIA[False] if by is None else "",
     )
+
+
+def chip_words(name, cell):
+    """What a chip says to a screen reader: the voter, their score or *vetoed*, and *seen it*, without the veto's reason, which the card's notes carry (#153, #158)."""
+    if cell.key == "veto":
+        said = "vetoed"
+    else:
+        said = next((words for _, key, _, words in board.SCALE if key == cell.key), "")
+    return ", ".join(part for part in (name, said, "seen it" if cell.seen_it else "") if part)
+
+
+def bar_of(shown, suggestion_id):
+    """The reveal bar for one film of the matrix, from the same cells, points and *didn't vote* the rows and headers carry (#158).
+
+    A voter with a score, a veto or a seen it on the film has a chip; one with a blank and nothing seen has none.
+    """
+    row = next(each for each in shown.rows if each.suggestion_id == suggestion_id)
+    chips = tuple(
+        Chip(column.name, cell.key, cell.sign, cell.seen_it, cell.mine, chip_words(column.name, cell))
+        for column, cell in zip(shown.columns, row.cells, strict=True)
+        if cell.key != "blank" or cell.seen_it
+    )
+    return RevealBar(chips, row.points, tuple(column.name for column in shown.columns if column.didnt_vote))
 
 
 def load(viewer, sort=""):
