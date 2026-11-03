@@ -1,14 +1,25 @@
 // Dragging a box along the admin's track: the box follows the pointer, the server answers each new snapped value with the track it
 // would leave, and the release saves through the same call. The engine is the server's alone; this file only snaps and paints (#22, #139).
 // A candidate picked up from the list is the same drag with no box yet: over the track it previews an insert, and a drop there places it (#144).
+// Held at the track's right edge, a moved box or a candidate widens the locked scale in steps, so the evening can lengthen in one drag (#139).
 {
   const GRID = 5;
   // Within this many minutes of a neighbour's edge, the box lands flush against it.
   const NEAR = 6;
   // Pixels the pointer must travel before a press is a drag and no longer a click that selects.
   const SLOP = 4;
+  // Held within this many pixels of the track's right edge (or past it), the locked scale widens by GROW_BY minutes every GROW_EVERY ms (#139).
+  const EDGE = 12;
+  const GROW_BY = 15;
+  const GROW_EVERY = 250;
+  // The scale stops growing at the server's furthest start, so no posted start or scale is refused (editing.FURTHEST, #139).
+  const FURTHEST = 100000;
   const region = () => document.getElementById("track-region");
   const form = () => region().querySelector("form.track-move");
+
+  const lanesBox = () => region().querySelector(".track__lanes").getBoundingClientRect();
+  // The minute under a pointer, in the scale the drag now locks.
+  const minuteAt = (x, d) => d.scale.start + ((x - lanesBox().left) / lanesBox().width) * d.scale.length;
 
   let drag = null;
   let suppressClick = false;
@@ -85,6 +96,7 @@
 
   const preview = (d, value) => {
     d.lastValue = value;
+    d.lastLength = d.scale.length;
     const seq = ++d.sent;
     // A handle names the new length, a drag the new start; a candidate names its film, or with no start, asks for the track as stored.
     let named = d.resizing ? { box: d.key, length: value } : { box: d.key, start: value };
@@ -117,6 +129,8 @@
       start0: Number(slot.dataset.start),
       length: Number(slot.dataset.length),
       length0: Number(slot.dataset.length),
+      // Where in the box the pointer holds it, in minutes, which stays as the scale grows.
+      grab: scale.start + ((event.clientX - track.querySelector(".track__lanes").getBoundingClientRect().left) / width) * scale.length - Number(slot.dataset.start),
       scale,
       minutesPerPixel: scale.length / width,
       others: [...track.querySelectorAll(".track__slot")]
@@ -129,6 +143,7 @@
       shown: 0,
       resizing,
       lastValue: null,
+      lastLength: null,
       start: null,
     };
   });
@@ -159,6 +174,7 @@
       sent: 0,
       shown: 0,
       lastValue: null,
+      lastLength: null,
       start: null,
       chip: null,
     };
@@ -175,6 +191,7 @@
     if (!d.moved && Math.hypot(event.clientX - d.x0, event.clientY - d.y0) < SLOP) return;
     if (!d.moved) {
       d.moved = true;
+      beat(d);
       d.row.classList.add("is-dragging");
       d.row.setPointerCapture(event.pointerId);
       d.chip = document.createElement("div");
@@ -184,7 +201,12 @@
     }
     d.chip.style.left = `${event.clientX}px`;
     d.chip.style.top = `${event.clientY}px`;
-    const rect = overTrack(event);
+    placeFilm(d);
+  };
+
+  // The candidate where the pointer last was: over the track it previews an insert there, off it the track as stored.
+  const placeFilm = (d) => {
+    const rect = overTrack(d.pointer);
     d.chip.hidden = !!rect;
     if (!rect) {
       // Back off the track: it shows as stored again, and a drop here saves nothing.
@@ -199,19 +221,42 @@
     // The box's middle is under the pointer, read against the scale the track is drawn in now: the first answer widens it.
     const shown = region().querySelector(".track");
     const drawn = { start: Number(shown.dataset.scaleStart), length: Number(shown.dataset.scaleLength) };
-    const raw = drawn.start + ((event.clientX - rect.left) / rect.width) * drawn.length - d.length / 2;
+    const raw = drawn.start + ((d.pointer.clientX - rect.left) / rect.width) * drawn.length - d.length / 2;
     d.start = snap(raw, d);
-    if (d.start !== d.lastValue) preview(d, d.start);
+    if (d.start !== d.lastValue || d.scale.length !== d.lastLength) preview(d, d.start);
   };
+
+  // A box on the track is moved with the same grab in minutes, whatever the scale has grown to.
+  const placeBox = (d) => {
+    d.start = snap(minuteAt(d.pointer.clientX, d) - d.grab, d);
+    d.slot.style.setProperty("--at", `${((d.start - d.scale.start) / d.scale.length) * 100}%`);
+    d.slot.style.setProperty("--span", `${(d.length / d.scale.length) * 100}%`);
+    if (d.start !== d.lastValue || d.scale.length !== d.lastLength) preview(d, d.start);
+  };
+
+  // The beat while a box or candidate is held: at the right edge the locked scale widens a step, and the box rides along (#139).
+  const grow = () => {
+    const d = drag;
+    if (!d || !d.moved || d.cancelled) return;
+    const right = lanesBox().right;
+    const atEdge = d.pointer.clientX >= right - EDGE && (d.film ? d.over : true);
+    if (!atEdge || d.scale.start + d.scale.length + GROW_BY > FURTHEST) return;
+    d.scale = { start: d.scale.start, length: d.scale.length + GROW_BY };
+    if (d.film) placeFilm(d);
+    else placeBox(d);
+  };
+  const beat = (d) => (d.timer = setInterval(grow, GROW_EVERY));
 
   addEventListener("pointermove", (event) => {
     const d = drag;
     if (!d || d.cancelled) return;
+    d.pointer = { clientX: event.clientX, clientY: event.clientY };
     if (d.film) return carryFilm(event, d);
     const travelled = event.clientX - d.x0;
     if (!d.moved && Math.abs(travelled) < SLOP) return;
     if (!d.moved) {
       d.moved = true;
+      if (!d.resizing) beat(d);
       d.slot.classList.add("is-dragging");
       d.slot.setPointerCapture(event.pointerId);
     }
@@ -221,9 +266,7 @@
       if (d.length !== d.lastValue) preview(d, d.length);
       return;
     }
-    d.start = snap(d.start0 + travelled * d.minutesPerPixel, d);
-    d.slot.style.setProperty("--at", `${((d.start - d.scale.start) / d.scale.length) * 100}%`);
-    if (d.start !== d.lastValue) preview(d, d.start);
+    placeBox(d);
   });
 
   const putDown = (d) => {
@@ -248,6 +291,7 @@
     const d = drag;
     if (!d) return;
     drag = null;
+    clearInterval(d.timer);
     // The click that ends a drag would select and navigate, racing the save, so it is not a click.
     if (d.moved) {
       suppressClick = true;
@@ -268,6 +312,7 @@
     const d = drag;
     if (!d || !d.moved || d.cancelled) return;
     d.cancelled = true;
+    clearInterval(d.timer);
     if (d.film) {
       putDown(d);
       return ask(form().dataset.preview, { box: d.rest.key, start: d.rest.start }).then((answer) => (answer.redirect ? location.assign(answer.redirect) : show(answer.html, null)));

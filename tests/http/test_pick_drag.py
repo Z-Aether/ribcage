@@ -76,6 +76,19 @@ def test_a_preview_can_hold_the_scale_still(evening):
     assert "--at: 20.000%" in slot_of(page, evening["cube"]).group(1)
 
 
+def test_a_preview_can_draw_a_scale_grown_past_the_evening_with_the_box_out_at_its_edge(evening):
+    # The evening ends at 269; a held-at-the-edge drag has grown the scale to 15 minute steps beyond it (#139).
+    for length, at in ((400, "75.000%"), (415, "72.289%")):
+        page = evening["admin"].post(PREVIEW, {"box": evening["thing"].pk, "start": "300", "scale_start": "0", "scale_length": length}).text
+
+        assert f'data-scale-start="0" data-scale-length="{length}"' in page
+        assert f"--at: {at}" in slot_of(page, evening["thing"]).group(1)
+        assert slot_of(page, evening["thing"]).group(2) == "300"
+    # The release refits: the stored track, asked for with no scale, is drawn to the evening again.
+    refit = evening["admin"].post(PREVIEW, {"box": evening["thing"].pk, "start": "300"}).text
+    assert "data-scale-length=\"400\"" not in refit
+
+
 def test_a_preview_and_a_save_naming_a_removed_box_reload_the_tab(evening):
     gone = evening["dinner"].pk
     evening["dinner"].delete()
