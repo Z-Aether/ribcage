@@ -3334,6 +3334,14 @@ body:has(> main > .ballot-head) > footer.site-footer {
   align-items: center;
   gap: 0.4rem;
 }
+/* Pico's bottom margin on forms, inputs and buttons put the row's controls at uneven heights (#145) */
+[data-skin] .track-tools__acts :is(form, input, button, label) {
+  margin: 0;
+}
+[data-skin] .ripple-mode :is(button, .ripple-mode__label) {
+  flex: 0 0 auto;
+  width: auto;
+}
 [data-skin] .meter {
   display: inline-block;
   width: 9rem;
@@ -3781,9 +3789,20 @@ body:has(> main > .ballot-head) > footer.site-footer {
   width: auto;
   margin: 0;
 }
+[data-skin] .arrange--armed > :is(form, a) {
+  flex: 0 0 auto;
+}
+@media (max-width: 600px) {
+  [data-skin] .arrange--armed > .arrange__armed {
+    flex: 1 0 100%;
+  }
+}
 [data-skin] .arrange input[type="number"] {
   flex: 0 0 auto;
   width: 4rem;
+  height: auto;
+  padding-block: 0.3rem;
+  font-size: inherit;
 }
 [data-skin] .arrange__armed {
   font-weight: 600;
