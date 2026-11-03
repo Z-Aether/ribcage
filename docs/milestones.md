@@ -33,7 +33,7 @@ The big-picture build schedule: ten milestones, each a vertical slice that is re
 | M5 | Trigger warnings | DTDD data, watched lists, matched topics | ~18 | #62 |
 | M6 | VOTE | The ballot, done markers, approval during VOTE | 8 | #63 |
 | M7 | The timetable, without SOLVE | PICK's Timetable tab, hand-built slates, readouts | ~20 | #64 |
-| M8 | The reveal and the evening | Reveal, RUN, publishing | ~15 | #65 |
+| M8 | The reveal and the evening | Reveal, RUN, publishing | 10 | #65 |
 | M9 | SOLVE and Compare | The solver, knobs, batch, shortlist, Compare tab | ~20 | #66 |
 | M10 | Rehearsal and launch | The gating end-to-end rehearsal on the real deployment | ~12 | #67 |
 
@@ -184,7 +184,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - **The reveal:** the matrix, sort by points or by a voter's ballot, *didn't vote*, ☒ and the seen-it badge, the read-only card opening under its row (#29).
 - **PICK → RUN:** publishes the timetable. **RUN → PICK** takes the evening down at once. The same moves' DTDD purge and refetch are M5's (#13, #32, #62).
 - **The RUN page:** the vertical evening fitted to one phone screen, past boxes dimmed, now playing inside the playing box, next box in a gap or before the start, the 30–60 s poll, the reveal one header link away (#13, #22, #36).
-- **Actualising:** the M7 editor used in RUN.
+- **Actualising:** the M7 editor used in RUN, with a now line on its track there (#163).
 - Every voter page's RUN-specific behaviour: *My warnings* gone from the name menu, the watched-list window closing (#34).
 - The RUN page tested on real phones, since a broken RUN is unfixable at any price (#25).
 
