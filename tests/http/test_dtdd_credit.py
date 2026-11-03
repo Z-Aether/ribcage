@@ -29,14 +29,16 @@ from tests.http.test_phase import walk_to
 CREDIT_ADDRESS = "https://www.doesthedogdie.com/"
 CREDIT_WORDS = "Powered by DoesTheDogDie.com"
 # The counts are bare numbers, so they are caught in any format a surface writes them in: "7771 yes", "7771/7772", "7,771" or a title (#112).
-SENTINELS = (RECORD, TOPIC, GROUP, DESCRIPTION, KEYWORDS, str(YES), str(NO), f"{YES:,}", f"{NO:,}")
+SENTINELS = (RECORD, TOPIC, GROUP, DESCRIPTION, KEYWORDS)
 CASEFOLDED = tuple(sentinel.casefold() for sentinel in SENTINELS)
+# A count is a whole number: digits of a timestamp's microseconds ("12:00:00.777123") or a token are no count of ours.
+COUNTS = re.compile(rf"(?<!\d)(?:{YES}|{NO}|{YES:,}|{NO:,})(?!\d)")
 
 
 def carries(text):
     """Whether `text` holds a sentinel in any case: the My warnings page's search text casefolds the label and keywords (#108, #112)."""
     folded = text.casefold()
-    return any(sentinel in folded for sentinel in CASEFOLDED)
+    return any(sentinel in folded for sentinel in CASEFOLDED) or COUNTS.search(text) is not None
 
 
 # Hidden inputs that carry opaque tokens, whose random characters could spell a count.
@@ -134,6 +136,11 @@ def test_a_region_without_its_own_credit_is_a_violation_even_when_another_region
 def test_a_credit_with_other_words_or_another_address_is_no_credit():
     assert violations(f'<section data-dtdd>{RECORD}<a href="{CREDIT_ADDRESS}">DTDD</a></section>')
     assert violations(f'<section data-dtdd>{RECORD}<a href="https://example.com/">{CREDIT_WORDS}</a></section>')
+
+
+def test_a_count_is_a_whole_number_so_a_clocks_microseconds_are_no_count():
+    assert carries("<p>7771 yes</p>") and carries("7,772") and carries("7771/7772")
+    assert not carries("2026-11-03T12:00:00.777123+00:00") and not carries("12:00:00.177720")
 
 
 def test_the_ledgers_count_of_topics_is_data_that_needs_its_region():
