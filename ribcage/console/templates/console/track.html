@@ -75,6 +75,10 @@
         {% endfor %}
       </ol>
     {% endif %}
+    {# The now line, RUN only: a mark that ignores the pointer. Present with no `left` while the present is off the scale, so the tick can show it when the night comes (#163). #}
+    {% if track.now %}
+      <div class="track__now{% if track.now.late %} is-late{% endif %}"{% if track.now.left %} style="--at: {{ track.now.left }}"{% else %} hidden{% endif %}{% if track.now.live %} data-anchor="{{ track.now.anchor }}" data-zone="{{ track.now.zone }}" data-late-from="{{ track.now.late_from }}"{% endif %} aria-hidden="true"><span class="track__now-label">{{ track.now.label }}</span></div>
+    {% endif %}
     {% if track.marker %}
       <div class="track__budget{% if track.marker.late %} is-late{% endif %}" style="--at: {{ track.marker.left }}"><span class="track__budget-label">{{ track.marker.label }}</span></div>
     {% endif %}

@@ -3531,6 +3531,41 @@ body:has(> main > .ballot-head) > footer.site-footer {
   left: auto;
   right: 0.3rem;
 }
+/* The now line: a thin lavender rule over the plan row and the strips, its clock time just under the hour labels; a mark that ignores the pointer (#163). */
+[data-skin] .track__now {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--at);
+  z-index: 3;
+  border-left: 1px solid var(--link);
+  pointer-events: none;
+}
+[data-skin] .track__now[hidden] {
+  display: none;
+}
+[data-skin] .track__now-label {
+  position: absolute;
+  top: 1.2rem;
+  left: 0.2rem;
+  padding: 0 0.25rem;
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--link);
+  font-size: 0.8rem;
+  line-height: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+/* At the very end the rule's own pixel would overflow the track and scroll its frame, so a late line sits a pixel in. */
+[data-skin] .track__now.is-late {
+  margin-left: -1px;
+}
+/* Near the track's right end the label turns to the line's left, as the budget's does, so it never runs off the track. */
+[data-skin] .track__now.is-late .track__now-label {
+  left: auto;
+  right: 0.2rem;
+}
 
 /* The box: a film's or a labelled one's, with no geometry of its own; its holder gives it a size (#136). */
 [data-skin] .box {

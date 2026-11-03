@@ -1,6 +1,6 @@
 """The track's plain data: geometry, clock labels in TIME_ZONE, lanes and the tool row's words (#22, #36, #136)."""
 
-from datetime import datetime, timezone as utc
+from datetime import datetime, timedelta, timezone as utc
 from zoneinfo import ZoneInfo
 
 import pytest
@@ -144,3 +144,48 @@ def test_with_no_strip_the_line_stays_and_shared_time_is_the_elapsed_time():
 
 def test_with_no_voters_there_is_no_line():
     assert track.build([film(1, 0, 100)], ANCHOR, None).presence_line == ""
+
+
+def test_the_now_line_stands_at_the_present_on_the_scale_inside_the_evening():
+    boxes = [film(1, 0, 100)]
+    held = track.Scale(-10, 120)
+
+    line = track.build(boxes, ANCHOR, None, held, now=datetime(2026, 11, 7, 19, 0, tzinfo=utc.utc)).now
+
+    assert line.left == "58.333%" and line.label == "19:00"
+    assert line.anchor == "2026-11-07T18:00:00+00:00"
+
+
+def test_the_now_line_is_in_the_deployments_clock():
+    with timezone.override(ZoneInfo("Europe/Berlin")):
+        assert track.build([film(1, 0, 100)], ANCHOR, None, now=datetime(2026, 11, 7, 19, 0, tzinfo=utc.utc)).now.label == "20:00"
+
+
+@pytest.mark.parametrize("minutes", [-30, 140])
+def test_there_is_no_now_line_before_or_after_the_scale(minutes):
+    now = ANCHOR + timedelta(minutes=minutes)
+
+    assert track.build([film(1, 0, 100)], ANCHOR, None, track.Scale(-10, 120), now=now).now.left is None
+
+
+def test_the_scale_edges_still_hold_the_line_and_no_present_means_no_line_at_all():
+    boxes = [film(1, 0, 100)]
+
+    assert track.build(boxes, ANCHOR, None, track.Scale(-10, 120), now=ANCHOR - timedelta(minutes=10)).now.left == "0.000%"
+    assert track.build(boxes, ANCHOR, None).now is None
+
+
+def test_the_now_line_changes_no_readout():
+    boxes = [film(1, 0, 300), film(2, 300, 205)]
+    plain = track.build(boxes, ANCHOR, 540)
+
+    lit = track.build(boxes, ANCHOR, 540, now=ANCHOR + timedelta(minutes=100))
+
+    assert (lit.tools, lit.placements, lit.marker, lit.bands, lit.scale) == (plain.tools, plain.placements, plain.marker, plain.bands, plain.scale)
+
+
+@pytest.mark.parametrize(("minutes", "late"), [(50, False), (100, True)])
+def test_the_now_line_label_turns_left_near_the_tracks_right_end(minutes, late):
+    line = track.build([film(1, 0, 100)], ANCHOR, None, track.Scale(0, 105), now=ANCHOR + timedelta(minutes=minutes)).now
+
+    assert line.late is late

@@ -190,6 +190,11 @@ def ripple_mode(request):
     return mode if mode in engine.MODES else engine.NONE
 
 
+def the_present():
+    """The instant the track's now line stands at: RUN only, since in PICK the evening may be days away (#163)."""
+    return timezone.now() if current() == Phase.RUN else None
+
+
 def track_context(request, mode=None):
     # The timetable and the break the tool row reads, for every render of the track, a preview's included (#145).
     return {"ripple_mode": mode or ripple_mode(request), "ripple_names": RIPPLE_NAMES, "timetable": setting.read(), "default_break": engine.DEFAULT_BREAK}
@@ -219,18 +224,18 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
     """The Pick tab on one of its two sub-tabs; the header is the same on both (#135)."""
     timetable = setting.read()
     budget = timetable.budget
-    the_track = track.load(timetable.anchor, budget) if sub == "timetable" and timetable.anchor else None
+    the_track = track.load(timetable.anchor, budget, now=the_present()) if sub == "timetable" and timetable.anchor else None
     labelled = selected_box(request, box)
     # Arming is a plain GET: the arranged track in place of the stored one, nothing written (#26, #145).
     armed = arrange_asked(request.GET) if request.method == "GET" and the_track else None
     if armed and (arranged := editing.arrange(*armed, save=False)):
-        the_track = track.build(arranged, timetable.anchor, budget, voters=track.voters())
+        the_track = track.build(arranged, timetable.anchor, budget, voters=track.voters(), now=the_present())
     else:
         armed = None
     if the_track and box_refused and not box_refused.says_length and Box.objects.filter(pk=labelled, suggestion__isnull=True).exists():
         # A refusal over the label alone keeps the typed length, so the track keeps showing it as the preview did (#140).
         kept = editing.run(labelled, engine.Resize(int(box_refused.length.strip())), mode or ripple_mode(request), save=False)
-        the_track = track.build(kept, timetable.anchor, budget, voters=track.voters()) if kept else the_track
+        the_track = track.build(kept, timetable.anchor, budget, voters=track.voters(), now=the_present()) if kept else the_track
     context = {
         "tab": "console_pick",
         "sub": sub,
@@ -394,7 +399,7 @@ def pick_preview(request):
         boxes = editing.run(box, change, mode, save=False)
     if boxes is None:
         return reload_the_tab(request, reverse("console_pick"))
-    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters())
+    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters(), now=the_present())
     return render(request, "console/track.html", {**track_context(request, mode), "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
 
 
@@ -414,7 +419,7 @@ def preview_insert(request):
     if boxes is None:
         return reload_the_tab(request, reverse("console_pick"))
     timetable = setting.read()
-    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters())
+    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters(), now=the_present())
     return render(request, "console/track.html", {**track_context(request, asked[2]), "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
 
 
@@ -426,7 +431,7 @@ def preview_arrange(request):
     if boxes is None:
         return reload_the_tab(request, reverse("console_pick"))
     timetable = setting.read()
-    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters())
+    the_track = track.build(boxes, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters(), now=the_present())
     return render(request, "console/track.html", {**track_context(request), **armed_context(asked), "timetable": timetable, "track": the_track, "selected": the_track.box(selected_box(request, request.POST.get("selected", "")))})
 
 

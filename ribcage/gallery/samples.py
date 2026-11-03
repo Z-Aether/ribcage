@@ -458,7 +458,7 @@ def timetable_track():
         track.Loaded(7, 560, 90, film=film(CUBE), vetoed_by="A", vetoers="Vetoed by Anne-Marie", veto_voters=frozenset({"anne-marie"})),
     ]
     voters = (("ada", "Ada"), ("anne-marie", "Anne-Marie"), ("sam", "Sam"), ("zoe", "Zoë"), ("bartholomew", "Bartholomew"))
-    return track.build(boxes, datetime(2026, 11, 7, 18, 0, tzinfo=utc.utc), 8 * 60, voters=voters)
+    return track.build(boxes, datetime(2026, 11, 7, 18, 0, tzinfo=utc.utc), 8 * 60, voters=voters, now=datetime(2026, 11, 7, 20, 40, tzinfo=utc.utc), live=False)
 
 
 def reveal_cells():

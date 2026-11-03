@@ -9,6 +9,7 @@ crossing a clock change shows an hour twice or skips one and nothing else notice
 from dataclasses import dataclass
 from datetime import UTC, timedelta
 
+from django.conf import settings
 from django.utils import timezone
 
 from ribcage.ballot import board
@@ -27,6 +28,8 @@ MOST_LABELS = 14
 LABEL_EVERY = (1, 2, 3, 6, 12, 24)
 # A marker past this far along labels itself on its left, so the label stays on the track.
 LABEL_LEFT_FROM = 70
+# Past this percent the now line's clock label sits left of the line, so it stays inside the track (#163).
+NOW_LABEL_LEFT_FROM = 90
 # An hour label this far along the track, in percent, has no room left of the edge, so the tick is left out (#136).
 LABEL_ROOM_UNTIL = 92
 
@@ -121,6 +124,19 @@ class Marker:
 
 
 @dataclass(frozen=True)
+class NowLine:
+    """The now line in RUN: `left` is None while the present is off the scale, and then no line shows. `live` lines are moved on by `static/timetable/now-line.js` (#163)."""
+
+    left: str | None
+    label: str
+    anchor: str
+    zone: str
+    live: bool = True
+    late: bool = False
+    late_from: int = NOW_LABEL_LEFT_FROM
+
+
+@dataclass(frozen=True)
 class Tools:
     """The tool row's words (#22). `spare` reads *35 min to spare* or *20 min over*, plain minutes (#136); `budget` and `spare` are None with no budget."""
 
@@ -172,6 +188,8 @@ class Track:
     shared_bands: tuple[Band, ...] = ()
     # *6 of 9 present throughout · shared time 6h58m*; empty with no voters.
     presence_line: str = ""
+    # In RUN only: the present on the scale, a mark that gates nothing and changes no readout (#163).
+    now: NowLine | None = None
 
     def box(self, key):
         """The box with this key, or None: a selection naming a box gone since is no selection (#137)."""
@@ -212,10 +230,12 @@ class Clock:
         return f"{self.day_hm(start)} → {self.day_hm(end) if last.date() != first.date() else self.hm(end)}"
 
 
-def build(boxes, anchor, budget, scale=None, voters=()):
+def build(boxes, anchor, budget, scale=None, voters=(), now=None, live=True):
     """The track for the loaded boxes against the anchor (an aware datetime) and the budget in minutes; None for no boxes.
 
     `voters` are every voter as (id, name) pairs in the order the strips take; the strips and the shared time read the boxes' vetoes against them (#149).
+
+    A `now` (an aware datetime) draws the now line where it falls inside the scale, from the same minute rule as the evening's now playing: minutes since the anchor instant (#159, #163).
 
     A `scale` is kept as given, which is how a drag holds the track still while the evening changes under it (#139).
     """
@@ -251,6 +271,14 @@ def build(boxes, anchor, budget, scale=None, voters=()):
         strips=strips_of(present, dict(voters), {box.key: box for box in boxes}, scale),
         shared_bands=tuple(Band(percent(scale.at(start)), percent(scale.size(end - start))) for start, end in present.shared_pieces) if present.strips else (),
         presence_line=presence_line(present, len(voters)),
+        now=None if now is None else now_line(now, anchor, scale, live),
+    )
+
+
+def now_line(now, anchor, scale, live):
+    at = scale.at((now - anchor) / timedelta(minutes=1))
+    return NowLine(
+        percent(at) if 0 <= at <= 100 else None, timezone.localtime(now).strftime("%H:%M"), anchor.astimezone(UTC).isoformat(), settings.TIME_ZONE, live, at > NOW_LABEL_LEFT_FROM
     )
 
 
@@ -337,9 +365,9 @@ def tools_of(reading, budget, clock, present):
     return Tools(screen, duration(budget), spare, over > 0, filled, evening, elapsed, len(reading.overlaps), shared)
 
 
-def load(anchor, budget):
+def load(anchor, budget, now=None):
     """Read the timetable's boxes and build its track: three queries however many boxes there are (the boxes, the vetoes, the voters)."""
-    return build(stored_boxes(), anchor, budget, voters=voters())
+    return build(stored_boxes(), anchor, budget, voters=voters(), now=now)
 
 
 def voters():
