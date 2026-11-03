@@ -3262,13 +3262,9 @@ body:has(> main > .ballot-head) > footer.site-footer {
   margin: 0;
   padding-block: 0.1rem;
 }
-[data-skin] .pick-field__reads,
 [data-skin] .pick-field__refusal {
   margin: 0.3rem 0 0;
   font-size: 0.9em;
-}
-[data-skin] .pick-field__reads {
-  color: var(--ink-muted);
 }
 /* A refusal is said kindly beside its box, in the note box's rose, never the veto's red (#88, #97). */
 [data-skin] .pick-field__refusal {

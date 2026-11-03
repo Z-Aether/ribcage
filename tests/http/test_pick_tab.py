@@ -67,7 +67,7 @@ def test_the_anchor_saves_as_an_instant_and_renders_in_the_deployments_time_zone
     assert Timetable.objects.get().anchor == datetime(2026, 11, 7, 17, 0, tzinfo=utc.utc)
     page = admin.get(PICK).text
     assert value(page, "anchor") == "2026-11-07T18:00"
-    assert "Saturday 7 November, 18:00" in page
+    assert "Saturday 7 November" not in page
 
 
 def test_the_anchor_can_be_changed_and_a_save_from_compare_returns_to_compare(admin):
@@ -109,7 +109,8 @@ def test_the_budget_saves_as_whole_minutes_and_reads_back_as_hours_and_minutes(a
     assert Timetable.objects.get().budget == 570
     page = admin.get(PICK).text
     assert (value(page, "hours"), value(page, "minutes")) == ("9", "30")
-    assert "9 h 30 min of screen time" in page
+    assert "of screen time" not in page
+    assert "pick-field__reads" not in page
 
 
 def test_a_blank_budget_clears_it_to_no_budget(admin):
@@ -119,7 +120,7 @@ def test_a_blank_budget_clears_it_to_no_budget(admin):
 
     assert response.status_code == 302
     assert Timetable.objects.get().budget is None
-    assert "No budget." in admin.get(PICK).text
+    assert "No budget." not in admin.get(PICK).text
 
 
 @pytest.mark.parametrize("typed", [("x", "30"), ("-1", "0"), ("1", "75"), ("0", "0"), ("1000", "")])

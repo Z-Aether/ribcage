@@ -238,7 +238,6 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
         "anchor": setting.local_anchor(timetable.anchor),
         "budget_hours": None if budget is None else budget // 60,
         "budget_minutes": None if budget is None else budget % 60,
-        "budget_words": None if budget is None else films.screen_time_words(budget),
         "refused": refused,
         "track": the_track,
         "selected": the_track.box(labelled) if the_track else None,

@@ -25,10 +25,6 @@
       </form>
       {% if refused and refused.field == "anchor" %}
         <p class="pick-field__refusal" id="pick-anchor-refusal">{{ refused.says }}</p>
-      {% elif anchor %}
-        <p class="pick-field__reads">{{ anchor|date:"l j F, H:i" }} ({{ anchor|date:"T" }})</p>
-      {% else %}
-        <p class="pick-field__reads">No start time yet.</p>
       {% endif %}
     </div>
 
@@ -48,10 +44,6 @@
       </form>
       {% if refused and refused.field == "budget" %}
         <p class="pick-field__refusal" id="pick-budget-refusal">{{ refused.says }}</p>
-      {% elif timetable.budget is not None %}
-        <p class="pick-field__reads">{{ budget_words }} of screen time</p>
-      {% else %}
-        <p class="pick-field__reads">No budget.</p>
       {% endif %}
     </div>
   </section>
