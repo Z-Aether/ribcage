@@ -4103,8 +4103,38 @@ body:has(> main > .ballot-head) > footer.site-footer {
   font-weight: 700;
   line-height: 1.2;
 }
-.reveal__voter > span:not(.avatar) {
+.reveal__voter .reveal__sort > span:not(.avatar),
+.reveal__sort .reveal__marker {
   display: block;
+}
+/* The headers are links that read as headers: the cursor and the ▾ or ▴ say they sort (#157). */
+.reveal__sort {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.reveal__sort:hover .reveal__name,
+.reveal__film-head .reveal__sort:hover,
+.reveal__points-head .reveal__sort:hover {
+  text-decoration: underline;
+}
+.reveal__film-head .reveal__sort,
+.reveal__points-head .reveal__sort {
+  display: inline;
+}
+.reveal__marker {
+  color: var(--accent);
+  font-size: 0.8rem;
+  line-height: 1;
+}
+/* A voter's header always holds the marker's line, empty unless active, so the row never grows when one is (#157). */
+.reveal__voter .reveal__marker {
+  height: 0.8rem;
+}
+.reveal__film-head .reveal__marker,
+.reveal__points-head .reveal__marker {
+  display: inline;
 }
 .reveal__name {
   overflow-wrap: break-word;

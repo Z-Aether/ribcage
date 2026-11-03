@@ -2,6 +2,7 @@
 
 import re
 
+from django.conf import settings
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
 
@@ -153,3 +154,102 @@ def test_a_voter_header_carries_the_full_name_as_its_title(voters):
     page = signed_in(data["ada"]).get("/").text
 
     assert 'title="ada"' in page
+
+
+def sorted_page(data, sort, viewer="ada"):
+    return signed_in(data[viewer]).get("/", {"sort": sort}).text
+
+
+def test_the_page_sorted_by_a_voter_and_by_that_voter_reversed(voters):
+    data = revealed(voters)
+    mark(data["dani"], data["one"], score=-1)
+    mark(data["dani"], data["two"], score=3)
+
+    assert titles_down(sorted_page(data, data["dani"].pk)) == ["Two", "One"]
+    assert titles_down(sorted_page(data, f"-{data['dani'].pk}")) == ["One", "Two"]
+
+
+def test_the_page_sorted_by_film_both_ways(voters):
+    data = revealed(voters)
+    mark(data["ada"], data["two"], score=3)
+
+    assert titles_down(sorted_page(data, "film")) == ["One", "Two"]
+    assert titles_down(sorted_page(data, "-film")) == ["Two", "One"]
+
+
+def test_the_active_header_is_marked_and_links_to_its_reverse(voters):
+    data = revealed(voters)
+    dani = data["dani"].pk
+
+    page = sorted_page(data, dani)
+
+    head = re.search(rf'<th[^>]*data-voter="{dani}"[^>]*>', page)[0]
+    assert 'aria-sort="descending"' in head
+    assert f'href="?sort=-{dani}"' in page
+    assert "▾" in page and page.count("▾") == 1
+    assert 'aria-sort="ascending"' in re.search(rf'<th[^>]*data-voter="{dani}"[^>]*>', sorted_page(data, f"-{dani}"))[0]
+    assert 'data-sort="%d"' % dani in page
+    assert 'href="?sort=film"' in page
+    assert "▴" in sorted_page(data, f"-{dani}")
+    film = sorted_page(data, "film")
+    assert 'href="?sort=-film"' in film and re.search(r'class="reveal__film-head" aria-sort="ascending"', film)
+    assert 'aria-sort="descending"' in re.search(r'<th[^>]*reveal__film-head[^>]*>', sorted_page(data, "-film"))[0]
+
+
+def points_head(page):
+    return re.search(r'<th[^>]*reveal__points-head[^>]*>.*?</th>', page, re.S)[0]
+
+
+def test_the_default_page_marks_points_and_no_other_header(voters):
+    data = revealed(voters)
+
+    page = signed_in(data["ada"]).get("/").text
+
+    assert page.count("aria-sort") == 1 and page.count("▾") == 1 and 'data-sort=""' in page
+    assert 'aria-sort="descending"' in points_head(page) and "▾" in points_head(page)
+
+
+def test_points_links_back_to_the_default_order_from_a_voter_sort(voters):
+    data = revealed(voters)
+    mark(data["dani"], data["one"], score=1)
+    mark(data["dani"], data["two"], score=-1)
+    mark(data["ada"], data["two"], score=3)
+    sorted_by_dani = sorted_page(data, data["dani"].pk)
+
+    head = points_head(sorted_by_dani)
+    assert 'href="?sort="' in head and "▾" not in head and "aria-sort" not in head
+    assert titles_down(sorted_by_dani) == ["One", "Two"]
+    assert titles_down(signed_in(data["ada"]).get("/", {"sort": ""}).text) == ["Two", "One"]
+
+
+def test_every_voter_header_holds_the_marker_slot_and_the_stylesheet_reserves_its_height(voters):
+    data = revealed(voters)
+    heads = lambda page: re.findall(r'<th[^>]*data-voter="\d+".*?</th>', page, re.S)
+
+    for page in [signed_in(data["ada"]).get("/").text, sorted_page(data, data["dani"].pk)]:
+        assert all('class="reveal__marker"' in head for head in heads(page))
+    css = (settings.BASE_DIR / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
+    assert re.search(r"\.reveal__voter \.reveal__marker \{\s*height: 0\.8rem;", css)
+
+
+def test_a_removed_or_unknown_voters_id_falls_back_to_points(voters):
+    data = revealed(voters)
+    mark(data["ada"], data["two"], score=3)
+    gone = data["hanna"].pk
+    mark(data["ada"], data["one"], score=1)
+    data["hanna"].delete()
+    default = titles_down(signed_in(data["ada"]).get("/").text)
+
+    for sort in [gone, f"-{gone}", "9999", "bogus", ""]:
+        page = sorted_page(data, sort)
+        assert titles_down(page) == default == ["Two", "One"]
+        assert 'data-sort=""' in page and "▴" not in page
+        assert 'aria-sort="descending"' in points_head(page) and page.count("aria-sort") == 1
+
+
+def test_the_scroll_script_is_loaded_on_every_page_and_names_the_sorted_header():
+    base = (settings.BASE_DIR / "ribcage/templates/base.html").read_text(encoding="utf-8")
+    source = (settings.BASE_DIR / "ribcage/static/components/reveal-scroll.js").read_text(encoding="utf-8")
+
+    assert "components/reveal-scroll.js" in base
+    assert 'th.reveal__voter[aria-sort]' in source and "scrollLeft" in source

@@ -1,9 +1,9 @@
 """The reveal's matrix: every voter's score on every film of the ballot, plain data for `components/reveal.html` from one loader (#29, #154).
 
-#157 sorts it, #158 opens a card under a row and #161 draws it again behind the evening, so the page's view only calls `load`.
+#157 sorts it by a query value, #158 opens a card under a row and #161 draws it again behind the evening, so the page's view only calls `load`.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from ribcage.ballot import board, progress
 from ribcage.ballot.models import BallotRecord
@@ -41,6 +41,10 @@ class Column:
     didnt_vote: bool
     # *24 of 32* for a voter who has placed some films but not all, else empty.
     partial: str
+    # The header's link, `?sort=...`, the ▾ or ▴ the active column wears and its aria-sort value (#157).
+    link: str = ""
+    marker: str = ""
+    aria_sort: str = ""
 
 
 @dataclass(frozen=True)
@@ -62,6 +66,16 @@ class Reveal:
     size: int
     # The score bands, for the legend: (score, key, sign, name).
     scale: tuple = board.SCALE
+    # The sort in force as its query value, empty for points: what a link that keeps the sort carries (#157, #158).
+    sort: str = ""
+    # The *Film* header's link, marker and aria-sort value.
+    film_link: str = "?sort=film"
+    film_marker: str = ""
+    film_aria_sort: str = ""
+    # The *Points* header is the way back to the default order, which wears ▾ while it is in force (#157).
+    points_link: str = "?sort="
+    points_marker: str = "▾"
+    points_aria_sort: str = "descending"
 
 
 def cell_of(name, mine, record, reason):
@@ -74,11 +88,41 @@ def cell_of(name, mine, record, reason):
     return Cell("blank", "", seen_it, mine, "", f"{name}: {BLANK_WORDS}")
 
 
-def build(voters, films, records, reasons, viewer_id):
+# A blank counts 0 but isn't a "don't mind", so it sits between 0 and −1; a veto sorts below −1 (#157).
+BLANK_RANK = -0.5
+VETO_RANK = -2
+REVERSED = "-"
+FILM = "film"
+MARKERS = {False: "▾", True: "▴"}
+# A score runs highest first by default, so ▾ is descending; *Film* runs A to Z, so ▾ is ascending.
+SCORE_ARIA = {False: "descending", True: "ascending"}
+FILM_ARIA = {False: "ascending", True: "descending"}
+
+
+def rank(record):
+    score, vetoed, _ = record if record else (None, False, False)
+    if vetoed:
+        return VETO_RANK
+    return BLANK_RANK if score is None else score
+
+
+def parse_sort(sort, voter_ids):
+    """(what to sort by, reversed) from a query value: `film`, a voter's id, either with a leading `-`; anything else is points (#157)."""
+    reverse = str(sort).startswith(REVERSED)
+    token = str(sort).removeprefix(REVERSED)
+    if token == FILM:
+        return FILM, reverse
+    if token.isascii() and token.isdigit() and int(token) in voter_ids:
+        return int(token), reverse
+    return None, False
+
+
+def build(voters, films, records, reasons, viewer_id, sort=""):
     """The matrix from plain data.
 
     `voters` is (id, name, scored) in the Roster's order, `films` is (suggestion id, Film) for the ballot,
     `records` is (voter id, suggestion id, score, vetoed, seen it) and `reasons` is {(voter id, suggestion id): the note}.
+    `sort` is `film` or a voter's id, either led by `-` to reverse; by default and when unknown it is points, highest first (#157).
     """
     size = len(films)
     held = {(voter_id, suggestion_id): (score, vetoed, seen_it) for voter_id, suggestion_id, score, vetoed, seen_it in records}
@@ -102,14 +146,48 @@ def build(voters, films, records, reasons, viewer_id):
         vetoers = ", ".join(name for (_, name, _), record in zip(voters, each, strict=True) if record and record[1])
         standing.append((suggestion_id, film, points, vetoers, cells))
     longest = max((abs(points) for _, _, points, _, _ in standing), default=0) or 1
+    by, reverse = parse_sort(sort, {voter_id for voter_id, _, _ in voters})
+    by_points = sorted(standing, key=lambda each: (-each[2], each[1].title.casefold(), each[1].title, each[0]))
+    if by == FILM:
+        ordered = sorted(standing, key=lambda each: (each[1].title.casefold(), each[1].title, each[0]), reverse=reverse)
+    elif by is not None:
+        # Stable over the points order, so ties fall to points then title (#157).
+        ordered = sorted(by_points, key=lambda each: rank(held.get((by, each[0]))), reverse=not reverse)
+    else:
+        ordered = by_points
     rows = tuple(
         Row(suggestion_id, film, points, round(100 * abs(points) / longest), points < 0, vetoers, cells)
-        for suggestion_id, film, points, vetoers, cells in sorted(standing, key=lambda each: (-each[2], each[1].title.casefold(), each[1].title, each[0]))
+        for suggestion_id, film, points, vetoers, cells in ordered
     )
-    return Reveal(columns, rows, size)
+
+    def toward(key):
+        return f"?sort={REVERSED if by == key and not reverse else ''}{key}"
+
+    columns = tuple(
+        replace(
+            each,
+            link=toward(each.voter_id),
+            marker=MARKERS[reverse] if by == each.voter_id else "",
+            aria_sort=SCORE_ARIA[reverse] if by == each.voter_id else "",
+        )
+        for each in columns
+    )
+    token = "" if by is None else f"{REVERSED if reverse else ''}{by}"
+    by_film = by == FILM
+    return Reveal(
+        columns,
+        rows,
+        size,
+        sort=token,
+        film_link=toward(FILM),
+        film_marker=MARKERS[reverse] if by_film else "",
+        film_aria_sort=FILM_ARIA[reverse] if by_film else "",
+        points_marker=MARKERS[False] if by is None else "",
+        points_aria_sort=SCORE_ARIA[False] if by is None else "",
+    )
 
 
-def load(viewer):
+def load(viewer, sort=""):
     """The reveal over the ballot as it stands, in a fixed number of queries however many voters and films there are (#154)."""
     suggestions = list(board.candidates())
     ids = [suggestion.pk for suggestion in suggestions]
@@ -121,4 +199,4 @@ def load(viewer):
         for suggestion_id, author_id, text in Note.objects.filter(suggestion__in=ids, author__isnull=False).values_list("suggestion_id", "author_id", "text")
         if (author_id, suggestion_id) in vetoed
     }
-    return build(voters, [(suggestion.pk, suggestion.film) for suggestion in suggestions], records, reasons, viewer.pk)
+    return build(voters, [(suggestion.pk, suggestion.film) for suggestion in suggestions], records, reasons, viewer.pk, sort)

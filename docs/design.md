@@ -219,7 +219,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 **Reveal** (#29):
 - A matrix: one row per film, one column per voter, scores in the cells, a points column on the right.
 - Rows are the ballot's films, by points, ties by title; columns are the roster in name order, the viewer's tinted. A partial voter's header reads *24 of 32*. On a phone the film column sticks while the voter columns scroll sideways (#154).
-- Sorted by points. Clicking a name re-sorts by that voter's ballot.
+- Sorted by points, highest first. Clicking a name re-sorts by that voter's score, highest first, and again reverses it; a blank sorts between 0 and −1 and a veto last, ties by points then title. Clicking *Film* sorts A–Z, and again Z–A. The active header wears ▾ (▴ reversed), with no hint text: in the default order that is *Points*, which has no reverse and is the way back to it from a voter's or *Film*'s sort. A sorted voter's column is scrolled into view on a phone. The sort is a plain `?sort=` GET of the same page, an unknown one falling back to points (#157).
 - A blank is a blank, a voter who never scored shows as *didn't vote*, vetoes are ☒ and seen it is a badge.
 - The film card opens inline under its row, read-only.
 - The floor set is not mentioned here; it is the admin's readout.

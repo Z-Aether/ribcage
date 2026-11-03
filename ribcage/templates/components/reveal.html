@@ -1,19 +1,22 @@
-{# The reveal's matrix over a Reveal from `ballot.reveal.load`: a row per film on the ballot, a column per voter, points on the right (#29, #154). A row carries its film as data-suggestion for the card under it (#158). #}
-<div class="reveal">
+{# The reveal's matrix over a Reveal from `ballot.reveal.load`: a row per film on the ballot, a column per voter, points on the right (#29, #154). The sort in force rides as data-sort, for a link that keeps it, and `reveal-scroll.js` brings a sorted voter's column into view (#157, #158). Every voter header holds a marker slot, empty unless active, so the header row keeps its height under any sort. A row carries its film as data-suggestion for the card under it (#158). #}
+<div class="reveal" data-sort="{{ reveal.sort }}">
   <p class="reveal-legend">{% for score, key, sign, name in reveal.scale %}<span class="reveal-legend__state"><span class="reveal-pill reveal-pill--{{ key }}">{{ sign }}</span>{{ name }}</span>{% endfor %}<span class="reveal-legend__state"><span class="reveal-pill reveal-pill--veto">☒</span>vetoed</span><span class="reveal-legend__state"><span class="reveal-pill reveal-pill--blank"></span>no score, counts 0</span><span class="reveal-legend__state"><span class="reveal-pill reveal-pill--seen-mark"><span class="reveal-pill__seen">👁</span></span>seen it</span></p>
   <div class="reveal__scroll">
     <table class="reveal__matrix" style="--voters: {{ reveal.columns|length }}">
       <thead>
         <tr>
-          <th scope="col" class="reveal__film-head">Film</th>
+          <th scope="col" class="reveal__film-head"{% if reveal.film_aria_sort %} aria-sort="{{ reveal.film_aria_sort }}"{% endif %}><a class="reveal__sort" href="{{ reveal.film_link }}">Film{% if reveal.film_marker %} <span class="reveal__marker" aria-hidden="true">{{ reveal.film_marker }}</span>{% endif %}</a></th>
           {% for column in reveal.columns %}
-          <th scope="col" class="reveal__voter{% if column.mine %} is-mine{% endif %}{% if column.didnt_vote %} is-absent{% endif %}" data-voter="{{ column.voter_id }}" title="{{ column.name }}">
-            <span class="avatar avatar--{{ column.shade }}" aria-hidden="true">{{ column.initial }}</span>
-            <span class="reveal__name">{{ column.name }}</span>
-            {% if column.didnt_vote %}<span class="reveal__sub">didn't vote</span>{% elif column.partial %}<span class="reveal__sub">{{ column.partial }}</span>{% endif %}
+          <th scope="col" class="reveal__voter{% if column.mine %} is-mine{% endif %}{% if column.didnt_vote %} is-absent{% endif %}" data-voter="{{ column.voter_id }}"{% if column.aria_sort %} aria-sort="{{ column.aria_sort }}"{% endif %} title="{{ column.name }}">
+            <a class="reveal__sort" href="{{ column.link }}">
+              <span class="avatar avatar--{{ column.shade }}" aria-hidden="true">{{ column.initial }}</span>
+              <span class="reveal__name">{{ column.name }}</span>
+              {% if column.didnt_vote %}<span class="reveal__sub">didn't vote</span>{% elif column.partial %}<span class="reveal__sub">{{ column.partial }}</span>{% endif %}
+              <span class="reveal__marker" aria-hidden="true">{{ column.marker }}</span>
+            </a>
           </th>
           {% endfor %}
-          <th scope="col" class="reveal__points-head">Points</th>
+          <th scope="col" class="reveal__points-head"{% if reveal.points_aria_sort %} aria-sort="{{ reveal.points_aria_sort }}"{% endif %}><a class="reveal__sort" href="{{ reveal.points_link }}">Points{% if reveal.points_marker %} <span class="reveal__marker" aria-hidden="true">{{ reveal.points_marker }}</span>{% endif %}</a></th>
         </tr>
       </thead>
       <tbody>

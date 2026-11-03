@@ -27,7 +27,7 @@ def the_ballot(request, phase):
 
 
 def the_reveal(request, phase):
-    return {"reveal": reveal.load(request.user)}
+    return {"reveal": reveal.load(request.user, request.GET.get("sort", ""))}
 
 
 def the_evening(request, phase):
