@@ -304,13 +304,9 @@ def test_the_runs_section_shows_the_real_evening_with_none_of_the_admins_readout
     assert not re.search(r"box__vetoes|box--dropped|box__mark|box__flexible|box--overlapping", run)
 
 
-def test_the_gallery_shows_the_reveal_phase_bar_with_chips_and_no_script(client, debug):
+def test_the_gallery_shows_no_reveal_bar_and_no_card_opens_from_its_sample_matrix(client, debug):
     page = client.get(GALLERY).text
-    bars = re.findall(r'<div class="phase-bar phase-bar--reveal">.*?</div>', page, re.S)
 
-    assert len(bars) == 2
-    assert all("reveal-chip--" in bar and "across the room" in bar and "Cy didn't vote" in bar for bar in bars)
-    assert "reveal-chip--veto" in bars[0] and "is-mine" in bars[0] and "👁" in bars[1]
-    assert "<b>-5 points</b>" in bars[1]
+    assert "phase-bar--reveal" not in page and "reveal-chip" not in page and "across the room" not in page
     # The sample matrix is a picture: no card opens from it.
     assert "data-reveal" not in page and "reveal-card" not in page

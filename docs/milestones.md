@@ -77,7 +77,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
   - the **poster** slot, with the **title card** for posterless films (#38);
   - the **film card**, collapsed and expanded, with an empty slot for each phase bar (#21).
 - A dev-only **gallery** route that shows the theme and these components on fixture films. It stays as the visual reference for later reviews, and later milestones add their components to it.
-- A component serving one view is designed in that view's milestone: phase bars in M4, M6 and M8, the card's DTDD section in M5, tiles in M6, the box in M7 and M8, the reveal cells in M8, the slate ledger row in M9.
+- A component serving one view is designed in that view's milestone: phase bars in M4 and M6 (the reveal's card has none, #158), the card's DTDD section in M5, tiles in M6, the box in M7 and M8, the reveal cells in M8, the slate ledger row in M9.
 
 **Deployable state:** unchanged app, now themed, plus the gallery locally.
 

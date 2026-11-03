@@ -13,7 +13,7 @@
   {% if card %}
   {# The card sits as wide as the frame the matrix scrolls in, and sticks to its left edge, so a phone's sideways scroll never takes it out of view. #}
   <tr class="reveal__detail" id="reveal-card-{{ row.suggestion_id }}">
-    <td colspan="{{ row.cells|length|add:2 }}"><div class="reveal__card">{% include "components/film_card.html" with card=card expanded=True phase_bar="components/reveal_bar.html" closes_row=True %}</div></td>
+    <td colspan="{{ row.cells|length|add:2 }}"><div class="reveal__card">{% include "components/film_card.html" with card=card expanded=True closes_row=True %}</div></td>
   </tr>
   {% endif %}
 </tbody>

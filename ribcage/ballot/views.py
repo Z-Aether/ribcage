@@ -134,7 +134,7 @@ def reveal_card(request):
         return reload_the_tab(request, reverse("phase_page"))
     if "close" in request.GET:
         return render(request, "components/reveal_row.html", {"row": row, "sort": shown.sort})
-    context = {"row": row, "sort": shown.sort, "card": revealed_card.of(request.user, suggestion, shown, triggers=phase is Phase.PICK), "scroll": True}
+    context = {"row": row, "sort": shown.sort, "card": revealed_card.of(request.user, suggestion, triggers=phase is Phase.PICK), "scroll": True}
     other = candidate(request.GET.get("closes"))
     if other is not None and other.pk != suggestion.pk:
         context["closed"] = next((each for each in shown.rows if each.suggestion_id == other.pk), None)

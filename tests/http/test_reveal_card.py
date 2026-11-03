@@ -29,14 +29,6 @@ def card_of(text):
     return re.search(r'<article class="film-card is-open".*?</article>', text, re.S)[0]
 
 
-def bar_of(text):
-    return re.search(r'<div class="phase-bar phase-bar--reveal">.*?</div>', text, re.S)[0]
-
-
-def chips_of(bar):
-    return re.findall(r'<li class="reveal-chip reveal-chip--([\w-]+)( is-mine)?"><span class="visually-hidden">[^<]*</span><span class="reveal-chip__name" aria-hidden="true">([^<]*)</span>', bar)
-
-
 def close_button(text):
     return re.search(r'<button type="button" class="film-card__toggle"[^>]*>', text)[0]
 
@@ -74,66 +66,17 @@ def test_a_row_opens_as_its_card_in_the_tbody_that_holds_it(revealed):
     assert re.search(r'<h3 class="film-card__title"><button[^>]*>One</button>', card_of(text))
 
 
-def test_the_bar_names_a_chip_per_voter_with_the_viewers_outlined_and_the_points_across_the_room(revealed):
+def test_the_card_holds_no_phase_bar_whatever_the_ballot_says(revealed):
     data = revealed
     mark(data["ada"], data["one"], score=3, seen_it=True)
     mark(data["dani"], data["one"], vetoed=True)
-    mark(data["hanna"], data["two"], score=1)
-
-    bar = bar_of(opened(signed_in(data["ada"]), data["one"]).text)
-
-    assert chips_of(bar) == [("top-pick", " is-mine", "ada"), ("veto", "", "Dani")]
-    assert "☒" in bar and bar.count("👁") == 1 and "<b>1 point</b> across the room" in bar
-    # Hanna placed a film elsewhere, so she voted.
-    assert "didn't vote" not in bar
-
-
-def test_the_bar_says_who_didnt_vote_and_a_negative_total_in_points(revealed):
-    data = revealed
-    mark(data["dani"], data["one"], vetoed=True)
-    mark(data["ada"], data["one"], score=-1)
-
-    bar = bar_of(opened(signed_in(data["dani"]), data["one"]).text)
-
-    assert "<b>-3 points</b> across the room" in bar
-    assert "· Hanna didn't vote" in bar
-
-
-def test_a_voter_who_only_saw_the_film_has_a_chip_and_a_blank_who_didnt_has_none(revealed):
-    data = revealed
-    mark(data["ada"], data["one"], seen_it=True)
-    mark(data["ada"], data["two"], score=2)
-    mark(data["dani"], data["two"], score=0)
-
-    bar = bar_of(opened(signed_in(data["dani"]), data["one"]).text)
-
-    assert chips_of(bar) == [("blank", "", "ada")] and bar.count("👁") == 1
-    assert "<b>0 points</b>" in bar and "· Hanna didn't vote" in bar
-
-
-def test_each_chip_is_read_out_in_words_without_the_vetoes_reason(revealed):
-    data = revealed
-    mark(data["ada"], data["one"], score=2)
-    mark(data["dani"], data["one"], vetoed=True, seen_it=True)
-    mark(data["hanna"], data["one"], seen_it=True)
-    Note.objects.create(suggestion=data["one"], author=data["dani"], text="Not sitting through that one.")
-
-    bar = bar_of(opened(signed_in(data["ada"]), data["one"]).text)
-
-    assert re.findall(r'<span class="visually-hidden">([^<]*)</span>', bar) == ["ada, Keen", "Dani, vetoed, seen it", "Hanna, seen it"]
-    assert "Not sitting" not in bar and "title=" not in bar
-    assert re.findall(r'<(?:b|span) class="reveal-chip__(?:name|sign|seen)" ([^>]*)>', bar) == ['aria-hidden="true"'] * 7
-    assert "aria-label=" not in bar.replace('aria-label="Everyone', "")
-
-
-def test_the_bar_does_not_repeat_the_vetoers_and_seers_the_notes_carry(revealed):
-    data = revealed
-    mark(data["dani"], data["one"], vetoed=True, seen_it=True)
     Note.objects.create(suggestion=data["one"], author=data["dani"], text="Not for me.")
 
     text = opened(signed_in(data["ada"]), data["one"]).text
 
-    assert "vetoed by" not in bar_of(text).lower() and "seen by" not in bar_of(text).lower()
+    for absent in ("phase-bar--reveal", "reveal-chip", "reveal-points", "across the room", "didn't vote", "point</b>", "points</b>"):
+        assert absent not in text
+    # The row above it still shows every score; the notes still mark the veto and who has seen it.
     assert "Not for me." in card_of(text) and "vetoed by Dani" in card_of(text) and "has seen it" in card_of(text)
 
 
@@ -293,7 +236,7 @@ def test_in_run_the_card_carries_no_trigger_content(voters, vocabulary):  # noqa
     text = opened(signed_in(voters["ada"]), heavy).text
 
     assert "reveal__detail" in text and "data-dtdd" not in text and "DoesTheDogDie" not in text and "has-trigger-icon" not in text
-    assert chips_of(bar_of(text)) == [("keen", " is-mine", "ada")]
+    assert "phase-bar--reveal" not in text and "across the room" not in text
 
 
 def test_the_scripts_leave_a_reveal_card_to_the_reveals_own():

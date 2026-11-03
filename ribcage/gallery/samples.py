@@ -383,16 +383,6 @@ def phase_bars():
             ),
             "components/vote_bar.html",
         ),
-        (
-            "The reveal's bar on Hanna's suggestion, read-only: everyone's score as a named chip, Ada's own outlined, Eli's veto as ☒; then the points across the room and Cy, who didn't vote. The veto and who has seen it are in the notes; the card has no note box (#158)",
-            replace(midsommar, reveal=reveal.bar_of(reveal_matrix(), MIDSOMMAR_ROW)),
-            "components/reveal_bar.html",
-        ),
-        (
-            "The reveal's bar on a film two voters vetoed, Bo of whom has seen it (👁), and Ada rated rather not: two ☒ chips, a −1, and a negative total",
-            replace(cards()[1], reveal=reveal.bar_of(reveal_matrix(), TERRIFIER_ROW)),
-            "components/reveal_bar.html",
-        ),
     )
 
 
@@ -471,10 +461,6 @@ def reveal_cells():
         ("a blank, never a 0", [cell("Ada", False, (None, False, False), "")]),
         ("seen it on a score, a veto and a blank", [cell("Ada", False, (3, False, True), ""), cell("Ada", False, (None, True, True), ""), cell("Ada", False, (None, False, True), "")]),
     )
-
-
-# The sample matrix's rows by film, whose records are below (#154, #158).
-MIDSOMMAR_ROW, TERRIFIER_ROW = 15, 14
 
 
 def reveal_matrix():

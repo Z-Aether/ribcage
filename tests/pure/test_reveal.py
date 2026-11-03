@@ -1,7 +1,6 @@
 """The reveal's matrix over plain records (#154)."""
 
 from ribcage.ballot import reveal
-from ribcage.films.card import RevealBar
 from ribcage.films.film import hand_entered
 
 ADA, BO, CY = 1, 2, 3
@@ -188,49 +187,3 @@ def test_aria_sort_names_the_order_the_rows_run_in():
     assert built(voters, ["One"], [], sort=f"-{BO}").columns[1].aria_sort == "ascending"
     assert built(voters, ["One"], [], sort="film").film_aria_sort == "ascending"
     assert built(voters, ["One"], [], sort="-film").film_aria_sort == "descending"
-
-
-VOTERS = [(ADA, "Ada", 1), (BO, "Bo", 1), (CY, "Cy", 0)]
-
-
-def test_the_bar_has_a_chip_for_a_score_a_veto_and_a_seen_it_alone_and_none_for_a_bare_blank():
-    records = [(ADA, 10, 3, False, True), (BO, 10, None, True, False), (CY, 10, None, False, True), (ADA, 11, 2, False, False)]
-    matrix = built(VOTERS, ["One", "Two"], records)
-
-    bar = reveal.bar_of(matrix, 10)
-
-    assert [(chip.name, chip.key, chip.sign, chip.seen_it, chip.mine) for chip in bar.chips] == [
-        ("Ada", "top-pick", "+3", True, True),
-        ("Bo", "veto", "☒", False, False),
-        ("Cy", "blank", "", True, False),
-    ]
-    assert [chip.name for chip in reveal.bar_of(matrix, 11).chips] == ["Ada"]
-
-
-def test_a_chip_is_said_as_the_voter_the_score_or_vetoed_and_seen_it_never_the_reason():
-    records = [(ADA, 10, 3, False, True), (BO, 10, None, True, False), (CY, 10, None, False, True)]
-    matrix = built(VOTERS, ["One"], records)
-
-    assert [chip.said for chip in reveal.bar_of(matrix, 10).chips] == ["Ada, Top pick, seen it", "Bo, vetoed", "Cy, seen it"]
-
-
-def test_the_bars_points_and_didnt_vote_are_the_rows_and_the_headers():
-    records = [(ADA, 10, 3, False, False), (BO, 10, None, True, False), (ADA, 11, 1, False, False)]
-    matrix = built(VOTERS, ["One", "Two"], records)
-
-    for row in matrix.rows:
-        assert reveal.bar_of(matrix, row.suggestion_id).points == row.points
-    assert reveal.bar_of(matrix, 10).didnt_vote == ("Cy",) == tuple(column.name for column in matrix.columns if column.didnt_vote)
-    assert reveal.bar_of(matrix, 10).didnt_vote_names == "Cy"
-
-
-def test_the_bar_reads_the_same_under_any_sort():
-    records = [(ADA, 10, 3, False, False), (BO, 10, None, True, False), (BO, 11, 2, False, True)]
-
-    assert reveal.bar_of(built(VOTERS, ["One", "Two"], records), 10) == reveal.bar_of(built(VOTERS, ["One", "Two"], records, sort=f"-{BO}"), 10)
-
-
-def test_the_bar_says_point_for_one_and_minus_one_and_points_otherwise():
-    words = {points: RevealBar((), points).points_word for points in (-2, -1, 0, 1, 2)}
-
-    assert words == {-2: "points", -1: "point", 0: "points", 1: "point", 2: "points"}

@@ -1,4 +1,4 @@
-"""The film card as the reveal opens it under a row: read-only, with the reveal's bar, and its DoesTheDogDie section only where the phase keeps any (#29, #158)."""
+"""The film card as the reveal opens it under a row: read-only, with no phase bar, and its DoesTheDogDie section only where the phase keeps any (#29, #158)."""
 
 from dataclasses import replace
 
@@ -7,8 +7,8 @@ from ribcage.suggestions import pool
 from ribcage.triggers import stored, watched
 
 
-def of(viewer, suggestion, shown, triggers=True):
-    """The card for a suggestion on the ballot of `shown`, a `reveal.Reveal`. `triggers` is False where the phase holds no trigger data, as in RUN (#106, #161).
+def of(viewer, suggestion, triggers=True):
+    """The card for a suggestion on the ballot. `triggers` is False where the phase holds no trigger data, as in RUN (#106, #161).
 
     It is built for no viewer's note box, so it has no pencil, no withdraw and no marks to toggle, and the viewer's own note shows in the list like anyone's;
     the viewer's matched topics are theirs alone (#111). A match can't be corrected from it, since nothing is written after the reveal (#27, #105).
@@ -18,5 +18,4 @@ def of(viewer, suggestion, shown, triggers=True):
         ((section, matched),) = stored.sections_and_matches_of([suggestion], watched.ticked_ids(viewer)).values()
         section = replace(pool.listed_from(section, suggestion), correction=None)
     marks = cardbar.marks_by_film([suggestion.pk]).get(suggestion.pk, cardbar.NO_MARKS)
-    card = pool.film_card(suggestion, pool.notes_in_order().filter(suggestion=suggestion), None, None, section, matched, None, marks)
-    return replace(card, reveal=reveal.bar_of(shown, suggestion.pk))
+    return pool.film_card(suggestion, pool.notes_in_order().filter(suggestion=suggestion), None, None, section, matched, None, marks)
