@@ -73,8 +73,8 @@ class Reveal:
     film_link: str = "?sort=film"
     film_marker: str = ""
     film_aria_sort: str = ""
-    # The *Points* header is the way back to the default order, which wears ▾ while it is in force (#157).
-    points_link: str = "?sort="
+    # *Points* reverses like the others while active (▾ highest first, the default; ▴ lowest first) and otherwise sorts highest first (#157).
+    points_link: str = "?sort=-points"
     points_marker: str = "▾"
     points_aria_sort: str = "descending"
 
@@ -94,6 +94,7 @@ BLANK_RANK = -0.5
 VETO_RANK = -2
 REVERSED = "-"
 FILM = "film"
+POINTS = "points"
 MARKERS = {False: "▾", True: "▴"}
 # A score runs highest first by default, so ▾ is descending; *Film* runs A to Z, so ▾ is ascending.
 SCORE_ARIA = {False: "descending", True: "ascending"}
@@ -108,11 +109,13 @@ def rank(record):
 
 
 def parse_sort(sort, voter_ids):
-    """(what to sort by, reversed) from a query value: `film`, a voter's id, either with a leading `-`; anything else is points (#157)."""
+    """(what to sort by, reversed) from a query value: `film`, `points`, a voter's id, any with a leading `-`; anything else is points, highest first (#157)."""
     reverse = str(sort).startswith(REVERSED)
     token = str(sort).removeprefix(REVERSED)
     if token == FILM:
         return FILM, reverse
+    if token == POINTS:
+        return POINTS, reverse
     if token.isascii() and token.isdigit() and int(token) in voter_ids:
         return int(token), reverse
     return None, False
@@ -123,7 +126,7 @@ def build(voters, films, records, reasons, viewer_id, sort=""):
 
     `voters` is (id, name, scored) in the Roster's order, `films` is (suggestion id, Film) for the ballot,
     `records` is (voter id, suggestion id, score, vetoed, seen it) and `reasons` is {(voter id, suggestion id): the note}.
-    `sort` is `film` or a voter's id, either led by `-` to reverse; by default and when unknown it is points, highest first (#157).
+    `sort` is `film`, `points` or a voter's id, any led by `-` to reverse; by default and when unknown it is points, highest first, and films tied on points keep title order A to Z whichever way it runs (#157).
     """
     size = len(films)
     held = {(voter_id, suggestion_id): (score, vetoed, seen_it) for voter_id, suggestion_id, score, vetoed, seen_it in records}
@@ -149,13 +152,14 @@ def build(voters, films, records, reasons, viewer_id, sort=""):
     longest = max((abs(points) for _, _, points, _, _ in standing), default=0) or 1
     by, reverse = parse_sort(sort, {voter_id for voter_id, _, _ in voters})
     by_points = sorted(standing, key=lambda each: (-each[2], each[1].title.casefold(), each[1].title, each[0]))
+    lowest_first = sorted(standing, key=lambda each: (each[2], each[1].title.casefold(), each[1].title, each[0]))
     if by == FILM:
         ordered = sorted(standing, key=lambda each: (each[1].title.casefold(), each[1].title, each[0]), reverse=reverse)
-    elif by is not None:
+    elif by not in (None, POINTS):
         # Stable over the points order, so ties fall to points then title (#157).
         ordered = sorted(by_points, key=lambda each: rank(held.get((by, each[0]))), reverse=not reverse)
     else:
-        ordered = by_points
+        ordered = lowest_first if by == POINTS and reverse else by_points
     rows = tuple(
         Row(suggestion_id, film, points, round(100 * abs(points) / longest), points < 0, vetoers, cells)
         for suggestion_id, film, points, vetoers, cells in ordered
@@ -164,6 +168,9 @@ def build(voters, films, records, reasons, viewer_id, sort=""):
     def toward(key):
         return f"?sort={REVERSED if by == key and not reverse else ''}{key}"
 
+    # Points is active in the default order too, where its link reverses it.
+    points_on = by in (None, POINTS)
+    points_reversed = by == POINTS and reverse
     columns = tuple(
         replace(
             each,
@@ -173,7 +180,7 @@ def build(voters, films, records, reasons, viewer_id, sort=""):
         )
         for each in columns
     )
-    token = "" if by is None else f"{REVERSED if reverse else ''}{by}"
+    token = "" if by is None or (by == POINTS and not reverse) else f"{REVERSED if reverse else ''}{by}"
     by_film = by == FILM
     return Reveal(
         columns,
@@ -183,8 +190,9 @@ def build(voters, films, records, reasons, viewer_id, sort=""):
         film_link=toward(FILM),
         film_marker=MARKERS[reverse] if by_film else "",
         film_aria_sort=FILM_ARIA[reverse] if by_film else "",
-        points_marker=MARKERS[False] if by is None else "",
-        points_aria_sort=SCORE_ARIA[False] if by is None else "",
+        points_link=f"?sort={'' if points_reversed else REVERSED + POINTS}" if points_on else "?sort=",
+        points_marker=MARKERS[points_reversed] if points_on else "",
+        points_aria_sort=SCORE_ARIA[points_reversed] if points_on else "",
     )
 
 

@@ -201,7 +201,15 @@ def test_the_cards_title_closes_it_by_a_request_that_keeps_the_sort(revealed):
     assert 'hx-target="closest tbody"' in button and 'hx-swap="outerHTML"' in button
 
 
-@pytest.mark.parametrize("sort,kept", [("film", "film"), ("-film", "-film"), ("", ""), ("bogus", ""), ("9999", "")])
+def test_a_card_opened_under_reversed_points_keeps_it_and_the_page_carries_it(revealed):
+    data = revealed
+    button = close_button(opened(signed_in(data["ada"]), data["one"], sort="-points").text)
+
+    assert f'hx-get="/reveal/card/?suggestion={data["one"].pk}&amp;close=1&amp;sort=-points"' in button
+    assert 'data-sort="-points"' in signed_in(data["ada"]).get("/", {"sort": "-points"}).text
+
+
+@pytest.mark.parametrize("sort,kept", [("film", "film"), ("-film", "-film"), ("-points", "-points"), ("points", ""), ("", ""), ("bogus", ""), ("9999", "")])
 def test_an_unknown_sort_is_kept_as_points_in_the_close_link(revealed, sort, kept):
     button = close_button(opened(signed_in(revealed["ada"]), revealed["one"], sort=sort).text)
 

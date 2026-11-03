@@ -126,7 +126,7 @@ def test_an_unknown_sort_or_voter_falls_back_to_points():
     records = [(ADA, 10, 1, False, False), (ADA, 11, 3, False, False)]
     default = titles(built([(ADA, "Ada", 2)], ["One", "Two"], records))
 
-    for sort in ["", "points", "nonsense", "99", "-99", "-", "--film", "1.5", "٣"]:
+    for sort in ["", "points", "nonsense", "--points", "points-", "99", "-99", "-", "--film", "1.5", "٣"]:
         matrix = built([(ADA, "Ada", 2)], ["One", "Two"], records, sort=sort)
         assert titles(matrix) == default
         assert matrix.sort == ""
@@ -152,16 +152,32 @@ def test_the_active_column_wears_a_marker_and_its_link_reverses_while_the_others
     assert built(voters, ["One"], [], sort="-film").film_marker == "▴"
 
 
-def test_points_wears_the_marker_only_in_the_default_order_and_links_back_to_it():
+def test_points_wears_the_marker_when_active_and_its_link_reverses_it():
     voters = [(ADA, "Ada", 0), (BO, "Bo", 0)]
 
     default = built(voters, ["One"], [])
-    assert (default.points_marker, default.points_aria_sort, default.points_link) == ("▾", "descending", "?sort=")
+    assert (default.points_marker, default.points_aria_sort, default.points_link, default.sort) == ("▾", "descending", "?sort=-points", "")
+    assert built(voters, ["One"], [], sort="points").points_link == "?sort=-points"
+
+    lowest = built(voters, ["One"], [], sort="-points")
+    assert (lowest.points_marker, lowest.points_aria_sort, lowest.points_link, lowest.sort) == ("▴", "ascending", "?sort=", "-points")
 
     for sort in [str(BO), f"-{BO}", "film", "-film"]:
         sorted_by = built(voters, ["One"], [], sort=sort)
         assert (sorted_by.points_marker, sorted_by.points_aria_sort) == ("", "")
         assert sorted_by.points_link == "?sort="
+
+
+def test_sorting_by_points_reversed_runs_lowest_first_with_ties_by_title_a_to_z():
+    records = [(ADA, 10, 1, False, False), (ADA, 11, 3, False, False), (ADA, 12, 1, False, False), (ADA, 13, -1, False, False)]
+    names = ["Zulu", "Echo", "alpha", "Bravo"]
+
+    down = built([(ADA, "Ada", 4)], names, records)
+    up = built([(ADA, "Ada", 4)], names, records, sort="-points")
+
+    assert titles(down) == ["Echo", "alpha", "Zulu", "Bravo"]
+    assert titles(up) == ["Bravo", "alpha", "Zulu", "Echo"]
+    assert [row.points for row in up.rows] == [-1, 1, 1, 3]
 
 
 def test_aria_sort_names_the_order_the_rows_run_in():

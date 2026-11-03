@@ -209,7 +209,7 @@ def test_the_default_page_marks_points_and_no_other_header(voters):
     assert 'aria-sort="descending"' in points_head(page) and "▾" in points_head(page)
 
 
-def test_points_links_back_to_the_default_order_from_a_voter_sort(voters):
+def test_points_from_a_voter_sort_goes_to_points_highest_first(voters):
     data = revealed(voters)
     mark(data["dani"], data["one"], score=1)
     mark(data["dani"], data["two"], score=-1)
@@ -220,6 +220,20 @@ def test_points_links_back_to_the_default_order_from_a_voter_sort(voters):
     assert 'href="?sort="' in head and "▾" not in head and "aria-sort" not in head
     assert titles_down(sorted_by_dani) == ["One", "Two"]
     assert titles_down(signed_in(data["ada"]).get("/", {"sort": ""}).text) == ["Two", "One"]
+
+
+def test_the_page_sorted_by_points_reversed_runs_lowest_first_and_marks_points(voters):
+    data = revealed(voters)
+    mark(data["ada"], data["two"], score=3)
+    default = signed_in(data["ada"]).get("/").text
+    page = sorted_page(data, "-points")
+
+    assert 'href="?sort=-points"' in points_head(default)
+    assert titles_down(default) == ["Two", "One"]
+    assert titles_down(page) == ["One", "Two"]
+    head = points_head(page)
+    assert 'aria-sort="ascending"' in head and "▴" in head and 'href="?sort="' in head
+    assert page.count("aria-sort") == 1 and page.count("▴") == 1 and 'data-sort="-points"' in page
 
 
 def test_every_voter_header_holds_the_marker_slot_and_the_stylesheet_reserves_its_height(voters):
