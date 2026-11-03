@@ -34,6 +34,7 @@ from ribcage.films.picker import Picker, PickerTile
 from ribcage.suggestions.notes import PITCH_REQUIRED
 from ribcage.suggestions.runtime import NOT_WHOLE_MINUTES
 from ribcage.suggestions.withdrawal import what_goes
+from ribcage.timetable import evening as timetable_evening
 from ribcage.timetable import track
 from ribcage.triggers import correction
 from ribcage.triggers.carrying import carries
@@ -73,21 +74,6 @@ class Tile:
     trigger_count: int = 0
     seen_it: bool = False
     vetoed_by: str = ""
-
-
-@dataclass(frozen=True)
-class EveningBox:
-    """A box on the sample RUN evening, in minutes from the anchor (M7 and M8 build the real one)."""
-
-    label: str
-    start: str
-    end: str
-    offset: int
-    length: int
-    film: object = None
-    past: bool = False
-    now: bool = False
-    minutes_left: int = 0
 
 
 @cache
@@ -438,12 +424,16 @@ def poster_row():
 
 
 def evening():
-    return (
-        EveningBox("The Thing", "18:00", "19:49", 0, 109, film=film(THE_THING), past=True),
-        EveningBox("Dinner", "20:00", "20:45", 120, 45, past=True),
-        EveningBox("Midsommar", "20:50", "23:17", 170, 147, film=film(MIDSOMMAR), now=True, minutes_left=72),
-        EveningBox("Exit 8", "23:30", "01:05", 330, 95, film=film(EXIT_8)),
-    )
+    """The voter's evening on a made-up night: films, a labelled box, a film with no poster and a long gap, a vetoed and a dropped film drawn as any box (#155)."""
+    boxes = [
+        track.Loaded(1, 0, 109, film=film(THE_THING), vetoed_by="SZ", vetoers="Vetoed by Sam, Zoë", veto_voters=frozenset({"sam", "zoe"})),
+        track.Loaded(2, 120, 45, label="Dinner", flexible=True),
+        track.Loaded(3, 170, 147, film=film(MIDSOMMAR)),
+        track.Loaded(4, 330, 47, film=film(CABINET_OF_CURIOSITIES)),
+        track.Loaded(5, 380, 93, film=film(POOH_2), dropped=True),
+        track.Loaded(6, 600, 95, film=film(EXIT_8)),
+    ]
+    return timetable_evening.build(boxes, datetime(2026, 11, 7, 18, 0, tzinfo=utc.utc))
 
 
 def timetable_track():
@@ -505,6 +495,4 @@ def gallery():
         "poster_row": poster_row(),
         "track": timetable_track(),
         "evening": evening(),
-        "evening_minutes": 425,
-        "evening_now": 245,
     }

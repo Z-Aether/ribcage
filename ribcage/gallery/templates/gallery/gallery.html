@@ -173,18 +173,10 @@
     <div class="run-sample">
       <div class="specimen__type">
         <h1>Tonight</h1>
-        <p>The voter's evening: the whole night fitted to one phone screen, the past dimmed, now playing inside its box. The box itself is M7's and M8's; this is its ground.</p>
+        <p>The voter's evening: the published timetable fitted to one phone screen, top to bottom, with films, a labelled box, a film with no poster and a long gap. The real component over plain data (#155).</p>
       </div>
-      <div class="evening" style="--evening-minutes: {{ evening_minutes }}; --evening-now: {{ evening_now }}">
-        {% for box in evening %}
-          <div class="evening__box{% if box.film %} evening__box--film{% endif %}{% if box.past %} is-past{% endif %}{% if box.now %} is-now{% endif %}" style="--offset: {{ box.offset }}; --length: {{ box.length }}">
-            {% if box.now %}<span class="evening__kicker">Now playing</span>{% endif %}
-            <span class="evening__title">{{ box.label }}</span>
-            <span class="evening__time">{{ box.start }}–{{ box.end }}{% if box.now %} · {{ box.minutes_left }} min left{% endif %}</span>
-            {% if box.now %}<span class="evening__progress" style="--left: {{ box.minutes_left }}"></span>{% endif %}
-          </div>
-        {% endfor %}
-        <div class="evening__now" aria-hidden="true"></div>
+      <div class="run-sample__phone">
+        {% include "components/evening.html" %}
       </div>
     </div>
   </section>

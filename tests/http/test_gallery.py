@@ -293,3 +293,12 @@ def test_the_gallery_shows_each_reveal_cell_and_a_sample_matrix(client, debug):
     assert "reveal-pill__seen" in page
     assert page.count('class="reveal__matrix"') == 1
     assert "didn't vote" in page and "4 of 6" in page
+
+
+def test_the_runs_section_shows_the_real_evening_with_none_of_the_admins_readouts(client, debug):
+    page = client.get(GALLERY).content.decode()
+
+    run = re.search(r'<section class="gallery-skin" data-skin="run".*?</section>', page, re.S)[0]
+    assert 'class="evening" id="evening"' in run and "data-evening-start" in run
+    assert run.count('class="evening__slot"') == 6 and "box--labelled" in run and "title-card" in run
+    assert not re.search(r"box__vetoes|box--dropped|box__mark|box__flexible|box--overlapping", run)

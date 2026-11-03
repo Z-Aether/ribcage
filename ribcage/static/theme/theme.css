@@ -4318,3 +4318,103 @@ body:has(> main > .ballot-head) > footer.site-footer {
     padding-right: 0.7rem !important;
   }
 }
+
+/* ---------- The evening: RUN's page, the timetable fitted to one screen (#155) ---------- */
+
+/* The page is the header, the evening and a slim footer, filling the window and no more; the evening takes what is left (#22). */
+body:has(> main > .evening) {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+[data-skin] main:has(> .evening) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  max-width: none;
+  padding: 0.5rem 0.75rem;
+}
+body:has(> main > .evening) > footer.site-footer {
+  margin-top: 0;
+  padding-block: 0.4rem 0.5rem;
+  font-size: 0.7em;
+}
+body:has(> main > .evening) > footer.site-footer .site-footer__tmdb {
+  margin-bottom: 0.2rem;
+}
+/* A phone's width on a wide window too: the evening is read down the screen, never stretched across it. */
+[data-skin] .evening {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  max-width: 32rem;
+  min-height: 0;
+  margin-inline: auto;
+}
+/* A box's height is its length: the slot sizes it and the box fills the slot, a hair inside so neighbours never touch. */
+[data-skin] .evening__slot {
+  position: absolute;
+  top: var(--top);
+  height: var(--height);
+  left: var(--left);
+  width: var(--width);
+  box-sizing: border-box;
+  padding: 1px;
+  container-type: size;
+}
+[data-skin] .evening__slot .box {
+  border-radius: var(--radius-control);
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+}
+[data-skin] .evening__slot .box__text {
+  font-size: 0.95rem;
+}
+[data-skin] .evening__slot .box__title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+/* The box has the evening's height to itself, so a short one (under the poster plus its padding) gives up its poster and length and then lays its title and times on one line. */
+@container (max-height: 4.9rem) {
+  .box__poster,
+  .box__length {
+    display: none;
+  }
+}
+@container (max-height: 3rem) {
+  [data-skin] .box {
+    padding-block: 0;
+    align-items: center;
+  }
+  [data-skin] .box__text {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+  [data-skin] .box__title {
+    display: block;
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  [data-skin] .box__times {
+    flex: none;
+  }
+}
+@container (max-height: 1.6rem) {
+  [data-skin] .box__text {
+    font-size: 0.75rem;
+  }
+  [data-skin] .box__title {
+    font-size: 0.8rem;
+  }
+}
+[data-skin] .evening__empty {
+  margin: 3rem 0 0;
+  text-align: center;
+  color: var(--ink-muted);
+}

@@ -6,6 +6,7 @@ from ribcage.ballot import board, done, reopened, reveal
 from ribcage.phase.history import current, reveal_has_happened
 from ribcage.phase.order import Phase
 from ribcage.suggestions import pool
+from ribcage.timetable import evening
 
 PHASE_PAGES = {
     Phase.SUGGEST: "phase/suggest.html",
@@ -29,12 +30,17 @@ def the_reveal(request, phase):
     return {"reveal": reveal.load(request.user)}
 
 
+def the_evening(request, phase):
+    return {"evening": evening.load()}
+
+
 # Voters read the pool in SUGGEST and APPROVE only; in VOTE the ballot takes its place (#27, #119).
 PHASE_CONTEXTS = {
     Phase.SUGGEST: the_pool,
     Phase.APPROVE: the_pool,
     Phase.VOTE: the_ballot,
     Phase.PICK: the_reveal,
+    Phase.RUN: the_evening,
 }
 
 

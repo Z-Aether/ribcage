@@ -154,7 +154,7 @@ body > main:has(.gallery-skin) {
   }
 }
 
-/* ---------- The RUN evening sample ---------- */
+/* ---------- The RUN evening sample (#155) ---------- */
 
 .run-sample {
   display: grid;
@@ -162,92 +162,15 @@ body > main:has(.gallery-skin) {
   gap: 2.5rem;
   align-items: start;
 }
-.evening {
-  position: relative;
+/* The evening in a phone-sized frame: the real region fills what its holder gives it. */
+.run-sample__phone {
+  display: flex;
+  flex-direction: column;
   height: 720px;
-  padding: 0;
+  padding: 0.5rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
   background-color: var(--ground);
-  overflow: hidden;
-}
-.evening__box {
-  position: absolute;
-  left: 0.75rem;
-  right: 0.75rem;
-  top: calc(var(--offset) / var(--evening-minutes) * 100% + 2px);
-  height: calc(var(--length) / var(--evening-minutes) * 100% - 4px);
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  padding: 0.45rem 0.8rem;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-control);
-  background-color: var(--surface);
-  overflow: hidden;
-}
-.evening__box:not(.evening__box--film) {
-  background-color: transparent;
-  border-style: dashed;
-}
-.evening__box.is-past {
-  opacity: 0.45;
-}
-.evening__box.is-now {
-  border-color: transparent;
-  background-color: var(--surface-raised);
-  box-shadow: var(--run-now-glow);
-  animation: var(--run-now-animation, none);
-}
-@media (prefers-reduced-motion: reduce) {
-  .evening__box.is-now {
-    animation: none;
-  }
-}
-.evening__kicker {
-  font-family: var(--font-label);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--run-now);
-}
-.evening__title {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  line-height: 1.2;
-}
-.evening__box.is-now .evening__title {
-  font-size: 1.5rem;
-}
-.evening__time {
-  font-size: 0.9rem;
-  color: var(--ink-muted);
-  font-variant-numeric: tabular-nums;
-}
-.evening__progress {
-  position: relative;
-  height: 4px;
-  margin-top: 0.5rem;
-  border-radius: 2px;
-  background-color: var(--line);
-}
-.evening__progress::after {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: calc((var(--length) - var(--left)) / var(--length) * 100%);
-  border-radius: 2px;
-  background-color: var(--run-now);
-}
-.evening__now {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(var(--evening-now) / var(--evening-minutes) * 100%);
-  height: 2px;
-  background-color: var(--run-now);
-  opacity: 0.8;
 }
 
 @media (max-width: 760px) {
