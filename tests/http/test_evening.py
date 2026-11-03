@@ -157,3 +157,70 @@ def test_for_an_anchor_ahead_the_first_box_is_next_in_two_days(running, clock):
 
     assert [re.search(r"evening__slot--(\w+)", slot)[1] for slot in slots_of(page)] == ["next", "later", "later", "later"]
     assert "NEXT · in 2 days" in page
+
+
+def test_the_page_polls_for_the_evening_every_interval(running, settings):
+    settings.POLL_INTERVAL_SECONDS = 20
+
+    region = re.search(r'<section class="evening" id="evening"[^>]*>', reader(running["ada"]).get("/").text)[0]
+
+    assert 'hx-get="/evening/"' in region
+    assert 'hx-trigger="every 20s"' in region
+    assert 'hx-swap="morph:outerHTML"' in region
+
+
+def test_the_poll_answers_the_region_alone_with_each_slot_marked(running):
+    answer = reader(running["ada"]).get("/evening/", headers={"HX-Request": "true"})
+
+    assert answer.status_code == 200
+    assert answer.text.lstrip().startswith('<section class="evening" id="evening"')
+    assert "<html" not in answer.text
+    assert len(slots_of(answer.text)) == 4
+    assert 'data-start="2026-11-07T18:00:00+00:00"' in answer.text
+
+
+def test_a_box_moved_on_the_track_shows_in_the_next_answer(running):
+    client = reader(running["ada"])
+    before = client.get("/evening/", headers={"HX-Request": "true"}).text
+    Box.objects.filter(label="Dinner").update(start=110)
+
+    after = client.get("/evening/", headers={"HX-Request": "true"}).text
+
+    assert 'data-start="2026-11-07T19:50:00+00:00"' in after
+    assert 'data-start="2026-11-07T19:50:00+00:00"' not in before
+
+
+@pytest.mark.parametrize("phase", [Phase.SUGGEST, Phase.APPROVE, Phase.VOTE, Phase.PICK])
+def test_outside_run_the_poll_reloads_the_tab_into_the_phase(voters, phase):
+    walk_to(phase)
+
+    htmx = reader(voters["ada"]).get("/evening/", headers={"HX-Request": "true"})
+    plain = reader(voters["ada"]).get("/evening/")
+
+    assert htmx.status_code == 200 and htmx["HX-Redirect"] == "/"
+    assert plain.status_code == 302 and plain["Location"] == "/"
+
+
+def test_the_poll_moving_from_run_to_pick_lands_on_the_reveal(running):
+    client = reader(running["ada"])
+    move(Phase.RUN, Phase.PICK)
+
+    assert client.get("/evening/", headers={"HX-Request": "true"})["HX-Redirect"] == "/"
+
+
+def test_the_poll_refuses_a_post(running):
+    assert reader(running["ada"]).post("/evening/").status_code == 405
+
+
+def test_a_plain_get_of_the_poll_in_run_redirects_to_the_page(running):
+    answer = reader(running["ada"]).get("/evening/")
+
+    assert answer.status_code == 302 and answer["Location"] == "/"
+
+
+def test_a_poll_whose_session_has_ended_reloads_the_tab_onto_login(running):
+    htmx = Client().get("/evening/", headers={"HX-Request": "true"})
+    plain = Client().get("/evening/")
+
+    assert htmx.status_code == 200 and htmx["HX-Redirect"] == "/login/"
+    assert plain.status_code == 302 and plain["Location"] == "/login/?next=/evening/"

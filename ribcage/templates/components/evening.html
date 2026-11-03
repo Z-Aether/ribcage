@@ -1,5 +1,5 @@
-{# The evening over a `timetable.evening.Evening`: one region of its own, which a later poll swaps in place, each box carrying its start and end instants, the region the span the scale fits (#155, #160) and each slot its state at the request's instant, which `static/run/now.js` keeps right from then on (#159). #}
-<section class="evening" id="evening" aria-label="The evening"{% if not evening.empty %} data-evening-start="{{ evening.starts_at }}" data-evening-end="{{ evening.ends_at }}" data-evening-minutes="{{ evening.minutes }}"{% endif %}>
+{# The evening over a `timetable.evening.Evening`: one region of its own, which the poll asks for again every `poll_seconds` and morphs in place (a failed one leaves it on screen, #160) where the page passes them, each box carrying its start and end instants, the region the span the scale fits (#155, #160) and each slot its state at the request's instant, which `static/run/now.js` keeps right from then on (#159). #}
+<section class="evening" id="evening" aria-label="The evening"{% if poll_seconds %} hx-get="{% url 'evening_poll' %}" hx-trigger="every {{ poll_seconds }}s" hx-target="this" hx-swap="morph:outerHTML" hx-ext="morph"{% endif %}{% if not evening.empty %} data-evening-start="{{ evening.starts_at }}" data-evening-end="{{ evening.ends_at }}" data-evening-minutes="{{ evening.minutes }}"{% endif %}>
   {% if evening.empty %}
     <p class="evening__empty">{{ evening.empty_line }}</p>
   {% else %}

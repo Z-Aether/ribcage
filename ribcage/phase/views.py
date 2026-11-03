@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.http import require_safe
 
 from ribcage.ballot import board, done, reopened, reveal
+from ribcage.phase.check import reload_into_the_current_phase
 from ribcage.phase.history import current, reveal_has_happened
 from ribcage.phase.order import Phase
 from ribcage.suggestions import pool
@@ -31,7 +33,7 @@ def the_reveal(request, phase):
 
 
 def the_evening(request, phase):
-    return {"evening": evening.load()}
+    return {"evening": evening.load(), "poll_seconds": settings.POLL_INTERVAL_SECONDS}
 
 
 # Voters read the pool in SUGGEST and APPROVE only; in VOTE the ballot takes its place (#27, #119).
@@ -50,6 +52,17 @@ def phase_page(request):
     phase = current()
     context = PHASE_CONTEXTS[phase](request, phase) if phase in PHASE_CONTEXTS else {}
     return render(request, PHASE_PAGES[phase], context)
+
+
+@require_safe
+def evening_poll(request):
+    """The evening as it stands, which the page swaps in place every POLL_INTERVAL_SECONDS: a plain GET, since a post that the CSRF check refuses reloads the tab (#13, #76, #160).
+
+    Outside RUN, and outside htmx, the whole tab reloads into the current phase, so RUN to PICK takes the evening down and keeps no last published one (#36).
+    """
+    if current() is not Phase.RUN or request.headers.get("HX-Request") != "true":
+        return reload_into_the_current_phase(request)
+    return render(request, "components/evening.html", the_evening(request, Phase.RUN))
 
 
 # The stretch of the marathon each phase belongs to, and the button under its entry, naming what the voter does there (#75, #134).
