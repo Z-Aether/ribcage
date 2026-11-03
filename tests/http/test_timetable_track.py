@@ -54,7 +54,7 @@ def test_the_tool_row_gives_screen_time_against_the_budget_and_the_evening_line(
     page = text_of(evening["admin"].get(PICK).text)
 
     assert "Screen time 3h19m of 9h budget" in page
-    assert "5h41m to spare" in page
+    assert "341 min to spare" in page
     assert "Evening Sat 18:00 → Sat 22:29 · 4h29m elapsed" in page
     assert "overlap" not in page.split("Evening")[1].split("Compare")[0]
 
@@ -65,7 +65,7 @@ def test_a_budget_below_screen_time_says_over_and_marks_the_minute_inside_a_film
     page = evening["admin"].get(PICK).text
 
     assert "Screen time 3h19m of 3h budget" in text_of(page)
-    assert "19m over" in page
+    assert "19 min over" in page
     assert 'class="track__budget' in page and ">budget 3h<" in page
 
 

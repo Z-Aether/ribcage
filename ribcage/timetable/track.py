@@ -122,7 +122,7 @@ class Marker:
 
 @dataclass(frozen=True)
 class Tools:
-    """The tool row's words (#22). `spare` reads *35m to spare* or *20m over*; `budget` and `spare` are None with no budget."""
+    """The tool row's words (#22). `spare` reads *35 min to spare* or *20 min over*, plain minutes (#136); `budget` and `spare` are None with no budget."""
 
     screen: str
     budget: str | None
@@ -332,7 +332,7 @@ def tools_of(reading, budget, clock, present):
     if budget is None:
         return Tools(screen, None, None, False, 0, evening, elapsed, len(reading.overlaps), shared)
     over = reading.over
-    spare = f"{duration(over)} over" if over > 0 else f"{duration(-over)} to spare"
+    spare = f"{over} min over" if over > 0 else f"{-over} min to spare"
     filled = 100 if over > 0 else round(reading.screen_time / budget * 100)
     return Tools(screen, duration(budget), spare, over > 0, filled, evening, elapsed, len(reading.overlaps), shared)
 

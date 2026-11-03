@@ -30,15 +30,23 @@ def test_the_tool_row_reads_spare_time_within_the_budget():
     built = track.build([film(1, 0, 300), Loaded(2, 300, 45, label="Dinner"), film(3, 345, 205)], ANCHOR, 540)
 
     tools = built.tools
-    assert (tools.screen, tools.budget, tools.spare, tools.is_over) == ("8h25m", "9h", "35m to spare", False)
+    assert (tools.screen, tools.budget, tools.spare, tools.is_over) == ("8h25m", "9h", "35 min to spare", False)
     assert (tools.evening, tools.elapsed, tools.overlaps) == ("Sat 18:00 → Sun 03:10", "9h10m", 0)
     assert built.marker is None
+
+
+def test_the_spare_reads_in_plain_minutes_while_the_other_readouts_keep_hours():
+    spare = track.build([film(1, 0, 300)], ANCHOR, 540).tools
+    exact = track.build([film(1, 0, 300), film(2, 300, 240)], ANCHOR, 540).tools
+
+    assert (spare.spare, spare.budget, spare.screen) == ("240 min to spare", "9h", "5h")
+    assert (exact.spare, exact.is_over, exact.elapsed) == ("0 min to spare", False, "9h")
 
 
 def test_the_tool_row_reads_over_and_the_marker_sits_inside_the_film_where_the_budget_runs_out():
     built = track.build([film(1, 0, 300), film(2, 310, 260)], ANCHOR, 540)
 
-    assert (built.tools.spare, built.tools.is_over, built.tools.filled) == ("20m over", True, 100)
+    assert (built.tools.spare, built.tools.is_over, built.tools.filled) == ("20 min over", True, 100)
     assert built.marker.label == "budget 9h"
     # 240 minutes into the second film, which starts at 310 on a scale of 570 padded by 17 minutes each side.
     scale_start, scale_length = -17, 570 + 34
