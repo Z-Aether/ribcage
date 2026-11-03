@@ -5,6 +5,8 @@ from typing import NamedTuple
 
 from django.urls import reverse
 
+from ribcage.phase.history import current
+from ribcage.phase.order import Phase
 from ribcage.suggestions.models import Suggestion
 from ribcage.triggers import correction, stored
 from ribcage.triggers.dtdd import Record, Snapshot, TopicCount
@@ -77,7 +79,8 @@ def answered(where, fragment, response):
 
 
 def pages():
-    return [(path, VOTER) for path, _ in pages_of(VOTER)] + [(path, ADMIN) for path, _ in pages_of(ADMIN)]
+    in_run = current() is Phase.RUN
+    return [(path, VOTER) for path, _ in pages_of(VOTER, in_run)] + [(path, ADMIN) for path, _ in pages_of(ADMIN, in_run)]
 
 
 def sweep(viewers, films, also=()):

@@ -1,7 +1,9 @@
-{# The thin voter header: the wordmark home to the phase page, and the voter's name opening their menu, *How it works* first in it, then *My warnings* (#27, #37, #107, #116, #134). #}
+{# The thin voter header: the wordmark home to the phase page, and the voter's name opening their menu, *How it works* first in it, then *My warnings*, and in RUN a link between the evening and the reveal (#161, #27, #37, #107, #116, #134). #}
 {% load phase_links %}<header class="voter-header">
   {% include "components/wordmark.html" %}
   {% header_links as links %}
+  {% if links.to_reveal %}<a class="voter-header__link" href="{% url 'reveal_page' %}">Everyone's scores</a>{% endif %}
+  {% if links.to_evening %}<a class="voter-header__link" href="{% url 'phase_page' %}">← The evening</a>{% endif %}
   <details class="voter-menu" data-voter-menu>
     <summary class="voter-menu__name">{{ user.display_name }}</summary>
     <ul class="voter-menu__items">

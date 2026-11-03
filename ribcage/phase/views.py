@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_safe
 
@@ -33,7 +33,7 @@ def the_reveal(request, phase):
 
 
 def the_evening(request, phase):
-    return {"evening": evening.load(), "poll_seconds": settings.POLL_INTERVAL_SECONDS}
+    return {"evening": evening.load(), "poll_seconds": settings.POLL_INTERVAL_SECONDS, "header_page": "evening"}
 
 
 # Voters read the pool in SUGGEST and APPROVE only; in VOTE the ballot takes its place (#27, #119).
@@ -63,6 +63,20 @@ def evening_poll(request):
     if current() is not Phase.RUN or request.headers.get("HX-Request") != "true":
         return reload_into_the_current_phase(request)
     return render(request, "components/evening.html", the_evening(request, Phase.RUN))
+
+
+@require_safe
+def reveal_page(request):
+    """The reveal at an address of its own, for RUN, where `/` is the evening: in PICK `/` is the reveal, and anywhere else the tab reloads into the phase so no score shows outside it (#8, #34, #161).
+
+    A GET, which the phase check leaves to the view. The page does not poll (#60).
+    """
+    phase = current()
+    if phase is Phase.PICK:
+        return redirect("phase_page")
+    if phase is not Phase.RUN:
+        return reload_into_the_current_phase(request)
+    return render(request, "phase/reveal.html", {"reveal": reveal.load(request.user, request.GET.get("sort", "")), "header_page": "reveal"})
 
 
 # The stretch of the marathon each phase belongs to, and the button under its entry, naming what the voter does there (#75, #134).

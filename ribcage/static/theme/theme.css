@@ -414,6 +414,14 @@ body > header.voter-header {
   text-decoration: none;
 }
 
+/* RUN's pair of links between the evening and the reveal sits between the wordmark and the menu, wrapping away rather than crowding the name (#161). */
+[data-skin] .voter-header__link {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 [data-skin] details.voter-menu {
   position: relative;
   flex: 0 1 auto;

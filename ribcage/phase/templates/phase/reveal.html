@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Everyone's scores · {{ marathon_name }}{% endblock %}
+
+{% block content %}
+  <header class="reveal-head">
+    <h1>Everyone's scores</h1>
+    <p class="reveal-head__line">The evening is under way · everyone's scores, by name</p>
+  </header>
+  {% include "components/reveal.html" %}
+{% endblock %}

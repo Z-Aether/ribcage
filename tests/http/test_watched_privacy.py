@@ -24,6 +24,7 @@ from tests.http.sweeping import CAT, DOG, JUMP, NO, RECORD, YES, add, sentinel_v
 from tests.http.test_phase import walk_to
 
 PHASES = [Phase.SUGGEST, Phase.APPROVE, Phase.VOTE, Phase.PICK]
+OBSERVED_PHASES = [*PHASES, Phase.RUN]  # the owner control cannot hold in RUN, where no page shows the list (#161)
 TICKED, EMPTY, DOES_NOT_CARE = "ticked", "empty", "does not care"
 # What two renders of one state differ by, and nothing else is forgiven: Django masks the CSRF token afresh on every render, and a signed snapshot carries its signing time.
 NORMALISED = [
@@ -90,7 +91,7 @@ def differences(before, after):
     return found
 
 
-@pytest.mark.parametrize("phase", PHASES)
+@pytest.mark.parametrize("phase", OBSERVED_PHASES)
 @pytest.mark.parametrize("observer", ["observer", "undecided"])
 def test_no_page_or_fragment_shown_to_another_voter_or_the_admin_differs_with_the_owners_list(cast, phase, observer):
     empty = renders(cast, phase, EMPTY, as_the=observer)

@@ -73,6 +73,7 @@ NO_DTDD_DATA = {
     "gallery",  # dev-only, answering 404 outside DEBUG
     "console", "console_phase_move", "console_films_approval",  # redirects, whatever they act on
     "evening_poll",  # the evening's poll: its region, or a reload into the phase (#160)
+    "reveal_page",  # the reveal in RUN, a page there that no other phase answers, and no trigger data to show (#161)
     "ballot_done",  # the header's done block: names and ticks, no film (#123)
     "ballot_seen",  # a tile, never matched topics (#121, #152)
     "console_pick_anchor", "console_pick_budget",  # the Pick header's saves: a redirect, or the tab with a refusal (#135)
@@ -119,9 +120,13 @@ def routes_of(route_kind):
     return [(path, entry) for path, entry in routes() if kind(entry) == route_kind]
 
 
-def pages_of(route_kind):
+# Pages that answer 200 in RUN alone and redirect elsewhere, which only the sweeps that walk to RUN read (#161).
+RUN_ONLY = {"reveal_page"}
+
+
+def pages_of(route_kind, in_run=False):
     # A page with an id is held by its own ticket's tests against a real row (#76).
-    return [(template, entry) for template, entry in route_templates() if kind(entry) == route_kind and "<" not in template and entry.name not in ACTS]
+    return [(template, entry) for template, entry in route_templates() if kind(entry) == route_kind and "<" not in template and entry.name not in ACTS and (in_run or entry.name not in RUN_ONLY)]
 
 
 def public_pages():

@@ -207,7 +207,7 @@ The page *is* the phase: one page per phase, no hub, no tabs.
 | **APPROVE** | The same pool, frozen, with no runtime pencil, and an intro that says a film opens (#130). Notes still writable, in APPROVE's phase bar, which holds the veto and seen it row, as SUGGEST's does, and the note box, and a runtime posted with it changes none; the admin's approval and drop change neither mark (#88, #90, #133, #152). |
 | **VOTE** (ballot) | See below. |
 | **PICK** (reveal) | See below. |
-| **RUN** | The evening (§7), with the reveal one header link away. |
+| **RUN** | The evening (§7), with the reveal one header link away: *Everyone's scores* on the evening, *← The evening* on the reveal, which has its own address, `/reveal/`, since `/` is the evening. That address redirects to `/` in PICK and reloads into the phase in the others (#161). |
 
 **VOTE** (#9, #35):
 - **Header:** one line: `n of N scored`, the *I'm done* toggle and the done roster by name. Under it one compact line gives the tile marks' legend and says scores stay hidden until VOTE closes (#126).
