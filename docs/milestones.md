@@ -34,7 +34,7 @@ The big-picture build schedule: ten milestones, each a vertical slice that is re
 | M6 | VOTE | The ballot, done markers, approval during VOTE | 8 | #63 |
 | M7 | The timetable, without SOLVE | PICK's Timetable tab, hand-built slates, readouts | ~20 | #64 |
 | M8 | The reveal and the evening | Reveal, RUN, publishing | 10 | #65 |
-| M9 | SOLVE and Compare | The solver, knobs, batch, shortlist, Compare tab | ~20 | #66 |
+| M9 | SOLVE and Compare | The solver, knobs, batch, shortlist, Compare tab | 11 | #66 |
 | M10 | Rehearsal and launch | The gating end-to-end rehearsal on the real deployment | ~12 | #67 |
 
 ```
@@ -200,7 +200,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - **The objective,** pure over plain data: floor set with its reasons, integerised `K·(W·m + Σrep) + T` with `K` per solve, `highspy` pinned `>= 1.15.1`, `mip_rel_gap = 0` (#6, #10, #33).
 - **Knobs and the basis:** without a voter, disregard a voter's vetoes, fix a film in or out (#17).
 - **The batch:** up to five proposals through the diversity cut, "more", replacement on a knob change, the solver's own reasons for a short batch. Remeasure `k = 4` on the seed corpus and fall back to `k = 2` if it bites (#17).
-- **Compare tab:** knobs, solve and "more", the ledger (timetable row, shortlist, batch), standing and tier, the floor set line, keep, swap, *Use this slate* armed with a preview and unavailable without an anchor (#24, #36).
+- **Compare tab:** knobs, the batch solved as the tab opens (#165), "more", the ledger (timetable row, shortlist, batch), standing and tier, the floor set line, keep, swap, *Use this slate* armed with a preview and unavailable without an anchor (#24, #36).
 - **The shortlist:** film set plus provenance, re-scored live under the current basis, its rows also in the Timetable tab (#17, #22).
 - **Tests:** #6's enumeration oracle as a marked test and a generator of hard-coded fixtures. The trap catalogue's solver traps (#25).
 - Tuning stage two on the seed corpus (#25).
