@@ -150,6 +150,8 @@ class Tools:
     overlaps: int
     # The shared time, which is the whole elapsed time while nobody's strip shows (#149).
     shared: str = ""
+    # Where the last box ends, day and clock: the end a laid slate prints (#171).
+    ends: str = ""
 
 
 @dataclass(frozen=True)
@@ -353,16 +355,17 @@ def ticks_of(scale, clock):
 
 
 def tools_of(reading, budget, clock, present):
-    evening = f"{clock.day_hm(reading.first_start)} → {clock.day_hm(reading.last_end)}"
+    ends = clock.day_hm(reading.last_end)
+    evening = f"{clock.day_hm(reading.first_start)} → {ends}"
     elapsed = duration(reading.elapsed)
     screen = duration(reading.screen_time)
     shared = duration(present.shared)
     if budget is None:
-        return Tools(screen, None, None, False, 0, evening, elapsed, len(reading.overlaps), shared)
+        return Tools(screen, None, None, False, 0, evening, elapsed, len(reading.overlaps), shared, ends)
     over = reading.over
     spare = f"{over} min over" if over > 0 else f"{-over} min to spare"
     filled = 100 if over > 0 else round(reading.screen_time / budget * 100)
-    return Tools(screen, duration(budget), spare, over > 0, filled, evening, elapsed, len(reading.overlaps), shared)
+    return Tools(screen, duration(budget), spare, over > 0, filled, evening, elapsed, len(reading.overlaps), shared, ends)
 
 
 def load(anchor, budget, now=None):
@@ -375,41 +378,37 @@ def voters():
     return tuple(Voter.objects.order_by("display_name_key").values_list("pk", "display_name"))
 
 
+def film_boxes(placed):
+    """Film boxes for `placed`, (key, start, suggestion) in order, with the vetoes read in one query: the one drawing of a film as a box (#144, #171)."""
+    rows = list(board.vetoes_on([suggestion.pk for _, _, suggestion in placed]))
+    marks = board.veto_marks(rows, None)
+    vetoers = {}
+    for suggestion_id, voter_id, _ in rows:
+        vetoers.setdefault(suggestion_id, set()).add(voter_id)
+    return [
+        Loaded(
+            key,
+            start,
+            suggestion.runtime,
+            film=suggestion.film,
+            vetoed_by=marks.get(suggestion.pk, ("", ""))[0],
+            vetoers=marks.get(suggestion.pk, ("", ""))[1],
+            # The mark is the admin's alone; voters never see approval (#26 §5).
+            dropped=suggestion.approval == Approval.DROPPED,
+            tmdb_runtime=suggestion.tmdb_runtime,
+            veto_voters=frozenset(vetoers.get(suggestion.pk, ())),
+        )
+        for key, start, suggestion in placed
+    ]
+
+
 def candidate_box(suggestion, key, start):
     """A candidate film as the box it would be, for a preview of its insert; nothing is stored (#144)."""
-    rows = list(board.vetoes_on([suggestion.pk]))
-    initials, names = board.veto_marks(rows, None).get(suggestion.pk, ("", ""))
-    return Loaded(
-        key, start, suggestion.runtime, film=suggestion.film, vetoed_by=initials, vetoers=names, tmdb_runtime=suggestion.tmdb_runtime, veto_voters=frozenset(voter for _, voter, _ in rows)
-    )
+    return film_boxes([(key, start, suggestion)])[0]
 
 
 def stored_boxes():
     """The timetable's boxes as the track shows them, in start order."""
     stored = list(Box.objects.select_related("suggestion").order_by("start", "pk"))
-    rows = list(board.vetoes_on([box.suggestion_id for box in stored if box.suggestion_id]))
-    marks = board.veto_marks(rows, None)
-    vetoers = {}
-    for suggestion_id, voter_id, _ in rows:
-        vetoers.setdefault(suggestion_id, set()).add(voter_id)
-    boxes = []
-    for box in stored:
-        if box.suggestion is None:
-            boxes.append(Loaded(box.pk, box.start, box.length, label=box.label, flexible=box.flexible))
-            continue
-        initials, names = marks.get(box.suggestion_id, ("", ""))
-        boxes.append(
-            Loaded(
-                box.pk,
-                box.start,
-                box.suggestion.runtime,
-                film=box.suggestion.film,
-                vetoed_by=initials,
-                vetoers=names,
-                # The mark is the admin's alone; voters never see approval (#26 §5).
-                dropped=box.suggestion.approval == Approval.DROPPED,
-                tmdb_runtime=box.suggestion.tmdb_runtime,
-                veto_voters=frozenset(vetoers.get(box.suggestion_id, ())),
-            )
-        )
-    return boxes
+    films = iter(film_boxes([(box.pk, box.start, box.suggestion) for box in stored if box.suggestion]))
+    return [Loaded(box.pk, box.start, box.length, label=box.label, flexible=box.flexible) if box.suggestion is None else next(films) for box in stored]

@@ -164,3 +164,10 @@ def test_the_in_wording_in_minutes_hours_and_days():
     assert [engine.in_words(m) for m in (0, 0.2, 25, 25.5, 59, 60, 61, 125, 23 * 60 + 59.5, 1440, 2880, 2 * 1440 + 600)] == [
         "1m", "1m", "25m", "26m", "59m", "1h", "1h01m", "2h05m", "1 day", "1 day", "2 days", "2 days",
     ]
+
+
+def test_laying_a_slate_puts_the_films_back_to_back_from_zero_in_the_order_given():
+    laid = engine.lay_back_to_back([("b", 100), ("a", 90), ("c", 45)])
+
+    assert [(each.key, each.start, each.length, each.is_film) for each in laid] == [("b", 0, 100, True), ("a", 100, 90, True), ("c", 190, 45, True)]
+    assert engine.lay_back_to_back([]) == []

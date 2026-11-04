@@ -376,6 +376,15 @@ def arrange(boxes, utility, minutes=DEFAULT_BREAK):
     return [after[box.key] for box in boxes]
 
 
+def lay_back_to_back(films):
+    """Boxes for `films`, (key, runtime) pairs in the order given, from minute 0 each starting where the one before ends (#36, #171)."""
+    laid, at = [], 0
+    for key, runtime in films:
+        laid.append(Placed(key, at, runtime, True))
+        at += runtime
+    return laid
+
+
 # ---------- Where the night is (#159) ----------
 
 PAST, PLAYING, NEXT, LATER = "past", "playing", "next", "later"
