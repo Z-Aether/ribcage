@@ -3998,36 +3998,176 @@ body:has(> main > .ballot-head) > footer.site-footer {
   color: var(--accent);
 }
 
-/* ---------- The plan on Compare: plain ledger markup; M9's slate row replaces it (#147) ---------- */
+/* ---------- The slate ledger row on Compare and in the gallery (#24, #164) ---------- */
 
-.the-plan__frame {
+.slate-ledger__frame {
   position: relative;
   overflow-x: auto;
 }
-[data-skin] .the-plan__over {
-  color: var(--veto-ink);
+[data-skin] table.slate-ledger {
+  width: auto;
+  min-width: 100%;
 }
-[data-skin] .the-plan__vetoed {
-  margin-top: 0.75rem;
+[data-skin] .slate-ledger__heading th {
+  padding-top: 0.9rem;
+  background-color: transparent;
+  border-bottom-color: var(--line);
 }
-[data-skin] .the-plan__most {
+[data-skin] .slate-ledger th.slate-ledger__film {
+  padding: 0.3rem 0.1rem;
+  width: 1.1rem;
+  height: 9rem;
+  vertical-align: bottom;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.slate-ledger__film span {
+  display: block;
+  max-height: 9rem;
+  overflow: hidden;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+[data-skin] .slate-ledger th.slate-ledger__film--core {
+  color: var(--ink-muted);
+  opacity: 0.7;
+}
+[data-skin] .slate-row {
+  cursor: pointer;
+}
+[data-skin] .slate-row:hover td,
+[data-skin] .slate-row.is-open td {
+  background-color: var(--surface);
+}
+.slate-row__opens {
+  all: unset;
+  text-align: left;
+  cursor: pointer;
   font-weight: 700;
 }
-[data-skin] .ledger td.the-plan__sum--best {
+.slate-row__opens:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.slate-row__standing {
+  display: block;
+  font-size: 0.78rem;
   color: var(--score-top-pick);
 }
-[data-skin] .ledger td.the-plan__sum--worst {
+.slate-row__tier {
+  display: inline-block;
+  padding: 0 0.4em;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  color: var(--ink-muted);
+}
+.slate-row__tier--tied {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.slate-row__distance {
+  display: inline-block;
+  min-width: 1.6em;
+  text-align: left;
+  color: var(--ink-muted);
+}
+[data-skin] .slate-row__over {
   color: var(--veto-ink);
 }
-[data-skin] .the-plan__breakdown {
-  margin-top: 0.75rem;
-  overflow-x: auto;
+.slate-row__films {
+  white-space: nowrap;
 }
-[data-skin] .the-plan__people th.ledger__number {
-  white-space: normal;
+.slate-strip {
+  display: inline-flex;
+  gap: 2px;
 }
-[data-skin] .the-plan__pin {
+.slate-strip__cell {
+  position: relative;
+  display: inline-block;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 3px;
+  background-color: var(--score-fill);
+  color: var(--score-ink);
+  font-style: normal;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.4rem;
+  text-align: center;
+}
+.slate-strip__cell--out {
+  background: none;
+  border: 1px dashed var(--ink-muted);
+}
+.slate-strip__pin {
+  position: absolute;
+  top: -0.45rem;
+  right: -0.2rem;
   color: var(--accent);
+  font-size: 0.8rem;
+  line-height: 1;
+}
+[data-skin] .slate-ledger td.slate-dot {
+  padding-inline: 0.1rem;
+  text-align: center;
+}
+.slate-dot__mark {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background-color: var(--ink);
+}
+.slate-dot--core .slate-dot__mark {
+  background-color: var(--ink-muted);
+  opacity: 0.55;
+}
+[data-skin] .ledger .slate-row__detail > td {
+  padding-left: 0.9rem;
+}
+.slate-row__grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem 2rem;
+  position: sticky;
+  left: 0;
+  max-width: 70rem;
+}
+[data-skin] .ledger .slate-row__detail .slate-row__grid td {
+  padding: 0.3rem 0.6rem;
+  background-color: transparent;
+}
+[data-skin] .slate-row__grid table {
+  width: auto;
+}
+.slate-row__aside {
+  max-width: 20rem;
+}
+.slate-row__grid h3 {
+  margin: 0 0 0.3rem;
+}
+[data-skin] .slate-row__most {
+  font-weight: 700;
+}
+[data-skin] .ledger td.slate-row__sum--best {
+  color: var(--score-top-pick);
+}
+[data-skin] .ledger td.slate-row__sum--worst {
+  color: var(--veto-ink);
+}
+[data-skin] .slate-row__pin {
+  color: var(--accent);
+}
+.slate-row__objective {
+  font-size: 0.78rem;
 }
 
 /* ---------- The reveal's matrix (#154) ---------- */

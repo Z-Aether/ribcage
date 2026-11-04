@@ -1,48 +1,106 @@
-"""The set readouts of the timetable's slate as stored: the loader for the pure `readouts.plan`, for Compare (#147)."""
+"""The slate ledger's rows as stored: the loader for the pure `readouts.ledger`, for Compare (#147, #164)."""
+
+from dataclasses import dataclass
+
+from django.conf import settings
+from django.db.models import Exists, OuterRef, Q
 
 from ribcage.ballot import floor as ballot_floor
 from ribcage.ballot.board import candidates
 from ribcage.ballot.models import BallotRecord
-from ribcage.readouts import floor, plan
-from ribcage.readouts.slate import SlateEntry, film_points, slate_order
+from ribcage.readouts import ledger, plan
+from ribcage.suggestions.models import Suggestion
+from ribcage.timetable import setting
 from ribcage.timetable.models import Box
 
+THE_PLAN = "The plan"
+SECTIONS = (THE_PLAN, "Shortlist", "This batch")
+NOTHING_YET = "Nothing on the timetable yet."
 
-def load():
-    """The plan's readouts as the page shows them, in seven queries however long the slate is (#147, #148).
 
-    The breakdown (film points, slate sums, a voter at zero's best eligible film) is the one more query, for the candidates' titles and runtimes.
+@dataclass(frozen=True)
+class Wanted:
+    """A further row for the ledger: its section, its label and its film set (suggestion ids); #165 and #169 pass theirs to `load`."""
+
+    section: str
+    label: str
+    films: tuple
+
+
+def signed(distance):
+    """A distance from the best row: = when level."""
+    return "=" if not distance else f"{distance:+d}".replace("-", "\N{MINUS SIGN}")
+
+
+def load(wanted=()):
+    """The ledger as the page shows it, in a fixed number of queries however many rows and films: the plan's row, then each of `wanted`'s.
+
+    The voters, the candidates', the rows' films and their ballot records are each loaded once for every row (#164).
     """
-    ids, names, runtimes, records, budget = ballot_floor.load()
-    found = floor.floor_set(ids, runtimes, records, budget)
-    boxes = list(Box.objects.order_by("start", "pk").values_list("suggestion_id", "suggestion__title", "suggestion__runtime"))
-    on_the_plan = [each for each in boxes if each[0] is not None]
-    titles = {pk: title for pk, title, _ in on_the_plan}
-    held = list(BallotRecord.objects.filter(suggestion__in=titles).values_list("voter_id", "suggestion_id", "score", "vetoed", "seen_it"))
-    # Slate order, not box order, so a move changes neither a tie's representative nor the Vetoed list (#36, #12).
-    by_film = {}
-    for _, film, score, vetoed, _ in held:
-        by_film.setdefault(film, []).append((score, vetoed))
-    standings = [
-        SlateEntry(pk, title, sum(1 for _, vetoed in by_film.get(pk, ()) if vetoed), film_points(by_film.get(pk, ()))) for pk, title in titles.items()
+    ids, names = ballot_floor.roster()
+    budget = setting.read().budget
+    boxes = list(Box.objects.order_by("start", "pk").values_list("suggestion_id", flat=True))
+    on_the_plan = [pk for pk in boxes if pk is not None]
+    screen = set(on_the_plan).union(*(each.films for each in wanted))
+    films = Suggestion.objects.filter(Q(pk__in=screen) | Q(pk__in=candidates().values("pk"))).annotate(on_the_ballot=Exists(candidates().filter(pk=OuterRef("pk"))))
+    found = list(films.values_list("pk", "title", "runtime", "on_the_ballot"))
+    titles = {pk: title for pk, title, _, _ in found}
+    runtimes = {pk: runtime for pk, _, runtime, _ in found}
+    on_the_ballot = {pk for pk, _, _, ballot in found if ballot}
+    records = list(BallotRecord.objects.filter(suggestion__in=titles).values_list("voter_id", "suggestion_id", "score", "vetoed", "seen_it"))
+    # The floor set reads the ballot alone; a dropped film's records on the plan count only for the plan's readouts (#26 §5).
+    found_floor = ballot_floor.of_the_ballot(ids, runtimes, on_the_ballot, records, budget)
+    on = ledger.stored_votes(ids, found_floor, records, titles, runtimes, on_the_ballot, budget)
+
+    # An empty timetable is no row, so it joins no standing and no core (#147, #164).
+    asked = [*([Wanted(THE_PLAN, THE_PLAN, tuple(on_the_plan))] if boxes else []), *wanted]
+    return {**of(asked, on, names, titles), "floor_line": ballot_floor.line_of(found_floor, names), "empty": not boxes}
+
+
+def of(asked, on, names, titles, prefix="slate"):
+    """The ledger of `asked`, `Wanted` rows, over a `ledger.StoredVotes`: the one drawing, which the gallery calls over made-up data too."""
+    reads = [ledger.read(each.films, on) for each in asked]
+    stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, each.total) for each in reads], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
+    shown = ledger.dots([each.films for each in reads], on.rank)
+    rows = [
+        {**row_of(one, stand, names, titles, on.runtimes, shown), "id": f"{prefix}-{number}", "label": each.label}
+        for number, (each, one, stand) in enumerate(zip(asked, reads, stood))
     ]
-    slate = [each.key for each in slate_order(standings)]
-    read = plan.plan(ids, slate, {pk: runtime for pk, _, runtime in on_the_plan}, held, found, budget)
-    on_the_ballot = {}
-    for _, film, score, vetoed, _ in records:
-        on_the_ballot.setdefault(film, []).append((score, vetoed))
-    the_ballot = list(candidates().values_list("pk", "title", "runtime"))
-    ranked = slate_order(
-        [
-            SlateEntry(pk, title, sum(1 for _, vetoed in on_the_ballot.get(pk, ()) if vetoed), film_points(on_the_ballot.get(pk, ())))
-            for pk, title, _ in the_ballot
-        ]
-    )
-    the_titles = {pk: title for pk, title, _ in the_ballot}
-    the_runtimes = {pk: runtime for pk, _, runtime in the_ballot}
-    broken = plan.breakdown(read, slate, {pk: runtime for pk, _, runtime in on_the_plan}, held, [each.key for each in ranked], records)
+    sections = [
+        {"name": name, "rows": [row for each, row in zip(asked, rows) if each.section == name], "empty": NOTHING_YET if name == THE_PLAN else ""}
+        for name in SECTIONS
+        if name == THE_PLAN or any(each.section == name for each in asked)
+    ]
+    return {"columns": [{"title": titles[film], "core": film in shown.core} for film in shown.columns], "sections": sections}
+
+
+def row_of(one, stand, names, titles, runtimes, shown):
+    """One row's data for `components/slate_row.html`, plain."""
+    read = one.plan
+    if stand.best:
+        says = "best on screen"
+    else:
+        says = "tied with the best" if stand.level else ""
+    held = set(one.films)
     return {
-        "empty": not boxes,
+        "tier": stand.tier,
+        "tied": stand.tied,
+        "standing": says,
+        "floor": read.floor,
+        "floor_distance": None if stand.floor_distance is None else signed(stand.floor_distance),
+        "sigma_rep": read.sigma_rep,
+        "sigma_distance": signed(stand.sigma_distance),
+        "total": one.total,
+        "films": read.films,
+        "screen_time": plan.clock(read.screen_time),
+        "budget": None if read.budget is None else plan.clock(read.budget),
+        "over": read.over,
+        "dots": [{"title": titles[film], "held": film in held, "core": film in shown.core} for film in shown.columns],
+        "people": [
+            {"name": names[each.voter], "score": each.representation, "film": titles.get(each.representative), "out": each.out, "pins": each.pins} for each in read.rows
+        ],
+        "vetoes": len(read.vetoed),
+        "vetoed": [{"film": titles[each.film], "by": [names[voter] for voter in each.vetoers]} for each in read.vetoed],
         "film_lines": [
             {
                 "title": titles[each.film],
@@ -52,9 +110,9 @@ def load():
                 "represents": [{"name": names[voter], "pins": pins} for voter, pins in each.represents],
                 "likes": each.likes,
             }
-            for each in broken.films
+            for each in one.breakdown.films
         ],
-        "people": [
+        "breakdown_people": [
             {
                 "name": names[each.voter],
                 "film": titles.get(each.representative),
@@ -63,19 +121,8 @@ def load():
                 "pins": each.pins,
                 "sum": each.slate_sum,
                 "served": each.served,
-                "best": None if each.best_eligible is None else {"title": the_titles[each.best_eligible[0]], "runtime": the_runtimes[each.best_eligible[0]], "score": each.best_eligible[1]},
+                "best": None if each.best_eligible is None else {"title": titles[each.best_eligible[0]], "runtime": runtimes[each.best_eligible[0]], "score": each.best_eligible[1]},
             }
-            for each in broken.people
+            for each in one.breakdown.people
         ],
-        "films": read.films,
-        "screen_time": plan.clock(read.screen_time),
-        "budget": None if read.budget is None else plan.clock(read.budget),
-        "over": read.over,
-        "floor": read.floor,
-        "sigma_rep": read.sigma_rep,
-        "floor_line": ballot_floor.line_of(found, names),
-        "rows": [
-            {"name": names[each.voter], "film": titles.get(each.representative), "score": each.representation, "out": each.out, "pins": each.pins} for each in read.rows
-        ],
-        "vetoed": [{"film": titles[each.film], "by": [names[voter] for voter in each.vetoers]} for each in read.vetoed],
     }

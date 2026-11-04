@@ -168,6 +168,14 @@
     {% include "console/track.html" %}
   </section>
 
+  <section class="gallery-skin" data-skin="admin" id="slate-ledger" aria-labelledby="slate-ledger-name">
+    <p class="gallery-skin__name" id="slate-ledger-name">Admin: the slate ledger row</p>
+    <p class="gallery-label">Collapsed: the plan, a kept slate and a proposal under a 6 hour budget, the films every row holds greyed as the core (click a row to open it)</p>
+    {% include "components/slate_ledger.html" with ledger=slate_ledger %}
+    <p class="gallery-label">The first row expanded</p>
+    {% include "components/slate_ledger.html" with ledger=slate_ledger_open %}
+  </section>
+
   <section class="gallery-skin" data-skin="run" id="run" aria-labelledby="run-name">
     <p class="gallery-skin__name" id="run-name">RUN</p>
     <div class="run-sample">

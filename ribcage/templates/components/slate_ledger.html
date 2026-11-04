@@ -1,0 +1,29 @@
+{# The slate ledger: one row per slate under a section's heading, the film dots one narrow column per film. Over plain data (#24, #164). #}
+<div class="slate-ledger__frame" data-keeps-scroll>
+  <table class="ledger slate-ledger" data-slate-ledger>
+    <thead>
+      <tr>
+        <th scope="col">Slate</th>
+        <th scope="col">Tier</th>
+        <th scope="col" class="ledger__number">Floor</th>
+        <th scope="col" class="ledger__number">Σrep</th>
+        <th scope="col">Films · screen time</th>
+        <th scope="col">People</th>
+        <th scope="col" class="ledger__number">Vetoes</th>
+        {% for dot in ledger.columns %}
+          <th scope="col" class="slate-ledger__film{% if dot.core %} slate-ledger__film--core{% endif %}"><span title="{{ dot.title }}">{{ dot.title }}</span></th>
+        {% endfor %}
+      </tr>
+    </thead>
+    {% for section in ledger.sections %}
+      <tbody class="slate-ledger__section" aria-label="{{ section.name }}">
+        <tr class="slate-ledger__heading"><th scope="rowgroup" colspan="{{ ledger.columns|length|add:7 }}">{{ section.name }}</th></tr>
+        {% for row in section.rows %}
+          {% include "components/slate_row.html" %}
+        {% empty %}
+          {% if section.empty %}<tr><td colspan="{{ ledger.columns|length|add:7 }}" class="ledger__muted">{{ section.empty }}</td></tr>{% endif %}
+        {% endfor %}
+      </tbody>
+    {% endfor %}
+  </table>
+</div>

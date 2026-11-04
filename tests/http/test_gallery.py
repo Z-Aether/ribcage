@@ -310,3 +310,14 @@ def test_the_gallery_shows_no_reveal_bar_and_no_card_opens_from_its_sample_matri
     assert "phase-bar--reveal" not in page and "reveal-chip" not in page and "across the room" not in page
     # The sample matrix is a picture: no card opens from it.
     assert "data-reveal" not in page and "reveal-card" not in page
+
+
+def test_the_gallery_shows_the_slate_ledger_row_collapsed_and_expanded(client, debug):
+    page = client.get(GALLERY).text
+    section = re.search(r'id="slate-ledger".*?</section>', page, re.S)[0]
+
+    assert section.count('data-slate-row') == 6
+    assert section.count('aria-expanded="true"') == 1 and section.count('aria-expanded="false"') == 5
+    assert "tied with the best" in section or "best on screen" in section
+    assert 'class="slate-row__over">over' in section
+    assert len(set(re.findall(r'id="([^"]*-detail)"', section))) == 6

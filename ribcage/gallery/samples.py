@@ -31,11 +31,13 @@ from ribcage.films.card import (
     Withdraw,
 )
 from ribcage.films.picker import Picker, PickerTile
+from ribcage.readouts import floor as readouts_floor
+from ribcage.readouts import ledger
 from ribcage.suggestions.notes import PITCH_REQUIRED
 from ribcage.suggestions.runtime import NOT_WHOLE_MINUTES
 from ribcage.suggestions.withdrawal import what_goes
 from ribcage.timetable import evening as timetable_evening
-from ribcage.timetable import track
+from ribcage.timetable import plan, track
 from ribcage.triggers import correction
 from ribcage.triggers.carrying import carries
 from ribcage.triggers.section import GAPS
@@ -476,8 +478,30 @@ def reveal_matrix():
     return reveal.build(voters, shown, records, {(4, 14): "I won't sit through that one."}, viewer_id=1)
 
 
+def slate_ledger(open_first=False):
+    """The slate ledger over made-up votes: the plan, a level rival and a lesser slate over budget, the first row opened or not (#164)."""
+    voters = [(1, "Ada"), (2, "Bo"), (3, "Cy"), (4, "Dee")]
+    keys = {10: THE_THING, 11: EVENT_HORIZON, 12: CABINET_OF_CURIOSITIES, 13: INFESTED, 14: TERRIFIER, 15: MIDSOMMAR}
+    titles = {pk: film(key).title for pk, key in keys.items()}
+    runtimes = {10: 109, 11: 96, 12: 47, 13: 100, 14: 85, 15: 147}
+    records = [
+        (1, 10, 3, False, False), (1, 11, 2, False, False), (1, 15, None, True, False), (2, 10, 2, False, False), (2, 12, 3, False, False),
+        (2, 14, None, True, False), (3, 11, 3, False, False), (3, 13, 1, False, False), (3, 15, 2, False, False), (4, 12, 2, False, False),
+        (4, 13, 3, False, False), (4, 14, 1, False, False),
+    ]  # fmt: skip
+    ids = [pk for pk, _ in voters]
+    found = readouts_floor.floor_set(ids, runtimes, records, 360)
+    on = ledger.stored_votes(ids, found, records, titles, runtimes, set(runtimes), 360)
+    asked = [plan.Wanted(plan.THE_PLAN, plan.THE_PLAN, (10, 11, 12, 13)), plan.Wanted("Shortlist", "Kept 1", (10, 11, 12, 15)), plan.Wanted("This batch", "Proposal 1", (10, 12, 13, 14))]
+    drawn = plan.of(asked, on, dict(voters), titles, prefix="open" if open_first else "slate")
+    drawn["sections"][0]["rows"][0]["open"] = open_first
+    return drawn
+
+
 def gallery():
     return {
+        "slate_ledger": slate_ledger(),
+        "slate_ledger_open": slate_ledger(True),
         "reveal_cells": reveal_cells(),
         "reveal_matrix": reveal_matrix(),
         "cards": cards(),

@@ -215,10 +215,13 @@ def test_from_vote_on_the_floor_set_shows_obrien_nothing_representable_and_barth
 
 @pytest.mark.parametrize("seeded", PHASES[PHASES.index(Phase.PICK) :], indirect=True)
 def test_in_pick_and_run_the_seeded_plan_has_a_floor_above_zero_that_removing_a_pinner_s_film_drops(db, seeded):
-    read = plan_load()
+    def the_row():
+        return plan_load()["sections"][0]["rows"][0]
+
+    read = the_row()
     assert read["floor"] > 0 and read["sigma_rep"] > 0
 
-    pinned = {each["film"] for each in read["rows"] if each["pins"]}
+    pinned = {each["film"] for each in read["people"] if each["pins"]}
     Box.objects.filter(suggestion__title__in=pinned).delete()
 
-    assert plan_load()["floor"] < read["floor"]
+    assert the_row()["floor"] < read["floor"]
