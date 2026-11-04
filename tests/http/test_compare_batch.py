@@ -108,5 +108,172 @@ def test_the_query_count_does_not_grow_with_the_ballot(admin, votes):
         more = film(f"More {number}", 80)
         BallotRecord.objects.create(voter=votes["voters"]["ada"], suggestion=more, score=2)
         BallotRecord.objects.create(voter=votes["voters"]["Dani"], suggestion=more, vetoed=True)
+    admin.get(COMPARE)  # the changed ballot is kept by this render, which writes the session once
 
     assert queries() == small
+
+
+@pytest.fixture
+def many(voters, settings):
+    """Six approved films of 100 minutes in a 4 hour budget, scored by ada and Dani, cut by 2 and a batch of 3."""
+    settings.DIVERSITY_CUT, settings.BATCH_SIZE = 2, 3
+    Timetable.objects.create(pk=1, budget=240)
+    for number in range(6):
+        one = film(f"Film {number}", 100)
+        for voter, score in [("ada", number % 4), ("Dani", (number * 2) % 4)]:
+            BallotRecord.objects.create(voter=voters[voter], suggestion=one, score=score)
+
+
+def proposals(page):
+    return re.findall(r'class="slate-row__opens"[^>]*>\s*(Proposal \d+)', page)
+
+
+def heading(page):
+    return text(re.search(r'aria-label="This batch">\s*<tr class="slate-ledger__heading">(.*?)</tr>', page, re.S)[1])
+
+
+def test_compare_shows_batch_size_proposals_with_the_count_and_more_in_the_header(admin, many):
+    page = admin.get(COMPARE).text
+
+    assert proposals(page) == ["Proposal 1", "Proposal 2", "Proposal 3"]
+    assert heading(page) == "This batch 3 · more"
+    assert "data-batch-more" in page and not re.search(r"<button[^>]*disabled[^>]*data-batch-more", page)
+
+
+def test_a_short_batch_says_why_and_greys_more(admin, votes, settings):
+    settings.DIVERSITY_CUT = 4
+
+    page = admin.get(COMPARE).text
+
+    assert proposals(page) == ["Proposal 1"]
+    assert heading(page) == "This batch 1 · more No other slate differs from these by 4 or more films."
+    assert re.search(r"<button[^>]*disabled[^>]*data-batch-more", page)
+
+
+def test_more_extends_the_batch_in_the_admins_session_and_keeps_the_first(admin, many):
+    before = proposals(admin.get(COMPARE).text)
+    first = cells(batch(admin.get(COMPARE).text))["films"]
+
+    assert admin.post("/console/pick/more/").status_code == 302
+    page = admin.get(COMPARE).text
+
+    assert proposals(page)[:3] == before and len(proposals(page)) == 6
+    assert cells(batch(page))["films"] == first
+    assert heading(page).startswith("This batch 6")
+
+
+def test_more_until_the_chain_ends_greys_it_with_the_reason(admin, many):
+    for _ in range(6):
+        admin.post("/console/pick/more/")
+
+    page = admin.get(COMPARE).text
+
+    assert len(proposals(page)) < 3 * 7
+    assert "No other slate differs from these by 2 or more films." in heading(page)
+
+
+def test_saving_the_budget_resets_more_to_one_batch(admin, many):
+    admin.post("/console/pick/more/")
+    assert len(proposals(admin.get(COMPARE).text)) == 6
+
+    admin.post("/console/pick/budget/", {"hours": "5", "minutes": "0", "sub": "compare"})
+
+    assert len(proposals(admin.get(COMPARE).text)) == 3
+
+
+def test_a_refused_budget_keeps_more(admin, many):
+    admin.post("/console/pick/more/")
+
+    admin.post("/console/pick/budget/", {"hours": "x", "minutes": "", "sub": "compare"})
+
+    assert len(proposals(admin.get(COMPARE).text)) == 6
+
+
+def test_the_same_votes_give_the_same_batch_on_every_render(admin, many):
+    def films(page):
+        return [text(each) for each in re.findall(r'<td[^>]*class="[^"]*films[^"]*"[^>]*>(.*?)</td>', batch(page), re.S)]
+
+    assert films(admin.get(COMPARE).text) == films(admin.get(COMPARE).text)
+
+
+def test_the_query_count_does_not_grow_with_the_batch(admin, many):
+    def queries():
+        with CaptureQueriesContext(connection) as captured:
+            admin.get(COMPARE)
+        return len(captured)
+
+    admin.get(COMPARE)
+    one = queries()
+    admin.post("/console/pick/more/")
+    admin.get(COMPARE)
+
+    assert queries() == one
+
+
+@pytest.fixture
+def solves(monkeypatch):
+    """The number of times a render calls the solver, counted from now."""
+    from ribcage.solver.model import solve
+
+    calls = []
+    monkeypatch.setattr("ribcage.timetable.batch.solve", lambda *args, **kwargs: calls.append(1) or solve(*args, **kwargs))
+    return calls
+
+
+def test_a_render_after_more_solves_only_the_new_proposals(admin, many, solves, settings):
+    admin.get(COMPARE)
+    assert len(solves) == settings.BATCH_SIZE
+    solves.clear()
+
+    admin.post("/console/pick/more/")
+    page = admin.get(COMPARE).text
+
+    assert len(solves) == settings.BATCH_SIZE and len(proposals(page)) == 6
+    assert re.search(r"solved in \d+ ms", page)
+
+
+def test_a_repeat_render_with_nothing_new_solves_nothing(admin, many, solves):
+    admin.post("/console/pick/more/")
+    first = admin.get(COMPARE).text
+    solves.clear()
+
+    again = admin.get(COMPARE).text
+    admin.get(COMPARE)
+
+    assert solves == []
+    assert proposals(again) == proposals(first) and "nothing new to solve" in again
+
+
+def test_a_chain_the_cut_ended_is_not_solved_again(admin, many, solves):
+    for _ in range(6):
+        admin.post("/console/pick/more/")
+    admin.get(COMPARE)
+    solves.clear()
+
+    page = admin.get(COMPARE).text
+
+    assert solves == [] and "No other slate differs" in heading(page)
+
+
+def test_a_vote_changed_between_renders_resets_more_and_solves_again(admin, many, voters, solves, settings):
+    admin.post("/console/pick/more/")
+    assert len(proposals(admin.get(COMPARE).text)) == 6
+    solves.clear()
+    one = Suggestion.objects.get(title="Film 0")
+    BallotRecord.objects.update_or_create(voter=voters["ada"], suggestion=one, defaults={"score": 3, "vetoed": False})
+    BallotRecord.objects.filter(voter=voters["Dani"], suggestion=one).update(score=-1)
+
+    page = admin.get(COMPARE).text
+
+    assert len(proposals(page)) == 3 and len(solves) == settings.BATCH_SIZE
+    assert len(proposals(admin.get(COMPARE).text)) == 3
+
+
+def test_a_film_added_to_the_ballot_between_renders_resets_more(admin, many, voters, solves):
+    admin.post("/console/pick/more/")
+    assert len(proposals(admin.get(COMPARE).text)) == 6
+    extra = film("Extra", 90)
+    BallotRecord.objects.create(voter=voters["ada"], suggestion=extra, score=3)
+
+    assert len(proposals(admin.get(COMPARE).text)) == 3
+

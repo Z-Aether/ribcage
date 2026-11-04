@@ -182,6 +182,8 @@ def selected_box(request, chosen=None):
 # The ripple mode control's words, in the tool row's order (#140, #141).
 RIPPLE_NAMES = ((engine.NONE, "None"), (engine.KEEP_GAPS, "Push · keep gaps"), (engine.KEEP_END_TIME, "Push · keep end time"))
 RIPPLE_SESSION_KEY = "ripple_mode"
+BATCHES_SESSION_KEY = "batches"  # how many batches of proposals "more" has taken Compare to (#166)
+CHAIN_SESSION_KEY = "chain"  # the slates the chain has found, beside a digest of the problem they answer (#166)
 
 
 def ripple_mode(request):
@@ -251,9 +253,20 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
         **track_context(request, mode),
         **armed_context(armed),
         "candidates": offering.not_in_the_plan() if sub == "timetable" else (),
-        "plan": plan.load(solved=True) if sub == "compare" else None,
+        "plan": solved_plan(request) if sub == "compare" else None,
     }
     return render_tab(request, "console/pick.html", context)
+
+
+def solved_plan(request):
+    """Compare's ledger, resuming the chain from the session and keeping what it found; a changed problem has set "more" back to one batch (#17, #166)."""
+    rounds, kept = admin_session.kept(request, BATCHES_SESSION_KEY, 1), admin_session.kept(request, CHAIN_SESSION_KEY)
+    shown = plan.load(solved=True, rounds=rounds, kept=kept)
+    if shown["rounds"] != rounds:
+        admin_session.keep(request, BATCHES_SESSION_KEY, shown["rounds"])
+    if shown["kept"] != kept:
+        admin_session.keep(request, CHAIN_SESSION_KEY, shown["kept"])
+    return shown
 
 
 @admin_required
@@ -289,7 +302,17 @@ def pick_budget(request):
         return redirect("console_pick")
     if refused := setting.set_budget(request.POST.get("hours", ""), request.POST.get("minutes", "")):
         return render_pick(request, chosen_sub(request), refused)
+    # A new budget replaces the batch, so "more" starts again from one (#17, #166).
+    admin_session.keep(request, BATCHES_SESSION_KEY, 1)
     return redirect("console_pick_compare" if chosen_sub(request) == "compare" else "console_pick")
+
+
+@admin_required
+@require_POST
+def pick_more(request):
+    # "More" is how many batches the chain has been taken to, kept in the admin's session beside the slates found; the next render solves what is missing (#17, #166).
+    admin_session.keep(request, BATCHES_SESSION_KEY, admin_session.kept(request, BATCHES_SESSION_KEY, 1) + 1)
+    return redirect("console_pick_compare")
 
 
 @admin_required

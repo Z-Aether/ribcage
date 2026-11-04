@@ -19,6 +19,7 @@ THIS_BATCH = "This batch"
 NO_KNOBS = "no knobs"
 SECTIONS = (THE_PLAN, "Shortlist", THIS_BATCH)
 NOTHING_YET = "Nothing on the timetable yet."
+NOTHING_TO_SOLVE = "nothing new to solve"
 
 
 @dataclass(frozen=True)
@@ -35,8 +36,10 @@ def signed(distance):
     return "=" if not distance else f"{distance:+d}".replace("-", "\N{MINUS SIGN}")
 
 
-def load(wanted=(), solved=False):
+def load(wanted=(), solved=False, rounds=1, kept=None):
     """The ledger as the page shows it, in a fixed number of queries however many rows and films: the plan's row, then each of `wanted`'s and, with `solved`, the batch's.
+
+    `rounds` is how far "more" has taken it and `kept` what the last solve left for the batch to resume from; a solved ledger carries `rounds` and `kept` back for the session (#166).
 
     The voters, the candidates', the rows' films and their ballot records are each loaded once for every row (#164).
     """
@@ -55,14 +58,20 @@ def load(wanted=(), solved=False):
     found_floor = ballot_floor.of_the_ballot(ids, runtimes, on_the_ballot, records, budget)
     on = ledger.stored_votes(ids, found_floor, records, titles, runtimes, on_the_ballot, budget)
 
-    # The batch is solved here on every render, from the same loaded votes, and never stored (#17, #165).
-    found_batch = batches.propose(on, settings.FLOOR_WEIGHT_MULTIPLIER) if solved else None
+    # The batch answers to the votes loaded here on every render: it solves what the kept slates lack, and is never stored in the database (#17, #165, #166).
+    found_batch = batches.propose(on, settings.FLOOR_WEIGHT_MULTIPLIER, rounds, kept) if solved else None
     proposals = [] if found_batch is None else [Wanted(THIS_BATCH, proposal_label(number, each), tuple(each)) for number, each in enumerate(found_batch.slates, 1)]
     # An empty timetable is no row, so it joins no standing and no core (#147, #164).
     asked = [*([Wanted(THE_PLAN, THE_PLAN, tuple(on_the_plan))] if boxes else []), *wanted, *proposals]
     floor_line = ballot_floor.line_of(found_floor, names)
-    banners = {THIS_BATCH: {"floor_line": floor_line, "basis": NO_KNOBS, "solved_in": f"solved in {found_batch.solved_ms} ms", "ending": found_batch.ending}} if solved else {}
-    return {**of(asked, on, names, titles, banners=banners), "empty": not boxes}
+    banners = {THIS_BATCH: {"floor_line": floor_line, "basis": NO_KNOBS, "solved_in": f"solved in {found_batch.solved_ms} ms" if found_batch.solving else NOTHING_TO_SOLVE, "ending": found_batch.ending, "more": more_of(found_batch)}} if solved else {}
+    memory = {"rounds": found_batch.rounds, "kept": found_batch.kept} if solved else {}
+    return {**of(asked, on, names, titles, banners=banners), "empty": not boxes, **memory}
+
+
+def more_of(found):
+    """The section header's count and "more": available until the cut stopped the chain, then greyed with the solver's reason (#17, #166)."""
+    return {"count": len(found.slates), "available": not found.stopped, "reason": found.stopped}
 
 
 def proposal_label(number, slate):
@@ -72,7 +81,7 @@ def proposal_label(number, slate):
 def of(asked, on, names, titles, prefix="slate", banners=None):
     """The ledger of `asked`, `Wanted` rows, over a `ledger.StoredVotes`: the one drawing, which the gallery calls over made-up data too.
 
-    `banners` are a section's heading facts by name (#165).
+    `banners` are a section's heading facts by name (#165); a banner's `more` is the header's count and "more" button (#166).
     """
     banners = banners or {}
     reads = [ledger.read(each.films, on) for each in asked]

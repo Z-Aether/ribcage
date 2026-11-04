@@ -4019,6 +4019,28 @@ body:has(> main > .ballot-head) > footer.site-footer {
   padding: 0.3rem 0.75rem;
   border-left: 3px solid var(--accent);
 }
+[data-skin] .slate-ledger__head {
+  position: sticky;
+  left: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+  max-width: calc(100vw - 2.5rem);
+}
+[data-skin] .batch-more {
+  display: inline;
+  margin: 0;
+}
+[data-skin] .batch-more--unavailable button {
+  opacity: 0.5;
+}
+[data-skin] .batch-more__reason {
+  color: var(--ink-muted);
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: 0;
+}
 [data-skin] .slate-ledger__banner td {
   padding-bottom: 0;
 }

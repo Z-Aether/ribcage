@@ -1,0 +1,6 @@
+{# The batch header's "more": a post to continue the chain, or greyed with the solver's reason beside it (#17, #166). Over plain data. #}
+{% if more.available %}
+  <form method="post" action="{% url 'console_pick_more' %}" class="batch-more">{% csrf_token %}<button type="submit" class="button--quiet" data-batch-more>more</button></form>
+{% else %}
+  <span class="batch-more batch-more--unavailable"><button type="button" class="button--quiet" disabled aria-describedby="batch-more-reason" data-batch-more>more</button> <span id="batch-more-reason" class="batch-more__reason" role="status">{{ more.reason }}</span></span>
+{% endif %}

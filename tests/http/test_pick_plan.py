@@ -22,7 +22,7 @@ EMPTY = "Nothing on the timetable yet."
 @pytest.fixture(autouse=True)
 def no_proposal(monkeypatch):
     """These tests read the plan's row alone; the batch beside it has its own file (#165)."""
-    monkeypatch.setattr("ribcage.timetable.plan.batches.propose", lambda on, multiplier: Batch((), 0, ""))
+    monkeypatch.setattr("ribcage.timetable.plan.batches.propose", lambda on, multiplier, rounds=1, kept=None: Batch((), 0, ""))
 
 
 def text(fragment):
@@ -30,7 +30,8 @@ def text(fragment):
 
 
 def the_plan(page):
-    return re.search(r'<section class="compare".*?</section>', page, re.S)[0]
+    # The form tokens differ on every render.
+    return re.sub(r'name="csrfmiddlewaretoken" value="[^"]*"', "", re.search(r'<section class="compare".*?</section>', page, re.S)[0])
 
 
 def cells(page, name):
