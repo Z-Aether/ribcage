@@ -4009,9 +4009,18 @@ body:has(> main > .ballot-head) > footer.site-footer {
 }
 [data-skin] .knob-bar__knob {
   display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+[data-skin] .knob-bar__items {
+  display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.3rem;
+  min-width: 0;
+}
+[data-skin] .knob-bar__items > .knob-bar__form {
+  max-width: 100%;
 }
 [data-skin] .knob-bar .knob-bar__form {
   display: inline-block;
@@ -4032,6 +4041,16 @@ body:has(> main > .ballot-head) > footer.site-footer {
 [data-skin] .knob-bar__label {
   min-width: 10rem;
 }
+@media (max-width: 40rem) {
+  [data-skin] .knob-bar__knob {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  [data-skin] .knob-bar__label {
+    min-width: 0;
+  }
+}
 [data-skin] :is(button, a.button).button--quiet.knob-chip.is-on {
   background: var(--ink);
   color: var(--surface);
@@ -4039,6 +4058,11 @@ body:has(> main > .ballot-head) > footer.site-footer {
 }
 [data-skin] :is(button, a.button).button--quiet.knob-chip--out:not(.is-on) {
   opacity: 0.5;
+}
+[data-skin] .knob-bar select {
+  width: auto;
+  max-width: min(16rem, 100%);
+  margin: 0;
 }
 
 /* ---------- The batch's banner: sticky so a scrolled ledger keeps it in view (#165) ---------- */
@@ -4218,6 +4242,10 @@ body:has(> main > .ballot-head) > footer.site-footer {
 .slate-dot--core .slate-dot__mark {
   background-color: var(--ink-muted);
   opacity: 0.55;
+}
+/* A film fixed in is outlined whichever rows hold it (#168). */
+.slate-dot--fixed .slate-dot__mark {
+  box-shadow: 0 0 0 0.12rem var(--surface), 0 0 0 0.26rem var(--accent);
 }
 [data-skin] .ledger .slate-row__detail > td {
   padding-left: 0.9rem;

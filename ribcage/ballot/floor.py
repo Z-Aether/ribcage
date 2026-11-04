@@ -21,12 +21,12 @@ def load():
     return ids, names, runtimes, records, setting.read().budget
 
 
-def of_the_ballot(ids, runtimes, on_the_ballot, records, budget, set_aside=()):
+def of_the_ballot(ids, runtimes, on_the_ballot, records, budget, set_aside=(), fixed_out=()):
     """The floor set over loaded voters, films and records, reading the ballot's films alone: a dropped film, on the timetable or not, counts for nobody (#26 §5, #164).
 
-    `set_aside` are the voters Compare's knob sets aside; the Roster passes none, so its floor set is the stored state (#146, #167).
+    `set_aside` are the voters Compare's knob sets aside; the Roster passes none, so its floor set is the stored state; `fixed_out` are the films the knob takes out (#146, #167, #168).
     """
-    return floor.floor_set(ids, {pk: runtimes[pk] for pk in on_the_ballot}, records, budget, set_aside)
+    return floor.floor_set(ids, {pk: runtimes[pk] for pk in on_the_ballot}, records, budget, set_aside, fixed_out)
 
 
 def of_the_roster():

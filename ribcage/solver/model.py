@@ -8,7 +8,7 @@ from ribcage.solver.objective import scale_of
 
 
 def solve(problem, found=(), distance=2, scale=None):
-    """The best slate as a frozenset of films, or None where none exists.
+    """The best slate as a frozenset of films, or None where none exists, as when the films fixed in alone exceed the budget (#168).
 
     `found` are slates already proposed; each is cut off by a Hamming distance of at least `distance`, the seam for #166's diversity cut and "more".
     `scale` is K, computed per solve unless a test forces another.
@@ -31,9 +31,9 @@ def solve(problem, found=(), distance=2, scale=None):
 
     columns = 0
 
-    def column(cost, upper):
+    def column(cost, upper, lower=0):
         nonlocal columns
-        highs.addCol(float(cost), 0.0, float(upper), 0, numpy.array([], dtype=numpy.int32), numpy.array([], dtype=numpy.float64))
+        highs.addCol(float(cost), float(lower), float(upper), 0, numpy.array([], dtype=numpy.int32), numpy.array([], dtype=numpy.float64))
         highs.changeColIntegrality(columns, highspy.HighsVarType.kInteger)
         columns += 1
         return columns - 1
@@ -42,7 +42,8 @@ def solve(problem, found=(), distance=2, scale=None):
         ordered = sorted(terms.items())
         highs.addRow(float(lower), float(upper), len(ordered), numpy.array([c for c, _ in ordered], dtype=numpy.int32), numpy.array([v for _, v in ordered], dtype=numpy.float64))
 
-    x = {film: column(film_points(points[film]), 1) for film in films}
+    pinned = set(problem.fixed_in)
+    x = {film: column(film_points(points[film]), 1, 1 if film in pinned else 0) for film in films}
     if problem.budget is not None:
         row(problem.budget, {x[film]: problem.runtimes[film] for film in films})
     members = problem.floor_set.members
@@ -66,7 +67,7 @@ def solve(problem, found=(), distance=2, scale=None):
 
     highs.run()
     status = highs.getModelStatus()
-    if status == highspy.HighsModelStatus.kInfeasible:
+    if status in (highspy.HighsModelStatus.kInfeasible, highspy.HighsModelStatus.kUnboundedOrInfeasible):
         return None
     if status != highspy.HighsModelStatus.kOptimal:
         raise RuntimeError(f"SOLVE ended {highs.modelStatusToString(status)}")

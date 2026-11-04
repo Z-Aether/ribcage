@@ -8,12 +8,14 @@ from time import perf_counter
 
 from django.conf import settings
 
+from ribcage.readouts.basis import Basis
 from ribcage.solver.model import solve
 from ribcage.solver.objective import Problem, scale_of
 
 NOTHING_FITS = "Nothing fits the budget, so the proposal is the empty slate."
 NO_FLOOR = "Nobody is in the floor set, so the total alone is optimised."
 NO_FILMS = "No film is approved, so there is nothing to propose."
+ALL_OUT = "Every film is fixed out, so there is nothing to propose."
 
 
 def solver_sources():
@@ -45,23 +47,37 @@ class Batch:
     solving: bool = True  # whether this render solved anything, so `solved_ms` is only that time
 
 
-def problem_of(on, multiplier):
-    """SOLVE's `Problem` from the stored votes: the ballot's films, every voter counted until #167's knobs set one aside."""
-    runtimes = {film: on.runtimes[film] for film in on.candidates}
+def problem_of(on, multiplier, basis=Basis()):
+    """SOLVE's `Problem` from the stored votes: the ballot's films but those fixed out, every voter counted until #167's knobs set one aside, the films fixed in pinned (#168)."""
+    runtimes = {film: on.runtimes[film] for film in on.candidates if film not in basis.fixed_out}
     records = tuple(each for each in on.records if each[1] in runtimes)
-    return Problem(on.voters, runtimes, records, on.budget, on.floor_set, multiplier)
+    pinned = tuple(film for film in on.candidates if film in runtimes and film in basis.fixed_in)
+    return Problem(on.voters, runtimes, records, on.budget, on.floor_set, multiplier, pinned)
 
 
-def ending_of(given):
-    """The ending that needs no knob, if the problem has one: nothing is said for everything fitting or no budget (#17, #165)."""
+def pins_say(given, titles):
+    """The ending for pins that alone exceed the budget, naming each with its runtime; nothing is dropped (#17, #24, #168)."""
+    named = ", ".join(f"{titles[film]} ({given.runtimes[film]}m)" for film in given.fixed_in)
+    return f"The films fixed in alone exceed the budget: {named}. Nothing dropped."
+
+
+def ending_of(given, slates=(), titles=None, basis=Basis()):
+    """The ending the problem has, if any: pins the solver found infeasible, no films, nothing fitting or no floor; nothing is said for everything fitting or no budget (#17, #165, #168).
+
+    Nothing pre-checks the pins: it is the first solve's status, no slate at all, that reports them.
+    """
+    if given.fixed_in and not slates:
+        return pins_say(given, titles or {film: film for film in given.fixed_in})
     if not given.runtimes:
-        return NO_FILMS
+        return ALL_OUT if basis.fixed_out else NO_FILMS
     if given.budget is not None and min(given.runtimes.values()) > given.budget:
         return NOTHING_FITS
     return NO_FLOOR if not given.floor_set.size else ""
 
 
-def stopped_says(distance):
+def stopped_says(distance, slates=(True,)):
+    if not slates:
+        return "No slate holds the films fixed in."
     return f"No other slate differs from these by {distance} or more films."
 
 
@@ -94,6 +110,7 @@ def fingerprint(given, size, distance):
         given.floor_set.members,
         given.floor_set.out,
         given.multiplier,
+        given.fixed_in,
         size,
         distance,
         SOLVER_CODE,
@@ -101,13 +118,13 @@ def fingerprint(given, size, distance):
     return sha256(repr(reads).encode()).hexdigest()
 
 
-def propose(on, multiplier, rounds=1, kept=None):
+def propose(on, multiplier, rounds=1, kept=None, basis=Basis(), titles=None):
     """The batch over `on`, a `ledger.StoredVotes`: `rounds` times `BATCH_SIZE` proposals at most, the admin's "more" being the count (#166).
 
     `kept` is what the last call returned as `Batch.kept`. When it answers to the same problem, only the proposals still missing are solved;
     when the problem has changed, it is dropped and the batch starts again at one round, as a new budget does (#17).
     """
-    given = problem_of(on, multiplier)
+    given = problem_of(on, multiplier, basis)
     size, distance = settings.BATCH_SIZE, settings.DIVERSITY_CUT
     mark = fingerprint(given, size, distance)
     same = kept is not None and kept["print"] == mark
@@ -120,4 +137,4 @@ def propose(on, multiplier, rounds=1, kept=None):
     started = perf_counter()
     slates, short = chain(given, length, distance, before, ended)
     memory = {"print": mark, "slates": [sorted(each) for each in slates], "short": short}
-    return Batch(tuple(slates), round((perf_counter() - started) * 1000), ending_of(given), stopped_says(distance) if short else "", rounds, memory, solving)
+    return Batch(tuple(slates), round((perf_counter() - started) * 1000), ending_of(given, slates, titles, basis), stopped_says(distance, slates) if short else "", rounds, memory, solving)

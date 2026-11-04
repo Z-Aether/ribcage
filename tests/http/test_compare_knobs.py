@@ -50,7 +50,7 @@ def test_without_a_voter_is_held_in_the_session_and_changes_the_rows_and_the_bat
     assert set_aside(admin, ada).status_code == 302
     page = admin.get(COMPARE).text
 
-    assert held(admin) == {"without": [ada.pk], "disregarded": []}
+    assert held(admin) == {"without": [ada.pk], "disregarded": [], "fixed_in": [], "fixed_out": []}
     assert "basis: without ada" in text(batch(page))
     assert cells(batch(page))["sigma"] != stored["sigma"]
     assert line(page)[0] == "Floor computed over 1 of 3 — ada: set aside by knob · Hanna: no ballot"
@@ -68,7 +68,7 @@ def test_the_knob_stays_across_reloads_and_both_sub_tabs_until_cleared(admin, vo
 
     admin.post(KNOB, {"knob": "clear"})
 
-    assert held(admin) == {"without": [], "disregarded": []}
+    assert held(admin) == {"without": [], "disregarded": [], "fixed_in": [], "fixed_out": []}
     assert "no knobs" in text(batch(admin.get(COMPARE).text))
 
 

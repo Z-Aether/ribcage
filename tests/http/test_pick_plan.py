@@ -22,7 +22,7 @@ EMPTY = "Nothing on the timetable yet."
 @pytest.fixture(autouse=True)
 def no_proposal(monkeypatch):
     """These tests read the plan's row alone; the batch beside it has its own file (#165)."""
-    monkeypatch.setattr("ribcage.timetable.plan.batches.propose", lambda on, multiplier, rounds=1, kept=None: Batch((), 0, ""))
+    monkeypatch.setattr("ribcage.timetable.plan.batches.propose", lambda on, multiplier, rounds=1, kept=None, basis=None, titles=None: Batch((), 0, ""))
 
 
 def text(fragment):

@@ -63,25 +63,35 @@ def load(wanted=(), solved=False, rounds=1, kept=None, basis=Basis()):
     for voter, film, _, vetoed, _ in records:
         if vetoed and film in on_the_ballot:
             vetoes[voter] = vetoes.get(voter, 0) + 1
-    basis = Basis(basis.without & set(ids), basis.disregarded & set(vetoes))
-    found_floor = ballot_floor.of_the_ballot(ids, runtimes, on_the_ballot, records, budget, basis.without)
+    pins = basis.fixed_in & on_the_ballot
+    basis = Basis(basis.without & set(ids), basis.disregarded & set(vetoes), pins, basis.fixed_out & on_the_ballot - pins)
+    found_floor = ballot_floor.of_the_ballot(ids, runtimes, on_the_ballot, records, budget, basis.without, basis.fixed_out)
     on = ledger.stored_votes(ids, found_floor, records, titles, runtimes, on_the_ballot, budget, basis)
 
     # The batch answers to the votes loaded here on every render: it solves what the kept slates lack, and is never stored in the database (#17, #165, #166).
-    found_batch = batches.propose(on, settings.FLOOR_WEIGHT_MULTIPLIER, rounds, kept) if solved else None
+    found_batch = batches.propose(on, settings.FLOOR_WEIGHT_MULTIPLIER, rounds, kept, basis, titles) if solved else None
     proposals = [] if found_batch is None else [Wanted(THIS_BATCH, proposal_label(number, each), tuple(each)) for number, each in enumerate(found_batch.slates, 1)]
     # An empty timetable is no row, so it joins no standing and no core (#147, #164).
     asked = [*([Wanted(THE_PLAN, THE_PLAN, tuple(on_the_plan))] if boxes else []), *wanted, *proposals]
     floor_line = ballot_floor.line_of(found_floor, names)
-    banners = {THIS_BATCH: {"floor_line": floor_line, "basis": f"basis: {label(basis, ids, names)}" if basis else NO_KNOBS, "solved_in": f"solved in {found_batch.solved_ms} ms" if found_batch.solving else NOTHING_TO_SOLVE, "ending": found_batch.ending, "more": more_of(found_batch)}} if solved else {}
+    banners = {THIS_BATCH: {"floor_line": floor_line, "basis": f"basis: {label(basis, ids, names, on.candidates, titles)}" if basis else NO_KNOBS, "solved_in": f"solved in {found_batch.solved_ms} ms" if found_batch.solving else NOTHING_TO_SOLVE, "ending": found_batch.ending, "more": more_of(found_batch)}} if solved else {}
     memory = {"rounds": found_batch.rounds, "kept": found_batch.kept} if solved else {}
-    knobs = knobs_of(basis, ids, names, dict(stored_floor.out), vetoes)
-    return {**of(asked, on, names, titles, banners=banners), "empty": not boxes, "basis": basis, "knobs": knobs, **memory}
+    knobs = knobs_of(basis, ids, names, dict(stored_floor.out), vetoes, on, titles)
+    return {**of(asked, on, names, titles, banners=banners, pinned=basis.fixed_in), "empty": not boxes, "basis": basis, "knobs": knobs, **memory}
 
 
-def knobs_of(basis, ids, names, out_for, vetoes):
-    """The knob bar's data: a chip per voter to set aside, dimmed with the reason where the stored votes already leave them out, and one per vetoer with their veto count (#24, #167)."""
+def knobs_of(basis, ids, names, out_for, vetoes, on, titles):
+    """The knob bar's data: a chip per voter to set aside, dimmed with the reason where the stored votes already leave them out, and one per vetoer with their veto count (#24, #167).
+
+    A film is fixed in or out from a select of the candidates not already fixed, in slate order, each with a chip and its remove for the ones fixed (#168).
+    """
+    def film(each):
+        return {"id": each, "title": titles[each], "runtime": on.runtimes[each]}
+
+    free = [film(each) for each in on.candidates if each not in basis.fixed_in and each not in basis.fixed_out]
     return {
+        "fix_in": {"options": free, "fixed": [film(each) for each in on.candidates if each in basis.fixed_in]},
+        "fix_out": {"options": free, "fixed": [film(each) for each in on.candidates if each in basis.fixed_out]},
         "without": [{"id": each, "name": names[each], "on": each in basis.without, "reason": out_for.get(each, "")} for each in ids],
         "disregard": [{"id": each, "name": names[each], "on": each in basis.disregarded, "vetoes": vetoes[each]} for each in ids if each in vetoes],
         "any": bool(basis),
@@ -97,17 +107,17 @@ def proposal_label(number, slate):
     return f"Proposal {number}" if slate else f"Proposal {number} (empty slate)"
 
 
-def of(asked, on, names, titles, prefix="slate", banners=None):
+def of(asked, on, names, titles, prefix="slate", banners=None, pinned=frozenset()):
     """The ledger of `asked`, `Wanted` rows, over a `ledger.StoredVotes`: the one drawing, which the gallery calls over made-up data too.
 
-    `banners` are a section's heading facts by name (#165); a banner's `more` is the header's count and "more" button (#166).
+    `banners` are a section's heading facts by name (#165); a banner's `more` is the header's count and "more" button (#166). `pinned` are the films fixed in, whose dots are outlined (#168).
     """
     banners = banners or {}
     reads = [ledger.read(each.films, on) for each in asked]
     stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, each.total) for each in reads], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
     shown = ledger.dots([each.films for each in reads], on.rank)
     rows = [
-        {**row_of(one, stand, names, titles, on.runtimes, shown), "id": f"{prefix}-{number}", "label": each.label}
+        {**row_of(one, stand, names, titles, on.runtimes, shown, pinned), "id": f"{prefix}-{number}", "label": each.label}
         for number, (each, one, stand) in enumerate(zip(asked, reads, stood))
     ]
     sections = [
@@ -123,7 +133,7 @@ def of(asked, on, names, titles, prefix="slate", banners=None):
     return {"columns": [{"title": titles[film], "core": film in shown.core} for film in shown.columns], "sections": sections}
 
 
-def row_of(one, stand, names, titles, runtimes, shown):
+def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset()):
     """One row's data for `components/slate_row.html`, plain."""
     read = one.plan
     if stand.best:
@@ -144,7 +154,7 @@ def row_of(one, stand, names, titles, runtimes, shown):
         "screen_time": plan.clock(read.screen_time),
         "budget": None if read.budget is None else plan.clock(read.budget),
         "over": read.over,
-        "dots": [{"title": titles[film], "held": film in held, "core": film in shown.core} for film in shown.columns],
+        "dots": [{"title": titles[film], "held": film in held, "core": film in shown.core, "fixed": film in pinned} for film in shown.columns],
         "people": [
             {"name": names[each.voter], "score": each.representation, "film": titles.get(each.representative), "out": each.out, "pins": each.pins} for each in read.rows
         ],

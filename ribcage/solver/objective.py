@@ -21,6 +21,7 @@ class Problem:
     budget: int  # or None
     floor_set: FloorSet
     multiplier: int  # FLOOR_WEIGHT_MULTIPLIER
+    fixed_in: tuple = ()  # candidate films the slate must hold, in slate order; a film fixed out is not in `runtimes` at all (#168)
 
     @property
     def weight(self):
