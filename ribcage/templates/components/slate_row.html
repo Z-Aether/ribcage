@@ -1,4 +1,23 @@
 {# `inert` draws keep and discard as plain text, no post, and the swap tick disabled (gallery). One slate's row and, hidden beneath it, its breakdown: a click on the row opens it in place and a second closes it (#24, #148, #164). No trigger content, ever (#17, #20). #}
+{# `compact` is the shortlist's row on the Timetable tab: the tier and standing, the films, the people and the dropped mark, with *Use this slate*, and no dots and no breakdown; `anchored` is whether the timetable has a start (#22, #171). #}
+{% if compact %}
+<tr class="slate-row slate-row--compact">
+  <td class="slate-row__label"><div class="slate-row__labelled">
+    <span class="slate-row__name">{{ row.label }}</span>
+    <span class="slate-row__tier{% if row.tied > 1 %} slate-row__tier--tied{% endif %}">tier {{ row.tier }}{% if row.tied > 1 %} · tied ×{{ row.tied }}{% endif %}</span>
+    {% if row.standing %}<span class="slate-row__standing">{{ row.standing }}</span>{% endif %}
+  </div></td>
+  <td class="slate-row__films">{{ row.films }} · {{ row.screen_time }}{% if row.over %} <strong class="slate-row__over">over</strong>{% endif %}{% if row.dropped %} <span class="slate-row__dropped" data-dropped title="Dropped since: {{ row.dropped|join:', ' }}">dropped: {{ row.dropped|join:", " }}</span>{% endif %}</td>
+  <td>{% include "components/slate_strip.html" %}</td>
+  <td class="slate-row__use">
+    {% if inert %}<span class="button--quiet slate-row__act" data-use>Use this slate</span>
+    {% else %}
+      <form method="get" action="{% url 'console_pick' %}" class="slate-row__act"><input type="hidden" name="use" value="{{ row.discard }}"><button type="submit" class="button--quiet" data-use{% if not anchored %} disabled aria-describedby="use-{{ row.discard }}-needs"{% endif %}>Use this slate</button></form>
+    {% endif %}
+    {% if not anchored %}<span class="ledger__muted" id="use-{{ row.discard }}-needs">Set the start time above first.</span>{% endif %}
+  </td>
+</tr>
+{% else %}
 <tr class="slate-row{% if row.open %} is-open{% endif %}" data-slate-row>
   <td class="slate-row__label">
     <input type="checkbox" class="slate-row__tick" data-swap-tick value="{{ row.film_ids }}" data-label="{{ row.label }}" aria-label="Tick {{ row.label }} to read the swap" title="Tick two rows to read the swap" autocomplete="off"{% if inert %} disabled{% endif %}>
@@ -17,7 +36,7 @@
   <td class="ledger__number slate-row__sigma">{{ row.sigma_rep }} <small class="slate-row__distance">{{ row.sigma_distance }}</small></td>
   <td class="slate-row__films">{{ row.films }} · {{ row.screen_time }}{% if row.over %} <strong class="slate-row__over">over</strong>{% elif not row.budget %} <span class="ledger__muted">no budget</span>{% endif %}{% if row.dropped %} <span class="slate-row__dropped" data-dropped title="Dropped since: {{ row.dropped|join:', ' }}">dropped: {{ row.dropped|join:", " }}</span>{% endif %}</td>
   <td>
-    <span class="slate-strip">{% for person in row.people %}{% if person.out %}<i class="slate-strip__cell slate-strip__cell--out" title="{{ person.name }}: {{ person.out }}"><span class="visually-hidden">{{ person.name }}: {{ person.out }}</span></i>{% else %}<i class="slate-strip__cell score--{% if person.score >= 3 %}top-pick{% elif person.score == 2 %}keen{% elif person.score == 1 %}happy{% else %}dont-mind{% endif %}" title="{{ person.name }}{% if person.pins %}, pins the floor{% endif %}: {% if person.film %}{{ person.film }}, {{ person.score }}{% else %}nothing on the slate{% endif %}">{{ person.score }}{% if person.pins %}<b class="slate-strip__pin">★</b>{% endif %}</i>{% endif %}{% endfor %}</span>
+    {% include "components/slate_strip.html" %}
   </td>
   <td class="ledger__number slate-row__vetoes">{% if row.vetoed %}<span title="{% for each in row.vetoed %}{% if not forloop.first %}; {% endif %}{{ each.film }} ({{ each.by|join:', ' }}){% endfor %}">{{ row.vetoes }}</span>{% else %}<span class="ledger__muted">0</span>{% endif %}</td>
   {% for dot in row.dots %}
@@ -84,3 +103,4 @@
     </div>
   </td>
 </tr>
+{% endif %}

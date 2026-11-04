@@ -66,13 +66,13 @@
       <div class="track-tools__acts" data-keeps-scroll>{% include "console/arrange_tools.html" %}{% include "console/break_button.html" %}</div>
     {% endif %}
 
-    {# The split below the track: the selected box's panel above the candidates on the left; M9's shortlist takes the right (#137). #}
+    {# The split below the track: the selected box's panel above the candidates on the left; the shortlist takes the right (#137, #171). #}
     <div class="pick-split" data-keeps-scroll>
       <div class="pick-split__left">
         {% if selected and not armed %}{% include "console/box_panel.html" %}{% endif %}
         {% include "console/candidates.html" %}
       </div>
-      <div class="pick-split__right"></div>
+      <div class="pick-split__right">{% include "components/slate_shortlist.html" with rows=kept_rows anchored=timetable.anchor %}</div>
     </div>
   {% endif %}
 {% endblock %}

@@ -1,5 +1,15 @@
 {# The arrange utilities: arming is a plain GET, which shows the result on the track; Apply posts it, Cancel shows the timetable as it is (#22, #145). #}
-{% if armed %}
+{% if armed.use %}
+  <div class="arrange arrange--armed" role="group" aria-label="Slate preview">
+    <span class="arrange__armed" data-using>{{ armed.name }}: {{ armed.films }} film{{ armed.films|pluralize }}, ends {{ armed.ends }}. Previewed, not applied.</span>
+    <form method="post" action="{% url 'console_pick_use' %}" class="arrange__form" data-lands-on="{% url 'console_pick' %}">
+      {% csrf_token %}
+      <input type="hidden" name="use" value="{{ armed.use }}">
+      <button type="submit">Apply</button>
+    </form>
+    <a class="button button--quiet arrange__cancel" href="{% url 'console_pick' %}">Cancel</a>
+  </div>
+{% elif armed %}
   <div class="arrange arrange--armed" role="group" aria-label="Arranged preview">
     <span class="arrange__armed">{{ armed.name }}{% if armed.utility == "lay-out" %} of {{ armed.minutes }} min{% endif %}: previewed, not applied.</span>
     <form method="post" action="{% url 'console_pick_arrange' %}" class="arrange__form" data-lands-on="{% url 'console_pick' %}">

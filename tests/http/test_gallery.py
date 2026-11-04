@@ -340,3 +340,13 @@ def test_the_gallerys_slate_ledger_ticks_do_nothing(client, debug):
 
     assert ticks and all(" disabled" in each for each in ticks)
     assert 'id="swap-panel"' not in section
+
+
+def test_the_gallery_shows_the_compact_row_beside_the_full_one(client, debug):
+    page = client.get(GALLERY).text
+    section = re.search(r'id="slate-ledger".*?</section>', page, re.S)[0]
+
+    assert section.count("slate-row--compact") == 2
+    assert "dropped: Midsommar" in section.split("data-shortlist")[1]
+    assert "Nothing kept yet." in section and "Set the start time above first." in section
+    assert section.count("data-use") == 2

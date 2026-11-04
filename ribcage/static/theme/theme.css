@@ -3759,14 +3759,14 @@ body:has(> main > .ballot-head) > footer.site-footer {
 }
 [data-skin] .pick-split {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1.5rem;
   margin-top: 1.25rem;
   align-items: start;
 }
 @media (max-width: 800px) {
   [data-skin] .pick-split {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 [data-skin] .box-panel {
@@ -4228,6 +4228,36 @@ body:has(> main > .ballot-head) > footer.site-footer {
 }
 .slate-row__films {
   white-space: nowrap;
+}
+.slate-row__labelled {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.5rem;
+}
+.slate-row__name {
+  font-weight: 600;
+}
+.slate-row--compact .slate-row__films {
+  white-space: normal;
+  min-width: 5.5rem;
+}
+.slate-row__use {
+  text-align: right;
+  white-space: nowrap;
+}
+.slate-row__use .ledger__muted {
+  display: block;
+  font-size: 0.78rem;
+}
+[data-skin] .slate-row__act .button--quiet:disabled {
+  color: var(--ink-muted);
+  text-decoration: none;
+  cursor: not-allowed;
+}
+.shortlist__head {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
 }
 .slate-strip {
   display: inline-flex;

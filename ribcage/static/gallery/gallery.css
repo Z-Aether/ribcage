@@ -146,7 +146,7 @@ body > main:has(.gallery-skin) {
   }
   .ledger__directors,
   .ledger th:nth-child(4),
-  .ledger td:nth-child(4) {
+  .ledger:not(.slate-ledger--compact) td:nth-child(4) {
     display: none;
   }
   [data-skin] .ledger .ledger__detail td {

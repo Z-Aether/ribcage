@@ -174,6 +174,10 @@
     {% include "components/slate_ledger.html" with ledger=slate_ledger inert=True %}
     <p class="gallery-label">The first row expanded</p>
     {% include "components/slate_ledger.html" with ledger=slate_ledger_open inert=True %}
+    <p class="gallery-label">The compact row on the Timetable tab's shortlist, with a film dropped since; the same row without a start time set, and the empty half</p>
+    {% include "components/slate_shortlist.html" with rows=shortlist_rows anchored=True inert=True %}
+    {% include "components/slate_shortlist.html" with rows=shortlist_rows anchored=False inert=True %}
+    {% include "components/slate_shortlist.html" with rows=None %}
   </section>
 
   <section class="gallery-skin" data-skin="run" id="run" aria-labelledby="run-name">

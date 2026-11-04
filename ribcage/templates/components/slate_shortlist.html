@@ -1,0 +1,15 @@
+{# The shortlist beside the track: the kept proposals in the order kept, each the slate ledger's row in compact form. `rows` are `plan` row data; `inert` is the gallery's (#22, #171). #}
+<div class="shortlist" role="region" aria-label="Shortlist" data-keeps-scroll>
+  {% if rows %}
+    <h2 class="shortlist__head">Shortlist</h2>
+    <div class="slate-ledger__frame">
+      <table class="ledger slate-ledger slate-ledger--compact" data-shortlist>
+        <tbody>
+          {% for row in rows %}{% include "components/slate_row.html" with compact=True %}{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="ledger__muted" data-nothing-kept>Nothing kept yet.</p>
+  {% endif %}
+</div>
