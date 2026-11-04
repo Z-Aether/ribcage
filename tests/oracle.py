@@ -47,12 +47,17 @@ class Instance:
         return cls(**{**data, **{key: tuple(data[key]) for key in tuples}, "records": tuple(tuple(each) for each in data["records"])})
 
 
-def problem_of(instance):
-    """The `Problem` the batch solves for `instance`, through the ledger's loader and the batch's own `problem_of`, so the knobs reach the solver as they do in the app (#167, #168)."""
+def votes_of(instance):
+    """The stored votes and the basis for `instance`, through the ledger's loader, so the knobs reach the solver as they do in the app (#167, #168)."""
     basis = Basis(frozenset(instance.without), frozenset(instance.disregarded), frozenset(instance.fixed_in), frozenset(instance.fixed_out))
     found = floor_set(instance.voters, instance.runtimes, instance.records, instance.budget, basis.without, basis.fixed_out)
-    titles = {film: film for film in instance.runtimes}
-    on = stored_votes(instance.voters, found, instance.records, titles, instance.runtimes, set(titles), instance.budget, basis)
+    titles = {film: str(film) for film in instance.runtimes}
+    return stored_votes(instance.voters, found, instance.records, titles, instance.runtimes, set(titles), instance.budget, basis), basis
+
+
+def problem_of(instance):
+    """The `Problem` the batch solves for `instance`, through `votes_of` and the batch's own `problem_of` (#167, #168)."""
+    on, basis = votes_of(instance)
     return batch.problem_of(on, instance.multiplier, basis)
 
 
