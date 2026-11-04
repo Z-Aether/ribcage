@@ -1,18 +1,19 @@
 """The slate ledger's readouts over plain data: a row's reads, standing and tier across rows, the film dots (#24, #164).
 
-Every read of a row is a function of its film set and the `StoredVotes`. The stored votes are what it holds until M9's knobs change them (#17, #167).
+Every read of a row is a function of its film set and the `StoredVotes`. The `StoredVotes` hold the votes as the basis counts them; the slate order is the stored votes' alone, whatever the basis (#17, #36, #167).
 """
 
 from dataclasses import dataclass
 
 from ribcage.readouts import plan as plans
+from ribcage.readouts.basis import Basis, under
 from ribcage.readouts.floor import FloorSet
 from ribcage.readouts.slate import SlateEntry, film_points, slate_order
 
 
 @dataclass(frozen=True)
 class StoredVotes:
-    """What every row is read against: the voters, the floor set, the stored records, the budget and the films' runtimes and slate order."""
+    """What every row is read against: the voters, the floor set, the records under the basis, the budget and the films' runtimes and slate order."""
 
     voters: tuple  # ids in the order wanted
     floor_set: FloorSet
@@ -23,8 +24,11 @@ class StoredVotes:
     budget: int  # or None
 
 
-def stored_votes(voters, floor_set, records, titles, runtimes, candidates, budget):
-    """The stored votes over `titles` (every film a row can hold, by key), ranking them in slate order by the records alone (#36)."""
+def stored_votes(voters, floor_set, records, titles, runtimes, candidates, budget, basis=Basis()):
+    """The votes over `titles` (every film a row can hold, by key), ranked in slate order by the stored records, then counted under `basis` (#36, #167).
+
+    `floor_set` is the one the basis gives (`set_aside` of `readouts.floor.floor_set`).
+    """
     by_film = {}
     for _, film, score, vetoed, _ in records:
         if film in titles:
@@ -34,7 +38,7 @@ def stored_votes(voters, floor_set, records, titles, runtimes, candidates, budge
     )
     rank = {each.key: place for place, each in enumerate(ranked)}
     on_the_ballot = set(candidates)
-    return StoredVotes(tuple(voters), floor_set, tuple(records), dict(runtimes), rank, tuple(each.key for each in ranked if each.key in on_the_ballot), budget)
+    return StoredVotes(tuple(voters), floor_set, under(records, basis), dict(runtimes), rank, tuple(each.key for each in ranked if each.key in on_the_ballot), budget)
 
 
 @dataclass(frozen=True)

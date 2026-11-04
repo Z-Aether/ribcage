@@ -4,6 +4,8 @@ from dataclasses import dataclass
 
 # A veto counts this in a film's points, though it is never stored as a score (#24).
 VETO_POINTS = -2
+# The `vetoed` a record carries when its voter's vetoes are disregarded: still a veto, so it bars the film, but it scores 0 (#167).
+DISREGARDED = "disregarded"
 
 
 @dataclass(frozen=True)
@@ -17,8 +19,8 @@ class SlateEntry:
 
 
 def film_points(records):
-    """The sum of everyone's score for a film from their (score, vetoed) records: a veto counts -2, an unplaced film 0 (#24)."""
-    return sum(VETO_POINTS if vetoed else score or 0 for score, vetoed in records)
+    """The sum of everyone's score for a film from their (score, vetoed) records: a veto counts -2 unless disregarded, an unplaced film 0 (#24, #167)."""
+    return sum(0 if vetoed == DISREGARDED else VETO_POINTS if vetoed else score or 0 for score, vetoed in records)
 
 
 def slate_sum(records):

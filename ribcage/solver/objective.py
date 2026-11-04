@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from ribcage.readouts import ledger, plan
 from ribcage.readouts.floor import FloorSet
+from ribcage.readouts.slate import DISREGARDED
 
 
 @dataclass(frozen=True)
@@ -31,8 +32,8 @@ class Problem:
 
 
 def scale_of(problem):
-    """K = 2·B + 1, B being every counted voter's |score| summed over the candidates, a veto counting 2, so K always exceeds 2·max|T| (#33, #165)."""
-    bound = sum(2 if vetoed else abs(score or 0) for _, _, score, vetoed, _ in problem.on_the_ballot())
+    """K = 2·B + 1, B being every counted voter's |score| summed over the candidates, a veto counting 2 and a disregarded one 0, so K always exceeds 2·max|T| (#33, #165)."""
+    bound = sum(0 if vetoed == DISREGARDED else 2 if vetoed else abs(score or 0) for _, _, score, vetoed, _ in problem.on_the_ballot())
     return 2 * bound + 1
 
 
