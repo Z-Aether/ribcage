@@ -349,4 +349,4 @@ def test_the_gallery_shows_the_compact_row_beside_the_full_one(client, debug):
     assert section.count("slate-row--compact") == 2
     assert "dropped: Midsommar" in section.split("data-shortlist")[1]
     assert "Nothing kept yet." in section and "Set the start time above first." in section
-    assert section.count("data-use") == 2
+    assert "".join(section.split("data-shortlist")[1:]).count("data-use") == 2

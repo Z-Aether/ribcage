@@ -229,14 +229,20 @@ def armed_context(asked, using=None):
 
 
 def use_asked(data):
-    """The kept proposal's key a request names to be used, or None; #172 adds a batch proposal's film set beside it (#171)."""
+    """What a request names to be used, or None: a kept proposal's key, or a batch proposal's films (`using_slate.batch_key`) (#171, #172)."""
     return data.get("use") or None
 
 
-def use_context(proposal, boxes, the_track):
-    """What the tool row reads of *Use this slate* armed: which proposal, its number on the shortlist, its film count and the end time (#171)."""
+def came_from_compare(data):
+    """Whether *Use this slate* was armed from Compare, which *Cancel* returns to (#172)."""
+    return data.get("back") == "compare"
+
+
+def use_context(proposal, boxes, the_track, back=False):
+    """What the tool row reads of *Use this slate* armed: which proposal, its name, its film count, the end time and whether Compare sent it (#171, #172)."""
     number = next((number for number, each in enumerate(keeping.load(), 1) if str(each.pk) == str(proposal)), 0)
-    return {"use": proposal, "name": f"Use Kept {number}", "films": len(boxes), "ends": the_track.tools.ends}
+    name = f"Use Kept {number}" if number else "Use this proposal"
+    return {"use": proposal, "name": name, "films": len(boxes), "ends": the_track.tools.ends, "back": back}
 
 
 def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=None, runtime_refused=None):
@@ -254,9 +260,9 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
         armed = None
         # *Use this slate* armed, over an empty timetable as well: the laid track in place of the stored one (#36, #171).
         proposal = use_asked(request.GET) if request.method == "GET" and sub == "timetable" else None
-        if proposal and (laid := using_slate.lay(using_slate.kept_films(proposal) or (), save=False)):
+        if proposal and (laid := using_slate.lay(using_slate.films_of(proposal) or (), save=False)):
             the_track = track.build(laid, timetable.anchor, budget, voters=track.voters(), now=the_present())
-            using = use_context(proposal, laid, the_track)
+            using = use_context(proposal, laid, the_track, came_from_compare(request.GET))
     if the_track and box_refused and not box_refused.says_length and Box.objects.filter(pk=labelled, suggestion__isnull=True).exists():
         # A refusal over the label alone keeps the typed length, so the track keeps showing it as the preview did (#140).
         kept = editing.run(labelled, engine.Resize(int(box_refused.length.strip())), mode or ripple_mode(request), save=False)
@@ -564,20 +570,20 @@ def preview_arrange(request):
 def preview_use(request):
     # *Use this slate* armed, shown through the preview's template like an utility (#171).
     proposal = use_asked(request.POST)
-    if proposal is None or (laid := using_slate.lay(using_slate.kept_films(proposal) or (), save=False)) is None:
+    if proposal is None or (laid := using_slate.lay(using_slate.films_of(proposal) or (), save=False)) is None:
         return reload_the_tab(request, reverse("console_pick"))
     timetable = setting.read()
     the_track = track.build(laid, timetable.anchor, timetable.budget, kept_scale(request), voters=track.voters(), now=the_present())
-    return render(request, "console/track.html", {**track_context(request), **armed_context(None, use_context(proposal, laid, the_track)), "timetable": timetable, "track": the_track, "selected": None})
+    return render(request, "console/track.html", {**track_context(request), **armed_context(None, use_context(proposal, laid, the_track, came_from_compare(request.POST))), "timetable": timetable, "track": the_track, "selected": None})
 
 
 @admin_required
 @require_POST
 def pick_use(request):
-    # Apply: the kept proposal's films again as stored now, replacing every box; one discarded since writes nothing. Never confirmed (#36, #171).
+    # Apply: the proposal's films again as stored now, replacing every box; a kept one discarded since, or a batch one with a film dropped since, writes nothing. Never confirmed (#36, #171, #172).
     proposal = use_asked(request.POST)
     if proposal is not None:
-        using_slate.lay(using_slate.kept_films(proposal) or (), save=True)
+        using_slate.lay(using_slate.films_of(proposal) or (), save=True)
     return reload_the_tab(request, reverse("console_pick"))
 
 

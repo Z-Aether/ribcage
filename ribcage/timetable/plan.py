@@ -14,7 +14,7 @@ from ribcage.readouts.basis import NO_KNOBS, Basis, label
 from ribcage.shortlist import keeping
 from ribcage.suggestions.models import Suggestion
 from ribcage.timetable import batch as batches
-from ribcage.timetable import setting
+from ribcage.timetable import setting, using
 from ribcage.timetable.models import Box
 
 THE_PLAN = "The plan"
@@ -238,6 +238,7 @@ def acts_of(each):
         "keeping": "kept" if each.already_kept else "keep" if each.keeps else "",
         "film_ids": ",".join(str(pk) for pk in sorted(each.films)),
         "discard": each.kept,
+        "use": str(each.kept) if each.kept else using.batch_key(sorted(each.films)) if each.keeps else "",
         "provenance": each.provenance,
     }
 

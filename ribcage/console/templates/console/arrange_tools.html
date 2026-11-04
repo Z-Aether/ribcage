@@ -7,7 +7,7 @@
       <input type="hidden" name="use" value="{{ armed.use }}">
       <button type="submit">Apply</button>
     </form>
-    <a class="button button--quiet arrange__cancel" href="{% url 'console_pick' %}">Cancel</a>
+    <a class="button button--quiet arrange__cancel" href="{% if armed.back %}{% url 'console_pick_compare' %}{% else %}{% url 'console_pick' %}{% endif %}"{% if armed.back %} data-restores-aside{% endif %}>Cancel</a>
   </div>
 {% elif armed %}
   <div class="arrange arrange--armed" role="group" aria-label="Arranged preview">

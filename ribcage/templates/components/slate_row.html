@@ -29,6 +29,10 @@
     {% if row.discard %}
       {% if inert %}<span class="button--quiet slate-row__act" data-discard>discard</span>{% else %}<form method="post" action="{% url 'console_pick_discard' %}" class="slate-row__act" data-lands-on="{% url 'console_pick_compare' %}">{% csrf_token %}<input type="hidden" name="proposal" value="{{ row.discard }}"><button type="submit" class="button--quiet" data-discard>discard</button></form>{% endif %}
     {% endif %}
+    {% if row.use %}
+      {% if inert %}<span class="button--quiet slate-row__act" data-use>use</span>{% else %}<form method="get" action="{% url 'console_pick' %}" class="slate-row__act" data-sets-aside><input type="hidden" name="use" value="{{ row.use }}"><input type="hidden" name="back" value="compare"><button type="submit" class="button--quiet" data-use{% if not anchored %} disabled title="Set the start time above first." aria-describedby="use-{{ row.id }}-needs"{% endif %}>use</button></form>{% endif %}
+      {% if not anchored %}<span class="ledger__muted" id="use-{{ row.id }}-needs">Set the start time above first.</span>{% endif %}
+    {% endif %}
     {% if row.provenance %}<span class="slate-row__provenance" data-provenance>{{ row.provenance }}</span>{% endif %}
   </td>
   <td><span class="slate-row__tier{% if row.tied > 1 %} slate-row__tier--tied{% endif %}">tier {{ row.tier }}{% if row.tied > 1 %} · tied ×{{ row.tied }}{% endif %}</span></td>

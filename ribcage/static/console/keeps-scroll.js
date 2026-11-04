@@ -19,8 +19,17 @@
     const kept = { y: scrollY, at: Date.now(), region: regions().indexOf(region), x: region.scrollLeft, places: places(element) };
     sessionStorage.setItem(key(new URL(address, location.href).pathname), JSON.stringify(kept));
   };
+  // A form marked data-sets-aside opens its target at the top and holds this scroll for the Cancel marked data-restores-aside,
+  // which opens the page it came from where it was left (#172).
+  const aside = key("aside");
   addEventListener("click", (event) => {
     const link = event.target.closest("[data-keeps-scroll] a[href]");
+    if (link?.hasAttribute("data-restores-aside") && !event.defaultPrevented) {
+      const held = JSON.parse(sessionStorage.getItem(aside));
+      sessionStorage.removeItem(aside);
+      if (held) sessionStorage.setItem(key(new URL(link.href).pathname), JSON.stringify({ ...held, at: Date.now() }));
+      return;
+    }
     if (link && !event.defaultPrevented && !(event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)) keep(link.href, link);
   });
   // Remove and the phase move redirect elsewhere, so the key they leave goes stale unread (#85);
@@ -29,6 +38,10 @@
   addEventListener("submit", (event) => {
     const form = event.target.closest("[data-keeps-scroll] form");
     if (!form || event.defaultPrevented) return;
+    if (form.hasAttribute("data-sets-aside")) {
+      keep(aside, form);
+      return;
+    }
     keep(form.action, form);
     if (form.dataset.landsOn) keep(form.dataset.landsOn, form);
   });
