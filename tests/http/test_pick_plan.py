@@ -259,7 +259,7 @@ def test_the_plan_is_a_slate_ledger_row_with_its_tier_standing_strip_vetoes_and_
     assert 'slate-strip__cell slate-strip__cell--out" title="Hanna: no ballot"' in page
     assert text(re.search(r'<span class="slate-row__tier">(.*?)</span>', page, re.S)[1]) == "tier 1"
     assert 'class="slate-strip__pin">★' in page
-    assert re.findall(r'<th scope="col" class="slate-ledger__film[^"]*"><span title="([^"]*)"', page) == ["The Thing", "Cube"]
+    assert re.findall(r'<th scope="col" data-film="\d+" class="slate-ledger__film[^"]*"><span title="([^"]*)"', page) == ["The Thing", "Cube"]
     assert page.count('class="slate-dot__mark"') == 2
     assert text(re.search(r'<p class="slate-row__objective[^>]*>(.*?)</p>', page, re.S)[1]) == "floor 2 · Σrep 5 · total 4"
     assert "DoesTheDogDie" not in page

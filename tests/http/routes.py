@@ -14,7 +14,7 @@ ADMIN = "admin"
 PUBLIC_POSTS = {"logout", "admin_logout"}
 
 # Routes that act or fetch a piece rather than show: a plain GET redirects, which their own tests hold, so the page sweeps leave them out (#89, #90, #92, #93, #103, #105, #107, #110, #119, #133).
-ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_seen", "ballot_card", "reveal_card", "evening_poll", "ballot_done", "console_pick_anchor", "console_pick_budget", "console_pick_more", "console_pick_knob", "console_pick_keep", "console_pick_discard", "console_pick_add", "console_pick_remove", "console_pick_break", "console_pick_box", "console_pick_preview", "console_pick_move", "console_pick_resize", "console_pick_mode", "console_pick_place", "console_pick_arrange"}
+ACTS = {"withdraw", "runtime", "find", "suggest", "dtdd_topics", "console_films_dtdd", "dtdd_match", "console_films_dtdd_match", "warnings_tick", "warnings_dont_care", "dtdd_watch", "ballot_place", "ballot_seen", "ballot_card", "reveal_card", "evening_poll", "ballot_done", "console_pick_anchor", "console_pick_budget", "console_pick_more", "console_pick_knob", "console_pick_keep", "console_pick_discard", "console_pick_swap", "console_pick_add", "console_pick_remove", "console_pick_break", "console_pick_box", "console_pick_preview", "console_pick_move", "console_pick_resize", "console_pick_mode", "console_pick_place", "console_pick_arrange"}
 
 class Fragment(NamedTuple):
     """One htmx answer that swaps a card, its section or a part of one in, which test_dtdd_credit.py sweeps for DoesTheDogDie's data (#112).
@@ -78,6 +78,7 @@ NO_DTDD_DATA = {
     "ballot_seen",  # a tile, never matched topics (#121, #152)
     "console_pick_anchor", "console_pick_budget",  # the Pick header's saves: a redirect, or the tab with a refusal (#135)
     "console_pick_more",  # Compare's "more": a redirect to the tab (#166)
+    "console_pick_swap",  # the swap panel alone, for two film sets; a plain GET redirects to Compare, and the panel holds no trigger content (#170)
     "console_pick_knob",  # a knob's chip or Clear knobs: a redirect to Compare (#167)
     "console_pick_keep", "console_pick_discard",  # a row's keep and discard: a redirect to Compare (#169)
     "console_pick_add", "console_pick_remove", "console_pick_break",  # the timetable's hand edits: a redirect to the tab (#137)

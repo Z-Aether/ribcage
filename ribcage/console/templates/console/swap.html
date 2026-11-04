@@ -1,0 +1,61 @@
+{# The swap panel: what changes between two ticked slates, left to right, no trigger content (#24, #170). #}
+<div class="swap" data-swap>
+  <h3 class="swap__title">The swap <small class="swap__between">{{ before }} → {{ after }}</small></h3>
+  <p class="swap__basis ledger__muted" data-swap-basis>{{ swap.basis }}</p>
+  <div class="swap__grid">
+    <div class="swap__films">
+      <h4>Films</h4>
+      <p data-swap-shared><strong>Shared:</strong> {{ swap.shared|join:", "|default:"none" }}</p>
+      <p class="swap__out" data-swap-out><strong>Out:</strong> {{ swap.out|join:", "|default:"none" }}</p>
+      <p class="swap__in" data-swap-in><strong>In:</strong> {{ swap.into|join:", "|default:"none" }}</p>
+    </div>
+    <div>
+      <h4>The numbers</h4>
+      <table class="ledger swap__table swap__numbers">
+        <tbody>
+          <tr data-swap-floor><th scope="row">Floor</th><td>{% if swap.numbers.floor.before is None %}no floor{% else %}{{ swap.numbers.floor.before }}{% endif %} → {% if swap.numbers.floor.after is None %}no floor{% else %}{{ swap.numbers.floor.after }}{% endif %}</td></tr>
+          <tr data-swap-sigma><th scope="row">Σrep</th><td>{{ swap.numbers.sigma_rep.before }} → {{ swap.numbers.sigma_rep.after }}</td></tr>
+          <tr data-swap-total><th scope="row">Total</th><td>{{ swap.numbers.total.before }} → {{ swap.numbers.total.after }}</td></tr>
+          <tr data-swap-time><th scope="row">Screen time</th><td>{{ swap.numbers.screen_time.before }} → {{ swap.numbers.screen_time.after }}</td></tr>
+          <tr data-swap-vetoes><th scope="row">Vetoes in the room</th><td>{{ swap.vetoes.before }} → {{ swap.vetoes.after }} <small class="swap__delta">{{ swap.vetoes.delta }}</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="swap__moved">
+      <h4>The swap</h4>
+      <ul class="swap__list">
+        {% for each in swap.carried_out %}
+          <li class="swap__out" data-swap-film-out><span class="swap__sign">−</span> {{ each.title }} <span class="ledger__muted">{{ each.runtime }}m · {{ each.points }} pts · {% if each.represents %}was {% for one in each.represents %}{% if not forloop.first %}, {% endif %}{{ one.name }}{% if one.pins %} <span class="slate-row__pin" title="Pins the floor">★</span>{% endif %}{% endfor %}'s{% else %}represented nobody{% endif %}</span></li>
+        {% endfor %}
+        {% for each in swap.carried_in %}
+          <li class="swap__in" data-swap-film-in><span class="swap__sign">+</span> {{ each.title }} <span class="ledger__muted">{{ each.runtime }}m · {{ each.points }} pts · {% if each.represents %}now {% for one in each.represents %}{% if not forloop.first %}, {% endif %}{{ one.name }}{% if one.pins %} <span class="slate-row__pin" title="Pins the floor">★</span>{% endif %}{% endfor %}'s{% else %}represents nobody{% endif %}</span></li>
+        {% empty %}
+          {% if not swap.carried_out %}<li class="ledger__muted">identical film sets</li>{% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="swap__people">
+      <h4>Who it moves</h4>
+      <table class="ledger swap__table">
+        <thead>
+          <tr><th scope="col">Voter</th><th scope="col">Before</th><th scope="col">After</th><th scope="col">Change</th><th scope="col" class="ledger__number">Slate sum</th></tr>
+        </thead>
+        <tbody>
+          {% for each in swap.moves %}
+            <tr data-swap-voter>
+              <td class="slate-row__person">{{ each.name }}</td>
+              {% if each.out %}
+                <td colspan="3" class="ledger__muted">{{ each.out }}</td>
+              {% else %}
+                <td>{% if each.before.film %}{{ each.before.film }}, {{ each.before.score }}{% else %}0{% endif %}{% if each.before.pins %} <span class="slate-row__pin" title="Pins the floor">★</span>{% endif %}</td>
+                <td>{% if each.after.film %}{{ each.after.film }}, {{ each.after.score }}{% else %}0{% endif %}{% if each.after.pins %} <span class="slate-row__pin" title="Pins the floor">★</span>{% endif %}</td>
+                <td class="swap__change{% if each.change > 0 %} swap__change--up{% elif each.change < 0 %} swap__change--down{% endif %}">{% if each.change > 0 %}▲ {{ each.change }}{% elif each.change < 0 %}▼ {{ each.change|cut:"-" }}{% else %}<span class="ledger__muted">=</span>{% endif %}</td>
+              {% endif %}
+              <td class="ledger__number swap__sum">{% if each.before.sum is None %}–{% else %}{{ each.before.sum }}{% endif %} → {% if each.after.sum is None %}–{% else %}{{ each.after.sum }}{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

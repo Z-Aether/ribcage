@@ -330,3 +330,13 @@ def test_the_gallerys_slate_ledger_keeps_and_discards_nothing(client, debug):
     assert "data-keep" in section and "data-discard" in section
     assert "<form" not in section
     assert "pick/keep" not in section and "pick/discard" not in section
+
+
+def test_the_gallerys_slate_ledger_ticks_do_nothing(client, debug):
+    page = client.get(GALLERY).text
+    section = re.search(r'id="slate-ledger".*?</section>', page, re.S)[0]
+
+    ticks = re.findall(r"<input[^>]*data-swap-tick[^>]*>", section)
+
+    assert ticks and all(" disabled" in each for each in ticks)
+    assert 'id="swap-panel"' not in section

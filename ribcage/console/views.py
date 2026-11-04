@@ -353,6 +353,24 @@ def pick_knob(request):
     return redirect("console_pick_compare")
 
 
+def film_set_asked(text):
+    """The film keys a swap's query names, or None where it names none of its own or a nonsense one (#170)."""
+    if text is None:
+        return None
+    pieces = [each for each in text.split(",") if each]
+    return tuple(int(each) for each in pieces) if all(each.isascii() and each.isdigit() and len(each) < 10 for each in pieces) else None
+
+
+@admin_required
+@require_safe
+def pick_swap(request):
+    # The swap panel alone, drawn under the session's basis from the two film sets the ticked rows hold; a plain GET redirects to Compare (#24, #170).
+    before, after = film_set_asked(request.GET.get("a")), film_set_asked(request.GET.get("b"))
+    if before is None or after is None:
+        return redirect("console_pick_compare")
+    return render(request, "console/swap.html", {"swap": plan.swap_of(before, after, kept_basis(request)), "before": request.GET.get("from", "")[:80], "after": request.GET.get("to", "")[:80]})
+
+
 @admin_required
 @require_POST
 def pick_keep(request):

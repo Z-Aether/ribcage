@@ -200,7 +200,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8 → M9 → M10
 - **The objective,** pure over plain data: floor set with its reasons, integerised `K·(W·m + Σrep) + T` with `K` per solve, `highspy` pinned `>= 1.15.1`, `mip_rel_gap = 0` (#6, #10, #33).
 - **Knobs and the basis:** without a voter, disregard a voter's vetoes, fix a film in or out (#17).
 - **The batch:** up to five proposals through the diversity cut, "more", replacement on a knob change, the solver's own reasons for a short batch. Remeasure `k = 4` on the seed corpus and fall back to `k = 2` if it bites (#17).
-- **Compare tab:** knobs, the batch solved as the tab opens (#165), "more", the ledger (timetable row, shortlist, batch), standing and tier, the floor set line, keep, swap, *Use this slate* armed with a preview and unavailable without an anchor (#24, #36).
+- **Compare tab:** knobs, the batch solved as the tab opens (#165), "more", the ledger (timetable row, shortlist, batch), standing and tier, the floor set line, keep, swap (tick two rows, #170), *Use this slate* armed with a preview and unavailable without an anchor (#24, #36).
 - **The shortlist:** film set plus provenance, kept from a batch row and removed by *discard*, re-scored live under the current basis, its rows also in the Timetable tab (#17, #22, #169).
 - **Tests:** #6's enumeration oracle as a marked test and a generator of hard-coded fixtures. The trap catalogue's solver traps (#25).
 - Tuning stage two on the seed corpus (#25).

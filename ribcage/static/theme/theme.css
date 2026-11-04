@@ -4902,3 +4902,84 @@ body:has(> main > .evening) > footer.site-footer .site-footer__tmdb {
   border-radius: 2px;
   background: linear-gradient(to right, var(--run-now) var(--elapsed), rgb(255 255 255 / 0.12) var(--elapsed));
 }
+
+/* ---------- The swap between two ticked slate rows (#24, #170) ---------- */
+
+.slate-row__tick {
+  margin: 0 0.4rem 0 0;
+  vertical-align: middle;
+}
+[data-skin] .slate-row.is-ticked td {
+  background-color: var(--surface-raised, var(--surface));
+}
+/* The films one of the two ticked rows holds and the other does not (#170). */
+[data-skin] .slate-ledger td.slate-dot--differs {
+  background-color: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.slate-dot--differs .slate-dot__mark {
+  background-color: var(--accent);
+  opacity: 1;
+}
+/* Sticky so two rows ticked low in the ledger leave the answer in view; it scrolls inside itself rather than cover the ledger (#170). */
+.swap-slot {
+  position: sticky;
+  top: 40px;
+  z-index: 5;
+  max-height: 40vh;
+  overflow-y: auto;
+  margin: 0.75rem 0;
+  background-color: var(--surface);
+}
+[data-skin] .swap {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+}
+.swap__title {
+  margin: 0;
+}
+.swap__between {
+  font-weight: 400;
+}
+.swap__basis {
+  margin: 0.2rem 0 0.5rem;
+  font-size: 0.78rem;
+}
+.swap__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  align-items: flex-start;
+}
+.swap__grid h4 {
+  margin: 0 0 0.3rem;
+}
+.swap__films p {
+  margin: 0 0 0.25rem;
+}
+.swap__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.swap__sign {
+  font-weight: 700;
+}
+.swap__out .swap__sign,
+.swap__change--down {
+  color: var(--veto-ink);
+}
+.swap__in .swap__sign,
+.swap__change--up {
+  color: var(--score-top-pick);
+}
+[data-skin] .swap__table {
+  width: auto;
+}
+.swap__delta {
+  color: var(--ink-muted);
+}
+.swap__people {
+  max-width: 100%;
+  overflow-x: auto;
+}

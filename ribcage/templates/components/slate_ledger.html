@@ -11,7 +11,7 @@
         <th scope="col">People</th>
         <th scope="col" class="ledger__number">Vetoes</th>
         {% for dot in ledger.columns %}
-          <th scope="col" class="slate-ledger__film{% if dot.core %} slate-ledger__film--core{% endif %}"><span title="{{ dot.title }}">{{ dot.title }}</span></th>
+          <th scope="col" data-film="{{ dot.id }}" class="slate-ledger__film{% if dot.core %} slate-ledger__film--core{% endif %}"><span title="{{ dot.title }}">{{ dot.title }}</span></th>
         {% endfor %}
       </tr>
     </thead>

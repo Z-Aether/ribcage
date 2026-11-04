@@ -1,6 +1,7 @@
-{# `inert` draws keep and discard as plain text, no post (gallery). One slate's row and, hidden beneath it, its breakdown: a click on the row opens it in place and a second closes it (#24, #148, #164). No trigger content, ever (#17, #20). #}
+{# `inert` draws keep and discard as plain text, no post, and the swap tick disabled (gallery). One slate's row and, hidden beneath it, its breakdown: a click on the row opens it in place and a second closes it (#24, #148, #164). No trigger content, ever (#17, #20). #}
 <tr class="slate-row{% if row.open %} is-open{% endif %}" data-slate-row>
   <td class="slate-row__label">
+    <input type="checkbox" class="slate-row__tick" data-swap-tick value="{{ row.film_ids }}" data-label="{{ row.label }}" aria-label="Tick {{ row.label }} to read the swap" title="Tick two rows to read the swap" autocomplete="off"{% if inert %} disabled{% endif %}>
     <button type="button" class="slate-row__opens" aria-expanded="{% if row.open %}true{% else %}false{% endif %}" aria-controls="{{ row.id }}-detail">{{ row.label }}</button>
     {% if row.standing %}<span class="slate-row__standing">{{ row.standing }}</span>{% endif %}
     {% if row.keeping == "keep" %}
@@ -20,7 +21,7 @@
   </td>
   <td class="ledger__number slate-row__vetoes">{% if row.vetoed %}<span title="{% for each in row.vetoed %}{% if not forloop.first %}; {% endif %}{{ each.film }} ({{ each.by|join:', ' }}){% endfor %}">{{ row.vetoes }}</span>{% else %}<span class="ledger__muted">0</span>{% endif %}</td>
   {% for dot in row.dots %}
-    <td class="slate-dot{% if dot.core %} slate-dot--core{% endif %}{% if dot.fixed %} slate-dot--fixed{% endif %}">{% if dot.held %}<span class="slate-dot__mark" role="img" aria-label="{{ dot.title }}{% if dot.fixed %}, fixed in{% endif %}" title="{{ dot.title }}{% if dot.fixed %}, fixed in{% endif %}"></span>{% endif %}</td>
+    <td data-film="{{ dot.id }}" class="slate-dot{% if dot.core %} slate-dot--core{% endif %}{% if dot.fixed %} slate-dot--fixed{% endif %}">{% if dot.held %}<span class="slate-dot__mark" role="img" aria-label="{{ dot.title }}{% if dot.fixed %}, fixed in{% endif %}" title="{{ dot.title }}{% if dot.fixed %}, fixed in{% endif %}"></span>{% endif %}</td>
   {% endfor %}
 </tr>
 <tr class="ledger__detail slate-row__detail" id="{{ row.id }}-detail"{% if not row.open %} hidden{% endif %}>

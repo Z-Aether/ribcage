@@ -1,5 +1,6 @@
 {# Compare: the slate ledger, the batch's banner heading its section (#146, #164, #165, #167). #}
 <section class="compare" aria-label="Compare" data-keeps-scroll>
   {% include "console/knob_bar.html" with knobs=plan.knobs %}
+  <div class="swap-slot" id="swap-panel" role="region" aria-label="The swap" aria-live="polite" data-at="{% url 'console_pick_swap' %}" hidden></div>
   {% include "components/slate_ledger.html" with ledger=plan %}
 </section>
