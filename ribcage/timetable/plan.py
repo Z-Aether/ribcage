@@ -120,7 +120,7 @@ def votes_under(screen, basis):
 
 
 def swap_of(before, after, basis=Basis()):
-    """The swap panel's data from the film sets `before` and `after` (suggestion ids) under `basis`, plain: a film no longer in the pool is left out of its side (#24, #170)."""
+    """The swap panel's data from the film sets `before` and `after` (suggestion ids) under `basis`, plain: a film no longer in the pool is left out of its side's numbers and named in `gone` (#24, #170)."""
     votes = votes_under(set(before) | set(after), basis)
     left, right = (tuple(each for each in films if each in votes.titles) for films in (before, after))
     found = swapping.swap(left, right, votes.on)
@@ -150,6 +150,7 @@ def swap_of(before, after, basis=Basis()):
             {"name": names[each.voter], "out": each.out, "before": side(each.before), "after": side(each.after), "change": each.change, "sum_change": each.sum_change}
             for each in found.moves
         ],
+        "gone": {"before": [each for each in before if each not in votes.titles], "after": [each for each in after if each not in votes.titles]},
         "basis": basis_line(votes),
     }
 

@@ -135,7 +135,7 @@ def test_a_plain_get_or_nonsense_redirects_to_compare(admin, room):
         assert admin.get(SWAP, query).headers["Location"] == COMPARE
 
 
-def test_a_film_no_longer_in_the_pool_leaves_its_side(admin, room):
+def test_a_film_no_longer_in_the_pool_is_marked_on_its_side(admin, room):
     gone = room["alien"].pk
     BallotRecord.objects.filter(suggestion=gone).delete()
     Suggestion.objects.filter(pk=gone).delete()
@@ -143,6 +143,34 @@ def test_a_film_no_longer_in_the_pool_leaves_its_side(admin, room):
     page = admin.get(SWAP, {"a": ids(room["cube"]), "b": f"{room['thing'].pk},{gone}"}).text
 
     assert lines(page, "data-swap-in") == ["In: The Thing"]
+    assert lines(page, "data-swap-gone") == [f"No longer in the pool: film {gone} (after), not scored"]
+
+
+def gone_films(*films):
+    pks = [each.pk for each in films]
+    BallotRecord.objects.filter(suggestion__in=pks).delete()
+    Suggestion.objects.filter(pk__in=pks).delete()
+    return pks
+
+
+def test_a_film_no_longer_in_the_pool_is_marked_on_the_before_side(admin, room):
+    [gone] = gone_films(room["alien"])
+
+    page = admin.get(SWAP, {"a": f"{room['cube'].pk},{gone}", "b": ids(room["cube"])}).text
+
+    assert lines(page, "data-swap-gone") == [f"No longer in the pool: film {gone} (before), not scored"]
+
+
+def test_films_gone_on_both_sides_are_told_apart_by_a_separator(admin, room):
+    before, after = gone_films(film("Gone before", 80), film("Gone after", 85))
+
+    page = admin.get(SWAP, {"a": f"{room['cube'].pk},{before}", "b": f"{room['thing'].pk},{after}"}).text
+
+    assert lines(page, "data-swap-gone") == [f"No longer in the pool: film {before} (before); film {after} (after), not scored"]
+
+
+def test_a_swap_of_films_all_in_the_pool_marks_nothing_gone(admin, room):
+    assert "data-swap-gone" not in ask(admin, [room["cube"]], [room["thing"]]).text
 
 
 def test_an_empty_side_is_a_slate_of_no_films(admin, room):

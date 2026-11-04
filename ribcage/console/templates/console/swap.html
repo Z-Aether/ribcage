@@ -8,6 +8,7 @@
       <p data-swap-shared><strong>Shared:</strong> {{ swap.shared|join:", "|default:"none" }}</p>
       <p class="swap__out" data-swap-out><strong>Out:</strong> {{ swap.out|join:", "|default:"none" }}</p>
       <p class="swap__in" data-swap-in><strong>In:</strong> {{ swap.into|join:", "|default:"none" }}</p>
+      {% if swap.gone.before or swap.gone.after %}<p class="ledger__muted" data-swap-gone><strong>No longer in the pool:</strong>{% if swap.gone.before %} film {{ swap.gone.before|join:", film " }} (before){% endif %}{% if swap.gone.before and swap.gone.after %};{% endif %}{% if swap.gone.after %} film {{ swap.gone.after|join:", film " }} (after){% endif %}, not scored</p>{% endif %}
     </div>
     <div>
       <h4>The numbers</h4>
