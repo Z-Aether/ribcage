@@ -10,11 +10,14 @@ from ribcage.ballot.board import candidates
 from ribcage.ballot.models import BallotRecord
 from ribcage.readouts import ledger, plan
 from ribcage.suggestions.models import Suggestion
+from ribcage.timetable import batch as batches
 from ribcage.timetable import setting
 from ribcage.timetable.models import Box
 
 THE_PLAN = "The plan"
-SECTIONS = (THE_PLAN, "Shortlist", "This batch")
+THIS_BATCH = "This batch"
+NO_KNOBS = "no knobs"
+SECTIONS = (THE_PLAN, "Shortlist", THIS_BATCH)
 NOTHING_YET = "Nothing on the timetable yet."
 
 
@@ -32,8 +35,8 @@ def signed(distance):
     return "=" if not distance else f"{distance:+d}".replace("-", "\N{MINUS SIGN}")
 
 
-def load(wanted=()):
-    """The ledger as the page shows it, in a fixed number of queries however many rows and films: the plan's row, then each of `wanted`'s.
+def load(wanted=(), solved=False):
+    """The ledger as the page shows it, in a fixed number of queries however many rows and films: the plan's row, then each of `wanted`'s and, with `solved`, the batch's.
 
     The voters, the candidates', the rows' films and their ballot records are each loaded once for every row (#164).
     """
@@ -52,13 +55,26 @@ def load(wanted=()):
     found_floor = ballot_floor.of_the_ballot(ids, runtimes, on_the_ballot, records, budget)
     on = ledger.stored_votes(ids, found_floor, records, titles, runtimes, on_the_ballot, budget)
 
+    # The batch is solved here on every render, from the same loaded votes, and never stored (#17, #165).
+    found_batch = batches.propose(on, settings.FLOOR_WEIGHT_MULTIPLIER) if solved else None
+    proposals = [] if found_batch is None else [Wanted(THIS_BATCH, proposal_label(number, each), tuple(each)) for number, each in enumerate(found_batch.slates, 1)]
     # An empty timetable is no row, so it joins no standing and no core (#147, #164).
-    asked = [*([Wanted(THE_PLAN, THE_PLAN, tuple(on_the_plan))] if boxes else []), *wanted]
-    return {**of(asked, on, names, titles), "floor_line": ballot_floor.line_of(found_floor, names), "empty": not boxes}
+    asked = [*([Wanted(THE_PLAN, THE_PLAN, tuple(on_the_plan))] if boxes else []), *wanted, *proposals]
+    floor_line = ballot_floor.line_of(found_floor, names)
+    banners = {THIS_BATCH: {"floor_line": floor_line, "basis": NO_KNOBS, "solved_in": f"solved in {found_batch.solved_ms} ms", "ending": found_batch.ending}} if solved else {}
+    return {**of(asked, on, names, titles, banners=banners), "empty": not boxes}
 
 
-def of(asked, on, names, titles, prefix="slate"):
-    """The ledger of `asked`, `Wanted` rows, over a `ledger.StoredVotes`: the one drawing, which the gallery calls over made-up data too."""
+def proposal_label(number, slate):
+    return f"Proposal {number}" if slate else f"Proposal {number} (empty slate)"
+
+
+def of(asked, on, names, titles, prefix="slate", banners=None):
+    """The ledger of `asked`, `Wanted` rows, over a `ledger.StoredVotes`: the one drawing, which the gallery calls over made-up data too.
+
+    `banners` are a section's heading facts by name (#165).
+    """
+    banners = banners or {}
     reads = [ledger.read(each.films, on) for each in asked]
     stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, each.total) for each in reads], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
     shown = ledger.dots([each.films for each in reads], on.rank)
@@ -67,9 +83,14 @@ def of(asked, on, names, titles, prefix="slate"):
         for number, (each, one, stand) in enumerate(zip(asked, reads, stood))
     ]
     sections = [
-        {"name": name, "rows": [row for each, row in zip(asked, rows) if each.section == name], "empty": NOTHING_YET if name == THE_PLAN else ""}
+        {
+            "name": name,
+            "rows": [row for each, row in zip(asked, rows) if each.section == name],
+            "empty": NOTHING_YET if name == THE_PLAN else "",
+            "banner": banners.get(name),
+        }
         for name in SECTIONS
-        if name == THE_PLAN or any(each.section == name for each in asked)
+        if name == THE_PLAN or name in banners or any(each.section == name for each in asked)
     ]
     return {"columns": [{"title": titles[film], "core": film in shown.core} for film in shown.columns], "sections": sections}
 

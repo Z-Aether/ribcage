@@ -26,11 +26,12 @@ from tests.http.test_phase import walk_to
 PHASES = [Phase.SUGGEST, Phase.APPROVE, Phase.VOTE, Phase.PICK]
 OBSERVED_PHASES = [*PHASES, Phase.RUN]  # the owner control cannot hold in RUN, where no page shows the list (#161)
 TICKED, EMPTY, DOES_NOT_CARE = "ticked", "empty", "does not care"
-# What two renders of one state differ by, and nothing else is forgiven: Django masks the CSRF token afresh on every render, and a signed snapshot carries its signing time.
+# What two renders of one state differ by, and nothing else is forgiven: Django masks the CSRF token afresh on every render, a signed snapshot carries its signing time and the batch's banner the time SOLVE took (#165).
 NORMALISED = [
     (re.compile(r'(name="csrfmiddlewaretoken" value=")[^"]*'), r"\1CSRF"),
     (re.compile(r'(&quot;X-CSRFToken&quot;: &quot;|"X-CSRFToken": ")[^"&]*'), r"\1CSRF"),
     (re.compile(r'(name="snapshot" value=")[^"]*'), r"\1SIGNED"),
+    (re.compile(r"solved in \d+ ms"), "solved in N ms"),
 ]
 
 

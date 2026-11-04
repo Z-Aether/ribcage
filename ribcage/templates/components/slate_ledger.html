@@ -18,6 +18,7 @@
     {% for section in ledger.sections %}
       <tbody class="slate-ledger__section" aria-label="{{ section.name }}">
         <tr class="slate-ledger__heading"><th scope="rowgroup" colspan="{{ ledger.columns|length|add:7 }}">{{ section.name }}</th></tr>
+        {% if section.banner %}<tr class="slate-ledger__banner"><td colspan="{{ ledger.columns|length|add:7 }}">{% include "components/batch_banner.html" with banner=section.banner %}</td></tr>{% endif %}
         {% for row in section.rows %}
           {% include "components/slate_row.html" %}
         {% empty %}

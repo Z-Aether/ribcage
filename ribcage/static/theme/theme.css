@@ -3998,6 +3998,31 @@ body:has(> main > .ballot-head) > footer.site-footer {
   color: var(--accent);
 }
 
+/* ---------- The batch's banner: sticky so a scrolled ledger keeps it in view (#165) ---------- */
+
+[data-skin] .batch-banner {
+  position: sticky;
+  left: 0;
+  max-width: calc(100vw - 2.5rem);
+}
+[data-skin] .batch-banner .floor-line {
+  margin-bottom: 0.25rem;
+}
+[data-skin] .batch-banner__facts {
+  margin: 0 0 0.25rem;
+  padding: 0 0.75rem;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+}
+[data-skin] .batch-banner__ending {
+  margin: 0 0 0.5rem;
+  padding: 0.3rem 0.75rem;
+  border-left: 3px solid var(--accent);
+}
+[data-skin] .slate-ledger__banner td {
+  padding-bottom: 0;
+}
+
 /* ---------- The slate ledger row on Compare and in the gallery (#24, #164) ---------- */
 
 .slate-ledger__frame {

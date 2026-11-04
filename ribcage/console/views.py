@@ -251,7 +251,7 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
         **track_context(request, mode),
         **armed_context(armed),
         "candidates": offering.not_in_the_plan() if sub == "timetable" else (),
-        "plan": plan.load() if sub == "compare" else None,
+        "plan": plan.load(solved=True) if sub == "compare" else None,
     }
     return render_tab(request, "console/pick.html", context)
 

@@ -1,0 +1,6 @@
+{# The batch's banner: the floor set line, the basis the rows are scored on, the solve time and an ending in the objective's terms (#17, #24, #165). Over plain data. #}
+<div class="batch-banner" data-batch-banner>
+  {% include "components/floor_line.html" with line=banner.floor_line %}
+  <p class="batch-banner__facts"><span class="batch-banner__basis">{{ banner.basis }}</span> · <span class="batch-banner__time">{{ banner.solved_in }}</span></p>
+  {% if banner.ending %}<p class="batch-banner__ending" role="status">{{ banner.ending }}</p>{% endif %}
+</div>

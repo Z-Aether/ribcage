@@ -143,7 +143,7 @@ The budget caps **screen time** and is the only hard constraint. Runtime never a
 
 - **Floor set:** everyone who could be represented above zero. Anyone outside it is named on screen with the reason: *no ballot*, *nothing representable*, or *set aside by knob* (#33).
 - **Knobs** (hypotheses that never touch stored votes): without a voter, disregard a voter's vetoes, fix a film in, fix a film out. The settings in force are the **basis** (#17).
-- **Batch:** up to five proposals, made real alternatives by the **diversity cut**, extended with "more", and replaced when a knob changes. A short batch is never padded (#17).
+- **Batch:** up to five proposals, made real alternatives by the **diversity cut**, extended with "more", and replaced when a knob changes. It is solved when *Compare* opens, on every render, so it always answers to today's votes, ballot and budget, and is never stored. The banner heading it carries the floor set line, the basis (*no knobs* until a knob is set) and the solve time, and says so when nothing fits the budget (the empty slate) or the floor set is empty (the total alone is optimised). A short batch is never padded (#17, #165).
 - **Shortlist:** proposals the admin keeps, stored as the film set plus its **provenance**, and re-scored live under the current basis (#17).
 
 ### Comparing
