@@ -70,7 +70,7 @@ def test_without_a_voter_removes_them_from_the_floor_sigma_rep_and_the_total():
     assert [(each.voter, each.out) for each in result.plan.rows if each.out] == [("ada", SET_ASIDE)]
     assert result.plan.sigma_rep == stored.plan.sigma_rep - 3
     assert result.total == stored.total - (3 + 1)
-    assert all(each.slate_sum == 0 for each in result.breakdown.people if each.voter == "ada")
+    assert all(each.slate_sum is None for each in result.breakdown.people if each.voter == "ada")
 
 
 def test_the_floor_set_reads_set_aside_by_knob_whatever_else_would_keep_them_out():

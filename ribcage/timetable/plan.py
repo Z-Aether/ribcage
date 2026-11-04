@@ -9,6 +9,7 @@ from ribcage.ballot import floor as ballot_floor
 from ribcage.ballot.board import candidates
 from ribcage.ballot.models import BallotRecord
 from ribcage.readouts import ledger, plan
+from ribcage.readouts.basis import NO_KNOBS, Basis, label
 from ribcage.suggestions.models import Suggestion
 from ribcage.timetable import batch as batches
 from ribcage.timetable import setting
@@ -16,7 +17,6 @@ from ribcage.timetable.models import Box
 
 THE_PLAN = "The plan"
 THIS_BATCH = "This batch"
-NO_KNOBS = "no knobs"
 SECTIONS = (THE_PLAN, "Shortlist", THIS_BATCH)
 NOTHING_YET = "Nothing on the timetable yet."
 NOTHING_TO_SOLVE = "nothing new to solve"
@@ -36,10 +36,13 @@ def signed(distance):
     return "=" if not distance else f"{distance:+d}".replace("-", "\N{MINUS SIGN}")
 
 
-def load(wanted=(), solved=False, rounds=1, kept=None):
+def load(wanted=(), solved=False, rounds=1, kept=None, basis=Basis()):
     """The ledger as the page shows it, in a fixed number of queries however many rows and films: the plan's row, then each of `wanted`'s and, with `solved`, the batch's.
 
     `rounds` is how far "more" has taken it and `kept` what the last solve left for the batch to resume from; a solved ledger carries `rounds` and `kept` back for the session (#166).
+
+    `basis` is the knobs the admin has set, which every row and the batch are scored under; a knob naming a voter no longer on the roster, or whose vetoes are gone, falls out,
+    and the basis in force comes back as `basis` for the session, with the knob bar's data as `knobs` (#17, #167).
 
     The voters, the candidates', the rows' films and their ballot records are each loaded once for every row (#164).
     """
@@ -55,8 +58,14 @@ def load(wanted=(), solved=False, rounds=1, kept=None):
     on_the_ballot = {pk for pk, _, _, ballot in found if ballot}
     records = list(BallotRecord.objects.filter(suggestion__in=titles).values_list("voter_id", "suggestion_id", "score", "vetoed", "seen_it"))
     # The floor set reads the ballot alone; a dropped film's records on the plan count only for the plan's readouts (#26 §5).
-    found_floor = ballot_floor.of_the_ballot(ids, runtimes, on_the_ballot, records, budget)
-    on = ledger.stored_votes(ids, found_floor, records, titles, runtimes, on_the_ballot, budget)
+    stored_floor = ballot_floor.of_the_ballot(ids, runtimes, on_the_ballot, records, budget)
+    vetoes = {}
+    for voter, film, _, vetoed, _ in records:
+        if vetoed and film in on_the_ballot:
+            vetoes[voter] = vetoes.get(voter, 0) + 1
+    basis = Basis(basis.without & set(ids), basis.disregarded & set(vetoes))
+    found_floor = ballot_floor.of_the_ballot(ids, runtimes, on_the_ballot, records, budget, basis.without)
+    on = ledger.stored_votes(ids, found_floor, records, titles, runtimes, on_the_ballot, budget, basis)
 
     # The batch answers to the votes loaded here on every render: it solves what the kept slates lack, and is never stored in the database (#17, #165, #166).
     found_batch = batches.propose(on, settings.FLOOR_WEIGHT_MULTIPLIER, rounds, kept) if solved else None
@@ -64,9 +73,19 @@ def load(wanted=(), solved=False, rounds=1, kept=None):
     # An empty timetable is no row, so it joins no standing and no core (#147, #164).
     asked = [*([Wanted(THE_PLAN, THE_PLAN, tuple(on_the_plan))] if boxes else []), *wanted, *proposals]
     floor_line = ballot_floor.line_of(found_floor, names)
-    banners = {THIS_BATCH: {"floor_line": floor_line, "basis": NO_KNOBS, "solved_in": f"solved in {found_batch.solved_ms} ms" if found_batch.solving else NOTHING_TO_SOLVE, "ending": found_batch.ending, "more": more_of(found_batch)}} if solved else {}
+    banners = {THIS_BATCH: {"floor_line": floor_line, "basis": f"basis: {label(basis, ids, names)}" if basis else NO_KNOBS, "solved_in": f"solved in {found_batch.solved_ms} ms" if found_batch.solving else NOTHING_TO_SOLVE, "ending": found_batch.ending, "more": more_of(found_batch)}} if solved else {}
     memory = {"rounds": found_batch.rounds, "kept": found_batch.kept} if solved else {}
-    return {**of(asked, on, names, titles, banners=banners), "empty": not boxes, **memory}
+    knobs = knobs_of(basis, ids, names, dict(stored_floor.out), vetoes)
+    return {**of(asked, on, names, titles, banners=banners), "empty": not boxes, "basis": basis, "knobs": knobs, **memory}
+
+
+def knobs_of(basis, ids, names, out_for, vetoes):
+    """The knob bar's data: a chip per voter to set aside, dimmed with the reason where the stored votes already leave them out, and one per vetoer with their veto count (#24, #167)."""
+    return {
+        "without": [{"id": each, "name": names[each], "on": each in basis.without, "reason": out_for.get(each, "")} for each in ids],
+        "disregard": [{"id": each, "name": names[each], "on": each in basis.disregarded, "vetoes": vetoes[each]} for each in ids if each in vetoes],
+        "any": bool(basis),
+    }
 
 
 def more_of(found):

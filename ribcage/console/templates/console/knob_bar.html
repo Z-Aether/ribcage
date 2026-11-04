@@ -1,0 +1,27 @@
+{# The knobs above Compare's ledger: each chip a plain post that reloads Compare where it was; the settings are the basis, held in the admin's session (#17, #24, #167). #}
+<div class="knob-bar" role="group" aria-label="Knobs" data-knob-bar>
+  <div class="knob-bar__knob" role="group" aria-label="Without">
+    <span class="knob-bar__label">Without</span>
+    {% for chip in knobs.without %}
+      <form method="post" action="{% url 'console_pick_knob' %}" class="knob-bar__form" data-lands-on="{% url 'console_pick_compare' %}">{% csrf_token %}
+        <input type="hidden" name="knob" value="without"><input type="hidden" name="voter" value="{{ chip.id }}"><input type="hidden" name="on" value="{% if chip.on %}0{% else %}1{% endif %}">
+        <button type="submit" class="button--quiet knob-chip{% if chip.on %} is-on{% endif %}{% if chip.reason %} knob-chip--out{% endif %}" aria-pressed="{% if chip.on %}true{% else %}false{% endif %}"{% if chip.reason %} title="{{ chip.reason }}"{% endif %} data-knob-without>{{ chip.name }}</button>
+      </form>
+    {% endfor %}
+  </div>
+  <div class="knob-bar__knob" role="group" aria-label="Disregard vetoes of">
+    <span class="knob-bar__label">Disregard vetoes of</span>
+    {% for chip in knobs.disregard %}
+      <form method="post" action="{% url 'console_pick_knob' %}" class="knob-bar__form" data-lands-on="{% url 'console_pick_compare' %}">{% csrf_token %}
+        <input type="hidden" name="knob" value="disregarded"><input type="hidden" name="voter" value="{{ chip.id }}"><input type="hidden" name="on" value="{% if chip.on %}0{% else %}1{% endif %}">
+        <button type="submit" class="button--quiet knob-chip{% if chip.on %} is-on{% endif %}" aria-pressed="{% if chip.on %}true{% else %}false{% endif %}" data-knob-disregard>{{ chip.name }} ({{ chip.vetoes }})</button>
+      </form>
+    {% empty %}
+      <span class="knob-bar__none">nobody has vetoed a film</span>
+    {% endfor %}
+  </div>
+  <form method="post" action="{% url 'console_pick_knob' %}" class="knob-bar__form" data-lands-on="{% url 'console_pick_compare' %}">{% csrf_token %}
+    <input type="hidden" name="knob" value="clear">
+    <button type="submit" class="button--quiet"{% if not knobs.any %} disabled{% endif %} data-knob-clear>Clear knobs</button>
+  </form>
+</div>

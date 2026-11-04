@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 
+from ribcage.readouts.floor import SET_ASIDE
 from ribcage.readouts.slate import film_points, slate_sum
 
 
@@ -106,7 +107,7 @@ class Person:
     representation: int
     out: str
     pins: bool
-    slate_sum: int
+    slate_sum: object  # an int, or None for a voter the knob set aside (#167)
     best_eligible: object  # (film, score) or None
     served: str  # "best", "worst" or "": the floor set's best- and worst-served slate sums
 
@@ -152,7 +153,7 @@ def breakdown(read, slate, runtimes, held, candidates, candidate_records):
             each.representation,
             each.out,
             each.pins,
-            sums[each.voter],
+            None if each.out == SET_ASIDE else sums[each.voter],
             _best_eligible(candidates, eligible.get(each.voter, ())) if not each.out and each.representation == 0 else None,
             "" if each.out or best == worst else "best" if sums[each.voter] == best else "worst" if sums[each.voter] == worst else "",
         )

@@ -21,9 +21,12 @@ def load():
     return ids, names, runtimes, records, setting.read().budget
 
 
-def of_the_ballot(ids, runtimes, on_the_ballot, records, budget):
-    """The floor set over loaded voters, films and records, reading the ballot's films alone: a dropped film, on the timetable or not, counts for nobody (#26 §5, #164)."""
-    return floor.floor_set(ids, {pk: runtimes[pk] for pk in on_the_ballot}, records, budget)
+def of_the_ballot(ids, runtimes, on_the_ballot, records, budget, set_aside=()):
+    """The floor set over loaded voters, films and records, reading the ballot's films alone: a dropped film, on the timetable or not, counts for nobody (#26 §5, #164).
+
+    `set_aside` are the voters Compare's knob sets aside; the Roster passes none, so its floor set is the stored state (#146, #167).
+    """
+    return floor.floor_set(ids, {pk: runtimes[pk] for pk in on_the_ballot}, records, budget, set_aside)
 
 
 def of_the_roster():
@@ -34,8 +37,13 @@ def of_the_roster():
 
 
 def line_of(found, names):
-    """The floor set line's data for `components/floor_line.html` (#146, #147)."""
-    return {"size": found.size, "of": found.of, "out": [(names[pk], reason) for pk, reason in found.out]}
+    """The floor set line's data for `components/floor_line.html`: it is highlighted when anyone is out for a reason other than the admin's own knob (#146, #147, #167)."""
+    return {
+        "size": found.size,
+        "of": found.of,
+        "out": [(names[pk], reason) for pk, reason in found.out],
+        "highlight": any(reason != floor.SET_ASIDE for _, reason in found.out),
+    }
 
 
 def change_on_removing(voter):

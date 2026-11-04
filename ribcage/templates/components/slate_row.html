@@ -59,7 +59,7 @@
                     0 · {% if person.best %}best eligible: {{ person.best.title }} ({{ person.best.runtime }}m, scored {{ person.best.score }}){% else %}<span class="ledger__muted">nothing eligible scored</span>{% endif %}
                   </td>
                 {% endif %}
-                <td class="ledger__number slate-row__sum{% if person.served %} slate-row__sum--{{ person.served }}{% endif %}">{{ person.sum }}</td>
+                <td class="ledger__number slate-row__sum{% if person.served %} slate-row__sum--{{ person.served }}{% endif %}">{% if person.sum is None %}–{% else %}{{ person.sum }}{% endif %}</td>
               </tr>
             {% endfor %}
           </tbody>

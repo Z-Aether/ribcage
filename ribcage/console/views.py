@@ -23,6 +23,7 @@ from ribcage.operations.backup import describe
 from ribcage.ballot.board import candidates
 from ribcage.phase.history import current, last_entered, vote_has_opened
 from ribcage.phase.order import PHASES, MoveRefused, Phase
+from ribcage.readouts.basis import Basis
 from ribcage.reload import reload_the_tab
 from ribcage.suggestions import runtime
 from ribcage.suggestions.models import Suggestion
@@ -183,6 +184,7 @@ def selected_box(request, chosen=None):
 RIPPLE_NAMES = ((engine.NONE, "None"), (engine.KEEP_GAPS, "Push · keep gaps"), (engine.KEEP_END_TIME, "Push · keep end time"))
 RIPPLE_SESSION_KEY = "ripple_mode"
 BATCHES_SESSION_KEY = "batches"  # how many batches of proposals "more" has taken Compare to (#166)
+KNOBS_SESSION_KEY = "knobs"  # the basis: the voters set aside and the voters whose vetoes are disregarded, by id (#167)
 CHAIN_SESSION_KEY = "chain"  # the slates the chain has found, beside a digest of the problem they answer (#166)
 
 
@@ -258,10 +260,26 @@ def render_pick(request, sub, refused=None, box_refused=None, box=None, mode=Non
     return render_tab(request, "console/pick.html", context)
 
 
+def kept_basis(request):
+    """The basis the admin's session holds, none until a knob is set (#167)."""
+    held = admin_session.kept(request, KNOBS_SESSION_KEY) or {}
+    return Basis(frozenset(held.get("without", ())), frozenset(held.get("disregarded", ())))
+
+
+def keep_basis(request, basis):
+    admin_session.keep(request, KNOBS_SESSION_KEY, {"without": sorted(basis.without), "disregarded": sorted(basis.disregarded)})
+
+
 def solved_plan(request):
-    """Compare's ledger, resuming the chain from the session and keeping what it found; a changed problem has set "more" back to one batch (#17, #166)."""
+    """Compare's ledger, resuming the chain from the session and keeping what it found; a changed problem has set "more" back to one batch (#17, #166).
+
+    The basis it was scored under is kept too, so a knob naming a voter since removed falls out for good (#66, #167).
+    """
     rounds, kept = admin_session.kept(request, BATCHES_SESSION_KEY, 1), admin_session.kept(request, CHAIN_SESSION_KEY)
-    shown = plan.load(solved=True, rounds=rounds, kept=kept)
+    held = kept_basis(request)
+    shown = plan.load(solved=True, rounds=rounds, kept=kept, basis=held)
+    if shown["basis"] != held:
+        keep_basis(request, shown["basis"])
     if shown["rounds"] != rounds:
         admin_session.keep(request, BATCHES_SESSION_KEY, shown["rounds"])
     if shown["kept"] != kept:
@@ -312,6 +330,22 @@ def pick_budget(request):
 def pick_more(request):
     # "More" is how many batches the chain has been taken to, kept in the admin's session beside the slates found; the next render solves what is missing (#17, #166).
     admin_session.keep(request, BATCHES_SESSION_KEY, admin_session.kept(request, BATCHES_SESSION_KEY, 1) + 1)
+    return redirect("console_pick_compare")
+
+
+@admin_required
+@require_POST
+def pick_knob(request):
+    # A knob is a hypothesis held in the admin's session, never a vote; changing one replaces the batch, so "more" starts again from one (#17, #167).
+    held = kept_basis(request)
+    knob, voter, on = request.POST.get("knob"), request.POST.get("voter", ""), request.POST.get("on") == "1"
+    if knob == "clear":
+        held = Basis()
+    elif knob in ("without", "disregarded") and voter.isdigit():
+        chosen = getattr(held, knob)
+        held = replace(held, **{knob: chosen | {int(voter)} if on else chosen - {int(voter)}})
+    keep_basis(request, held)
+    admin_session.keep(request, BATCHES_SESSION_KEY, 1)
     return redirect("console_pick_compare")
 
 

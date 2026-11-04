@@ -3998,6 +3998,49 @@ body:has(> main > .ballot-head) > footer.site-footer {
   color: var(--accent);
 }
 
+/* ---------- The knob bar above Compare's ledger: a chip per voter, on when the knob is (#167) ---------- */
+
+[data-skin] .knob-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.25rem;
+  margin: 0 0 0.75rem;
+}
+[data-skin] .knob-bar__knob {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+[data-skin] .knob-bar .knob-bar__form {
+  display: inline-block;
+  flex: none;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+}
+[data-skin] .knob-bar button {
+  margin: 0;
+}
+[data-skin] .knob-bar__label,
+[data-skin] .knob-bar__none {
+  flex: none;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+[data-skin] .knob-bar__label {
+  min-width: 10rem;
+}
+[data-skin] :is(button, a.button).button--quiet.knob-chip.is-on {
+  background: var(--ink);
+  color: var(--surface);
+  border-color: var(--ink);
+}
+[data-skin] :is(button, a.button).button--quiet.knob-chip--out:not(.is-on) {
+  opacity: 0.5;
+}
+
 /* ---------- The batch's banner: sticky so a scrolled ledger keeps it in view (#165) ---------- */
 
 [data-skin] .batch-banner {

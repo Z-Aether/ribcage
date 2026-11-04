@@ -1,4 +1,5 @@
-{# Compare: the slate ledger, the batch's banner heading its section (#146, #164, #165). #}
+{# Compare: the slate ledger, the batch's banner heading its section (#146, #164, #165, #167). #}
 <section class="compare" aria-label="Compare" data-keeps-scroll>
+  {% include "console/knob_bar.html" with knobs=plan.knobs %}
   {% include "components/slate_ledger.html" with ledger=plan %}
 </section>
