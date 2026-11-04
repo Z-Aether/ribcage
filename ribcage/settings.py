@@ -166,8 +166,8 @@ LOGGING = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Judgement values: tunable from the environment without a rebuild; correctness values stay hard-coded (#25).
-# Each proposal in a batch differs from every other by at least this many films; remeasure, or fall back to 2 (#17).
-DIVERSITY_CUT = environment.positive_whole_number("DIVERSITY_CUT", default=4)
+# Each proposal in a batch differs from every other by at least this many films; 4 and 3 took over 3 s on the seed corpus at tight budgets, so 2 (#17, #174).
+DIVERSITY_CUT = environment.positive_whole_number("DIVERSITY_CUT", default=2)
 # c in W = c·|floor set|: raising the floor one step is worth one rep point per person (#33).
 FLOOR_WEIGHT_MULTIPLIER = environment.positive_whole_number("FLOOR_WEIGHT_MULTIPLIER", default=1)
 # Proposals per batch: five fit side by side on a desktop, and "more" extends a batch (#17).

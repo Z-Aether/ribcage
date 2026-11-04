@@ -83,7 +83,7 @@ def test_simultaneous_sqlite_writers_queue_in_wal_mode(monkeypatch):
 
 # Defaults as the tickets decided them: #17, #33, #13, #20, #31, #21 and #88.
 JUDGEMENT_DEFAULTS = {
-    "DIVERSITY_CUT": 4,
+    "DIVERSITY_CUT": 2,
     "FLOOR_WEIGHT_MULTIPLIER": 1,
     "BATCH_SIZE": 5,
     "POLL_INTERVAL_SECONDS": 30,
