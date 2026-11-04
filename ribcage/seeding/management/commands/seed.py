@@ -12,7 +12,7 @@ from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import FRESH_PHASE, PHASES, Phase
 from ribcage.films.corpus import FETCH_COMMAND
 from ribcage.seeding.ballots import seed_the_ballots, seed_the_early_marks
-from ribcage.seeding.timetable import seed_the_timetable
+from ribcage.seeding.timetable import seed_the_shortlist, seed_the_timetable
 from ribcage.seeding.watched import seed_the_watched_lists
 from ribcage.seeding.pool import SEEDED_POOL, seed_the_pool, seed_the_trigger_data, trigger_states
 from ribcage.triggers import stored
@@ -58,6 +58,7 @@ class Command(BaseCommand):
             seed_the_early_marks(phase)
             if phase in (Phase.PICK, Phase.RUN):
                 seed_the_timetable()
+                seed_the_shortlist()
             if phase is Phase.RUN:
                 # As entering RUN leaves it: the matches and setters, no snapshot, no vocabulary (#106).
                 stored.purge()

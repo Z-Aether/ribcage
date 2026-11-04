@@ -10,6 +10,7 @@ from ribcage.ballot.board import candidates
 from ribcage.ballot.models import BallotRecord
 from ribcage.readouts import ledger, plan
 from ribcage.readouts.basis import NO_KNOBS, Basis, label
+from ribcage.shortlist import keeping
 from ribcage.suggestions.models import Suggestion
 from ribcage.timetable import batch as batches
 from ribcage.timetable import setting
@@ -17,18 +18,26 @@ from ribcage.timetable.models import Box
 
 THE_PLAN = "The plan"
 THIS_BATCH = "This batch"
-SECTIONS = (THE_PLAN, "Shortlist", THIS_BATCH)
-NOTHING_YET = "Nothing on the timetable yet."
+SHORTLIST = "Shortlist"
+SECTIONS = (THE_PLAN, SHORTLIST, THIS_BATCH)
+NOTHING_YET = {THE_PLAN: "Nothing on the timetable yet.", SHORTLIST: "Nothing kept yet."}
 NOTHING_TO_SOLVE = "nothing new to solve"
 
 
 @dataclass(frozen=True)
 class Wanted:
-    """A further row for the ledger: its section, its label and its film set (suggestion ids); #165 and #169 pass theirs to `load`."""
+    """A further row for the ledger: its section, its label and its film set (suggestion ids); #165 and #169 pass theirs to `load`.
+
+    `kept` is a kept proposal's key, which its row offers to discard, with its `provenance` line; a batch row `keeps` its film set unless it is `already_kept` (#169).
+    """
 
     section: str
     label: str
     films: tuple
+    kept: int = 0
+    provenance: str = ""
+    keeps: bool = False
+    already_kept: bool = False
 
 
 def signed(distance):
@@ -48,9 +57,10 @@ def load(wanted=(), solved=False, rounds=1, kept=None, basis=Basis()):
     """
     ids, names = ballot_floor.roster()
     budget = setting.read().budget
+    stored = keeping.load()
     boxes = list(Box.objects.order_by("start", "pk").values_list("suggestion_id", flat=True))
     on_the_plan = [pk for pk in boxes if pk is not None]
-    screen = set(on_the_plan).union(*(each.films for each in wanted))
+    screen = set(on_the_plan).union(*(each.films for each in wanted), *(each.films for each in stored))
     films = Suggestion.objects.filter(Q(pk__in=screen) | Q(pk__in=candidates().values("pk"))).annotate(on_the_ballot=Exists(candidates().filter(pk=OuterRef("pk"))))
     found = list(films.values_list("pk", "title", "runtime", "on_the_ballot"))
     titles = {pk: title for pk, title, _, _ in found}
@@ -70,14 +80,39 @@ def load(wanted=(), solved=False, rounds=1, kept=None, basis=Basis()):
 
     # The batch answers to the votes loaded here on every render: it solves what the kept slates lack, and is never stored in the database (#17, #165, #166).
     found_batch = batches.propose(on, settings.FLOOR_WEIGHT_MULTIPLIER, rounds, kept, basis, titles) if solved else None
-    proposals = [] if found_batch is None else [Wanted(THIS_BATCH, proposal_label(number, each), tuple(each)) for number, each in enumerate(found_batch.slates, 1)]
+    already = {frozenset(each.films) for each in stored}
+    proposals = [] if found_batch is None else [
+        Wanted(THIS_BATCH, proposal_label(number, each), tuple(each), keeps=bool(each), already_kept=frozenset(each) in already) for number, each in enumerate(found_batch.slates, 1)
+    ]
+    # The kept proposals are scored live under the basis like every row; their provenance only explains (#17, #169).
+    now = provenance(basis, ids, names, titles, on.candidates)
+    kept_rows = [Wanted(SHORTLIST, f"Kept {number}", each.films, kept=each.pk, provenance=provenance_line(each.provenance, now)) for number, each in enumerate(stored, 1)]
     # An empty timetable is no row, so it joins no standing and no core (#147, #164).
-    asked = [*([Wanted(THE_PLAN, THE_PLAN, tuple(on_the_plan))] if boxes else []), *wanted, *proposals]
+    asked = [*([Wanted(THE_PLAN, THE_PLAN, tuple(on_the_plan))] if boxes else []), *wanted, *kept_rows, *proposals]
     floor_line = ballot_floor.line_of(found_floor, names)
     banners = {THIS_BATCH: {"floor_line": floor_line, "basis": f"basis: {label(basis, ids, names, on.candidates, titles)}" if basis else NO_KNOBS, "solved_in": f"solved in {found_batch.solved_ms} ms" if found_batch.solving else NOTHING_TO_SOLVE, "ending": found_batch.ending, "more": more_of(found_batch)}} if solved else {}
     memory = {"rounds": found_batch.rounds, "kept": found_batch.kept} if solved else {}
     knobs = knobs_of(basis, ids, names, dict(stored_floor.out), vetoes, on, titles)
-    return {**of(asked, on, names, titles, banners=banners, pinned=basis.fixed_in), "empty": not boxes, "basis": basis, "knobs": knobs, **memory}
+    return {**of(asked, on, names, titles, banners=banners, pinned=basis.fixed_in, dropped=set(titles) - on_the_ballot, always=(THE_PLAN, SHORTLIST) if solved else (THE_PLAN,)), "empty": not boxes, "basis": basis, "knobs": knobs, **memory}
+
+
+def provenance(basis, ids, names, titles, films=()):
+    """The basis in words as a kept proposal stores it: the same for the same knobs, voters in the roster's order and films in key order (#169)."""
+    return label(basis, ids, names, sorted(each for each in films if each in titles), titles)
+
+
+def provenance_line(found, now):
+    """What a kept row says of where it came from: the basis it was found under, and whether the row has been rescored since (#24, #169)."""
+    return f"found under the current basis: {found}" if found == now else f"found under: {found} · rescored under the current basis"
+
+
+def provenance_now(basis):
+    """The words a keep stores for `basis`, as the session holds it: the knobs on voters or films since gone left out, as `load` leaves them (#169)."""
+    ids, names = ballot_floor.roster()
+    fixed = candidates().filter(pk__in=basis.fixed_in | basis.fixed_out)
+    pins = set(fixed.values_list("pk", flat=True))
+    titles = dict(fixed.values_list("pk", "title"))
+    return provenance(Basis(basis.without & set(ids), basis.disregarded, basis.fixed_in & pins, basis.fixed_out & pins), ids, names, titles, pins)
 
 
 def knobs_of(basis, ids, names, out_for, vetoes, on, titles):
@@ -107,33 +142,43 @@ def proposal_label(number, slate):
     return f"Proposal {number}" if slate else f"Proposal {number} (empty slate)"
 
 
-def of(asked, on, names, titles, prefix="slate", banners=None, pinned=frozenset()):
+def of(asked, on, names, titles, prefix="slate", banners=None, pinned=frozenset(), dropped=frozenset(), always=(THE_PLAN,)):
     """The ledger of `asked`, `Wanted` rows, over a `ledger.StoredVotes`: the one drawing, which the gallery calls over made-up data too.
 
-    `banners` are a section's heading facts by name (#165); a banner's `more` is the header's count and "more" button (#166). `pinned` are the films fixed in, whose dots are outlined (#168).
+    `banners` are a section's heading facts by name (#165); a banner's `more` is the header's count and "more" button (#166). `pinned` are the films fixed in, whose dots are outlined (#168). `dropped` are the films no longer on the ballot, marked on every row that holds one (#26 §5, #169); `always` are the sections drawn even when empty.
     """
     banners = banners or {}
     reads = [ledger.read(each.films, on) for each in asked]
     stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, each.total) for each in reads], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
     shown = ledger.dots([each.films for each in reads], on.rank)
     rows = [
-        {**row_of(one, stand, names, titles, on.runtimes, shown, pinned), "id": f"{prefix}-{number}", "label": each.label}
+        {**row_of(one, stand, names, titles, on.runtimes, shown, pinned, dropped), "id": f"{prefix}-{number}", "label": each.label, **acts_of(each)}
         for number, (each, one, stand) in enumerate(zip(asked, reads, stood))
     ]
     sections = [
         {
             "name": name,
             "rows": [row for each, row in zip(asked, rows) if each.section == name],
-            "empty": NOTHING_YET if name == THE_PLAN else "",
+            "empty": NOTHING_YET.get(name, ""),
             "banner": banners.get(name),
         }
         for name in SECTIONS
-        if name == THE_PLAN or name in banners or any(each.section == name for each in asked)
+        if name in always or name in banners or any(each.section == name for each in asked)
     ]
     return {"columns": [{"title": titles[film], "core": film in shown.core} for film in shown.columns], "sections": sections}
 
 
-def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset()):
+def acts_of(each):
+    """What a row offers beside its figures: a batch row *keep*, or *kept* once its film set is on the shortlist, and a kept row *discard* with where it came from (#169)."""
+    return {
+        "keeping": "kept" if each.already_kept else "keep" if each.keeps else "",
+        "film_ids": ",".join(str(pk) for pk in each.films),
+        "discard": each.kept,
+        "provenance": each.provenance,
+    }
+
+
+def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset(), dropped=frozenset()):
     """One row's data for `components/slate_row.html`, plain."""
     read = one.plan
     if stand.best:
@@ -151,6 +196,7 @@ def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset()):
         "sigma_distance": signed(stand.sigma_distance),
         "total": one.total,
         "films": read.films,
+        "dropped": [titles[film] for film in one.films if film in dropped],
         "screen_time": plan.clock(read.screen_time),
         "budget": None if read.budget is None else plan.clock(read.budget),
         "over": read.over,
@@ -163,6 +209,7 @@ def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset()):
         "film_lines": [
             {
                 "title": titles[each.film],
+                "dropped": each.film in dropped,
                 "runtime": each.runtime,
                 "points": each.points,
                 "most": each.most,

@@ -4173,6 +4173,37 @@ body:has(> main > .ballot-head) > footer.site-footer {
   font-size: 0.78rem;
   color: var(--score-top-pick);
 }
+.slate-row__act {
+  display: inline;
+  margin: 0 0 0 0.4rem;
+}
+[data-skin] .slate-row__act .button--quiet {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.78rem;
+  font-weight: 400;
+  text-decoration: underline;
+  color: var(--accent);
+}
+.slate-row__kept,
+.slate-row__dropped {
+  margin-left: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+[data-skin] .slate-row__dropped {
+  color: var(--veto-ink);
+}
+.slate-row__provenance {
+  display: block;
+  max-width: 16rem;
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: normal;
+  color: var(--ink-muted);
+}
 .slate-row__tier {
   display: inline-block;
   padding: 0 0.4em;

@@ -250,7 +250,7 @@ def test_the_coloured_sums_outrank_the_ledger_cell_ink():
 def test_the_plan_is_a_slate_ledger_row_with_its_tier_standing_strip_vetoes_and_dots(admin, plan):
     page = the_plan(admin.get(COMPARE).text)
 
-    assert re.findall(r'<tbody class="slate-ledger__section" aria-label="([^"]*)"', page) == ["The plan", "This batch"]
+    assert re.findall(r'<tbody class="slate-ledger__section" aria-label="([^"]*)"', page) == ["The plan", "Shortlist", "This batch"]
     assert cells(page, {"label": "slate-row__label", "vetoes": "slate-row__vetoes"}) == {"label": "The plan best on screen", "vetoes": "1"}
     assert re.findall(r'<i class="slate-strip__cell ([^"]*)" title="([^"]*)"', page)[:2] == [
         ("score--top-pick", "ada: Cube, 3"),

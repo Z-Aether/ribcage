@@ -5,6 +5,7 @@ from django.db.models import Count, Exists, IntegerField, OuterRef, Subquery, Va
 from django.db.models.functions import Coalesce
 
 from ribcage.ballot.models import BallotRecord
+from ribcage.shortlist.models import KeptFilm
 from ribcage.suggestions.models import Approval
 from ribcage.timetable.models import Box
 
@@ -23,13 +24,14 @@ def marks_by_others(field):
 
 def with_holds(suggestions):
     """Every load of suggestions that feeds withdrawable goes through here, so M7 and M9 add their holds
-    (a kept proposal) as annotations in this module alone (#34, #89, #118).
+    (a kept proposal, #169) as annotations in this module alone (#34, #89, #118).
     Only a score holds a film from the ballot: a veto or seen it alone goes with a withdraw (#151)."""
     return suggestions.annotate(
         held_by_ballot=Exists(BallotRecord.objects.filter(suggestion=OuterRef("pk"), score__isnull=False)),
         vetoes_by_others=marks_by_others("vetoed"),
         seen_its_by_others=marks_by_others("seen_it"),
         held_by_box=Exists(Box.objects.filter(suggestion=OuterRef("pk"))),
+        held_by_shortlist=Exists(KeptFilm.objects.filter(suggestion=OuterRef("pk"))),
     )
 
 
@@ -43,7 +45,8 @@ def withdrawable(suggestion):
     # Read first, so an unloaded suggestion raises whatever its approval (#118).
     held = suggestion.held_by_ballot
     held_by_box = suggestion.held_by_box
-    return suggestion.approval != Approval.APPROVED and not held and not held_by_box
+    held_by_shortlist = suggestion.held_by_shortlist
+    return suggestion.approval != Approval.APPROVED and not held and not held_by_box and not held_by_shortlist
 
 
 def may_withdraw(voter, suggestion):

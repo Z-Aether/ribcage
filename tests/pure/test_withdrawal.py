@@ -33,6 +33,15 @@ def test_a_suggestion_with_a_ballot_record_is_not_withdrawable_whatever_its_appr
     assert not may_withdraw(ADA, a_suggestion(held_by_ballot=True))
 
 
+def test_a_suggestion_on_a_kept_proposal_is_not_withdrawable_whatever_its_approval():
+    # The shortlist's hold is an annotation like the others (#169).
+    suggestion = a_suggestion(Approval.DROPPED)
+    suggestion.held_by_shortlist = True
+
+    assert not withdrawable(suggestion)
+    assert not may_withdraw(ADA, suggestion)
+
+
 @pytest.mark.parametrize("approval", list(Approval))
 def test_a_suggestion_not_loaded_through_with_holds_raises_rather_than_read_as_unheld(approval):
     # Approved too: approval must not short-circuit past the unloaded read (#118).

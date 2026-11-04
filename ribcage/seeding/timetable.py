@@ -1,9 +1,12 @@
-"""The seeded timetable: in PICK and RUN, the next Saturday at 18:00, a 9 hour budget and a hand-built evening within it; earlier phases leave all empty (#135, #136)."""
+"""The seeded timetable: in PICK and RUN, the next Saturday at 18:00, a 9 hour budget and a hand-built evening within it, and one kept proposal; earlier phases leave all empty (#135, #136, #169)."""
 
 from datetime import datetime, time, timedelta
 
 from django.utils import timezone
 
+from ribcage.ballot import floor
+from ribcage.readouts.basis import Basis, label
+from ribcage.shortlist import keeping
 from ribcage.suggestions.models import Suggestion
 from ribcage.timetable.models import Box, Timetable
 
@@ -49,3 +52,15 @@ def seed_the_timetable():
         else:
             Box.objects.create(suggestion=films[what], start=start)
             at = start + films[what].runtime
+
+
+# The kept proposal, found under a knob the seed leaves off, so its provenance reads rescored under the current basis (#169).
+KEPT_FILMS = (WEREWOLF_BY_NIGHT, EXIT_8, CUBE, TERRIFIER)
+KEPT_UNDER = "Sam"
+
+
+def seed_the_shortlist():
+    ids, names = floor.roster()
+    sam = next(pk for pk in ids if names[pk] == KEPT_UNDER)
+    films = {suggestion.tmdb_id: suggestion for suggestion in Suggestion.objects.exclude(tmdb_id=None)}
+    keeping.keep([films[each].pk for each in KEPT_FILMS], label(Basis(disregarded=frozenset({sam})), ids, names))

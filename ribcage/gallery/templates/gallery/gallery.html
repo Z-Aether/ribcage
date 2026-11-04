@@ -171,9 +171,9 @@
   <section class="gallery-skin" data-skin="admin" id="slate-ledger" aria-labelledby="slate-ledger-name">
     <p class="gallery-skin__name" id="slate-ledger-name">Admin: the slate ledger row</p>
     <p class="gallery-label">Collapsed: the plan, a kept slate and a proposal under a 6 hour budget, the films every row holds greyed as the core (click a row to open it)</p>
-    {% include "components/slate_ledger.html" with ledger=slate_ledger %}
+    {% include "components/slate_ledger.html" with ledger=slate_ledger inert=True %}
     <p class="gallery-label">The first row expanded</p>
-    {% include "components/slate_ledger.html" with ledger=slate_ledger_open %}
+    {% include "components/slate_ledger.html" with ledger=slate_ledger_open inert=True %}
   </section>
 
   <section class="gallery-skin" data-skin="run" id="run" aria-labelledby="run-name">

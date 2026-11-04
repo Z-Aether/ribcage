@@ -321,3 +321,12 @@ def test_the_gallery_shows_the_slate_ledger_row_collapsed_and_expanded(client, d
     assert "tied with the best" in section or "best on screen" in section
     assert 'class="slate-row__over">over' in section
     assert len(set(re.findall(r'id="([^"]*-detail)"', section))) == 6
+
+
+def test_the_gallerys_slate_ledger_keeps_and_discards_nothing(client, debug):
+    page = client.get(GALLERY).text
+    section = re.search(r'id="slate-ledger".*?</section>', page, re.S)[0]
+
+    assert "data-keep" in section and "data-discard" in section
+    assert "<form" not in section
+    assert "pick/keep" not in section and "pick/discard" not in section

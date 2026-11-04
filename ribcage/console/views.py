@@ -25,6 +25,7 @@ from ribcage.phase.history import current, last_entered, vote_has_opened
 from ribcage.phase.order import PHASES, MoveRefused, Phase
 from ribcage.readouts.basis import Basis
 from ribcage.reload import reload_the_tab
+from ribcage.shortlist import keeping
 from ribcage.suggestions import runtime
 from ribcage.suggestions.models import Suggestion
 from ribcage.timetable import editing, engine, labelling, laying, offering, retiming, setting, track
@@ -349,6 +350,25 @@ def pick_knob(request):
         held = held.fixing(int(film), knob, on)
     keep_basis(request, held)
     admin_session.keep(request, BATCHES_SESSION_KEY, 1)
+    return redirect("console_pick_compare")
+
+
+@admin_required
+@require_POST
+def pick_keep(request):
+    # Stores the film set the row showed with the basis in force in words; a set naming a film no longer a candidate, or already kept, writes nothing (#17, #169).
+    asked = request.POST.get("films", "").split(",")
+    keeping.keep([int(each) for each in asked if each.isascii() and each.isdigit() and len(each) < 10], plan.provenance_now(kept_basis(request)))
+    return redirect("console_pick_compare")
+
+
+@admin_required
+@require_POST
+def pick_discard(request):
+    # At once and without a confirm, since the batch can find the proposal again (#169).
+    chosen = request.POST.get("proposal", "")
+    if chosen.isascii() and chosen.isdigit() and len(chosen) < 10:
+        keeping.discard(int(chosen))
     return redirect("console_pick_compare")
 
 

@@ -196,7 +196,7 @@ The knob settings currently in force, under which every slate on screen is score
 The knob settings a kept proposal was found under. Explains where it came from; does not score it. (#17)
 
 **Shortlist**:
-The proposals the admin has kept. The only stored thing on the PICK surface besides the timetable. (#17)
+The proposals the admin has kept. The only stored thing on the PICK surface besides the timetable. A kept proposal leaves it by being discarded, since *drop* is approval's word. (#17, #169)
 _Avoid_: saved, favourites, pinned (pinning is a film-level knob)
 
 **Standing**:

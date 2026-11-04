@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "ribcage.triggers",
     "ribcage.phase",
     "ribcage.timetable",
+    "ribcage.shortlist",
     "ribcage.console",
     "ribcage.seeding",
     "ribcage.gallery",

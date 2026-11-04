@@ -14,6 +14,7 @@ from ribcage.films.corpus import read_entries
 from ribcage.phase.history import current
 from ribcage.phase.models import PhaseMove
 from ribcage.phase.order import PHASES, Phase
+from ribcage.shortlist.models import KeptProposal
 from ribcage.suggestions.models import Approval, Note, Suggestion
 from ribcage.timetable import engine
 from ribcage.timetable.engine import Placed
@@ -149,6 +150,21 @@ def test_from_vote_on_some_films_are_seen_one_seen_and_scored_and_one_seen_and_v
 @pytest.mark.parametrize("seeded", PHASES[: PHASES.index(Phase.PICK)], indirect=True)
 def test_before_pick_the_anchor_and_the_budget_are_empty(db, seeded):
     assert not Timetable.objects.exists()
+
+
+@pytest.mark.parametrize("seeded", [Phase.SUGGEST, Phase.APPROVE, Phase.VOTE], indirect=True)
+def test_before_pick_nothing_is_kept(db, seeded):
+    assert not KeptProposal.objects.exists()
+
+
+@pytest.mark.parametrize("seeded", [Phase.PICK, Phase.RUN], indirect=True)
+def test_in_pick_and_run_one_proposal_is_kept_found_under_a_knob_the_seed_leaves_off(db, seeded):
+    proposal = KeptProposal.objects.get()
+
+    assert proposal.provenance == "Sam's vetoes disregarded"
+    assert proposal.films.count() == 4
+    assert not any(film.suggestion.approval != Approval.APPROVED for film in proposal.films.select_related("suggestion"))
+    assert plan_load(solved=False)["sections"][1]["rows"][0]["provenance"] == "found under: Sam's vetoes disregarded · rescored under the current basis"
 
 
 @pytest.mark.parametrize("seeded", [Phase.PICK, Phase.RUN], indirect=True)

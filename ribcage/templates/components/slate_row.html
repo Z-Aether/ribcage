@@ -1,13 +1,20 @@
-{# One slate's row and, hidden beneath it, its breakdown: a click on the row opens it in place and a second closes it (#24, #148, #164). No trigger content, ever (#17, #20). #}
+{# `inert` draws keep and discard as plain text, no post (gallery). One slate's row and, hidden beneath it, its breakdown: a click on the row opens it in place and a second closes it (#24, #148, #164). No trigger content, ever (#17, #20). #}
 <tr class="slate-row{% if row.open %} is-open{% endif %}" data-slate-row>
   <td class="slate-row__label">
     <button type="button" class="slate-row__opens" aria-expanded="{% if row.open %}true{% else %}false{% endif %}" aria-controls="{{ row.id }}-detail">{{ row.label }}</button>
     {% if row.standing %}<span class="slate-row__standing">{{ row.standing }}</span>{% endif %}
+    {% if row.keeping == "keep" %}
+      {% if inert %}<span class="button--quiet slate-row__act" data-keep>keep</span>{% else %}<form method="post" action="{% url 'console_pick_keep' %}" class="slate-row__act" data-lands-on="{% url 'console_pick_compare' %}">{% csrf_token %}<input type="hidden" name="films" value="{{ row.film_ids }}"><button type="submit" class="button--quiet" data-keep>keep</button></form>{% endif %}
+    {% elif row.keeping == "kept" %}<span class="slate-row__kept" data-kept>kept</span>{% endif %}
+    {% if row.discard %}
+      {% if inert %}<span class="button--quiet slate-row__act" data-discard>discard</span>{% else %}<form method="post" action="{% url 'console_pick_discard' %}" class="slate-row__act" data-lands-on="{% url 'console_pick_compare' %}">{% csrf_token %}<input type="hidden" name="proposal" value="{{ row.discard }}"><button type="submit" class="button--quiet" data-discard>discard</button></form>{% endif %}
+    {% endif %}
+    {% if row.provenance %}<span class="slate-row__provenance" data-provenance>{{ row.provenance }}</span>{% endif %}
   </td>
   <td><span class="slate-row__tier{% if row.tied > 1 %} slate-row__tier--tied{% endif %}">tier {{ row.tier }}{% if row.tied > 1 %} · tied ×{{ row.tied }}{% endif %}</span></td>
   <td class="ledger__number slate-row__floor">{% if row.floor is None %}<span class="ledger__muted">no floor</span>{% else %}{{ row.floor }} <small class="slate-row__distance">{{ row.floor_distance }}</small>{% endif %}</td>
   <td class="ledger__number slate-row__sigma">{{ row.sigma_rep }} <small class="slate-row__distance">{{ row.sigma_distance }}</small></td>
-  <td class="slate-row__films">{{ row.films }} · {{ row.screen_time }}{% if row.over %} <strong class="slate-row__over">over</strong>{% elif not row.budget %} <span class="ledger__muted">no budget</span>{% endif %}</td>
+  <td class="slate-row__films">{{ row.films }} · {{ row.screen_time }}{% if row.over %} <strong class="slate-row__over">over</strong>{% elif not row.budget %} <span class="ledger__muted">no budget</span>{% endif %}{% if row.dropped %} <span class="slate-row__dropped" data-dropped title="Dropped since: {{ row.dropped|join:', ' }}">dropped: {{ row.dropped|join:", " }}</span>{% endif %}</td>
   <td>
     <span class="slate-strip">{% for person in row.people %}{% if person.out %}<i class="slate-strip__cell slate-strip__cell--out" title="{{ person.name }}: {{ person.out }}"><span class="visually-hidden">{{ person.name }}: {{ person.out }}</span></i>{% else %}<i class="slate-strip__cell score--{% if person.score >= 3 %}top-pick{% elif person.score == 2 %}keen{% elif person.score == 1 %}happy{% else %}dont-mind{% endif %}" title="{{ person.name }}{% if person.pins %}, pins the floor{% endif %}: {% if person.film %}{{ person.film }}, {{ person.score }}{% else %}nothing on the slate{% endif %}">{{ person.score }}{% if person.pins %}<b class="slate-strip__pin">★</b>{% endif %}</i>{% endif %}{% endfor %}</span>
   </td>
@@ -28,7 +35,7 @@
           <tbody>
             {% for film in row.film_lines %}
               <tr>
-                <td class="slate-row__title{% if film.most %} slate-row__most{% endif %}">{{ film.title }}</td>
+                <td class="slate-row__title{% if film.most %} slate-row__most{% endif %}">{{ film.title }}{% if film.dropped %} <span class="slate-row__dropped">dropped</span>{% endif %}</td>
                 <td class="ledger__number">{{ film.runtime }}m</td>
                 <td class="ledger__number slate-row__points">{{ film.points }}</td>
                 <td class="slate-row__represents">
@@ -70,6 +77,7 @@
           <strong>Vetoed:</strong>
           {% for each in row.vetoed %}{% if not forloop.first %}; {% endif %}{{ each.film }} ({{ each.by|join:", " }}){% empty %}none{% endfor %}
         </p>
+        {% if row.provenance %}<p class="slate-row__provenance">{{ row.provenance }}</p>{% endif %}
         <p class="slate-row__objective ledger__muted">{% if row.floor is None %}no floor{% else %}floor {{ row.floor }}{% endif %} · Σrep {{ row.sigma_rep }} · total {{ row.total }}</p>
       </div>
     </div>

@@ -492,7 +492,7 @@ def slate_ledger(open_first=False):
     ids = [pk for pk, _ in voters]
     found = readouts_floor.floor_set(ids, runtimes, records, 360)
     on = ledger.stored_votes(ids, found, records, titles, runtimes, set(runtimes), 360)
-    asked = [plan.Wanted(plan.THE_PLAN, plan.THE_PLAN, (10, 11, 12, 13)), plan.Wanted("Shortlist", "Kept 1", (10, 11, 12, 15)), plan.Wanted("This batch", "Proposal 1", (10, 12, 13, 14))]
+    asked = [plan.Wanted(plan.THE_PLAN, plan.THE_PLAN, (10, 11, 12, 13)), plan.Wanted("Shortlist", "Kept 1", (10, 11, 12, 15), kept=1, provenance="found under: without Cy · rescored under the current basis"), plan.Wanted("This batch", "Proposal 1", (10, 12, 13, 14), keeps=True)]
     drawn = plan.of(asked, on, dict(voters), titles, prefix="open" if open_first else "slate")
     drawn["sections"][0]["rows"][0]["open"] = open_first
     return drawn
