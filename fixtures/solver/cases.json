@@ -1,0 +1,9117 @@
+[
+ {
+  "instance": {
+   "name": "a floor-pinning voter",
+   "voters": [
+    "a",
+    "b",
+    "c"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "y",
+     1,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": 93,
+    "triple": [
+     1,
+     3,
+     3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a tie only the total separates",
+   "voters": [
+    "a",
+    "c"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "y",
+     3,
+     false,
+     true
+    ],
+    [
+     "c",
+     "x",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": 65,
+    "triple": [
+     2,
+     2,
+     5
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a veto moves a representative",
+   "voters": [
+    "a",
+    "b",
+    "c"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "y",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "x",
+     3,
+     false,
+     true
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": 71,
+    "triple": [
+     0,
+     3,
+     2
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a disregarded veto",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "y",
+     1,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [
+    "b"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": 68,
+    "triple": [
+     1,
+     3,
+     3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a voter with no ballot",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "nobody"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "y",
+     1,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": 93,
+    "triple": [
+     1,
+     3,
+     3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "an empty floor set",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [
+    "a",
+    "b"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [],
+    "best": 0,
+    "triple": [
+     null,
+     0,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "no budget",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "z",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "x",
+     "y",
+     "z"
+    ],
+    "best": 212,
+    "triple": [
+     3,
+     6,
+     8
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "nothing fits",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 90,
+    "y": 100
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [],
+    "best": 0,
+    "triple": [
+     null,
+     0,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "pins over the budget",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "z",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 100,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "x",
+    "y"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "pins that fit",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "z",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "z"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "x",
+     "z"
+    ],
+    "best": 210,
+    "triple": [
+     3,
+     6,
+     6
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "every film fixed out",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "x",
+    "y"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [],
+    "best": 0,
+    "triple": [
+     null,
+     0,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "the one film that represents fixed out",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "x"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": 22,
+    "triple": [
+     2,
+     2,
+     2
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "no films",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {},
+   "records": [],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [],
+    "best": 0,
+    "triple": [
+     null,
+     0,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-0-none",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 1923,
+    "triple": [
+     3,
+     12,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 1921,
+    "triple": [
+     3,
+     12,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03"
+    ],
+    "best": 964,
+    "triple": [
+     1,
+     10,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": 964,
+    "triple": [
+     1,
+     10,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f04"
+    ],
+    "best": 963,
+    "triple": [
+     1,
+     10,
+     9
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-0-without",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [
+    "b"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 1172,
+    "triple": [
+     3,
+     9,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 1172,
+    "triple": [
+     3,
+     9,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 823,
+    "triple": [
+     2,
+     7,
+     6
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f07"
+    ],
+    "best": 823,
+    "triple": [
+     2,
+     7,
+     6
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f05"
+    ],
+    "best": 566,
+    "triple": [
+     1,
+     7,
+     7
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-0-disregarded",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [
+    "b",
+    "a"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 1923,
+    "triple": [
+     3,
+     12,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 1921,
+    "triple": [
+     3,
+     12,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03"
+    ],
+    "best": 964,
+    "triple": [
+     1,
+     10,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": 964,
+    "triple": [
+     1,
+     10,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f04"
+    ],
+    "best": 963,
+    "triple": [
+     1,
+     10,
+     9
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-0-fixed_in",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f04"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 1287,
+    "triple": [
+     3,
+     12,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 1285,
+    "triple": [
+     3,
+     12,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f04"
+    ],
+    "best": 751,
+    "triple": [
+     1,
+     10,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": 749,
+    "triple": [
+     1,
+     10,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": 375,
+    "triple": [
+     0,
+     7,
+     4
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-0-fixed_out",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f04",
+    "f01"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": 492,
+    "triple": [
+     1,
+     9,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": 490,
+    "triple": [
+     1,
+     9,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f05"
+    ],
+    "best": 74,
+    "triple": [
+     0,
+     2,
+     0
+    ]
+   },
+   {
+    "films": [
+     "f06"
+    ],
+    "best": 37,
+    "triple": [
+     0,
+     1,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-0-all",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [
+    "a"
+   ],
+   "disregarded": [
+    "c",
+    "b"
+   ],
+   "fixed_in": [
+    "f04"
+   ],
+   "fixed_out": [
+    "f02",
+    "f01"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 280,
+    "triple": [
+     1,
+     7,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f05"
+    ],
+    "best": 276,
+    "triple": [
+     1,
+     7,
+     6
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-1-none",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 1477,
+    "triple": [
+     2,
+     10,
+     19
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 1473,
+    "triple": [
+     2,
+     10,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f06",
+     "f07"
+    ],
+    "best": 1466,
+    "triple": [
+     2,
+     10,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 1466,
+    "triple": [
+     2,
+     10,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f04",
+     "f07"
+    ],
+    "best": 1385,
+    "triple": [
+     2,
+     9,
+     8
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-1-without",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [
+    "a"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 932,
+    "triple": [
+     2,
+     8,
+     22
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": 929,
+    "triple": [
+     2,
+     8,
+     19
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f06"
+    ],
+    "best": 923,
+    "triple": [
+     2,
+     8,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": 922,
+    "triple": [
+     2,
+     8,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 922,
+    "triple": [
+     2,
+     8,
+     12
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-1-disregarded",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [
+    "a",
+    "d"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 1266,
+    "triple": [
+     2,
+     10,
+     24
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 1258,
+    "triple": [
+     2,
+     10,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 1255,
+    "triple": [
+     2,
+     10,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f06",
+     "f07"
+    ],
+    "best": 1251,
+    "triple": [
+     2,
+     10,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f04",
+     "f07"
+    ],
+    "best": 1184,
+    "triple": [
+     2,
+     9,
+     11
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-1-fixed_in",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f03"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 1477,
+    "triple": [
+     2,
+     10,
+     19
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 1473,
+    "triple": [
+     2,
+     10,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": 1384,
+    "triple": [
+     2,
+     9,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f07"
+    ],
+    "best": 898,
+    "triple": [
+     1,
+     7,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f06"
+    ],
+    "best": 658,
+    "triple": [
+     0,
+     8,
+     10
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-1-fixed_out",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f03",
+    "f00"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f02",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 1220,
+    "triple": [
+     2,
+     10,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f06",
+     "f07"
+    ],
+    "best": 1212,
+    "triple": [
+     2,
+     10,
+     6
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": 407,
+    "triple": [
+     0,
+     6,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f02"
+    ],
+    "best": 135,
+    "triple": [
+     0,
+     2,
+     1
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-1-all",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [
+    "b"
+   ],
+   "disregarded": [
+    "d",
+    "c"
+   ],
+   "fixed_in": [
+    "f03"
+   ],
+   "fixed_out": [
+    "f00",
+    "f06"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 623,
+    "triple": [
+     2,
+     7,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f07"
+    ],
+    "best": 570,
+    "triple": [
+     2,
+     6,
+     6
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-2-none",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": 1723,
+    "triple": [
+     2,
+     11,
+     22
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04"
+    ],
+    "best": 1654,
+    "triple": [
+     2,
+     10,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f07"
+    ],
+    "best": 1653,
+    "triple": [
+     2,
+     10,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f06"
+    ],
+    "best": 1652,
+    "triple": [
+     2,
+     10,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f04",
+     "f06"
+    ],
+    "best": 1146,
+    "triple": [
+     1,
+     10,
+     12
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-2-without",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 2,
+   "without": [
+    "c"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f04"
+    ],
+    "best": 915,
+    "triple": [
+     2,
+     8,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f05"
+    ],
+    "best": 913,
+    "triple": [
+     2,
+     8,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": 865,
+    "triple": [
+     2,
+     7,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f04",
+     "f07"
+    ],
+    "best": 819,
+    "triple": [
+     2,
+     6,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": 596,
+    "triple": [
+     1,
+     7,
+     11
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-2-disregarded",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [
+    "c",
+    "d"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": 1723,
+    "triple": [
+     2,
+     11,
+     22
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04"
+    ],
+    "best": 1654,
+    "triple": [
+     2,
+     10,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f07"
+    ],
+    "best": 1653,
+    "triple": [
+     2,
+     10,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f06"
+    ],
+    "best": 1652,
+    "triple": [
+     2,
+     10,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f04",
+     "f06"
+    ],
+    "best": 1146,
+    "triple": [
+     1,
+     10,
+     12
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-2-fixed_in",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f06"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f06"
+    ],
+    "best": 1718,
+    "triple": [
+     2,
+     11,
+     17
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": 1589,
+    "triple": [
+     2,
+     9,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f05",
+     "f06"
+    ],
+    "best": 1082,
+    "triple": [
+     1,
+     9,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f04",
+     "f06"
+    ],
+    "best": 1018,
+    "triple": [
+     1,
+     8,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f06",
+     "f07"
+    ],
+    "best": 192,
+    "triple": [
+     0,
+     3,
+     3
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-2-fixed_out",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f06",
+    "f02"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": 1181,
+    "triple": [
+     2,
+     11,
+     22
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f07"
+    ],
+    "best": 1049,
+    "triple": [
+     2,
+     9,
+     12
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-2-all",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 1,
+   "without": [
+    "d"
+   ],
+   "disregarded": [
+    "c",
+    "d"
+   ],
+   "fixed_in": [
+    "f06"
+   ],
+   "fixed_out": [
+    "f04",
+    "f05"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f06"
+    ],
+    "best": 386,
+    "triple": [
+     2,
+     7,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06",
+     "f07"
+    ],
+    "best": 90,
+    "triple": [
+     0,
+     3,
+     3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-3-none",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f06"
+    ],
+    "best": 2568,
+    "triple": [
+     3,
+     12,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06",
+     "f07"
+    ],
+    "best": 579,
+    "triple": [
+     0,
+     8,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f05",
+     "f07"
+    ],
+    "best": 573,
+    "triple": [
+     0,
+     8,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f07"
+    ],
+    "best": 573,
+    "triple": [
+     0,
+     8,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f05"
+    ],
+    "best": 432,
+    "triple": [
+     0,
+     6,
+     6
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-3-without",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 2,
+   "without": [
+    "c"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 1443,
+    "triple": [
+     3,
+     9,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f05"
+    ],
+    "best": 1069,
+    "triple": [
+     2,
+     8,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f04",
+     "f05"
+    ],
+    "best": 1064,
+    "triple": [
+     2,
+     8,
+     4
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f07"
+    ],
+    "best": 269,
+    "triple": [
+     0,
+     5,
+     4
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f07"
+    ],
+    "best": 268,
+    "triple": [
+     0,
+     5,
+     3
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-3-disregarded",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [
+    "c",
+    "a"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f06"
+    ],
+    "best": 1996,
+    "triple": [
+     3,
+     12,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06",
+     "f07"
+    ],
+    "best": 451,
+    "triple": [
+     0,
+     8,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f05",
+     "f07"
+    ],
+    "best": 449,
+    "triple": [
+     0,
+     8,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f07"
+    ],
+    "best": 448,
+    "triple": [
+     0,
+     8,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f04",
+     "f05"
+    ],
+    "best": 339,
+    "triple": [
+     0,
+     6,
+     9
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-3-fixed_in",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f04"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": 1924,
+    "triple": [
+     2,
+     11,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f07"
+    ],
+    "best": 572,
+    "triple": [
+     0,
+     8,
+     4
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f04"
+    ],
+    "best": 141,
+    "triple": [
+     0,
+     2,
+     -1
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-3-fixed_out",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f04",
+    "f02"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f06"
+    ],
+    "best": 1476,
+    "triple": [
+     3,
+     12,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": 495,
+    "triple": [
+     0,
+     8,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f05",
+     "f07"
+    ],
+    "best": 493,
+    "triple": [
+     0,
+     8,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03"
+    ],
+    "best": 305,
+    "triple": [
+     0,
+     5,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-3-all",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 1,
+   "without": [
+    "d"
+   ],
+   "disregarded": [
+    "d",
+    "a"
+   ],
+   "fixed_in": [
+    "f04"
+   ],
+   "fixed_out": [
+    "f00"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": 779,
+    "triple": [
+     3,
+     9,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 218,
+    "triple": [
+     0,
+     5,
+     3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-4-none",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 1328,
+    "triple": [
+     2,
+     11,
+     17
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": 1324,
+    "triple": [
+     2,
+     11,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": 1319,
+    "triple": [
+     2,
+     11,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": 1250,
+    "triple": [
+     2,
+     10,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 905,
+    "triple": [
+     1,
+     9,
+     8
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-4-without",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [
+    "c"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 971,
+    "triple": [
+     3,
+     9,
+     17
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": 964,
+    "triple": [
+     3,
+     9,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": 963,
+    "triple": [
+     3,
+     9,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": 748,
+    "triple": [
+     2,
+     8,
+     6
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": 536,
+    "triple": [
+     1,
+     7,
+     6
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-4-disregarded",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [
+    "c",
+    "a"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 1179,
+    "triple": [
+     2,
+     11,
+     20
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": 1175,
+    "triple": [
+     2,
+     11,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": 1170,
+    "triple": [
+     2,
+     11,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": 1109,
+    "triple": [
+     2,
+     10,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 802,
+    "triple": [
+     1,
+     9,
+     9
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-4-fixed_in",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f01"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 1880,
+    "triple": [
+     2,
+     11,
+     17
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": 1876,
+    "triple": [
+     2,
+     11,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": 1181,
+    "triple": [
+     1,
+     9,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": 1178,
+    "triple": [
+     1,
+     9,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f05"
+    ],
+    "best": 1043,
+    "triple": [
+     1,
+     7,
+     8
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-4-fixed_out",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f01",
+    "f02"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": 1173,
+    "triple": [
+     2,
+     11,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": 1105,
+    "triple": [
+     2,
+     10,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": 308,
+    "triple": [
+     0,
+     5,
+     3
+    ]
+   },
+   {
+    "films": [],
+    "best": 0,
+    "triple": [
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-4-all",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [
+    "d"
+   ],
+   "disregarded": [
+    "a",
+    "d"
+   ],
+   "fixed_in": [
+    "f01"
+   ],
+   "fixed_out": [
+    "f05"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f06"
+    ],
+    "best": 329,
+    "triple": [
+     1,
+     6,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": 326,
+    "triple": [
+     1,
+     6,
+     2
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f04"
+    ],
+    "best": 246,
+    "triple": [
+     1,
+     3,
+     3
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f07"
+    ],
+    "best": 54,
+    "triple": [
+     0,
+     2,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-none",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f05",
+     "f07"
+    ],
+    "best": 497,
+    "triple": [
+     1,
+     6,
+     2
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04"
+    ],
+    "best": 165,
+    "triple": [
+     0,
+     3,
+     0
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06"
+    ],
+    "best": -6,
+    "triple": [
+     0,
+     0,
+     -6
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-without",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [
+    "b"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f05",
+     "f07"
+    ],
+    "best": 461,
+    "triple": [
+     1,
+     6,
+     2
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04"
+    ],
+    "best": 153,
+    "triple": [
+     0,
+     3,
+     0
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06"
+    ],
+    "best": -4,
+    "triple": [
+     0,
+     0,
+     -4
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-disregarded",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [
+    "b",
+    "c"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f05",
+     "f07"
+    ],
+    "best": 425,
+    "triple": [
+     1,
+     6,
+     2
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f06"
+    ],
+    "best": 142,
+    "triple": [
+     0,
+     3,
+     1
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f04"
+    ],
+    "best": -3,
+    "triple": [
+     0,
+     0,
+     -3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-fixed_in",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f00"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00"
+    ],
+    "best": 112,
+    "triple": [
+     0,
+     2,
+     2
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-fixed_out",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f00",
+    "f05"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f07"
+    ],
+    "best": 390,
+    "triple": [
+     2,
+     5,
+     3
+    ]
+   },
+   {
+    "films": [
+     "f04",
+     "f06"
+    ],
+    "best": -3,
+    "triple": [
+     0,
+     0,
+     -3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-all",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [
+    "a"
+   ],
+   "disregarded": [
+    "b",
+    "d"
+   ],
+   "fixed_in": [
+    "f00"
+   ],
+   "fixed_out": [
+    "f02",
+    "f04"
+   ],
+   "distance": 4,
+   "length": 5
+  },
+  "steps": [
+   {
+    "films": [
+     "f00"
+    ],
+    "best": 52,
+    "triple": [
+     0,
+     2,
+     2
+    ]
+   }
+  ],
+  "exhausted": true
+ }
+]
