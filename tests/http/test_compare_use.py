@@ -126,4 +126,5 @@ def test_without_an_anchor_use_is_disabled_on_compare_with_the_line(admin, room)
     page = admin.get(COMPARE).text
     rows = batch_rows(page)[1:]
 
-    assert rows and all(re.search(r"<button[^>]*data-use disabled", each) and "Set the start time above first." in each for each in rows)
+    assert rows and all(re.search(r'<button[^>]*data-use disabled title="Set the start time above first."', each) for each in rows)
+    assert all('class="visually-hidden"' in each and 'class="ledger__muted" id="use-' not in each for each in rows)  # described for screen readers, not drawn (#164)

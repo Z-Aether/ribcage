@@ -260,6 +260,7 @@ def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset(), dropp
         "sigma_rep": read.sigma_rep,
         "sigma_distance": signed(stand.sigma_distance),
         "total": one.total,
+        "total_distance": signed(stand.total_distance),
         "films": read.films,
         "dropped": [titles[film] for film in one.films if film in dropped],
         "screen_time": plan.clock(read.screen_time),

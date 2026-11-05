@@ -22,7 +22,7 @@ def batch(page):
 
 def cells(section):
     row = re.search(r'<tr class="slate-row" data-slate-row>(.*?)</tr>', section, re.S)[1]
-    return {name: text(re.search(rf'<td[^>]*class="[^"]*{name}[^"]*"[^>]*>(.*?)</td>', row, re.S)[1]) for name in ("label", "floor", "sigma", "films")}
+    return {name: text(re.search(rf'<td[^>]*class="[^"]*{name}[^"]*"[^>]*>(.*?)</td>', row, re.S)[1]) for name in ("label", "floor", "sigma", "total", "films")}
 
 
 def film(title, runtime, approval=Approval.APPROVED):
@@ -138,6 +138,19 @@ def test_compare_shows_batch_size_proposals_with_the_count_and_more_in_the_heade
     assert proposals(page) == ["Proposal 1", "Proposal 2", "Proposal 3"]
     assert heading(page) == "This batch 3 · more"
     assert "data-batch-more" in page and not re.search(r"<button[^>]*disabled[^>]*data-batch-more", page)
+
+
+def test_the_total_is_a_column_after_sigma_rep_with_its_distance_from_the_best_row(admin, many):
+    page = admin.get(COMPARE).text
+    head = re.search(r"<thead>(.*?)</thead>", page, re.S)[1]
+    row = re.search(r'<tr class="slate-row" data-slate-row>(.*?)</tr>', page, re.S)[1]
+
+    assert re.findall(r"<th[^>]*>(.*?)</th>", head, re.S)[3:5] == ["Σrep", "Total"]
+    found = re.findall(r'<td class="ledger__number slate-row__total">(\d+) <small class="slate-row__distance">(=|[−+]\d+)</small>', page)
+    shown = [(int(total), 0 if said == "=" else int(said.replace("−", "-"))) for total, said in found]
+    assert len(shown) >= 3 and len({total for total, _ in shown}) > 1  # rows whose totals differ
+    assert len({total - distance for total, distance in shown}) == 1  # every distance is from one best total
+    assert re.search(r'<th scope="rowgroup" colspan="%d"' % len(re.findall(r"<th", head)), page)  # the heading spans every column
 
 
 def test_a_short_batch_says_why_and_greys_more(admin, votes, settings):

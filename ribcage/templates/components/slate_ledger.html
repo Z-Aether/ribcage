@@ -7,6 +7,7 @@
         <th scope="col">Tier</th>
         <th scope="col" class="ledger__number">Floor</th>
         <th scope="col" class="ledger__number">Σrep</th>
+        <th scope="col" class="ledger__number">Total</th>
         <th scope="col">Films · screen time</th>
         <th scope="col">People</th>
         <th scope="col" class="ledger__number">Vetoes</th>
@@ -17,12 +18,12 @@
     </thead>
     {% for section in ledger.sections %}
       <tbody class="slate-ledger__section" aria-label="{{ section.name }}">
-        <tr class="slate-ledger__heading"><th scope="rowgroup" colspan="{{ ledger.columns|length|add:7 }}"><span class="slate-ledger__head">{{ section.name }}{% if section.banner.more %} <span class="slate-ledger__count" data-batch-count>{{ section.banner.more.count }}</span> · {% include "components/batch_more.html" with more=section.banner.more %}{% endif %}</span></th></tr>
-        {% if section.banner %}<tr class="slate-ledger__banner"><td colspan="{{ ledger.columns|length|add:7 }}">{% include "components/batch_banner.html" with banner=section.banner %}</td></tr>{% endif %}
+        <tr class="slate-ledger__heading"><th scope="rowgroup" colspan="{{ ledger.columns|length|add:8 }}"><span class="slate-ledger__head">{{ section.name }}{% if section.banner.more %} <span class="slate-ledger__count" data-batch-count>{{ section.banner.more.count }}</span> · {% include "components/batch_more.html" with more=section.banner.more %}{% endif %}</span></th></tr>
+        {% if section.banner %}<tr class="slate-ledger__banner"><td colspan="{{ ledger.columns|length|add:8 }}">{% include "components/batch_banner.html" with banner=section.banner %}</td></tr>{% endif %}
         {% for row in section.rows %}
           {% include "components/slate_row.html" %}
         {% empty %}
-          {% if section.empty %}<tr><td colspan="{{ ledger.columns|length|add:7 }}" class="ledger__muted">{{ section.empty }}</td></tr>{% endif %}
+          {% if section.empty %}<tr><td colspan="{{ ledger.columns|length|add:8 }}" class="ledger__muted">{{ section.empty }}</td></tr>{% endif %}
         {% endfor %}
       </tbody>
     {% endfor %}

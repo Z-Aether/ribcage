@@ -4168,17 +4168,24 @@ body:has(> main > .ballot-head) > footer.site-footer {
   outline-offset: 3px;
   border-radius: 2px;
 }
+.slate-row__line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem 0.5rem;
+  white-space: nowrap;
+}
 .slate-row__standing {
-  display: block;
+  display: inline;
   font-size: 0.78rem;
   color: var(--score-top-pick);
 }
 .slate-row__act {
   display: inline;
-  margin: 0 0 0 0.4rem;
+  margin: 0;
 }
 [data-skin] .slate-row__act .button--quiet {
   min-height: 0;
+  margin: 0;
   padding: 0;
   border: 0;
   background: none;

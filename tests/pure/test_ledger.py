@@ -61,6 +61,12 @@ def test_distances_are_measured_from_the_best():
     assert (stood[1].floor_distance, stood[1].sigma_distance) == (0, 0)
 
 
+def test_the_total_distance_is_measured_from_the_best_rows_total():
+    stood = standings([(2, 4, 7), (3, 6, 5), (3, 6, 9)], 2, 1)  # the best is the highest total of the best objective
+
+    assert [each.total_distance for each in stood] == [-2, -4, 0]
+
+
 def test_a_single_row_is_the_best_and_alone_in_its_tier():
     only = standings([(1, 3, 4)], 2, 1)[0]
 

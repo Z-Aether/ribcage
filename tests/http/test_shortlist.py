@@ -49,7 +49,7 @@ def keep_first(admin):
 
 
 def provenance_of(page):
-    return [text(each) for each in re.findall(r'<span class="slate-row__provenance" data-provenance>(.*?)</span>', shortlist(page), re.S)]
+    return [text(each) for each in re.findall(r'<p class="slate-row__provenance" data-provenance>(.*?)</p>', shortlist(page), re.S)]
 
 
 def points_of(page, title):
@@ -67,6 +67,15 @@ def test_keep_stores_the_film_set_and_a_plain_copy_of_the_basis_and_reloads_comp
     proposal = KeptProposal.objects.get()
     assert proposal.provenance == "without Dani"
     assert sorted(KeptFilm.objects.filter(proposal=proposal).values_list("suggestion_id", flat=True)) == sorted(int(each) for each in offered.split(","))
+
+
+def test_a_kept_row_draws_no_provenance_on_its_line_and_its_detail_row_does(admin, many):
+    keep_first(admin)
+    shown = shortlist(admin.get(COMPARE).text)
+    line = re.search(r'<tr class="slate-row" data-slate-row>.*?</tr>', shown, re.S)[0]
+
+    assert "provenance" not in line and "found under" not in line
+    assert "found under the current basis: no knobs" in text(shown.split('class="ledger__detail')[1])
 
 
 def test_a_kept_row_is_rescored_under_the_basis_and_its_provenance_says_so(admin, many, voters):

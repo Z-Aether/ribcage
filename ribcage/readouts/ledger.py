@@ -84,6 +84,7 @@ class Standing:
     objective: int  # W·m + Σrep
     floor_distance: object  # from the best row's floor, or None with no floor
     sigma_distance: int
+    total_distance: int
 
 
 def standings(rows, size, multiplier):
@@ -101,9 +102,9 @@ def standings(rows, size, multiplier):
     ordered = sorted(groups, key=lambda key: (-objective[groups[key][0]], -max(rows[each][2] for each in groups[key])))
     tier_of = {key: place for place, key in enumerate(ordered, 1)}
     result = []
-    for each, (floor, sigma, _) in enumerate(rows):
+    for each, (floor, sigma, whole) in enumerate(rows):
         key = (floor, sigma)
-        best_floor, best_sigma, _ = rows[chosen]
+        best_floor, best_sigma, best_total = rows[chosen]
         result.append(
             Standing(
                 tier_of[key],
@@ -113,6 +114,7 @@ def standings(rows, size, multiplier):
                 objective[each],
                 None if floor is None else floor - best_floor,
                 sigma - best_sigma,
+                whole - best_total,
             )
         )
     return result
