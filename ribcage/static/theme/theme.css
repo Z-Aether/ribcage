@@ -4957,15 +4957,15 @@ body:has(> main > .evening) > footer.site-footer .site-footer__tmdb {
   background-color: var(--accent);
   opacity: 1;
 }
-/* Sticky so two rows ticked low in the ledger leave the answer in view; it scrolls inside itself rather than cover the ledger (#170). */
+/* The panel sits in place above the ledger at its full height, with no scrollbar of its own (the dev, 2026-11-05, #170). */
 .swap-slot {
-  position: sticky;
-  top: 40px;
-  z-index: 5;
-  max-height: 40vh;
-  overflow-y: auto;
   margin: 0.75rem 0;
-  background-color: var(--surface);
+}
+.swap__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 [data-skin] .swap {
   padding: 0.6rem 0.9rem;

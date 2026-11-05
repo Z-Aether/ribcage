@@ -180,8 +180,14 @@ def test_an_empty_side_is_a_slate_of_no_films(admin, room):
     assert numbers(page)["Screen time"] == "0m → 1h30m"
 
 
-def test_the_panel_slot_is_pinned_in_view_by_the_stylesheet():
+def test_the_panel_slot_sits_in_place_at_full_size():
     css = (settings.BASE_DIR / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
     rule = re.search(r"^\.swap-slot \{(.*?)\}", css, re.S | re.M)[1]
 
-    assert "position: sticky" in rule and "max-height" in rule and "overflow-y: auto" in rule
+    assert not any(word in rule for word in ("position", "max-height", "overflow"))
+
+
+def test_the_panel_carries_a_clear_control(admin, room):
+    page = ask(admin, [room["cube"]], [room["thing"]]).text
+
+    assert 'data-swap-clear' in page and "Clear" in text(re.search(r"<button[^>]*data-swap-clear[^>]*>(.*?)</button>", page, re.S)[1])

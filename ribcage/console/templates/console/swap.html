@@ -1,6 +1,9 @@
 {# The swap panel: what changes between two ticked slates, left to right, no trigger content (#24, #170). #}
 <div class="swap" data-swap>
-  <h3 class="swap__title">The swap <small class="swap__between">{{ before }} → {{ after }}</small></h3>
+  <div class="swap__head">
+    <h3 class="swap__title">The swap <small class="swap__between">{{ before }} → {{ after }}</small></h3>
+    <button type="button" class="button--quiet swap__clear" data-swap-clear>Clear</button>
+  </div>
   <p class="swap__basis ledger__muted" data-swap-basis>{{ swap.basis }}</p>
   <div class="swap__grid">
     <div class="swap__films">

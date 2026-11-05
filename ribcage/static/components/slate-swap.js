@@ -51,6 +51,14 @@
     askForThePanel();
   });
 
+  // Clear is the panel's own control: the same state as unticking both rows by hand (the dev, 2026-11-05).
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest("[data-swap-clear]")) return;
+    ticked.splice(0).forEach((box) => (box.checked = false));
+    lightTheDifferences();
+    askForThePanel();
+  });
+
   // An answer for a pair no longer ticked is dropped, not swapped in over the current one.
   document.addEventListener("htmx:beforeSwap", (event) => {
     const panel = slot();
