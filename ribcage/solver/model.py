@@ -7,6 +7,24 @@ from ribcage.readouts.slate import film_points
 from ribcage.solver.objective import scale_of
 
 
+class Model:
+    """The MILP a rule's levels optimise: the HiGHS instance, the film columns and what a level needs to set its objective (#175)."""
+
+    def __init__(self, highs, films, x, points, k):
+        self.highs, self.films, self.x, self.points, self.k = highs, films, x, points, k
+
+
+def total_levels(model):
+    """The rule `total`: one solve, `K·(W·m + Σrep) + T`, the floor and representation columns already costing the K-scaled part (#33, #165)."""
+    for film in model.films:
+        model.highs.changeColCost(model.x[film], float(film_points(model.points[film])))
+    model.highs.run()
+
+
+# A rule's levels, by the same names as `readouts.tiebreaker.KEYS`; each gets the whole model and leaves the optimal solution in it (#175).
+LEVELS = {"total": total_levels}
+
+
 def solve(problem, found=(), distance=2, scale=None):
     """The best slate as a frozenset of films, or None where none exists, as when the films fixed in alone exceed the budget (#168).
 
@@ -43,7 +61,7 @@ def solve(problem, found=(), distance=2, scale=None):
         highs.addRow(float(lower), float(upper), len(ordered), numpy.array([c for c, _ in ordered], dtype=numpy.int32), numpy.array([v for _, v in ordered], dtype=numpy.float64))
 
     pinned = set(problem.fixed_in)
-    x = {film: column(film_points(points[film]), 1, 1 if film in pinned else 0) for film in films}
+    x = {film: column(0, 1, 1 if film in pinned else 0) for film in films}
     if problem.budget is not None:
         row(problem.budget, {x[film]: problem.runtimes[film] for film in films})
     members = problem.floor_set.members
@@ -65,7 +83,7 @@ def solve(problem, found=(), distance=2, scale=None):
         # Σ over films outside minus Σ over films inside ≥ distance − |S|: at least `distance` films differ.
         row(highspy.kHighsInf, {x[film]: (-1 if film in inside else 1) for film in films}, lower=distance - len(inside & set(films)))
 
-    highs.run()
+    LEVELS[problem.tiebreaker](Model(highs, films, x, points, k))
     status = highs.getModelStatus()
     if status in (highspy.HighsModelStatus.kInfeasible, highspy.HighsModelStatus.kUnboundedOrInfeasible):
         return None

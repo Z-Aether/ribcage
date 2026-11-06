@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from ribcage.readouts import ledger, plan
+from ribcage.readouts import plan, tiebreaker
 from ribcage.readouts.floor import FloorSet
 from ribcage.readouts.slate import DISREGARDED
 
@@ -22,6 +22,7 @@ class Problem:
     floor_set: FloorSet
     multiplier: int  # FLOOR_WEIGHT_MULTIPLIER
     fixed_in: tuple = ()  # candidate films the slate must hold, in slate order; a film fixed out is not in `runtimes` at all (#168)
+    tiebreaker: str = tiebreaker.DEFAULT  # the rule that separates slates equal on floor and Σrep (#175)
 
     @property
     def weight(self):
@@ -45,6 +46,12 @@ class Value:
     total: int
     weight: int
     scale: int
+    rule_key: object = None  # the tiebreaker's key for the slate (#175)
+
+    @property
+    def key(self):
+        """What slates are compared on: `(W·m + Σrep, the rule's key)`, the greater the better (#175)."""
+        return (self.weight * (self.floor or 0) + self.sigma_rep, self.rule_key)
 
     @property
     def integer(self):
@@ -62,4 +69,4 @@ def value(films, problem, scale=None):
     on_slate = set(slate)
     held = [each for each in problem.on_the_ballot() if each[1] in on_slate]
     read = plan.plan(problem.voters, slate, {film: problem.runtimes[film] for film in slate}, held, problem.floor_set, problem.budget)
-    return Value(read.floor, read.sigma_rep, ledger.total(slate, held), problem.weight, scale_of(problem) if scale is None else scale)
+    return Value(read.floor, read.sigma_rep, tiebreaker.total(slate, held), problem.weight, scale_of(problem) if scale is None else scale, tiebreaker.KEYS[problem.tiebreaker](slate, held))

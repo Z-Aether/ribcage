@@ -34,6 +34,15 @@ def positive_whole_number(name, default):
     return int(value)
 
 
+def choice(name, options, default):
+    value = os.environ.get(name, "").strip()
+    if not value:
+        return default
+    if value not in options:
+        raise ImproperlyConfigured(f"Set {name} to one of: {', '.join(options)}, not {value!r}.")
+    return value
+
+
 def load_file(path):
     # Docker's env-file format: NAME=value verbatim, no quotes or interpolation; the environment wins.
     if not path.exists():

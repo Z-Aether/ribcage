@@ -6,6 +6,7 @@ Every read of a row is a function of its film set and the `StoredVotes`. The `St
 from dataclasses import dataclass
 
 from ribcage.readouts import plan as plans
+from ribcage.readouts import tiebreaker
 from ribcage.readouts.basis import Basis, under
 from ribcage.readouts.floor import FloorSet
 from ribcage.readouts.slate import SlateEntry, film_points, slate_order
@@ -51,13 +52,7 @@ class Read:
     total: int
 
 
-def total(films, records):
-    """A slate's total: everyone's score for every film in it, a veto -2 and an unplaced film 0, which is the sum of its film points (#6, #24).
-
-    `records` are (voter, film, score, vetoed, seen_it).
-    """
-    on_slate = set(films)
-    return sum(film_points([(score, vetoed)]) for _, film, score, vetoed, _ in records if film in on_slate)
+total = tiebreaker.total  # the tiebreaker `total`'s key, kept here for the row's figure (#175)
 
 
 def read(films, on):
@@ -88,10 +83,11 @@ class Standing:
 
 
 def standings(rows, size, multiplier):
-    """The standing of each of `rows`, (floor, Σrep, total) triples with floor None for an empty floor set, over a floor set of `size` voters.
+    """The standing of each of `rows`, (floor, Σrep, tiebreaker key) triples with floor None for an empty floor set, over a floor set of `size` voters.
 
     Tiers group rows equal on floor and Σrep and are numbered by `W·m + Σrep` from the best, `W = multiplier · size`;
-    the best row has the highest of that, then the highest total, and nothing ranks rows within a tier (#17, #24, #33).
+    the best row has the highest of that, then the highest key, and nothing ranks rows within a tier (#17, #24, #33, #175).
+    `total_distance` is the key's distance from the best's, the figure under `total`, whose key is a number.
     """
     weight = multiplier * size
     objective = [(floor or 0) * weight + sigma for floor, sigma, _ in rows]
@@ -99,7 +95,7 @@ def standings(rows, size, multiplier):
     groups = {}
     for each, (floor, sigma, whole) in enumerate(rows):
         groups.setdefault((floor, sigma), []).append(each)
-    ordered = sorted(groups, key=lambda key: (-objective[groups[key][0]], -max(rows[each][2] for each in groups[key])))
+    ordered = sorted(groups, key=lambda key: (objective[groups[key][0]], max(rows[each][2] for each in groups[key])), reverse=True)
     tier_of = {key: place for place, key in enumerate(ordered, 1)}
     result = []
     for each, (floor, sigma, whole) in enumerate(rows):

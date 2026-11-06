@@ -43,7 +43,7 @@ def test_the_endings_name_themselves_where_enumeration_finds_nothing():
     assert feasible_slates(pins) == []
     assert batch.ending_of(pins, [], None).startswith("The films fixed in alone exceed the budget")
     assert batch.ending_of(problem_of(by_name["nothing fits"])) == batch.NOTHING_FITS
-    assert batch.ending_of(problem_of(by_name["an empty floor set"])) == batch.NO_FLOOR
+    assert batch.ending_of(problem_of(by_name["an empty floor set"])) == batch.NO_FLOOR.format(rule="total")
     assert batch.ending_of(problem_of(by_name["no films"])) == batch.NO_FILMS
     knob = by_name["every film fixed out"]
     assert batch.ending_of(problem_of(knob), basis=Basis(fixed_out=frozenset(knob.fixed_out))) == batch.ALL_OUT

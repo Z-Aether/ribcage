@@ -1,7 +1,7 @@
 """The enumeration oracle: SOLVE's answers against every slate within the budget, scored by the solver's own objective (#6, #25, #173).
 
 An `Instance` is plain data (voters, runtimes, records, budget, knobs), so a later harness can build one from real votes: `problem_of(instance)` is the `Problem` the batch would solve.
-Ties are compared by objective value, never by film set.
+Slates are compared on `Value.key`, ties by it and never by film set.
 It cannot enumerate long budgets: past about 16 films or 12 hours it falls off a cliff (#6).
 
 Regenerate `fixtures/solver/cases.json` with `python -m tests.oracle`, and only when the objective or a hand-chosen case changes on purpose; say which in the commit.
@@ -37,6 +37,7 @@ class Instance:
     fixed_out: tuple = ()
     distance: int = 4
     length: int = 5
+    tiebreaker: str = "total"
 
     def encoded(self):
         return {**self.__dict__, "records": [list(each) for each in self.records]}
@@ -58,11 +59,11 @@ def votes_of(instance):
 def problem_of(instance):
     """The `Problem` the batch solves for `instance`, through `votes_of` and the batch's own `problem_of` (#167, #168)."""
     on, basis = votes_of(instance)
-    return batch.problem_of(on, instance.multiplier, basis)
+    return batch.problem_of(on, instance.multiplier, basis, instance.tiebreaker)
 
 
 def feasible_slates(problem):
-    """Every film set within the budget holding the films fixed in, each with its objective's integer."""
+    """Every film set within the budget holding the films fixed in, each with its key (`Value.key`)."""
     films = sorted(problem.runtimes)
     pinned = set(problem.fixed_in)
     found = []
@@ -79,12 +80,17 @@ def feasible_slates(problem):
             walk(index + 1, chosen, used)
 
     walk(0, frozenset(), 0)
-    return [(each, value(each, problem).integer) for each in found]
+    return [(each, value(each, problem).key) for each in found]
 
 
 def best_far_from(slates, before, distance):
-    """The best integer among `slates` at least `distance` films from every slate in `before`, or None where there is none."""
-    return max((integer for each, integer in slates if all(len(each ^ other) >= distance for other in before)), default=None)
+    """The best key among `slates` at least `distance` films from every slate in `before`, or None where there is none."""
+    return max((key for each, key in slates if all(len(each ^ other) >= distance for other in before)), default=None)
+
+
+def listed(key):
+    """A key as JSON holds it, tuples as lists, so the fixture compares to a fresh key."""
+    return [listed(each) for each in key] if isinstance(key, tuple) else key
 
 
 def disagreements(instance, slates=None):
@@ -98,7 +104,7 @@ def disagreements(instance, slates=None):
     said = []
     for place, each in enumerate(proposals):
         best = best_far_from(every, proposals[:place], instance.distance)
-        got = value(each, problem).integer
+        got = value(each, problem).key
         if best is None:
             said.append(f"proposal {place + 1} should not exist")
         elif got != best:
@@ -190,7 +196,7 @@ def solved(instance):
         raise AssertionError(f"{instance.name}: " + "; ".join(said))
     proposals, short = batch.chain(problem, instance.length, instance.distance)
     steps = [
-        {"films": sorted(each), "best": best_far_from(every, proposals[:place], instance.distance), "triple": list(value(each, problem).triple)}
+        {"films": sorted(each), "best": listed(best_far_from(every, proposals[:place], instance.distance)), "triple": list(value(each, problem).triple)}
         for place, each in enumerate(proposals)
     ]
     return {"instance": instance.encoded(), "steps": steps, "exhausted": short}

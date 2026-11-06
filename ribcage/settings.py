@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from ribcage import environment
+from ribcage.readouts import tiebreaker
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -174,6 +175,8 @@ FLOOR_WEIGHT_MULTIPLIER = environment.positive_whole_number("FLOOR_WEIGHT_MULTIP
 BATCH_SIZE = environment.positive_whole_number("BATCH_SIZE", default=5)
 # RUN's clock runs on the device, so a 30–60 s poll carries only the admin's edits and phase moves (#13, #36).
 POLL_INTERVAL_SECONDS = environment.positive_whole_number("POLL_INTERVAL_SECONDS", default=30)
+# The rule that separates slates equal on floor and Σrep: `total` so far (#175).
+SLATE_TIEBREAKER = environment.choice("SLATE_TIEBREAKER", tuple(tiebreaker.KEYS), default=tiebreaker.DEFAULT)
 # Yes votes a matched topic needs, beyond outnumbering its no votes, to show the trigger icon (#20).
 TRIGGER_ICON_THRESHOLD = environment.positive_whole_number("TRIGGER_ICON_THRESHOLD", default=5)
 # Login backoff: this many failures for one display name within the window bring a wait (#31, #71).

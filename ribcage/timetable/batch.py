@@ -13,7 +13,7 @@ from ribcage.solver.model import solve
 from ribcage.solver.objective import Problem, scale_of
 
 NOTHING_FITS = "Nothing fits the budget, so the proposal is the empty slate."
-NO_FLOOR = "Nobody is in the floor set, so the total alone is optimised."
+NO_FLOOR = "Nobody is in the floor set, so the tiebreaker ({rule}) alone is optimised."
 NO_FILMS = "No film is approved, so there is nothing to propose."
 ALL_OUT = "Every film is fixed out, so there is nothing to propose."
 
@@ -22,7 +22,7 @@ def solver_sources():
     """The files whose bytes a solve's result depends on: the solver, the film points it calls and this chain (#166)."""
     here = Path(__file__).resolve()
     ribcage = here.parent.parent
-    return [*sorted((ribcage / "solver").glob("*.py")), ribcage / "readouts" / "slate.py", here]
+    return [*sorted((ribcage / "solver").glob("*.py")), ribcage / "readouts" / "slate.py", ribcage / "readouts" / "tiebreaker.py", here]
 
 
 def code_digest():
@@ -47,12 +47,12 @@ class Batch:
     solving: bool = True  # whether this render solved anything, so `solved_ms` is only that time
 
 
-def problem_of(on, multiplier, basis=Basis()):
-    """SOLVE's `Problem` from the stored votes: the ballot's films but those fixed out, every voter counted until #167's knobs set one aside, the films fixed in pinned (#168)."""
+def problem_of(on, multiplier, basis=Basis(), tiebreaker=None):
+    """SOLVE's `Problem` from the stored votes: the ballot's films but those fixed out, every voter counted until #167's knobs set one aside, the films fixed in pinned (#168), under the tiebreaker `SLATE_TIEBREAKER` names unless one is given (#175)."""
     runtimes = {film: on.runtimes[film] for film in on.candidates if film not in basis.fixed_out}
     records = tuple(each for each in on.records if each[1] in runtimes)
     pinned = tuple(film for film in on.candidates if film in runtimes and film in basis.fixed_in)
-    return Problem(on.voters, runtimes, records, on.budget, on.floor_set, multiplier, pinned)
+    return Problem(on.voters, runtimes, records, on.budget, on.floor_set, multiplier, pinned, settings.SLATE_TIEBREAKER if tiebreaker is None else tiebreaker)
 
 
 def pins_say(given, titles):
@@ -72,7 +72,7 @@ def ending_of(given, slates=(), titles=None, basis=Basis()):
         return ALL_OUT if basis.fixed_out else NO_FILMS
     if given.budget is not None and min(given.runtimes.values()) > given.budget:
         return NOTHING_FITS
-    return NO_FLOOR if not given.floor_set.size else ""
+    return NO_FLOOR.format(rule=given.tiebreaker) if not given.floor_set.size else ""
 
 
 def stopped_says(distance, slates=(True,)):
@@ -111,6 +111,7 @@ def fingerprint(given, size, distance):
         given.floor_set.out,
         given.multiplier,
         given.fixed_in,
+        given.tiebreaker,
         size,
         distance,
         SOLVER_CODE,

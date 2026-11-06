@@ -81,8 +81,8 @@ def test_simultaneous_sqlite_writers_queue_in_wal_mode(monkeypatch):
     assert options["timeout"] >= 20
 
 
-# Defaults as the tickets decided them: #17, #33, #13, #20, #31, #21 and #88.
-JUDGEMENT_DEFAULTS = {
+# Defaults as the tickets decided them: #17, #33, #13, #20, #31, #21 and #88; the whole numbers alone, since a choice has its own tests.
+WHOLE_NUMBER_DEFAULTS = {
     "DIVERSITY_CUT": 2,
     "FLOOR_WEIGHT_MULTIPLIER": 1,
     "BATCH_SIZE": 5,
@@ -96,6 +96,10 @@ JUDGEMENT_DEFAULTS = {
 }
 
 
+# The choice among rules, defaulted by #175.
+JUDGEMENT_DEFAULTS = {**WHOLE_NUMBER_DEFAULTS, "SLATE_TIEBREAKER": "total"}
+
+
 @pytest.mark.parametrize(("name", "default"), JUDGEMENT_DEFAULTS.items())
 def test_a_judgement_constant_falls_back_to_its_decided_default(monkeypatch, name, default):
     monkeypatch.delenv(name, raising=False)
@@ -103,7 +107,7 @@ def test_a_judgement_constant_falls_back_to_its_decided_default(monkeypatch, nam
     assert load_settings()[name] == default
 
 
-@pytest.mark.parametrize("name", JUDGEMENT_DEFAULTS)
+@pytest.mark.parametrize("name", WHOLE_NUMBER_DEFAULTS)
 def test_a_judgement_constant_is_overridden_from_the_environment(monkeypatch, name):
     monkeypatch.setenv(name, "7")
 
@@ -118,12 +122,33 @@ def test_a_judgement_constant_that_is_not_a_whole_number_stops_startup_naming_it
         load_settings()
 
 
-@pytest.mark.parametrize("name", JUDGEMENT_DEFAULTS)
+@pytest.mark.parametrize("name", WHOLE_NUMBER_DEFAULTS)
 def test_a_judgement_constant_set_to_zero_stops_startup_naming_it(monkeypatch, name):
     monkeypatch.setenv(name, "0")
 
     with pytest.raises(ImproperlyConfigured, match=f"Set {name} to a whole number of at least 1"):
         load_settings()
+
+
+def test_the_slate_tiebreaker_takes_a_rule_by_name_and_a_blank_gives_the_default(monkeypatch):
+    monkeypatch.setenv("SLATE_TIEBREAKER", "total")
+    assert load_settings()["SLATE_TIEBREAKER"] == "total"
+    monkeypatch.setenv("SLATE_TIEBREAKER", "  ")
+    assert load_settings()["SLATE_TIEBREAKER"] == "total"
+
+
+def test_a_slate_tiebreaker_naming_no_rule_stops_startup_naming_the_variable_and_every_rule(monkeypatch):
+    monkeypatch.setenv("SLATE_TIEBREAKER", "sum")
+
+    with pytest.raises(ImproperlyConfigured, match=r"Set SLATE_TIEBREAKER to one of: total, not 'sum'\."):
+        load_settings()
+
+
+def test_the_compose_file_passes_every_judgement_constant_through():
+    text = (EXAMPLE_ENV_FILE.parent / "compose.yaml").read_text()
+
+    for name in JUDGEMENT_DEFAULTS:
+        assert f"{name}: ${{{name}:-}}" in text
 
 
 def test_the_example_env_file_names_every_variable_and_nothing_else():

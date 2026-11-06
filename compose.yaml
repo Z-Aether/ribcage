@@ -23,6 +23,7 @@ services:
       MARATHON_NAME: ${MARATHON_NAME:-}
       # Judgement constants: left empty, each keeps its default (#25).
       DIVERSITY_CUT: ${DIVERSITY_CUT:-}
+      SLATE_TIEBREAKER: ${SLATE_TIEBREAKER:-}
       FLOOR_WEIGHT_MULTIPLIER: ${FLOOR_WEIGHT_MULTIPLIER:-}
       BATCH_SIZE: ${BATCH_SIZE:-}
       POLL_INTERVAL_SECONDS: ${POLL_INTERVAL_SECONDS:-}

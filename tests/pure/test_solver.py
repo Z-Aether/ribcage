@@ -21,7 +21,7 @@ def problem(runtimes, records, voters=("a", "b"), budget=None, members=None, mul
 
 
 def best_by_enumeration(given, scale=None):
-    """Every subset within the budget, the best by the objective's integer."""
+    """Every subset within the budget, the best by the objective's key."""
     films = sorted(given.runtimes)
     fits = [
         frozenset(chosen)
@@ -29,7 +29,7 @@ def best_by_enumeration(given, scale=None):
         for chosen in itertools.combinations(films, size)
         if given.budget is None or sum(given.runtimes[each] for each in chosen) <= given.budget
     ]
-    return max(value(each, given, scale).integer for each in fits)
+    return max(value(each, given, scale).key for each in fits)
 
 
 def test_only_the_total_separates_two_slates_and_the_gap_is_zero(monkeypatch):
@@ -141,5 +141,5 @@ def test_the_solver_matches_the_best_subset_by_the_objective(seed):
 
     chosen = solve(given)
 
-    assert value(chosen, given).integer == best_by_enumeration(given)
+    assert value(chosen, given).key == best_by_enumeration(given)
     assert given.budget is None or sum(films[each] for each in chosen) <= given.budget

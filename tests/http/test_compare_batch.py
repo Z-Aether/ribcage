@@ -81,10 +81,10 @@ def test_no_budget_says_nothing(admin, votes):
     assert "batch-banner__ending" not in section
 
 
-def test_an_empty_floor_set_says_the_total_alone_is_optimised(admin, votes):
+def test_an_empty_floor_set_says_the_tiebreaker_alone_is_optimised(admin, votes):
     BallotRecord.objects.all().delete()
 
-    assert "Nobody is in the floor set, so the total alone is optimised." in text(batch(admin.get(COMPARE).text))
+    assert "Nobody is in the floor set, so the tiebreaker (total) alone is optimised." in text(batch(admin.get(COMPARE).text))
 
 
 def test_a_dropped_film_on_the_plan_is_never_proposed(admin, votes):

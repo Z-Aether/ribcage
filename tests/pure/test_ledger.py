@@ -97,3 +97,19 @@ def test_the_dots_put_the_core_first_then_the_rest_each_in_slate_order():
     assert dots([{"cube", "tron", "alien"}, {"alien", "tron", "thing"}], rank).columns == ("alien", "tron", "cube", "thing")
     assert dots([{"tron", "cube"}], rank).columns == ("cube", "tron")
     assert dots([], rank).columns == ()
+
+
+def test_the_tiers_order_on_any_comparable_key_not_only_a_number():
+    from dataclasses import dataclass
+
+    @dataclass(frozen=True, order=True)
+    class Key:  # stands for #176's tuple keys: ordered, not negatable
+        part: int
+
+        def __sub__(self, other):
+            return self.part - other.part
+
+    stood = standings([(2, 5, Key(1)), (2, 5, Key(9)), (1, 4, Key(3))], 3, 1)
+
+    assert [each.tier for each in stood] == [1, 1, 2]
+    assert stood[1].best

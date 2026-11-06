@@ -11,7 +11,7 @@ import pytest
 
 from ribcage.solver.model import solve
 from ribcage.solver.objective import value
-from tests.oracle import CASES, Instance, problem_of
+from tests.oracle import CASES, Instance, listed, problem_of
 
 STORED = json.loads(CASES.read_text())
 
@@ -34,7 +34,7 @@ def test_the_solver_and_the_objective_match_the_enumerated_answer(stored):
     for place, step in enumerate(stored["steps"]):
         assert list(value(slates[place], problem).triple) == step["triple"]
         best = solve(problem, found=slates[:place], distance=instance.distance)
-        assert value(best, problem).integer == step["best"]
+        assert listed(value(best, problem).key) == step["best"]
     after = solve(problem, found=slates, distance=instance.distance)
     if stored["exhausted"]:
         assert after is None or after in slates

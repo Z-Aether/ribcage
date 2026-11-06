@@ -162,8 +162,11 @@ A voter's score for their representative in a slate; zero if they have none. The
 _Avoid_: satisfaction, happiness
 
 **Total**:
-The sum of every voter's score for every film in a slate. The objective's least component: it separates slates equal on floor and Σrep and can never outweigh either. (#6, #10)
-_Avoid_: ε, tie-break, tiebreaker
+The sum of every voter's score for every film in a slate. It is the tiebreaker rule `total`, the one rule there is. (#6, #10, #175)
+
+**Tiebreaker**:
+The objective's least component: it separates slates equal on floor and Σrep and can never outweigh either. Which rule it is comes from `SLATE_TIEBREAKER`, and `total` is the one rule. (#175, #66's note of 2026-11-06)
+_Avoid_: ε, tie-break
 
 **Floor set**:
 The voters the floor is computed over: everyone who could be represented above zero — a positive score on a candidate they have neither seen nor vetoed, that is not fixed out and fits the budget on its own — minus anyone set aside by the without-a-voter knob. Never everyone registered; a voter with no ballot is simply one who fails the test. Recomputed on every solve, and anyone outside it is named on screen with the reason. (#8, #15, #17, #28, #33)

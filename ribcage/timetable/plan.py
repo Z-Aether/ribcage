@@ -8,7 +8,7 @@ from django.db.models import Exists, OuterRef, Q
 from ribcage.ballot import floor as ballot_floor
 from ribcage.ballot.board import candidates
 from ribcage.ballot.models import BallotRecord
-from ribcage.readouts import ledger, plan
+from ribcage.readouts import ledger, plan, tiebreaker
 from ribcage.readouts import swap as swapping
 from ribcage.readouts.basis import NO_KNOBS, Basis, label
 from ribcage.shortlist import keeping
@@ -213,7 +213,7 @@ def of(asked, on, names, titles, prefix="slate", banners=None, pinned=frozenset(
     """
     banners = banners or {}
     reads = [ledger.read(each.films, on) for each in asked]
-    stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, each.total) for each in reads], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
+    stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, tiebreaker.KEYS[settings.SLATE_TIEBREAKER](each.films, on.records)) for each in reads], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
     shown = ledger.dots([each.films for each in reads], on.rank)
     rows = [
         {**row_of(one, stand, names, titles, on.runtimes, shown, pinned, dropped), "id": f"{prefix}-{number}", "label": each.label, **acts_of(each)}

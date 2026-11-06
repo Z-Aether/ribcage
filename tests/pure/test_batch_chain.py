@@ -118,6 +118,7 @@ def test_the_fingerprint_changes_with_anything_the_solve_reads():
     assert fingerprint(given, 6, 4) != same and fingerprint(given, 5, 3) != same
     assert fingerprint(dataclasses.replace(given, budget=300), 5, 4) != same
     assert fingerprint(dataclasses.replace(given, multiplier=given.multiplier + 1), 5, 4) != same
+    assert fingerprint(dataclasses.replace(given, tiebreaker="another"), 5, 4) != same
 
 
 def test_the_fingerprint_changes_with_the_code_the_solve_runs_on(monkeypatch):
@@ -135,10 +136,10 @@ def test_the_code_digest_reads_the_solver_the_film_points_and_the_chain():
 
     names = {"/".join(each.parts[-2:]) for each in batch.solver_sources()}
 
-    assert {"solver/model.py", "solver/objective.py", "readouts/slate.py", "timetable/batch.py"} <= names
+    assert {"solver/model.py", "solver/objective.py", "readouts/slate.py", "readouts/tiebreaker.py", "timetable/batch.py"} <= names
 
 
-@pytest.mark.parametrize("name", ["solver/model.py", "solver/objective.py", "readouts/slate.py", "timetable/batch.py"])
+@pytest.mark.parametrize("name", ["solver/model.py", "solver/objective.py", "readouts/slate.py", "readouts/tiebreaker.py", "timetable/batch.py"])
 def test_the_code_digest_changes_when_any_file_it_reads_changes(monkeypatch, name):
     from pathlib import Path
 
@@ -150,3 +151,18 @@ def test_the_code_digest_changes_when_any_file_it_reads_changes(monkeypatch, nam
     monkeypatch.setattr(Path, "read_bytes", lambda self: read(self) + (b"changed" if "/".join(self.parts[-2:]) == name else b""))
 
     assert batch.code_digest() != before
+
+
+def test_the_setting_reaches_the_problem_and_the_fingerprint(settings):
+    from ribcage.timetable.batch import fingerprint, problem_of
+    from tests.oracle import Instance, votes_of
+
+    instance = Instance("one", ("a",), {"f": 60}, (("a", "f", 3, False, False),), 120)
+    on, _ = votes_of(instance)
+    default = problem_of(on, 1)
+
+    settings.SLATE_TIEBREAKER = "another"
+    changed = problem_of(on, 1)
+
+    assert changed.tiebreaker == "another" != default.tiebreaker
+    assert fingerprint(changed, 5, 4) != fingerprint(default, 5, 4)
