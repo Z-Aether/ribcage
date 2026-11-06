@@ -52,3 +52,17 @@ def test_a_file_becomes_an_instance_leaving_out_the_unmatched(tmp_path):
 
 def test_the_harness_skips_cleanly_without_the_directory(tmp_path):
     assert tuning.past_instances(tmp_path / "missing", ([], {}, {})) == []
+
+
+def test_the_summary_names_each_rule_and_each_instance_by_letter_with_its_worst_and_median():
+    rows = [
+        {"instance": letter, "rule": rule, "k": 2, "budget": 8, "knob": "none", "answer": "open", "solve_ms": ms, "render_ms": ms, "slates": 1, "stopped": False}
+        for letter, rule, ms in [("A", "total", 100), ("A", "total", 300), ("B", "total", 200), ("A", "leximin", 4000), ("B", "leximin", 500)]
+    ]
+    said = []
+
+    tuning.summarise(rows, said.append)
+
+    assert any(line.startswith("leximin k=2: 2 answers, worst render 4000 ms (A,") and line.endswith("over 3 s: 1") for line in said)
+    assert "  A: median 300 ms, worst 300 ms" in said and "  B: median 500 ms, worst 500 ms" in said
+    assert any(line.startswith("total k=2: 3 answers, worst render 300 ms") for line in said)
