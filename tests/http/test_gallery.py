@@ -316,11 +316,24 @@ def test_the_gallery_shows_the_slate_ledger_row_collapsed_and_expanded(client, d
     page = client.get(GALLERY).text
     section = re.search(r'id="slate-ledger".*?</section>', page, re.S)[0]
 
-    assert section.count('data-slate-row') == 6
-    assert section.count('aria-expanded="true"') == 1 and section.count('aria-expanded="false"') == 5
+    assert section.count('data-slate-row') == 9
+    assert section.count('aria-expanded="true"') == 1 and section.count('aria-expanded="false"') == 8
     assert "tied with the best" in section or "best on screen" in section
     assert 'class="slate-row__over">over' in section
-    assert len(set(re.findall(r'id="([^"]*-detail)"', section))) == 6
+    assert len(set(re.findall(r'id="([^"]*-detail)"', section))) == 9
+
+
+def test_the_gallery_draws_the_ledger_and_the_swap_under_both_tiebreakers(client, debug):
+    section = re.search(r'id="slate-ledger".*?</section>', client.get(GALLERY).text, re.S)[0]
+
+    assert re.findall(r'<th scope="col" class="ledger__number" data-tiebreaker>(.*?)</th>', section) == ["Leximin", "Leximin", "Total"]
+    assert re.findall(r'<tr data-swap-tiebreaker><th scope="row">(.*?)</th>', section) == ["Leximin"]
+    assert section.count("data-swap-total") == 2
+    # Leximin marks the lowest slate sum, tied on the proposal, and total marks nothing.
+    leximin, total = section.split("The same ledger under the total tiebreaker")
+    assert leximin.count("slate-strip__cell--lowest") >= 4 and "slate-strip__cell--lowest" not in total.split("The swap panel")[0]
+    assert "Eli: nothing representable, slate sum 0" in section
+    assert "−2 at 2nd" in leximin and "−4 at 2nd" in leximin
 
 
 def test_the_gallerys_slate_ledger_keeps_and_discards_nothing(client, debug):

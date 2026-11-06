@@ -34,7 +34,7 @@ class Move:
     after: Side
     out: str
     change: int  # the score after minus before, 0 for a voter outside the floor set
-    sum_change: object  # the slate sum after minus before, or None where either is
+    sum_change: object  # the slate sum after minus before, or None where either is (a voter out for *nothing representable* has one, #177)
 
 
 @dataclass(frozen=True)
@@ -61,7 +61,7 @@ def swap(before, after, on):
     moves = []
     for was, now in zip(left.plan.rows, right.plan.rows):
         one, two = left_sides[was.voter], right_sides[was.voter]
-        both = not was.out and two.slate_sum is not None and one.slate_sum is not None
+        both = was.voter in left.plan.counted and two.slate_sum is not None and one.slate_sum is not None
         moves.append(Move(was.voter, one, two, was.out, 0 if was.out else two.score - one.score, two.slate_sum - one.slate_sum if both else None))
     return Swap(
         tuple(each for each in left.films if each in held_right),

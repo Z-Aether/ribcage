@@ -37,7 +37,7 @@
   <td><span class="slate-row__tier{% if row.tied > 1 %} slate-row__tier--tied{% endif %}">tier {{ row.tier }}{% if row.tied > 1 %} · tied ×{{ row.tied }}{% endif %}</span></td>
   <td class="ledger__number slate-row__floor">{% if row.floor is None %}<span class="ledger__muted">no floor</span>{% else %}{{ row.floor }} <small class="slate-row__distance">{{ row.floor_distance }}</small>{% endif %}</td>
   <td class="ledger__number slate-row__sigma">{{ row.sigma_rep }} <small class="slate-row__distance">{{ row.sigma_distance }}</small></td>
-  <td class="ledger__number slate-row__total">{{ row.total }} <small class="slate-row__distance">{{ row.total_distance }}</small></td>
+  <td class="ledger__number slate-row__total">{{ row.tiebreaker.value }} <small class="slate-row__distance">{{ row.tiebreaker.distance }}</small></td>
   <td class="slate-row__films">{{ row.films }} · {{ row.screen_time }}{% if row.over %} <strong class="slate-row__over">over</strong>{% elif not row.budget %} <span class="ledger__muted">no budget</span>{% endif %}{% if row.dropped %} <span class="slate-row__dropped" data-dropped title="Dropped since: {{ row.dropped|join:', ' }}">dropped: {{ row.dropped|join:", " }}</span>{% endif %}</td>
   <td>
     {% include "components/slate_strip.html" %}
@@ -102,7 +102,7 @@
           {% for each in row.vetoed %}{% if not forloop.first %}; {% endif %}{{ each.film }} ({{ each.by|join:", " }}){% empty %}none{% endfor %}
         </p>
         {% if row.provenance %}<p class="slate-row__provenance" data-provenance>{{ row.provenance }}</p>{% endif %}
-        <p class="slate-row__objective ledger__muted">{% if row.floor is None %}no floor{% else %}floor {{ row.floor }}{% endif %} · Σrep {{ row.sigma_rep }} · total {{ row.total }}</p>
+        <p class="slate-row__objective ledger__muted">{% if row.floor is None %}no floor{% else %}floor {{ row.floor }}{% endif %} · Σrep {{ row.sigma_rep }} · total {{ row.total }}{% if row.tiebreaker.line %} · {{ row.tiebreaker.line }}{% endif %}</p>
       </div>
     </div>
   </td>

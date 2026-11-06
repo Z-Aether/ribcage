@@ -110,10 +110,8 @@ def test_compare_renders_the_batch_and_every_row_under_each_rule(admin, votes, s
     page = response.text
     assert cells(batch(page))["label"].startswith("Proposal 1")
     assert cells(batch(page))["films"] == "2 · 3h19m"
-    distances = re.findall(r'<td class="ledger__number slate-row__total">\d+ <small class="slate-row__distance">(.*?)</small>', page)
-    # The total's distance from the best row is a number under `total`; the leximin key is no number, so #177 draws its own.
-    assert distances
-    assert bool(any(text(each) for each in distances)) == (rule == "total")
+    assert re.search(r'<th scope="col" class="ledger__number" data-tiebreaker>(Total|Leximin)</th>', page)[1] == rule.capitalize()
+    assert re.findall(r'<td class="ledger__number slate-row__total">\d+ <small class="slate-row__distance">(.*?)</small>', page)
 
 
 def test_a_dropped_film_on_the_plan_is_never_proposed(admin, votes):

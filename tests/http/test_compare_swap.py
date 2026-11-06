@@ -75,7 +75,7 @@ def test_the_panel_answers_the_swap_from_the_plan_to_a_slate(admin, room):
     assert lines(page, "data-swap-shared") == ["Shared: The Thing"]
     assert lines(page, "data-swap-out") == ["Out: Cube"]
     assert lines(page, "data-swap-in") == ["In: Alien"]
-    assert numbers(page) == {"Floor": "2 → 1", "Σrep": "5 → 4", "Total": "4 → 6", "Screen time": "3h19m → 3h46m", "Vetoes in the room": "1 → 0 −1"}
+    assert numbers(page) == {"Floor": "2 → 1", "Σrep": "5 → 4", "Total": "4 → 6", "Leximin": "0 · 4 → 1 · 5 +1 at 1st", "Screen time": "3h19m → 3h46m", "Vetoes in the room": "1 → 0 −1"}
     assert lines(page, "data-swap-film-out") == ["− Cube 90m · 1 pts · was ada's"]
     assert lines(page, "data-swap-film-in") == ["+ Alien 117m · 3 pts · now Dani's"]
     assert moves(page)["ada"].count("▼ 2") == 1 and "▲ 1" in moves(page)["Dani"]

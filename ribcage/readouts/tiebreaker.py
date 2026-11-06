@@ -62,5 +62,47 @@ def leximin_distance(key, best):
     return None
 
 
+def signed(distance):
+    """A distance from the best row: = when level, else the figure with its sign (a true minus sign) (#164)."""
+    return "=" if not distance else f"{distance:+d}".replace("-", "−")
+
+
+def ordinal(place):
+    """1st, 2nd, 3rd, 4th, 11th, 21st."""
+    teens = place % 100 in (11, 12, 13)
+    return f"{place}{'th' if teens else {1: 'st', 2: 'nd', 3: 'rd'}.get(place % 10, 'th')}"
+
+
+def leximin_words(key, best):
+    """Where `key` falls short of or beats `best`, as the ledger says it: *−1 at 2nd*, or *=* when the two are the same throughout (#177)."""
+    gap = leximin_distance(key, best)
+    return "=" if gap is None else f"{signed(gap.by)} at {ordinal(gap.position)}"
+
+
+def _sums(key):
+    return " · ".join(str(each) for each in key)
+
+
+@dataclass(frozen=True)
+class Column:
+    """What a rule shows on Compare, in words over its key: its column's header, the figure and the distance from the best row's key, its line in the breakdown and its row in the swap (#177).
+
+    `swap` is the swap's row for the rule, or None where the ledger's *Total* row already says it; `marks_lowest` is whether the strip marks the voters holding the lowest slate sum.
+    A rule's readouts live here and the templates only draw them.
+    """
+
+    header: str
+    value: object  # key -> str
+    distance: object  # (key, best key) -> str
+    line: object  # key -> str, "" for none
+    swap: object  # key -> str, or None for no row
+    marks_lowest: bool
+
+
+COLUMNS = {
+    "total": Column("Total", str, lambda key, best: signed(key - best), lambda key: "", None, False),
+    "leximin": Column("Leximin", lambda key: str(key[0]) if key else "–", leximin_words, lambda key: f"leximin {_sums(key)}" if key else "", _sums, True),
+}
+
 KEYS = {"total": total, "leximin": leximin}
 DEFAULT = "leximin"

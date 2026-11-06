@@ -478,24 +478,35 @@ def reveal_matrix():
     return reveal.build(voters, shown, records, {(4, 14): "I won't sit through that one."}, viewer_id=1)
 
 
-def slate_ledger(open_first=False):
-    """The slate ledger over made-up votes: the plan, a level rival and a lesser slate over budget, the first row opened or not (#164)."""
-    voters = [(1, "Ada"), (2, "Bo"), (3, "Cy"), (4, "Dee")]
-    keys = {10: THE_THING, 11: EVENT_HORIZON, 12: CABINET_OF_CURIOSITIES, 13: INFESTED, 14: TERRIFIER, 15: MIDSOMMAR}
+def ledger_votes():
+    """The made-up votes the slate ledger and the swap are read over: Eli has nothing representable, a lowest slate sum is tied between two voters on the proposal, and the kept slate and the proposal are level on floor and Σrep until the 2nd place from the lowest (#164, #177)."""
+    voters = [(1, "Ada"), (2, "Bo"), (3, "Cy"), (4, "Dee"), (5, "Eli")]
+    keys = {10: THE_THING, 11: EVENT_HORIZON, 12: CABINET_OF_CURIOSITIES, 13: INFESTED, 14: TERRIFIER, 15: MIDSOMMAR, 16: CUBE}
     titles = {pk: film(key).title for pk, key in keys.items()}
-    runtimes = {10: 109, 11: 96, 12: 47, 13: 100, 14: 85, 15: 147}
+    runtimes = {10: 109, 11: 96, 12: 47, 13: 80, 14: 75, 15: 147, 16: 90}
     records = [
         (1, 10, 3, False, False), (1, 11, 2, False, False), (1, 15, None, True, False), (2, 10, 2, False, False), (2, 12, 3, False, False),
         (2, 14, None, True, False), (3, 11, 3, False, False), (3, 13, 1, False, False), (3, 15, 2, False, False), (4, 12, 2, False, False),
-        (4, 13, 3, False, False), (4, 14, 1, False, False),
+        (4, 13, 3, False, False), (4, 14, 1, False, False), (5, 11, 0, False, False), (5, 13, 0, False, False), (5, 16, -1, False, False),
     ]  # fmt: skip
     ids = [pk for pk, _ in voters]
     found = readouts_floor.floor_set(ids, runtimes, records, 360)
-    on = ledger.stored_votes(ids, found, records, titles, runtimes, set(runtimes), 360)
-    asked = [plan.Wanted(plan.THE_PLAN, plan.THE_PLAN, (10, 11, 12, 13)), plan.Wanted("Shortlist", "Kept 1", (10, 11, 12, 15), kept=1, provenance="found under: without Cy · rescored under the current basis"), plan.Wanted("This batch", "Proposal 1", (10, 12, 13, 14), keeps=True)]
-    drawn = plan.of(asked, on, dict(voters), titles, prefix="open" if open_first else "slate", dropped={15})
+    return dict(voters), titles, ledger.stored_votes(ids, found, records, titles, runtimes, set(runtimes), 360)
+
+
+def slate_ledger(open_first=False, rule="leximin"):
+    """The slate ledger over made-up votes under `rule`: the plan, a kept slate over budget and a level proposal, the first row opened or not (#164, #177)."""
+    names, titles, on = ledger_votes()
+    asked = [plan.Wanted(plan.THE_PLAN, plan.THE_PLAN, (10, 11, 12, 13)), plan.Wanted("Shortlist", "Kept 1", (10, 11, 12, 15), kept=1, provenance="found under: without Cy · rescored under the current basis"), plan.Wanted("This batch", "Proposal 1", (10, 11, 13, 14), keeps=True)]
+    drawn = plan.of(asked, on, names, titles, prefix=f"{rule}-open" if open_first else rule, dropped={15}, rule=rule)
     drawn["sections"][0]["rows"][0]["open"] = open_first
     return drawn
+
+
+def swap_panel(rule="leximin"):
+    """The swap panel from the plan to a slate with the film Eli scored -1 in, under `rule`: Eli's slate sum moves though nothing is representable for them (#170, #177)."""
+    names, titles, on = ledger_votes()
+    return plan.swap_drawn((10, 11, 12, 13), (10, 11, 12, 16), on, names, titles, "no knobs", {"before": [], "after": []}, rule)
 
 
 def shortlist_rows():
@@ -508,6 +519,8 @@ def gallery():
     return {
         "slate_ledger": slate_ledger(),
         "slate_ledger_open": slate_ledger(True),
+        "slate_ledger_total": slate_ledger(rule="total"),
+        "swaps": (("leximin", swap_panel("leximin")), ("total", swap_panel("total"))),
         "shortlist_rows": shortlist_rows(),
         "reveal_cells": reveal_cells(),
         "reveal_matrix": reveal_matrix(),

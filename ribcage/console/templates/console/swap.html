@@ -20,6 +20,7 @@
           <tr data-swap-floor><th scope="row">Floor</th><td>{% if swap.numbers.floor.before is None %}no floor{% else %}{{ swap.numbers.floor.before }}{% endif %} → {% if swap.numbers.floor.after is None %}no floor{% else %}{{ swap.numbers.floor.after }}{% endif %}</td></tr>
           <tr data-swap-sigma><th scope="row">Σrep</th><td>{{ swap.numbers.sigma_rep.before }} → {{ swap.numbers.sigma_rep.after }}</td></tr>
           <tr data-swap-total><th scope="row">Total</th><td>{{ swap.numbers.total.before }} → {{ swap.numbers.total.after }}</td></tr>
+          {% if swap.numbers.tiebreaker %}<tr data-swap-tiebreaker><th scope="row">{{ swap.numbers.tiebreaker.header }}</th><td>{{ swap.numbers.tiebreaker.before }} → {{ swap.numbers.tiebreaker.after }} <small class="swap__delta">{{ swap.numbers.tiebreaker.distance }}</small></td></tr>{% endif %}
           <tr data-swap-time><th scope="row">Screen time</th><td>{{ swap.numbers.screen_time.before }} → {{ swap.numbers.screen_time.after }}</td></tr>
           <tr data-swap-vetoes><th scope="row">Vetoes in the room</th><td>{{ swap.vetoes.before }} → {{ swap.vetoes.after }} <small class="swap__delta">{{ swap.vetoes.delta }}</small></td></tr>
         </tbody>

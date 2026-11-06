@@ -87,7 +87,7 @@ def standings(rows, size, multiplier):
 
     Tiers group rows equal on floor and Σrep and are numbered by `W·m + Σrep` from the best, `W = multiplier · size`;
     the best row has the highest of that, then the highest key, and nothing ranks rows within a tier (#17, #24, #33, #175).
-    `total_distance` is the key's distance from the best's where the key is a number, as under `total`; #177 draws the distance of a tuple key.
+    `total_distance` is the key's distance from the best's where the key is a number, as under `total`; the ledger's column words every rule's distance itself, through `tiebreaker.COLUMNS` (#177).
     """
     weight = multiplier * size
     objective = [(floor or 0) * weight + sigma for floor, sigma, _ in rows]

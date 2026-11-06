@@ -41,9 +41,7 @@ class Wanted:
     already_kept: bool = False
 
 
-def signed(distance):
-    """A distance from the best row: = when level."""
-    return "=" if not distance else f"{distance:+d}".replace("-", "\N{MINUS SIGN}")
+signed = tiebreaker.signed  # a distance from the best row: = when level
 
 
 def load(wanted=(), solved=False, rounds=1, kept=None, basis=Basis()):
@@ -123,8 +121,16 @@ def swap_of(before, after, basis=Basis()):
     """The swap panel's data from the film sets `before` and `after` (suggestion ids) under `basis`, plain: a film no longer in the pool is left out of its side's numbers and named in `gone` (#24, #170)."""
     votes = votes_under(set(before) | set(after), basis)
     left, right = (tuple(each for each in films if each in votes.titles) for films in (before, after))
-    found = swapping.swap(left, right, votes.on)
-    names, titles = votes.names, votes.titles
+    gone = {"before": [each for each in before if each not in votes.titles], "after": [each for each in after if each not in votes.titles]}
+    return swap_drawn(left, right, votes.on, votes.names, votes.titles, basis_line(votes), gone)
+
+
+def swap_drawn(left, right, on, names, titles, basis_words, gone, rule=None):
+    """The swap panel's data over a `ledger.StoredVotes`, the one drawing, which the gallery calls over made-up data too; the tiebreaker's row is the rule's own (#170, #177)."""
+    found = swapping.swap(left, right, on)
+    rule = rule or settings.SLATE_TIEBREAKER
+    column, key = tiebreaker.COLUMNS[rule], tiebreaker.KEYS[rule]
+    keys = key(left, on.records, on.floor_set), key(right, on.records, on.floor_set)
     pair = lambda one, two: {"before": one, "after": two}
 
     def film(each):
@@ -141,6 +147,7 @@ def swap_of(before, after, basis=Basis()):
             "floor": pair(*found.floor),
             "sigma_rep": pair(*found.sigma_rep),
             "total": pair(*found.total),
+            "tiebreaker": None if column.swap is None else {**pair(column.swap(keys[0]), column.swap(keys[1])), "header": column.header, "distance": column.distance(keys[1], keys[0])},
             "screen_time": pair(*(plan.clock(each) for each in found.screen_time)),
         },
         "vetoes": {**pair(*found.vetoes), "delta": signed(found.vetoes[1] - found.vetoes[0])},
@@ -150,8 +157,8 @@ def swap_of(before, after, basis=Basis()):
             {"name": names[each.voter], "out": each.out, "before": side(each.before), "after": side(each.after), "change": each.change, "sum_change": each.sum_change}
             for each in found.moves
         ],
-        "gone": {"before": [each for each in before if each not in votes.titles], "after": [each for each in after if each not in votes.titles]},
-        "basis": basis_line(votes),
+        "gone": gone,
+        "basis": basis_words,
     }
 
 
@@ -206,18 +213,24 @@ def proposal_label(number, slate):
     return f"Proposal {number}" if slate else f"Proposal {number} (empty slate)"
 
 
-def of(asked, on, names, titles, prefix="slate", banners=None, pinned=frozenset(), dropped=frozenset(), always=(THE_PLAN,)):
+def of(asked, on, names, titles, prefix="slate", banners=None, pinned=frozenset(), dropped=frozenset(), always=(THE_PLAN,), rule=None):
     """The ledger of `asked`, `Wanted` rows, over a `ledger.StoredVotes`: the one drawing, which the gallery calls over made-up data too.
 
     `banners` are a section's heading facts by name (#165); a banner's `more` is the header's count and "more" button (#166). `pinned` are the films fixed in, whose dots are outlined (#168). `dropped` are the films no longer on the ballot, marked on every row that holds one (#26 §5, #169); `always` are the sections drawn even when empty.
+
+    `rule` is the tiebreaker, `settings.SLATE_TIEBREAKER` unless the gallery draws another; its column, figures and distances come from `tiebreaker.COLUMNS` (#177).
     """
     banners = banners or {}
+    rule = rule or settings.SLATE_TIEBREAKER
+    column = tiebreaker.COLUMNS[rule]
     reads = [ledger.read(each.films, on) for each in asked]
-    stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, tiebreaker.KEYS[settings.SLATE_TIEBREAKER](each.films, on.records, on.floor_set)) for each in reads], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
+    keys = [tiebreaker.KEYS[rule](each.films, on.records, on.floor_set) for each in reads]
+    stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, key) for each, key in zip(reads, keys)], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
+    best = next((key for key, stand in zip(keys, stood) if stand.best), None)
     shown = ledger.dots([each.films for each in reads], on.rank)
     rows = [
-        {**row_of(one, stand, names, titles, on.runtimes, shown, pinned, dropped), "id": f"{prefix}-{number}", "label": each.label, **acts_of(each)}
-        for number, (each, one, stand) in enumerate(zip(asked, reads, stood))
+        {**row_of(one, stand, names, titles, on.runtimes, shown, pinned, dropped, column, key, best), "id": f"{prefix}-{number}", "label": each.label, **acts_of(each)}
+        for number, (each, one, stand, key) in enumerate(zip(asked, reads, stood, keys))
     ]
     sections = [
         {
@@ -229,7 +242,7 @@ def of(asked, on, names, titles, prefix="slate", banners=None, pinned=frozenset(
         for name in SECTIONS
         if name in always or name in banners or any(each.section == name for each in asked)
     ]
-    return {"columns": [{"id": film, "title": titles[film], "core": film in shown.core} for film in shown.columns], "sections": sections}
+    return {"columns": [{"id": film, "title": titles[film], "core": film in shown.core} for film in shown.columns], "sections": sections, "tiebreaker": column.header}
 
 
 def acts_of(each):
@@ -243,9 +256,12 @@ def acts_of(each):
     }
 
 
-def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset(), dropped=frozenset()):
-    """One row's data for `components/slate_row.html`, plain."""
+def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset(), dropped=frozenset(), column=tiebreaker.COLUMNS[tiebreaker.DEFAULT], key=(), best=()):
+    """One row's data for `components/slate_row.html`, plain; `column` is the tiebreaker's, `key` the row's and `best` the best row's (#177)."""
     read = one.plan
+    # The strip shows a slate sum for the voters leximin counts and none for a voter out for no ballot or set aside (#177).
+    sums = {each.voter: each.slate_sum for each in one.breakdown.people if each.voter in one.plan.counted}
+    lowest = set(tiebreaker.lowest(sums)) if column.marks_lowest else set()
     if stand.best:
         says = "best on screen"
     else:
@@ -260,7 +276,7 @@ def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset(), dropp
         "sigma_rep": read.sigma_rep,
         "sigma_distance": signed(stand.sigma_distance),
         "total": one.total,
-        "total_distance": "" if stand.total_distance is None else signed(stand.total_distance),
+        "tiebreaker": {"value": column.value(key), "distance": column.distance(key, best), "line": column.line(key)},
         "films": read.films,
         "dropped": [titles[film] for film in one.films if film in dropped],
         "screen_time": plan.clock(read.screen_time),
@@ -268,7 +284,8 @@ def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset(), dropp
         "over": read.over,
         "dots": [{"id": film, "title": titles[film], "held": film in held, "core": film in shown.core, "fixed": film in pinned} for film in shown.columns],
         "people": [
-            {"name": names[each.voter], "score": each.representation, "film": titles.get(each.representative), "out": each.out, "pins": each.pins} for each in read.rows
+            {"name": names[each.voter], "score": each.representation, "film": titles.get(each.representative), "out": each.out, "pins": each.pins, "sum": sums.get(each.voter), "lowest": each.voter in lowest}
+            for each in read.rows
         ],
         "vetoes": len(read.vetoed),
         "vetoed": [{"film": titles[each.film], "by": [names[voter] for voter in each.vetoers]} for each in read.vetoed],

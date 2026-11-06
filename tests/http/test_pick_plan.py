@@ -253,15 +253,15 @@ def test_the_plan_is_a_slate_ledger_row_with_its_tier_standing_strip_vetoes_and_
     assert re.findall(r'<tbody class="slate-ledger__section" aria-label="([^"]*)"', page) == ["The plan", "Shortlist", "This batch"]
     assert cells(page, {"label": "slate-row__label", "vetoes": "slate-row__vetoes"}) == {"label": "The plan best on screen", "vetoes": "1"}
     assert re.findall(r'<i class="slate-strip__cell ([^"]*)" title="([^"]*)"', page)[:2] == [
-        ("score--top-pick", "ada: Cube, 3"),
-        ("score--keen", "Dani, pins the floor: The Thing, 2"),
+        ("score--top-pick", "ada: Cube, 3, slate sum 4"),
+        ("score--keen slate-strip__cell--lowest", "Dani, pins the floor: The Thing, 2, slate sum 0, the lowest"),
     ]
     assert 'slate-strip__cell slate-strip__cell--out" title="Hanna: no ballot"' in page
     assert text(re.search(r'<span class="slate-row__tier">(.*?)</span>', page, re.S)[1]) == "tier 1"
     assert 'class="slate-strip__pin">★' in page
     assert re.findall(r'<th scope="col" data-film="\d+" class="slate-ledger__film[^"]*"><span title="([^"]*)"', page) == ["The Thing", "Cube"]
     assert page.count('class="slate-dot__mark"') == 2
-    assert text(re.search(r'<p class="slate-row__objective[^>]*>(.*?)</p>', page, re.S)[1]) == "floor 2 · Σrep 5 · total 4"
+    assert text(re.search(r'<p class="slate-row__objective[^>]*>(.*?)</p>', page, re.S)[1]) == "floor 2 · Σrep 5 · total 4 · leximin 0 · 4"
     assert "DoesTheDogDie" not in page
 
 
@@ -271,7 +271,7 @@ def test_removing_the_floor_pinners_film_changes_the_floor_and_the_strip(admin, 
     page = admin.get(COMPARE).text
 
     assert cells(page, {"floor": "slate-row__floor"}) == {"floor": "0 ="}
-    assert re.findall(r'<i class="slate-strip__cell ([^"]*)" title="([^"]*)"', page)[1] == ("score--dont-mind", "Dani, pins the floor: nothing on the slate")
+    assert re.findall(r'<i class="slate-strip__cell ([^"]*)" title="([^"]*)"', page)[1] == ("score--dont-mind slate-strip__cell--lowest", "Dani, pins the floor: nothing on the slate, slate sum -2, the lowest")
 
 
 def test_the_ledger_loads_further_rows_in_the_same_queries(admin, plan):

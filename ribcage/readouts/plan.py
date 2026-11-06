@@ -32,6 +32,7 @@ class Plan:
     floor: int  # or None with an empty floor set
     sigma_rep: int
     vetoed: tuple
+    counted: tuple = ()  # the voters `FloorSet.counted` names, the one rule for whom the tiebreaker, the strip and the worst served count (#177)
 
     @property
     def over(self):
@@ -75,7 +76,7 @@ def plan(voters, slate, runtimes, records, floor_set, budget):
         if each in chosen or each in reasons
     )
     vetoed = tuple(Vetoed(film, tuple(each for each in voters if each in vetoers[film])) for film in slate if film in vetoers)
-    return Plan(len(slate), sum(runtimes[film] for film in slate), budget, rows, floor, sum(score for _, score in chosen.values()), vetoed)
+    return Plan(len(slate), sum(runtimes[film] for film in slate), budget, rows, floor, sum(score for _, score in chosen.values()), vetoed, floor_set.counted)
 
 
 def clock(minutes):
@@ -109,7 +110,7 @@ class Person:
     pins: bool
     slate_sum: object  # an int, or None for a voter the knob set aside (#167)
     best_eligible: object  # (film, score) or None
-    served: str  # "best", "worst" or "": the floor set's best- and worst-served slate sums
+    served: str  # "best", "worst" or "": the best- and worst-served slate sums among the voters leximin counts
 
 
 @dataclass(frozen=True)
@@ -144,7 +145,8 @@ def breakdown(read, slate, runtimes, held, candidates, candidate_records):
     for voter, film, score, vetoed, seen_it in candidate_records:
         eligible.setdefault(voter, []).append((film, score, vetoed, seen_it))
     sums = {each.voter: slate_sum(by_voter.get(each.voter, ())) for each in read.rows}
-    members = [sums[each.voter] for each in read.rows if not each.out]
+    counted = set(read.counted)
+    members = [sums[voter] for voter in sums if voter in counted]
     best, worst = max(members, default=0), min(members, default=0)
     people = tuple(
         Person(
@@ -155,7 +157,7 @@ def breakdown(read, slate, runtimes, held, candidates, candidate_records):
             each.pins,
             None if each.out == SET_ASIDE else sums[each.voter],
             _best_eligible(candidates, eligible.get(each.voter, ())) if not each.out and each.representation == 0 else None,
-            "" if each.out or best == worst else "best" if sums[each.voter] == best else "worst" if sums[each.voter] == worst else "",
+            "" if each.voter not in counted or best == worst else "best" if sums[each.voter] == best else "worst" if sums[each.voter] == worst else "",
         )
         for each in read.rows
     )
