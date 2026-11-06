@@ -825,6 +825,1365 @@
  },
  {
   "instance": {
+   "name": "a floor-pinning voter (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "y",
+     1,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": [
+     6,
+     [
+      1,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     1,
+     3,
+     3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a tie only the total separates (leximin)",
+   "voters": [
+    "a",
+    "c"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "y",
+     3,
+     false,
+     true
+    ],
+    [
+     "c",
+     "x",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": [
+     4,
+     [
+      2,
+      3
+     ]
+    ],
+    "triple": [
+     2,
+     2,
+     5
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a veto moves a representative (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "y",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "x",
+     3,
+     false,
+     true
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": [
+     3,
+     [
+      -1,
+      0,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     3,
+     2
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a disregarded veto (leximin)",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "y",
+     1,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [
+    "b"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": [
+     5,
+     [
+      1,
+      2
+     ]
+    ],
+    "triple": [
+     1,
+     3,
+     3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a voter with no ballot (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "nobody"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "y",
+     1,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": [
+     6,
+     [
+      1,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     1,
+     3,
+     3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "an empty floor set (leximin)",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [
+    "a",
+    "b"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [],
+    "best": [
+     0,
+     []
+    ],
+    "triple": [
+     null,
+     0,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "no budget (leximin)",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "z",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "x",
+     "y",
+     "z"
+    ],
+    "best": [
+     12,
+     [
+      3,
+      5
+     ]
+    ],
+    "triple": [
+     3,
+     6,
+     8
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "nothing fits (leximin)",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 90,
+    "y": 100
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 60,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [],
+    "best": [
+     0,
+     [
+      0
+     ]
+    ],
+    "triple": [
+     null,
+     0,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "pins over the budget (leximin)",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "z",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 100,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "x",
+    "y"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "pins that fit (leximin)",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "z",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "z"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "x",
+     "z"
+    ],
+    "best": [
+     12,
+     [
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     3,
+     6,
+     6
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "every film fixed out (leximin)",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "x",
+    "y"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [],
+    "best": [
+     0,
+     [
+      0
+     ]
+    ],
+    "triple": [
+     null,
+     0,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "the one film that represents fixed out (leximin)",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "x"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "y"
+    ],
+    "best": [
+     4,
+     [
+      2
+     ]
+    ],
+    "triple": [
+     2,
+     2,
+     2
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "no films (leximin)",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {},
+   "records": [],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [],
+    "best": [
+     0,
+     []
+    ],
+    "triple": [
+     null,
+     0,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a slate the total wins but leximin loses",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "z",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "z",
+     1,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "x",
+     "z"
+    ],
+    "best": [
+     12,
+     [
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     3,
+     6,
+     7
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a tie the lowest slate sum leaves and the second-lowest separates",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "y",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "y",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "z",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "z",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "z",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "z",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "x",
+     "z"
+    ],
+    "best": [
+     24,
+     [
+      3,
+      5,
+      5,
+      5
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     18
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a voter with nothing representable whose -1 decides",
+   "voters": [
+    "a",
+    "b",
+    "d"
+   ],
+   "runtimes": {
+    "p": 60,
+    "x": 60,
+    "y": 60
+   },
+   "records": [
+    [
+     "a",
+     "p",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "p",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "x",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "y",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "p",
+     "y"
+    ],
+    "best": [
+     12,
+     [
+      0,
+      4,
+      4
+     ]
+    ],
+    "triple": [
+     3,
+     6,
+     8
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a leximin tie with a voter with no ballot beside it",
+   "voters": [
+    "a",
+    "b",
+    "nobody"
+   ],
+   "runtimes": {
+    "x": 60,
+    "y": 60,
+    "z": 60
+   },
+   "records": [
+    [
+     "a",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "z",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "y",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "z",
+     1,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "x",
+     "z"
+    ],
+    "best": [
+     12,
+     [
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     3,
+     6,
+     7
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "a disregarded veto counted as 0 in the slate sums",
+   "voters": [
+    "a",
+    "b"
+   ],
+   "runtimes": {
+    "p": 60,
+    "x": 60,
+    "y": 60
+   },
+   "records": [
+    [
+     "a",
+     "p",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "x",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "y",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "p",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "x",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "y",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 120,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [
+    "b"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "p",
+     "x"
+    ],
+    "best": [
+     12,
+     [
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     3,
+     6,
+     7
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
    "name": "drawn-0-none",
    "voters": [
     "a",
@@ -1060,6 +2419,274 @@
      1,
      10,
      9
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-0-none (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f04"
+    ],
+    "best": [
+     36,
+     [
+      2,
+      3,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     36,
+     [
+      1,
+      3,
+      3,
+      7
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     27,
+     [
+      3,
+      3,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f05"
+    ],
+    "best": [
+     18,
+     [
+      1,
+      2,
+      2,
+      4
+     ]
+    ],
+    "triple": [
+     1,
+     10,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     18,
+     [
+      -1,
+      2,
+      2,
+      4
+     ]
+    ],
+    "triple": [
+     1,
+     10,
+     7
     ]
    }
   ],
@@ -1312,6 +2939,270 @@
  },
  {
   "instance": {
+   "name": "drawn-0-without (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [
+    "b"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04"
+    ],
+    "best": [
+     27,
+     [
+      2,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     3,
+     9,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     27,
+     [
+      1,
+      4,
+      6
+     ]
+    ],
+    "triple": [
+     3,
+     9,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f07"
+    ],
+    "best": [
+     20,
+     [
+      3,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     20,
+     [
+      0,
+      1,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     19,
+     [
+      1,
+      2,
+      3
+     ]
+    ],
+    "triple": [
+     2,
+     7,
+     6
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-0-disregarded",
    "voters": [
     "a",
@@ -1550,6 +3441,277 @@
      1,
      10,
      9
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-0-disregarded (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [
+    "b",
+    "a"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f04"
+    ],
+    "best": [
+     36,
+     [
+      2,
+      3,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     36,
+     [
+      1,
+      3,
+      3,
+      7
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     27,
+     [
+      3,
+      3,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f05"
+    ],
+    "best": [
+     18,
+     [
+      1,
+      2,
+      2,
+      4
+     ]
+    ],
+    "triple": [
+     1,
+     10,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     18,
+     [
+      -1,
+      2,
+      2,
+      4
+     ]
+    ],
+    "triple": [
+     1,
+     10,
+     7
     ]
    }
   ],
@@ -1803,6 +3965,276 @@
  },
  {
   "instance": {
+   "name": "drawn-0-fixed_in (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f04"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f04"
+    ],
+    "best": [
+     24,
+     [
+      2,
+      3,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     24,
+     [
+      1,
+      3,
+      3,
+      7
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     14,
+     [
+      -1,
+      2,
+      2,
+      4
+     ]
+    ],
+    "triple": [
+     1,
+     10,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f04",
+     "f07"
+    ],
+    "best": [
+     14,
+     [
+      -2,
+      3,
+      4,
+      6
+     ]
+    ],
+    "triple": [
+     1,
+     10,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     8,
+     [
+      0,
+      0,
+      1,
+      6
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     7
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-0-fixed_out",
    "voters": [
     "a",
@@ -2024,6 +4456,247 @@
  },
  {
   "instance": {
+   "name": "drawn-0-fixed_out (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f04",
+    "f01"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     13,
+     [
+      0,
+      3,
+      4,
+      4
+     ]
+    ],
+    "triple": [
+     1,
+     9,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     13,
+     [
+      0,
+      2,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     1,
+     9,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02"
+    ],
+    "best": [
+     2,
+     [
+      -1,
+      0,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     0,
+     2,
+     1
+    ]
+   },
+   {
+    "films": [
+     "f05",
+     "f06"
+    ],
+    "best": [
+     1,
+     [
+      -1,
+      -1,
+      0,
+      1
+     ]
+    ],
+    "triple": [
+     0,
+     1,
+     -1
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
    "name": "drawn-0-all",
    "voters": [
     "a",
@@ -2215,6 +4888,212 @@
      1,
      7,
      6
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-0-all (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 120,
+    "f01": 120,
+    "f02": 60,
+    "f03": 100,
+    "f04": 150,
+    "f05": 120,
+    "f06": 120,
+    "f07": 100
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     -1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [
+    "a"
+   ],
+   "disregarded": [
+    "c",
+    "b"
+   ],
+   "fixed_in": [
+    "f04"
+   ],
+   "fixed_out": [
+    "f02",
+    "f01"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f04",
+     "f06"
+    ],
+    "best": [
+     10,
+     [
+      1,
+      4,
+      4
+     ]
+    ],
+    "triple": [
+     1,
+     7,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     10,
+     [
+      0,
+      2,
+      5
+     ]
+    ],
+    "triple": [
+     1,
+     7,
+     7
     ]
    }
   ],
@@ -2515,6 +5394,323 @@
  },
  {
   "instance": {
+   "name": "drawn-1-none (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      1,
+      2,
+      3,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      0,
+      3,
+      4,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      -3,
+      1,
+      1,
+      8
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      -4,
+      2,
+      6,
+      14
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     18
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     17,
+     [
+      0,
+      2,
+      2,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     9,
+     9
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-1-without",
    "voters": [
     "a",
@@ -2802,6 +5998,319 @@
      2,
      8,
      12
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-1-without (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [
+    "a"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     14,
+     [
+      4,
+      6,
+      11
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     21
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     14,
+     [
+      3,
+      4,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     14,
+     [
+      2,
+      4,
+      11
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     17
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     14,
+     [
+      1,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     14,
+     [
+      1,
+      1,
+      9
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     11
     ]
    }
   ],
@@ -3104,6 +6613,328 @@
  },
  {
   "instance": {
+   "name": "drawn-1-disregarded (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [
+    "a",
+    "d"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      1,
+      3,
+      3,
+      12
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     19
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      1,
+      2,
+      3,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      0,
+      4,
+      4,
+      8
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      0,
+      3,
+      4,
+      9
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     17,
+     [
+      1,
+      3,
+      4,
+      10
+     ]
+    ],
+    "triple": [
+     2,
+     9,
+     18
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-1-fixed_in",
    "voters": [
     "a",
@@ -3399,6 +7230,324 @@
  },
  {
   "instance": {
+   "name": "drawn-1-fixed_in (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f03"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      0,
+      4,
+      4,
+      9
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     17
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      -2,
+      4,
+      4,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f07"
+    ],
+    "best": [
+     17,
+     [
+      -1,
+      1,
+      3,
+      8
+     ]
+    ],
+    "triple": [
+     2,
+     9,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     12,
+     [
+      -3,
+      -1,
+      3,
+      8
+     ]
+    ],
+    "triple": [
+     1,
+     8,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f06"
+    ],
+    "best": [
+     8,
+     [
+      -4,
+      0,
+      4,
+      8
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     8
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-1-fixed_out",
    "voters": [
     "a",
@@ -3669,6 +7818,296 @@
  },
  {
   "instance": {
+   "name": "drawn-1-fixed_out (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f03",
+    "f00"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      1,
+      2,
+      3,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      -3,
+      0,
+      3,
+      8
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     6,
+     [
+      -2,
+      0,
+      4,
+      5
+     ]
+    ],
+    "triple": [
+     0,
+     6,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f01"
+    ],
+    "best": [
+     3,
+     [
+      -2,
+      -2,
+      0,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     3,
+     -1
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
    "name": "drawn-1-all",
    "voters": [
     "a",
@@ -3916,6 +8355,261 @@
  },
  {
   "instance": {
+   "name": "drawn-1-all (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 60,
+    "f03": 100,
+    "f04": 60,
+    "f05": 120,
+    "f06": 120,
+    "f07": 120
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     true
+    ],
+    [
+     "a",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f00",
+     1,
+     false,
+     true
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [
+    "b"
+   ],
+   "disregarded": [
+    "d",
+    "c"
+   ],
+   "fixed_in": [
+    "f03"
+   ],
+   "fixed_out": [
+    "f00",
+    "f06"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f07"
+    ],
+    "best": [
+     13,
+     [
+      1,
+      4,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     7,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     13,
+     [
+      -3,
+      4,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     7,
+     8
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
    "name": "drawn-2-none",
    "voters": [
     "a",
@@ -4150,6 +8844,277 @@
     "best": [
      18,
      12
+    ],
+    "triple": [
+     1,
+     10,
+     12
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-2-none (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     27,
+     [
+      3,
+      5,
+      7,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     22
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04"
+    ],
+    "best": [
+     26,
+     [
+      3,
+      3,
+      5,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f07"
+    ],
+    "best": [
+     26,
+     [
+      2,
+      3,
+      4,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f06"
+    ],
+    "best": [
+     26,
+     [
+      1,
+      2,
+      5,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f04",
+     "f06"
+    ],
+    "best": [
+     18,
+     [
+      0,
+      3,
+      4,
+      5
+     ]
     ],
     "triple": [
      1,
@@ -4410,6 +9375,274 @@
  },
  {
   "instance": {
+   "name": "drawn-2-without (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 2,
+   "without": [
+    "c"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     20,
+     [
+      3,
+      5,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f07"
+    ],
+    "best": [
+     20,
+     [
+      2,
+      3,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f06"
+    ],
+    "best": [
+     20,
+     [
+      1,
+      5,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f05"
+    ],
+    "best": [
+     19,
+     [
+      3,
+      3,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     7,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f04",
+     "f06"
+    ],
+    "best": [
+     18,
+     [
+      2,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     2,
+     6,
+     8
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-2-disregarded",
    "voters": [
     "a",
@@ -4647,6 +9880,280 @@
     "best": [
      18,
      12
+    ],
+    "triple": [
+     1,
+     10,
+     12
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-2-disregarded (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [
+    "c",
+    "d"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     27,
+     [
+      3,
+      5,
+      7,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     22
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f04"
+    ],
+    "best": [
+     26,
+     [
+      3,
+      3,
+      5,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f07"
+    ],
+    "best": [
+     26,
+     [
+      2,
+      3,
+      4,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f06"
+    ],
+    "best": [
+     26,
+     [
+      1,
+      2,
+      5,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     10,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f04",
+     "f06"
+    ],
+    "best": [
+     18,
+     [
+      0,
+      3,
+      4,
+      5
+     ]
     ],
     "triple": [
      1,
@@ -4905,6 +10412,277 @@
  },
  {
   "instance": {
+   "name": "drawn-2-fixed_in (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f06"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f06"
+    ],
+    "best": [
+     27,
+     [
+      2,
+      5,
+      5,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     17
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     25,
+     [
+      3,
+      3,
+      4,
+      4
+     ]
+    ],
+    "triple": [
+     2,
+     9,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     17,
+     [
+      0,
+      2,
+      3,
+      6
+     ]
+    ],
+    "triple": [
+     1,
+     9,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f04",
+     "f06"
+    ],
+    "best": [
+     16,
+     [
+      1,
+      1,
+      3,
+      5
+     ]
+    ],
+    "triple": [
+     1,
+     8,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f06",
+     "f07"
+    ],
+    "best": [
+     3,
+     [
+      0,
+      0,
+      1,
+      2
+     ]
+    ],
+    "triple": [
+     0,
+     3,
+     3
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-2-fixed_out",
    "voters": [
     "a",
@@ -5090,6 +10868,213 @@
     "best": [
      17,
      12
+    ],
+    "triple": [
+     2,
+     9,
+     12
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-2-fixed_out (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f06",
+    "f02"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     19,
+     [
+      3,
+      5,
+      7,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     22
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f07"
+    ],
+    "best": [
+     17,
+     [
+      2,
+      3,
+      3,
+      4
+     ]
     ],
     "triple": [
      2,
@@ -5299,6 +11284,217 @@
      0,
      3,
      3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-2-all (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 60,
+    "f01": 60,
+    "f02": 60,
+    "f03": 100,
+    "f04": 90,
+    "f05": 100,
+    "f06": 100,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     -1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f04",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     2,
+     false,
+     false
+    ]
+   ],
+   "budget": 360,
+   "multiplier": 1,
+   "without": [
+    "d"
+   ],
+   "disregarded": [
+    "c",
+    "d"
+   ],
+   "fixed_in": [
+    "f06"
+   ],
+   "fixed_out": [
+    "f04",
+    "f05"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f06"
+    ],
+    "best": [
+     13,
+     [
+      2,
+      2,
+      3
+     ]
+    ],
+    "triple": [
+     2,
+     7,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     9,
+     [
+      0,
+      2,
+      3
+     ]
+    ],
+    "triple": [
+     1,
+     6,
+     5
     ]
    }
   ],
@@ -5554,6 +11750,279 @@
  },
  {
   "instance": {
+   "name": "drawn-3-none (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     36,
+     [
+      1,
+      3,
+      3,
+      5
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     8,
+     [
+      2,
+      3,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f07"
+    ],
+    "best": [
+     8,
+     [
+      0,
+      1,
+      1,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f05"
+    ],
+    "best": [
+     8,
+     [
+      -2,
+      1,
+      2,
+      4
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     6,
+     [
+      -4,
+      0,
+      3,
+      6
+     ]
+    ],
+    "triple": [
+     0,
+     6,
+     5
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-3-without",
    "voters": [
     "a",
@@ -5797,6 +12266,276 @@
      0,
      5,
      3
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-3-without (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 2,
+   "without": [
+    "c"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f02",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     27,
+     [
+      3,
+      3,
+      6
+     ]
+    ],
+    "triple": [
+     3,
+     9,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     20,
+     [
+      2,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     20,
+     [
+      1,
+      1,
+      2
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     4
+    ]
+   },
+   {
+    "films": [
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     6,
+     [
+      0,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     6,
+     6
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f07"
+    ],
+    "best": [
+     5,
+     [
+      1,
+      1,
+      2
+     ]
+    ],
+    "triple": [
+     0,
+     5,
+     4
     ]
    }
   ],
@@ -6055,6 +12794,282 @@
  },
  {
   "instance": {
+   "name": "drawn-3-disregarded (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [
+    "c",
+    "a"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     36,
+     [
+      3,
+      3,
+      5,
+      5
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     16
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     8,
+     [
+      2,
+      3,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f05"
+    ],
+    "best": [
+     8,
+     [
+      0,
+      2,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f07"
+    ],
+    "best": [
+     8,
+     [
+      0,
+      2,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     6,
+     [
+      -1,
+      0,
+      3,
+      6
+     ]
+    ],
+    "triple": [
+     0,
+     6,
+     8
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-3-fixed_in",
    "voters": [
     "a",
@@ -6261,6 +13276,239 @@
     "best": [
      2,
      -1
+    ],
+    "triple": [
+     0,
+     2,
+     -1
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-3-fixed_in (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f04"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     27,
+     [
+      -1,
+      1,
+      2,
+      3
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     8,
+     [
+      0,
+      0,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     6
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f04"
+    ],
+    "best": [
+     2,
+     [
+      -2,
+      -2,
+      1,
+      2
+     ]
     ],
     "triple": [
      0,
@@ -6508,6 +13756,261 @@
  },
  {
   "instance": {
+   "name": "drawn-3-fixed_out (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f04",
+    "f02"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     24,
+     [
+      1,
+      3,
+      3,
+      5
+     ]
+    ],
+    "triple": [
+     3,
+     12,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     8,
+     [
+      0,
+      2,
+      2,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     7
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     8,
+     [
+      -2,
+      1,
+      2,
+      4
+     ]
+    ],
+    "triple": [
+     0,
+     8,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03"
+    ],
+    "best": [
+     5,
+     [
+      -4,
+      -2,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     0,
+     5,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
    "name": "drawn-3-all",
    "voters": [
     "a",
@@ -6706,6 +14209,224 @@
     "best": [
      5,
      3
+    ],
+    "triple": [
+     0,
+     5,
+     3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-3-all (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 150,
+    "f02": 150,
+    "f03": 90,
+    "f04": 100,
+    "f05": 150,
+    "f06": 120,
+    "f07": 150
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f02",
+     3,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     3,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f06",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     0,
+     false,
+     false
+    ]
+   ],
+   "budget": 500,
+   "multiplier": 1,
+   "without": [
+    "d"
+   ],
+   "disregarded": [
+    "d",
+    "a"
+   ],
+   "fixed_in": [
+    "f04"
+   ],
+   "fixed_out": [
+    "f00"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     18,
+     [
+      -1,
+      3,
+      3
+     ]
+    ],
+    "triple": [
+     3,
+     9,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     5,
+     [
+      0,
+      0,
+      3
+     ]
     ],
     "triple": [
      0,
@@ -6990,6 +14711,303 @@
  },
  {
   "instance": {
+   "name": "drawn-4-none (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     19,
+     [
+      3,
+      3,
+      4,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     19,
+     [
+      1,
+      2,
+      2,
+      3
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f03",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     19,
+     [
+      1,
+      1,
+      3,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     11
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     19,
+     [
+      -1,
+      2,
+      3,
+      8
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     13,
+     [
+      1,
+      2,
+      3,
+      7
+     ]
+    ],
+    "triple": [
+     1,
+     9,
+     13
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-4-without",
    "voters": [
     "a",
@@ -7252,6 +15270,301 @@
     "best": [
      10,
      6
+    ],
+    "triple": [
+     1,
+     7,
+     6
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
+   "name": "drawn-4-without (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [
+    "c"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     18,
+     [
+      4,
+      4,
+      7
+     ]
+    ],
+    "triple": [
+     3,
+     9,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      3,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     3,
+     9,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f02",
+     "f03",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     18,
+     [
+      1,
+      2,
+      9
+     ]
+    ],
+    "triple": [
+     3,
+     9,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     14,
+     [
+      0,
+      2,
+      3
+     ]
+    ],
+    "triple": [
+     2,
+     8,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04",
+     "f06"
+    ],
+    "best": [
+     10,
+     [
+      1,
+      1,
+      4
+     ]
     ],
     "triple": [
      1,
@@ -7538,6 +15851,305 @@
  },
  {
   "instance": {
+   "name": "drawn-4-disregarded (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [
+    "c",
+    "a"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     19,
+     [
+      3,
+      4,
+      5,
+      6
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     18
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f03",
+     "f04",
+     "f05"
+    ],
+    "best": [
+     19,
+     [
+      3,
+      3,
+      3,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     14
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f03",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     19,
+     [
+      3,
+      3,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     19,
+     [
+      1,
+      2,
+      3,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     13,
+     [
+      1,
+      2,
+      3,
+      8
+     ]
+    ],
+    "triple": [
+     1,
+     9,
+     14
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-4-fixed_in",
    "voters": [
     "a",
@@ -7812,6 +16424,305 @@
  },
  {
   "instance": {
+   "name": "drawn-4-fixed_in (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f01"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     27,
+     [
+      3,
+      3,
+      4,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     15
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f05",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     27,
+     [
+      1,
+      1,
+      3,
+      5
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     10
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f02",
+     "f04",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     17,
+     [
+      1,
+      2,
+      3,
+      7
+     ]
+    ],
+    "triple": [
+     1,
+     9,
+     13
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f04"
+    ],
+    "best": [
+     16,
+     [
+      -1,
+      1,
+      2,
+      6
+     ]
+    ],
+    "triple": [
+     1,
+     8,
+     8
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     15,
+     [
+      0,
+      0,
+      1,
+      2
+     ]
+    ],
+    "triple": [
+     1,
+     7,
+     3
+    ]
+   }
+  ],
+  "exhausted": false
+ },
+ {
+  "instance": {
    "name": "drawn-4-fixed_out",
    "voters": [
     "a",
@@ -8053,6 +16964,275 @@
      0,
      0,
      0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-4-fixed_out (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f01",
+    "f02"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f03",
+     "f04",
+     "f05",
+     "f06"
+    ],
+    "best": [
+     19,
+     [
+      2,
+      3,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     12
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f03",
+     "f05",
+     "f07"
+    ],
+    "best": [
+     19,
+     [
+      -1,
+      1,
+      2,
+      7
+     ]
+    ],
+    "triple": [
+     2,
+     11,
+     9
+    ]
+   },
+   {
+    "films": [
+     "f06",
+     "f07"
+    ],
+    "best": [
+     5,
+     [
+      -1,
+      -1,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     0,
+     5,
+     0
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f04"
+    ],
+    "best": [
+     4,
+     [
+      -2,
+      0,
+      1,
+      4
+     ]
+    ],
+    "triple": [
+     0,
+     4,
+     3
     ]
    }
   ],
@@ -8319,6 +17499,281 @@
  },
  {
   "instance": {
+   "name": "drawn-4-all (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 90,
+    "f01": 100,
+    "f02": 60,
+    "f03": 120,
+    "f04": 120,
+    "f05": 90,
+    "f06": 60,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f00",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     3,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f06",
+     -1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     3,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f06",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     -1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f00",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f02",
+     -1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f03",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f04",
+     3,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     1,
+     false,
+     true
+    ],
+    [
+     "d",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": null,
+   "multiplier": 2,
+   "without": [
+    "d"
+   ],
+   "disregarded": [
+    "a",
+    "d"
+   ],
+   "fixed_in": [
+    "f01"
+   ],
+   "fixed_out": [
+    "f05"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f03",
+     "f04",
+     "f06"
+    ],
+    "best": [
+     12,
+     [
+      1,
+      1,
+      3
+     ]
+    ],
+    "triple": [
+     1,
+     6,
+     5
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f03",
+     "f06",
+     "f07"
+    ],
+    "best": [
+     12,
+     [
+      -1,
+      0,
+      3
+     ]
+    ],
+    "triple": [
+     1,
+     6,
+     2
+    ]
+   },
+   {
+    "films": [
+     "f00",
+     "f01",
+     "f02",
+     "f04"
+    ],
+    "best": [
+     9,
+     [
+      1,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     1,
+     3,
+     3
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f07"
+    ],
+    "best": [
+     2,
+     [
+      -1,
+      0,
+      1
+     ]
+    ],
+    "triple": [
+     0,
+     2,
+     0
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
    "name": "drawn-5-none",
    "voters": [
     "a",
@@ -8534,6 +17989,248 @@
     "best": [
      0,
      -6
+    ],
+    "triple": [
+     0,
+     0,
+     -6
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-none (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f05",
+     "f07"
+    ],
+    "best": [
+     9,
+     [
+      0,
+      0,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     1,
+     6,
+     2
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04"
+    ],
+    "best": [
+     3,
+     [
+      -2,
+      0,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     0,
+     3,
+     0
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06"
+    ],
+    "best": [
+     0,
+     [
+      -2,
+      -2,
+      -2,
+      0
+     ]
     ],
     "triple": [
      0,
@@ -8763,6 +18460,247 @@
     "best": [
      0,
      -4
+    ],
+    "triple": [
+     0,
+     0,
+     -4
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-without (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [
+    "b"
+   ],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f05",
+     "f07"
+    ],
+    "best": [
+     9,
+     [
+      0,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     1,
+     6,
+     2
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f04"
+    ],
+    "best": [
+     3,
+     [
+      -2,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     0,
+     3,
+     0
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f06"
+    ],
+    "best": [
+     0,
+     [
+      -2,
+      -2,
+      0
+     ]
     ],
     "triple": [
      0,
@@ -9005,6 +18943,251 @@
  },
  {
   "instance": {
+   "name": "drawn-5-disregarded (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [
+    "b",
+    "c"
+   ],
+   "fixed_in": [],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f05",
+     "f07"
+    ],
+    "best": [
+     9,
+     [
+      0,
+      0,
+      1,
+      1
+     ]
+    ],
+    "triple": [
+     1,
+     6,
+     2
+    ]
+   },
+   {
+    "films": [
+     "f01",
+     "f06"
+    ],
+    "best": [
+     3,
+     [
+      -2,
+      0,
+      1,
+      2
+     ]
+    ],
+    "triple": [
+     0,
+     3,
+     1
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f04"
+    ],
+    "best": [
+     0,
+     [
+      -2,
+      -1,
+      0,
+      0
+     ]
+    ],
+    "triple": [
+     0,
+     0,
+     -3
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
    "name": "drawn-5-fixed_in",
    "voters": [
     "a",
@@ -9191,6 +19374,209 @@
     "best": [
      2,
      2
+    ],
+    "triple": [
+     0,
+     2,
+     2
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-fixed_in (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [
+    "f00"
+   ],
+   "fixed_out": [],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00"
+    ],
+    "best": [
+     2,
+     [
+      0,
+      0,
+      0,
+      2
+     ]
     ],
     "triple": [
      0,
@@ -9418,6 +19804,231 @@
  },
  {
   "instance": {
+   "name": "drawn-5-fixed_out (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [],
+   "disregarded": [],
+   "fixed_in": [],
+   "fixed_out": [
+    "f00",
+    "f05"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f01",
+     "f07"
+    ],
+    "best": [
+     9,
+     [
+      -4,
+      0,
+      3,
+      4
+     ]
+    ],
+    "triple": [
+     2,
+     5,
+     3
+    ]
+   },
+   {
+    "films": [
+     "f02",
+     "f04"
+    ],
+    "best": [
+     0,
+     [
+      -2,
+      -2,
+      -1,
+      0
+     ]
+    ],
+    "triple": [
+     0,
+     0,
+     -5
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
    "name": "drawn-5-all",
    "voters": [
     "a",
@@ -9612,6 +20223,216 @@
     "best": [
      2,
      2
+    ],
+    "triple": [
+     0,
+     2,
+     2
+    ]
+   }
+  ],
+  "exhausted": true
+ },
+ {
+  "instance": {
+   "name": "drawn-5-all (leximin)",
+   "voters": [
+    "a",
+    "b",
+    "c",
+    "d"
+   ],
+   "runtimes": {
+    "f00": 150,
+    "f01": 100,
+    "f02": 100,
+    "f03": 150,
+    "f04": 60,
+    "f05": 120,
+    "f06": 90,
+    "f07": 60
+   },
+   "records": [
+    [
+     "a",
+     "f01",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f03",
+     null,
+     true,
+     false
+    ],
+    [
+     "a",
+     "f04",
+     0,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f05",
+     2,
+     false,
+     false
+    ],
+    [
+     "a",
+     "f07",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f00",
+     0,
+     false,
+     true
+    ],
+    [
+     "b",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "b",
+     "f05",
+     0,
+     false,
+     false
+    ],
+    [
+     "b",
+     "f07",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f01",
+     2,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f02",
+     0,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f03",
+     1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f04",
+     -1,
+     false,
+     false
+    ],
+    [
+     "c",
+     "f06",
+     null,
+     true,
+     false
+    ],
+    [
+     "c",
+     "f07",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f00",
+     2,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f01",
+     1,
+     false,
+     false
+    ],
+    [
+     "d",
+     "f02",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f05",
+     null,
+     true,
+     false
+    ],
+    [
+     "d",
+     "f07",
+     3,
+     false,
+     false
+    ]
+   ],
+   "budget": 207,
+   "multiplier": 1,
+   "without": [
+    "a"
+   ],
+   "disregarded": [
+    "b",
+    "d"
+   ],
+   "fixed_in": [
+    "f00"
+   ],
+   "fixed_out": [
+    "f02",
+    "f04"
+   ],
+   "distance": 4,
+   "length": 5,
+   "tiebreaker": "leximin"
+  },
+  "steps": [
+   {
+    "films": [
+     "f00"
+    ],
+    "best": [
+     2,
+     [
+      0,
+      0,
+      2
+     ]
     ],
     "triple": [
      0,

@@ -9,8 +9,8 @@ from time import perf_counter
 from django.conf import settings
 
 from ribcage.readouts.basis import Basis
-from ribcage.solver.model import solve
-from ribcage.solver.objective import Problem, scale_of
+from ribcage.solver.model import SCALES, solve
+from ribcage.solver.objective import Problem
 
 NOTHING_FITS = "Nothing fits the budget, so the proposal is the empty slate."
 NO_FLOOR = "Nobody is in the floor set, so the tiebreaker ({rule}) alone is optimised."
@@ -19,10 +19,10 @@ ALL_OUT = "Every film is fixed out, so there is nothing to propose."
 
 
 def solver_sources():
-    """The files whose bytes a solve's result depends on: the solver, the film points it calls and this chain (#166)."""
+    """The files whose bytes a solve's result depends on: the solver, the film points and floor set it calls and this chain (#166)."""
     here = Path(__file__).resolve()
     ribcage = here.parent.parent
-    return [*sorted((ribcage / "solver").glob("*.py")), ribcage / "readouts" / "slate.py", ribcage / "readouts" / "tiebreaker.py", here]
+    return [*sorted((ribcage / "solver").glob("*.py")), ribcage / "readouts" / "floor.py", ribcage / "readouts" / "slate.py", ribcage / "readouts" / "tiebreaker.py", here]
 
 
 def code_digest():
@@ -90,7 +90,7 @@ def chain(given, length, distance, kept=(), ended=False):
     found = [frozenset(each) for each in kept][:length]
     if ended and len(found) < length:
         return found, True
-    scale = scale_of(given)
+    scale = SCALES[given.tiebreaker](given)
     while len(found) < length:
         best = solve(given, found=found, distance=distance, scale=scale)
         # The empty pool has one slate only; solving it again would repeat it, never pad (#17).

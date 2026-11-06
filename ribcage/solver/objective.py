@@ -55,7 +55,7 @@ class Value:
 
     @property
     def integer(self):
-        """K·(W·m + Σrep) + T, what the solver maximises."""
+        """K·(W·m + Σrep) + T, what the solver maximises under `total`; no rule compares by it and `leximin` has no such number (#175, #176)."""
         return self.scale * ((self.floor or 0) * self.weight + self.sigma_rep) + self.total
 
     @property
@@ -69,4 +69,4 @@ def value(films, problem, scale=None):
     on_slate = set(slate)
     held = [each for each in problem.on_the_ballot() if each[1] in on_slate]
     read = plan.plan(problem.voters, slate, {film: problem.runtimes[film] for film in slate}, held, problem.floor_set, problem.budget)
-    return Value(read.floor, read.sigma_rep, tiebreaker.total(slate, held), problem.weight, scale_of(problem) if scale is None else scale, tiebreaker.KEYS[problem.tiebreaker](slate, held))
+    return Value(read.floor, read.sigma_rep, tiebreaker.total(slate, held), problem.weight, scale_of(problem) if scale is None else scale, tiebreaker.KEYS[problem.tiebreaker](slate, held, problem.floor_set))

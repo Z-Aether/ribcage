@@ -7,7 +7,7 @@ import pytest
 
 from ribcage.readouts.basis import Basis
 from ribcage.timetable import batch
-from tests.oracle import KNOBS, Instance, disagreements, drawn, feasible_slates, hand_chosen, problem_of
+from tests.oracle import KNOBS, RULES, Instance, disagreements, drawn, feasible_slates, hand_chosen, problem_of, under
 
 pytestmark = pytest.mark.slow
 
@@ -17,16 +17,18 @@ def test_the_solver_agrees_with_enumeration_on_the_traps_and_endings(instance):
     assert disagreements(instance) == []
 
 
+@pytest.mark.parametrize("rule", RULES)
 @pytest.mark.parametrize("knob", KNOBS)
 @pytest.mark.parametrize("seed", range(8))
-def test_the_chain_agrees_with_enumeration_on_seeded_draws_under_each_knob(seed, knob):
-    assert disagreements(drawn(seed, films=11, knob=knob)) == []
+def test_the_chain_agrees_with_enumeration_on_seeded_draws_under_each_knob_and_rule(seed, knob, rule):
+    assert disagreements(under(drawn(seed, films=11, knob=knob), rule)) == []
 
 
+@pytest.mark.parametrize("rule", RULES)
 @pytest.mark.parametrize("seed", range(3))
-def test_sixteen_films_agree_with_no_knob_and_with_every_knob(seed):
+def test_sixteen_films_agree_with_no_knob_and_with_every_knob(seed, rule):
     for knob in ("none", "all"):
-        assert disagreements(drawn(seed, films=16, voters=5, knob=knob)) == []
+        assert disagreements(under(drawn(seed, films=16, voters=5, knob=knob), rule)) == []
 
 
 def test_the_oracle_catches_a_proposal_that_is_not_the_best(monkeypatch):

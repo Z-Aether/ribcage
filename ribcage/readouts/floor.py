@@ -24,6 +24,11 @@ class FloorSet:
     def of(self):
         return len(self.members) + len(self.out)
 
+    @property
+    def counted(self):
+        """The voters the tiebreaker `leximin` ranks: the floor set, then those out for *nothing representable*; never *no ballot* or *set aside by knob* (#176)."""
+        return self.members + tuple(voter for voter, reason in self.out if reason == NOTHING_REPRESENTABLE)
+
 
 def floor_set(voters, runtimes, records, budget, set_aside=(), fixed_out=()):
     """The floor set over `voters` (any keys, in the order wanted), from the candidates' `runtimes` by film, the ballot `records` and the `budget`.

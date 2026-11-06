@@ -136,10 +136,10 @@ def test_the_code_digest_reads_the_solver_the_film_points_and_the_chain():
 
     names = {"/".join(each.parts[-2:]) for each in batch.solver_sources()}
 
-    assert {"solver/model.py", "solver/objective.py", "readouts/slate.py", "readouts/tiebreaker.py", "timetable/batch.py"} <= names
+    assert {"solver/model.py", "solver/objective.py", "readouts/floor.py", "readouts/slate.py", "readouts/tiebreaker.py", "timetable/batch.py"} <= names
 
 
-@pytest.mark.parametrize("name", ["solver/model.py", "solver/objective.py", "readouts/slate.py", "readouts/tiebreaker.py", "timetable/batch.py"])
+@pytest.mark.parametrize("name", ["solver/model.py", "solver/objective.py", "readouts/floor.py", "readouts/slate.py", "readouts/tiebreaker.py", "timetable/batch.py"])
 def test_the_code_digest_changes_when_any_file_it_reads_changes(monkeypatch, name):
     from pathlib import Path
 
@@ -166,3 +166,22 @@ def test_the_setting_reaches_the_problem_and_the_fingerprint(settings):
 
     assert changed.tiebreaker == "another" != default.tiebreaker
     assert fingerprint(changed, 5, 4) != fingerprint(default, 5, 4)
+
+
+@pytest.mark.parametrize("rule", ["total", "leximin"])
+def test_a_chain_solve_builds_its_model_with_the_rules_own_k(monkeypatch, rule):
+    from ribcage.solver import model
+    from ribcage.solver.model import SCALES
+
+    given = dataclasses.replace(pool(3), tiebreaker=rule)
+    seen = []
+    real = model.Model.__init__
+
+    def spy(self, highs, films, x, points, k, base, sums):
+        seen.append(k)
+        real(self, highs, films, x, points, k, base, sums)
+
+    monkeypatch.setattr(model.Model, "__init__", spy)
+    chain(given, 2, 2)
+
+    assert seen and set(seen) == {SCALES[rule](given)}

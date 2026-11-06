@@ -13,11 +13,11 @@ from ribcage.solver.model import solve
 from ribcage.solver.objective import Problem, scale_of, value
 
 
-def problem(runtimes, records, voters=("a", "b"), budget=None, members=None, multiplier=1):
+def problem(runtimes, records, voters=("a", "b"), budget=None, members=None, multiplier=1, **more):
     found = floor_set(voters, runtimes, records, budget)
     if members is not None:
         found = type(found)(tuple(members), ())
-    return Problem(tuple(voters), runtimes, tuple(records), budget, found, multiplier)
+    return Problem(tuple(voters), runtimes, tuple(records), budget, found, multiplier, **more)
 
 
 def best_by_enumeration(given, scale=None):
@@ -52,7 +52,7 @@ def test_only_the_total_separates_two_slates_and_the_gap_is_zero(monkeypatch):
 def test_a_scale_of_one_flips_the_winner_and_the_computed_scale_gets_it_right():
     # b, c and d have seen X and love it: T favours X while the floor and Σrep favour Y; K = 1 lets T win.
     records = [("a", "x", 1, False, False), ("a", "y", 2, False, False)] + [(each, "x", 3, False, True) for each in "bcd"]
-    given = problem({"x": 100, "y": 100}, records, voters=tuple("abcd"), budget=100)
+    given = problem({"x": 100, "y": 100}, records, voters=tuple("abcd"), budget=100, tiebreaker="total")
 
     assert given.floor_set.members == ("a",)
     assert solve(given, scale=1) == {"x"}
@@ -91,7 +91,7 @@ def test_a_veto_and_a_seen_it_each_bar_a_film_from_representing_its_voter(barred
 
 def test_an_empty_floor_set_optimises_the_total_alone():
     records = [("a", "x", 3, False, False), ("a", "y", 1, False, False), ("b", "y", 3, False, False)]
-    given = problem({"x": 60, "y": 60}, records, budget=60, members=())
+    given = problem({"x": 60, "y": 60}, records, budget=60, members=(), tiebreaker="total")
 
     assert given.weight == 0
     assert value({"y"}, given).floor is None

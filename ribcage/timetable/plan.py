@@ -213,7 +213,7 @@ def of(asked, on, names, titles, prefix="slate", banners=None, pinned=frozenset(
     """
     banners = banners or {}
     reads = [ledger.read(each.films, on) for each in asked]
-    stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, tiebreaker.KEYS[settings.SLATE_TIEBREAKER](each.films, on.records)) for each in reads], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
+    stood = ledger.standings([(each.plan.floor, each.plan.sigma_rep, tiebreaker.KEYS[settings.SLATE_TIEBREAKER](each.films, on.records, on.floor_set)) for each in reads], on.floor_set.size, settings.FLOOR_WEIGHT_MULTIPLIER)
     shown = ledger.dots([each.films for each in reads], on.rank)
     rows = [
         {**row_of(one, stand, names, titles, on.runtimes, shown, pinned, dropped), "id": f"{prefix}-{number}", "label": each.label, **acts_of(each)}
@@ -260,7 +260,7 @@ def row_of(one, stand, names, titles, runtimes, shown, pinned=frozenset(), dropp
         "sigma_rep": read.sigma_rep,
         "sigma_distance": signed(stand.sigma_distance),
         "total": one.total,
-        "total_distance": signed(stand.total_distance),
+        "total_distance": "" if stand.total_distance is None else signed(stand.total_distance),
         "films": read.films,
         "dropped": [titles[film] for film in one.films if film in dropped],
         "screen_time": plan.clock(read.screen_time),

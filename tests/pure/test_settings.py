@@ -96,8 +96,8 @@ WHOLE_NUMBER_DEFAULTS = {
 }
 
 
-# The choice among rules, defaulted by #175.
-JUDGEMENT_DEFAULTS = {**WHOLE_NUMBER_DEFAULTS, "SLATE_TIEBREAKER": "total"}
+# The choice among rules, defaulted by #176.
+JUDGEMENT_DEFAULTS = {**WHOLE_NUMBER_DEFAULTS, "SLATE_TIEBREAKER": "leximin"}
 
 
 @pytest.mark.parametrize(("name", "default"), JUDGEMENT_DEFAULTS.items())
@@ -134,13 +134,13 @@ def test_the_slate_tiebreaker_takes_a_rule_by_name_and_a_blank_gives_the_default
     monkeypatch.setenv("SLATE_TIEBREAKER", "total")
     assert load_settings()["SLATE_TIEBREAKER"] == "total"
     monkeypatch.setenv("SLATE_TIEBREAKER", "  ")
-    assert load_settings()["SLATE_TIEBREAKER"] == "total"
+    assert load_settings()["SLATE_TIEBREAKER"] == "leximin"
 
 
 def test_a_slate_tiebreaker_naming_no_rule_stops_startup_naming_the_variable_and_every_rule(monkeypatch):
     monkeypatch.setenv("SLATE_TIEBREAKER", "sum")
 
-    with pytest.raises(ImproperlyConfigured, match=r"Set SLATE_TIEBREAKER to one of: total, not 'sum'\."):
+    with pytest.raises(ImproperlyConfigured, match=r"Set SLATE_TIEBREAKER to one of: total, leximin, not 'sum'\."):
         load_settings()
 
 

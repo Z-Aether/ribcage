@@ -11,16 +11,20 @@ import pytest
 
 from ribcage.solver.model import solve
 from ribcage.solver.objective import value
-from tests.oracle import CASES, Instance, listed, problem_of
+from tests.oracle import CASES, RULES, Instance, leximin_traps, listed, problem_of
 
 STORED = json.loads(CASES.read_text())
 
 
-def test_the_fixture_has_cases_for_the_traps_and_every_knob():
+def test_the_fixture_has_cases_for_the_traps_every_knob_and_both_rules():
     names = {each["instance"]["name"] for each in STORED}
 
     assert len(STORED) >= 30
     assert {"a floor-pinning voter", "a tie only the total separates", "a veto moves a representative", "a voter with no ballot", "pins over the budget"} <= names
+    assert {each.name for each in leximin_traps()} <= names
+    assert {each["instance"]["tiebreaker"] for each in STORED} == set(RULES)
+    for rule in RULES:
+        assert any(each["instance"]["name"].startswith("drawn-") and each["instance"]["tiebreaker"] == rule for each in STORED)
     for knob in ("without", "disregarded", "fixed_in", "fixed_out"):
         assert any(each["instance"][knob] for each in STORED)
 

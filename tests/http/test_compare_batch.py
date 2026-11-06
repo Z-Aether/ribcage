@@ -16,6 +16,12 @@ from tests.http.test_pick_plan import text
 COMPARE = "/console/pick/compare/"
 
 
+def settings_default():
+    from ribcage.readouts import tiebreaker
+
+    return tiebreaker.DEFAULT
+
+
 def batch(page):
     return re.search(r'<tbody class="slate-ledger__section" aria-label="This batch">(.*?)</tbody>', page, re.S)[1]
 
@@ -81,10 +87,33 @@ def test_no_budget_says_nothing(admin, votes):
     assert "batch-banner__ending" not in section
 
 
-def test_an_empty_floor_set_says_the_tiebreaker_alone_is_optimised(admin, votes):
+@pytest.mark.parametrize("rule", ["total", "leximin"])
+def test_an_empty_floor_set_says_the_tiebreaker_alone_is_optimised(admin, votes, settings, rule):
+    settings.SLATE_TIEBREAKER = rule
     BallotRecord.objects.all().delete()
 
-    assert "Nobody is in the floor set, so the tiebreaker (total) alone is optimised." in text(batch(admin.get(COMPARE).text))
+    assert f"Nobody is in the floor set, so the tiebreaker ({rule}) alone is optimised." in text(batch(admin.get(COMPARE).text))
+
+
+def test_with_the_setting_unset_the_default_rule_is_leximin():
+    assert settings_default() == "leximin"
+
+
+@pytest.mark.parametrize("rule", ["total", "leximin"])
+def test_compare_renders_the_batch_and_every_row_under_each_rule(admin, votes, settings, rule):
+    settings.SLATE_TIEBREAKER = rule
+    Box.objects.create(suggestion=votes["thing"], start=0)
+
+    response = admin.get(COMPARE)
+
+    assert response.status_code == 200
+    page = response.text
+    assert cells(batch(page))["label"].startswith("Proposal 1")
+    assert cells(batch(page))["films"] == "2 · 3h19m"
+    distances = re.findall(r'<td class="ledger__number slate-row__total">\d+ <small class="slate-row__distance">(.*?)</small>', page)
+    # The total's distance from the best row is a number under `total`; the leximin key is no number, so #177 draws its own.
+    assert distances
+    assert bool(any(text(each) for each in distances)) == (rule == "total")
 
 
 def test_a_dropped_film_on_the_plan_is_never_proposed(admin, votes):
@@ -140,7 +169,8 @@ def test_compare_shows_batch_size_proposals_with_the_count_and_more_in_the_heade
     assert "data-batch-more" in page and not re.search(r"<button[^>]*disabled[^>]*data-batch-more", page)
 
 
-def test_the_total_is_a_column_after_sigma_rep_with_its_distance_from_the_best_row(admin, many):
+def test_the_total_is_a_column_after_sigma_rep_with_its_distance_from_the_best_row(admin, many, settings):
+    settings.SLATE_TIEBREAKER = "total"
     page = admin.get(COMPARE).text
     head = re.search(r"<thead>(.*?)</thead>", page, re.S)[1]
     row = re.search(r'<tr class="slate-row" data-slate-row>(.*?)</tr>', page, re.S)[1]

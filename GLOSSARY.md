@@ -162,11 +162,14 @@ A voter's score for their representative in a slate; zero if they have none. The
 _Avoid_: satisfaction, happiness
 
 **Total**:
-The sum of every voter's score for every film in a slate. It is the tiebreaker rule `total`, the one rule there is. (#6, #10, #175)
+The sum of every voter's score for every film in a slate. A readout of every slate, and the tiebreaker only under the rule `total`, which `SLATE_TIEBREAKER=total` chooses. (#6, #10, #175, #176)
 
 **Tiebreaker**:
-The objective's least component: it separates slates equal on floor and Σrep and can never outweigh either. Which rule it is comes from `SLATE_TIEBREAKER`, and `total` is the one rule. (#175, #66's note of 2026-11-06)
+The objective's third component, a rule chosen by `SLATE_TIEBREAKER` that separates slates equal on floor and Σrep and can never outweigh either. `leximin` is the default and `total` the other rule. (#175, #176, #66's note of 2026-11-06)
 _Avoid_: ε, tie-break
+
+**Leximin**:
+The default tiebreaker. Among slates equal on floor and Σrep, the best is the one whose lowest slate sum is highest, a tie going to the second-lowest, and so on up the voters. A slate sum is one voter's scores for every film in the slate summed, a veto counting −2 and a disregarded one 0. It counts the floor set and the voters out for *nothing representable*, never those out for *no ballot* or *set aside by knob*. It prefers slate sums (5, 5, 5, 5, 5) to (4, 10, 10, 10, 10), whatever the total. (#176)
 
 **Floor set**:
 The voters the floor is computed over: everyone who could be represented above zero — a positive score on a candidate they have neither seen nor vetoed, that is not fixed out and fits the budget on its own — minus anyone set aside by the without-a-voter knob. Never everyone registered; a voter with no ballot is simply one who fails the test. Recomputed on every solve, and anyone outside it is named on screen with the reason. (#8, #15, #17, #28, #33)
@@ -203,7 +206,7 @@ The proposals the admin has kept. The only stored thing on the PICK surface besi
 _Avoid_: saved, favourites, pinned (pinning is a film-level knob)
 
 **Standing**:
-A proposal's distance from the best slate on screen in the objective's own components under the current basis: floor and Σrep, with total subordinate. Computed for the timetable's own film set alike, so a hand-edited slate stays comparable. (#12, #17)
+A proposal's distance from the best slate on screen in the objective's own components under the current basis: floor and Σrep, with the tiebreaker subordinate. Computed for the timetable's own film set alike, so a hand-edited slate stays comparable. (#12, #17)
 _Avoid_: rank, score
 
 **Tier**:

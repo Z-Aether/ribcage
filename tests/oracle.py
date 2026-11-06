@@ -1,7 +1,7 @@
 """The enumeration oracle: SOLVE's answers against every slate within the budget, scored by the solver's own objective (#6, #25, #173).
 
 An `Instance` is plain data (voters, runtimes, records, budget, knobs), so a later harness can build one from real votes: `problem_of(instance)` is the `Problem` the batch would solve.
-Slates are compared on `Value.key`, ties by it and never by film set.
+Slates are compared on `Value.key`, ties by it and never by film set. An instance names its rule, `total` unless told another; `under` gives the same votes under a rule (#176).
 It cannot enumerate long budgets: past about 16 films or 12 hours it falls off a cliff (#6).
 
 Regenerate `fixtures/solver/cases.json` with `python -m tests.oracle`, and only when the objective or a hand-chosen case changes on purpose; say which in the commit.
@@ -10,10 +10,11 @@ Regenerate `fixtures/solver/cases.json` with `python -m tests.oracle`, and only 
 
 import json
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 from ribcage.readouts.basis import Basis
+from ribcage.readouts import tiebreaker
 from ribcage.readouts.floor import floor_set
 from ribcage.readouts.ledger import stored_votes
 from ribcage.solver.objective import value
@@ -21,6 +22,7 @@ from ribcage.timetable import batch
 
 CASES = Path(__file__).resolve().parent.parent / "fixtures" / "solver" / "cases.json"
 KNOBS = ("none", "without", "disregarded", "fixed_in", "fixed_out", "all")
+RULES = tuple(tiebreaker.KEYS)
 
 
 @dataclass(frozen=True)
@@ -117,6 +119,11 @@ def disagreements(instance, slates=None):
     return said
 
 
+def under(instance, rule):
+    """`instance` under the tiebreaker `rule`, named for it unless it is `total`, whose names the fixture has always held (#176)."""
+    return instance if rule == instance.tiebreaker else replace(instance, name=f"{instance.name} ({rule})", tiebreaker=rule)
+
+
 def drawn(seed, films=10, voters=4, knob="none"):
     """A plain seeded random instance: runtimes, scores, vetoes and seen-its by chance, then the budget and the knob."""
     chance = random.Random(seed)
@@ -157,8 +164,8 @@ def case(name, *records, voters=("a", "b"), runtimes=None, budget=None, **knobs)
     return Instance(name, voters, {"x": 60, "y": 60, "z": 60} if runtimes is None else runtimes, records, budget, **knobs)
 
 
-def hand_chosen():
-    """The traps and the endings, each small enough to enumerate in a blink (#6, #173)."""
+def total_traps():
+    """The traps and the endings under `total`, each small enough to enumerate in a blink (#6, #173)."""
     return [
         # c is held to 1 by y alone: the floor wants y though x is worth more to a and b, so only the floor term picks y.
         case("a floor-pinning voter", scored("a", "x", 2), scored("a", "y", 1), scored("b", "x", 2), scored("b", "y", 1), scored("c", "y", 1), voters=("a", "b", "c"), budget=60),
@@ -180,9 +187,53 @@ def hand_chosen():
     ]
 
 
+def leximin_traps():
+    """The traps of `leximin`, each naming the level it guards: cut from `model.py`, the oracle disagrees with the solver (#176).
+
+    Level k is `L_k`, the sum of the k smallest slate sums, and each case is small enough that its top tier on floor and Σrep is a handful of slates.
+    """
+    p, x, y, z = "p", "x", "y", "z"
+    wins = (
+        # Level 1. x is loved by both, so every top slate holds it; {x,y} is worth 8 to {x,z}'s 7, but gives b only 2 against {x,z}'s lowest of 3.
+        [scored("a", x, 3), scored("a", y, 3), scored("a", z, 0), scored("b", x, 3), scored("b", y, -1), scored("b", z, 1)]
+    )
+    return [
+        case("a slate the total wins but leximin loses", *wins, runtimes={x: 60, y: 60, z: 60}, budget=120, tiebreaker="leximin"),
+        # Level 2. x is loved by all four, so every top slate holds it; y adds (0, 1, 3, 3) and z (0, 2, 2, 2): both leave 3 as the lowest sum, the second-lowest is 4 against 5, and the total 19 against 18.
+        case(
+            "a tie the lowest slate sum leaves and the second-lowest separates",
+            *[scored(v, x, 3) for v in "abcd"],
+            *[scored(v, y, each) for v, each in zip("abcd", (0, 1, 3, 3))],
+            *[scored(v, z, each) for v, each in zip("abcd", (0, 2, 2, 2))],
+            voters=("a", "b", "c", "d"), runtimes={x: 60, y: 60, z: 60}, budget=120, tiebreaker="leximin",
+        ),
+        # Level 1. d has nothing to like, so is out of the floor set, but a -1 on p's partner x is the lowest sum on {p,x}, which the total prefers (11 to 8) and {p,y} beats.
+        case(
+            "a voter with nothing representable whose -1 decides",
+            scored("a", p, 3), scored("b", p, 3), scored("a", x, 3), scored("b", x, 3), scored("d", x, -1),
+            scored("a", y, 1), scored("b", y, 1), scored("d", y, 0),
+            voters=("a", "b", "d"), runtimes={p: 60, x: 60, y: 60}, budget=120, tiebreaker="leximin",
+        ),
+        # Level 1, as the first trap, with a voter who never voted beside it: the answer is the same and the key has no slot for them.
+        case("a leximin tie with a voter with no ballot beside it", *wins, voters=("a", "b", "nobody"), runtimes={x: 60, y: 60, z: 60}, budget=120, tiebreaker="leximin"),
+        # Level 1. b's veto on x scores 0 once disregarded: {p,x} gives (3, 4) to {p,y}'s (2, 6), though the total prefers {p,y} (8 to 7); counted as -2 {p,x} would give (1, 4).
+        case(
+            "a disregarded veto counted as 0 in the slate sums",
+            scored("a", p, 3), scored("a", x, 1), scored("a", y, -1), scored("b", p, 3), ("b", x, None, True, False), scored("b", y, 3),
+            runtimes={p: 60, x: 60, y: 60}, budget=120, disregarded=("b",), tiebreaker="leximin",
+        ),
+    ]
+
+
+def hand_chosen():
+    """The traps and the endings, `total`'s under each rule and then `leximin`'s own (#176)."""
+    traps = total_traps()
+    return [*traps, *[under(each, "leximin") for each in traps], *leximin_traps()]
+
+
 def cases(seeds=range(6), films=8):
-    """What the generator solves: the hand-chosen instances and seeded draws under each knob kind."""
-    return hand_chosen() + [drawn(seed, films=films, knob=knob) for seed in seeds for knob in KNOBS]
+    """What the generator solves: the hand-chosen instances and seeded draws under each knob kind and each rule."""
+    return hand_chosen() + [under(drawn(seed, films=films, knob=knob), rule) for seed in seeds for knob in KNOBS for rule in RULES]
 
 
 def solved(instance):
