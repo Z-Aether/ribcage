@@ -22,7 +22,7 @@ Break milestone M<n> into implementation tickets, each **self-contained**: an im
 4. **Draft and quiz** as to-tickets' steps 3 and 4 say.
 5. **Write each ticket** from the template below. Done when:
    - every decision you gathered that bears on a ticket is in its "What to build", cited;
-   - each acceptance criterion is concrete enough to name its test.
+   - each acceptance criterion is concrete enough to name its proof: a test where it owes one (`CLAUDE.md`'s `tests/` lines), else a state to browse.
 6. **Publish** as to-tickets' step 5 and the Milestone operations say: each ticket a sub-issue of the parent, with its triage label and native blocking edges.
 
 ## Revising open tickets

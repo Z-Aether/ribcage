@@ -13,6 +13,8 @@ from ribcage.solver.model import solve
 from ribcage.solver.objective import value
 from tests.oracle import CASES, RULES, Instance, leximin_traps, listed, problem_of
 
+pytestmark = pytest.mark.heavy
+
 STORED = json.loads(CASES.read_text())
 
 

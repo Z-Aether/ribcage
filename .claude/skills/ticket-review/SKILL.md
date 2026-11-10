@@ -14,7 +14,8 @@ A **finding** is something in the change that can cause a problem. Grade each on
 - **critical**: loses or leaks data, opens a wall (the login, the admin wall, the phase check), or breaks the deployment.
 - **high**: an acceptance criterion unmet, or behaviour a voter or the admin would meet as a bug.
 - **mid**: a problem that bites later:
-  - a test that passes without the code it covers;
+  - an owed test that is missing, or that passes without the code it covers;
+  - a pin: a test that asserts tags, class names, element counts or a file's source text, so it breaks on a restyle and never on a bug;
   - a gap in a meta-test such as `tests/http/test_route_kinds.py` or `test_phase_check.py`;
   - a name that contradicts `GLOSSARY.md`;
   - an untrue line in `CLAUDE.md`, a live doc or a drafted ticket comment;
@@ -28,12 +29,14 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
 
 1. **Pin the change.** You get a range, `<base>..HEAD`, and usually the implementer's report. Run `git log --oneline <range>` and `git diff --stat <range>`, and check that `git status` is clean. Read the ticket and its parent with `gh issue view <n> --comments`. The ticket carries the decisions it needs, each citing its source. Open a cited ticket or doc section only to settle a question the ticket leaves open.
 2. **Read the diff whole.** Use `git diff <range>`, file by file for a long one.
-3. **Prove each acceptance criterion.** For every criterion, name the test that covers it. Then make the test bite:
-   - Break the code it covers by reverting a line or flipping a condition.
-   - Run that test, or its file alone, and see it fail.
-   - Restore with `git checkout -- <file>`.
+3. **Prove each acceptance criterion.** `CLAUDE.md`'s `tests/` lines say which criteria owe a test.
+   - **A criterion that owes a test:** name the test that covers it, then make it bite.
+     - Break the code it covers by reverting a line or flipping a condition.
+     - Run that test, or its file alone, and see it fail.
+     - Restore with `git checkout -- <file>`.
+   - **Every other criterion:** see it hold in the browser, in step 5. It needs no test, and a test written for it is held to the pin rule above.
 
-   Done when every criterion has a test that failed against broken code and `git status` is clean again. A criterion with no test, or a test that passed against broken code, is a finding.
+   Done when every criterion that owes a test has one that failed against broken code, every other criterion has a browsed state, and `git status` is clean again.
 4. **Check the rules** against the diff:
    - `CLAUDE.md` stays true for everything the change touched, and its Layout grows only as that section's own rule allows.
    - Commits are one short line ending in the ticket number.
@@ -51,7 +54,7 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
 7. **Report.** Write the report to the path your brief names, else return it:
    - **Verdict:** clean, or the number of findings.
    - **Findings**, highest grade first. Give each one its grade, `file:line`, the problem it causes and the direction of the fix.
-   - **Criteria**, first review only: each acceptance criterion and the test that proves it.
+   - **Criteria**, first review only: each acceptance criterion and its proof, the test or the browsed state.
    - **Design questions** the implementer's report doesn't already raise, each with the options you see.
    - **Suite counts.**
 
@@ -59,7 +62,7 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
 
 A re-review gets the fixup commits as its range and the findings they answer.
 
-- For each finding, check that it is fixed. A behaviour fix needs a test that bites, proved as step 3 does.
+- For each finding, check that it is fixed. A fix that owes a test needs one that bites, proved as step 3 does; any other fix needs its state browsed.
 - Check the fixups for new problems with steps 2 and 4.
 - Browse, as in step 5, only the states a fixup touched.
 - Run the test files the fixups touch, then report as in step 7, leaving out the criteria list.

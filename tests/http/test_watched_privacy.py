@@ -23,6 +23,8 @@ from tests.http.signing_in import sign_in_as_the_admin
 from tests.http.sweeping import CAT, DOG, JUMP, NO, RECORD, YES, add, sentinel_vocabulary, sweep
 from tests.http.test_phase import walk_to
 
+pytestmark = pytest.mark.heavy
+
 PHASES = [Phase.SUGGEST, Phase.APPROVE, Phase.VOTE, Phase.PICK]
 OBSERVED_PHASES = [*PHASES, Phase.RUN]  # the owner control cannot hold in RUN, where no page shows the list (#161)
 TICKED, EMPTY, DOES_NOT_CARE = "ticked", "empty", "does not care"

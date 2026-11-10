@@ -8,11 +8,12 @@ You are implementing ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{pa
 
 ## Do
 - **Build** what the ticket's "What to build" asks, test-first where it fits (the `tdd` skill).
-- **Test** every acceptance criterion, in the suite `CLAUDE.md`'s Layout gives it.
+- **Test** each acceptance criterion that owes a test (`CLAUDE.md`'s `tests/` lines say which), in the suite the Layout gives it. Browse the rest.
 - **Keep `CLAUDE.md` true**, editing with the `writing-for-agents` skill.
 - **Record decisions.** A decision that changes `docs/design.md`, `docs/milestones.md` or `docs/theme.md` updates their lines in the same commit, citing #{n}.
 - **Run targeted tests while you work:** the test files of what you change, and of the modules that use it.
-- **Run the full default suite once, last,** after the docs edits: `.venv/Scripts/python -m pytest -n 4 -q 2>&1 | tail -15`, with the Bash `timeout` at 600000, since the run outlasts the 120 s default. Fix what fails and rerun just those files; the orchestrator runs the full suite again after the review. Done when every test passes.
+- **Run the light run once, last,** after the docs edits: `.venv/Scripts/python -m pytest -n 4 -q -m "not slow and not heavy" 2>&1 | tail -15`, with the Bash `timeout` at 300000, since the run can outlast the 120 s default. Fix what fails and rerun just those files. Done when every test passes.
+- **Run a heavy test file by name** when your change touches what it covers: a seed or another management command, the backup, a migration, the solver, DoesTheDogDie's data on a page, the watched list. The orchestrator runs the full suite once the batch is built.
 - **Browse it** by following `docs/agents/browser-verification.md`, at both widths. Save screenshots as `tmp/m{m}/{n}-…png`.
   - States to check: {the states the acceptance criteria name}.
   - Stop the seeded server with `scripts/seeded.sh stop` when you're done.
@@ -29,8 +30,8 @@ You are implementing ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{pa
 ## Report (concise)
 - the commit SHAs and messages;
 - what you built, and where;
-- each acceptance criterion and the test that covers it;
-- the suite counts;
+- each acceptance criterion and its proof: the test, or the browsed state and its screenshot;
+- the light run's counts;
 - the states you browsed and the screenshot paths;
 - the design questions;
 - anything left undone or uncertain.

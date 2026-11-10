@@ -306,6 +306,7 @@ def part_problems(answers):
     return problems, landed
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("phase", [Phase.SUGGEST, Phase.APPROVE, Phase.VOTE, Phase.PICK])
 def test_every_page_and_card_fragment_shows_doesthedogdies_data_only_in_a_region_with_its_credit(viewers, films, phase):
     walk_to(phase)
@@ -315,6 +316,7 @@ def test_every_page_and_card_fragment_shows_doesthedogdies_data_only_in_a_region
     assert part_problems(answers)[0] == []
 
 
+@pytest.mark.heavy
 def test_every_listed_answer_shows_data_somewhere_and_every_part_lands_somewhere(viewers, films):
     """A listed answer that shows nothing in any phase checks nothing: its parameters have gone stale, or it was written wrongly (#112)."""
     shown, landed = set(), set()
@@ -332,6 +334,7 @@ def test_every_listed_answer_shows_data_somewhere_and_every_part_lands_somewhere
     assert {each.route for each in FRAGMENTS if each.part} - landed == set()
 
 
+@pytest.mark.heavy
 def test_the_sweep_meets_the_card_the_warnings_page_and_the_ledger_as_regions_that_hold_data(viewers, films):
     answers = {answer.where: answer.text for answer in sweep(viewers, films)}
 

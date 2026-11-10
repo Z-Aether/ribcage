@@ -1,6 +1,10 @@
 from pathlib import Path
 from xml.etree import ElementTree
 
+import pytest
+
+pytestmark = pytest.mark.heavy
+
 GUARD = Path(__file__).with_name("conftest.py").read_text()
 REPO_ROOT = Path(__file__).parents[2]
 PURE_TESTS_REACHING_FOR_THE_DATABASE = """

@@ -9,6 +9,8 @@ from ribcage.solver.model import solve
 from ribcage.timetable.batch import chain, stopped_says
 from tests.pure.test_solver import problem
 
+pytestmark = pytest.mark.heavy
+
 
 def pool(seed, films=8):
     rng = random.Random(seed)

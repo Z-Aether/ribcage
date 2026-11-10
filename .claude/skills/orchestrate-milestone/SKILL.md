@@ -20,7 +20,7 @@ Take the tickets one at a time, even where they could run in parallel. Implement
 
 1. **Implement.** Fill in `briefs/implement.md` and spawn a Sonnet agent at medium effort, or high where a direction changes and needs redesign.
 
-   Done when it reports its commits and a passing suite, and `git status` is clean.
+   Done when it reports its commits and a passing light run, and `git status` is clean.
 2. **Review.** Fill in `briefs/review.md` and spawn an Opus agent. A change of only comments or docs skips the review.
 3. **Fix loop.** While a review reports findings:
    - **Fix.** Fill in `briefs/fix.md` with every finding verbatim and spawn a Sonnet agent. It commits with `--fixup=<the ticket's commit>`.
@@ -28,14 +28,15 @@ Take the tickets one at a time, even where they could run in parallel. Implement
 
    Done when a re-review comes back clean.
 4. **Squash.** Run `before=$(git rev-parse HEAD^{tree}); GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash <the ticket's base>`, then compare `git rev-parse HEAD^{tree}` with `$before`. Done when the trees match and `git log` shows no `fixup!` commit.
-5. **Run the full suite**, the ticket's only full run after the implementer's: `.venv/Scripts/python -m pytest -n 4 -q 2>&1 | tail -15` with `run_in_background`. A failure goes through the fix loop, its failing tests as the findings. Done when it passes.
-6. **Hand off.** Anything this build decided that a later ticket needs goes into `handoff.md`, under that ticket's number. Copy those lines into that ticket's implement brief.
+5. **Hand off.** Anything this build decided that a later ticket needs goes into `handoff.md`, under that ticket's number. Copy those lines into that ticket's implement brief.
 
 **A usage limit** cuts an agent off mid-run. After the reset, resume it with SendMessage: it checks `git status` and `git log <base>..HEAD`, then finishes its brief.
 
 ## Wrap-up
 
-Report to the dev:
+**Run the full suite**, the batch's one full run: `.venv/Scripts/python -m pytest -n 4 -q 2>&1 | tail -15` with `run_in_background`. Each implementer ran only the light run (`CLAUDE.md`'s Light run line), so this is the first run of the heavy tests over the batch. A failure goes through the fix loop, its failing tests as the findings, as a fixup of the commit that broke it, squashed as step 4 does from that commit's base. Done when it passes.
+
+Then report to the dev:
 
 - each ticket's commits and what it built;
 - the decisions made during the build, from the drafts in `tmp/m<n>/`;

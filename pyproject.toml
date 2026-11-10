@@ -5,4 +5,5 @@ testpaths = ["tests"]
 addopts = ["-m", "not slow", "--strict-markers", "-p", "pytester"]
 markers = [
     "slow: on-demand tests excluded from the default run, such as #6's enumeration oracle; run with -m slow",
+    "heavy: tests of whole seconds that few changes touch, left out of the light run: -m 'not slow and not heavy'",
 ]
