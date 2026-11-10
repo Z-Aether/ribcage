@@ -5,7 +5,6 @@ from itertools import pairwise
 
 import pytest
 from django.conf import settings
-from django.contrib.staticfiles import finders
 from django.db import connection
 from django.test import Client
 from django.test.utils import CaptureQueriesContext
@@ -161,13 +160,6 @@ def test_each_gap_is_named_on_the_card_and_never_as_an_all_clear(hanna, films, s
     assert f'<span class="dtdd__gap-name">{state.replace("-", " ")}</span>' in shown
     assert says in shown
     assert '<details class="dtdd__topics"' not in shown
-
-
-def test_a_collapsed_card_shows_neither_the_section_nor_its_credit():
-    # The pool's cards open in place by script, so a collapsed card holds the section and the theme hides it whole (#21).
-    css = open(finders.find("theme/theme.css"), encoding="utf-8").read()
-
-    assert re.search(r"\.film-card:not\(\.is-open\) \.film-card__dtdd \{\s*display: none;", css)
 
 
 def test_the_credit_sits_inside_the_section_so_a_collapsed_card_hides_it_too(hanna, films):

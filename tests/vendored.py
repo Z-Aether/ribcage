@@ -22,7 +22,3 @@ def vendored_assets():
 
 def vendored_files_pages_load():
     return [name for name in vendored_assets() if not name.endswith(FONT_SUFFIX)]
-
-
-def vendored_fonts():
-    return [name for name in vendored_assets() if name.endswith(FONT_SUFFIX)]

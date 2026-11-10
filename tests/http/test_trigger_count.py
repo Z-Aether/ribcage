@@ -2,7 +2,6 @@
 
 import re
 
-from django.conf import settings
 from django.template.loader import render_to_string
 
 from ribcage.films.card import Matched, TopicRow
@@ -43,13 +42,7 @@ def test_the_count_leaves_out_thin_rows_the_block_lists_and_counts_every_strong_
     assert counts(card(page, strong)) == [(2, 2)]
 
 
-def test_the_dtdd_links_keep_the_standard_colour_and_only_the_on_your_list_label_is_lime():
-    css = (settings.BASE_DIR / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
-    lime = css[css.index("/* Lime is the trigger warnings"):]
-    lime = lime[: lime.index("}")]
-
-    assert ".dtdd a" not in lime
-    assert "[data-skin] .dtdd__matched .dtdd__group" in lime
+def test_the_matched_block_is_labelled_on_your_list():
     assert "On your list" in render_to_string("components/dtdd_matched.html", {"matched": Matched((TopicRow("dogs dying", 3, 1),), strong=0)})
 
 

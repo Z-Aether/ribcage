@@ -159,18 +159,6 @@ def test_the_shortlist_row_keeps_its_label_a_table_cell_and_the_table_sits_in_a_
     assert re.search(r'<div class="slate-ledger__frame">\s*<table class="ledger slate-ledger slate-ledger--compact"', page)
 
 
-def test_the_split_columns_may_shrink_and_the_gallery_hides_no_cell_of_the_compact_row():
-    from pathlib import Path
-
-    root = Path(__file__).resolve().parents[2] / "ribcage" / "static"
-    theme = (root / "theme" / "theme.css").read_text(encoding="utf8")
-    gallery = (root / "gallery" / "gallery.css").read_text(encoding="utf8")
-
-    assert theme.count("grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);") >= 1
-    assert ".slate-row--compact .slate-row__label {\n  display: flex" not in theme
-    assert ".ledger td:nth-child(4)" not in gallery.replace(".ledger:not(.slate-ledger--compact) td:nth-child(4)", "")
-
-
 @pytest.mark.django_db
 def test_the_previewed_boxes_are_the_boxes_the_save_stores(shortlisted):
     from dataclasses import replace

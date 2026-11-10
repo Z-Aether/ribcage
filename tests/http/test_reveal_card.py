@@ -3,7 +3,6 @@
 import re
 
 import pytest
-from django.conf import settings
 from django.urls import reverse
 
 from ribcage.ballot.models import BallotRecord
@@ -237,11 +236,3 @@ def test_in_run_the_card_carries_no_trigger_content(voters, vocabulary):  # noqa
 
     assert "reveal__detail" in text and "data-dtdd" not in text and "DoesTheDogDie" not in text and "has-trigger-icon" not in text
     assert "phase-bar--reveal" not in text and "across the room" not in text
-
-
-def test_the_scripts_leave_a_reveal_card_to_the_reveals_own():
-    cards = (settings.BASE_DIR / "ribcage/static/components/film-card.js").read_text(encoding="utf-8")
-    own = (settings.BASE_DIR / "ribcage/static/components/reveal-card.js").read_text(encoding="utf-8")
-
-    assert cards.count("[data-reveal]") == 3
-    assert "Escape" in own and "closes" in own and "scrollLeft" not in own

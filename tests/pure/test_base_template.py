@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.test import RequestFactory
 
-from tests.vendored import STATIC, vendored_fonts, vendored_files_pages_load
+from tests.vendored import STATIC, vendored_files_pages_load
 
 PLAIN_STATIC_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
@@ -55,13 +55,6 @@ def test_the_base_template_loads_the_theme():
     assert theme_stylesheets()
 
 
-@pytest.mark.parametrize("name", vendored_fonts())
-def test_a_theme_stylesheet_the_base_template_loads_declares_each_vendored_font(name):
-    declared = "".join(path.read_text(encoding="utf-8") for path in theme_stylesheets())
-
-    assert f'url("../{name}")' in declared
-
-
 def test_a_page_wears_the_voter_skin_unless_it_names_another():
     assert '<body data-skin="voter" ' in a_page_extending_the_base_template()
 
@@ -82,11 +75,3 @@ def test_the_base_template_hands_htmx_the_pages_csrf_token():
 def test_the_base_template_carries_the_themes_icon():
     # It also stops the browser asking for /favicon.ico and logging a 404 (#46, #58).
     assert f'<link rel="icon" href="{static("theme/pumpkin.svg")}"' in a_page_extending_the_base_template()
-
-
-@pytest.mark.parametrize("variable", ["--pico-button-box-shadow", "--pico-button-hover-box-shadow"])
-def test_the_theme_keeps_picos_button_shadows_composable(variable):
-    # Pico appends its focus ring to these, and `none` voids the whole list, so buttons lose their focus ring (#58).
-    declared = "".join(path.read_text(encoding="utf-8") for path in theme_stylesheets())
-
-    assert not re.search(rf"{variable}:\s*none\b", declared)

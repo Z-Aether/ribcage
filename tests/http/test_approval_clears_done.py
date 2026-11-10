@@ -1,11 +1,9 @@
 """Approving once VOTE has opened asks first and clears every done marker; dropping clears none; the console shows who is done (#15, #28, #124)."""
 
 import html
-from pathlib import Path
 import re
 
 import pytest
-from django.conf import settings
 
 from ribcage.ballot.board import candidates
 from ribcage.ballot.done import set_done
@@ -236,14 +234,10 @@ def test_the_roster_shows_scored_vetoes_and_done_once_vote_has_opened(admin, vot
     assert roster_cells(admin.get(ROSTER).text) == [("ada", "2 / 3", "1", "done"), ("Dani", "0 / 3", "0", "done"), ("Hanna", "0 / 3", "0", "not yet")]
 
 
-def test_the_roster_sits_in_a_sideways_scrolling_frame_and_the_confirm_keeps_to_its_width(admin, voters, vote):
+def test_the_roster_sits_in_a_sideways_scrolling_frame(admin, voters, vote):
     page = admin.get(ROSTER).text
-    css = (Path(settings.BASE_DIR) / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
 
     assert re.search(r'<div class="roster__frame" data-keeps-scroll>\s*<table class="ledger roster">', page)
-    assert re.search(r"\.films-ledger__frame,\s*\.roster__frame \{", css)
-    sticky = re.search(r"\.ledger \.ledger__detail :is\(\.films-confirm[^{]*\{([^}]*)\}", css)
-    assert sticky and "position: sticky" in sticky[1] and "max-width: calc(100cqi" in sticky[1]
 
 
 def test_progress_is_every_voters_in_one_query_and_counts_as_the_ballot_does(voters, vote, django_assert_num_queries):

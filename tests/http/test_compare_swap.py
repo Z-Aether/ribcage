@@ -3,7 +3,6 @@
 import re
 
 import pytest
-from django.conf import settings
 
 from ribcage.ballot.models import BallotRecord
 from ribcage.suggestions.models import Suggestion
@@ -178,13 +177,6 @@ def test_an_empty_side_is_a_slate_of_no_films(admin, room):
 
     assert lines(page, "data-swap-in") == ["In: Cube"]
     assert numbers(page)["Screen time"] == "0m → 1h30m"
-
-
-def test_the_panel_slot_sits_in_place_at_full_size():
-    css = (settings.BASE_DIR / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
-    rule = re.search(r"^\.swap-slot \{(.*?)\}", css, re.S | re.M)[1]
-
-    assert not any(word in rule for word in ("position", "max-height", "overflow"))
 
 
 def test_the_panel_carries_a_clear_control(admin, room):

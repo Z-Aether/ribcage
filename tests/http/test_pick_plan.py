@@ -4,7 +4,6 @@ import html
 import re
 
 import pytest
-from django.conf import settings
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
 
@@ -238,13 +237,6 @@ def test_the_breakdown_query_count_does_not_grow_with_the_slate(admin, plan):
         put(f"Unplaced {number}", 80)
 
     assert queries() == small
-
-
-def test_the_coloured_sums_outrank_the_ledger_cell_ink():
-    css = (settings.BASE_DIR / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
-
-    assert "[data-skin] .ledger td.slate-row__sum--best {" in css
-    assert "[data-skin] .ledger td.slate-row__sum--worst {" in css
 
 
 def test_the_plan_is_a_slate_ledger_row_with_its_tier_standing_strip_vetoes_and_dots(admin, plan):

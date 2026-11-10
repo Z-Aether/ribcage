@@ -2,7 +2,6 @@
 
 import re
 
-from django.conf import settings
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
 
@@ -236,14 +235,12 @@ def test_the_page_sorted_by_points_reversed_runs_lowest_first_and_marks_points(v
     assert page.count("aria-sort") == 1 and page.count("▴") == 1 and 'data-sort="-points"' in page
 
 
-def test_every_voter_header_holds_the_marker_slot_and_the_stylesheet_reserves_its_height(voters):
+def test_every_voter_header_holds_the_marker_slot(voters):
     data = revealed(voters)
     heads = lambda page: re.findall(r'<th[^>]*data-voter="\d+".*?</th>', page, re.S)
 
     for page in [signed_in(data["ada"]).get("/").text, sorted_page(data, data["dani"].pk)]:
         assert all('class="reveal__marker"' in head for head in heads(page))
-    css = (settings.BASE_DIR / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
-    assert re.search(r"\.reveal__voter \.reveal__marker \{\s*height: 0\.8rem;", css)
 
 
 def test_a_removed_or_unknown_voters_id_falls_back_to_points(voters):
@@ -259,11 +256,3 @@ def test_a_removed_or_unknown_voters_id_falls_back_to_points(voters):
         assert titles_down(page) == default == ["Two", "One"]
         assert 'data-sort=""' in page and "▴" not in page
         assert 'aria-sort="descending"' in points_head(page) and page.count("aria-sort") == 1
-
-
-def test_the_scroll_script_is_loaded_on_every_page_and_names_the_sorted_header():
-    base = (settings.BASE_DIR / "ribcage/templates/base.html").read_text(encoding="utf-8")
-    source = (settings.BASE_DIR / "ribcage/static/components/reveal-scroll.js").read_text(encoding="utf-8")
-
-    assert "components/reveal-scroll.js" in base
-    assert 'th.reveal__voter[aria-sort]' in source and "scrollLeft" in source

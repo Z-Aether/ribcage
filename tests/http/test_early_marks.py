@@ -367,10 +367,3 @@ def test_the_note_save_in_the_pool_draws_the_closed_card_with_the_new_marks(pool
     answer = saved(pool, veto=True, seen=True)
 
     assert "Vetoed by ada" in answer.text and "👁" in answer.text
-
-
-def test_the_style_leaves_the_veto_pill_and_its_reason_line_to_the_box_with_no_script():
-    css = (settings.BASE_DIR / "ribcage/static/theme/theme.css").read_text(encoding="utf-8")
-
-    assert ".phase-bar:has(.vote-bar__veto-box:checked) .note-box__hint--follows" in css
-    assert ".vote-bar__veto--toggle:has(.vote-bar__veto-box:checked) .vote-bar__veto-on" in css

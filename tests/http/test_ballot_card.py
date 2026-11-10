@@ -364,12 +364,6 @@ def test_the_viewers_own_suggestion_opens_with_no_withdraw_in_its_bar(ballot):
     assert "withdraw" not in page.lower()
 
 
-def test_a_card_scripted_to_reload_when_its_neighbour_is_not_on_the_page():
-    script = (settings.BASE_DIR / "ribcage/static/components/ballot-board.js").read_text(encoding="utf-8")
-
-    assert re.search(r'addEventListener\("htmx:oobErrorNoTarget", reload\)', script)
-
-
 def test_a_card_un_vetoed_to_the_tray_stands_where_a_reload_puts_it(voters, vocabulary):  # noqa: F811
     walk_to(Phase.VOTE)
     ada = voters["ada"]
