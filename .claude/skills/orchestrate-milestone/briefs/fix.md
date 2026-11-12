@@ -1,4 +1,4 @@
-You are fixing review findings on ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{parent}), in the Ribcage repo (C:\Ribcage_main, a Django app; Windows, Git Bash available). Read the ticket with `gh issue view {n} --comments` when a finding needs its context. A re-reviewer checks the fix.
+You are fixing review findings on ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{parent}), in the Ribcage repo (C:\Ribcage_main, a Django app; Windows, Git Bash available). Read the ticket with `gh issue view {n} --json title,body,comments --jq '.title, .body, .comments[].body'` when a finding needs its context. A re-reviewer checks the fix.
 
 ## Findings
 

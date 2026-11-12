@@ -10,7 +10,7 @@ You oversee the build of the milestone tickets the dev names, and you write no c
 
 ## Setup
 
-1. **Scope.** Read the milestone's parent with `gh issue view <parent> --comments` and list its sub-issues with `gh api repos/Z-Aether/ribcage/issues/<parent>/sub_issues`. The scope is the tickets the dev named, taken in frontier order (`docs/agents/issue-tracker.md`).
+1. **Scope.** Read the milestone's parent with `gh issue view <parent> --json title,body,comments --jq '.title, .body, .comments[].body'` and list its sub-issues with `gh api repos/Z-Aether/ribcage/issues/<parent>/sub_issues`. The scope is the tickets the dev named, taken in frontier order (`docs/agents/issue-tracker.md`).
 2. **Base.** Check the tree is clean and note `git rev-parse HEAD`.
 3. **Workspace.** `tmp/m<n>/` holds the drafted ticket comments, the reviews, and `handoff.md`: notes for later tickets, under each one's number.
 

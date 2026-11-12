@@ -27,7 +27,7 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
 
 ## Steps
 
-1. **Pin the change.** You get a range, `<base>..HEAD`, and usually the implementer's report. Run `git log --oneline <range>` and `git diff --stat <range>`, and check that `git status` is clean. Read the ticket and its parent with `gh issue view <n> --comments`. The ticket carries the decisions it needs, each citing its source. Open a cited ticket or doc section only to settle a question the ticket leaves open.
+1. **Pin the change.** You get a range, `<base>..HEAD`, and usually the implementer's report. Run `git log --oneline <range>` and `git diff --stat <range>`, and check that `git status` is clean. Read the ticket and its parent with `gh issue view <n> --json title,body,comments --jq '.title, .body, .comments[].body'`. The ticket carries the decisions it needs, each citing its source. Open a cited ticket or doc section only to settle a question the ticket leaves open.
 2. **Read the diff whole.** Use `git diff <range>`, file by file for a long one.
 3. **Prove each acceptance criterion.** `CLAUDE.md`'s `tests/` lines say which criteria owe a test.
    - **A criterion that owes a test:** name the test that covers it, then make it bite.

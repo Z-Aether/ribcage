@@ -1,7 +1,7 @@
 You are implementing ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{parent}), in the Ribcage repo (C:\Ribcage_main, a Django app; Windows, Git Bash available). A reviewer checks your work afterwards.
 
 ## Read
-- **The ticket and its parent:** `gh issue view {n} --comments` and `gh issue view {parent} --comments`. The ticket carries the decisions it needs, each citing its source, and the last dated amendment wins.
+- **The ticket and its parent:** `gh issue view {n} --json title,body,comments --jq '.title, .body, .comments[].body'`, and the same for {parent}. The ticket carries the decisions it needs, each citing its source, and the last dated amendment wins.
 - **What its Context names:** the design sections, the modules it builds on, and `docs/theme.md` when it builds or styles a page.
 - **What this batch built that you use:** {handoff lines for #n, earlier commits and what they hold, or "nothing"}
 - **Everything else on demand.** Open a cited ticket, another doc section or a sibling ticket only to settle a question the ticket leaves open. Grep `GLOSSARY.md` for the terms you name things with.
