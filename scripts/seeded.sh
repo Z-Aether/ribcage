@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Starts or stops the seeded instance for a browser check, in one call each (docs/agents/browser-verification.md).
-# Usage: scripts/seeded.sh start [seededserver options, such as --phase VOTE]   reseeds, serves, prints the voters
+# Usage: scripts/seeded.sh start [seededserver options, such as --phase VOTE]   reseeds, serves, prints the voters and both passwords
 #        scripts/seeded.sh stop
 set -euo pipefail
 
@@ -34,7 +34,9 @@ case ${1:-} in
     shift
     stop
     mkdir -p tmp
-    PYTHONUNBUFFERED=1 nohup "$PYTHON" manage.py seededserver "$@" > "$LOG" 2>&1 < /dev/null &
+    # The seeded admin signs in with .env.example's placeholder, so a browser check never reads .env.
+    admin_password=$(sed -n 's/^ADMIN_PASSWORD=//p' .env.example | tr -d '\r')
+    ADMIN_PASSWORD=$admin_password PYTHONUNBUFFERED=1 nohup "$PYTHON" manage.py seededserver "$@" > "$LOG" 2>&1 < /dev/null &
     server=$!
     disown
     for _ in $(seq 1 120); do
@@ -45,6 +47,7 @@ case ${1:-} in
     done
     answers || { tail -20 "$LOG" >&2; die "not answering after 60 s; the log is above"; }
     grep -v '"GET ' "$LOG"
+    echo "The admin signs in at /console/login/ with the password $admin_password"
     echo "Serving http://127.0.0.1:8000/; the server's log is $LOG."
     ;;
   stop)
