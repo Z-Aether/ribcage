@@ -34,7 +34,7 @@ Take the tickets one at a time, even where they could run in parallel. Implement
 
 ## Wrap-up
 
-**Run the full suite**, the batch's one full run: `.venv/Scripts/python -m pytest -n 4 -q 2>&1 | tail -15` with `run_in_background`. Each implementer ran only the light run (`CLAUDE.md`'s Light run line), so this is the first run of the heavy tests over the batch. A failure goes through the fix loop, its failing tests as the findings, as a fixup of the commit that broke it, squashed as step 4 does from that commit's base. Done when it passes.
+**Run the full suite**, the batch's one full run: `.venv/Scripts/python -m pytest -n 4 -q 2>&1 | tail -15`, a foreground call with the Bash `timeout` at 600000, since the harness stops a background run when memory runs short. Each implementer ran only the light run (`CLAUDE.md`'s Light run line), so this is the first run of the heavy tests over the batch. A failure goes through the fix loop, its failing tests as the findings, as a fixup of the commit that broke it, squashed as step 4 does from that commit's base. Done when it passes.
 
 Then report to the dev:
 
