@@ -12,18 +12,20 @@ You oversee the build of the milestone tickets the dev names, and you write no c
 
 1. **Scope.** Read the milestone's parent with `gh issue view <parent> --json title,body,comments --jq '.title, .body, .comments[].body'` and list its sub-issues with `gh api repos/Z-Aether/ribcage/issues/<parent>/sub_issues`. The scope is the tickets the dev named, taken in frontier order (`docs/agents/issue-tracker.md`).
 2. **Base.** Check the tree is clean and note `git rev-parse HEAD`.
-3. **Workspace.** `tmp/m<n>/` holds the drafted ticket comments, the reviews, and `handoff.md`: notes for later tickets, under each one's number.
+3. **Workspace.** `tmp/m<n>/` holds every agent's report, the drafted ticket comments, and `handoff.md`: notes for later tickets, under each one's number.
 
 ## Per ticket
 
 Take the tickets one at a time, even where they could run in parallel. Implementers and fixers run Sonnet; reviews run Opus, the build's quality gate.
 
+**Reports travel as paths.** Each agent writes its report to the workspace and returns a summary: `<ticket>-report.md` from the implementer, `<ticket>-review-<k>.md` from review `k`, `<ticket>-fix-<k>.md` from the fix that answers it. A brief names the path of the report its agent reads. Open a report yourself only when its summary leaves a decision of yours open.
+
 1. **Implement.** Fill in `briefs/implement.md` and spawn a Sonnet agent at medium effort, or high where a direction changes and needs redesign.
 
-   Done when it reports its commits and a passing light run, and `git status` is clean.
+   Done when it returns its commits and a passing light run, and `git status` is clean.
 2. **Review.** Fill in `briefs/review.md` and spawn an Opus agent. A change of only comments or docs skips the review.
 3. **Fix loop.** While a review reports findings:
-   - **Fix.** Fill in `briefs/fix.md` with every finding verbatim and spawn a Sonnet agent. It commits with `--fixup=<the ticket's commit>`.
+   - **Fix.** Fill in `briefs/fix.md` with the review's number and spawn a Sonnet agent. It commits with `--fixup=<the ticket's commit>`.
    - **Re-review.** Fill in `briefs/re-review.md` and spawn a Sonnet agent.
 
    Done when a re-review comes back clean.
@@ -34,7 +36,7 @@ Take the tickets one at a time, even where they could run in parallel. Implement
 
 ## Wrap-up
 
-**Run the full suite**, the batch's one full run: `.venv/Scripts/python -m pytest -n 4 -q 2>&1 | tail -15`, a foreground call with the Bash `timeout` at 600000, since the harness stops a background run when memory runs short. Each implementer ran only the light run (`CLAUDE.md`'s Light run line), so this is the first run of the heavy tests over the batch. A failure goes through the fix loop, its failing tests as the findings, as a fixup of the commit that broke it, squashed as step 4 does from that commit's base. Done when it passes.
+**Run the full suite**, the batch's one full run: `.venv/Scripts/python -m pytest -n 4 -q 2>&1 | tail -15`, a foreground call with the Bash `timeout` at 600000, since the harness stops a background run when memory runs short. Each implementer ran only the light run (`CLAUDE.md`'s Light run line), so this is the first run of the heavy tests over the batch. A failure goes through the fix loop, its failing tests written to the ticket's next review file as the findings, as a fixup of the commit that broke it, squashed as step 4 does from that commit's base. Done when it passes.
 
 Then report to the dev:
 

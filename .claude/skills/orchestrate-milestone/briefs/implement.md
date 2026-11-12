@@ -27,7 +27,8 @@ You are implementing ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{pa
 - **Design questions:** where the ticket and the live docs leave open what the app does or what a voter or the admin can do (a rule, a limit, a flow, what is kept or lost), make the choice most consistent with them and list it as a design question. Wording, looks, layout, code placement and dev tooling are yours to choose: record each choice in the drafted ticket comment. The dev meets them while testing.
 - **`private/`** stays untouched.
 
-## Report (concise)
+## Report
+Write it to `tmp/m{m}/{n}-report.md`, for the reviewer:
 - the commit SHAs and messages;
 - what you built, and where;
 - each acceptance criterion and its proof: the test, or the browsed state and its screenshot;
@@ -35,3 +36,5 @@ You are implementing ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{pa
 - the states you browsed and the screenshot paths;
 - the design questions;
 - anything left undone or uncertain.
+
+Return only what the orchestrator acts on: the commit SHAs and messages, one line on what you built, the light run's counts, the design questions in full, and anything left undone or uncertain.

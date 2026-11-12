@@ -27,7 +27,7 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
 
 ## Steps
 
-1. **Pin the change.** You get a range, `<base>..HEAD`, and usually the implementer's report. Run `git log --oneline <range>` and `git diff --stat <range>`, and check that `git status` is clean. Read the ticket and its parent with `gh issue view <n> --json title,body,comments --jq '.title, .body, .comments[].body'`. The ticket carries the decisions it needs, each citing its source. Open a cited ticket or doc section only to settle a question the ticket leaves open.
+1. **Pin the change.** You get a range, `<base>..HEAD`, and usually the path of the implementer's report. Run `git log --oneline <range>` and `git diff --stat <range>`, and check that `git status` is clean. Read the ticket and its parent with `gh issue view <n> --json title,body,comments --jq '.title, .body, .comments[].body'`. The ticket carries the decisions it needs, each citing its source. Open a cited ticket or doc section only to settle a question the ticket leaves open.
 2. **Read the diff whole.** Use `git diff <range>`, file by file for a long one.
 3. **Prove each acceptance criterion.** `CLAUDE.md`'s `tests/` lines say which criteria owe a test.
    - **A criterion that owes a test:** name the test that covers it, then make it bite.
@@ -51,7 +51,7 @@ Behaviour a voter would find wrong, like a note shown twice, a field that jumps 
    - Then follow `docs/agents/browser-verification.md` over every state the change touches, at both widths.
    - Favour the states the implementer's run left out: refusals, empty states, the card after a swap, a second action after the first.
 6. **Run the test files the diff touches** in one run. A failure is a finding. The full suite is left to whoever lands the change, unless your brief asks for it.
-7. **Report.** Write the report to the path your brief names, else return it:
+7. **Report.** Write the report to the path your brief names and return what the brief asks for; with no path, return the report itself. It holds:
    - **Verdict:** clean, or the number of findings.
    - **Findings**, highest grade first. Give each one its grade, `file:line`, the problem it causes and the direction of the fix.
    - **Criteria**, first review only: each acceptance criterion and its proof, the test or the browsed state.

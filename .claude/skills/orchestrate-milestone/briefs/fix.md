@@ -2,7 +2,8 @@ You are fixing review findings on ticket #{n}, "{title}", a sub-issue of milesto
 
 ## Findings
 
-{every finding from the review, verbatim}
+Review {k}'s report, `tmp/m{m}/{n}-review-{k}.md`, lists them.
+{the orchestrator's notes on a finding, or delete this line}
 
 ## Do
 - **Fix every finding.** A fix to something that owes a test (`CLAUDE.md`'s `tests/` lines) comes with a test that fails before it. Any other fix is proved by browsing the state its finding names.
@@ -13,8 +14,11 @@ You are fixing review findings on ticket #{n}, "{title}", a sub-issue of milesto
 - **Design questions:** where a fix leaves open what the app does or what a voter or the admin can do (a rule, a limit, a flow, what is kept or lost), make the choice most consistent with the ticket and list it as a design question. Wording, looks, layout, code placement and dev tooling are yours to choose: record each choice in `tmp/m{m}/{n}-comment.md`. The dev meets them while testing.
 - **GitHub and `private/` stay untouched.**
 
-## Report (concise)
+## Report
+Write it to `tmp/m{m}/{n}-fix-{k}.md`, for the re-reviewer:
 - the fixup SHA;
 - per finding, what changed and its proof: the test, or the browsed state;
 - the targeted run's counts;
 - the design questions.
+
+Return only what the orchestrator acts on: the fixup SHA, the targeted run's counts, the design questions in full, and any finding left unfixed.
