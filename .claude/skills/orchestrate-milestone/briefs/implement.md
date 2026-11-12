@@ -8,6 +8,7 @@ You are implementing ticket #{n}, "{title}", a sub-issue of milestone M{m} (#{pa
 
 ## Do
 - **Build** what the ticket's "What to build" asks, test-first where it fits (the `tdd` skill).
+- **Create each new file with the Write tool:** a heredoc that breaks on a quote in its body costs the whole file again.
 - **Test** each acceptance criterion that owes a test (`CLAUDE.md`'s `tests/` lines say which), in the suite the Layout gives it. Browse the rest.
 - **Keep `CLAUDE.md` true**, editing with the `writing-for-agents` skill.
 - **Record decisions.** A decision that changes `docs/design.md`, `docs/milestones.md` or `docs/theme.md` updates their lines in the same commit, citing #{n}.
