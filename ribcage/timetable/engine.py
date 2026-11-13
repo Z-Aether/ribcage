@@ -405,6 +405,7 @@ def now_playing(boxes, now):
 
     A box is playing from its start up to its end; every box sharing the present is playing. With none playing, the boxes
     starting soonest are next, whether the gap is 25 minutes or days; while one plays, the rest are later.
+    `static/run/now.js` re-derives this on the phone from the same instants: keep the two together (#159).
     """
     playing = [box for box in boxes if box.start <= now < box.end]
     coming = [box.start for box in boxes if box.start > now]
